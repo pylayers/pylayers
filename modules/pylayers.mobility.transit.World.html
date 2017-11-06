@@ -31,6 +31,7 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="PyLayers Modules Reference" href="pylayers.html" />
+    <link rel="next" title="pylayers.mobility.transit.SteeringBehavior" href="pylayers.mobility.transit.SteeringBehavior.html" />
     <link rel="prev" title="pylayers.mobility.transit.Person" href="pylayers.mobility.transit.Person.html" />
 <script type="text/javascript">
 
@@ -109,6 +110,23 @@
 	    </div>
 	
 	<div class="rellink">
+	<a href="pylayers.mobility.transit.SteeringBehavior.html" title="pylayers.mobility.transit.SteeringBehavior"
+	    accesskey="N">Next
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.mobi...
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.mobility.transit.SteeringBehavior
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
 	<a href="../py-modindex.html" title="Python Module Index"
 	    >Modules
 	    <br>
@@ -165,183 +183,6 @@
             
   <div class="section" id="module-pylayers.mobility.transit.World">
 <span id="pylayers-mobility-transit-world"></span><h1>pylayers.mobility.transit.World<a class="headerlink" href="#module-pylayers.mobility.transit.World" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="pylayers.mobility.transit.World.World">
-<em class="property">class </em><code class="descclassname">pylayers.mobility.transit.World.</code><code class="descname">World</code><span class="sig-paren">(</span><em>**args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#World"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.World" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class World</p>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.mobility.transit.World.World.boids" title="pylayers.mobility.transit.World.World.boids"><code class="xref py py-obj docutils literal"><span class="pre">boids</span></code></a>(boid[,&nbsp;distance])</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.mobility.transit.World.World.add_boid" title="pylayers.mobility.transit.World.World.add_boid"><code class="xref py py-obj docutils literal"><span class="pre">add_boid</span></code></a>(boid)</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.mobility.transit.World.World.remove_boid" title="pylayers.mobility.transit.World.World.remove_boid"><code class="xref py py-obj docutils literal"><span class="pre">remove_boid</span></code></a>(boid)</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<table border="1" class="docutils">
-<colgroup>
-<col width="52%" />
-<col width="48%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>update_boid</td>
-<td>&nbsp;</td>
-</tr>
-<tr class="row-even"><td>obstacles</td>
-<td>&nbsp;</td>
-</tr>
-<tr class="row-odd"><td>add_wall</td>
-<td>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="pylayers.mobility.transit.World.World.add_boid">
-<code class="descname">add_boid</code><span class="sig-paren">(</span><em>boid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#World.add_boid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.World.add_boid" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>boid</strong></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.mobility.transit.World.World.add_wall">
-<code class="descname">add_wall</code><span class="sig-paren">(</span><em>*wall</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#World.add_wall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.World.add_wall" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.mobility.transit.World.World.add_zone">
-<code class="descname">add_zone</code><span class="sig-paren">(</span><em>zone</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#World.add_zone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.World.add_zone" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>zone</strong></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.mobility.transit.World.World.boids">
-<code class="descname">boids</code><span class="sig-paren">(</span><em>boid</em>, <em>distance=2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#World.boids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.World.boids" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>boid</strong></p>
-<p><strong>distance</strong> : int</p>
-<blockquote>
-<div><p>default 2</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">other_boids</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.mobility.transit.World.World.obstacles">
-<code class="descname">obstacles</code><span class="sig-paren">(</span><em>boid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#World.obstacles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.World.obstacles" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.mobility.transit.World.World.plot">
-<code class="descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#World.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.World.plot" title="Permalink to this definition">¶</a></dt>
-<dd><p>plot obstacles from the world</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.mobility.transit.World.World.remove_boid">
-<code class="descname">remove_boid</code><span class="sig-paren">(</span><em>boid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#World.remove_boid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.World.remove_boid" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>boid</strong></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.mobility.transit.World.World.to_local">
-<code class="descname">to_local</code><span class="sig-paren">(</span><em>boid</em>, <em>point</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#World.to_local"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.World.to_local" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.mobility.transit.World.World.update_boid">
-<code class="descname">update_boid</code><span class="sig-paren">(</span><em>boid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#World.update_boid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.World.update_boid" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.mobility.transit.World.World.zones">
-<code class="descname">zones</code><span class="sig-paren">(</span><em>boid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#World.zones"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.World.zones" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>boid</strong></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.mobility.transit.World.near">
-<code class="descclassname">pylayers.mobility.transit.World.</code><code class="descname">near</code><span class="sig-paren">(</span><em>boid</em>, <em>items</em>, <em>distance</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#near"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.near" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="pylayers.mobility.transit.World.world">
-<code class="descclassname">pylayers.mobility.transit.World.</code><code class="descname">world</code><span class="sig-paren">(</span><em>**args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#world"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.world" title="Permalink to this definition">¶</a></dt>
-<dd><p>defining world</p>
-<p class="rubric">Notes</p>
-<p><a class="reference external" href="http://e-collection.library.ethz.ch/eserv/eth:27090/eth-27090-01.pdf">Obstacles in pedestrian simulations</a></p>
-</dd></dl>
-
 </div>
 
 
@@ -370,8 +211,13 @@
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="../py-modindex.html">
+      <a href="pylayers.mobility.transit.SteeringBehavior.html">
         Next
+      </a>  
+    </div>
+    <div class="buttonPrevious">
+      <a href="../py-modindex.html">
+        Previous
       </a>  
     </div>
     

@@ -176,143 +176,20 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.antssh.SSHFunc" title="pylayers.antprop.antssh.SSHFunc"><code class="xref py py-obj docutils literal"><span class="pre">SSHFunc</span></code></a>(L,&nbsp;theta,&nbsp;phi)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.antssh.SSHFunc.html#pylayers.antprop.antssh.SSHFunc" title="pylayers.antprop.antssh.SSHFunc"><code class="xref py py-obj docutils literal"><span class="pre">SSHFunc</span></code></a>(L,&nbsp;theta,&nbsp;phi)</td>
 <td>ssh function</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.antssh.SSHFunc2" title="pylayers.antprop.antssh.SSHFunc2"><code class="xref py py-obj docutils literal"><span class="pre">SSHFunc2</span></code></a>(L,&nbsp;theta,&nbsp;phi)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.antssh.SSHFunc2.html#pylayers.antprop.antssh.SSHFunc2" title="pylayers.antprop.antssh.SSHFunc2"><code class="xref py py-obj docutils literal"><span class="pre">SSHFunc2</span></code></a>(L,&nbsp;theta,&nbsp;phi)</td>
 <td>ssh function version 2</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.antssh.SphereToCart" title="pylayers.antprop.antssh.SphereToCart"><code class="xref py py-obj docutils literal"><span class="pre">SphereToCart</span></code></a>(theta,&nbsp;phi,&nbsp;eth,&nbsp;eph,&nbsp;bfreq)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.antssh.SphereToCart.html#pylayers.antprop.antssh.SphereToCart" title="pylayers.antprop.antssh.SphereToCart"><code class="xref py py-obj docutils literal"><span class="pre">SphereToCart</span></code></a>(theta,&nbsp;phi,&nbsp;eth,&nbsp;eph,&nbsp;bfreq)</td>
 <td>Spherical to Cartesian</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.antssh.CartToSphere" title="pylayers.antprop.antssh.CartToSphere"><code class="xref py py-obj docutils literal"><span class="pre">CartToSphere</span></code></a>(theta,&nbsp;phi,&nbsp;ex,&nbsp;ey,&nbsp;ez[,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.antssh.CartToSphere.html#pylayers.antprop.antssh.CartToSphere" title="pylayers.antprop.antssh.CartToSphere"><code class="xref py py-obj docutils literal"><span class="pre">CartToSphere</span></code></a>(theta,&nbsp;phi,&nbsp;ex,&nbsp;ey,&nbsp;ez[,&nbsp;...])</td>
 <td>Convert from Cartesian to Spherical</td>
 </tr>
 </tbody>
 </table>
-<dl class="function">
-<dt id="pylayers.antprop.antssh.CartToSphere">
-<code class="descclassname">pylayers.antprop.antssh.</code><code class="descname">CartToSphere</code><span class="sig-paren">(</span><em>theta</em>, <em>phi</em>, <em>ex</em>, <em>ey</em>, <em>ez</em>, <em>bfreq=True</em>, <em>pattern=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/antssh.html#CartToSphere"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antssh.CartToSphere" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert from Cartesian to Spherical</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>theta</strong></p>
-<p><strong>phi</strong></p>
-<p><strong>ex</strong></p>
-<p><strong>ey</strong></p>
-<p><strong>ez</strong></p>
-<p><strong>bfreq</strong> : boolean</p>
-<p><strong>pattern</strong> : boolean</p>
-<p><strong>Convert from cartesian to spherical  coordinates</strong></p>
-<p class="last"><strong>bfreq</strong> : boolean parameter to indicate if the conversion is done for all frequencies of only one.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.antprop.antssh.SSHFunc">
-<code class="descclassname">pylayers.antprop.antssh.</code><code class="descname">SSHFunc</code><span class="sig-paren">(</span><em>L</em>, <em>theta</em>, <em>phi</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/antssh.html#SSHFunc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antssh.SSHFunc" title="Permalink to this definition">¶</a></dt>
-<dd><p>ssh function</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : integer,</p>
-<blockquote>
-<div><p>spherical harmonics order</p>
-</div></blockquote>
-<p><strong>theta: numpy array (1,nth)</strong></p>
-<p><strong>phi: numpy array (1,nph)</strong></p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Y</strong> : np.array</p>
-<blockquote>
-<div><p>((1+L)*(2+L)/2,nth*nph)</p>
-</div></blockquote>
-<p class="last"><strong>indx</strong> : np.array</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>Compute the spherical harmonic functions for the order L
-return a spherical matrix ((1+L)*(2+L)/2,nth*nph) and the index (l,m) of the shperical harmonics</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.antprop.antssh.SSHFunc2">
-<code class="descclassname">pylayers.antprop.antssh.</code><code class="descname">SSHFunc2</code><span class="sig-paren">(</span><em>L</em>, <em>theta</em>, <em>phi</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/antssh.html#SSHFunc2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antssh.SSHFunc2" title="Permalink to this definition">¶</a></dt>
-<dd><p>ssh function version 2</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : integer,</p>
-<blockquote>
-<div><p>spherical harmonics order</p>
-</div></blockquote>
-<p><strong>theta: numpy array(1,ndir)</strong></p>
-<p class="last"><strong>phi: numpy array(1,ndir)</strong></p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>theta and phi should have the same dimensions which represents the rays
-Compute the spherical harmonic functions for the order L
-return a spherical matrix ((1+L)*(2+L)/2,ndir) and the index (l,m) of the shperical harmonics</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.antprop.antssh.SphereToCart">
-<code class="descclassname">pylayers.antprop.antssh.</code><code class="descname">SphereToCart</code><span class="sig-paren">(</span><em>theta</em>, <em>phi</em>, <em>eth</em>, <em>eph</em>, <em>bfreq</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/antssh.html#SphereToCart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antssh.SphereToCart" title="Permalink to this definition">¶</a></dt>
-<dd><p>Spherical to Cartesian</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>theta :</strong></p>
-<p><strong>phi   :</strong></p>
-<p><strong>eth   :</strong></p>
-<p><strong>eph   :</strong></p>
-<p><strong>bfreq: boolean</strong></p>
-<blockquote class="last">
-<div><p>indicate if the conversion is done for all frequencies or only one.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.antprop.antssh.ssh">
-<code class="descclassname">pylayers.antprop.antssh.</code><code class="descname">ssh</code><span class="sig-paren">(</span><em>A</em>, <em>L=20</em>, <em>dsf=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/antssh.html#ssh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antssh.ssh" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function calculates the Scalar Spherical Harmonics coefficients</p>
-<blockquote>
-<div>m : phi    longitude
-l : theta  latitude</div></blockquote>
-<p>Antenna pattern are stored       (f theta phi)
-Coeff are stored with this order (f , l , m )</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> :  antenna</p>
-<p><strong>dsf</strong> :  int</p>
-<blockquote class="last">
-<div><p>down sampling factor  &#8216;default 1&#8217;</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </div>
 </div>
 

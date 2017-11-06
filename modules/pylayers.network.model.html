@@ -31,6 +31,7 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="PyLayers Modules Reference" href="pylayers.html" />
+    <link rel="next" title="pylayers.network.net" href="pylayers.network.net.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -91,6 +92,23 @@
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
+	<a href="pylayers.network.net.html" title="pylayers.network.net"
+	    accesskey="N">Next
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.network.net
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.network.net
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
 	<a href="../py-modindex.html" title="Python Module Index"
 	    >Modules
 	    <br>
@@ -147,198 +165,6 @@
             
   <div class="section" id="module-pylayers.network.model">
 <span id="pylayers-network-model"></span><h1>pylayers.network.model<a class="headerlink" href="#module-pylayers.network.model" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="pylayers.network.model.PLSmodel">
-<em class="property">class </em><code class="descclassname">pylayers.network.model.</code><code class="descname">PLSmodel</code><span class="sig-paren">(</span><em>f=3.0</em>, <em>rssnp=2.64</em>, <em>d0=1.0</em>, <em>sigrss=3.0</em>, <em>method='mode'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/model.html#PLSmodel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.model.PLSmodel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Path Loss Shadowing model</p>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="19%" />
-<col width="81%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>f</td>
-<td>(float) frequency in GHz</td>
-</tr>
-<tr class="row-even"><td>rssnp</td>
-<td>(float) path loss exponent</td>
-</tr>
-<tr class="row-odd"><td>d0</td>
-<td>(float) PL0 distance</td>
-</tr>
-<tr class="row-even"><td>sigrss</td>
-<td>(float) shadowing variance</td>
-</tr>
-<tr class="row-odd"><td>method</td>
-<td>(used model)</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.network.model.PLSmodel.OneSlope" title="pylayers.network.model.PLSmodel.OneSlope"><code class="xref py py-obj docutils literal"><span class="pre">OneSlope</span></code></a>(r)</td>
-<td>OneSlope model : give Power Level from distance  with OneSlope method</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.network.model.PLSmodel.getPL" title="pylayers.network.model.PLSmodel.getPL"><code class="xref py py-obj docutils literal"><span class="pre">getPL</span></code></a>(r,&nbsp;RSSStd)</td>
-<td>Get Power Level from a given distance</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.network.model.PLSmodel.getPL0" title="pylayers.network.model.PLSmodel.getPL0"><code class="xref py py-obj docutils literal"><span class="pre">getPL0</span></code></a>([Gt,&nbsp;Gr])</td>
-<td>get Path Loss at reference distance d0</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.network.model.PLSmodel.getPLmean" title="pylayers.network.model.PLSmodel.getPLmean"><code class="xref py py-obj docutils literal"><span class="pre">getPLmean</span></code></a>(d)</td>
-<td>compute PL mean</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.network.model.PLSmodel.getRange" title="pylayers.network.model.PLSmodel.getRange"><code class="xref py py-obj docutils literal"><span class="pre">getRange</span></code></a>(RSS,&nbsp;RSSStd)</td>
-<td>Get  distance from a given Power Level</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.network.model.PLSmodel.getRangeStd" title="pylayers.network.model.PLSmodel.getRangeStd"><code class="xref py py-obj docutils literal"><span class="pre">getRangeStd</span></code></a>(RSS,&nbsp;RSSStd)</td>
-<td>Compute Ranges std associated to &#8220;Rest&#8221; estimator</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
-<td>generic help</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.network.model.PLSmodel.iOneSlope" title="pylayers.network.model.PLSmodel.iOneSlope"><code class="xref py py-obj docutils literal"><span class="pre">iOneSlope</span></code></a>(PL)</td>
-<td>goes from PL to estimated distance</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="pylayers.network.model.PLSmodel.OneSlope">
-<code class="descname">OneSlope</code><span class="sig-paren">(</span><em>r</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/model.html#PLSmodel.OneSlope"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.model.PLSmodel.OneSlope" title="Permalink to this definition">¶</a></dt>
-<dd><p>OneSlope model : give Power Level from distance  with OneSlope method</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>r</strong> : range (meters)</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>PL</strong> : float</p>
-<blockquote class="last">
-<div><p>path loss values</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.network.model.PLSmodel.getPL">
-<code class="descname">getPL</code><span class="sig-paren">(</span><em>r</em>, <em>RSSStd</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/model.html#PLSmodel.getPL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.model.PLSmodel.getPL" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get Power Level from a given distance</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>r</strong> : range</p>
-<p class="last"><strong>RSSStd</strong> : range standard deviation</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; M = PLSmodel(f=0.3,rssnp=2.64,d0=1,sigrss=3,method=&#39;mode&#39;)
-&gt;&gt;&gt; PL =  M.getPL(16,1)
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.network.model.PLSmodel.getPL0">
-<code class="descname">getPL0</code><span class="sig-paren">(</span><em>Gt=0</em>, <em>Gr=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/model.html#PLSmodel.getPL0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.model.PLSmodel.getPL0" title="Permalink to this definition">¶</a></dt>
-<dd><p>get Path Loss at reference distance d0</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>PL0_c</strong> : PL0 compute</p>
-<p><strong>Gt</strong> : transmitting antenna gain dB (default 0 dB)</p>
-<p class="last"><strong>Gr</strong> : receiving antenna gain dB (default 0 dB)</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.network.model import *
-&gt;&gt;&gt; plm = PLSmodel()
-&gt;&gt;&gt; plm.getPL0()
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.network.model.PLSmodel.getPLmean">
-<code class="descname">getPLmean</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/model.html#PLSmodel.getPLmean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.model.PLSmodel.getPLmean" title="Permalink to this definition">¶</a></dt>
-<dd><p>compute PL mean</p>
-<p>rac{d}{d_0}}$$</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.network.model.PLSmodel.getRange">
-<code class="descname">getRange</code><span class="sig-paren">(</span><em>RSS</em>, <em>RSSStd</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/model.html#PLSmodel.getRange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.model.PLSmodel.getRange" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get  distance from a given Power Level</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>RSS :</strong></p>
-<p><strong>R</strong></p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">r :</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.network.model.PLSmodel.getRangeStd">
-<code class="descname">getRangeStd</code><span class="sig-paren">(</span><em>RSS</em>, <em>RSSStd</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/model.html#PLSmodel.getRangeStd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.model.PLSmodel.getRangeStd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute Ranges std associated to &#8220;Rest&#8221; estimator</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>RSS :</strong></p>
-<p class="last"><strong>RSSStd :</strong></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.network.model.PLSmodel.iOneSlope">
-<code class="descname">iOneSlope</code><span class="sig-paren">(</span><em>PL</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/model.html#PLSmodel.iOneSlope"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.model.PLSmodel.iOneSlope" title="Permalink to this definition">¶</a></dt>
-<dd><p>goes from PL to estimated distance</p>
-<p>inverse OneSlope model : give distance from Power Level with OneSlope method</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>PL :</strong></p>
-<blockquote>
-<div><p>path loss in dB</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>r</strong> : range array</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 
 
@@ -362,8 +188,13 @@
      <div class="rel">
     
     <div class="buttonPrevious">
-      <a href="../py-modindex.html">
+      <a href="pylayers.network.net.html">
         Previous
+      </a>  
+    </div>
+    <div class="buttonNext">
+      <a href="../py-modindex.html">
+        Next
       </a>  
     </div>
     

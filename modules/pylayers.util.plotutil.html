@@ -32,6 +32,7 @@
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="PyLayers Modules Reference" href="pylayers.html" />
     <link rel="next" title="pylayers.util.plotutil.cformat" href="generated/pylayers.util.plotutil.cformat.html" />
+    <link rel="prev" title="pylayers.util.mayautil" href="pylayers.util.mayautil.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -91,6 +92,23 @@
 	   
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="pylayers.util.mayautil.html" title="pylayers.util.mayautil"
+	    accesskey="P">Previous
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.util...
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.util.mayautil
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
 	<div class="rellink">
 	<a href="generated/pylayers.util.plotutil.cformat.html" title="pylayers.util.plotutil.cformat"
 	    accesskey="N">Next
@@ -172,327 +190,23 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.util.plotutil.cformat" title="pylayers.util.plotutil.cformat"><code class="xref py py-obj docutils literal"><span class="pre">cformat</span></code></a>(x,&nbsp;y,&nbsp;**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.plotutil.cformat.html#pylayers.util.plotutil.cformat" title="pylayers.util.plotutil.cformat"><code class="xref py py-obj docutils literal"><span class="pre">cformat</span></code></a>(x,&nbsp;y,&nbsp;**kwargs)</td>
 <td>complex format</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.util.plotutil.mulcplot" title="pylayers.util.plotutil.mulcplot"><code class="xref py py-obj docutils literal"><span class="pre">mulcplot</span></code></a>(x,&nbsp;y,&nbsp;**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.plotutil.mulcplot.html#pylayers.util.plotutil.mulcplot" title="pylayers.util.plotutil.mulcplot"><code class="xref py py-obj docutils literal"><span class="pre">mulcplot</span></code></a>(x,&nbsp;y,&nbsp;**kwargs)</td>
 <td>handling multiple complex variable plots</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.util.plotutil.displot" title="pylayers.util.plotutil.displot"><code class="xref py py-obj docutils literal"><span class="pre">displot</span></code></a>(pt,&nbsp;ph[,&nbsp;arrow])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.plotutil.displot.html#pylayers.util.plotutil.displot" title="pylayers.util.plotutil.displot"><code class="xref py py-obj docutils literal"><span class="pre">displot</span></code></a>(pt,&nbsp;ph[,&nbsp;arrow])</td>
 <td>discontinuous plot</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.util.plotutil.pol3D" title="pylayers.util.plotutil.pol3D"><code class="xref py py-obj docutils literal"><span class="pre">pol3D</span></code></a>(fig,&nbsp;rho,&nbsp;theta,&nbsp;phi[,&nbsp;sf,&nbsp;shade,&nbsp;title])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.plotutil.pol3D.html#pylayers.util.plotutil.pol3D" title="pylayers.util.plotutil.pol3D"><code class="xref py py-obj docutils literal"><span class="pre">pol3D</span></code></a>(fig,&nbsp;rho,&nbsp;theta,&nbsp;phi[,&nbsp;sf,&nbsp;shade,&nbsp;title])</td>
 <td>polar 3D  surface plot</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.util.plotutil.cylinder" title="pylayers.util.plotutil.cylinder"><code class="xref py py-obj docutils literal"><span class="pre">cylinder</span></code></a>(fig,&nbsp;pa,&nbsp;pb,&nbsp;R)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.plotutil.cylinder.html#pylayers.util.plotutil.cylinder" title="pylayers.util.plotutil.cylinder"><code class="xref py py-obj docutils literal"><span class="pre">cylinder</span></code></a>(fig,&nbsp;pa,&nbsp;pb,&nbsp;R)</td>
 <td>plot a cylinder</td>
 </tr>
 </tbody>
 </table>
-<dl class="function">
-<dt id="pylayers.util.plotutil.cformat">
-<code class="descclassname">pylayers.util.plotutil.</code><code class="descname">cformat</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/plotutil.html#cformat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.plotutil.cformat" title="Permalink to this definition">¶</a></dt>
-<dd><p>complex format</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray   (,Nx)</p>
-<p><strong>y</strong> : ndarray (Ny,Nx)</p>
-<p><strong>uy</strong> : ndarray()</p>
-<blockquote>
-<div><p>select rows of y</p>
-</div></blockquote>
-<p><strong>typ</strong> : string</p>
-<blockquote>
-<div><p>&#8216;m&#8217;   : modulus
-&#8216;v&#8217;   : value
-&#8216;l10&#8217; : dB (10 log10)
-&#8216;l20&#8217; : dB (20 log10)
-&#8216;d&#8217;   : phase degrees
-&#8216;r&#8217;   : phase radians
-&#8216;du&#8217;  : phase degrees unwrap
-&#8216;ru&#8217;  : phase radians unwrap
-&#8216;gdn&#8217; : group delay (ns)
-&#8216;gdm&#8217; : group distance (m)
-&#8216;re&#8217;  : real part
-&#8216;im&#8217;  : imaginary part</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">xn</p>
-<p>yn</p>
-<p class="last">ylabels</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.util.plotutil.cylinder">
-<code class="descclassname">pylayers.util.plotutil.</code><code class="descname">cylinder</code><span class="sig-paren">(</span><em>fig</em>, <em>pa</em>, <em>pb</em>, <em>R</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/plotutil.html#cylinder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.plotutil.cylinder" title="Permalink to this definition">¶</a></dt>
-<dd><p>plot a cylinder</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pa</strong> : np.array 3 x nc</p>
-<p><strong>pb</strong> : np.array 3 x nc</p>
-<p class="last"><strong>R</strong> : np.array 1 x Nc</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.util.plotutil import *
-&gt;&gt;&gt; import numpy as np
-&gt;&gt;&gt; pa = np.array([0,0,0])
-&gt;&gt;&gt; pb = np.array([0,0,10])
-&gt;&gt;&gt; fig = plt.figure()
-&gt;&gt;&gt; cylinder(fig,pa,pb,3)
-&gt;&gt;&gt; plt.show()
-</pre></div>
-</div>
-<p>(<a class="reference external" href="../modules/pylayers-util-plotutil-1.py">Source code</a>, <a class="reference external" href="../modules/pylayers-util-plotutil-1.png">png</a>, <a class="reference external" href="../modules/pylayers-util-plotutil-1.hires.png">hires.png</a>, <a class="reference external" href="../modules/pylayers-util-plotutil-1.pdf">pdf</a>)</p>
-<div class="figure">
-<img alt="../_images/pylayers-util-plotutil-1.png" src="../_images/pylayers-util-plotutil-1.png" />
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.util.plotutil.displot">
-<code class="descclassname">pylayers.util.plotutil.</code><code class="descname">displot</code><span class="sig-paren">(</span><em>pt</em>, <em>ph</em>, <em>arrow=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/plotutil.html#displot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.plotutil.displot" title="Permalink to this definition">¶</a></dt>
-<dd><p>discontinuous plot</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pt:</strong></p>
-<blockquote>
-<div><p>tail points array (2 x (2*Nseg))</p>
-</div></blockquote>
-<p><strong>ph :</strong></p>
-<blockquote>
-<div><p>head points array (2 x (2*Nseg))</p>
-</div></blockquote>
-<p><strong>arrow</strong> : bool</p>
-<blockquote>
-<div><p>display arrow on segments (square = tail, triangle = head)</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">f,a</p>
-<blockquote class="last">
-<div><p>fig and ax</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import scipy as sp
-&gt;&gt;&gt; import matplotlib.pyplot as plt
-&gt;&gt;&gt; from pylayers.util.plotutil import *
-&gt;&gt;&gt; N   = 10
-&gt;&gt;&gt; pt  = sp.rand(2,N)
-&gt;&gt;&gt; ph  = sp.rand(2,N)
-&gt;&gt;&gt; f,a = displot(pt,ph)
-&gt;&gt;&gt; txt = plt.title(&#39;pylayers.util.geomutil.displot(pt,ph) : plot 10 random segments&#39;)
-&gt;&gt;&gt; plt.show()
-</pre></div>
-</div>
-<p>(<a class="reference external" href="../modules/pylayers-util-plotutil-2.py">Source code</a>, <a class="reference external" href="../modules/pylayers-util-plotutil-2.png">png</a>, <a class="reference external" href="../modules/pylayers-util-plotutil-2.hires.png">hires.png</a>, <a class="reference external" href="../modules/pylayers-util-plotutil-2.pdf">pdf</a>)</p>
-<div class="figure">
-<img alt="../_images/pylayers-util-plotutil-2.png" src="../_images/pylayers-util-plotutil-2.png" />
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.util.plotutil.mulcplot">
-<code class="descclassname">pylayers.util.plotutil.</code><code class="descname">mulcplot</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/plotutil.html#mulcplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.plotutil.mulcplot" title="Permalink to this definition">¶</a></dt>
-<dd><p>handling multiple complex variable plots</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray  (,N)</p>
-<p><strong>y</strong> : ndarray  (M,N)</p>
-<p><strong>typ</strong> : list of string</p>
-<blockquote>
-<div><p>&#8216;m&#8217;   : modulus
-&#8216;v&#8217;   : value
-&#8216;l10&#8217; : dB (10 log10)
-&#8216;l20&#8217; : dB (20 log10)
-&#8216;d&#8217;   : phase degrees
-&#8216;r&#8217;   : phase radians
-&#8216;du&#8217;  : phase degrees unwrap
-&#8216;ru&#8217;  : phase radians unwrap
-&#8216;gdn&#8217; : group delay (ns)
-&#8216;gdm&#8217; : group distance (m)
-&#8216;re&#8217;  : real part
-&#8216;im&#8217;  : imaginary part</p>
-</div></blockquote>
-<p><strong>att</strong> : boolean</p>
-<blockquote>
-<div><p>False</p>
-</div></blockquote>
-<p><strong>ncol</strong> : int</p>
-<blockquote>
-<div><p>number of columns</p>
-</div></blockquote>
-<p><strong>nlin</strong> : int</p>
-<blockquote>
-<div><p>number of lines</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>fig,lax</strong> : figure and list of axes</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>Here fig and ax are numpy arrays of matplotlib fig and ax</p>
-<p>If len(y.shape) &gt; 2 the two first axes are used
-as nlin and ncol this takes the priority over
-the passed values nlin and ncol</p>
-<p>notice that the typ is a list of string and not a string</p>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import numpy as np
-&gt;&gt;&gt; import pylayers.util.plotutil as plu
-&gt;&gt;&gt; x = np.arange(0,10,.01)
-&gt;&gt;&gt; z1 = np.cos(2*x)*np.sin(10*x) + 1j * np.cos(3*x)*np.sin(11*x)
-&gt;&gt;&gt; z2 = np.cos(3*x)*np.sin(11*x) + 1j * np.cos(4*x)*np.sin(10*x)
-&gt;&gt;&gt; z3 = np.cos(4*x)*np.sin(12*x) + 1j * np.cos(5*x)*np.sin(12*x)
-&gt;&gt;&gt; z4 = np.cos(5*x)*np.sin(13*x) + 1j * np.cos(6*x)*np.sin(13*x)
-&gt;&gt;&gt; y = np.vstack((z1,z2,z3,z4))
-&gt;&gt;&gt; plu.mulcplot(x,y)
-&gt;&gt;&gt; plt.show()
-</pre></div>
-</div>
-<p>(<a class="reference external" href="../modules/pylayers-util-plotutil-3.py">Source code</a>, <a class="reference external" href="../modules/pylayers-util-plotutil-3_00_00.png">png</a>, <a class="reference external" href="../modules/pylayers-util-plotutil-3_00_00.hires.png">hires.png</a>, <a class="reference external" href="../modules/pylayers-util-plotutil-3_00_00.pdf">pdf</a>)</p>
-<div class="figure">
-<img alt="../_images/pylayers-util-plotutil-3_00_00.png" src="../_images/pylayers-util-plotutil-3_00_00.png" />
-</div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; plu.mulcplot(x,y,typ=[&#39;v&#39;],)
-&gt;&gt;&gt; plt.show()
-</pre></div>
-</div>
-<p>(<a class="reference external" href="../modules/pylayers-util-plotutil-3_01_00.png">png</a>, <a class="reference external" href="../modules/pylayers-util-plotutil-3_01_00.hires.png">hires.png</a>, <a class="reference external" href="../modules/pylayers-util-plotutil-3_01_00.pdf">pdf</a>)</p>
-<div class="figure">
-<img alt="../_images/pylayers-util-plotutil-3_01_00.png" src="../_images/pylayers-util-plotutil-3_01_00.png" />
-</div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; plu.mulcplot(x,y,typ=[&#39;r&#39;],ncol=2,nlin=2,color=&#39;k&#39;,linewidth=2)
-&gt;&gt;&gt; plt.show()
-</pre></div>
-</div>
-<p>(<a class="reference external" href="../modules/pylayers-util-plotutil-3_02_00.png">png</a>, <a class="reference external" href="../modules/pylayers-util-plotutil-3_02_00.hires.png">hires.png</a>, <a class="reference external" href="../modules/pylayers-util-plotutil-3_02_00.pdf">pdf</a>)</p>
-<div class="figure">
-<img alt="../_images/pylayers-util-plotutil-3_02_00.png" src="../_images/pylayers-util-plotutil-3_02_00.png" />
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.util.plotutil.pol3D">
-<code class="descclassname">pylayers.util.plotutil.</code><code class="descname">pol3D</code><span class="sig-paren">(</span><em>fig</em>, <em>rho</em>, <em>theta</em>, <em>phi</em>, <em>sf=False</em>, <em>shade=True</em>, <em>title='pol3D'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/plotutil.html#pol3D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.plotutil.pol3D" title="Permalink to this definition">¶</a></dt>
-<dd><p>polar 3D  surface plot</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rho</strong> : np.array</p>
-<blockquote>
-<div><p>t  x p</p>
-</div></blockquote>
-<p><strong>theta</strong> : np.array</p>
-<blockquote>
-<div><p>1 x t</p>
-</div></blockquote>
-<p><strong>phi</strong> : np.array</p>
-<blockquote class="last">
-<div><p>1 x p</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.util.plotutil import *
-&gt;&gt;&gt; import numpy as np
-&gt;&gt;&gt; theta = np.linspace(0,np.pi,90)
-&gt;&gt;&gt; phi = np.linspace(0,2*np.pi,180)
-&gt;&gt;&gt; rho = np.ones((len(theta),len(phi)))
-&gt;&gt;&gt; fig=plt.figure()
-&gt;&gt;&gt; pol3D(fig,rho,theta,phi)
-&gt;&gt;&gt; plt.show()
-</pre></div>
-</div>
-<p>(<a class="reference external" href="../modules/pylayers-util-plotutil-4.py">Source code</a>, <a class="reference external" href="../modules/pylayers-util-plotutil-4.png">png</a>, <a class="reference external" href="../modules/pylayers-util-plotutil-4.hires.png">hires.png</a>, <a class="reference external" href="../modules/pylayers-util-plotutil-4.pdf">pdf</a>)</p>
-<div class="figure">
-<img alt="../_images/pylayers-util-plotutil-4.png" src="../_images/pylayers-util-plotutil-4.png" />
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.util.plotutil.polycol">
-<code class="descclassname">pylayers.util.plotutil.</code><code class="descname">polycol</code><span class="sig-paren">(</span><em>lpoly</em>, <em>var=[]</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/plotutil.html#polycol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.plotutil.polycol" title="Permalink to this definition">¶</a></dt>
-<dd><p>plot a collection of polygon</p>
-<p>lpoly : list of polygons (,npol)
-var   : np.array (,npol)</p>
-<blockquote>
-<div>variable associated to polygon</div></blockquote>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.util.plotutil import *
-&gt;&gt;&gt; npoly, nverts = 100, 4
-&gt;&gt;&gt; centers = 100 * (np.random.random((npoly,2)) - 0.5)
-&gt;&gt;&gt; offsets = 10 * (np.random.random((nverts,npoly,2)) - 0.5)
-&gt;&gt;&gt; verts = centers + offsets
-&gt;&gt;&gt; verts = np.swapaxes(verts, 0, 1)
-&gt;&gt;&gt; var = np.random.random(npoly)*200
-&gt;&gt;&gt; f,a = polycol(verts,var)
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.util.plotutil.rectplot">
-<code class="descclassname">pylayers.util.plotutil.</code><code class="descname">rectplot</code><span class="sig-paren">(</span><em>x</em>, <em>xpos</em>, <em>ylim=[]</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/plotutil.html#rectplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.plotutil.rectplot" title="Permalink to this definition">¶</a></dt>
-<dd><p>plot rectangles on an axis</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray</p>
-<blockquote>
-<div><p>range of x</p>
-</div></blockquote>
-<p><strong>xpos</strong> : ndarray (nbrect,2)</p>
-<blockquote>
-<div><p>[[start indice in x rectangle 1, end indice in x rectangle 1],
-[start indice in x rectangle 2, end indice in x rectangle 2],
-[start indice in x rectangle n, end indice in x rectangle n]]</p>
-</div></blockquote>
-<p><strong>ylimits</strong> : tuple</p>
-<blockquote class="last">
-<div><p>(ymin,ymax) of rectangles</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.util.plotutil.shadow">
-<code class="descclassname">pylayers.util.plotutil.</code><code class="descname">shadow</code><span class="sig-paren">(</span><em>data</em>, <em>ax</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/plotutil.html#shadow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.plotutil.shadow" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>data</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span><dd>0 or 1</dd>
-</dl>
-<p>ax : matplotlib.axes</p>
-</dd></dl>
-
 </div>
 
 
@@ -516,13 +230,18 @@ var   : np.array (,npol)</p>
      <div class="rel">
     
     <div class="buttonPrevious">
-      <a href="generated/pylayers.util.plotutil.cformat.html">
+      <a href="pylayers.util.mayautil.html">
         Previous
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="../py-modindex.html">
+      <a href="generated/pylayers.util.plotutil.cformat.html">
         Next
+      </a>  
+    </div>
+    <div class="buttonPrevious">
+      <a href="../py-modindex.html">
+        Previous
       </a>  
     </div>
     

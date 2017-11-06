@@ -304,7 +304,7 @@
 
         <span class="k">return</span> <span class="n">s</span></div>
 
-<div class="viewcode-block" id="Simul.create_layout"><a class="viewcode-back" href="../../../modules/pylayers.simul.simulnet.html#pylayers.simul.simulnet.Simul.create_layout">[docs]</a>    <span class="k">def</span> <span class="nf">create_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.create_layout"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simulnet.Simul.create_layout.html#pylayers.simul.simulnet.Simul.create_layout">[docs]</a>    <span class="k">def</span> <span class="nf">create_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create Layout in Simpy the_world thanks to Tk backend</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -337,7 +337,7 @@
             <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">wall</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">the_world</span><span class="o">.</span><span class="n">add_wall</span><span class="p">(</span><span class="n">wall</span><span class="p">[</span><span class="n">ii</span><span class="p">],</span> <span class="n">wall</span><span class="p">[</span><span class="n">ii</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="Simul.create_agent"><a class="viewcode-back" href="../../../modules/pylayers.simul.simulnet.html#pylayers.simul.simulnet.Simul.create_agent">[docs]</a>    <span class="k">def</span> <span class="nf">create_agent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.create_agent"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simulnet.Simul.create_agent.html#pylayers.simul.simulnet.Simul.create_agent">[docs]</a>    <span class="k">def</span> <span class="nf">create_agent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create simulation&#39;s Agents</span>
 
 <span class="sd">        ..todo:: change lAg list to a dictionnary ( modification in show.py too) </span>
@@ -384,13 +384,13 @@
                     <span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
                     <span class="n">seed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Simul.create_EMS"><a class="viewcode-back" href="../../../modules/pylayers.simul.simulnet.html#pylayers.simul.simulnet.Simul.create_EMS">[docs]</a>    <span class="k">def</span> <span class="nf">create_EMS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.create_EMS"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simulnet.Simul.create_EMS.html#pylayers.simul.simulnet.Simul.create_EMS">[docs]</a>    <span class="k">def</span> <span class="nf">create_EMS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create electromagnetic Solver object</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">EMS</span> <span class="o">=</span> <span class="n">EMSolver</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Simul.create_network"><a class="viewcode-back" href="../../../modules/pylayers.simul.simulnet.html#pylayers.simul.simulnet.Simul.create_network">[docs]</a>    <span class="k">def</span> <span class="nf">create_network</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.create_network"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simulnet.Simul.create_network.html#pylayers.simul.simulnet.Simul.create_network">[docs]</a>    <span class="k">def</span> <span class="nf">create_network</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create the whole network</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -419,7 +419,7 @@
                                  <span class="n">save</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">[</span><span class="s1">&#39;save&#39;</span><span class="p">]))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Pnet</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Pnet</span><span class="o">.</span><span class="n">run</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Simul.create_visual"><a class="viewcode-back" href="../../../modules/pylayers.simul.simulnet.html#pylayers.simul.simulnet.Simul.create_visual">[docs]</a>    <span class="k">def</span> <span class="nf">create_visual</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.create_visual"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simulnet.Simul.create_visual.html#pylayers.simul.simulnet.Simul.create_visual">[docs]</a>    <span class="k">def</span> <span class="nf">create_visual</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create visual Tk process</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -427,7 +427,7 @@
             <span class="n">interval</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s1">&#39;show_interval&#39;</span><span class="p">]),</span> <span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">visu</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">visu</span><span class="o">.</span><span class="n">execute</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Simul.create"><a class="viewcode-back" href="../../../modules/pylayers.simul.simulnet.html#pylayers.simul.simulnet.Simul.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.create"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simulnet.Simul.create.html#pylayers.simul.simulnet.Simul.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create the simulation</span>
 <span class="sd">            This method is called at the end of __init__</span>
 
@@ -468,7 +468,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">save</span> <span class="o">=</span> <span class="n">Save</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span> <span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span> <span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">run</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Simul.create_show"><a class="viewcode-back" href="../../../modules/pylayers.simul.simulnet.html#pylayers.simul.simulnet.Simul.create_show">[docs]</a>    <span class="k">def</span> <span class="nf">create_show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.create_show"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simulnet.Simul.create_show.html#pylayers.simul.simulnet.Simul.create_show">[docs]</a>    <span class="k">def</span> <span class="nf">create_show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create a vizualization</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -519,7 +519,7 @@
 
 
 
-<div class="viewcode-block" id="Simul.runsimul"><a class="viewcode-back" href="../../../modules/pylayers.simul.simulnet.html#pylayers.simul.simulnet.Simul.runsimul">[docs]</a>    <span class="k">def</span> <span class="nf">runsimul</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.runsimul"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simulnet.Simul.runsimul.html#pylayers.simul.simulnet.Simul.runsimul">[docs]</a>    <span class="k">def</span> <span class="nf">runsimul</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; run simulation</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 

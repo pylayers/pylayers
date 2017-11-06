@@ -31,6 +31,7 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="PyLayers Modules Reference" href="pylayers.html" />
+    <link rel="next" title="pylayers.util.plotutil" href="pylayers.util.plotutil.html" />
     <link rel="prev" title="pylayers.util.graphutil.find_all_paths" href="generated/pylayers.util.graphutil.find_all_paths.html" />
 <script type="text/javascript">
 
@@ -109,6 +110,23 @@
 	    </div>
 	
 	<div class="rellink">
+	<a href="pylayers.util.plotutil.html" title="pylayers.util.plotutil"
+	    accesskey="N">Next
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.util...
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.util.plotutil
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
 	<a href="../py-modindex.html" title="Python Module Index"
 	    >Modules
 	    <br>
@@ -165,269 +183,6 @@
             
   <div class="section" id="module-pylayers.util.mayautil">
 <span id="pylayers-util-mayautil"></span><h1>pylayers.util.mayautil<a class="headerlink" href="#module-pylayers.util.mayautil" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="pylayers.util.mayautil.VolumeSlicer">
-<em class="property">class </em><code class="descclassname">pylayers.util.mayautil.</code><code class="descname">VolumeSlicer</code><span class="sig-paren">(</span><em>**traits</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/mayautil.html#VolumeSlicer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.mayautil.VolumeSlicer" title="Permalink to this definition">¶</a></dt>
-<dd><p>volume slicer</p>
-<p>adapted from &gt;http://docs.enthought.com/mayavi/mayavi/auto/example_volume_slicer.html</p>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; x, y, z = np.ogrid[-5:5:64j, -5:5:64j, -5:5:64j]
-&gt;&gt;&gt; data = np.sin(3*x)/x + 0.05*z**2 + np.cos(3*y)
-&gt;&gt;&gt; m = VolumeSlicer(data=data)
-&gt;&gt;&gt; m.configure_traits()
-</pre></div>
-</div>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">add_class_trait</span></code>(name,&nbsp;*trait)</td>
-<td>Adds a named trait attribute to this class.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">add_trait</span></code>(name,&nbsp;*trait)</td>
-<td>Adds a trait attribute to this object.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">add_trait_category</span></code>(category)</td>
-<td>Adds a trait category to a class.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">add_trait_listener</span></code>(object[,&nbsp;prefix])</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">all_trait_names</span></code>()</td>
-<td>Returns the list of all trait names, including implicitly defined traits.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">base_trait</span></code>(name)</td>
-<td>Returns the base trait definition for a trait attribute.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">class_default_traits_view</span></code>()</td>
-<td>Returns the name of the default traits view for the class.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">class_editable_traits</span></code>()</td>
-<td>Returns an alphabetically sorted list of the names of non-event trait attributes associated with the current class.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">class_trait_names</span></code>(**metadata)</td>
-<td>Returns a list of the names of all trait attributes whose definitions match the set of <em>metadata</em> criteria specified.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">class_trait_view</span></code>([name,&nbsp;view_element])</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">class_trait_view_elements</span></code>()</td>
-<td>Returns the ViewElements object associated with the class.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">class_traits</span></code>(**metadata)</td>
-<td>Returns a dictionary containing the definitions of all of the trait attributes of the class that match the set of <em>metadata</em> criteria.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">class_visible_traits</span></code>()</td>
-<td>Returns an alphabetically sorted list of the names of non-event</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">clone_traits</span></code>([traits,&nbsp;memo,&nbsp;copy])</td>
-<td>Clones a new object from this one, optionally copying only a specified set of traits.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">configure_traits</span></code>([filename,&nbsp;view,&nbsp;kind,&nbsp;...])</td>
-<td>Creates and displays a dialog box for editing values of trait attributes, as if it were a complete, self-contained GUI application.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">copy_traits</span></code>(other[,&nbsp;traits,&nbsp;memo,&nbsp;copy])</td>
-<td>Copies another object&#8217;s trait attributes into this one.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">copyable_trait_names</span></code>(**metadata)</td>
-<td>Returns the list of trait names to copy or clone by default.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">default_traits_view</span></code>()</td>
-<td>Returns the name of the default traits view for the object&#8217;s class.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.util.mayautil.VolumeSlicer.display_scene3d" title="pylayers.util.mayautil.VolumeSlicer.display_scene3d"><code class="xref py py-obj docutils literal"><span class="pre">display_scene3d</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.util.mayautil.VolumeSlicer.display_scene_x" title="pylayers.util.mayautil.VolumeSlicer.display_scene_x"><code class="xref py py-obj docutils literal"><span class="pre">display_scene_x</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.util.mayautil.VolumeSlicer.display_scene_y" title="pylayers.util.mayautil.VolumeSlicer.display_scene_y"><code class="xref py py-obj docutils literal"><span class="pre">display_scene_y</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.util.mayautil.VolumeSlicer.display_scene_z" title="pylayers.util.mayautil.VolumeSlicer.display_scene_z"><code class="xref py py-obj docutils literal"><span class="pre">display_scene_z</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">edit_traits</span></code>([view,&nbsp;parent,&nbsp;kind,&nbsp;context,&nbsp;...])</td>
-<td>Displays a user interface window for editing trait attribute values.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">editable_traits</span></code>()</td>
-<td>Returns an alphabetically sorted list of the names of non-event trait attributes associated with the current object.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get</span></code>(*args,&nbsp;**kw)</td>
-<td>Shortcut for getting object trait attributes.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">has_traits_interface</span></code>(*interfaces)</td>
-<td>Returns whether the object implements a specified traits interface.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.util.mayautil.VolumeSlicer.make_ipw_3d" title="pylayers.util.mayautil.VolumeSlicer.make_ipw_3d"><code class="xref py py-obj docutils literal"><span class="pre">make_ipw_3d</span></code></a>(axis_name)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.util.mayautil.VolumeSlicer.make_side_view" title="pylayers.util.mayautil.VolumeSlicer.make_side_view"><code class="xref py py-obj docutils literal"><span class="pre">make_side_view</span></code></a>(axis_name)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">on_trait_change</span></code>(handler[,&nbsp;name,&nbsp;remove,&nbsp;...])</td>
-<td>Causes the object to invoke a handler whenever a trait attribute matching a specified pattern is modified, or removes the association.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">on_trait_event</span></code>(handler[,&nbsp;name,&nbsp;remove,&nbsp;...])</td>
-<td>Causes the object to invoke a handler whenever a trait attribute matching a specified pattern is modified, or removes the association.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">print_traits</span></code>([show_help])</td>
-<td>Prints the values of all explicitly-defined, non-event trait attributes on the current object, in an easily readable format.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">remove_trait</span></code>(name)</td>
-<td>Removes a trait attribute from this object.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">remove_trait_listener</span></code>(object[,&nbsp;prefix])</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">reset_traits</span></code>([traits])</td>
-<td>Resets some or all of an object&#8217;s trait attributes to their default values.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">set</span></code>(*args,&nbsp;**kw)</td>
-<td>Shortcut for setting object trait attributes.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">set_trait_dispatch_handler</span></code>(name,&nbsp;klass[,&nbsp;...])</td>
-<td>Sets a trait notification dispatch handler.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">sync_trait</span></code>(trait_name,&nbsp;object[,&nbsp;alias,&nbsp;...])</td>
-<td>Synchronizes the value of a trait attribute on this object with a trait attribute on another object.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">trait</span></code>(name[,&nbsp;force,&nbsp;copy])</td>
-<td>Returns the trait definition for the <em>name</em> trait attribute.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">trait_context</span></code>()</td>
-<td>Returns the default context to use for editing or configuring traits.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">trait_get</span></code>(*names,&nbsp;**metadata)</td>
-<td>Shortcut for getting object trait attributes.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">trait_items_event</span></code>(event_trait,name,items_event)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">trait_monitor</span></code>(handler[,&nbsp;remove])</td>
-<td>Adds or removes the specified <em>handler</em> from the list of active monitors.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">trait_names</span></code>(**metadata)</td>
-<td>Returns a list of the names of all trait attributes whose definitions match the set of <em>metadata</em> criteria specified.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">trait_property_changed</span></code>(...)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">trait_set</span></code>([trait_change_notify])</td>
-<td>Shortcut for setting object trait attributes.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">trait_setq</span></code>(**traits)</td>
-<td>Shortcut for setting object trait attributes.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">trait_subclasses</span></code>([all])</td>
-<td>Returns a list of the immediate (or all) subclasses of this class.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">trait_view</span></code>([name,&nbsp;view_element])</td>
-<td>Gets or sets a ViewElement associated with an object&#8217;s class.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">trait_view_elements</span></code>()</td>
-<td>Returns the ViewElements object associated with the object&#8217;s class.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">trait_views</span></code>([klass])</td>
-<td>Returns a list of the names of all view elements associated with the current object&#8217;s class.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">traits</span></code>(**metadata)</td>
-<td>Returns a dictionary containing the definitions of all of the trait attributes of this object that match the set of <em>metadata</em> criteria.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">traits_init</span></code>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">traits_inited</span></code>([True])</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">validate_trait</span></code>(name,&nbsp;value)</td>
-<td>Validates whether a value is legal for a trait.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">visible_traits</span></code>()</td>
-<td>Returns an alphabetically sorted list of the names of non-event</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="pylayers.util.mayautil.VolumeSlicer.display_scene3d">
-<code class="descname">display_scene3d</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/mayautil.html#VolumeSlicer.display_scene3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.mayautil.VolumeSlicer.display_scene3d" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.mayautil.VolumeSlicer.display_scene_x">
-<code class="descname">display_scene_x</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/mayautil.html#VolumeSlicer.display_scene_x"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.mayautil.VolumeSlicer.display_scene_x" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.mayautil.VolumeSlicer.display_scene_y">
-<code class="descname">display_scene_y</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/mayautil.html#VolumeSlicer.display_scene_y"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.mayautil.VolumeSlicer.display_scene_y" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.mayautil.VolumeSlicer.display_scene_z">
-<code class="descname">display_scene_z</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/mayautil.html#VolumeSlicer.display_scene_z"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.mayautil.VolumeSlicer.display_scene_z" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.mayautil.VolumeSlicer.make_ipw_3d">
-<code class="descname">make_ipw_3d</code><span class="sig-paren">(</span><em>axis_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/mayautil.html#VolumeSlicer.make_ipw_3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.mayautil.VolumeSlicer.make_ipw_3d" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.mayautil.VolumeSlicer.make_side_view">
-<code class="descname">make_side_view</code><span class="sig-paren">(</span><em>axis_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/mayautil.html#VolumeSlicer.make_side_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.mayautil.VolumeSlicer.make_side_view" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.util.mayautil.inotshow">
-<code class="descclassname">pylayers.util.mayautil.</code><code class="descname">inotshow</code><span class="sig-paren">(</span><em>filename</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/mayautil.html#inotshow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.mayautil.inotshow" title="Permalink to this definition">¶</a></dt>
-<dd><p>IPython notebook show saved mayavi file</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>doc</strong> : bool</p>
-<blockquote>
-<div><p>if doc, image is supposed to be generated for documentation</p>
-</div></blockquote>
-<p class="last"><strong>See IPython.display.Image</strong></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.util.mayautil.savefig">
-<code class="descclassname">pylayers.util.mayautil.</code><code class="descname">savefig</code><span class="sig-paren">(</span><em>filename</em>, <em>mlabview=[]</em>, <em>magnification=3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/mayautil.html#savefig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.mayautil.savefig" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save mayavi figure</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
-<blockquote>
-<div><p>name of the figure</p>
-</div></blockquote>
-<p><strong>mlabview</strong> : [] <a href="#id1"><span class="problematic" id="id2">|</span></a>(x,y,z, np.array([ xroll,yroll,zroll]))</p>
-<blockquote>
-<div><p>specifyy angle of camera view ( see mayavi.view )</p>
-</div></blockquote>
-<p><strong>magnification</strong> : int</p>
-<blockquote class="last">
-<div><p>resolution of the generated image ( see mayavi.savefig)</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </div>
 
 
@@ -456,8 +211,13 @@
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="../py-modindex.html">
+      <a href="pylayers.util.plotutil.html">
         Next
+      </a>  
+    </div>
+    <div class="buttonPrevious">
+      <a href="../py-modindex.html">
+        Previous
       </a>  
     </div>
     

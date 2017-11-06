@@ -318,7 +318,7 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ED.apply"><a class="viewcode-back" href="../../../modules/pylayers.signal.ED.html#pylayers.signal.ED.ED.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;ideal&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="ED.apply"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.ED.ED.apply.html#pylayers.signal.ED.ED.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;ideal&#39;</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot; apply signal </span>
 
 <span class="sd">        Parameters</span>
@@ -362,7 +362,7 @@
 
         <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ED.moment"><a class="viewcode-back" href="../../../modules/pylayers.signal.ED.html#pylayers.signal.ED.ED.moment">[docs]</a>    <span class="k">def</span> <span class="nf">moment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;struc&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="ED.moment"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.ED.ED.moment.html#pylayers.signal.ED.ED.moment">[docs]</a>    <span class="k">def</span> <span class="nf">moment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;struc&#39;</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot; evaluate mean and variance of output signal y</span>
 
 <span class="sd">        Parameters</span>
@@ -412,7 +412,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">muy</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">vary</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vary</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="ED.pdf"><a class="viewcode-back" href="../../../modules/pylayers.signal.ED.html#pylayers.signal.ED.ED.pdf">[docs]</a>    <span class="k">def</span> <span class="nf">pdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">E</span><span class="p">,</span><span class="n">Ei</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="ED.pdf"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.ED.ED.pdf.html#pylayers.signal.ED.ED.pdf">[docs]</a>    <span class="k">def</span> <span class="nf">pdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">E</span><span class="p">,</span><span class="n">Ei</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculates decision problem densities under H0 and H1</span>
 
 <span class="sd">        Parameters</span>
@@ -452,7 +452,7 @@
                            <span class="n">scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span>
                            <span class="n">nc</span><span class="o">=</span><span class="p">(</span><span class="n">E</span><span class="o">+</span><span class="n">Ei</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="ED.errprob"><a class="viewcode-back" href="../../../modules/pylayers.signal.ED.html#pylayers.signal.ED.ED.errprob">[docs]</a>    <span class="k">def</span> <span class="nf">errprob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">E</span><span class="p">,</span><span class="n">Ei</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">thresh</span><span class="o">=</span><span class="mf">2e-9</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;thresh&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="ED.errprob"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.ED.ED.errprob.html#pylayers.signal.ED.ED.errprob">[docs]</a>    <span class="k">def</span> <span class="nf">errprob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">E</span><span class="p">,</span><span class="n">Ei</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">thresh</span><span class="o">=</span><span class="mf">2e-9</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;thresh&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculates error probability</span>
 
 <span class="sd">        Parameters</span>
@@ -511,7 +511,7 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">errp</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ED.plot"><a class="viewcode-back" href="../../../modules/pylayers.signal.ED.html#pylayers.signal.ED.ED.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">E</span><span class="p">):</span>
+<div class="viewcode-block" id="ED.plot"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.ED.ED.plot.html#pylayers.signal.ED.ED.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">E</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot decision problem densities</span>
 
 <span class="sd">        Parameters</span>
@@ -531,7 +531,7 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">p0</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">p1</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ED.roc"><a class="viewcode-back" href="../../../modules/pylayers.signal.ED.html#pylayers.signal.ED.ED.roc">[docs]</a>    <span class="k">def</span> <span class="nf">roc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">E</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;thresh&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="ED.roc"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.ED.ED.roc.html#pylayers.signal.ED.ED.roc">[docs]</a>    <span class="k">def</span> <span class="nf">roc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">E</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;thresh&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; determines receiver operating curve</span>
 
 <span class="sd">        Parameters</span>

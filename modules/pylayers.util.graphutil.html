@@ -32,6 +32,7 @@
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="PyLayers Modules Reference" href="pylayers.html" />
     <link rel="next" title="pylayers.util.graphutil.draw" href="generated/pylayers.util.graphutil.draw.html" />
+    <link rel="prev" title="pylayers.util.geomutil.dmin3d" href="generated/pylayers.util.geomutil.dmin3d.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -91,6 +92,23 @@
 	   
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="generated/pylayers.util.geomutil.dmin3d.html" title="pylayers.util.geomutil.dmin3d"
+	    accesskey="P">Previous
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.util...
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.util.geomutil.dmin3d
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
 	<div class="rellink">
 	<a href="generated/pylayers.util.graphutil.draw.html" title="pylayers.util.graphutil.draw"
 	    accesskey="N">Next
@@ -177,155 +195,17 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.util.graphutil.draw" title="pylayers.util.graphutil.draw"><code class="xref py py-obj docutils literal"><span class="pre">draw</span></code></a>(G,&nbsp;**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.graphutil.draw.html#pylayers.util.graphutil.draw" title="pylayers.util.graphutil.draw"><code class="xref py py-obj docutils literal"><span class="pre">draw</span></code></a>(G,&nbsp;**kwargs)</td>
 <td>draw a networkx graph</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.util.graphutil.edgetype" title="pylayers.util.graphutil.edgetype"><code class="xref py py-obj docutils literal"><span class="pre">edgetype</span></code></a>(G)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.graphutil.edgetype.html#pylayers.util.graphutil.edgetype" title="pylayers.util.graphutil.edgetype"><code class="xref py py-obj docutils literal"><span class="pre">edgetype</span></code></a>(G)</td>
 <td>edge type</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.util.graphutil.find_all_paths" title="pylayers.util.graphutil.find_all_paths"><code class="xref py py-obj docutils literal"><span class="pre">find_all_paths</span></code></a>(graph,&nbsp;start,&nbsp;end)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.graphutil.find_all_paths.html#pylayers.util.graphutil.find_all_paths" title="pylayers.util.graphutil.find_all_paths"><code class="xref py py-obj docutils literal"><span class="pre">find_all_paths</span></code></a>(graph,&nbsp;start,&nbsp;end)</td>
 <td>find all paths</td>
 </tr>
 </tbody>
 </table>
-<dl class="function">
-<dt id="pylayers.util.graphutil.draw">
-<code class="descclassname">pylayers.util.graphutil.</code><code class="descname">draw</code><span class="sig-paren">(</span><em>G</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/graphutil.html#draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.graphutil.draw" title="Permalink to this definition">¶</a></dt>
-<dd><p>draw a networkx graph</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>G</strong> : Graph with pos (geometric graph)</p>
-<p><strong>&#8216;show&#8217;: False,</strong></p>
-<blockquote>
-<div><p>plt.show</p>
-</div></blockquote>
-<p><strong>&#8216;figsize&#8217;: (8,8)</strong></p>
-<blockquote>
-<div><p>figsize from plt.figure</p>
-</div></blockquote>
-<p><strong>&#8216;fig&#8217;: [],</strong></p>
-<blockquote>
-<div><p>plt.figure instance</p>
-</div></blockquote>
-<p><strong>&#8216;ax&#8217;: [],</strong></p>
-<blockquote>
-<div><p>plt.axis instance</p>
-</div></blockquote>
-<p><strong>&#8216;arrows&#8217;:False,</strong></p>
-<blockquote>
-<div><p>display arrows on segments</p>
-</div></blockquote>
-<p><strong>&#8216;nodes&#8217;:True,</strong></p>
-<blockquote>
-<div><p>displays nodes for points</p>
-</div></blockquote>
-<p><strong>&#8216;edges&#8217;:True,</strong></p>
-<blockquote>
-<div><p>display nodes for segments</p>
-</div></blockquote>
-<p><strong>&#8216;lowerseg&#8217;</strong> : False</p>
-<blockquote>
-<div><p>only display segment in contact with floor. Remove
-other iso segments</p>
-</div></blockquote>
-<p><strong>&#8216;airwalls&#8217;:False,</strong></p>
-<blockquote>
-<div><p>display airwalls</p>
-</div></blockquote>
-<p><strong>&#8216;labels&#8217;:True,</strong></p>
-<blockquote>
-<div><p>display labels on nodes (points and segments)</p>
-</div></blockquote>
-<p><strong>&#8216;width&#8217;: 2,</strong></p>
-<blockquote>
-<div><p>edge line width</p>
-</div></blockquote>
-<p><strong>&#8216;node_color&#8217;:&#8217;w&#8217;,</strong></p>
-<blockquote>
-<div><p>node color</p>
-</div></blockquote>
-<p><strong>&#8216;edge_color&#8217;:&#8217;k&#8217;,</strong></p>
-<blockquote>
-<div><p>edge color</p>
-</div></blockquote>
-<p><strong>&#8216;posnode_color&#8217;:&#8217;k&#8217;,</strong></p>
-<blockquote>
-<div><p>point font color</p>
-</div></blockquote>
-<p><strong>&#8216;negnode_color&#8217;:&#8217;b&#8217;,</strong></p>
-<blockquote>
-<div><p>segment font color</p>
-</div></blockquote>
-<p><strong>&#8216;font_size&#8217;: 30,</strong></p>
-<blockquote>
-<div><p>font size</p>
-</div></blockquote>
-<p><strong>&#8216;node_size&#8217;: 200,</strong></p>
-<blockquote>
-<div><p>node size</p>
-</div></blockquote>
-<p><strong>&#8216;alphan&#8217;: 0.8,</strong></p>
-<blockquote>
-<div><p>node transparence ( alpha)</p>
-</div></blockquote>
-<p><strong>&#8216;alphae&#8217;: 1.0,</strong></p>
-<blockquote>
-<div><p>edge transparence ( alpha)</p>
-</div></blockquote>
-<p><strong>&#8216;nodelist&#8217;: [],</strong></p>
-<blockquote>
-<div><p>list of nodes to be displayed</p>
-</div></blockquote>
-<p><strong>&#8216;edgelist&#8217;: [],</strong></p>
-<blockquote class="last">
-<div><p>list of edges to be displayed</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.gis.layout.showG</span></code></p>
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.util.graphutil.edgetype">
-<code class="descclassname">pylayers.util.graphutil.</code><code class="descname">edgetype</code><span class="sig-paren">(</span><em>G</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/graphutil.html#edgetype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.graphutil.edgetype" title="Permalink to this definition">¶</a></dt>
-<dd><p>edge type</p>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.util.geomutil import *
-&gt;&gt;&gt; import shapely.geometry as shg
-&gt;&gt;&gt; import matplotlib.pyplot as plt
-&gt;&gt;&gt; points = shg.MultiPoint([(0, 0),(0, 1),(1,1),(1.5,1),(2.5,1),(2.5,2),(2.8,2),(2.8,1.1),(3.2, 1.1), (3.2, 0.7), (0.4, 0.7), (0.4, 0)])
-&gt;&gt;&gt; polyg  = Polygon(points)
-&gt;&gt;&gt; Gv     = polyg.buildGv(show=True)
-&gt;&gt;&gt; plt.show()
-</pre></div>
-</div>
-<p>(<a class="reference external" href="../modules/pylayers-util-graphutil-1.py">Source code</a>)</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.util.graphutil.find_all_paths">
-<code class="descclassname">pylayers.util.graphutil.</code><code class="descname">find_all_paths</code><span class="sig-paren">(</span><em>graph</em>, <em>start</em>, <em>end</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/graphutil.html#find_all_paths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.graphutil.find_all_paths" title="Permalink to this definition">¶</a></dt>
-<dd><p>find all paths</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>graph :</strong></p>
-<p><strong>start:</strong></p>
-<p class="last"><strong>end :</strong></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </div>
 </div>
 
@@ -350,13 +230,18 @@ other iso segments</p>
      <div class="rel">
     
     <div class="buttonPrevious">
-      <a href="generated/pylayers.util.graphutil.draw.html">
+      <a href="generated/pylayers.util.geomutil.dmin3d.html">
         Previous
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="../py-modindex.html">
+      <a href="generated/pylayers.util.graphutil.draw.html">
         Next
+      </a>  
+    </div>
+    <div class="buttonPrevious">
+      <a href="../py-modindex.html">
+        Previous
       </a>  
     </div>
     

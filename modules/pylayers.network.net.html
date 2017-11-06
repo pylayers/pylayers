@@ -32,6 +32,7 @@
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="PyLayers Modules Reference" href="pylayers.html" />
     <link rel="next" title="pylayers.network.net.Network.__init__" href="generated/pylayers.network.net.Network.__init__.html" />
+    <link rel="prev" title="pylayers.network.model" href="pylayers.network.model.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -92,6 +93,23 @@
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
+	<a href="pylayers.network.model.html" title="pylayers.network.model"
+	    accesskey="P">Previous
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.netw...
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.network.model
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
 	<a href="generated/pylayers.network.net.Network.__init__.html" title="pylayers.network.net.Network.__init__"
 	    accesskey="N">Next
 	    <br>
@@ -150,9 +168,7 @@
     <h3>This page</h3>
 	<ul>
 <li><a class="reference internal" href="#">pylayers.network.net</a><ul>
-<li><a class="reference internal" href="#class-network">Class Network</a><ul>
-</ul>
-</li>
+<li><a class="reference internal" href="#class-network">Class Network</a></li>
 </ul>
 </li>
 </ul>
@@ -190,278 +206,11 @@
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.net.Network.__init__.html#pylayers.network.net.Network.__init__" title="pylayers.network.net.Network.__init__"><code class="xref py py-obj docutils literal"><span class="pre">Network.__init__</span></code></a>([numMotes,&nbsp;numGateways,&nbsp;...])</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.network.net.Network.connect" title="pylayers.network.net.Network.connect"><code class="xref py py-obj docutils literal"><span class="pre">Network.connect</span></code></a>([dmax,&nbsp;pdrValue,&nbsp;n,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.net.Network.connect.html#pylayers.network.net.Network.connect" title="pylayers.network.net.Network.connect"><code class="xref py py-obj docutils literal"><span class="pre">Network.connect</span></code></a>([dmax,&nbsp;pdrValue,&nbsp;n,&nbsp;...])</td>
 <td>connect nodes based on a connectivity model</td>
 </tr>
 </tbody>
 </table>
-<dl class="class">
-<dt id="pylayers.network.net.Network">
-<em class="property">class </em><code class="descclassname">pylayers.network.net.</code><code class="descname">Network</code><span class="sig-paren">(</span><em>numMotes=100</em>, <em>numGateways=10</em>, <em>loadBalance=10</em>, <em>dx=316</em>, <em>dy=316</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/net.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.net.Network" title="Permalink to this definition">¶</a></dt>
-<dd><p class="rubric">Attributes</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">name</span></code></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">add_cycle</span></code>(nodes,&nbsp;**attr)</td>
-<td>Add a cycle.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">add_edge</span></code>(u,&nbsp;v[,&nbsp;attr_dict])</td>
-<td>Add an edge between u and v.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">add_edges_from</span></code>(ebunch[,&nbsp;attr_dict])</td>
-<td>Add all the edges in ebunch.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">add_node</span></code>(n[,&nbsp;attr_dict])</td>
-<td>Add a single node n and update node attributes.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">add_nodes_from</span></code>(nodes,&nbsp;**attr)</td>
-<td>Add multiple nodes.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">add_path</span></code>(nodes,&nbsp;**attr)</td>
-<td>Add a path.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">add_star</span></code>(nodes,&nbsp;**attr)</td>
-<td>Add a star.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">add_weighted_edges_from</span></code>(ebunch[,&nbsp;weight])</td>
-<td>Add all the edges in ebunch as weighted edges with specified weights.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">adjacency_iter</span></code>()</td>
-<td>Return an iterator of (node, adjacency dict) tuples for all nodes.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">adjacency_list</span></code>()</td>
-<td>Return an adjacency list representation of the graph.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">adjlist_dict_factory</span></code></td>
-<td>alias of <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">clear</span></code>()</td>
-<td>Remove all nodes and edges from the graph.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.network.net.Network.connect" title="pylayers.network.net.Network.connect"><code class="xref py py-obj docutils literal"><span class="pre">connect</span></code></a>([dmax,&nbsp;pdrValue,&nbsp;n,&nbsp;sensitivitydBm,&nbsp;...])</td>
-<td>connect nodes based on a connectivity model</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">copy</span></code>()</td>
-<td>Return a copy of the graph.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">degree</span></code>([nbunch,&nbsp;weight])</td>
-<td>Return the degree of a node or nodes.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">degree_iter</span></code>([nbunch,&nbsp;weight])</td>
-<td>Return an iterator for (node, degree).</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.network.net.Network.disconnect" title="pylayers.network.net.Network.disconnect"><code class="xref py py-obj docutils literal"><span class="pre">disconnect</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">edge_attr_dict_factory</span></code></td>
-<td>alias of <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">edges</span></code>([nbunch,&nbsp;data,&nbsp;default])</td>
-<td>Return a list of edges.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">edges_iter</span></code>([nbunch,&nbsp;data,&nbsp;default])</td>
-<td>Return an iterator over the edges.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get_edge_data</span></code>(u,&nbsp;v[,&nbsp;default])</td>
-<td>Return the attribute dictionary associated with edge (u,v).</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">has_edge</span></code>(u,&nbsp;v)</td>
-<td>Return True if the edge (u,v) is in the graph.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">has_node</span></code>(n)</td>
-<td>Return True if the graph contains the node n.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
-<td>generic help</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">is_directed</span></code>()</td>
-<td>Return True if graph is directed, False otherwise.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">is_multigraph</span></code>()</td>
-<td>Return True if graph is a multigraph, False otherwise.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">nbunch_iter</span></code>([nbunch])</td>
-<td>Return an iterator of nodes contained in nbunch that are also in the graph.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">neighbors</span></code>(n)</td>
-<td>Return a list of the nodes connected to the node n.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">neighbors_iter</span></code>(n)</td>
-<td>Return an iterator over all neighbors of node n.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">node_dict_factory</span></code></td>
-<td>alias of <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">nodes</span></code>([data])</td>
-<td>Return a list of the nodes in the graph.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">nodes_iter</span></code>([data])</td>
-<td>Return an iterator over the nodes.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">nodes_with_selfloops</span></code>()</td>
-<td>Return a list of nodes with self loops.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">number_of_edges</span></code>([u,&nbsp;v])</td>
-<td>Return the number of edges between two nodes.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">number_of_nodes</span></code>()</td>
-<td>Return the number of nodes in the graph.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">number_of_selfloops</span></code>()</td>
-<td>Return the number of selfloop edges.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">order</span></code>()</td>
-<td>Return the number of nodes in the graph.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">remove_edge</span></code>(u,&nbsp;v)</td>
-<td>Remove the edge between u and v.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">remove_edges_from</span></code>(ebunch)</td>
-<td>Remove all edges specified in ebunch.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">remove_node</span></code>(n)</td>
-<td>Remove node n.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">remove_nodes_from</span></code>(nodes)</td>
-<td>Remove multiple nodes.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.network.net.Network.routing" title="pylayers.network.net.Network.routing"><code class="xref py py-obj docutils literal"><span class="pre">routing</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.network.net.Network.scheduling" title="pylayers.network.net.Network.scheduling"><code class="xref py py-obj docutils literal"><span class="pre">scheduling</span></code></a>(numTimeSlots,&nbsp;numOffsets[,&nbsp;export])</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">selfloop_edges</span></code>([data,&nbsp;default])</td>
-<td>Return a list of selfloop edges.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.network.net.Network.show" title="pylayers.network.net.Network.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>([connectivity,&nbsp;routes])</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">size</span></code>([weight])</td>
-<td>Return the number of edges.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">subgraph</span></code>(nbunch)</td>
-<td>Return the subgraph induced on nodes in nbunch.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">to_directed</span></code>()</td>
-<td>Return a directed representation of the graph.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">to_undirected</span></code>()</td>
-<td>Return an undirected copy of the graph.</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="pylayers.network.net.Network.connect">
-<code class="descname">connect</code><span class="sig-paren">(</span><em>dmax=175</em>, <em>pdrValue=0.8</em>, <em>n=2</em>, <em>sensitivitydBm=-85</em>, <em>fGHz=2.4</em>, <em>PtdBm=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/net.html#Network.connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.net.Network.connect" title="Permalink to this definition">¶</a></dt>
-<dd><p>connect nodes based on a connectivity model</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dmax</strong></p>
-<p><strong>pdrValue :</strong></p>
-<blockquote class="last">
-<div><p>Packet Delivery Rate Value  (default 0.8)   (= 1 - PER)</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.network.net.Network.disconnect">
-<code class="descname">disconnect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/net.html#Network.disconnect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.net.Network.disconnect" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.network.net.Network.routing">
-<code class="descname">routing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/net.html#Network.routing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.net.Network.routing" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.network.net.Network.scheduling">
-<code class="descname">scheduling</code><span class="sig-paren">(</span><em>numTimeSlots</em>, <em>numOffsets</em>, <em>export=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/net.html#Network.scheduling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.net.Network.scheduling" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>numTimeSlots</strong></p>
-<p><strong>numOffsets</strong></p>
-<p class="last"><strong>export</strong> : boolean</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.network.net.Network.show">
-<code class="descname">show</code><span class="sig-paren">(</span><em>connectivity=True</em>, <em>routes=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/net.html#Network.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.net.Network.show" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>conectivity</strong></p>
-<p class="last"><strong>routes</strong></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.network.net.connectModel">
-<code class="descclassname">pylayers.network.net.</code><code class="descname">connectModel</code><span class="sig-paren">(</span><em>d</em>, <em>fGHz=2.4</em>, <em>sensitivitydBm=-85</em>, <em>n=2</em>, <em>PtdBm=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/net.html#connectModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.net.connectModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>connectivity model</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>d</strong> : distance in meters</p>
-<p><strong>fGHz :</strong></p>
-<p><strong>sensitivitydBm :</strong></p>
-<p class="last"><strong>ptdBm :</strong></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </div>
 </div>
 
@@ -486,13 +235,18 @@
      <div class="rel">
     
     <div class="buttonPrevious">
-      <a href="generated/pylayers.network.net.Network.__init__.html">
+      <a href="pylayers.network.model.html">
         Previous
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="../py-modindex.html">
+      <a href="generated/pylayers.network.net.Network.__init__.html">
         Next
+      </a>  
+    </div>
+    <div class="buttonPrevious">
+      <a href="../py-modindex.html">
+        Previous
       </a>  
     </div>
     

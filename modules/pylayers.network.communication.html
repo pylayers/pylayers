@@ -31,6 +31,8 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="PyLayers Modules Reference" href="pylayers.html" />
+    <link rel="next" title="pylayers.network.emsolver" href="pylayers.network.emsolver.html" />
+    <link rel="prev" title="pylayers.mobility.transit.SteeringBehavior.Separation.calculate" href="generated/pylayers.mobility.transit.SteeringBehavior.Separation.calculate.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -91,6 +93,40 @@
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
+	<a href="generated/pylayers.mobility.transit.SteeringBehavior.Separation.calculate.html" title="pylayers.mobility.transit.SteeringBehavior.Separation.calculate"
+	    accesskey="P">Previous
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.mobi...
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.mobility.transit.SteeringBehavior.Separation.calculate
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="pylayers.network.emsolver.html" title="pylayers.network.emsolver"
+	    accesskey="N">Next
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.netw...
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.network.emsolver
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
 	<a href="../py-modindex.html" title="Python Module Index"
 	    >Modules
 	    <br>
@@ -131,9 +167,7 @@
     <a href="../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">pylayers.network.communication</a><ul>
-</ul>
-</li>
+<li><a class="reference internal" href="#">pylayers.network.communication</a></li>
 </ul>
 
     
@@ -149,592 +183,6 @@
             
   <div class="section" id="module-pylayers.network.communication">
 <span id="pylayers-network-communication"></span><h1>pylayers.network.communication<a class="headerlink" href="#module-pylayers.network.communication" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="pylayers.network.communication.Gcom">
-<em class="property">class </em><code class="descclassname">pylayers.network.communication.</code><code class="descname">Gcom</code><span class="sig-paren">(</span><em>net=Network information ******************* number of nodes: 0 ID      | name            |group   | type | position (x</em>, <em>y</em>, <em>z)  | antenna    |  wstd        -----------------------------------------------------------------------------------------</em>, <em>sim=&lt;SimPy.Simulation.Simulation object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/communication.html#Gcom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.Gcom" title="Permalink to this definition">¶</a></dt>
-<dd><p>Communication graph</p>
-<p class="rubric">Notes</p>
-<p>That class inherits of networkx.MultiDiGraph().
-Its nodes are the nodes of the passing Network object.
-Its edge represents all the possbile communication bridge between thoses nodes.
-On the edge, timestamped message can be passed between nodes</p>
-<p>Contrary to pylayers.network, which is an undirected graph, here edge are directed.</p>
-<p>Hence the dictionnary of simpy events (devt) can be created.
-The keys of devt are a tuple (nodeid#1, nodeid#2 , wstd).</p>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="11%" />
-<col width="89%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>net</td>
-<td>(pylayers.network.network())</td>
-</tr>
-<tr class="row-even"><td>sim</td>
-<td>(SimPy.SimulationRT())</td>
-</tr>
-<tr class="row-odd"><td>devt</td>
-<td>(dictionary) dictionnary of event</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">add_cycle</span></code>(nodes,&nbsp;**attr)</td>
-<td>Add a cycle.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">add_edge</span></code>(u,&nbsp;v[,&nbsp;key,&nbsp;attr_dict])</td>
-<td>Add an edge between u and v.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">add_edges_from</span></code>(ebunch[,&nbsp;attr_dict])</td>
-<td>Add all the edges in ebunch.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">add_node</span></code>(n[,&nbsp;attr_dict])</td>
-<td>Add a single node n and update node attributes.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">add_nodes_from</span></code>(nodes,&nbsp;**attr)</td>
-<td>Add multiple nodes.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">add_path</span></code>(nodes,&nbsp;**attr)</td>
-<td>Add a path.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">add_star</span></code>(nodes,&nbsp;**attr)</td>
-<td>Add a star.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">add_weighted_edges_from</span></code>(ebunch[,&nbsp;weight])</td>
-<td>Add all the edges in ebunch as weighted edges with specified weights.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">adjacency_iter</span></code>()</td>
-<td>Return an iterator of (node, adjacency dict) tuples for all nodes.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">adjacency_list</span></code>()</td>
-<td>Return an adjacency list representation of the graph.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">adjlist_dict_factory</span></code></td>
-<td>alias of <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">clear</span></code>()</td>
-<td>Remove all nodes and edges from the graph.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">copy</span></code>()</td>
-<td>Return a copy of the graph.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.network.communication.Gcom.create" title="pylayers.network.communication.Gcom.create"><code class="xref py py-obj docutils literal"><span class="pre">create</span></code></a>()</td>
-<td>Create the communication graph and the dictionnary of simpy events</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.network.communication.Gcom.create_evt" title="pylayers.network.communication.Gcom.create_evt"><code class="xref py py-obj docutils literal"><span class="pre">create_evt</span></code></a>()</td>
-<td>Create the dictionnary of simpy event.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.network.communication.Gcom.create_graph" title="pylayers.network.communication.Gcom.create_graph"><code class="xref py py-obj docutils literal"><span class="pre">create_graph</span></code></a>()</td>
-<td>Create the communication graph from the Network graph</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">degree</span></code>([nbunch,&nbsp;weight])</td>
-<td>Return the degree of a node or nodes.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">degree_iter</span></code>([nbunch,&nbsp;weight])</td>
-<td>Return an iterator for (node, degree).</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">edge_attr_dict_factory</span></code></td>
-<td>alias of <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">edge_key_dict_factory</span></code></td>
-<td>alias of <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">edges</span></code>([nbunch,&nbsp;data,&nbsp;keys,&nbsp;default])</td>
-<td>Return a list of edges.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">edges_iter</span></code>([nbunch,&nbsp;data,&nbsp;keys,&nbsp;default])</td>
-<td>Return an iterator over the edges.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get_edge_data</span></code>(u,&nbsp;v[,&nbsp;key,&nbsp;default])</td>
-<td>Return the attribute dictionary associated with edge (u,v).</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">has_edge</span></code>(u,&nbsp;v[,&nbsp;key])</td>
-<td>Return True if the graph has an edge between nodes u and v.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">has_node</span></code>(n)</td>
-<td>Return True if the graph contains the node n.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">has_predecessor</span></code>(u,&nbsp;v)</td>
-<td>Return True if node u has predecessor v.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">has_successor</span></code>(u,&nbsp;v)</td>
-<td>Return True if node u has successor v.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">in_degree</span></code>([nbunch,&nbsp;weight])</td>
-<td>Return the in-degree of a node or nodes.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">in_degree_iter</span></code>([nbunch,&nbsp;weight])</td>
-<td>Return an iterator for (node, in-degree).</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">in_edges</span></code>([nbunch,&nbsp;keys,&nbsp;data])</td>
-<td>Return a list of the incoming edges.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">in_edges_iter</span></code>([nbunch,&nbsp;data,&nbsp;keys])</td>
-<td>Return an iterator over the incoming edges.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">is_directed</span></code>()</td>
-<td>Return True if graph is directed, False otherwise.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">is_multigraph</span></code>()</td>
-<td>Return True if graph is a multigraph, False otherwise.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.network.communication.Gcom.load_dec_file" title="pylayers.network.communication.Gcom.load_dec_file"><code class="xref py py-obj docutils literal"><span class="pre">load_dec_file</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">nbunch_iter</span></code>([nbunch])</td>
-<td>Return an iterator of nodes contained in nbunch that are also in the graph.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">neighbors</span></code>(n)</td>
-<td>Return a list of successor nodes of n.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">neighbors_iter</span></code>(n)</td>
-<td>Return an iterator over successor nodes of n.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">node_dict_factory</span></code></td>
-<td>alias of <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">nodes</span></code>([data])</td>
-<td>Return a list of the nodes in the graph.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">nodes_iter</span></code>([data])</td>
-<td>Return an iterator over the nodes.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">nodes_with_selfloops</span></code>()</td>
-<td>Return a list of nodes with self loops.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">number_of_edges</span></code>([u,&nbsp;v])</td>
-<td>Return the number of edges between two nodes.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">number_of_nodes</span></code>()</td>
-<td>Return the number of nodes in the graph.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">number_of_selfloops</span></code>()</td>
-<td>Return the number of selfloop edges.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">order</span></code>()</td>
-<td>Return the number of nodes in the graph.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">out_degree</span></code>([nbunch,&nbsp;weight])</td>
-<td>Return the out-degree of a node or nodes.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">out_degree_iter</span></code>([nbunch,&nbsp;weight])</td>
-<td>Return an iterator for (node, out-degree).</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">out_edges</span></code>([nbunch,&nbsp;keys,&nbsp;data])</td>
-<td>Return a list of the outgoing edges.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">out_edges_iter</span></code>([nbunch,&nbsp;data,&nbsp;keys,&nbsp;default])</td>
-<td>Return an iterator over the edges.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">predecessors</span></code>(n)</td>
-<td>Return a list of predecessor nodes of n.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">predecessors_iter</span></code>(n)</td>
-<td>Return an iterator over predecessor nodes of n.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">remove_edge</span></code>(u,&nbsp;v[,&nbsp;key])</td>
-<td>Remove an edge between u and v.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">remove_edges_from</span></code>(ebunch)</td>
-<td>Remove all edges specified in ebunch.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">remove_node</span></code>(n)</td>
-<td>Remove node n.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">remove_nodes_from</span></code>(nbunch)</td>
-<td>Remove multiple nodes.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">reverse</span></code>([copy])</td>
-<td>Return the reverse of the graph.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">selfloop_edges</span></code>([data,&nbsp;keys,&nbsp;default])</td>
-<td>Return a list of selfloop edges.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">size</span></code>([weight])</td>
-<td>Return the number of edges.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">subgraph</span></code>(nbunch)</td>
-<td>Return the subgraph induced on nodes in nbunch.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">successors</span></code>(n)</td>
-<td>Return a list of successor nodes of n.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">successors_iter</span></code>(n)</td>
-<td>Return an iterator over successor nodes of n.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">to_directed</span></code>()</td>
-<td>Return a directed copy of the graph.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">to_undirected</span></code>([reciprocal])</td>
-<td>Return an undirected representation of the digraph.</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="pylayers.network.communication.Gcom.create">
-<code class="descname">create</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/communication.html#Gcom.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.Gcom.create" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div>Create the communication graph and the dictionnary of simpy events</div></blockquote>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.network.communication import *
-&gt;&gt;&gt; G=Gcom()
-&gt;&gt;&gt; G.create()
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.network.communication.Gcom.create_evt">
-<code class="descname">create_evt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/communication.html#Gcom.create_evt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.Gcom.create_evt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create the dictionnary of simpy event.
-Hence each node of communication graph can send signal to others</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.network.communication.Gcom.create_graph">
-<code class="descname">create_graph</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/communication.html#Gcom.create_graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.Gcom.create_graph" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create the communication graph from the Network graph</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.network.communication.Gcom.load_dec_file">
-<code class="descname">load_dec_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/communication.html#Gcom.load_dec_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.Gcom.load_dec_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="pylayers.network.communication.RX">
-<em class="property">class </em><code class="descclassname">pylayers.network.communication.</code><code class="descname">RX</code><span class="sig-paren">(</span><em>**args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/communication.html#RX"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.RX" title="Permalink to this definition">¶</a></dt>
-<dd><p>RX process</p>
-<p>Each agent has a RX process to receive information asynchronously.</p>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="12%" />
-<col width="88%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>sim</td>
-<td>(SimPy.SimulationRT())</td>
-</tr>
-<tr class="row-even"><td>ID</td>
-<td>(string) id of the agent</td>
-</tr>
-<tr class="row-odd"><td>net</td>
-<td>(pylayers.network.network())</td>
-</tr>
-<tr class="row-even"><td>gcom</td>
-<td>(pylayers.network.communication()) a graph a communication</td>
-</tr>
-<tr class="row-odd"><td>devt</td>
-<td>(dictionary) dictionnary of event</td>
-</tr>
-<tr class="row-even"><td>refreshRSS</td>
-<td>(float) time interval where RSS are refreshed</td>
-</tr>
-<tr class="row-odd"><td>refreshTOA</td>
-<td>(float) time interval where TOA are refresh (if agent.comm_mode ==&#8217;syncho&#8217;)</td>
-</tr>
-<tr class="row-even"><td>mp</td>
-<td>(bool) message passing [Not yet implemented]</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">acquired</span></code>(res)</td>
-<td>Multi - functional test for reneging for &#8216;request&#8217; and &#8216;get&#8217;: (1)If res of type Resource:     Tests whether resource res was acquired when proces reactivated.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">active</span></code>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">attrnames</span></code>()</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">cancel</span></code>(victim)</td>
-<td>Application function to cancel all event notices for this Process instance;(should be all event notices for the _generator_).</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.network.communication.RX.create_evt" title="pylayers.network.communication.RX.create_evt"><code class="xref py py-obj docutils literal"><span class="pre">create_evt</span></code></a>()</td>
-<td>Create simpy events from communication gaph</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.network.communication.RX.fill_req" title="pylayers.network.communication.RX.fill_req"><code class="xref py py-obj docutils literal"><span class="pre">fill_req</span></code></a>(n,&nbsp;wstd)</td>
-<td>update values of the personnal network of a requester in regard</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">interrupt</span></code>(victim)</td>
-<td>Application function to interrupt active processes</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">interruptReset</span></code>()</td>
-<td>Application function for an interrupt victim to get out of &#8216;interrupted&#8217; state.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">interrupted</span></code>()</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">passive</span></code>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">queuing</span></code>(resource)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.network.communication.RX.refresh_RSS" title="pylayers.network.communication.RX.refresh_RSS"><code class="xref py py-obj docutils literal"><span class="pre">refresh_RSS</span></code></a>()</td>
-<td>Refresh RSS process</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">start</span></code>([pem,&nbsp;at,&nbsp;delay,&nbsp;prior])</td>
-<td>Activates PEM of this Process.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">stored</span></code>(buffer)</td>
-<td>Test for reneging for &#8216;yield put .</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">terminated</span></code>()</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.network.communication.RX.wait_request" title="pylayers.network.communication.RX.wait_request"><code class="xref py py-obj docutils literal"><span class="pre">wait_request</span></code></a>()</td>
-<td>Wait request</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="pylayers.network.communication.RX.create_evt">
-<code class="descname">create_evt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/communication.html#RX.create_evt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.RX.create_evt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create simpy events from communication gaph</p>
-<p>The available reception event for the given id are pickup into the
-communication graph to fill self.devt.</p>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.network.communication import *
-&gt;&gt;&gt; T = TX()
-&gt;&gt;&gt; T.create_evt()
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.network.communication.RX.fill_req">
-<code class="descname">fill_req</code><span class="sig-paren">(</span><em>n</em>, <em>wstd</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/communication.html#RX.fill_req"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.RX.fill_req" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>update values of the personnal network of a requester in regard</dt>
-<dd>with the action define in self.gcom.dec[requester.id]</dd>
-</dl>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="7%" />
-<col width="93%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>n</td>
-<td>(id of the requester) wstd : used wstd</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.network.communication.RX.refresh_RSS">
-<code class="descname">refresh_RSS</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/communication.html#RX.refresh_RSS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.RX.refresh_RSS" title="Permalink to this definition">¶</a></dt>
-<dd><p>Refresh RSS process</p>
-<p>The RSS values on the edges of the Personnal Network of node self.ID
-are refreshed every self.refreshRSS</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.network.communication.RX.wait_request">
-<code class="descname">wait_request</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/communication.html#RX.wait_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.RX.wait_request" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wait request</p>
-<p>The self.ID node wait a request from another node of its Personal network.
-Once the request is received, self.ID reply to the requester node
-and fill the PN of the requester in regards with the action define in
-self.gcom.dec[requester.id]</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="pylayers.network.communication.TX">
-<em class="property">class </em><code class="descclassname">pylayers.network.communication.</code><code class="descname">TX</code><span class="sig-paren">(</span><em>**args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/communication.html#TX"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.TX" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>TX process ( not used for now)</dt>
-<dd>Each agent use the TX process for querying LDP/information/message passing data
-to other agent</dd>
-</dl>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">acquired</span></code>(res)</td>
-<td>Multi - functional test for reneging for &#8216;request&#8217; and &#8216;get&#8217;: (1)If res of type Resource:     Tests whether resource res was acquired when proces reactivated.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">active</span></code>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">attrnames</span></code>()</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">cancel</span></code>(victim)</td>
-<td>Application function to cancel all event notices for this Process instance;(should be all event notices for the _generator_).</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.network.communication.TX.create_evt" title="pylayers.network.communication.TX.create_evt"><code class="xref py py-obj docutils literal"><span class="pre">create_evt</span></code></a>()</td>
-<td>Create simpy events from communication gaph</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.network.communication.TX.interpret_dec" title="pylayers.network.communication.TX.interpret_dec"><code class="xref py py-obj docutils literal"><span class="pre">interpret_dec</span></code></a>()</td>
-<td>interpret decision rule from self.dec</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">interrupt</span></code>(victim)</td>
-<td>Application function to interrupt active processes</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">interruptReset</span></code>()</td>
-<td>Application function for an interrupt victim to get out of &#8216;interrupted&#8217; state.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">interrupted</span></code>()</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">passive</span></code>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">queuing</span></code>(resource)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.network.communication.TX.request" title="pylayers.network.communication.TX.request"><code class="xref py py-obj docutils literal"><span class="pre">request</span></code></a>()</td>
-<td>request a transmission commanded by localizaiton</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.network.communication.TX.run" title="pylayers.network.communication.TX.run"><code class="xref py py-obj docutils literal"><span class="pre">run</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">start</span></code>([pem,&nbsp;at,&nbsp;delay,&nbsp;prior])</td>
-<td>Activates PEM of this Process.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">stored</span></code>(buffer)</td>
-<td>Test for reneging for &#8216;yield put .</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">terminated</span></code>()</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="pylayers.network.communication.TX.create_evt">
-<code class="descname">create_evt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/communication.html#TX.create_evt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.TX.create_evt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create simpy events from communication gaph</p>
-<p>The available reception event for the given id are pickup into the
-communication graph to fill self.devt.</p>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.network.communication import *
-&gt;&gt;&gt; T = TX()
-&gt;&gt;&gt; T.create_evt()
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.network.communication.TX.interpret_dec">
-<code class="descname">interpret_dec</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/communication.html#TX.interpret_dec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.TX.interpret_dec" title="Permalink to this definition">¶</a></dt>
-<dd><p>interpret decision rule from self.dec</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.network.communication.TX.request">
-<code class="descname">request</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/communication.html#TX.request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.TX.request" title="Permalink to this definition">¶</a></dt>
-<dd><p>request a transmission commanded by localizaiton</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.network.communication.TX.run">
-<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/communication.html#TX.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.TX.run" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="pylayers.network.communication.dcond">
-<em class="property">class </em><code class="descclassname">pylayers.network.communication.</code><code class="descname">dcond</code><span class="sig-paren">(</span><em>ID=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/communication.html#dcond"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.dcond" title="Permalink to this definition">¶</a></dt>
-<dd><p>may be obsolete</p>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">clear</span></code>(()&nbsp;-&gt;&nbsp;None.&nbsp;&nbsp;Remove&nbsp;all&nbsp;items&nbsp;from&nbsp;D.)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">copy</span></code>(()&nbsp;-&gt;&nbsp;a&nbsp;shallow&nbsp;copy&nbsp;of&nbsp;D)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">fromkeys</span></code>(...)</td>
-<td>v defaults to None.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get</span></code>((k[,d])&nbsp;-&gt;&nbsp;D[k]&nbsp;if&nbsp;k&nbsp;in&nbsp;D,&nbsp;...)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">has_key</span></code>((k)&nbsp;-&gt;&nbsp;True&nbsp;if&nbsp;D&nbsp;has&nbsp;a&nbsp;key&nbsp;k,&nbsp;else&nbsp;False)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">items</span></code>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D&#8217;s&nbsp;(key,&nbsp;value)&nbsp;pairs,&nbsp;...)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">iteritems</span></code>(()&nbsp;-&gt;&nbsp;an&nbsp;iterator&nbsp;over&nbsp;the&nbsp;(key,&nbsp;...)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">iterkeys</span></code>(()&nbsp;-&gt;&nbsp;an&nbsp;iterator&nbsp;over&nbsp;the&nbsp;keys&nbsp;of&nbsp;D)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">itervalues</span></code>(...)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">keys</span></code>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D&#8217;s&nbsp;keys)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.network.communication.dcond.parse" title="pylayers.network.communication.dcond.parse"><code class="xref py py-obj docutils literal"><span class="pre">parse</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">pop</span></code>((k[,d])&nbsp;-&gt;&nbsp;v,&nbsp;...)</td>
-<td>If key is not found, d is returned if given, otherwise KeyError is raised</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">popitem</span></code>(()&nbsp;-&gt;&nbsp;(k,&nbsp;v),&nbsp;...)</td>
-<td>2-tuple; but raise KeyError if D is empty.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">setdefault</span></code>((k[,d])&nbsp;-&gt;&nbsp;D.get(k,d),&nbsp;...)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code>(([E,&nbsp;...)</td>
-<td>If E present and has a .keys() method, does:     for k in E: D[k] = E[k]</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">values</span></code>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D&#8217;s&nbsp;values)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">viewitems</span></code>(...)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">viewkeys</span></code>(...)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">viewvalues</span></code>(...)</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="pylayers.network.communication.dcond.parse">
-<code class="descname">parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/communication.html#dcond.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.dcond.parse" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </div>
 
 
@@ -757,6 +205,16 @@ communication graph to fill self.devt.</p>
     </div>
      <div class="rel">
     
+    <div class="buttonPrevious">
+      <a href="generated/pylayers.mobility.transit.SteeringBehavior.Separation.calculate.html">
+        Previous
+      </a>  
+    </div>
+    <div class="buttonNext">
+      <a href="pylayers.network.emsolver.html">
+        Next
+      </a>  
+    </div>
     <div class="buttonPrevious">
       <a href="../py-modindex.html">
         Previous

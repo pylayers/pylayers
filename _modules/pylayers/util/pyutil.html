@@ -223,7 +223,7 @@
 <span class="c1"># Wave Related functions</span>
 <span class="c1">#</span>
 <span class="c1">###################################</span>
-<div class="viewcode-block" id="delay"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.delay">[docs]</a><span class="k">def</span> <span class="nf">delay</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">):</span>
+<div class="viewcode-block" id="delay"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.delay.html#pylayers.util.pyutil.delay">[docs]</a><span class="k">def</span> <span class="nf">delay</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; calculate delay in ns between 2 points</span>
 
 <span class="sd">    Parameters</span>
@@ -256,7 +256,7 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="lt2idic"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.lt2idic">[docs]</a><span class="k">def</span> <span class="nf">lt2idic</span><span class="p">(</span><span class="n">lt</span><span class="p">):</span>
+<div class="viewcode-block" id="lt2idic"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.lt2idic.html#pylayers.util.pyutil.lt2idic">[docs]</a><span class="k">def</span> <span class="nf">lt2idic</span><span class="p">(</span><span class="n">lt</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; convert list of tuple to dictionary</span>
 
 <span class="sd">    Parameters</span>
@@ -283,7 +283,7 @@
         <span class="n">dic</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">tup</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="mi">2</span><span class="p">])])</span>
     <span class="k">return</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="getlong"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.getlong">[docs]</a><span class="k">def</span> <span class="nf">getlong</span><span class="p">(</span><span class="n">shortname</span><span class="p">,</span><span class="n">directory</span><span class="p">):</span>
+<div class="viewcode-block" id="getlong"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.getlong.html#pylayers.util.pyutil.getlong">[docs]</a><span class="k">def</span> <span class="nf">getlong</span><span class="p">(</span><span class="n">shortname</span><span class="p">,</span><span class="n">directory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  get a long name</span>
 
 <span class="sd">    This function allows to construct the long file name relatively</span>
@@ -317,7 +317,7 @@
     <span class="n">longname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">directory</span><span class="p">,</span><span class="n">shortname</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">longname</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="getshort"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.getshort">[docs]</a><span class="k">def</span> <span class="nf">getshort</span><span class="p">(</span><span class="n">longname</span><span class="p">):</span>
+<div class="viewcode-block" id="getshort"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.getshort.html#pylayers.util.pyutil.getshort">[docs]</a><span class="k">def</span> <span class="nf">getshort</span><span class="p">(</span><span class="n">longname</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  get a short name</span>
 
 <span class="sd">    Parameters</span>
@@ -337,7 +337,7 @@
     <span class="n">shortname</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">longname</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">return</span><span class="p">(</span><span class="n">shortname</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="getdir"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.getdir">[docs]</a><span class="k">def</span> <span class="nf">getdir</span><span class="p">(</span><span class="n">longname</span><span class="p">):</span>
+<div class="viewcode-block" id="getdir"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.getdir.html#pylayers.util.pyutil.getdir">[docs]</a><span class="k">def</span> <span class="nf">getdir</span><span class="p">(</span><span class="n">longname</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  get directory of a long name</span>
 
 <span class="sd">    Parameters</span>
@@ -357,7 +357,7 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">dirname</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="shp"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.shp">[docs]</a><span class="k">def</span> <span class="nf">shp</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+<div class="viewcode-block" id="shp"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.shp.html#pylayers.util.pyutil.shp">[docs]</a><span class="k">def</span> <span class="nf">shp</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; return dimension of an array</span>
 
 <span class="sd">    Parameters</span>
@@ -390,7 +390,7 @@
         <span class="n">shp</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">))</span>
     <span class="k">return</span><span class="p">(</span><span class="n">shp</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="dimcmp"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.dimcmp">[docs]</a><span class="k">def</span> <span class="nf">dimcmp</span><span class="p">(</span><span class="n">ar1</span><span class="p">,</span><span class="n">ar2</span><span class="p">):</span>
+<div class="viewcode-block" id="dimcmp"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.dimcmp.html#pylayers.util.pyutil.dimcmp">[docs]</a><span class="k">def</span> <span class="nf">dimcmp</span><span class="p">(</span><span class="n">ar1</span><span class="p">,</span><span class="n">ar2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; compare shape of arrays</span>
 
 <span class="sd">    Parameters</span>
@@ -419,7 +419,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="tstincl"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.tstincl">[docs]</a><span class="k">def</span> <span class="nf">tstincl</span><span class="p">(</span><span class="n">ar1</span><span class="p">,</span><span class="n">ar2</span><span class="p">):</span>
+<div class="viewcode-block" id="tstincl"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.tstincl.html#pylayers.util.pyutil.tstincl">[docs]</a><span class="k">def</span> <span class="nf">tstincl</span><span class="p">(</span><span class="n">ar1</span><span class="p">,</span><span class="n">ar2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; test wheteher ar1 interval is included in interval ar2</span>
 
 <span class="sd">    Parameters</span>
@@ -448,7 +448,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ininter"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.ininter">[docs]</a><span class="k">def</span> <span class="nf">ininter</span><span class="p">(</span><span class="n">ar</span><span class="p">,</span><span class="n">val1</span><span class="p">,</span><span class="n">val2</span><span class="p">):</span>
+<div class="viewcode-block" id="ininter"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.ininter.html#pylayers.util.pyutil.ininter">[docs]</a><span class="k">def</span> <span class="nf">ininter</span><span class="p">(</span><span class="n">ar</span><span class="p">,</span><span class="n">val1</span><span class="p">,</span><span class="n">val2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; in interval </span>
 
 <span class="sd">    Parameters</span>
@@ -528,7 +528,7 @@
 
     <span class="k">return</span> <span class="n">compint</span> </div>
 
-<div class="viewcode-block" id="cshift"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.cshift">[docs]</a><span class="k">def</span> <span class="nf">cshift</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+<div class="viewcode-block" id="cshift"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.cshift.html#pylayers.util.pyutil.cshift">[docs]</a><span class="k">def</span> <span class="nf">cshift</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; ndarray circular shift     </span>
 <span class="sd">        Parameters</span>
 <span class="sd">         ----------</span>
@@ -547,7 +547,7 @@
     <span class="n">offset</span> <span class="o">%=</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">l</span><span class="p">[</span><span class="o">-</span><span class="n">offset</span><span class="p">:],</span> <span class="n">l</span><span class="p">[:</span><span class="o">-</span><span class="n">offset</span><span class="p">]))</span></div>
 
-<div class="viewcode-block" id="LegFunc"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.LegFunc">[docs]</a><span class="k">def</span> <span class="nf">LegFunc</span><span class="p">(</span><span class="n">nn</span><span class="p">,</span><span class="n">ntrunc</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">):</span>
+<div class="viewcode-block" id="LegFunc"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.LegFunc.html#pylayers.util.pyutil.LegFunc">[docs]</a><span class="k">def</span> <span class="nf">LegFunc</span><span class="p">(</span><span class="n">nn</span><span class="p">,</span><span class="n">ntrunc</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Compute Legendre functions Ylm(theta,phi)</span>
 
 <span class="sd">    Parameters</span>
@@ -586,7 +586,7 @@
     <span class="n">Ylm</span><span class="o">=</span><span class="n">array</span><span class="p">(</span><span class="n">Ylm</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">Ylm</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ExpFunc"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.ExpFunc">[docs]</a><span class="k">def</span> <span class="nf">ExpFunc</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
+<div class="viewcode-block" id="ExpFunc"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.ExpFunc.html#pylayers.util.pyutil.ExpFunc">[docs]</a><span class="k">def</span> <span class="nf">ExpFunc</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; exponential fitting</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -628,7 +628,7 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span><span class="n">beta</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="InvFunc"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.InvFunc">[docs]</a><span class="k">def</span> <span class="nf">InvFunc</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">z</span><span class="p">):</span>
+<div class="viewcode-block" id="InvFunc"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.InvFunc.html#pylayers.util.pyutil.InvFunc">[docs]</a><span class="k">def</span> <span class="nf">InvFunc</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">z</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; inverse fitting</span>
 
 <span class="sd">    Parameters</span>
@@ -656,7 +656,7 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="PowFunc"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.PowFunc">[docs]</a><span class="k">def</span> <span class="nf">PowFunc</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
+<div class="viewcode-block" id="PowFunc"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.PowFunc.html#pylayers.util.pyutil.PowFunc">[docs]</a><span class="k">def</span> <span class="nf">PowFunc</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; power fitting</span>
 
 <span class="sd">    Parameters</span>
@@ -688,7 +688,7 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span><span class="n">beta</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="randcol"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.randcol">[docs]</a><span class="k">def</span> <span class="nf">randcol</span><span class="p">(</span><span class="n">Nc</span><span class="p">):</span>
+<div class="viewcode-block" id="randcol"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.randcol.html#pylayers.util.pyutil.randcol">[docs]</a><span class="k">def</span> <span class="nf">randcol</span><span class="p">(</span><span class="n">Nc</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; get random color </span>
 
 <span class="sd">    Parameters </span>
@@ -722,7 +722,7 @@
     <span class="k">return</span><span class="p">(</span><span class="n">col</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="coldict"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.coldict">[docs]</a><span class="k">def</span> <span class="nf">coldict</span><span class="p">():</span>
+<div class="viewcode-block" id="coldict"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.coldict.html#pylayers.util.pyutil.coldict">[docs]</a><span class="k">def</span> <span class="nf">coldict</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot; Color dictionary</span>
 <span class="sd">    html color</span>
 
@@ -1302,7 +1302,7 @@
 
     <span class="k">return</span> <span class="n">cold</span></div>
 
-<div class="viewcode-block" id="createtrxfile"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.createtrxfile">[docs]</a><span class="k">def</span> <span class="nf">createtrxfile</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span><span class="n">freq</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">Fpr</span><span class="p">,</span><span class="n">Fpi</span><span class="p">,</span><span class="n">Ftr</span><span class="p">,</span><span class="n">Fti</span><span class="p">):</span>
+<div class="viewcode-block" id="createtrxfile"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.createtrxfile.html#pylayers.util.pyutil.createtrxfile">[docs]</a><span class="k">def</span> <span class="nf">createtrxfile</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span><span class="n">freq</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">Fpr</span><span class="p">,</span><span class="n">Fpi</span><span class="p">,</span><span class="n">Ftr</span><span class="p">,</span><span class="n">Fti</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create antenna trx file    </span>
 <span class="sd">    Usage:createtrxfile(filename,freq,phi,theta,Fpr,Fpi,Ftr,Fti)</span>
@@ -1314,7 +1314,7 @@
         <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%f</span><span class="se">\t</span><span class="si">%f</span><span class="se">\t</span><span class="si">%f</span><span class="se">\t</span><span class="si">%f</span><span class="se">\t</span><span class="si">%f</span><span class="se">\t</span><span class="si">%f</span><span class="se">\t</span><span class="si">%f</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">ravel</span><span class="p">(</span><span class="n">freq</span><span class="p">)[</span><span class="n">i</span><span class="p">],</span><span class="n">ravel</span><span class="p">(</span><span class="n">phi</span><span class="p">)[</span><span class="n">i</span><span class="p">],</span><span class="n">ravel</span><span class="p">(</span><span class="n">theta</span><span class="p">)[</span><span class="n">i</span><span class="p">],</span><span class="n">ravel</span><span class="p">(</span><span class="n">Fpr</span><span class="p">)[</span><span class="n">i</span><span class="p">],</span><span class="n">ravel</span><span class="p">(</span><span class="n">Fpi</span><span class="p">)[</span><span class="n">i</span><span class="p">],</span><span class="n">ravel</span><span class="p">(</span><span class="n">Ftr</span><span class="p">)[</span><span class="n">i</span><span class="p">],</span><span class="n">ravel</span><span class="p">(</span><span class="n">Fti</span><span class="p">)[</span><span class="n">i</span><span class="p">]))</span>
     <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="rgb"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.rgb">[docs]</a><span class="k">def</span> <span class="nf">rgb</span><span class="p">(</span><span class="n">valex</span><span class="p">,</span><span class="n">out</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="rgb"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.rgb.html#pylayers.util.pyutil.rgb">[docs]</a><span class="k">def</span> <span class="nf">rgb</span><span class="p">(</span><span class="n">valex</span><span class="p">,</span><span class="n">out</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">         convert a hexadecimal color into a (r,g,b) array</span>
 <span class="sd">         &gt;&gt;&gt; import pylayers.util.pyutil as pyu</span>
@@ -1332,7 +1332,7 @@
     <span class="k">return</span><span class="p">(</span><span class="n">col</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="nbint"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.nbint">[docs]</a><span class="k">def</span> <span class="nf">nbint</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+<div class="viewcode-block" id="nbint"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.nbint.html#pylayers.util.pyutil.nbint">[docs]</a><span class="k">def</span> <span class="nf">nbint</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; calculate the number of distinct contiguous sets in a sequence of integer</span>
 
 <span class="sd">    Parameters</span>
@@ -1361,7 +1361,7 @@
     <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span></div>
 
 
-<div class="viewcode-block" id="encodmtlb"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.encodmtlb">[docs]</a><span class="k">def</span> <span class="nf">encodmtlb</span><span class="p">(</span><span class="n">lin</span><span class="p">):</span>
+<div class="viewcode-block" id="encodmtlb"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.encodmtlb.html#pylayers.util.pyutil.encodmtlb">[docs]</a><span class="k">def</span> <span class="nf">encodmtlb</span><span class="p">(</span><span class="n">lin</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  encode python list of string in Matlab format</span>
 
 <span class="sd">    Parameters</span>
@@ -1420,7 +1420,7 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">lout</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="sqrte"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.sqrte">[docs]</a><span class="k">def</span> <span class="nf">sqrte</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
+<div class="viewcode-block" id="sqrte"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.sqrte.html#pylayers.util.pyutil.sqrte">[docs]</a><span class="k">def</span> <span class="nf">sqrte</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Evanescent SQRT for waves problems</span>
 
 <span class="sd">     .. _Sophocles J. Orfanidis - 1999-2008: http://www.ece.rutgers.edu/~orfanidi/ewa</span>
@@ -1462,7 +1462,7 @@
     <span class="n">y</span>  <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sh</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">y</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="untie"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.untie">[docs]</a><span class="k">def</span> <span class="nf">untie</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+<div class="viewcode-block" id="untie"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.untie.html#pylayers.util.pyutil.untie">[docs]</a><span class="k">def</span> <span class="nf">untie</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    Parameters</span>
@@ -1494,7 +1494,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span><span class="p">(</span><span class="bp">False</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="corrcy"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.corrcy">[docs]</a><span class="k">def</span> <span class="nf">corrcy</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+<div class="viewcode-block" id="corrcy"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.corrcy.html#pylayers.util.pyutil.corrcy">[docs]</a><span class="k">def</span> <span class="nf">corrcy</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; cyclic matching correlation</span>
 
 <span class="sd">    Parameters</span>
@@ -1546,7 +1546,7 @@
 
 
 
-<div class="viewcode-block" id="foo"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.foo">[docs]</a><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">var1</span><span class="p">,</span> <span class="n">var2</span><span class="p">,</span> <span class="n">long_var_name</span><span class="o">=</span><span class="s1">&#39;hi&#39;</span><span class="p">)</span> <span class="p">:</span>
+<div class="viewcode-block" id="foo"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.foo.html#pylayers.util.pyutil.foo">[docs]</a><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">var1</span><span class="p">,</span> <span class="n">var2</span><span class="p">,</span> <span class="n">long_var_name</span><span class="o">=</span><span class="s1">&#39;hi&#39;</span><span class="p">)</span> <span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;A one-line summary that does not use variable names or the</span>
 <span class="sd">    function name.</span>
 
@@ -1649,7 +1649,7 @@
     <span class="k">pass</span></div>
 
 
-<div class="viewcode-block" id="cdf"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.cdf">[docs]</a><span class="k">def</span> <span class="nf">cdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span><span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;CDF&quot;</span><span class="p">,</span><span class="n">logx</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="cdf"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.cdf.html#pylayers.util.pyutil.cdf">[docs]</a><span class="k">def</span> <span class="nf">cdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span><span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;CDF&quot;</span><span class="p">,</span><span class="n">logx</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; plot the cumulative density function of x</span>
 
 <span class="sd">    Parameters</span>
@@ -1693,7 +1693,7 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="bitreverse"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.bitreverse">[docs]</a><span class="k">def</span> <span class="nf">bitreverse</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span><span class="n">nbit</span><span class="o">=</span><span class="mi">9</span><span class="p">):</span>
+<div class="viewcode-block" id="bitreverse"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.bitreverse.html#pylayers.util.pyutil.bitreverse">[docs]</a><span class="k">def</span> <span class="nf">bitreverse</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span><span class="n">nbit</span><span class="o">=</span><span class="mi">9</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1719,13 +1719,13 @@
     <span class="k">return</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">t</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="timestamp"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.timestamp">[docs]</a><span class="k">def</span> <span class="nf">timestamp</span><span class="p">(</span><span class="n">now</span><span class="p">):</span>
+<div class="viewcode-block" id="timestamp"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.timestamp.html#pylayers.util.pyutil.timestamp">[docs]</a><span class="k">def</span> <span class="nf">timestamp</span><span class="p">(</span><span class="n">now</span><span class="p">):</span>
     
     <span class="n">dt</span> <span class="o">=</span> <span class="n">dat</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
     <span class="n">dn</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">dat</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">now</span><span class="p">)))</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> &#39;</span><span class="p">)</span><span class="o">+</span><span class="n">dn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;:&#39;</span><span class="o">+</span><span class="n">dn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span><span class="s1">&#39;:&#39;</span><span class="o">+</span><span class="n">dn</span><span class="p">[</span><span class="mi">2</span><span class="p">][:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span><span class="n">dn</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">:</span><span class="mi">5</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="writemeca"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.writemeca">[docs]</a><span class="k">def</span> <span class="nf">writemeca</span><span class="p">(</span><span class="n">ID</span><span class="p">,</span><span class="n">time</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">a</span><span class="p">):</span>
+<div class="viewcode-block" id="writemeca"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.writemeca.html#pylayers.util.pyutil.writemeca">[docs]</a><span class="k">def</span> <span class="nf">writemeca</span><span class="p">(</span><span class="n">ID</span><span class="p">,</span><span class="n">time</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">a</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    write mecanic information into text file:</span>
 <span class="sd">        output/TruePosition.txt</span>
@@ -1769,7 +1769,7 @@
 
 
 
-<div class="viewcode-block" id="writenet"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.writenet">[docs]</a><span class="k">def</span> <span class="nf">writenet</span><span class="p">(</span><span class="n">net</span><span class="p">,</span><span class="n">t</span><span class="p">):</span>
+<div class="viewcode-block" id="writenet"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.writenet.html#pylayers.util.pyutil.writenet">[docs]</a><span class="k">def</span> <span class="nf">writenet</span><span class="p">(</span><span class="n">net</span><span class="p">,</span><span class="n">t</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    write network information into text file:</span>
 <span class="sd">        netsave/ZIGLinkMeasurements.txt</span>
@@ -1829,7 +1829,7 @@
 <span class="c1">#                                            e[2][&#39;d&#39;]))</span>
 
 
-<div class="viewcode-block" id="writenode"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.writenode">[docs]</a><span class="k">def</span> <span class="nf">writenode</span><span class="p">(</span><span class="n">agent</span><span class="p">):</span>
+<div class="viewcode-block" id="writenode"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.writenode.html#pylayers.util.pyutil.writenode">[docs]</a><span class="k">def</span> <span class="nf">writenode</span><span class="p">(</span><span class="n">agent</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    write Nodes.txt</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -1844,7 +1844,7 @@
     <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="writeDetails"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.writeDetails">[docs]</a><span class="k">def</span> <span class="nf">writeDetails</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;simulation&#39;</span><span class="p">,</span> <span class="n">location</span> <span class="o">=</span><span class="s1">&#39;Rennes&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="writeDetails"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.writeDetails.html#pylayers.util.pyutil.writeDetails">[docs]</a><span class="k">def</span> <span class="nf">writeDetails</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;simulation&#39;</span><span class="p">,</span> <span class="n">location</span> <span class="o">=</span><span class="s1">&#39;Rennes&#39;</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    write MeasurementsDetails.txt</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -1859,7 +1859,7 @@
     <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="zipd"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.zipd">[docs]</a><span class="k">def</span> <span class="nf">zipd</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">zipfilename</span><span class="p">):</span>
+<div class="viewcode-block" id="zipd"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.zipd.html#pylayers.util.pyutil.zipd">[docs]</a><span class="k">def</span> <span class="nf">zipd</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">zipfilename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; add a folder to a zipfile</span>
 
 <span class="sd">    Parameters</span>
@@ -1881,7 +1881,7 @@
             <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">fil</span><span class="p">)[</span><span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">):]))</span>
     <span class="n">zip_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="unzipd"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.unzipd">[docs]</a><span class="k">def</span> <span class="nf">unzipd</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">zipfilename</span><span class="p">):</span>
+<div class="viewcode-block" id="unzipd"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.unzipd.html#pylayers.util.pyutil.unzipd">[docs]</a><span class="k">def</span> <span class="nf">unzipd</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">zipfilename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; unzip a zipfile to a folder</span>
 
 <span class="sd">    Parameters</span>
@@ -1905,7 +1905,7 @@
             <span class="nb">file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span>
                 <span class="s1">&#39;wb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">zip_file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">each</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="unzipf"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.unzipf">[docs]</a><span class="k">def</span> <span class="nf">unzipf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">zipfilename</span><span class="p">):</span>
+<div class="viewcode-block" id="unzipf"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.unzipf.html#pylayers.util.pyutil.unzipf">[docs]</a><span class="k">def</span> <span class="nf">unzipf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">zipfilename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; unzip a file from zipfile to a folder</span>
 
 <span class="sd">    Parameters</span>
@@ -1928,7 +1928,7 @@
             <span class="nb">file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span>
                 <span class="s1">&#39;wb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">zip_file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">each</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="rotate_line"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.rotate_line">[docs]</a><span class="k">def</span> <span class="nf">rotate_line</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">theta</span><span class="p">):</span>
+<div class="viewcode-block" id="rotate_line"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.rotate_line.html#pylayers.util.pyutil.rotate_line">[docs]</a><span class="k">def</span> <span class="nf">rotate_line</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">theta</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    rotation of a line [AB] of an angle theta with A fixed</span>
 
@@ -1951,7 +1951,7 @@
     <span class="n">Br</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">R</span><span class="p">,</span><span class="n">B</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">Br</span></div>
 
-<div class="viewcode-block" id="extract_block_diag"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.extract_block_diag">[docs]</a><span class="k">def</span> <span class="nf">extract_block_diag</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="extract_block_diag"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.extract_block_diag.html#pylayers.util.pyutil.extract_block_diag">[docs]</a><span class="k">def</span> <span class="nf">extract_block_diag</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Extracts blocks of size M from the kth diagonal</span>
 <span class="sd">    of square matrix A, whose size must be a multiple of M.&quot;&quot;&quot;</span>
 
@@ -1975,7 +1975,7 @@
                        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">M</span><span class="p">,</span><span class="n">M</span><span class="p">)])</span>
     <span class="k">return</span> <span class="n">blocks</span></div>
 
-<div class="viewcode-block" id="fill_block_diag"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.fill_block_diag">[docs]</a><span class="k">def</span> <span class="nf">fill_block_diag</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">blocks</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="fill_block_diag"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.fill_block_diag.html#pylayers.util.pyutil.fill_block_diag">[docs]</a><span class="k">def</span> <span class="nf">fill_block_diag</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">blocks</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;fill A with blocks of size M from the kth diagonal</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -2000,7 +2000,7 @@
     <span class="k">return</span> <span class="n">A</span></div>
 
 
-<div class="viewcode-block" id="fill_block_diagMDA"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.fill_block_diagMDA">[docs]</a><span class="k">def</span> <span class="nf">fill_block_diagMDA</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">blocks</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="fill_block_diagMDA"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.fill_block_diagMDA.html#pylayers.util.pyutil.fill_block_diagMDA">[docs]</a><span class="k">def</span> <span class="nf">fill_block_diagMDA</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">blocks</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;fill A with blocks of size M from the kth diagonal</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -2042,7 +2042,7 @@
 <span class="n">has_colours</span> <span class="o">=</span> <span class="n">has_colours</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="printout"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.printout">[docs]</a><span class="k">def</span> <span class="nf">printout</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="n">WHITE</span><span class="p">):</span>
+<div class="viewcode-block" id="printout"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.printout.html#pylayers.util.pyutil.printout">[docs]</a><span class="k">def</span> <span class="nf">printout</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="n">WHITE</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">has_colours</span><span class="p">:</span>
                 <span class="n">seq</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\x1b</span><span class="s2">[1;</span><span class="si">%d</span><span class="s2">m&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="mi">30</span><span class="o">+</span><span class="n">colour</span><span class="p">)</span> <span class="o">+</span> <span class="n">text</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\x1b</span><span class="s2">[0m&quot;</span>
                 <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
@@ -2050,7 +2050,7 @@
                 <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="in_ipynb"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.in_ipynb">[docs]</a><span class="k">def</span> <span class="nf">in_ipynb</span><span class="p">():</span>
+<div class="viewcode-block" id="in_ipynb"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.in_ipynb.html#pylayers.util.pyutil.in_ipynb">[docs]</a><span class="k">def</span> <span class="nf">in_ipynb</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    check if program is run in ipython notebook</span>
 <span class="sd">    &quot;&quot;&quot;</span>
