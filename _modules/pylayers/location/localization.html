@@ -102,6 +102,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html">&#8220;</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html#some-layout">Some Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
@@ -485,7 +487,7 @@
 
         <span class="k">print</span> <span class="p">(</span><span class="s1">&#39;!!!!!! Warning Localization : No RSS only localization !!!!!&#39;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="PLocalization.run"><a class="viewcode-back" href="../../../modules/pylayers.location.localization.html#pylayers.location.localization.PLocalization.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="c1">#        self.loc.get_const()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">fill_cla</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ldp</span><span class="o">=</span><span class="s1">&#39;TOA&#39;</span><span class="p">)</span>
@@ -515,7 +517,7 @@
 
             <span class="k">if</span> <span class="n">bep</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
                 <span class="k">print</span> <span class="s1">&#39;LOCALIZATION node&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="s1">&#39; update @&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
-            <span class="k">yield</span> <span class="n">hold</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc_updt_time</span></div></div>
+            <span class="k">yield</span> <span class="n">hold</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc_updt_time</span></div>
 </pre></div>
 
            </div>

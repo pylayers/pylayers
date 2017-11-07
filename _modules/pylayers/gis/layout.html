@@ -102,6 +102,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html">&#8220;</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html#some-layout">Some Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
@@ -9162,24 +9164,24 @@
             <span class="n">edgelistbkup</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;edgelist&#39;</span><span class="p">]</span>
             <span class="n">widthbkup</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span>
             <span class="n">nodecolbkup</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;edge_color&#39;</span><span class="p">]</span>
-
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">sllist</span> <span class="o">=</span> <span class="p">[</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;sllist&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">()]</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="n">sllist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 
+            <span class="c1">#</span>
+            <span class="c1"># Draw segment slab per slab with proper linewidth and color </span>
+            <span class="c1">#</span>
             <span class="k">for</span> <span class="n">lmat</span> <span class="ow">in</span> <span class="n">sllist</span><span class="p">:</span>
+                <span class="c1">#print(lmat)</span>
                 <span class="n">lseg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="n">lmat</span><span class="p">]</span>
                 <span class="k">if</span> <span class="n">lseg</span> <span class="o">!=</span> <span class="p">[]:</span>
-                    <span class="n">lseg2</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span> <span class="o">==</span> <span class="n">i</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-                             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">lseg</span><span class="p">]</span>
-                    <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;edgelist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">reduce</span><span class="p">(</span>
-                        <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">lseg2</span><span class="p">)</span>
+                    <span class="n">lseg2</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span> <span class="o">==</span> <span class="n">i</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">lseg</span><span class="p">]</span>
+                    <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;edgelist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">lseg2</span><span class="p">))</span>
                     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;slab&#39;</span><span class="p">]:</span>
                         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;edge_color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cold</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">lmat</span><span class="p">][</span><span class="s1">&#39;color&#39;</span><span class="p">]]</span>
                         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">lmat</span><span class="p">][</span><span class="s1">&#39;linewidth&#39;</span><span class="p">]</span>
                     <span class="k">else</span><span class="p">:</span>
-
                         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;edge_color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;k&#39;</span>
                         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
@@ -9187,11 +9189,12 @@
                     <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+
                 <span class="k">if</span> <span class="s1">&#39;s&#39;</span> <span class="ow">in</span> <span class="n">dis_nodes</span><span class="p">:</span>
                     <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
-
+                
                 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gru</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
             <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodelist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nodelistbkup</span>

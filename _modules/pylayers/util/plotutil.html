@@ -102,6 +102,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html">&#8220;</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html#some-layout">Some Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
@@ -593,7 +595,7 @@
     <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="rectplot"><a class="viewcode-back" href="../../../modules/pylayers.util.plotutil.html#pylayers.util.plotutil.rectplot">[docs]</a><span class="k">def</span> <span class="nf">rectplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">xpos</span><span class="p">,</span><span class="n">ylim</span><span class="o">=</span><span class="p">[],</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">rectplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">xpos</span><span class="p">,</span><span class="n">ylim</span><span class="o">=</span><span class="p">[],</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; plot rectangles on an axis</span>
 
 <span class="sd">    Parameters</span>
@@ -645,7 +647,7 @@
                             <span class="n">hatch</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;hatch&#39;</span><span class="p">])</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span> 
 
-    <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span></div>
+    <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
 
 <div class="viewcode-block" id="displot"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.plotutil.displot.html#pylayers.util.plotutil.displot">[docs]</a><span class="k">def</span> <span class="nf">displot</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">ph</span><span class="p">,</span> <span class="n">arrow</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; discontinuous plot</span>
@@ -853,7 +855,7 @@
     <span class="n">p</span> <span class="o">=</span> <span class="n">pa</span><span class="p">[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">+</span><span class="n">t</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span><span class="o">*</span><span class="p">(</span><span class="n">pb</span><span class="p">[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">-</span><span class="n">pa</span><span class="p">[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:],</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,:],</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,:],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;parametric curve&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="polycol"><a class="viewcode-back" href="../../../modules/pylayers.util.plotutil.html#pylayers.util.plotutil.polycol">[docs]</a><span class="k">def</span> <span class="nf">polycol</span><span class="p">(</span><span class="n">lpoly</span><span class="p">,</span><span class="n">var</span><span class="o">=</span><span class="p">[],</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">polycol</span><span class="p">(</span><span class="n">lpoly</span><span class="p">,</span><span class="n">var</span><span class="o">=</span><span class="p">[],</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; plot a collection of polygon</span>
 
 <span class="sd">    lpoly : list of polygons (,npol)</span>
@@ -914,9 +916,9 @@
     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;colorbar&#39;</span><span class="p">]:</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">polc</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span></div>
+    <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
 
-<div class="viewcode-block" id="shadow"><a class="viewcode-back" href="../../../modules/pylayers.util.plotutil.html#pylayers.util.plotutil.shadow">[docs]</a><span class="k">def</span> <span class="nf">shadow</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">ax</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">shadow</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">ax</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    data : np.array</span>
 <span class="sd">        0 or 1</span>
@@ -966,7 +968,7 @@
                     <span class="p">(</span><span class="n">tv</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="n">aa</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="mi">500</span><span class="p">)]</span>
            <span class="n">poly</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">vertc</span><span class="p">,</span><span class="n">facecolor</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">],</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
            <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span></div>
+    <span class="k">return</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 
            </div>

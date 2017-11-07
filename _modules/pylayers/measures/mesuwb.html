@@ -102,6 +102,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html">&#8220;</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html#some-layout">Some Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
@@ -921,7 +923,7 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">F</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="RAW_DATA"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.RAW_DATA">[docs]</a><span class="k">class</span> <span class="nc">RAW_DATA</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">RAW_DATA</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    Members</span>
@@ -951,9 +953,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ch3</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ch4</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">timetx</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="CAL_DATA"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.CAL_DATA">[docs]</a><span class="k">class</span> <span class="nc">CAL_DATA</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">CAL_DATA</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    CAL_DATA</span>
 
@@ -999,9 +1001,9 @@
         <span class="c1"># place a window on each channel</span>
         <span class="c1">#</span>
         <span class="n">s1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ch1</span>
-        <span class="n">s2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ch2</span></div></div>
+        <span class="n">s2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ch2</span></div>
 
-<div class="viewcode-block" id="Fdd"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.Fdd">[docs]</a><span class="k">class</span> <span class="nc">Fdd</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Fdd</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Frequency Domain Deconv Data</span>
 
 <span class="sd">    Attributes</span>
@@ -1105,9 +1107,9 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">v4</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Freq (GHz)&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;CH4&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div></div>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Tdd"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.Tdd">[docs]</a><span class="k">class</span> <span class="nc">Tdd</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Tdd</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Time Domain Deconv Data</span>
 
@@ -1393,9 +1395,9 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ns)&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;CH4&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span> <span class="n">show</span><span class="p">()</span></div></div>
+        <span class="n">plt</span><span class="o">.</span> <span class="n">show</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="TFP"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.TFP">[docs]</a><span class="k">class</span> <span class="nc">TFP</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">TFP</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Tx</span>
 <span class="sd">    Rx</span>
@@ -1482,12 +1484,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">chan_param</span><span class="p">[</span><span class="s1">&#39;toa_win&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">(</span>
             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chan_param</span><span class="p">[</span><span class="s1">&#39;toa_win&#39;</span><span class="p">],</span> <span class="n">FP</span><span class="o">.</span><span class="n">chan_param</span><span class="p">[</span><span class="s1">&#39;toa_win&#39;</span><span class="p">]))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">chan_param</span><span class="p">[</span><span class="s1">&#39;toa_new&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">(</span>
-            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chan_param</span><span class="p">[</span><span class="s1">&#39;toa_new&#39;</span><span class="p">],</span> <span class="n">FP</span><span class="o">.</span><span class="n">chan_param</span><span class="p">[</span><span class="s1">&#39;toa_new&#39;</span><span class="p">]))</span></div></div>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chan_param</span><span class="p">[</span><span class="s1">&#39;toa_new&#39;</span><span class="p">],</span> <span class="n">FP</span><span class="o">.</span><span class="n">chan_param</span><span class="p">[</span><span class="s1">&#39;toa_new&#39;</span><span class="p">]))</span></div>
         <span class="c1">#self.chan_param[&#39;toa_th_tmtm&#39;]=hstack((self.chan_param[&#39;toa_th_tmtm&#39;],FP.chan_param[&#39;toa_th_tmtm&#39;]))</span>
         <span class="c1">#self.chan_param[&#39;toa_th_tm&#39;]=hstack((self.chan_param[&#39;toa_th_tm&#39;],FP.chan_param[&#39;toa_th_tm&#39;]))</span>
         <span class="c1">#self .chan_param[&#39;toa_th_tmt&#39;]=hstack((self.chan_param[&#39;toa_th_tmt&#39;],FP.chan_param[&#39;toa_th_tmt&#39;]))</span>
 
-<div class="viewcode-block" id="FP"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.FP">[docs]</a><span class="k">class</span> <span class="nc">FP</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">FP</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Fingerprint class</span>
 
 <span class="sd">    Rxid : 1 | 2 | 3 | 4</span>
@@ -1648,7 +1650,7 @@
         <span class="c1">#self.chan_param[&#39;toa_cum_tm&#39;]=toa_cum_tm</span>
         <span class="c1">#self.chan_param[&#39;toa_cum_tmt&#39;]=toa_cum_tmt</span>
         <span class="c1">#self.chan_param[&#39;toa_new&#39;]=toa_new</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">chan_param</span><span class="p">[</span><span class="s1">&#39;toa_win&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">toa_win</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chan_param</span><span class="p">[</span><span class="s1">&#39;toa_win&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">toa_win</span></div>
         <span class="c1">#self.chan_param[&#39;toa_th_tmtm&#39;]=toa_th_tmtm</span>
         <span class="c1">#self.chan_param[&#39;toa_th_tm&#39;]=toa_th_tm</span>
         <span class="c1">#self. chan_param[&#39;toa_th_tmt&#39;]=toa_th_tmt</span>
@@ -1680,7 +1682,7 @@
 <span class="c1">#\bigskip</span>
 
 
-<div class="viewcode-block" id="UWBMeasure"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.UWBMeasure">[docs]</a><span class="k">class</span> <span class="nc">UWBMeasure</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">UWBMeasure</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; UWBMeasure class</span>
 
 <span class="sd">    Attributes</span>
@@ -2307,7 +2309,7 @@
         <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;./figures/&#39;</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="n">ext3</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;portrait&#39;</span><span class="p">)</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span></div></div>
+        <span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span></div>
         <span class="c1">#fig.savefig(&#39;./figures/&#39;+filename+ext1,orientation=&#39;portrait&#39;)</span>
         <span class="c1">#clf()  # very important to close the figure otherwise memory error</span>
 <span class="c1">#        entete=&#39;\\clearpage\\setcounter{page}{1}\\pagestyle{Standard} \n {\\centering  &#39;+ self.Tx_position</span>

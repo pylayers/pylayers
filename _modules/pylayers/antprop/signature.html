@@ -102,6 +102,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html">&#8220;</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html#some-layout">Some Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
@@ -200,7 +202,7 @@
 <span class="c1">#from numba import autojit</span>
 
 
-<div class="viewcode-block" id="plot_lines"><a class="viewcode-back" href="../../../modules/pylayers.antprop.signature.html#pylayers.antprop.signature.plot_lines">[docs]</a><span class="k">def</span> <span class="nf">plot_lines</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="p">[]):</span>
+<span class="k">def</span> <span class="nf">plot_lines</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="p">[]):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -224,9 +226,9 @@
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">xy</span>
         
         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">solid_capstyle</span><span class="o">=</span><span class="s1">&#39;round&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">ax</span></div>
+    <span class="k">return</span> <span class="n">ax</span>
 
-<div class="viewcode-block" id="plot_poly"><a class="viewcode-back" href="../../../modules/pylayers.antprop.signature.html#pylayers.antprop.signature.plot_poly">[docs]</a><span class="k">def</span> <span class="nf">plot_poly</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="p">[]):</span>
+<span class="k">def</span> <span class="nf">plot_poly</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="p">[]):</span>
     <span class="sd">&quot;&quot;&quot; plot polygon </span>
 
 <span class="sd">    Parameters</span>
@@ -242,11 +244,11 @@
         <span class="n">pp</span> <span class="o">=</span> <span class="n">PolygonPatch</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">ax</span></div>
+    <span class="k">return</span> <span class="n">ax</span>
 
 
 
-<div class="viewcode-block" id="showsig"><a class="viewcode-back" href="../../../modules/pylayers.antprop.signature.html#pylayers.antprop.signature.showsig">[docs]</a><span class="k">def</span> <span class="nf">showsig</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">tx</span><span class="o">=</span><span class="p">[],</span><span class="n">rx</span><span class="o">=</span><span class="p">[]):</span>
+<span class="k">def</span> <span class="nf">showsig</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">tx</span><span class="o">=</span><span class="p">[],</span><span class="n">rx</span><span class="o">=</span><span class="p">[]):</span>
     <span class="sd">&quot;&quot;&quot; show signature</span>
 
 <span class="sd">    Parameters</span>
@@ -269,10 +271,10 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">rx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;+&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-    <span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;edlabel&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span></div>
+    <span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;edlabel&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
 
 
-<div class="viewcode-block" id="gidl"><a class="viewcode-back" href="../../../modules/pylayers.antprop.signature.html#pylayers.antprop.signature.gidl">[docs]</a><span class="k">def</span> <span class="nf">gidl</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">gidl</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; gi without diffraction</span>
 
 <span class="sd">   Returns</span>
@@ -298,15 +300,15 @@
 
     <span class="n">dpos</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">edlist</span><span class="p">}</span>
     <span class="n">gr</span><span class="o">.</span><span class="n">pos</span><span class="o">=</span><span class="n">dpos</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span></div>
+    <span class="k">return</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span>
 
-<div class="viewcode-block" id="shLtmp"><a class="viewcode-back" href="../../../modules/pylayers.antprop.signature.html#pylayers.antprop.signature.shLtmp">[docs]</a><span class="k">def</span> <span class="nf">shLtmp</span><span class="p">(</span><span class="n">L</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">shLtmp</span><span class="p">(</span><span class="n">L</span><span class="p">):</span>
     <span class="n">seg_connect</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span><span class="mi">0</span><span class="p">}</span>
 
     <span class="n">dpts</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]:(</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]],</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">seg_connect</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="p">}</span>
-    <span class="n">L</span><span class="o">.</span><span class="n">_shseg</span> <span class="o">=</span> <span class="p">{</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">sh</span><span class="o">.</span><span class="n">LineString</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">dpts</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span></div>
+    <span class="n">L</span><span class="o">.</span><span class="n">_shseg</span> <span class="o">=</span> <span class="p">{</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">sh</span><span class="o">.</span><span class="n">LineString</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">dpts</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
 
-<div class="viewcode-block" id="showsig2"><a class="viewcode-back" href="../../../modules/pylayers.antprop.signature.html#pylayers.antprop.signature.showsig2">[docs]</a><span class="k">def</span> <span class="nf">showsig2</span><span class="p">(</span><span class="n">lsig</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">tahe</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">showsig2</span><span class="p">(</span><span class="n">lsig</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">tahe</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">lsig</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
         <span class="n">lsig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">lsig</span><span class="p">])</span>
 
@@ -357,9 +359,9 @@
     <span class="c1">#plu.displot(vl[0].reshape(2,1),vl[1].reshape(2,1),arrow=True)</span>
     <span class="c1">#plu.displot(vr[0].reshape(2,1),vr[1].reshape(2,1),arrow=True)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span></div>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="c1">#@profile</span>
-<div class="viewcode-block" id="valid"><a class="viewcode-back" href="../../../modules/pylayers.antprop.signature.html#pylayers.antprop.signature.valid">[docs]</a><span class="k">def</span> <span class="nf">valid</span><span class="p">(</span><span class="n">lsig</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">tahe</span><span class="o">=</span><span class="p">[]):</span>
+<span class="k">def</span> <span class="nf">valid</span><span class="p">(</span><span class="n">lsig</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">tahe</span><span class="o">=</span><span class="p">[]):</span>
     <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    Check if a signature is valid.</span>
 <span class="sd">    if a segment of a given signature is not in or touches the polygon</span>
@@ -546,7 +548,7 @@
     <span class="c1"># plu.displot(vr[0].reshape(2,1),vr[1].reshape(2,1),arrow=True)</span>
     <span class="c1"># plt.legend()</span>
 
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">inside</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">inside</span><span class="p">)</span>
 
 
 
@@ -567,7 +569,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Signatures.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.__init__.html#pylayers.antprop.signature.Signatures.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">source</span><span class="p">,</span><span class="n">target</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">source</span><span class="p">,</span><span class="n">target</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; object constructor</span>
 
 <span class="sd">        Parameters</span>
@@ -598,9 +600,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span> <span class="o">=</span> <span class="n">cutoff</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="n">threshold</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ratio</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">_filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39;.sig&#39;</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">_filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39;.sig&#39;</span>
 
-<div class="viewcode-block" id="Signatures.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.__repr__.html#pylayers.antprop.signature.Signatures.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
         <span class="k">def</span> <span class="nf">fun1</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">x</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
@@ -633,14 +635,14 @@
                 <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
                 
 
-        <span class="k">return</span><span class="p">(</span><span class="n">s</span><span class="p">)</span></div>
+        <span class="k">return</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Signatures.__len__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.__len__.html#pylayers.antprop.signature.Signatures.__len__">[docs]</a>    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">nsig</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">])</span><span class="o">/</span><span class="mi">2</span>
             <span class="n">nsig</span> <span class="o">+=</span> <span class="n">size</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">nsig</span><span class="p">)</span></div>
+        <span class="k">return</span><span class="p">(</span><span class="n">nsig</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Signatures.compl"><a class="viewcode-back" href="../../../modules/pylayers.antprop.signature.html#pylayers.antprop.signature.Signatures.compl">[docs]</a>    <span class="k">def</span> <span class="nf">compl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lint</span><span class="p">,</span><span class="n">L</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; completion from lint </span>
@@ -796,7 +798,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">nsig</span> <span class="o">+=</span> <span class="n">size</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">nint</span> <span class="o">+=</span> <span class="n">size</span><span class="o">*</span><span class="n">k</span></div>
 
-<div class="viewcode-block" id="Signatures.info"><a class="viewcode-back" href="../../../modules/pylayers.antprop.signature.html#pylayers.antprop.signature.Signatures.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># print &quot;Signatures for scenario defined by :&quot;</span>
         <span class="c1"># print &quot;Layout&quot;</span>
         <span class="c1"># print &quot;======&quot;</span>
@@ -833,7 +835,7 @@
                     <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span>
                         <span class="n">pyu</span><span class="o">.</span><span class="n">printout</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="n">pyu</span><span class="o">.</span><span class="n">RED</span><span class="p">)</span>
                 <span class="k">print</span> <span class="s1">&#39;]&#39;</span>
-            <span class="k">print</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span></div>
+            <span class="k">print</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
                 <span class="c1"># s = s + &#39;   &#39;+ str(a[i,0,:]) + &#39;\n&#39;</span>
 
                 <span class="c1"># s = s + &#39;   &#39;+ str(a[i,1,:]) + &#39;\n&#39;</span>
@@ -927,7 +929,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="Signatures._saveh5"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures._saveh5.html#pylayers.antprop.signature.Signatures._saveh5">[docs]</a>    <span class="k">def</span> <span class="nf">_saveh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_saveh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Save in hdf5 compliant with Links</span>
 
 <span class="sd">        Parameters</span>
@@ -967,10 +969,10 @@
             <span class="n">fh5</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="n">fh5</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Signature: issue when writting h5py file&#39;</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Signature: issue when writting h5py file&#39;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Signatures._loadh5"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures._loadh5.html#pylayers.antprop.signature.Signatures._loadh5">[docs]</a>    <span class="k">def</span> <span class="nf">_loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">grpname</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">grpname</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load signatures in hdf5 format compliant with class Links</span>
 
 <span class="sd">        Parameters</span>
@@ -1037,7 +1039,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
 
 
 <div class="viewcode-block" id="Signatures.save"><a class="viewcode-back" href="../../../modules/pylayers.antprop.signature.html#pylayers.antprop.signature.Signatures.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -2017,7 +2019,7 @@
         
         <span class="k">return</span> <span class="n">pta</span><span class="p">,</span><span class="n">phe</span></div>
 
-<div class="viewcode-block" id="Signatures.pltunfold"><a class="viewcode-back" href="../../../modules/pylayers.antprop.signature.html#pylayers.antprop.signature.Signatures.pltunfold">[docs]</a>    <span class="k">def</span> <span class="nf">pltunfold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">pltunfold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="kn">import</span> <span class="nn">shapely.ops</span> <span class="kn">as</span> <span class="nn">sho</span>
         <span class="kn">from</span> <span class="nn">descartes.patch</span> <span class="kn">import</span> <span class="n">PolygonPatch</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
@@ -2063,7 +2065,7 @@
         <span class="n">poly</span><span class="o">=</span><span class="n">sho</span><span class="o">.</span><span class="n">polygonize</span><span class="p">(</span><span class="n">cross</span><span class="p">)</span>
         <span class="c1"># ax = plot_lines(ax,cross,color=&#39;b&#39;)</span>
 
-        <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_poly</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">poly</span><span class="p">)</span></div>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_poly</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">poly</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Signatures.show"><a class="viewcode-back" href="../../../modules/pylayers.antprop.signature.html#pylayers.antprop.signature.Signatures.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  plot signatures within the simulated environment</span>
@@ -3143,7 +3145,7 @@
 <span class="sd">    pc  : center point of interaction segment (2xN) ndarray</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Signature.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signature.__init__.html#pylayers.antprop.signature.Signature.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sig</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sig</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; object constructor</span>
 
 <span class="sd">        Parameters</span>
@@ -3176,20 +3178,20 @@
 
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span><span class="o">==</span><span class="nb">list</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">seq</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">seginter</span><span class="p">,</span><span class="n">sig</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">typinter</span><span class="p">,</span><span class="n">sig</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">typinter</span><span class="p">,</span><span class="n">sig</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Signature.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signature.__repr__.html#pylayers.antprop.signature.Signature.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pb</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-        <span class="k">return</span> <span class="n">s</span></div>
+        <span class="k">return</span> <span class="n">s</span>
 
-<div class="viewcode-block" id="Signature.info"><a class="viewcode-back" href="../../../modules/pylayers.antprop.signature.html#pylayers.antprop.signature.Signature.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="k">print</span> <span class="n">k</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">k</span><span class="p">]</span></div>
+            <span class="k">print</span> <span class="n">k</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
 
 <div class="viewcode-block" id="Signature.ev2"><a class="viewcode-back" href="../../../modules/pylayers.antprop.signature.html#pylayers.antprop.signature.Signature.ev2">[docs]</a>    <span class="k">def</span> <span class="nf">ev2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  evaluation of Signature</span>

@@ -102,6 +102,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html">&#8220;</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html#some-layout">Some Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
@@ -253,7 +255,7 @@
    
 
 
-<div class="viewcode-block" id="Link.__add__"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.Link.__add__.html#pylayers.simul.link.Link.__add__">[docs]</a>    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">l</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">l</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; merge ak and tauk of 2 Links</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">L</span>  <span class="o">=</span> <span class="n">Link</span><span class="p">()</span>
@@ -262,7 +264,7 @@
         <span class="n">us</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">tk</span><span class="p">)</span>
         <span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ak</span> <span class="o">=</span> <span class="n">ak</span><span class="p">[</span><span class="n">us</span><span class="p">]</span>
         <span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">tk</span> <span class="o">=</span> <span class="n">tk</span><span class="p">[</span><span class="n">us</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">L</span></div></div>
+        <span class="k">return</span> <span class="n">L</span></div>
 
 
 <div class="viewcode-block" id="SLink"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.SLink">[docs]</a><span class="k">class</span> <span class="nc">SLink</span><span class="p">(</span><span class="n">Link</span><span class="p">):</span>
@@ -359,7 +361,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="DLink.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.__init__.html#pylayers.simul.link.DLink.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; deterministic link evaluation</span>
 
 <span class="sd">        </span>
@@ -608,7 +610,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">Si</span> <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ca</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">cb</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">Rays</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="n">Ctilde</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="n">Tchannel</span><span class="p">()</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="n">Tchannel</span><span class="p">()</span>
 
 
     <span class="nd">@property</span>
@@ -925,7 +927,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">chanreal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">get_cir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="DLink.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.__repr__.html#pylayers.simul.link.DLink.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; __repr__</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -980,7 +982,7 @@
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;dist_excess_max : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delay_excess_max_ns</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; m </span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;No Layout specified&#39;</span>
-        <span class="k">return</span> <span class="n">s</span></div>
+        <span class="k">return</span> <span class="n">s</span>
 
 <div class="viewcode-block" id="DLink.inforay"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.inforay">[docs]</a>    <span class="k">def</span> <span class="nf">inforay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">iray</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provide full information about a specified ray</span>
@@ -1256,7 +1258,7 @@
             <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Link stack: issue during stacking&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DLink._delete"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink._delete.html#pylayers.simul.link.DLink._delete">[docs]</a>    <span class="k">def</span> <span class="nf">_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Delete a key and associated data into h5py file</span>
 
 <span class="sd">        Parameters</span>
@@ -1279,7 +1281,7 @@
             <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Link._delete: issue when deleting in h5py file&#39;</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Link._delete: issue when deleting in h5py file&#39;</span><span class="p">)</span>
 
 
 
@@ -2071,12 +2073,12 @@
 
 
 
-<div class="viewcode-block" id="DLink.select"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.select">[docs]</a>    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cid</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;button_press_event&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">OnClick</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span></div>
+        <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
 
-<div class="viewcode-block" id="DLink.OnClick"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.OnClick">[docs]</a>    <span class="k">def</span> <span class="nf">OnClick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">event</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">OnClick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">event</span><span class="p">):</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">xdata</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">ydata</span>
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
@@ -2090,7 +2092,7 @@
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_show3</span><span class="p">()</span>
-        <span class="k">print</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span></div>
+        <span class="k">print</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DLink.show"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show the link</span>
@@ -2288,7 +2290,7 @@
 
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span></div>
 
-<div class="viewcode-block" id="DLink._show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink._show3.html#pylayers.simul.link.DLink._show3">[docs]</a>    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rays</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">lay</span><span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">ant</span><span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">newfig</span><span class="o">=</span> <span class="bp">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rays</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">lay</span><span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">ant</span><span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">newfig</span><span class="o">=</span> <span class="bp">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; display the simulation scene using Mayavi</span>
 <span class="sd">            using Mayavi</span>
 
@@ -2460,7 +2462,7 @@
         <span class="n">mlab</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">focalpoint</span><span class="o">=</span><span class="n">fp</span><span class="p">)</span><span class="c1">#,distance=15*dab-55)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_maya_fig</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">disable_render</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="n">mlab</span><span class="o">.</span><span class="n">orientation_axes</span><span class="p">()</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maya_fig</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maya_fig</span>
         <span class="c1">#return(self._maya_fig)</span>
 
 
