@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pylayers.network.emsolver &mdash; Python 1 documentation</title>
+  <title>pylayers.network.emsolver &mdash; PyLayers</title>
   
 
   
@@ -34,7 +34,7 @@
   
         <link rel="author" title="About these documents"
               href="../about.html"/>
-    <link rel="top" title="Python 1 documentation" href="../index.html"/>
+    <link rel="top" title="PyLayers" href="../index.html"/>
         <link rel="up" title="PyLayers Modules References" href="pylayers.html"/>
         <link rel="next" title="pylayers.network.model" href="pylayers.network.model.html"/>
         <link rel="prev" title="pylayers.network.communication" href="pylayers.network.communication.html"/> 
@@ -101,34 +101,28 @@
 <li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#references">9&nbsp;&nbsp;&nbsp;References</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="pylayers.html">PyLayers Modules References</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="pylayers.html#environment-description">Environment Description</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pylayers.html#antenna">Antenna</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pylayers.html#materials-and-slabs">Materials and Slabs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pylayers.html#ray-tracing">Ray Tracing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pylayers.html#channel">Channel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pylayers.html#other-formats">Other Formats</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pylayers.html#algebraic">Algebraic</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pylayers.html#geometric">Geometric</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pylayers.html#learning">Learning</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pylayers.html#large-scale-mobility">Large Scale Mobility</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pylayers.html#motion-capture">Motion Capture</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="pylayers.html#transit">Transit</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="pylayers.mobility.transit.Person.html">pylayers.mobility.transit.Person</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.mobility.transit.World.html">pylayers.mobility.transit.World</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.mobility.transit.SteeringBehavior.html">pylayers.mobility.transit.SteeringBehavior</a></li>
-<li class="toctree-l3 current"><a class="reference internal" href="pylayers.html#networks">Networks</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="pylayers.network.communication.html">pylayers.network.communication</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#">pylayers.network.emsolver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pylayers.network.model.html">pylayers.network.model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pylayers.network.net.html">pylayers.network.net</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pylayers.network.network.html">pylayers.network.network</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pylayers.network.show.html">pylayers.network.show</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pylayers.network.wsn.html">pylayers.network.wsn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.html#antennas-and-propagation">Antennas and Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.html#simulations">Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.html#localization-algorithms">Localization Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.html#measurement-data">Measurement Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.html#instrumentation">Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.html#agents-and-bodies-mobility">Agents and Bodies Mobility</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="pylayers.html#networks">Networks</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="pylayers.network.communication.html">pylayers.network.communication</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pylayers.network.emsolver</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#class-emsolver">Class EMsolver</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.html#physical-layer">Physical Layer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.html#utility-classes-and-functions">Utility classes and functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.network.model.html">pylayers.network.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.network.net.html">pylayers.network.net</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.network.network.html">pylayers.network.network</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.network.show.html">pylayers.network.show</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.network.wsn.html">pylayers.network.wsn</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.html#physical-layer">Physical Layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.html#signal-processing">Signal Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.html#utility-classes-and-functions">Utility classes and functions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>

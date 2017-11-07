@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pylayers.gis.layout &mdash; Python 1 documentation</title>
+  <title>pylayers.gis.layout &mdash; PyLayers</title>
   
 
   
@@ -34,7 +34,7 @@
   
         <link rel="author" title="About these documents"
               href="../../../about.html"/>
-    <link rel="top" title="Python 1 documentation" href="../../../index.html"/>
+    <link rel="top" title="PyLayers" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -4609,6 +4609,9 @@
 <span class="sd">            Examples</span>
 <span class="sd">            --------</span>
 
+<span class="sd">            .. plot::</span>
+<span class="sd">                :include-source:</span>
+
 <span class="sd">            &gt;&gt;&gt; from pylayers.gis.layout import *</span>
 <span class="sd">            &gt;&gt;&gt; L = Layout(&#39;TA-Office.ini&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; p1 = np.array([[0,0,0],[0,0,0]])</span>
@@ -9059,24 +9062,24 @@
 <span class="sd">        .. plot::</span>
 <span class="sd">            :include-source:</span>
 
-<span class="sd">            &gt;&gt;&gt; from pylayers.gis.layout import  *</span>
-<span class="sd">            &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">            &gt;&gt;&gt; L = Layout(&#39;TA-Office.ini&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; L.dumpr()</span>
-<span class="sd">            &gt;&gt;&gt; fig = plt.figure(figsize=(10,10))</span>
-<span class="sd">            &gt;&gt;&gt; ax = fig.add_subplot(221)</span>
-<span class="sd">            &gt;&gt;&gt; fig,ax = L.showG(&#39;s&#39;,fig=fig,ax=ax)</span>
-<span class="sd">            &gt;&gt;&gt; tis = plt.title(&quot;Gs&quot;)</span>
-<span class="sd">            &gt;&gt;&gt; ax = fig.add_subplot(222)</span>
-<span class="sd">            &gt;&gt;&gt; fig,ax = L.showG(&#39;t&#39;,fig=fig,ax=ax)</span>
-<span class="sd">            &gt;&gt;&gt; tit = plt.title(&quot;Gt&quot;)</span>
-<span class="sd">            &gt;&gt;&gt; ax = fig.add_subplot(223)</span>
-<span class="sd">            &gt;&gt;&gt; fig,ax = L.showG(&#39;r&#39;,fig=fig,ax=ax)</span>
-<span class="sd">            &gt;&gt;&gt; tic = plt.title(&quot;Gr&quot;)</span>
-<span class="sd">            &gt;&gt;&gt; ax = fig.add_subplot(224)</span>
-<span class="sd">            &gt;&gt;&gt; fig,ax = L.showG(&#39;v&#39;,fig=fig,ax=ax)</span>
-<span class="sd">            &gt;&gt;&gt; tiv = plt.title(&quot;Gv&quot;)</span>
-<span class="sd">            &gt;&gt;&gt; plt.show()</span>
+<span class="sd">        &gt;&gt;&gt; from pylayers.gis.layout import  *</span>
+<span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">        &gt;&gt;&gt; L = Layout(&#39;TA-Office.ini&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; L.dumpr()</span>
+<span class="sd">        &gt;&gt;&gt; fig = plt.figure(figsize=(10,10))</span>
+<span class="sd">        &gt;&gt;&gt; ax = fig.add_subplot(221)</span>
+<span class="sd">        &gt;&gt;&gt; fig,ax = L.showG(&#39;s&#39;,fig=fig,ax=ax)</span>
+<span class="sd">        &gt;&gt;&gt; tis = plt.title(&quot;Gs&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; ax = fig.add_subplot(222)</span>
+<span class="sd">        &gt;&gt;&gt; fig,ax = L.showG(&#39;t&#39;,fig=fig,ax=ax)</span>
+<span class="sd">        &gt;&gt;&gt; tit = plt.title(&quot;Gt&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; ax = fig.add_subplot(223)</span>
+<span class="sd">        &gt;&gt;&gt; fig,ax = L.showG(&#39;r&#39;,fig=fig,ax=ax)</span>
+<span class="sd">        &gt;&gt;&gt; tic = plt.title(&quot;Gr&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; ax = fig.add_subplot(224)</span>
+<span class="sd">        &gt;&gt;&gt; fig,ax = L.showG(&#39;v&#39;,fig=fig,ax=ax)</span>
+<span class="sd">        &gt;&gt;&gt; tiv = plt.title(&quot;Gv&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; plt.show()</span>
 
 <span class="sd">        See Also</span>
 <span class="sd">        --------</span>
