@@ -260,7 +260,9 @@ class Pattern(PyLayers):
 
         From Balanis (Formula 4.62(a)) 
         
-        .. math:: F_{\theta}(\theta,\phi) = \left[  \frac{\cos\left(\frac{kl}{2}\cos\theta\right)- \cos\left(\frac{kl}{2}\right)}{\sin \theta} \right] 
+        .. math:: 
+        
+            F_{\theta}(\theta,\phi) = \left[  \frac{\cos\left(\frac{kl}{2}\cos\theta\right)- \cos\left(\frac{kl}{2}\right)}{\sin \theta} \right] 
 
         """
         defaults = { 'param' : { 'l' : 0.25 } }
@@ -1578,27 +1580,29 @@ class Pattern(PyLayers):
     def gain(self):
         """  calculates antenna gain
         
-        Returns
-        -------
+        Notes
+        -----
 
-        self.G  : np.array(Nt,Np,Nf) dtype:float
+        This function updates the following attributes
+
+        + self.G  : np.array(Nt,Np,Nf) dtype:float
             linear gain 
                   or np.array(Nr,Nf)
-        self.sqG : np.array(Nt,Np,Nf) dtype:float 
+        + self.sqG : np.array(Nt,Np,Nf) dtype:float 
             linear sqare root of gain 
                   or np.array(Nr,Nf)
-        self.efficiency : np.array (,Nf) dtype:float 
+        + self.efficiency : np.array (,Nf) dtype:float 
             efficiency 
-        self.hpster : np.array (,Nf) dtype:float
+        + self.hpster : np.array (,Nf) dtype:float
             half power solid angle :  1 ~ 4pi steradian 
-        self.ehpbw : np.array (,Nf) dtyp:float 
+        + self.ehpbw : np.array (,Nf) dtyp:float 
             equivalent half power beamwidth (radians)
 
         Notes
         -----
 
-        .. math:: G(\theta,phi) = |F_{\\theta}|^2 + |F_{\\phi}|^2
-(
+        .. math:: G(\\theta,\\phi) = |F_{\\theta}|^2 + |F_{\\phi}|^2
+
         """
         self.G = np.real( self.Fp * np.conj(self.Fp)
                        +  self.Ft * np.conj(self.Ft) )
@@ -2683,11 +2687,11 @@ class Antenna(Pattern):
         .. math::
 
             \epsilon_r^{\\theta} =
-            \\frac{|F_{\\theta}(\\theta,\phi)-\hat{F}_{\\theta}(\\theta)(\phi)|^2}
+            \\frac{|F_{\\theta}(\\theta,\phi)-\hat{F}_{\\theta}(\\theta,\phi)|^2}
                  {|F_{\\theta}(\\theta,\phi)|^2}
 
             \epsilon_r^{\phi} =
-            \\frac{|F_{\phi}(\\theta,\phi)-\hat{F}_{\phi}(\\theta)(\phi)|^2}
+            \\frac{|F_{\phi}(\\theta,\phi)-\hat{F}_{\phi}(\\theta,\phi)|^2}
                  {|F_{\\theta}(\\theta,\phi)|^2}
 
 
@@ -5341,7 +5345,9 @@ def _gain(Ft,Fp):
     Notes
     -----
 
-    .. math:: G(\theta,phi) = |F_{\\theta}|^2 + |F_{\\phi}|^2
+    .. math:: 
+    
+        G(\theta,phi) = |F_{\\theta}|^2 + |F_{\\phi}|^2
 
     """
     G = np.real( Fp * np.conj(Fp)

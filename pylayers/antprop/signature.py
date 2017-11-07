@@ -1,70 +1,20 @@
 #-*- coding:Utf-8 -*-
 """
+
+.. automodule:: 
+    :members:
+
 Class Signatures
 ================
 
-.. autosummary::
-    :toctree: generated/
-
-    Signatures.__init__
-    Signatures.__repr__
-    Signatures.__len__
-    Signatures.num
-    Signatures.compl
-    Signatures.info
-    Signatures.saveh5
-    Signatures.loadh5
-    Signatures._saveh5
-    Signatures._loadh5
-    Signatures.load
-    Signatures.save
-    Signatures.sp
-    Signatures.calsig
-    Signatures.exist
-    Signatures.dido
-    Signatures.run
-    Signatures.meta
-    Signatures.lineofcycle
-    Signatures.cones
-    Signatures.unfold
-    Signatures.show
-    Signatures.showi
-    Signatures.rays
-    Signatures.raysv
-    Signatures.image
-    Signatures.image2
+.. autoclass:: Signatures 
+    :members:
 
 Class Signature
 ===============
 
-.. autosummary::
-    :toctree: generated/
-
-    Signature.__init__
-    Signature.__repr__
-    Signature.info
-    Signature.split
-    Signature.ev2
-    Signature.evf
-    Signature.ev
-    Signature.unfold
-    Signature.evtx
-    Signature.image
-    Signature.backtrace
-    Signature.sig2beam
-    Signature.sig2ray
-
-Utility functions
-=================
-
-.. autosummary::
-    :toctree: generated/
-
-    showsig
-    gidl
-    frontline
-    edgeout2
-    edgeout
+.. autoclass:: Signature
+    :members:
 
 """
 import doctest

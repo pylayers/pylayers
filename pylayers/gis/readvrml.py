@@ -4,34 +4,15 @@
 Utility Functions
 =================
 
-.. autosummary::
-    :toctree: generated/
+.. automodule::
+    :members:
 
-    savestr2
-    stretch
-    segsplit
-    extract
-    inbracket
-    incrochet
-    geomLine
-    geomFace
-    ParseDirectionalLight
-    ParseMaterial
-    show
-    parsevrml
-    vrml2sha
-    vrml2geom
 
 VLayout Class
 =============
 
-.. autosummary::
-    :toctree: generated/
-
-    Vlayout.load
-    Vlayout.show
-    Vlayout.wallanalysis
-    Vlayout.show3entity
+.. autoclass:: Vlayout
+    :members:
 
 """
 import os

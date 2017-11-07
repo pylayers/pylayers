@@ -9,15 +9,13 @@
 .. currentmodule:: pylayers.antprop.
 
 This module handles electromagnetic solver 
+
 Class EMsolver
 --------------
     
-.. autosummary::
-    :toctree: generated/
+.. autoclass:: EMsolver
+    :member:
 
-    EMsolver.save_model
-    EMsolver.load_model
-    EMsolver.solve
 
 """
 import os

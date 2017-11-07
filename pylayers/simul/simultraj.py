@@ -2,60 +2,15 @@
 # -*- coding: utf-8 -*-
 #
 """
-   Run simulation with full human trajectory
+  Run simulation with full human trajectory
 
 .. currentmodule:: pylayers.simul.simultraj
 
 Simul class
 ===========
 
-.. autosummary::
-    :toctree: generated/
-
-Run simulation and data exploitation
-------------------------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Simul.__init__
-    Simul.run
-    Simul._gen_net
-    Simul.evaldeter
-    Simul.evalstat
-    Simul.show
-
-Loading and Saving
-------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Simul._saveh5
-    Simul._loadh5
-    Simul.savepd
-    Simul.loadpd
-
-Extraction
-----------
-
-.. autosummary::
-    :toctree: generated/
-
-    Simul.get_link
-    Simul.get_value
-
-Miscellanous
-------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Simul.setttime
-    Simul.replace_data
-    Simul.check_exist
-    Simul.get_df_from_link
-    Simul.update_pos
+.. autoclass:: Simul
+    :members:
 
 See Also
 --------

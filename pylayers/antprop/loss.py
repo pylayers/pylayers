@@ -10,30 +10,8 @@ Loss module
 This module implements path loss models for various situations.
 
 
-.. autosummary::
-    :toctree: generated/
-
-    cdf
-    cost231
-    cost259
-    cost2100
-    calnu
-    Dgrid_points
-    Dgrid_zone
-    FMetisShad2
-    FMetisShad
-    gaspl
-    hata
-    LossMetisShadowing
-    LossMetisShadowing2
-    Losst
-    Loss0_v2
-    Loss0
-    Loss_diff
-    OneSlopeMdl
-    PL0
-    PL
-    visuPts
+.. automodule:: 
+    :members:
 
 """
 
@@ -1850,7 +1828,14 @@ def cdf(x,colsym="",lab="",lw=4):
     Examples
     --------
 
-    >>> import numpy as np
+    .. plot::
+        :include-source:
+
+        >>> import numpy as np
+        >>> import matplotlib.pyplot as plt 
+        >>> x = np.random.randn(10000)
+        >>> cdf(x)
+        >>> plt.show()
 
     """
     rcParams['legend.fontsize']=20

@@ -4,9 +4,7 @@ r"""
 
 .. currentmodule:: pylayers.simul.link
 
-
 =======
-This module runs the electromagnetic simulation at the link level.
 
 This module runs the electromagnetic simulation for a link.
 A deterministic link has two termination points and an associated Layout
@@ -25,10 +23,9 @@ which includes both link termination antennas.
 A common factor of both statistical (SLink) and deterministic channel (DLink)
 is the exitence of :math:`\alpha_k` and :math:`\tau_k`
 
-.. autosummary::
-    :toctree: generated/
+.. autoclass:: Link
+    :members:
 
-    Link.__add__
 
 
 SLink Class
@@ -36,10 +33,8 @@ SLink Class
 
 Slink is for statistical links.
 
-.. autosummary::
-    :toctree: generated/
-
-    SLink.onbody
+.. autoclass:: SLink
+    :members: 
 
 DLink Class
 ===========
@@ -48,59 +43,14 @@ Dlink is for deterministic links
 
 >>> from pylayers.simul.link import *
 >>> L = DLink(verbose=False)
->>> aktk = L.eval()
+>>> L.eval()
+>>> L.pltcir()
 
 DLink simulation
 ----------------
 
-.. autosummary::
-    :toctree: generated/
-
-    DLink.eval
-    DLink.afp
-    DLink.adp
-    DLink._show3
-
-
-DLink init
-----------
-
-.. autosummary::
-    :toctree: generated/
-
-    DLink.__init__
-    DLink.__repr__
-    DLink.reset_config
-    DLink.check_grpname
-
-
-search in hdf5 file
--------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    DLink.checkh5
-    DLink.array_exist
-    DLink.get_grpname
-    DLink.get_idx
-
-
-Modify hdf5 file
-----------------
-
-.. autosummary::
-    :toctree: generated/
-
-
-    DLink.save_init
-    DLink.save
-    DLink.load
-    DLink.stack
-    DLink._delete
-
-
-
+.. autoclass:: DLink
+    :members:
 
 """
 

@@ -6,108 +6,23 @@
 Node Class
 ==========
 
-.. autosummary::
-    :toctree: generated/
-
-     Node.__init__
-     Node.randomMAC
-
+.. autoclass:: Node
+    :members:
 
 Network Class
 ==============
 
-.. autosummary::
-    :toctree: generated/
-
-    Network.__init__
-    Network.__repr__
-
-
-Network creation
-----------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Network.add_devices
-    Network.create
-    Network._get_edges_typ
-    Network._get_grp
-    Network._get_llink
-    Network._get_wstd
-    Network._get_SubNet
-    Network._connect
-    Network._init_PN
-
-
-Network attributes queries
---------------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Network.get_pos
-    Network.get_orient
-    Network.get_pos_est
-    Network.overview
-    Network.haspe
-    Network.pp
-
-
-Network update
---------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Network.update_pos
-    Network.update_orient
-    Network.update_edges
-    Network.update_PN
-    Network.compute_LDPs
-    Network.update_LDPs
-
-
-Network Utilities
------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Network.perm
-    Network.combi
-    Network.Gen_tuple
-    Network.dist_edge
-    Network.show
-
-
-
-Network save
-------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Network.csv_save
-    Network.init_save
-    Network.mat_save
-    Network.txt_save
-    Network.loc_save
-    Network.pyray_save
-    Network.loc_save
-    Network.ini_save
+.. autoclass: Network
+    :members:
 
 
 PNetwork Class
 ==============
 
-    SimPy Process compliant version of the Network class
+SimPy Process compliant version of the Network class
 
-.. autosummary::
-    :toctree: generated/
-
-     PNetwork.__init__
-     PNetwork.run
+.. autoclass:: PNetwork
+    :members:
 
 """
 #####################################################################

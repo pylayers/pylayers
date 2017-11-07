@@ -4,6 +4,24 @@ Module OSMParser
 
 This module provides classes to handle open street map (OSM) objects
 
+.. autoclass:: Way
+    :members:
+
+.. autoclass:: Coords 
+    :members:
+
+.. autoclass:: Nodes 
+    :members:
+
+.. autoclass:: Ways 
+    :members:
+
+.. autoclass:: Relations 
+    :members:
+
+.. autoclass:: FloorPlan 
+    :members:
+
 """
 from osmapi import OsmApi
 import geocoder as geo

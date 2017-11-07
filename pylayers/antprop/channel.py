@@ -18,82 +18,30 @@ TBchannel class
 TUchannel class
 ===============
 
-.. autosummary::
-    :toctree:generated/
-
-    TUchannel.psd
-    TUchannel.awgn
-    TUchannel.Etau0
-    TUchannel.Ewin
-    TUchannel.Etot
-    TUchannel.Emax
-    TUchannel.toa_max2
-    TUchannel.toa_new
-    TUchannel.toa_win
-    TUchannel.toa_max
+.. autoclass:: TUchannel
+    :members:
 
 
 TUDchannel
 ==========
 
-.. autosummary::
-    :toctree: generated/
-
-    TUDchannel.fig
+.. autoclass:: TUDchannel
+    :members:
 
 Tchannel
 =========
 
-.. autosummary::
-    :toctree: generated/
+.. autosclass:: Tchannel
+    :members:
 
-    Tchannel.saveh5
-    Tchannel.loadh5
-    Tchannel.apply
-    Tchannel.applywav
-    Tchannel.getcir
-    Tchannel.get_cir
-    Tchannel.chantap
-    Tchannel.baseband
-    Tchannel.plotd
-    Tchannel.plotad
-    Tchannel.doadod
-    Tchannel.energy
-    Tchannel.rssi
-    Tchannel.wavefig
-    Tchannel.rayfig
-    Tchannel.rssi
-    Tchannel.cut
-    Tchannel.sort
-    Tchannel.showtap
-    Tchannel.tap
-    Tchannel.ifft
-    Tchannel.totime
-    Tchannel.iftd
-    Tchannel.ft1
-    Tchannel.ftau
-    Tchannel.rir
-    Tchannel.cir
-    Tchannel.plot3d
-    Tchannel.ft2
-    Tchannel.frombuf
-    Tchannel.capacity
-    Tchannel.calibrate
-    Tchannel.pdp
 
 Mchannel
 ========
 
 VNA Measured channel 
 
-.. autosummary::
-    :toctree: generated/
-
-    Mchannel.eig
-    Mchannel.Bcapacity
-    Mchannel.WFcapacity
-    Mchannel.plt2
-
+.. autoclass:: Mchannel
+    :members:
 
 AFPchannel
 ==========
@@ -101,50 +49,23 @@ AFPchannel
 Angular Frequency Profile Channel 
 
 .. autoclass:: AFPChannel 
+    :members:
 
-.. autosummary::
-    :toctree: generated/
-
-    AFPchannel.loadmes 
-    AFPchannel.toadp 
 
 ADPchannel
 ==========
 
 Angular Delay Profile Channel 
 
-.. autosummary::
-    :toctree: generated/
+.. autoclass:: ADPchannel 
+    :members:
 
-    ADPchannel.correlate
-    ADPchannel.clean
-    ADPchannel.pdp
-    ADPchannel.app
-    ADPchannel.tomap
-    ADPchannel.polarplot
 
 Ctilde
 ======
 
-.. autosummary::
-    :toctree: generated/
-
-    Ctilde.inforay 
-    Ctilde.saveh5 
-    Ctilde.loadh5 
-    Ctilde._loadh5 
-    Ctilde.los 
-    Ctilde.mobility
-    Ctilde.plotd
-    Ctilde.doadod
-    Ctilde.locbas
-    Ctilde.Cg2Cl
-    Ctilde.show
-    Ctilde.check_reciprocity
-    Ctilde.energy 
-    Ctilde.cut
-    Ctilde.sort
-    Ctilde.prop2tran
+.. autoclass:: Ctilde
+    :members:
 
 """
 from __future__ import print_function

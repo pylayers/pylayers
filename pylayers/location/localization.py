@@ -1,3 +1,15 @@
+"""
+
+.. automodule::
+    :members:
+
+.. autoclass:: Localization
+    :members:
+
+.. autoclass:: PLocalization
+    :members:
+
+"""
 from pylayers.util.project import *
 import sys
 

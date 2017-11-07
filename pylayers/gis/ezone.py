@@ -3,6 +3,11 @@
 
 This module handles the description of an earth zone
 
+.. autoclass:: DEM
+    :members:
+
+.. autoclass:: Ezone 
+    :members:
 
 """
 import h5py

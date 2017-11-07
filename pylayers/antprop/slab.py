@@ -22,94 +22,40 @@ The adopted axis convention is the following
 Interface Class
 ===============
 
-.. autosummary::
-    :toctree: generated/
-
-    Interface.__init__
-    Interface.RT
-    Interface.pcolor
-    Interface.tocolor
-    Interface.loss0
-    Interface.losst
-    Interface.plotwrt
+.. autoclass:: Interface
+    :members:
 
 MatInterface Class
 ==================
 
-.. autosummary::
-    :toctree: generated/
-
-     MatInterface.__init__
+.. autoclass:: MatInterface
+    :members:
 
 
 Mat Class
 =========
 
-.. autosummary::
-    :toctree: generated/
-
-    Mat.__init__
-    Mat.eval
-    Mat.info
-    Mat.R
-
+.. autoclass:: Mat 
+    :members:
 
 MatDB Class
 ===========
 
-.. autosummary::
-    :toctree: generated/
-
-    MatDB.__init__
-    MatDB.info
-    MatDB.dass
-    MatDB.delete
-    MatDB.edit
-    MatDB.add
-    MatDB.addgui
-    MatDB.choose
-    MatDB.load
-    MatDB.save
-    MatDB.savemat
+.. autoclass:: MatDB 
+    :members:
 
 Slab Class
 ==========
 
-.. autosummary::
-    :toctree: generated/
+.. autoclass:: Slab
+    :members:
 
-    Slab.__init__
-    Slab.__repr__
-    Slab.info
-    Slab.conv
-    Slab.ev
-    Slab.filter
-    Slab.excess_grdelay
-    Slab.tocolor
-    Slab.loss0
-    Slab.losst
-    Slab.editgui
-    Slab.show
 
 SlabDB Class
 ============
 
-.. autosummary::
-    :toctree: generated/
-
-    SlabDB.__init__
-    SlabDB.showall
-    SlabDB.info
-    SlabDB.dass
-    SlabDB.delete
-    SlabDB.edit
-    SlabDB.show
-    SlabDB.add
-    SlabDB.addgui
-    SlabDB.load
-    SlabDB.loadsl
-    SlabDB.save
-    SlabDB.savesl
+.. autoclass:: SlabDB
+    :members:
 
 Utility Functions
 ==================

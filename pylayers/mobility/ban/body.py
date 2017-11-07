@@ -6,41 +6,15 @@ Body Class
 
 This class implements the body model
 
-.. autosummary::
-    :toctree: /generated
+.. autoclass:: Body
+    :members:
 
-    Body.__init__
-    Body.__repr__
-    Body.load
-    Body.center
-    Body.posvel
-    Body.settopos
-    Body.setccs
-    Body.setdcs
-    Body.setacs
-    Body.loadC3D
-    Body.plot3d
-    Body._show3
-    Body.show
-    Body.show3
-    Body.geomfile
-    Body.movie
-    Body.intersectBody
-    Body.body_link
-    Body.cylinder_basis_k
-    Body.cyl_antenna
 
-Miscelianous Functions
-======================
+Cylinder Class
+==============
 
-.. autosummary::
-    :toctree: /generated
-
-    ChangeBasis
-    translate
-    rotation
-    dist
-    Global_Trajectory
+.. autoclass:: Cylinder
+    :members:
 
 """
 #import mayavi.mlab as mlab

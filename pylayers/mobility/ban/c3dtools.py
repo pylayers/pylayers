@@ -18,7 +18,46 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-'''A Python library for reading and writing C3D files.'''
+"""
+A Python library for reading and writing C3D files. 
+
+Header class
+============
+
+.. autoclass:: Header
+    :members:
+
+Header class
+============
+
+.. autoclass:: Group
+    :members:
+
+Manager class
+=============
+
+.. autoclass:: Manager
+    :members:
+
+Reader  class
+=============
+
+.. autoclass:: Reader
+    :members:
+
+Writer class
+============
+
+.. autoclass:: Writer
+    :members:
+
+Manager class
+=============
+
+.. autoclass:: Manager
+    :members:
+
+"""
 
 import array
 import numpy
@@ -26,6 +65,7 @@ import struct
 import logging
 import operator
 import cStringIO
+
 
 
 class Header(object):

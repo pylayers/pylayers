@@ -1,3 +1,13 @@
+"""
+
+.. automodule::
+    :members:
+
+.. autoclass:: Observables
+    :members:
+
+"""
+
 from __future__ import print_function
 import numpy as np
 import scipy as sp

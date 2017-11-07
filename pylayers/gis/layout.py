@@ -9,148 +9,8 @@ r"""
 
 .. currentmodule:: pylayers.gis.layout
 
-.. autosummary::
-    :toctree: generated
-
-Layout Class
-============
-
-.. autosummary::
-    :toctree: generated
-
-    Layout.Layout.add_fnod
-    Layout.add_furniture
-    Layout.add_furniture_file
-    Layout.add_nfpe
-    Layout._addoutcy
-    Layout.add_pnod
-    Layout.add_pons
-    Layout.add_segment
-    Layout.angleonlink
-    Layout.angleonlink3
-    Layout.angleonlinkold
-    Layout.boundary
-    Layout.build
-    Layout.buildGi
-    Layout.buildGr
-    Layout.buildGt
-    Layout.buildGt_old
-    Layout.buildGv
-    Layout.buildGw
-    Layout.check
-    Layout.check2
-    ssayout.check_Gi
-    Layout.cleanup
-    Layout.clip
-    Layout.closest_edge
-    Layout._convex_hull
-    Layout.cy2pt
-    Layout.cycleinline
-    Layout._delaunay
-    Layout.del_points
-    Layout.del_segment
-    Layout.diag
-    Layout.displaygui
-    Layout.dumpr
-    Layout.dumpw
-    Layout.ed2nd
-    Layout.editor
-    Layout.editorTk
-    Layout.edit_point
-    Layout.edit_seg
-    Layout.edit_segment
-    Layout.exportosm
-    Layout.extrseg
-    Layout.facet3D
-    Layout.facets3D
-    Layout.filterGi
-    Layout._find_diffractions
-    Layout.find_edgelist
-    Layout.g2npy
-    Layout.geomfile
-    Layout.getangles
-    Layout.get_diffslab
-    Layout.get_points
-    Layout.get_Sg_pos
-    Layout.get_zone
-    Layout.have_subseg
-    Layout._help
-    Layout.importosm
-    Layout.importres
-    Layout.importshp
-    Layout.info
-    Layout.info_segment
-    Layout.intercy
-    Layout._interlist
-    Layout.ispoint
-    Layout.isseg
-    Layout.layerongrid
-    Layout.layeronlink
-    Layout.load
-    Layout.loadfur
-    Layout.load_modif
-    Layout.ls
-    Layout.mask
-    Layout._merge_polygons
-    Layout.nd2seg
-    Layout.numseg
-    Layout.off_overlay
-    Layout.offset_index
-    Layout.onseg
-    Layout.outputGi
-    Layout.outputGi_mp
-    Layout.outputGi_new
-    Layout.plot
-    Layout.plot_segments
-    Layout.pltlines
-    Layout.pltpoly
-    Layout.pltvnodes
-    Layout.polysh2geu
-    Layout.pt2cy
-    Layout.pt2ro
-    Layout.ptGs2cy
-    Layout.ptin
-    Layout.randTxRx
-    Layout.room2nodes
-    Layout.room2segments
-    Layout.rotate
-    Layout.save
-    Layout.scl_overlay
-    Layout.seg2pts
-    Layout.seg2ro
-    Layout.seginframe
-    Layout.seginframe2
-    Layout.seginline
-    Layout.segpt
-    Layout.seguv
-    Layout.show
-    Layout.show3
-    Layout._show3
-    Layout.showG
-    Layout._showGi
-    Layout.showGs
-    Layout._showGt
-    Layout._showGv
-    Layout.show_layer
-    Layout.show_nodes
-    Layout.show_seg1
-    Layout.show_segment
-    Layout.showSig
-    Layout.signature
-    Layout.subseg
-    Layout.thwall
-    Layout.translate
-    Layout._triangle
-    Layout._triangle_old
-    Layout.updateshseg
-    Layout._updGsncy
-    Layout.visilist
-    Layout.visi_papb
-    Layout._visual_check
-    Layout.waypoint
-    Layout.waypointGw
-    Layout.wedge
-    Layout.wedge2
+.. autoclass:: Layout
+   :members: 
 
 """
 from __future__ import print_function
@@ -1147,18 +1007,34 @@ class Layout(pro.PyLayers):
     def g2npy(self,verbose=False):
         """ conversion from graphs to numpy arrays
 
+        Parameters
+        ----------
+
+        verbose : boolean 
+
         Notes
         -----
 
         This function updates the following arrays:
 
-        self.pt   (2xNp)
-        self.tahe (2xNs)
-        self.tgs
-        self.dca  : dictionnary of cycle with an airwall
-        self.lsss : list of subsegments
+        + self.pt   (2xNp)
+        + self.pg   center of gravity 
+        + self.tahe (2xNs)
+        + self.tgs  : graph to segment 
+        + self.tsg  : segment to graph
+        + self.dca  : dictionnary of cycle with an airwall
+        + self.s2pu : sparse_lil_matrx 
+        + self.s2pc : sparse_lil_matrx 
+        + self.lsss : list of iso segments
+        + self.maxheight : 
+        + self.normal :
 
         assert self.pt[self.iupnt[-1]] == self.pt[:,self.iupnt[-1]]
+
+        See Also
+        --------
+
+        extrseg
 
         """
 
@@ -9132,24 +9008,26 @@ class Layout(pro.PyLayers):
             edgelistbkup = kwargs['edgelist']
             widthbkup = kwargs['width']
             nodecolbkup = kwargs['edge_color']
-
             try:
                 sllist = [kwargs['sllist'].pop()]
             except:
                 sllist = self.name.keys()
 
+            #
+            # Draw segment slab per slab with proper linewidth and color 
+            #
             for lmat in sllist:
+                print(lmat)
+                if lmat=='DOOR':
+                    pdb.set_trace()
                 lseg = self.name[lmat]
                 if lseg != []:
-                    lseg2 = [np.where(np.array(self.Gs.edges()) == i)[0]
-                             for i in lseg]
-                    kwargs['edgelist'] = reduce(
-                        lambda x, y: list(x) + list(y), lseg2)
+                    lseg2 = [np.where(np.array(self.Gs.edges()) == i)[0] for i in lseg]
+                    kwargs['edgelist'] = list(reduce(lambda x, y: list(x) + list(y), lseg2))
                     if kwargs['slab']:
                         kwargs['edge_color'] = cold[self.sl[lmat]['color']]
                         kwargs['width'] = self.sl[lmat]['linewidth']
                     else:
-
                         kwargs['edge_color'] = 'k'
                         kwargs['width'] = 1
 
@@ -9157,11 +9035,12 @@ class Layout(pro.PyLayers):
                     kwargs['labels'] = True
                 else:
                     kwargs['labels'] = False
+
                 if 's' in dis_nodes:
                     kwargs['nodes'] = True
                 else:
                     kwargs['nodes'] = False
-
+                
                 kwargs['fig'], kwargs['ax'] = gru.draw(G, **kwargs)
 
             kwargs['nodelist'] = nodelistbkup
