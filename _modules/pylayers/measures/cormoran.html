@@ -1,146 +1,155 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pylayers.measures.cormoran &mdash; Python 1 documentation</title>
+  
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  
+  
+
+  
+
+  
+  
     
-    <title>pylayers.measures.cormoran &mdash; Python 1 documentation</title>
-    
-    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
     <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="author" title="About these documents"
+              href="../../../about.html"/>
+    <link rel="top" title="Python 1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/javascript" src="../../../_static/sidebar.js"></script>
-    <link rel="author" title="About these documents" href="../../../about.html" />
-    <link rel="top" title="Python 1 documentation" href="../../../index.html" />
-    <link rel="up" title="Module code" href="../../index.html" />
-<script type="text/javascript">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34943220-1']);
-  _gaq.push(['_trackPageview']);
+          
+            <a href="../../../index.html" class="icon icon-home"> Python
+          
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
-
-  </head>
-  <body role="document">
-
-    <div class="header-wrapper">
-      <div class="header">
-          <p class="logo"><a href="../../../index.html">
-            <img src="../../../_static/pylayers.png" alt="Logo"/>
-          </a>
-          </p><div class="navbar">
-          <ul>
-            <li><a href="../../../download.html">Download</a></li>
-            <li><a href="../../../notebook/TOC.html">User Guide</a></li>
-            <li><a href="../../../modules/pylayers.html">Reference</a></li>
-       </ul>
-
-<div class="search_form">
-
-<div id="cse" style="width: 100%;"></div>
-<script>
-  (function() {
-       var cx = '004820205189002234612:sa15qzuf2ca';
-           var gcse = document.createElement('script');
-               gcse.type = 'text/javascript';
-                   gcse.async = true;
-                       gcse.src = (document.location.protocol == 'https:' ?
-                           'https:' : 'http:') +
-                               '//cse.google.com/cse.js?cx=' + cx;
-                                   var s =
-                                   document.getElementsByTagName('script')[0];
-                                       s.parentNode.insertBefore(gcse, s);
-                                         })();
-</script>
-<gcse:search></gcse:search>
-</div>
-</div> <!-- end navbar --></div>
-    </div>
-
-    <div class="content-wrapper">
-
-      <div class="sphinxsidebar">
-	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
-	<!-- rellinks[1:] is an ugly hack to avoid link to module
-	    index  -->
-	<div class="rellink">
-	<a href="../../../py-modindex.html" title="Python Module Index"
-	    >Modules
-	    <br>
-	    <span class="smallrellink">
-	    Python Module Index
-	    </span>
-	    <span class="hiddenrellink">
-	    Python Module Index
-	    </span>
-	    
-	    </a>
-	</div>
-	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="../../index.html" title="Module code" >
-	Up
-	<br>
-	<span class="smallrellink">
-	Module code
-	</span>
-	<span class="hiddenrellink">
-	Module code
-	</span>
-	
-	</a>
-	</div>
-    </div>
-    <p style="text-align: center; background-color: #BFFFFF">This documentation is
-
-    for Python <strong>version 1</strong>
-    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
-    
-    <h3>Citing</h3>
-    <p>If you use the software, please consider
-    <a href="../../../about.html#citing-pylayers">citing pylayers</a>.</p>
-    <h3>This page</h3>
-	
-    
-    </div>
-	  </div>
-
-
-      <div class="content">
+          
             
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+            <img src="../../../_static/pylayers.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#radio-propagation-simulation">2&nbsp;&nbsp;&nbsp;Radio Propagation Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#handling-agent-mobility">3&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#wireless-body-area-network-related-classes">4&nbsp;&nbsp;&nbsp;Wireless Body Area Network Related Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#some-simulation-examples">5&nbsp;&nbsp;&nbsp;Some Simulation Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#algorithms-for-localization">6&nbsp;&nbsp;&nbsp;Algorithms for Localization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#measurements-tools">7&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#pylayers-tools">8&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#references">9&nbsp;&nbsp;&nbsp;References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/pylayers.html">PyLayers Modules Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>pylayers.measures.cormoran</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <h1>Source code for pylayers.measures.cormoran</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding:Utf-8 -*-</span>
@@ -151,137 +160,8 @@
 <span class="sd">CorSer Class</span>
 <span class="sd">============</span>
 
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    cor_log</span>
-
-<span class="sd">CorSer init and load data</span>
-<span class="sd">-------------------------</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    CorSer.__init__</span>
-<span class="sd">    CorSer.__repr__</span>
-<span class="sd">    CorSer._loadBS</span>
-<span class="sd">    CorSer._loadTCR</span>
-<span class="sd">    CorSer._load_offset_dict</span>
-<span class="sd">    CorSer._loadbody</span>
-<span class="sd">    CorSer._loadcam</span>
-<span class="sd">    CorSer._loadhkb</span>
-<span class="sd">    CorSer._loadinfranodes</span>
-<span class="sd">    CorSer.loadlog</span>
-
-
-<span class="sd">CorSer exploit data</span>
-<span class="sd">-------------------</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    CorSer.getdevp</span>
-<span class="sd">    CorSer.getlink</span>
-<span class="sd">    CorSer.getlinkd</span>
-<span class="sd">    CorSer.getlinkp</span>
-<span class="sd">    CorSer.devmapper</span>
-<span class="sd">    CorSer.export_csv</span>
-
-
-<span class="sd">CorSer visualization tools</span>
-<span class="sd">--------------------------</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-
-<span class="sd">2D  visualization</span>
-<span class="sd">~~~~~~~~~~~~~~~~~</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    CorSer.plot</span>
-<span class="sd">    CorSer.pltmob</span>
-<span class="sd">    CorSer.plttcr</span>
-<span class="sd">    CorSer.pltvisi</span>
-<span class="sd">    CorSer.animhkb</span>
-<span class="sd">    CorSer.animhkbAP</span>
-<span class="sd">    CorSer.imshow</span>
-<span class="sd">    Corser.showlink</span>
-<span class="sd">    CorSer.pltgt</span>
-
-
-<span class="sd">3D visualization</span>
-<span class="sd">~~~~~~~~~~~~~~~~</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    CorSer._show3</span>
-<span class="sd">    CorSer._show3i</span>
-<span class="sd">    CorSer.imshowvisibility</span>
-<span class="sd">    CorSer.imshowvisibility_i</span>
-<span class="sd">    CorSer.anim</span>
-
-
-
-<span class="sd">Video Visualization</span>
-<span class="sd">~~~~~~~~~~~~~~~~~~~</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    CorSer.snapshot</span>
-<span class="sd">    CorSer.snapshots</span>
-<span class="sd">    CorSer.vlc</span>
-
-
-<span class="sd">CorSer Internal processing</span>
-<span class="sd">--------------------------</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-
-<span class="sd">Time Alignement</span>
-<span class="sd">~~~~~~~~~~~~~~~</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-
-<span class="sd">    CorSer.align</span>
-<span class="sd">    CorSer.offset_setter</span>
-<span class="sd">    CorSer.offset_setter_video</span>
-<span class="sd">    CorSer._align_on_devdf</span>
-<span class="sd">    CorSer._align_devdf_on_hkb</span>
-<span class="sd">    CorSer._apply_offset&#39;</span>
-<span class="sd">    CorSer._save_data_off_dict</span>
-<span class="sd">    CorSer._save_offset_dict</span>
-
-<span class="sd">Data frame transformation</span>
-<span class="sd">~~~~~~~~~~~~~~~~~~~~~~~~~</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    CorSer.compute_visibility</span>
-<span class="sd">    CorSer._computedevpdf</span>
-<span class="sd">    CorSer._computedistdf</span>
-<span class="sd">    CorSer._distancematrix</span>
-<span class="sd">    CorSer._visiarray</span>
-
-
-<span class="sd">Vizualizing processing</span>
-<span class="sd">~~~~~~~~~~~~~~~~~~~~~~</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    CorSer.visidev</span>
-<span class="sd">    CorSer.visidev2</span>
-<span class="sd">    CorSer.__refreshshow3i</span>
+<span class="sd">.. autoclass:: CorSer</span>
+<span class="sd">    :members:</span>
 
 <span class="sd">Notes</span>
 <span class="sd">-----</span>
@@ -376,7 +256,7 @@
     <span class="n">lt</span><span class="o">.</span><span class="n">hour</span><span class="o">*</span><span class="mi">3600</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">ta</span><span class="p">)</span>
 
-<span class="k">class</span> <span class="nc">CorSer</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer">[docs]</a><span class="k">class</span> <span class="nc">CorSer</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Handle CORMORAN measurement data</span>
 
 <span class="sd">    Hikob data handling from CORMORAN measurement campaign</span>
@@ -883,7 +763,7 @@
         <span class="c1"># self.dist = np.sqrt(np.sum((mpts[:,np.newaxis,:]-mpts[np.newaxis,:])**2,axis=2))</span>
 
 
-<div class="viewcode-block" id="CorSer.loadlog"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.loadlog.html#pylayers.measures.cormoran.CorSer.loadlog">[docs]</a>    <span class="k">def</span> <span class="nf">loadlog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.loadlog"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.loadlog">[docs]</a>    <span class="k">def</span> <span class="nf">loadlog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load in self.log the log of the current serie</span>
 <span class="sd">            from MeasurementLog.csv</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1256,7 +1136,7 @@
         <span class="n">topandas</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hkb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hkb</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">hkb</span><span class="o">!=</span><span class="mi">0</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="CorSer.compute_visibility"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.compute_visibility.html#pylayers.measures.cormoran.CorSer.compute_visibility">[docs]</a>    <span class="k">def</span> <span class="nf">compute_visibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="n">square_mda</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">all_links</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.compute_visibility"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.compute_visibility">[docs]</a>    <span class="k">def</span> <span class="nf">compute_visibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="n">square_mda</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">all_links</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; determine visibility of links for a given techno</span>
 
 
@@ -1455,7 +1335,7 @@
 
         <span class="k">return</span> <span class="n">intersect</span><span class="p">,</span><span class="n">links</span></div>
 
-<div class="viewcode-block" id="CorSer.imshowvisibility"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.imshowvisibility.html#pylayers.measures.cormoran.CorSer.imshowvisibility">[docs]</a>    <span class="k">def</span> <span class="nf">imshowvisibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.imshowvisibility"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.imshowvisibility">[docs]</a>    <span class="k">def</span> <span class="nf">imshowvisibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  imshow visibility mda</span>
 
 
@@ -1778,7 +1658,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">_mayavdic</span><span class="o">.</span><span class="n">mlab_source</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">x</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">top</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">top</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">z</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">top</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">u</span><span class="o">=</span><span class="n">V</span><span class="p">[</span> <span class="mi">0</span><span class="p">],</span><span class="n">v</span><span class="o">=</span><span class="n">V</span><span class="p">[</span> <span class="mi">1</span><span class="p">],</span><span class="n">w</span><span class="o">=</span><span class="n">V</span><span class="p">[</span> <span class="mi">2</span><span class="p">])</span>
 
 
-<div class="viewcode-block" id="CorSer.imshowvisibility_i"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.imshowvisibility_i.html#pylayers.measures.cormoran.CorSer.imshowvisibility_i">[docs]</a>    <span class="k">def</span> <span class="nf">imshowvisibility_i</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.imshowvisibility_i"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.imshowvisibility_i">[docs]</a>    <span class="k">def</span> <span class="nf">imshowvisibility_i</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  imshow visibility mda interactive</span>
 
 <span class="sd">        Parameters</span>
@@ -2102,7 +1982,7 @@
         <span class="c1"># # self.dist = np.sqrt(np.sum((mpts[:,np.newaxis,:]-mpts[np.newaxis,:])**2,axis=2))</span>
 
 
-<div class="viewcode-block" id="CorSer.vlc"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.vlc.html#pylayers.measures.cormoran.CorSer.vlc">[docs]</a>    <span class="k">def</span> <span class="nf">vlc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.vlc"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.vlc">[docs]</a>    <span class="k">def</span> <span class="nf">vlc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; play video of the associated serie</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">videofile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rootdir</span><span class="p">,</span><span class="s1">&#39;POST-TREATED&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">day</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;-06-2014&#39;</span><span class="p">,</span><span class="s1">&#39;Videos&#39;</span><span class="p">)</span>
@@ -2118,7 +1998,7 @@
             <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;file &#39;</span><span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span> <span class="o">+</span> <span class="s1">&#39; not found&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="CorSer.snapshot"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.snapshot.html#pylayers.measures.cormoran.CorSer.snapshot">[docs]</a>    <span class="k">def</span> <span class="nf">snapshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">t0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">offset</span><span class="o">=</span><span class="mf">15.5</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">save</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[],</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)):</span>
+<div class="viewcode-block" id="CorSer.snapshot"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.snapshot">[docs]</a>    <span class="k">def</span> <span class="nf">snapshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">t0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">offset</span><span class="o">=</span><span class="mf">15.5</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">save</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[],</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)):</span>
         <span class="sd">&quot;&quot;&quot; single snapshot plot</span>
 
 <span class="sd">        Parameters</span>
@@ -2168,7 +2048,7 @@
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span></div>
 
 
-<div class="viewcode-block" id="CorSer.snapshots"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.snapshots.html#pylayers.measures.cormoran.CorSer.snapshots">[docs]</a>    <span class="k">def</span> <span class="nf">snapshots</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">t0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">t1</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">offset</span><span class="o">=</span><span class="mf">15.5</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.snapshots"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.snapshots">[docs]</a>    <span class="k">def</span> <span class="nf">snapshots</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">t0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">t1</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">offset</span><span class="o">=</span><span class="mf">15.5</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; take snapshots </span>
 
 <span class="sd">        Parameters</span>
@@ -2402,7 +2282,7 @@
                     <span class="n">array</span><span class="p">([</span> <span class="mf">0.48298163</span><span class="p">,</span>  <span class="mf">0.67806043</span><span class="p">,</span>  <span class="mf">0.0987967</span> <span class="p">]))</span></div>
 
 
-<div class="viewcode-block" id="CorSer.imshow"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.imshow.html#pylayers.measures.cormoran.CorSer.imshow">[docs]</a>    <span class="k">def</span> <span class="nf">imshow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">time</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.imshow"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.imshow">[docs]</a>    <span class="k">def</span> <span class="nf">imshow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">time</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; DEPRECATED</span>
 
 <span class="sd">        Parameters</span>
@@ -2465,7 +2345,7 @@
         <span class="c1">#        cpt = cpt + 1</span>
         <span class="k">return</span> <span class="n">fig</span><span class="p">,(</span><span class="n">ax1</span><span class="p">,</span><span class="n">ax2</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">lk2nd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lk</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.lk2nd"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.lk2nd">[docs]</a>    <span class="k">def</span> <span class="nf">lk2nd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lk</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; transcode a lk from Id to real name</span>
 
 <span class="sd">        Parameters</span>
@@ -2482,7 +2362,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">u</span> <span class="o">=</span> <span class="n">lk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;HKB:&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
         <span class="n">v</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">idHKB</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)],</span><span class="n">u</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CorSer._load_offset_dict"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer._load_offset_dict.html#pylayers.measures.cormoran.CorSer._load_offset_dict">[docs]</a>    <span class="k">def</span> <span class="nf">_load_offset_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load offset_dictionnary.bin</span>
@@ -2536,7 +2416,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_save_offset_dict</span><span class="p">(</span><span class="n">d</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="CorSer.offset_setter_video"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.offset_setter_video.html#pylayers.measures.cormoran.CorSer.offset_setter_video">[docs]</a>    <span class="k">def</span> <span class="nf">offset_setter_video</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="s1">&#39;AP1&#39;</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="s1">&#39;WristRight&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.offset_setter_video"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.offset_setter_video">[docs]</a>    <span class="k">def</span> <span class="nf">offset_setter_video</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="s1">&#39;AP1&#39;</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="s1">&#39;WristRight&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; video offset setter</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;inverse&#39;</span><span class="p">:</span><span class="bp">True</span>
@@ -2655,7 +2535,7 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="CorSer.offset_setter"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.offset_setter.html#pylayers.measures.cormoran.CorSer.offset_setter">[docs]</a>    <span class="k">def</span> <span class="nf">offset_setter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="s1">&#39;HKB:1&#39;</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="s1">&#39;HKB:12&#39;</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.offset_setter"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.offset_setter">[docs]</a>    <span class="k">def</span> <span class="nf">offset_setter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="s1">&#39;HKB:1&#39;</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="s1">&#39;HKB:12&#39;</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; offset setter</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;inverse&#39;</span><span class="p">:</span><span class="bp">True</span>
@@ -2861,7 +2741,7 @@
     <span class="c1">#         plt.ion()</span>
 
 
-    <span class="k">def</span> <span class="nf">mtlbsave</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.mtlbsave"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.mtlbsave">[docs]</a>    <span class="k">def</span> <span class="nf">mtlbsave</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Matlab format save</span>
 
 
@@ -2960,13 +2840,13 @@
                 <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;tm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Sdist</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">matlab</span> <span class="o">=</span> <span class="n">d</span>
-        <span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="n">filemat</span><span class="p">,</span><span class="n">d</span><span class="p">)</span>
+        <span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="n">filemat</span><span class="p">,</span><span class="n">d</span><span class="p">)</span></div>
 
 
 
 
 
-<div class="viewcode-block" id="CorSer.pltvisi"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.pltvisi.html#pylayers.measures.cormoran.CorSer.pltvisi">[docs]</a>    <span class="k">def</span> <span class="nf">pltvisi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.pltvisi"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.pltvisi">[docs]</a>    <span class="k">def</span> <span class="nf">pltvisi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot visibility between link a and b</span>
 
 
@@ -3060,7 +2940,7 @@
 
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span></div>
 
-<div class="viewcode-block" id="CorSer.pltmob"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.pltmob.html#pylayers.measures.cormoran.CorSer.pltmob">[docs]</a>    <span class="k">def</span> <span class="nf">pltmob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.pltmob"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.pltmob">[docs]</a>    <span class="k">def</span> <span class="nf">pltmob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot mobility</span>
 
 <span class="sd">        Parameters</span>
@@ -3202,7 +3082,7 @@
 
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span></div>
 
-<div class="viewcode-block" id="CorSer.animhkb"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.animhkb.html#pylayers.measures.cormoran.CorSer.animhkb">[docs]</a>    <span class="k">def</span> <span class="nf">animhkb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">interval</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">save</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.animhkb"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.animhkb">[docs]</a>    <span class="k">def</span> <span class="nf">animhkb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">interval</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">save</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -3237,7 +3117,7 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="CorSer.animhkbAP"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.animhkbAP.html#pylayers.measures.cormoran.CorSer.animhkbAP">[docs]</a>    <span class="k">def</span> <span class="nf">animhkbAP</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">AP_list</span><span class="p">,</span><span class="n">interval</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">save</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.animhkbAP"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.animhkbAP">[docs]</a>    <span class="k">def</span> <span class="nf">animhkbAP</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">AP_list</span><span class="p">,</span><span class="n">interval</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">save</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -3306,7 +3186,7 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="CorSer.plot"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.plot.html#pylayers.measures.cormoran.CorSer.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.plot"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; ploting </span>
 
 <span class="sd">        Parameters</span>
@@ -3491,7 +3371,7 @@
             <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">,</span><span class="n">lines</span></div>
 
 
-    <span class="k">def</span> <span class="nf">plthkb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.plthkb"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.plthkb">[docs]</a>    <span class="k">def</span> <span class="nf">plthkb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot Hikob devices </span>
 
 <span class="sd">        DEPRECATED</span>
@@ -3626,9 +3506,9 @@
             <span class="n">r</span><span class="p">[</span><span class="n">t0</span><span class="p">:</span><span class="n">t1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">)</span>
             <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Reciprocity offset&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fontsize&#39;</span><span class="p">])</span>
 
-        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span></div>
 
-<div class="viewcode-block" id="CorSer.plttcr"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.plttcr.html#pylayers.measures.cormoran.CorSer.plttcr">[docs]</a>    <span class="k">def</span> <span class="nf">plttcr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.plttcr"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.plttcr">[docs]</a>    <span class="k">def</span> <span class="nf">plttcr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot TCR devices </span>
 
 <span class="sd">        Parameters</span>
@@ -3702,7 +3582,7 @@
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span></div>
 
 
-<div class="viewcode-block" id="CorSer.pltgt"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.pltgt.html#pylayers.measures.cormoran.CorSer.pltgt">[docs]</a>    <span class="k">def</span> <span class="nf">pltgt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.pltgt"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.pltgt">[docs]</a>    <span class="k">def</span> <span class="nf">pltgt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plt ground truth</span>
 
 <span class="sd">        Parameters</span>
@@ -3895,7 +3775,7 @@
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span></div>
 
 
-    <span class="k">def</span> <span class="nf">pltlk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.pltlk"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.pltlk">[docs]</a>    <span class="k">def</span> <span class="nf">pltlk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot links</span>
 
 <span class="sd">        Parameters</span>
@@ -4097,7 +3977,7 @@
                 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;mode&#39;</span><span class="p">]</span><span class="o">=</span> <span class="s1">&#39;TCR&#39;</span>
                 <span class="n">fig</span><span class="p">,</span><span class="n">axs</span><span class="p">[</span><span class="n">cptax</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pltgt</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">axs</span>
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">axs</span></div>
         <span class="c1"># aa = axs[cptax].axis()</span>
         <span class="c1">#</span>
         <span class="c1"># calculates visibility and display NLOS region</span>
@@ -4105,7 +3985,7 @@
         <span class="c1">#</span>
 
 
-    <span class="k">def</span> <span class="nf">showpattern</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.showpattern"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.showpattern">[docs]</a>    <span class="k">def</span> <span class="nf">showpattern</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show pattern configuation for a given link and frame</span>
 
 <span class="sd">        Parameters</span>
@@ -4176,9 +4056,9 @@
             <span class="n">p2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">din</span><span class="p">[</span><span class="n">ba</span><span class="p">][</span><span class="s1">&#39;ant&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">phi</span><span class="o">&lt;=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;phi&#39;</span><span class="p">])[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xa</span><span class="p">[:,</span><span class="n">p2</span><span class="p">],</span><span class="n">ya</span><span class="p">[:,</span><span class="n">p2</span><span class="p">])</span>
 
-        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span></div>
 
-    <span class="k">def</span> <span class="nf">showlink</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="s1">&#39;AP1&#39;</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="s1">&#39;BackCenter&#39;</span><span class="p">,</span><span class="n">technoa</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="n">technob</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.showlink"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.showlink">[docs]</a>    <span class="k">def</span> <span class="nf">showlink</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="s1">&#39;AP1&#39;</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="s1">&#39;BackCenter&#39;</span><span class="p">,</span><span class="n">technoa</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="n">technob</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show link configuation for a given frame</span>
 
 <span class="sd">        Parameters</span>
@@ -4234,7 +4114,7 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;ob&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p3</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p3</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;or&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p4</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p4</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;ok&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span></div>
         
         <span class="c1"># if A.ndim==2:</span>
         <span class="c1">#     plt.plot(A[iframe,0],A[iframe,1],&#39;ob&#39;)</span>
@@ -4284,7 +4164,7 @@
 
 
 
-<div class="viewcode-block" id="CorSer.visidev"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.visidev.html#pylayers.measures.cormoran.CorSer.visidev">[docs]</a>    <span class="k">def</span> <span class="nf">visidev</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">technoa</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="n">technob</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="n">dsf</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.visidev"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.visidev">[docs]</a>    <span class="k">def</span> <span class="nf">visidev</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">technoa</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="n">technob</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="n">dsf</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get link visibility status</span>
 
 <span class="sd">        Returns</span>
@@ -4339,7 +4219,7 @@
         <span class="c1">#return(visi,iframe)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">visi</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="CorSer.visidev2"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.visidev2.html#pylayers.measures.cormoran.CorSer.visidev2">[docs]</a>    <span class="k">def</span> <span class="nf">visidev2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">technoa</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="n">technob</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="n">trange</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="CorSer.visidev2"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.visidev2">[docs]</a>    <span class="k">def</span> <span class="nf">visidev2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">technoa</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="n">technob</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="n">trange</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; get link visibility status</span>
 
 <span class="sd">        Returns</span>
@@ -4518,7 +4398,7 @@
         <span class="c1">#     self.devdf=self._align_devdf_on_hkb(self.devdf,self.hkb)</span>
 
 
-<div class="viewcode-block" id="CorSer.export_csv"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.export_csv.html#pylayers.measures.cormoran.CorSer.export_csv">[docs]</a>    <span class="k">def</span> <span class="nf">export_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.export_csv"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.export_csv">[docs]</a>    <span class="k">def</span> <span class="nf">export_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; export to csv devices positions</span>
 
 <span class="sd">        Parameters</span>
@@ -4612,7 +4492,7 @@
         <span class="n">ldf</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">sep</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">savemat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.savemat"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.savemat">[docs]</a>    <span class="k">def</span> <span class="nf">savemat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save in Matlab Format </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">d</span> <span class="o">=</span><span class="p">{}</span>
@@ -4823,10 +4703,10 @@
         <span class="n">d</span><span class="p">[</span><span class="s1">&#39;al4L_est&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">al4ebL</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10001</span><span class="p">])</span>
 
         <span class="n">_filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filemocap</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.c3d&#39;</span><span class="p">,</span><span class="s1">&#39;.mat&#39;</span><span class="p">)</span>
-        <span class="n">savemat</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span><span class="n">d</span><span class="p">)</span>
+        <span class="n">savemat</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span><span class="n">d</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="CorSer.getlinkd"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.getlinkd.html#pylayers.measures.cormoran.CorSer.getlinkd">[docs]</a>    <span class="k">def</span> <span class="nf">getlinkd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.getlinkd"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.getlinkd">[docs]</a>    <span class="k">def</span> <span class="nf">getlinkd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;    get the distance for a link between devices</span>
 
 <span class="sd">        Parameters</span>
@@ -4896,7 +4776,7 @@
 
 
 
-<div class="viewcode-block" id="CorSer.getlinkp"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.getlinkp.html#pylayers.measures.cormoran.CorSer.getlinkp">[docs]</a>    <span class="k">def</span> <span class="nf">getlinkp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">technoa</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">technob</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">fId</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.getlinkp"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.getlinkp">[docs]</a>    <span class="k">def</span> <span class="nf">getlinkp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">technoa</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">technob</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">fId</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  get a link devices positions</span>
 
 <span class="sd">        Parameters</span>
@@ -4943,7 +4823,7 @@
         <span class="k">return</span> <span class="n">pa</span><span class="p">,</span><span class="n">pb</span></div>
 
 
-<div class="viewcode-block" id="CorSer.getlink"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.getlink.html#pylayers.measures.cormoran.CorSer.getlink">[docs]</a>    <span class="k">def</span> <span class="nf">getlink</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.getlink"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.getlink">[docs]</a>    <span class="k">def</span> <span class="nf">getlink</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;    get a link value</span>
 
 <span class="sd">        Parameters</span>
@@ -5031,7 +4911,7 @@
 
 
 
-<div class="viewcode-block" id="CorSer.getdevp"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.getdevp.html#pylayers.measures.cormoran.CorSer.getdevp">[docs]</a>    <span class="k">def</span> <span class="nf">getdevp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">fId</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.getdevp"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.getdevp">[docs]</a>    <span class="k">def</span> <span class="nf">getdevp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">fId</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get a  device position</span>
 
 <span class="sd">        Parameters</span>
@@ -5091,7 +4971,7 @@
 
 
 
-<div class="viewcode-block" id="CorSer.devmapper"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.devmapper.html#pylayers.measures.cormoran.CorSer.devmapper">[docs]</a>    <span class="k">def</span> <span class="nf">devmapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.devmapper"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.devmapper">[docs]</a>    <span class="k">def</span> <span class="nf">devmapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  retrieve name of device if input is number</span>
 <span class="sd">             or</span>
 <span class="sd">             retrieve number of device if input is name</span>
@@ -5228,7 +5108,7 @@
         <span class="k">return</span> <span class="n">a</span><span class="p">,</span><span class="n">ia</span><span class="p">,</span><span class="n">ba</span><span class="p">,</span><span class="n">subject</span><span class="p">,</span><span class="n">techno</span></div>
 
 
-<div class="viewcode-block" id="CorSer.align"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.align.html#pylayers.measures.cormoran.CorSer.align">[docs]</a>    <span class="k">def</span> <span class="nf">align</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">devdf</span><span class="p">,</span><span class="n">hkbdf</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.align"><a class="viewcode-back" href="../../../modules/pylayers.measures.cormoran.html#pylayers.measures.cormoran.CorSer.align">[docs]</a>    <span class="k">def</span> <span class="nf">align</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">devdf</span><span class="p">,</span><span class="n">hkbdf</span><span class="p">):</span>
 
         <span class="sd">&quot;&quot;&quot; DEPRECATED align time of 2 data frames:</span>
 
@@ -5492,7 +5372,7 @@
         <span class="n">cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span><span class="s1">&#39;subject&#39;</span><span class="p">,</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">,</span><span class="s1">&#39;z&#39;</span><span class="p">,</span><span class="s1">&#39;v&#39;</span><span class="p">,</span><span class="s1">&#39;vx&#39;</span><span class="p">,</span><span class="s1">&#39;vy&#39;</span><span class="p">,</span><span class="s1">&#39;vz&#39;</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;ax&#39;</span><span class="p">,</span><span class="s1">&#39;ay&#39;</span><span class="p">,</span><span class="s1">&#39;az&#39;</span><span class="p">]</span>
         <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">cols</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">df</span></div>
+        <span class="k">return</span> <span class="n">df</span></div></div>
 
 <span class="k">def</span> <span class="nf">dist_sh2rssi</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span><span class="n">Ssh</span><span class="p">,</span><span class="n">offsetdB</span><span class="o">=</span><span class="mi">15</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -5565,37 +5445,64 @@
     <span class="c1">#     return NHcr,DHc</span>
 </pre></div>
 
+           </div>
           </div>
-        </div>
-      </div>
-        <div class="clearer"></div>
-      </div>
-    </div>
+          <footer>
   
 
-    <div class="footer">
-        &copy; 2016, PyLayers developer team.
-      Last updated on Sep 21, 2017.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
-    </div>
-     <div class="rel">
-    
-    <div class="buttonPrevious">
-      <a href="../../../py-modindex.html">
-        Previous
-      </a>  
-    </div>
-    
-     </div>
-     <script type="text/javascript">
-       $("div.buttonNext, div.buttonPrevious").hover(
-           function () {
-               $(this).css('background-color', '#AFFFFF');
-           },
-           function () {
-               $(this).css('background-color', '#AFFFFF');
-           }
-       );
-     </script>
-  </body>
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team.
+      Last updated on Nov 07, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
 </html>

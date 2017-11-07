@@ -1,200 +1,198 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Outdoor Coverage Knife-Edge Model &mdash; Python 1 documentation</title>
+  
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  
+  
+
+  
+
+  
+  
     
-    <title>&lt;no title&gt; &mdash; Python 1 documentation</title>
-    
-    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
     <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="author" title="About these documents"
+              href="../../about.html"/>
+    <link rel="top" title="Python 1 documentation" href="../../index.html"/>
+        <link rel="up" title="1   Overview" href="../TOC.html"/>
+        <link rel="next" title="Slabs and Materials" href="../2-AP/SlabsMaterials.html"/>
+        <link rel="prev" title="Geographical Information and the Earth Zone class : Ezone" href="Ezone.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/javascript" src="../../_static/sidebar.js"></script>
-    <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="Python 1 documentation" href="../../index.html" />
-    <link rel="up" title="1   Overview" href="../TOC.html" />
-    <link rel="next" title="Slabs and Materials" href="../2-AP/SlabsMaterials.html" />
-    <link rel="prev" title="Geographical Information and the Earth Zone class : Ezone" href="Ezone.html" />
-<script type="text/javascript">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34943220-1']);
-  _gaq.push(['_trackPageview']);
+          
+            <a href="../../index.html" class="icon icon-home"> Python
+          
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
-
-  </head>
-  <body role="document">
-
-    <div class="header-wrapper">
-      <div class="header">
-          <p class="logo"><a href="../../index.html">
-            <img src="../../_static/pylayers.png" alt="Logo"/>
+          
+            
+            <img src="../../_static/pylayers.png" class="logo" />
+          
           </a>
-          </p><div class="navbar">
-          <ul>
-            <li><a href="../../download.html">Download</a></li>
-            <li><a href="../TOC.html">User Guide</a></li>
-            <li><a href="../../modules/pylayers.html">Reference</a></li>
-       </ul>
 
-<div class="search_form">
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
 
-<div id="cse" style="width: 100%;"></div>
-<script>
-  (function() {
-       var cx = '004820205189002234612:sa15qzuf2ca';
-           var gcse = document.createElement('script');
-               gcse.type = 'text/javascript';
-                   gcse.async = true;
-                       gcse.src = (document.location.protocol == 'https:' ?
-                           'https:' : 'http:') +
-                               '//cse.google.com/cse.js?cx=' + cx;
-                                   var s =
-                                   document.getElementsByTagName('script')[0];
-                                       s.parentNode.insertBefore(gcse, s);
-                                         })();
-</script>
-<gcse:search></gcse:search>
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
 </div>
-</div> <!-- end navbar --></div>
-    </div>
 
-    <div class="content-wrapper">
+          
+        </div>
 
-      <div class="sphinxsidebar">
-	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
-	<!-- rellinks[1:] is an ugly hack to avoid link to module
-	    index  -->
-	<div class="rellink">
-	<a href="Ezone.html" title="Geographical Information and the Earth Zone class : Ezone"
-	    accesskey="P">Previous
-	    <br>
-	    <span class="smallrellink">
-	    Geographical ...
-	    </span>
-	    <span class="hiddenrellink">
-	    Geographical Information and the Earth Zone class : Ezone
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="../2-AP/SlabsMaterials.html" title="Slabs and Materials"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    Slabs and Materials
-	    </span>
-	    <span class="hiddenrellink">
-	    Slabs and Materials
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="../../py-modindex.html" title="Python Module Index"
-	    >Modules
-	    <br>
-	    <span class="smallrellink">
-	    Python Module Index
-	    </span>
-	    <span class="hiddenrellink">
-	    Python Module Index
-	    </span>
-	    
-	    </a>
-	</div>
-	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="../TOC.html" title="1   Overview" >
-	Up
-	<br>
-	<span class="smallrellink">
-	1   Overview
-	</span>
-	<span class="hiddenrellink">
-	1   Overview
-	</span>
-	
-	</a>
-	</div>
-    </div>
-    <p style="text-align: center; background-color: #BFFFFF">This documentation is
-
-    for Python <strong>version 1</strong>
-    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
-    
-    <h3>Citing</h3>
-    <p>If you use the software, please consider
-    <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
-    <h3>This page</h3>
-	<ul class="simple">
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../TOC.html#radio-propagation-simulation">2&nbsp;&nbsp;&nbsp;Radio Propagation Simulation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../TOC.html#environment-description">2.1&nbsp;&nbsp;&nbsp;Environment Description</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../TOC.html#indoor-and-outdoor-layout">2.1.1&nbsp;&nbsp;&nbsp;Indoor and Outdoor Layout</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../TOC.html#gis-and-dem">2.1.2&nbsp;&nbsp;&nbsp;GIS and DEM</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="Ezone.html">Geographical Information and the Earth Zone class : <code class="docutils literal"><span class="pre">Ezone</span></code></a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Outdoor Coverage Knife-Edge Model</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../TOC.html#handling-material-properties-of-layout">2.1.3&nbsp;&nbsp;&nbsp;Handling Material Properties of Layout</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#description-of-antennas">2.2&nbsp;&nbsp;&nbsp;Description of Antennas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#multiwall-motley-keenan-simulation">2.3&nbsp;&nbsp;&nbsp;Multiwall Motley-Keenan Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#ray-tracing-tool">2.4&nbsp;&nbsp;&nbsp;Ray Tracing Tool</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#handling-agent-mobility">3&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#wireless-body-area-network-related-classes">4&nbsp;&nbsp;&nbsp;Wireless Body Area Network Related Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#some-simulation-examples">5&nbsp;&nbsp;&nbsp;Some Simulation Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#algorithms-for-localization">6&nbsp;&nbsp;&nbsp;Algorithms for Localization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#measurements-tools">7&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#pylayers-tools">8&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#references">9&nbsp;&nbsp;&nbsp;References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/pylayers.html">PyLayers Modules Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 </ul>
 
-    
-    </div>
-	  </div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">Python</a>
+      </nav>
 
 
-      <div class="content">
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
+      
+    <li>Outdoor Coverage Knife-Edge Model</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/notebook/1-GIS/Coverage.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <div class="code python highlight-none"><div class="highlight"><pre><span></span>from pylayers.gis.ezone import *
+  <div class="code highlight-none"><div class="highlight"><pre><span></span>!date
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>samedi 4 novembre 2017, 22:47:17 (UTC+0100)
+</pre></div>
+</div>
+<div class="section" id="outdoor-coverage-knife-edge-model">
+<h1>Outdoor Coverage Knife-Edge Model<a class="headerlink" href="#outdoor-coverage-knife-edge-model" title="Permalink to this headline">¶</a></h1>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>from pylayers.gis.ezone import *
 import matplotlib.tri as tri
 %matplotlib inline
 </pre></div>
 </div>
-<p>We load</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>z = Ezone(&#39;N48W002&#39;)
+<p>We load a earth zone from its name in srtm file convention</p>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>z = Ezone(&#39;N48W002&#39;)
 z.loadh5()
 z.rebase()
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span># x,y,r,R,dem,LOS,h_earth,diff,fac,nu,numax,LFS,Ltot= z.cov(pc=(11000,45000),Ht=2,Hr=2,Rmax=10000)
+<div class="code highlight-none"><div class="highlight"><pre><span></span># x,y,r,R,dem,LOS,h_earth,diff,fac,nu,numax,LFS,Ltot= z.cov(pc=(11000,45000),Ht=2,Hr=2,Rmax=10000)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>pc=(11000,45000)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>pc=(11000,45000)
 Rmax = 10000
 fGHz=0.3
 Ht = 2
@@ -205,12 +203,12 @@ Nr = 50
 </pre></div>
 </div>
 <p>Then the coverage zone is defined</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>lmbda = 0.3/fGHz
+<div class="code highlight-none"><div class="highlight"><pre><span></span>lmbda = 0.3/fGHz
 phi  = np.linspace(0,2*np.pi,Nphi)[:,None]
 r  = np.linspace(0,Rmax,Nr)[None,:]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span> # cartesian
+<div class="code highlight-none"><div class="highlight"><pre><span></span> # cartesian
 x  = pc[0] + r*np.cos(phi)
 y  = pc[1] + r*np.sin(phi)
 extent_c = np.array([x.min(),x.max(),y.min(),y.max()])
@@ -224,53 +222,53 @@ rx = np.round((lon - z.extent[0]) / z.lonstep).astype(int)
 ry = np.round((z.extent[3]-lat) / z.latstep).astype(int)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>x.max()
+<div class="code highlight-none"><div class="highlight"><pre><span></span>x.max()
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>21000.0
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>x.min()
+<div class="code highlight-none"><div class="highlight"><pre><span></span>x.min()
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>1000.0
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span> # dem
+<div class="code highlight-none"><div class="highlight"><pre><span></span> # dem
 dem = z.hgts[ry,rx]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>dem.shape
+<div class="code highlight-none"><div class="highlight"><pre><span></span>dem.shape
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>(45, 50)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>X=expand(x)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>X=expand(x)
 Y=expand(y)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>X0=expand(pc[0]*np.ones((Nphi,Nr)))
+<div class="code highlight-none"><div class="highlight"><pre><span></span>X0=expand(pc[0]*np.ones((Nphi,Nr)))
 Y0=expand(pc[1]*np.ones((Nphi,Nr)))
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>R=np.sqrt((X0-X)**2+(Y0-Y)**2)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>R=np.sqrt((X0-X)**2+(Y0-Y)**2)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>R.shape
+<div class="code highlight-none"><div class="highlight"><pre><span></span>R.shape
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>(45, 49, 50)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.plot(R[0,8,:],&#39;or&#39;)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>plt.plot(R[0,8,:],&#39;or&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fe83ba93050&gt;]
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f12d07c5790&gt;]
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_16_1.png" src="../../_images/Coverage_16_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>r
+<img alt="../../_images/Coverage_18_1.png" src="../../_images/Coverage_18_1.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>r
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>array([[     0.        ,    204.08163265,    408.16326531,    612.24489796,
@@ -288,63 +286,63 @@ Y0=expand(pc[1]*np.ones((Nphi,Nr)))
           9795.91836735,  10000.        ]])
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>B=r.T[None,1:]-R
+<div class="code highlight-none"><div class="highlight"><pre><span></span>B=r.T[None,1:]-R
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.imshow(B[0,:,:],cmap=plt.cm.jet,vmax=10000)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>plt.imshow(B[0,:,:],cmap=plt.cm.jet,vmax=10000)
 plt.colorbar()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar instance at 0x7fe83b75d248&gt;
-</pre></div>
-</div>
-<img alt="../../_images/Coverage_19_1.png" src="../../_images/Coverage_19_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>h_earth=(R*B)/(2*K*6375e3)
-</pre></div>
-</div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.imshow(h_earth[0,:,:],cmap=plt.cm.jet)
-plt.colorbar()
-</pre></div>
-</div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar instance at 0x7fe83b619b90&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7f12d3d8af10&gt;
 </pre></div>
 </div>
 <img alt="../../_images/Coverage_21_1.png" src="../../_images/Coverage_21_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span># ground height + antenna height
+<div class="code highlight-none"><div class="highlight"><pre><span></span>h_earth=(R*B)/(2*K*6375e3)
+</pre></div>
+</div>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>plt.imshow(h_earth[0,:,:],cmap=plt.cm.jet)
+plt.colorbar()
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7f12d04f7510&gt;
+</pre></div>
+</div>
+<img alt="../../_images/Coverage_23_1.png" src="../../_images/Coverage_23_1.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span># ground height + antenna height
 Ha = expand((Ht + z.hgts[ry[0,0],rx[0,0]])*np.ones((Nphi,Nr)))
 Hb = expand(Hr + dem)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span># LOS line
+<div class="code highlight-none"><div class="highlight"><pre><span></span># LOS line
 LOS  = Ha+(Hb-Ha)*R/r.T[None,1:]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>LOS.shape
+<div class="code highlight-none"><div class="highlight"><pre><span></span>LOS.shape
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>(45, 49, 50)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.imshow(LOS[0,:,:],cmap=plt.cm.jet)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>plt.imshow(LOS[0,:,:],cmap=plt.cm.jet)
 plt.colorbar()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar instance at 0x7fe83b4f7440&gt;
-</pre></div>
-</div>
-<img alt="../../_images/Coverage_25_1.png" src="../../_images/Coverage_25_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>diff = expand(dem)+h_earth-LOS
-</pre></div>
-</div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.imshow(diff[0,:,:],cmap=plt.cm.jet)
-plt.colorbar()
-</pre></div>
-</div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar instance at 0x7fe83b347a70&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7f12d0350510&gt;
 </pre></div>
 </div>
 <img alt="../../_images/Coverage_27_1.png" src="../../_images/Coverage_27_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>fac  = np.sqrt(2*r.T[None,1:]/(lmbda*R*B))
+<div class="code highlight-none"><div class="highlight"><pre><span></span>diff = expand(dem)+h_earth-LOS
+</pre></div>
+</div>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>plt.imshow(diff[0,:,:],cmap=plt.cm.jet)
+plt.colorbar()
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7f12d0229b10&gt;
+</pre></div>
+</div>
+<img alt="../../_images/Coverage_29_1.png" src="../../_images/Coverage_29_1.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>fac  = np.sqrt(2*r.T[None,1:]/(lmbda*R*B))
 nu   = diff*fac
 #num,ind  = maxloc(nu)
 numax = np.nanmax(nu,axis=2)
@@ -356,7 +354,14 @@ LFS = 32.4 + 20*np.log10(r[0,1:])+20*np.log10(fGHz)
 Ltot = LFS+L
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>numax
+<div class="highlight-none"><div class="highlight"><pre><span></span>/home/uguen/anaconda2/lib/python2.7/site-packages/ipykernel_launcher.py:1: RuntimeWarning: divide by zero encountered in divide
+  &quot;&quot;&quot;Entry point for launching an IPython kernel.
+/home/uguen/anaconda2/lib/python2.7/site-packages/ipykernel_launcher.py:1: RuntimeWarning: invalid value encountered in sqrt
+  &quot;&quot;&quot;Entry point for launching an IPython kernel.
+/home/uguen/anaconda2/lib/python2.7/site-packages/ipykernel_launcher.py:2: RuntimeWarning: invalid value encountered in multiply
+</pre></div>
+</div>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>numax
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>array([[       -inf, -0.48965701, -0.28230755, ...,  0.24972005,
@@ -374,27 +379,27 @@ Ltot = LFS+L
          0.25062671,  0.25151559]])
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>Ltot.shape
+<div class="code highlight-none"><div class="highlight"><pre><span></span>Ltot.shape
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>(45, 49)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>LOS.shape
+<div class="code highlight-none"><div class="highlight"><pre><span></span>LOS.shape
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>(45, 49, 50)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(15,8))
+<div class="code highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(15,8))
 plt.imshow(dem,cmap=plt.cm.jet)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7fe83b28ab90&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7f12d016aad0&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_32_1.png" src="../../_images/Coverage_32_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(15,8))
+<img alt="../../_images/Coverage_34_1.png" src="../../_images/Coverage_34_1.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(15,8))
 plt.imshow(Ltot,cmap=plt.cm.jet)
 plt.colorbar()
 plt.axis(&#39;auto&#39;)
@@ -403,57 +408,57 @@ plt.axis(&#39;auto&#39;)
 <div class="highlight-none"><div class="highlight"><pre><span></span>(-10.0, 50.0, 50.0, -10.0)
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_33_1.png" src="../../_images/Coverage_33_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>u=np.argmax(nu,axis=2)
+<img alt="../../_images/Coverage_35_1.png" src="../../_images/Coverage_35_1.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>u=np.argmax(nu,axis=2)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.imshow(nu[0,:,:],vmin=-0.3,vmax=0.3,cmap=plt.cm.BrBG)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>plt.imshow(nu[0,:,:],vmin=-0.3,vmax=0.3,cmap=plt.cm.BrBG)
 plt.colorbar()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar instance at 0x7fe83982d0e0&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7f12d048f650&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_35_1.png" src="../../_images/Coverage_35_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>#plt.plot(h_earth[0,30,:])
+<img alt="../../_images/Coverage_37_1.png" src="../../_images/Coverage_37_1.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>#plt.plot(h_earth[0,30,:])
 #plt.plot(LOS[0,30,:])
 #plt.plot(diff[0,30,:])
 #plt.plot(dem[0,:])
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>#plt.plot(nu[0,30,:])
+<div class="code highlight-none"><div class="highlight"><pre><span></span>#plt.plot(nu[0,30,:])
 #plt.ylim(0,1)
 #plt.plot(8,nu[0,30,8],&#39;or&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>nu.shape
+<div class="code highlight-none"><div class="highlight"><pre><span></span>nu.shape
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>(45, 49, 50)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>numax2=np.nanmax(nu,axis=2)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>numax2=np.nanmax(nu,axis=2)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>numax2.shape
+<div class="code highlight-none"><div class="highlight"><pre><span></span>numax2.shape
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>(45, 49)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.imshow(numax2,cmap=plt.cm.jet,vmin=-1.4)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>plt.imshow(numax2,cmap=plt.cm.jet,vmin=-1.4)
 plt.colorbar()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar instance at 0x7fe83b484f38&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7f12ce6d6c50&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_41_1.png" src="../../_images/Coverage_41_1.png" />
+<img alt="../../_images/Coverage_43_1.png" src="../../_images/Coverage_43_1.png" />
 <p>imax indique le point d&#8217;engagement maximum</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>imax=np.nanargmax(nu,axis=2)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>imax=np.nanargmax(nu,axis=2)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>imax
+<div class="code highlight-none"><div class="highlight"><pre><span></span>imax
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>array([[ 0,  1,  2, ...,  4,  4,  4],
@@ -465,35 +470,35 @@ plt.colorbar()
        [ 0,  1,  2, ...,  4,  4,  4]])
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.imshow(imax,cmap=plt.cm.jet)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>plt.imshow(imax,cmap=plt.cm.jet)
 plt.colorbar()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar instance at 0x7fe8396c39e0&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7f12ce5a34d0&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_45_1.png" src="../../_images/Coverage_45_1.png" />
-<p>Recherche des coordonnes du point diffractant pour toutes les
+<img alt="../../_images/Coverage_47_1.png" src="../../_images/Coverage_47_1.png" />
+<p>Recherche des coordonn??es du point diffractant pour toutes les
 directions et pour tous les ranges.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>imax.shape
+<div class="code highlight-none"><div class="highlight"><pre><span></span>imax.shape
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>(45, 49)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>iphi = np.arange(Nphi)[:,None]
+<div class="code highlight-none"><div class="highlight"><pre><span></span>iphi = np.arange(Nphi)[:,None]
 it = np.arange(0,Nr-1)[None,:]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.imshow(imax,cmap=plt.cm.jet)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>plt.imshow(imax,cmap=plt.cm.jet)
 plt.colorbar()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar instance at 0x7fe8395a1290&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7f12ce47cc50&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_49_1.png" src="../../_images/Coverage_49_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>for k in range(2,Nphi-1):
+<img alt="../../_images/Coverage_51_1.png" src="../../_images/Coverage_51_1.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>for k in range(2,Nphi-1):
     for l in range(1,Nr-1):
         if imax[k,l]!=0:
             t1 = np.arange(0,1,imax[k,l])
@@ -501,33 +506,33 @@ plt.colorbar()
             t = np.hstack((t1,t2))
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>XM = x[iphi,imax[iphi,it]]
+<div class="code highlight-none"><div class="highlight"><pre><span></span>XM = x[iphi,imax[iphi,it]]
 YM = y[iphi,imax[iphi,it]]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>XM.shape
+<div class="code highlight-none"><div class="highlight"><pre><span></span>XM.shape
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>(45, 49)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.imshow(XM,cmap=plt.cm.jet)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>plt.imshow(XM,cmap=plt.cm.jet)
 plt.colorbar()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar instance at 0x7fe839401560&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7f12ce2e8150&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_53_1.png" src="../../_images/Coverage_53_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.imshow(YM,cmap=plt.cm.jet)
+<img alt="../../_images/Coverage_55_1.png" src="../../_images/Coverage_55_1.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>plt.imshow(YM,cmap=plt.cm.jet)
 plt.colorbar()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar instance at 0x7fe8392e3758&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7f12ce1bd990&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_54_1.png" src="../../_images/Coverage_54_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(20,20))
+<img alt="../../_images/Coverage_56_1.png" src="../../_images/Coverage_56_1.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(20,20))
 ik = 3
 #plt.tripcolor(triang,dem.flatten())
 f,a,d=z.show(coord=&#39;cartesian&#39;,extent=extent_c)
@@ -536,41 +541,41 @@ a.plot(x[:,ik],y[:,ik],&#39;.b&#39;)
 #plt.axis(&#39;equal&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fe8391a9750&gt;]
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f12ce0799d0&gt;]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7fe8392aa250&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7f12ce6540d0&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_55_2.png" src="../../_images/Coverage_55_2.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>RF=np.sqrt((XM[...,None]-x[:,None,:])**2+(YM[...,None]-y[:,None,:])**2)
+<img alt="../../_images/Coverage_57_2.png" src="../../_images/Coverage_57_2.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>RF=np.sqrt((XM[...,None]-x[:,None,:])**2+(YM[...,None]-y[:,None,:])**2)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.imshow(RF[0,:,:],cmap=plt.cm.jet)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>plt.imshow(RF[0,:,:],cmap=plt.cm.jet)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7fe83907a810&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7f12cdec30d0&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_57_1.png" src="../../_images/Coverage_57_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.plot(x[0,:],y[0,:])
+<img alt="../../_images/Coverage_59_1.png" src="../../_images/Coverage_59_1.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>plt.plot(x[0,:],y[0,:])
 plt.plot(XM[0,:],YM[0,:],&#39;or&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fe839096690&gt;]
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f12cde5cf50&gt;]
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_58_1.png" src="../../_images/Coverage_58_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>RF.shape
+<img alt="../../_images/Coverage_60_1.png" src="../../_images/Coverage_60_1.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>RF.shape
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>(45, 49, 50)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>P=RF[:,0:-1,:]-RF[:,1:,:]
+<div class="code highlight-none"><div class="highlight"><pre><span></span>P=RF[:,0:-1,:]-RF[:,1:,:]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>import numpy as np
+<div class="code highlight-none"><div class="highlight"><pre><span></span>import numpy as np
 import time
 import pdb
 from numba import jit
@@ -609,31 +614,31 @@ toc=time.time()
 print toc-tic
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>0.41774392128
+<div class="highlight-none"><div class="highlight"><pre><span></span>0.395106077194
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.plot(RF[0,4,:])
+<div class="code highlight-none"><div class="highlight"><pre><span></span>plt.plot(RF[0,4,:])
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fe831a52390&gt;]
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f12c57eb950&gt;]
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_62_1.png" src="../../_images/Coverage_62_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>UL=np.zeros(RF.shape)
+<img alt="../../_images/Coverage_64_1.png" src="../../_images/Coverage_64_1.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>UL=np.zeros(RF.shape)
 UR=np.zeros(RF.shape)
 UL[(u[0,:],u[1,:],u[2,:])]=RF[(u[0,:],u[1,:],u[2,:])]
 UR[(v[0,:],v[1,:],v[2,:])]=RF[(v[0,:],v[1,:],v[2,:])]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.plot(UL[0,4,:])
+<div class="code highlight-none"><div class="highlight"><pre><span></span>plt.plot(UL[0,4,:])
 plt.plot(UR[0,4,:],&#39;r&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fe8390f81d0&gt;]
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f12cde65490&gt;]
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_64_1.png" src="../../_images/Coverage_64_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>import numpy as np
+<img alt="../../_images/Coverage_66_1.png" src="../../_images/Coverage_66_1.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>import numpy as np
 import time
 import pdb
 from numba import jit
@@ -672,10 +677,10 @@ toc=time.time()
 print toc-tic
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>0.271940946579
+<div class="highlight-none"><div class="highlight"><pre><span></span>0.28248000145
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>import numpy as np
+<div class="code highlight-none"><div class="highlight"><pre><span></span>import numpy as np
 import time
 import pdb
 from numba import jit
@@ -730,18 +735,23 @@ def interv(z,d,fGHz,L,depth):
     return(L)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>tic = time.time()
+<div class="code highlight-none"><div class="highlight"><pre><span></span>tic = time.time()
 L=cover(dem,x,y,1,1,2)
 toc=time.time()
 print toc-tic
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>45 50
-2.75408005714
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_67_1.png" src="../../_images/Coverage_67_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>x
+<div class="highlight-none"><div class="highlight"><pre><span></span>/home/uguen/anaconda2/lib/python2.7/site-packages/ipykernel_launcher.py:20: RuntimeWarning: invalid value encountered in divide
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>2.30528688431
+</pre></div>
+</div>
+<img alt="../../_images/Coverage_69_3.png" src="../../_images/Coverage_69_3.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>x
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>array([[ 11000.        ,  11204.08163265,  11408.16326531, ...,
@@ -759,61 +769,84 @@ print toc-tic
          20591.83673469,  20795.91836735,  21000.        ]])
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.imshow(L[0,:,:],cmap=plt.cm.jet)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>plt.imshow(L[0,:,:],cmap=plt.cm.jet)
 plt.colorbar()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar instance at 0x7fe82ae3a320&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7f12be98b610&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_69_1.png" src="../../_images/Coverage_69_1.png" />
+<img alt="../../_images/Coverage_71_1.png" src="../../_images/Coverage_71_1.png" />
+</div>
 
 
+           </div>
           </div>
-        </div>
-      </div>
-        <div class="clearer"></div>
-      </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../2-AP/SlabsMaterials.html" class="btn btn-neutral float-right" title="Slabs and Materials" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Ezone.html" class="btn btn-neutral" title="Geographical Information and the Earth Zone class : Ezone" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
     </div>
   
 
-    <div class="footer">
-        &copy; 2016, PyLayers developer team.
-      Last updated on Sep 20, 2017.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
-    <span style="padding-left: 5ex;">
-    <a href="../../_sources/notebook/1-GIS/Coverage.rst.txt"
-	    rel="nofollow">Show this page source</a>
-    </span>
-    </div>
-     <div class="rel">
-    
-    <div class="buttonPrevious">
-      <a href="Ezone.html">
-        Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="../2-AP/SlabsMaterials.html">
-        Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
-      <a href="../../py-modindex.html">
-        Previous
-      </a>  
-    </div>
-    
-     </div>
-     <script type="text/javascript">
-       $("div.buttonNext, div.buttonPrevious").hover(
-           function () {
-               $(this).css('background-color', '#AFFFFF');
-           },
-           function () {
-               $(this).css('background-color', '#AFFFFF');
-           }
-       );
-     </script>
-  </body>
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team.
+      Last updated on Nov 07, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
 </html>

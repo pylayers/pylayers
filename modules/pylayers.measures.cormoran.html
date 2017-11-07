@@ -1,213 +1,223 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pylayers.measures.cormoran &mdash; Python 1 documentation</title>
+  
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  
+  
+
+  
+
+  
+  
     
-    <title>pylayers.measures.cormoran &mdash; Python 1 documentation</title>
-    
-    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
     <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/javascript" src="../_static/sidebar.js"></script>
-    <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="top" title="Python 1 documentation" href="../index.html" />
-    <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.measures.cormoran.cor_log" href="generated/pylayers.measures.cormoran.cor_log.html" />
-<script type="text/javascript">
+  
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34943220-1']);
-  _gaq.push(['_trackPageview']);
+  
+        <link rel="author" title="About these documents"
+              href="../about.html"/>
+    <link rel="top" title="Python 1 documentation" href="../index.html"/>
+        <link rel="up" title="PyLayers Modules Reference" href="pylayers.html"/> 
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
+  
+  <script src="../_static/js/modernizr.min.js"></script>
 
-</script>
+</head>
 
-  </head>
-  <body role="document">
+<body class="wy-body-for-nav" role="document">
 
-    <div class="header-wrapper">
-      <div class="header">
-          <p class="logo"><a href="../index.html">
-            <img src="../_static/pylayers.png" alt="Logo"/>
-          </a>
-          </p><div class="navbar">
-          <ul>
-            <li><a href="../download.html">Download</a></li>
-            <li><a href="../notebook/TOC.html">User Guide</a></li>
-            <li><a href="pylayers.html">Reference</a></li>
-       </ul>
-
-<div class="search_form">
-
-<div id="cse" style="width: 100%;"></div>
-<script>
-  (function() {
-       var cx = '004820205189002234612:sa15qzuf2ca';
-           var gcse = document.createElement('script');
-               gcse.type = 'text/javascript';
-                   gcse.async = true;
-                       gcse.src = (document.location.protocol == 'https:' ?
-                           'https:' : 'http:') +
-                               '//cse.google.com/cse.js?cx=' + cx;
-                                   var s =
-                                   document.getElementsByTagName('script')[0];
-                                       s.parentNode.insertBefore(gcse, s);
-                                         })();
-</script>
-<gcse:search></gcse:search>
-</div>
-</div> <!-- end navbar --></div>
-    </div>
-
-    <div class="content-wrapper">
-
-      <div class="sphinxsidebar">
-	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
-	<!-- rellinks[1:] is an ugly hack to avoid link to module
-	    index  -->
-	<div class="rellink">
-	<a href="generated/pylayers.measures.cormoran.cor_log.html" title="pylayers.measures.cormoran.cor_log"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.meas...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.measures.cormoran.cor_log
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="../py-modindex.html" title="Python Module Index"
-	    >Modules
-	    <br>
-	    <span class="smallrellink">
-	    Python Module Index
-	    </span>
-	    <span class="hiddenrellink">
-	    Python Module Index
-	    </span>
-	    
-	    </a>
-	</div>
-	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="pylayers.html" title="PyLayers" >
-	Up
-	<br>
-	<span class="smallrellink">
-	PyLayers
-	</span>
-	<span class="hiddenrellink">
-	PyLayers
-	</span>
-	
-	</a>
-	</div>
-    </div>
-    <p style="text-align: center; background-color: #BFFFFF">This documentation is
-
-    for Python <strong>version 1</strong>
-    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
-    
-    <h3>Citing</h3>
-    <p>If you use the software, please consider
-    <a href="../about.html#citing-pylayers">citing pylayers</a>.</p>
-    <h3>This page</h3>
-	<ul>
-<li><a class="reference internal" href="#">pylayers.measures.cormoran</a><ul>
-<li><a class="reference internal" href="#corser-class">CorSer Class</a><ul>
-<li><a class="reference internal" href="#corser-init-and-load-data">CorSer init and load data</a></li>
-<li><a class="reference internal" href="#corser-exploit-data">CorSer exploit data</a></li>
-<li><a class="reference internal" href="#corser-visualization-tools">CorSer visualization tools</a><ul>
-<li><a class="reference internal" href="#d-visualization">2D  visualization</a></li>
-<li><a class="reference internal" href="#id1">3D visualization</a></li>
-<li><a class="reference internal" href="#video-visualization">Video Visualization</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#corser-internal-processing">CorSer Internal processing</a><ul>
-<li><a class="reference internal" href="#time-alignement">Time Alignement</a></li>
-<li><a class="reference internal" href="#data-frame-transformation">Data frame transformation</a></li>
-<li><a class="reference internal" href="#vizualizing-processing">Vizualizing processing</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#notes">Notes</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+  <div class="wy-grid-for-nav">
 
     
-    </div>
-	  </div>
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
 
+          
+            <a href="../index.html" class="icon icon-home"> Python
+          
 
-      <div class="content">
+          
             
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+            <img src="../_static/pylayers.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#radio-propagation-simulation">2&nbsp;&nbsp;&nbsp;Radio Propagation Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#handling-agent-mobility">3&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#wireless-body-area-network-related-classes">4&nbsp;&nbsp;&nbsp;Wireless Body Area Network Related Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#some-simulation-examples">5&nbsp;&nbsp;&nbsp;Some Simulation Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#algorithms-for-localization">6&nbsp;&nbsp;&nbsp;Algorithms for Localization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#measurements-tools">7&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#pylayers-tools">8&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#references">9&nbsp;&nbsp;&nbsp;References</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="pylayers.html">PyLayers Modules Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="pylayers.html#simulations">Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.html#antenna-and-propagation">Antenna and Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.html#geographical-information">Geographical Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.html#localization-algorithms">Localization Algorithms</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="pylayers.html#measurement-data">Measurement Data</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="pylayers.measures.mesuwb.html">pylayers.measures.mesuwb</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pylayers.measures.cormoran</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#corser-class">CorSer Class</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.html#agents-and-bodies-mobility">Agents and Bodies Mobility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.html#networks">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.html#physical-layer">Physical Layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.html#utility-classes-and-functions">Utility classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
+      
+          <li><a href="pylayers.html">PyLayers Modules Reference</a> &raquo;</li>
+      
+    <li>pylayers.measures.cormoran</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/modules/pylayers.measures.cormoran.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <div class="section" id="module-pylayers.measures.cormoran">
 <span id="pylayers-measures-cormoran"></span><h1>pylayers.measures.cormoran<a class="headerlink" href="#module-pylayers.measures.cormoran" title="Permalink to this headline">¶</a></h1>
 <p>This module handles CORMORAN measurement data</p>
 <div class="section" id="corser-class">
 <h2>CorSer Class<a class="headerlink" href="#corser-class" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pylayers.measures.cormoran.CorSer">
+<em class="property">class </em><code class="descclassname">pylayers.measures.cormoran.</code><code class="descname">CorSer</code><span class="sig-paren">(</span><em>serie=6</em>, <em>day=11</em>, <em>source='CITI'</em>, <em>layout=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle CORMORAN measurement data</p>
+<p>Hikob data handling from CORMORAN measurement campaign</p>
+<dl class="docutils">
+<dt>11/06/2014</dt>
+<dd>single subject (Bernard and Nicolas)</dd>
+<dt>12/06/2014</dt>
+<dd>several subject (Jihad, Eric , Nicolas)</dd>
+</dl>
+<p class="rubric">Attributes</p>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.cor_log.html#pylayers.measures.cormoran.cor_log" title="pylayers.measures.cormoran.cor_log"><code class="xref py py-obj docutils literal"><span class="pre">cor_log</span></code></a>([short])</td>
-<td>display cormoran measurement campaign logfile</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.ant" title="pylayers.measures.cormoran.CorSer.ant"><code class="xref py py-obj docutils literal"><span class="pre">ant</span></code></a></td>
+<td>display device techno, id , id on body, body owner,...</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.dev" title="pylayers.measures.cormoran.CorSer.dev"><code class="xref py py-obj docutils literal"><span class="pre">dev</span></code></a></td>
+<td>display device techno, id , id on body, body owner,...</td>
 </tr>
 </tbody>
 </table>
-<div class="section" id="corser-init-and-load-data">
-<h3>CorSer init and load data<a class="headerlink" href="#corser-init-and-load-data" title="Permalink to this headline">¶</a></h3>
+<p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.__init__.html#pylayers.measures.cormoran.CorSer.__init__" title="pylayers.measures.cormoran.CorSer.__init__"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.__init__</span></code></a>([serie,&nbsp;day,&nbsp;source,&nbsp;layout])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.align" title="pylayers.measures.cormoran.CorSer.align"><code class="xref py py-obj docutils literal"><span class="pre">align</span></code></a>(devdf,&nbsp;hkbdf)</td>
+<td>DEPRECATED align time of 2 data frames:</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.anim.html#pylayers.measures.cormoran.CorSer.anim" title="pylayers.measures.cormoran.CorSer.anim"><code class="xref py py-obj docutils literal"><span class="pre">anim</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.animhkb" title="pylayers.measures.cormoran.CorSer.animhkb"><code class="xref py py-obj docutils literal"><span class="pre">animhkb</span></code></a>(a,&nbsp;b[,&nbsp;interval,&nbsp;save])</td>
 <td><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -218,268 +228,1115 @@
 </table>
 </td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.__repr__.html#pylayers.measures.cormoran.CorSer.__repr__" title="pylayers.measures.cormoran.CorSer.__repr__"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.__repr__</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._loadBS.html#pylayers.measures.cormoran.CorSer._loadBS" title="pylayers.measures.cormoran.CorSer._loadBS"><code class="xref py py-obj docutils literal"><span class="pre">CorSer._loadBS</span></code></a>([day,&nbsp;serie,&nbsp;scenario,&nbsp;run])</td>
-<td>load BeSpoon data</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._loadTCR.html#pylayers.measures.cormoran.CorSer._loadTCR" title="pylayers.measures.cormoran.CorSer._loadTCR"><code class="xref py py-obj docutils literal"><span class="pre">CorSer._loadTCR</span></code></a>([day,&nbsp;serie,&nbsp;scenario,&nbsp;run])</td>
-<td>load TCR data</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._load_offset_dict.html#pylayers.measures.cormoran.CorSer._load_offset_dict" title="pylayers.measures.cormoran.CorSer._load_offset_dict"><code class="xref py py-obj docutils literal"><span class="pre">CorSer._load_offset_dict</span></code></a>()</td>
-<td>load offset_dictionnary.bin</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._loadbody.html#pylayers.measures.cormoran.CorSer._loadbody" title="pylayers.measures.cormoran.CorSer._loadbody"><code class="xref py py-obj docutils literal"><span class="pre">CorSer._loadbody</span></code></a>([day,&nbsp;serie])</td>
-<td>load body from motion capture file</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._loadcam.html#pylayers.measures.cormoran.CorSer._loadcam" title="pylayers.measures.cormoran.CorSer._loadcam"><code class="xref py py-obj docutils literal"><span class="pre">CorSer._loadcam</span></code></a>()</td>
-<td>load camera position</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._loadhkb.html#pylayers.measures.cormoran.CorSer._loadhkb" title="pylayers.measures.cormoran.CorSer._loadhkb"><code class="xref py py-obj docutils literal"><span class="pre">CorSer._loadhkb</span></code></a>([day,&nbsp;serie,&nbsp;scenario,&nbsp;run,&nbsp;...])</td>
-<td>load hkb measurement data</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._loadinfranodes.html#pylayers.measures.cormoran.CorSer._loadinfranodes" title="pylayers.measures.cormoran.CorSer._loadinfranodes"><code class="xref py py-obj docutils literal"><span class="pre">CorSer._loadinfranodes</span></code></a>()</td>
-<td>load infrastructure nodes</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.loadlog.html#pylayers.measures.cormoran.CorSer.loadlog" title="pylayers.measures.cormoran.CorSer.loadlog"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.loadlog</span></code></a>()</td>
-<td>load in self.log the log of the current serie</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.animhkbAP" title="pylayers.measures.cormoran.CorSer.animhkbAP"><code class="xref py py-obj docutils literal"><span class="pre">animhkbAP</span></code></a>(a,&nbsp;AP_list[,&nbsp;interval,&nbsp;save])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="corser-exploit-data">
-<h3>CorSer exploit data<a class="headerlink" href="#corser-exploit-data" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.getdevp.html#pylayers.measures.cormoran.CorSer.getdevp" title="pylayers.measures.cormoran.CorSer.getdevp"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.getdevp</span></code></a>(a[,&nbsp;techno,&nbsp;t,&nbsp;fId])</td>
-<td>get a  device position</td>
+</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.getlink.html#pylayers.measures.cormoran.CorSer.getlink" title="pylayers.measures.cormoran.CorSer.getlink"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.getlink</span></code></a>(a,&nbsp;b[,&nbsp;techno,&nbsp;t])</td>
-<td>get a link value</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.compute_visibility" title="pylayers.measures.cormoran.CorSer.compute_visibility"><code class="xref py py-obj docutils literal"><span class="pre">compute_visibility</span></code></a>([techno,&nbsp;square_mda,&nbsp;...])</td>
+<td>determine visibility of links for a given techno</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.getlinkd.html#pylayers.measures.cormoran.CorSer.getlinkd" title="pylayers.measures.cormoran.CorSer.getlinkd"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.getlinkd</span></code></a>(a,&nbsp;b[,&nbsp;techno,&nbsp;t])</td>
-<td>get the distance for a link between devices</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.getlinkp.html#pylayers.measures.cormoran.CorSer.getlinkp" title="pylayers.measures.cormoran.CorSer.getlinkp"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.getlinkp</span></code></a>(a,&nbsp;b[,&nbsp;technoa,&nbsp;technob,&nbsp;t,&nbsp;fId])</td>
-<td>get a link devices positions</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.devmapper.html#pylayers.measures.cormoran.CorSer.devmapper" title="pylayers.measures.cormoran.CorSer.devmapper"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.devmapper</span></code></a>(a[,&nbsp;techno])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.devmapper" title="pylayers.measures.cormoran.CorSer.devmapper"><code class="xref py py-obj docutils literal"><span class="pre">devmapper</span></code></a>(a[,&nbsp;techno])</td>
 <td>retrieve name of device if input is number</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.export_csv.html#pylayers.measures.cormoran.CorSer.export_csv" title="pylayers.measures.cormoran.CorSer.export_csv"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.export_csv</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.export_csv" title="pylayers.measures.cormoran.CorSer.export_csv"><code class="xref py py-obj docutils literal"><span class="pre">export_csv</span></code></a>(**kwargs)</td>
 <td>export to csv devices positions</td>
 </tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="corser-visualization-tools">
-<h3>CorSer visualization tools<a class="headerlink" href="#corser-visualization-tools" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-</tbody>
-</table>
-<div class="section" id="d-visualization">
-<h4>2D  visualization<a class="headerlink" href="#d-visualization" title="Permalink to this headline">¶</a></h4>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.plot.html#pylayers.measures.cormoran.CorSer.plot" title="pylayers.measures.cormoran.CorSer.plot"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.plot</span></code></a>(a,&nbsp;b[,&nbsp;techno,&nbsp;t])</td>
-<td>ploting</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.getdevp" title="pylayers.measures.cormoran.CorSer.getdevp"><code class="xref py py-obj docutils literal"><span class="pre">getdevp</span></code></a>(a[,&nbsp;techno,&nbsp;t,&nbsp;fId])</td>
+<td>get a  device position</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.pltmob.html#pylayers.measures.cormoran.CorSer.pltmob" title="pylayers.measures.cormoran.CorSer.pltmob"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.pltmob</span></code></a>(**kwargs)</td>
-<td>plot mobility</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.getlink" title="pylayers.measures.cormoran.CorSer.getlink"><code class="xref py py-obj docutils literal"><span class="pre">getlink</span></code></a>(a,&nbsp;b[,&nbsp;techno,&nbsp;t])</td>
+<td>get a link value</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.plttcr.html#pylayers.measures.cormoran.CorSer.plttcr" title="pylayers.measures.cormoran.CorSer.plttcr"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.plttcr</span></code></a>(a,&nbsp;b,&nbsp;**kwargs)</td>
-<td>plot TCR devices</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.getlinkd" title="pylayers.measures.cormoran.CorSer.getlinkd"><code class="xref py py-obj docutils literal"><span class="pre">getlinkd</span></code></a>(a,&nbsp;b[,&nbsp;techno,&nbsp;t])</td>
+<td>get the distance for a link between devices</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.pltvisi.html#pylayers.measures.cormoran.CorSer.pltvisi" title="pylayers.measures.cormoran.CorSer.pltvisi"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.pltvisi</span></code></a>(a,&nbsp;b[,&nbsp;techno])</td>
-<td>plot visibility between link a and b</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.getlinkp" title="pylayers.measures.cormoran.CorSer.getlinkp"><code class="xref py py-obj docutils literal"><span class="pre">getlinkp</span></code></a>(a,&nbsp;b[,&nbsp;technoa,&nbsp;technob,&nbsp;t,&nbsp;fId])</td>
+<td>get a link devices positions</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.animhkb.html#pylayers.measures.cormoran.CorSer.animhkb" title="pylayers.measures.cormoran.CorSer.animhkb"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.animhkb</span></code></a>(a,&nbsp;b[,&nbsp;interval,&nbsp;save])</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
+<td>generic help</td>
 </tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.animhkbAP.html#pylayers.measures.cormoran.CorSer.animhkbAP" title="pylayers.measures.cormoran.CorSer.animhkbAP"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.animhkbAP</span></code></a>(a,&nbsp;AP_list[,&nbsp;interval,&nbsp;save])</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.imshow.html#pylayers.measures.cormoran.CorSer.imshow" title="pylayers.measures.cormoran.CorSer.imshow"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.imshow</span></code></a>([time,&nbsp;kind])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.imshow" title="pylayers.measures.cormoran.CorSer.imshow"><code class="xref py py-obj docutils literal"><span class="pre">imshow</span></code></a>([time,&nbsp;kind])</td>
 <td>DEPRECATED</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Corser.showlink</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.pltgt.html#pylayers.measures.cormoran.CorSer.pltgt" title="pylayers.measures.cormoran.CorSer.pltgt"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.pltgt</span></code></a>(a,&nbsp;b,&nbsp;**kwargs)</td>
-<td>plt ground truth</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="id1">
-<h4>3D visualization<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._show3.html#pylayers.measures.cormoran.CorSer._show3" title="pylayers.measures.cormoran.CorSer._show3"><code class="xref py py-obj docutils literal"><span class="pre">CorSer._show3</span></code></a>(**kwargs)</td>
-<td>mayavi 3d show of scenario</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._show3i.html#pylayers.measures.cormoran.CorSer._show3i" title="pylayers.measures.cormoran.CorSer._show3i"><code class="xref py py-obj docutils literal"><span class="pre">CorSer._show3i</span></code></a>([t])</td>
-<td>show3 interactive</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.imshowvisibility.html#pylayers.measures.cormoran.CorSer.imshowvisibility" title="pylayers.measures.cormoran.CorSer.imshowvisibility"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.imshowvisibility</span></code></a>([techno,&nbsp;t])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.imshowvisibility" title="pylayers.measures.cormoran.CorSer.imshowvisibility"><code class="xref py py-obj docutils literal"><span class="pre">imshowvisibility</span></code></a>([techno,&nbsp;t])</td>
 <td>imshow visibility mda</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.imshowvisibility_i.html#pylayers.measures.cormoran.CorSer.imshowvisibility_i" title="pylayers.measures.cormoran.CorSer.imshowvisibility_i"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.imshowvisibility_i</span></code></a>([techno,&nbsp;t])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.imshowvisibility_i" title="pylayers.measures.cormoran.CorSer.imshowvisibility_i"><code class="xref py py-obj docutils literal"><span class="pre">imshowvisibility_i</span></code></a>([techno,&nbsp;t])</td>
 <td>imshow visibility mda interactive</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.anim.html#pylayers.measures.cormoran.CorSer.anim" title="pylayers.measures.cormoran.CorSer.anim"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.anim</span></code></a>()</td>
-<td></td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.lk2nd" title="pylayers.measures.cormoran.CorSer.lk2nd"><code class="xref py py-obj docutils literal"><span class="pre">lk2nd</span></code></a>(lk)</td>
+<td>transcode a lk from Id to real name</td>
 </tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="video-visualization">
-<h4>Video Visualization<a class="headerlink" href="#video-visualization" title="Permalink to this headline">¶</a></h4>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.snapshot.html#pylayers.measures.cormoran.CorSer.snapshot" title="pylayers.measures.cormoran.CorSer.snapshot"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.snapshot</span></code></a>([t0,&nbsp;offset,&nbsp;title,&nbsp;save,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.loadlog" title="pylayers.measures.cormoran.CorSer.loadlog"><code class="xref py py-obj docutils literal"><span class="pre">loadlog</span></code></a>()</td>
+<td>load in self.log the log of the current serie</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.mtlbsave" title="pylayers.measures.cormoran.CorSer.mtlbsave"><code class="xref py py-obj docutils literal"><span class="pre">mtlbsave</span></code></a>()</td>
+<td>Matlab format save</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.offset_setter" title="pylayers.measures.cormoran.CorSer.offset_setter"><code class="xref py py-obj docutils literal"><span class="pre">offset_setter</span></code></a>([a,&nbsp;b,&nbsp;techno])</td>
+<td>offset setter</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.offset_setter_video" title="pylayers.measures.cormoran.CorSer.offset_setter_video"><code class="xref py py-obj docutils literal"><span class="pre">offset_setter_video</span></code></a>([a,&nbsp;b])</td>
+<td>video offset setter</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.plot" title="pylayers.measures.cormoran.CorSer.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>(a,&nbsp;b[,&nbsp;techno,&nbsp;t])</td>
+<td>ploting</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.pltgt" title="pylayers.measures.cormoran.CorSer.pltgt"><code class="xref py py-obj docutils literal"><span class="pre">pltgt</span></code></a>(a,&nbsp;b,&nbsp;**kwargs)</td>
+<td>plt ground truth</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.plthkb" title="pylayers.measures.cormoran.CorSer.plthkb"><code class="xref py py-obj docutils literal"><span class="pre">plthkb</span></code></a>(a,&nbsp;b[,&nbsp;techno])</td>
+<td>plot Hikob devices</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.pltlk" title="pylayers.measures.cormoran.CorSer.pltlk"><code class="xref py py-obj docutils literal"><span class="pre">pltlk</span></code></a>(a,&nbsp;b,&nbsp;**kwargs)</td>
+<td>plot links</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.pltmob" title="pylayers.measures.cormoran.CorSer.pltmob"><code class="xref py py-obj docutils literal"><span class="pre">pltmob</span></code></a>(**kwargs)</td>
+<td>plot mobility</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.plttcr" title="pylayers.measures.cormoran.CorSer.plttcr"><code class="xref py py-obj docutils literal"><span class="pre">plttcr</span></code></a>(a,&nbsp;b,&nbsp;**kwargs)</td>
+<td>plot TCR devices</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.pltvisi" title="pylayers.measures.cormoran.CorSer.pltvisi"><code class="xref py py-obj docutils literal"><span class="pre">pltvisi</span></code></a>(a,&nbsp;b[,&nbsp;techno])</td>
+<td>plot visibility between link a and b</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.savemat" title="pylayers.measures.cormoran.CorSer.savemat"><code class="xref py py-obj docutils literal"><span class="pre">savemat</span></code></a>()</td>
+<td>save in Matlab Format</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.showlink" title="pylayers.measures.cormoran.CorSer.showlink"><code class="xref py py-obj docutils literal"><span class="pre">showlink</span></code></a>([a,&nbsp;b,&nbsp;technoa,&nbsp;technob])</td>
+<td>show link configuation for a given frame</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.showpattern" title="pylayers.measures.cormoran.CorSer.showpattern"><code class="xref py py-obj docutils literal"><span class="pre">showpattern</span></code></a>(a[,&nbsp;techno])</td>
+<td>show pattern configuation for a given link and frame</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.snapshot" title="pylayers.measures.cormoran.CorSer.snapshot"><code class="xref py py-obj docutils literal"><span class="pre">snapshot</span></code></a>([t0,&nbsp;offset,&nbsp;title,&nbsp;save,&nbsp;fig,&nbsp;ax,&nbsp;...])</td>
 <td>single snapshot plot</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.snapshots.html#pylayers.measures.cormoran.CorSer.snapshots" title="pylayers.measures.cormoran.CorSer.snapshots"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.snapshots</span></code></a>([t0,&nbsp;t1,&nbsp;offset])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.snapshots" title="pylayers.measures.cormoran.CorSer.snapshots"><code class="xref py py-obj docutils literal"><span class="pre">snapshots</span></code></a>([t0,&nbsp;t1,&nbsp;offset])</td>
 <td>take snapshots</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.vlc.html#pylayers.measures.cormoran.CorSer.vlc" title="pylayers.measures.cormoran.CorSer.vlc"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.vlc</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.visidev" title="pylayers.measures.cormoran.CorSer.visidev"><code class="xref py py-obj docutils literal"><span class="pre">visidev</span></code></a>(a,&nbsp;b[,&nbsp;technoa,&nbsp;technob,&nbsp;dsf])</td>
+<td>get link visibility status</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.visidev2" title="pylayers.measures.cormoran.CorSer.visidev2"><code class="xref py py-obj docutils literal"><span class="pre">visidev2</span></code></a>(a,&nbsp;b[,&nbsp;technoa,&nbsp;technob,&nbsp;trange])</td>
+<td>get link visibility status</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer.vlc" title="pylayers.measures.cormoran.CorSer.vlc"><code class="xref py py-obj docutils literal"><span class="pre">vlc</span></code></a>()</td>
 <td>play video of the associated serie</td>
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-<div class="section" id="corser-internal-processing">
-<h3>CorSer Internal processing<a class="headerlink" href="#corser-internal-processing" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.align">
+<code class="descname">align</code><span class="sig-paren">(</span><em>devdf</em>, <em>hkbdf</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.align"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.align" title="Permalink to this definition">¶</a></dt>
+<dd><p>DEPRECATED align time of 2 data frames:</p>
+<p>the time delta of the second data frame is applyied on the first one
+(e.g. time for devdf donwsampled by hkb data frame time)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
 <tbody valign="top">
-</tbody>
-</table>
-<div class="section" id="time-alignement">
-<h4>Time Alignement<a class="headerlink" href="#time-alignement" title="Permalink to this headline">¶</a></h4>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.align.html#pylayers.measures.cormoran.CorSer.align" title="pylayers.measures.cormoran.CorSer.align"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.align</span></code></a>(devdf,&nbsp;hkbdf)</td>
-<td>DEPRECATED align time of 2 data frames:</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.offset_setter.html#pylayers.measures.cormoran.CorSer.offset_setter" title="pylayers.measures.cormoran.CorSer.offset_setter"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.offset_setter</span></code></a>([a,&nbsp;b,&nbsp;techno])</td>
-<td>offset setter</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.offset_setter_video.html#pylayers.measures.cormoran.CorSer.offset_setter_video" title="pylayers.measures.cormoran.CorSer.offset_setter_video"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.offset_setter_video</span></code></a>([a,&nbsp;b])</td>
-<td>video offset setter</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._align_on_devdf.html#pylayers.measures.cormoran.CorSer._align_on_devdf" title="pylayers.measures.cormoran.CorSer._align_on_devdf"><code class="xref py py-obj docutils literal"><span class="pre">CorSer._align_on_devdf</span></code></a>([typ])</td>
-<td>align hkb or bs time on device data frame (devdf) time index</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._align_devdf_on_hkb.html#pylayers.measures.cormoran.CorSer._align_devdf_on_hkb" title="pylayers.measures.cormoran.CorSer._align_devdf_on_hkb"><code class="xref py py-obj docutils literal"><span class="pre">CorSer._align_devdf_on_hkb</span></code></a>(devdf,&nbsp;hkbdf)</td>
-<td>NOT USED Practically</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer._apply_offset'</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._save_data_off_dict.html#pylayers.measures.cormoran.CorSer._save_data_off_dict" title="pylayers.measures.cormoran.CorSer._save_data_off_dict"><code class="xref py py-obj docutils literal"><span class="pre">CorSer._save_data_off_dict</span></code></a>(filename,&nbsp;typ,&nbsp;value)</td>
-<td>save</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._save_offset_dict.html#pylayers.measures.cormoran.CorSer._save_offset_dict" title="pylayers.measures.cormoran.CorSer._save_offset_dict"><code class="xref py py-obj docutils literal"><span class="pre">CorSer._save_offset_dict</span></code></a>(d)</td>
-<td></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>devdf</strong> : device dataframe</p>
+<p class="last"><strong>hkbdf</strong> : hkbdataframe</p>
+</td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.cormoran import *
+&gt;&gt;&gt; S=CorSer(6)
+&gt;&gt;&gt; devdf = S.devdf[S.devdf[&#39;id&#39;]==&#39;HKB:15&#39;]
+&gt;&gt;&gt; hkbdf = S.hkb[&#39;AP1-AnkleLeft&#39;]
+&gt;&gt;&gt; devdf2,hkbdf2 = S.align(devdf,hkbdf)
+</pre></div>
 </div>
-<div class="section" id="data-frame-transformation">
-<h4>Data frame transformation<a class="headerlink" href="#data-frame-transformation" title="Permalink to this headline">¶</a></h4>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.animhkb">
+<code class="descname">animhkb</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>interval=10</em>, <em>save=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.animhkb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.animhkb" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.compute_visibility.html#pylayers.measures.cormoran.CorSer.compute_visibility" title="pylayers.measures.cormoran.CorSer.compute_visibility"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.compute_visibility</span></code></a>([techno,&nbsp;...])</td>
-<td>determine visibility of links for a given techno</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._computedevpdf.html#pylayers.measures.cormoran.CorSer._computedevpdf" title="pylayers.measures.cormoran.CorSer._computedevpdf"><code class="xref py py-obj docutils literal"><span class="pre">CorSer._computedevpdf</span></code></a>()</td>
-<td>create a timestamped data frame</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._computedistdf.html#pylayers.measures.cormoran.CorSer._computedistdf" title="pylayers.measures.cormoran.CorSer._computedistdf"><code class="xref py py-obj docutils literal"><span class="pre">CorSer._computedistdf</span></code></a>()</td>
-<td>Compute the distance dataframe from distance matrix</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._distancematrix.html#pylayers.measures.cormoran.CorSer._distancematrix" title="pylayers.measures.cormoran.CorSer._distancematrix"><code class="xref py py-obj docutils literal"><span class="pre">CorSer._distancematrix</span></code></a>()</td>
-<td>Compute the ditance matrix between the nodes</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._visiarray.html#pylayers.measures.cormoran.CorSer._visiarray" title="pylayers.measures.cormoran.CorSer._visiarray"><code class="xref py py-obj docutils literal"><span class="pre">CorSer._visiarray</span></code></a>(a,&nbsp;b[,&nbsp;technoa,&nbsp;technob])</td>
-<td>create entries for plu.rectplot</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : node name <a href="#id1"><span class="problematic" id="id2">|</span></a>number</p>
+<p><strong>b</strong> : node name | number</p>
+<p class="last"><strong>save</strong> : bool</p>
+</td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="vizualizing-processing">
-<h4>Vizualizing processing<a class="headerlink" href="#vizualizing-processing" title="Permalink to this headline">¶</a></h4>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.animhkbAP">
+<code class="descname">animhkbAP</code><span class="sig-paren">(</span><em>a</em>, <em>AP_list</em>, <em>interval=1</em>, <em>save=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.animhkbAP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.animhkbAP" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.visidev.html#pylayers.measures.cormoran.CorSer.visidev" title="pylayers.measures.cormoran.CorSer.visidev"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.visidev</span></code></a>(a,&nbsp;b[,&nbsp;technoa,&nbsp;technob,&nbsp;dsf])</td>
-<td>get link visibility status</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.visidev2.html#pylayers.measures.cormoran.CorSer.visidev2" title="pylayers.measures.cormoran.CorSer.visidev2"><code class="xref py py-obj docutils literal"><span class="pre">CorSer.visidev2</span></code></a>(a,&nbsp;b[,&nbsp;technoa,&nbsp;technob,&nbsp;trange])</td>
-<td>get link visibility status</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.__refreshshow3i</span></code></td>
-<td></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : node name</p>
+<p><strong>AP_nb=[]</strong></p>
+<p class="last"><strong>save</strong> : bool</p>
+</td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pylayers.measures.cormoran.CorSer.ant">
+<code class="descname">ant</code><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.ant" title="Permalink to this definition">¶</a></dt>
+<dd><p>display device techno, id , id on body, body owner,...</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.compute_visibility">
+<code class="descname">compute_visibility</code><span class="sig-paren">(</span><em>techno='HKB'</em>, <em>square_mda=True</em>, <em>all_links=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.compute_visibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.compute_visibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>determine visibility of links for a given techno</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>techno  string</strong></p>
+<blockquote>
+<div><dl class="docutils">
+<dt>select the given radio technology of the nodes to determine</dt>
+<dd><p class="first last">the visibility matrix</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>square_mda  boolean</strong></p>
+<blockquote>
+<div><dl class="docutils">
+<dt>select ouput format</dt>
+<dd><p class="first last">True : (device x device x timestamp)
+False : (link x timestamp)</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>all_links</strong> : bool</p>
+<blockquote class="last">
+<div><p>compute all links or just those for which data is available</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pylayers.measures.cormoran.CorSer.dev">
+<code class="descname">dev</code><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.dev" title="Permalink to this definition">¶</a></dt>
+<dd><p>display device techno, id , id on body, body owner,...</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.devmapper">
+<code class="descname">devmapper</code><span class="sig-paren">(</span><em>a</em>, <em>techno=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.devmapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.devmapper" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>retrieve name of device if input is number</dt>
+<dd>or
+retrieve number of device if input is name</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : str | int</p>
+<blockquote>
+<div><p>name <a href="#id3"><span class="problematic" id="id4">|</span></a>id <a href="#id5"><span class="problematic" id="id6">|</span></a>bodyid</p>
+</div></blockquote>
+<p><strong>techno</strong> : str</p>
+<blockquote>
+<div><p>radio techno</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>a</strong> : string</p>
+<blockquote>
+<div><p>dev name</p>
+</div></blockquote>
+<p><strong>ia</strong> : int</p>
+<blockquote>
+<div><p>dev number</p>
+</div></blockquote>
+<p><strong>ba</strong> : string</p>
+<blockquote>
+<div><p>dev refernce in body</p>
+</div></blockquote>
+<p><strong>subject</strong> : string</p>
+<blockquote class="last">
+<div><p>body owning the device</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.export_csv">
+<code class="descname">export_csv</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.export_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.export_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>export to csv devices positions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>unit</strong> : string (&#8216;mm&#8217;|&#8217;cm&#8217;|&#8217;m&#8217;),</p>
+<blockquote class="last">
+<div><blockquote>
+<div><p>unit of positions in csv(default mm)</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>tunit: string</dt>
+<dd><p class="first last">time unit in csv (default &#8216;ns&#8217;)</p>
+</dd>
+<dt>&#8216;alias&#8217;: dict</dt>
+<dd><p class="first last">dictionnary to replace name of the devices into the csv .
+example : if you want to replace a device id named &#8216;TCR:34&#8217;
+to an id = 5, you have to add an entry in the alias dictionnary as :
+alias.update({&#8216;TCR34&#8217;:5})</p>
+</dd>
+<dt>offset</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span><dd><p class="first last">apply an offset on positions</p>
+</dd>
+</dl>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.getdevp">
+<code class="descname">getdevp</code><span class="sig-paren">(</span><em>a</em>, <em>techno=''</em>, <em>t=''</em>, <em>fId=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.getdevp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.getdevp" title="Permalink to this definition">¶</a></dt>
+<dd><p>get a  device position</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : str | int</p>
+<blockquote>
+<div><p>name <a href="#id7"><span class="problematic" id="id8">|</span></a>id</p>
+</div></blockquote>
+<p><strong>techno</strong> : str</p>
+<blockquote>
+<div><p>radio techno</p>
+</div></blockquote>
+<p><strong>optional :</strong></p>
+<p><strong>t</strong> : float | list</p>
+<blockquote>
+<div><p>given time <a href="#id9"><span class="problematic" id="id10">|</span></a>[time_start,time_stop]</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>pa</strong> : np.array()</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.cormoran import *
+&gt;&gt;&gt; S=CorSer(serie=34)
+&gt;&gt;&gt; a=S.getdevp(&#39;AP1&#39;,&#39;WristLeft&#39;)
+</pre></div>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.getlink">
+<code class="descname">getlink</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>techno=''</em>, <em>t=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.getlink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.getlink" title="Permalink to this definition">¶</a></dt>
+<dd><p>get a link value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : str | int</p>
+<blockquote>
+<div><p>name <a href="#id11"><span class="problematic" id="id12">|</span></a>id</p>
+</div></blockquote>
+<p><strong>b</strong> : str | int</p>
+<blockquote>
+<div><p>name <a href="#id13"><span class="problematic" id="id14">|</span></a>id</p>
+</div></blockquote>
+<p><strong>optional :</strong></p>
+<p><strong>techno</strong> : str</p>
+<blockquote>
+<div><p>radio techno</p>
+</div></blockquote>
+<p><strong>t</strong> : float | list</p>
+<blockquote>
+<div><p>given time
+or [start,stop] time</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Pandas Serie</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.cormoran import *
+&gt;&gt;&gt; S=CorSer(serie=34)
+&gt;&gt;&gt; S.getlink(&#39;AP1&#39;,&#39;WristLeft&#39;)
+</pre></div>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.getlinkd">
+<code class="descname">getlinkd</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>techno=''</em>, <em>t=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.getlinkd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.getlinkd" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the distance for a link between devices</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : str | int</p>
+<blockquote>
+<div><p>name <a href="#id15"><span class="problematic" id="id16">|</span></a>id</p>
+</div></blockquote>
+<p><strong>b</strong> : str | int</p>
+<blockquote>
+<div><p>name <a href="#id17"><span class="problematic" id="id18">|</span></a>id</p>
+</div></blockquote>
+<p><strong>optional</strong></p>
+<p><strong>techno</strong> : str</p>
+<blockquote>
+<div><p>radio techno</p>
+</div></blockquote>
+<p><strong>t</strong> : float | list</p>
+<blockquote>
+<div><p>given time
+or [start,stop] time</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>dist</strong> : np.array()</p>
+<blockquote class="last">
+<div><p>all distances for all timestamps for the given link</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.cormoran import *
+&gt;&gt;&gt; S = CorSer(serie=6)
+&gt;&gt;&gt; d = S.getlinkd(&#39;AP1&#39;,&#39;WristLeft&#39;,techno=&#39;HKB&#39;)
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.getlinkp">
+<code class="descname">getlinkp</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>technoa=''</em>, <em>technob=''</em>, <em>t=''</em>, <em>fId=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.getlinkp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.getlinkp" title="Permalink to this definition">¶</a></dt>
+<dd><p>get a link devices positions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : str | int</p>
+<blockquote>
+<div><p>name <a href="#id19"><span class="problematic" id="id20">|</span></a>id</p>
+</div></blockquote>
+<p><strong>b</strong> : str | int</p>
+<blockquote>
+<div><p>name <a href="#id21"><span class="problematic" id="id22">|</span></a>id</p>
+</div></blockquote>
+<p><strong>optional :</strong></p>
+<p><strong>technoa</strong> : str</p>
+<blockquote>
+<div><p>radio techno</p>
+</div></blockquote>
+<p><strong>technob</strong> : str</p>
+<blockquote>
+<div><p>radio techno</p>
+</div></blockquote>
+<p><strong>t</strong> : float | list</p>
+<blockquote>
+<div><p>given time | [time_start,time_stop]</p>
+</div></blockquote>
+<p><strong>OR</strong></p>
+<p><strong>fId</strong> : int</p>
+<blockquote>
+<div><p>frame id</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>pa,pb</strong> : np.array()</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.cormoran import *
+&gt;&gt;&gt; S=CorSer(serie=34)
+&gt;&gt;&gt; a,b=S.getlinkp(&#39;AP1&#39;,&#39;WristLeft&#39;)
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.imshow">
+<code class="descname">imshow</code><span class="sig-paren">(</span><em>time=100</em>, <em>kind='time'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.imshow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.imshow" title="Permalink to this definition">¶</a></dt>
+<dd><p>DEPRECATED</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>kind</strong> : string</p>
+<blockquote class="last">
+<div><p>&#8216;mean&#8217;,&#8217;std&#8217;</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.imshowvisibility">
+<code class="descname">imshowvisibility</code><span class="sig-paren">(</span><em>techno='HKB'</em>, <em>t=0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.imshowvisibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.imshowvisibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>imshow visibility mda</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>techno</strong> : (HKB|TCR)</p>
+<p><strong>t</strong> : float</p>
+<blockquote class="last">
+<div><p>time in second</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.measures.CorSer.compute_visibility</span></code></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.cormoran import *
+&gt;&gt;&gt; import matplotlib.pyplot as plt
+&gt;&gt;&gt; C=CorSer(serie=6,day=12)
+&gt;&gt;&gt; inter,links=C.compute_visibility(techno=&#39;TCR&#39;,square_mda=True)
+&gt;&gt;&gt; i,l=C.imshowvisibility_i(inter,links)
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.imshowvisibility_i">
+<code class="descname">imshowvisibility_i</code><span class="sig-paren">(</span><em>techno='HKB'</em>, <em>t=0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.imshowvisibility_i"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.imshowvisibility_i" title="Permalink to this definition">¶</a></dt>
+<dd><p>imshow visibility mda interactive</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>inter</strong> : (nb link x nb link x timestamps)</p>
+<p><strong>links</strong> : (nblinks)</p>
+<p class="last"><strong>time</strong> : intial time (s)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.lk2nd">
+<code class="descname">lk2nd</code><span class="sig-paren">(</span><em>lk</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.lk2nd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.lk2nd" title="Permalink to this definition">¶</a></dt>
+<dd><p>transcode a lk from Id to real name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>lk</strong> : string</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; C=Corser(6)
+&gt;&gt;&gt; lk = &#39;HKB:15-HKB:7&#39;
+&gt;&gt;&gt; C.lk2nd(lk)
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.loadlog">
+<code class="descname">loadlog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.loadlog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.loadlog" title="Permalink to this definition">¶</a></dt>
+<dd><p>load in self.log the log of the current serie
+from MeasurementLog.csv</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.mtlbsave">
+<code class="descname">mtlbsave</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.mtlbsave"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.mtlbsave" title="Permalink to this definition">¶</a></dt>
+<dd><p>Matlab format save</p>
+<dl class="docutils">
+<dt>S{day}_{serie}</dt>
+<dd><p class="first">node_name
+node_place
+node_coord</p>
+<p>HKB.{linkname}.tr
+HKB.{linkname}.rssi
+HKB.{linkname}.td
+HKB.{linkname}.dist
+HKB.{linkname}.sh
+HKB.{linkname}.dsh</p>
+<p class="last">TCR.{linkname}.tr
+HKB.{linkname}.range
+HKB.{linkname}.td
+HKB.{linkname}.dist
+HKB.{linkname}.sh</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.offset_setter">
+<code class="descname">offset_setter</code><span class="sig-paren">(</span><em>a='HKB:1'</em>, <em>b='HKB:12'</em>, <em>techno=''</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.offset_setter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.offset_setter" title="Permalink to this definition">¶</a></dt>
+<dd><p>offset setter</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.offset_setter_video">
+<code class="descname">offset_setter_video</code><span class="sig-paren">(</span><em>a='AP1'</em>, <em>b='WristRight'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.offset_setter_video"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.offset_setter_video" title="Permalink to this definition">¶</a></dt>
+<dd><p>video offset setter</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>techno=''</em>, <em>t=''</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>ploting</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : str | int</p>
+<blockquote>
+<div><p>name <a href="#id23"><span class="problematic" id="id24">|</span></a>id</p>
+</div></blockquote>
+<p><strong>b</strong> : str | int</p>
+<blockquote>
+<div><p>name <a href="#id25"><span class="problematic" id="id26">|</span></a>id</p>
+</div></blockquote>
+<p><strong>techno</strong> : str (optional)</p>
+<blockquote>
+<div><p>radio techno</p>
+</div></blockquote>
+<p><strong>t</strong> : float | list (optional)</p>
+<blockquote>
+<div><p>given time
+or [start,stop] time</p>
+</div></blockquote>
+<p><strong>color</strong> : color</p>
+<p><strong>distance</strong> : boolean (False)</p>
+<blockquote>
+<div><p>plot distance instead of value</p>
+</div></blockquote>
+<p><strong>lin</strong> : boolean (False)</p>
+<blockquote>
+<div><p>display linear value instead of dB</p>
+</div></blockquote>
+<p><strong>sqrtinv</strong> : boolean (False)</p>
+<blockquote>
+<div><p>apply : &#8220;sqrt (1/ dataset)&#8221;</p>
+</div></blockquote>
+<p><strong>xoffset</strong> : float (0)</p>
+<blockquote>
+<div><p>add an offset on x axis</p>
+</div></blockquote>
+<p><strong>yoffset</strong> :  float (1|1e3|1e6)</p>
+<blockquote>
+<div><p>add an offset on y axis</p>
+</div></blockquote>
+<p><strong>title</strong> : boolean (True)</p>
+<blockquote>
+<div><p>display title</p>
+</div></blockquote>
+<p><strong>shortlabel</strong> : boolean (True)</p>
+<blockquote>
+<div><p>enable short labelling</p>
+</div></blockquote>
+<p><strong>fontsize</strong> : int (18)</p>
+<blockquote>
+<div><p>font size</p>
+</div></blockquote>
+<p><strong>returnlines</strong> : boolean</p>
+<blockquote class="last">
+<div><p>if True return the matplotlib ploted lines</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.cormoran import *
+&gt;&gt;&gt; S = CorSer(6)
+&gt;&gt;&gt; f,ax = S.plot(&#39;AP1&#39;,&#39;TorsoTopLeft&#39;,techno=&#39;HKB&#39;)
+&gt;&gt;&gt; f,ax = S.pltvisi(&#39;AP1&#39;,&#39;TorsoTopLeft&#39;,techno=&#39;HKB&#39;,fig=f,ax=ax)
+&gt;&gt;&gt; #f,ax = S.pltmob(fig=f,ax=ax)
+&gt;&gt;&gt; #plt.title(&#39;hatch = visibility / gray= mobility&#39;)
+&gt;&gt;&gt; plt.show()
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.pltgt">
+<code class="descname">pltgt</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.pltgt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.pltgt" title="Permalink to this definition">¶</a></dt>
+<dd><p>plt ground truth</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>t0</strong></p>
+<p><strong>t1</strong></p>
+<p><strong>fig</strong></p>
+<p><strong>ax</strong></p>
+<p><strong>figsize: tuple</strong></p>
+<p><strong>linestyle&#8217;</strong></p>
+<p><strong>inverse :False,</strong></p>
+<blockquote>
+<div><p>display 1/distance  instead of distance</p>
+</div></blockquote>
+<p><strong>log</strong> : boolean</p>
+<blockquote>
+<div><p>display log for distance intead of distance</p>
+</div></blockquote>
+<p><strong>gammma&#8217;:1.,</strong></p>
+<blockquote>
+<div><p>mulitplication factor for log : gamma*log(distance)
+this can be used to fit RSS</p>
+</div></blockquote>
+<p><strong>mode</strong> : string</p>
+<blockquote>
+<div><p>&#8216;HKB&#8217; | &#8216;TCR&#8217; | &#8216;FULL&#8217;</p>
+</div></blockquote>
+<p><strong>visi</strong> : boolean,</p>
+<blockquote>
+<div><p>display visibility</p>
+</div></blockquote>
+<p><strong>color: string color (&#8216;k&#8217;|&#8217;m&#8217;|&#8217;g&#8217;),</strong></p>
+<blockquote>
+<div><p>color to display the visibility area</p>
+</div></blockquote>
+<p><strong>hatch&#8217;: strin hatch type (&#8216;//&#8217;)</strong></p>
+<blockquote>
+<div><p>hatch type to hatch visibility area</p>
+</div></blockquote>
+<p><strong>fontsize: int</strong></p>
+<blockquote class="last">
+<div><p>title fontsize</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.plthkb">
+<code class="descname">plthkb</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>techno='HKB'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.plthkb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.plthkb" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot Hikob devices</p>
+<p>DEPRECATED</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : node name <a href="#id27"><span class="problematic" id="id28">|</span></a>number</p>
+<p><strong>b</strong> : node name | number</p>
+<p><strong>t0</strong> : start time</p>
+<p class="last"><strong>t1</strong> : stop time</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.cormoran import *
+&gt;&gt;&gt; S = CorSer(6)
+&gt;&gt;&gt; f,ax = S.plthkb(&#39;AP1&#39;,&#39;TorsoTopLeft&#39;,techno=&#39;HKB&#39;)
+&gt;&gt;&gt; f,ax = S.pltvisi(&#39;AP1&#39;,&#39;TorsoTopLeft&#39;,techno=&#39;HKB&#39;,fig=f,ax=ax)
+&gt;&gt;&gt; f,ax = S.pltmob(fig=f,ax=ax)
+&gt;&gt;&gt; plt.title(&#39;hatch = visibility / gray= mobility&#39;)
+&gt;&gt;&gt; plt.show()
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.pltlk">
+<code class="descname">pltlk</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.pltlk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.pltlk" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot links</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : string</p>
+<blockquote>
+<div><p>node a name</p>
+</div></blockquote>
+<p><strong>b</strong> : string</p>
+<blockquote>
+<div><p>node b name</p>
+</div></blockquote>
+<p><strong>display: list</strong></p>
+<blockquote>
+<div><p>techno to be displayed</p>
+</div></blockquote>
+<p><strong>figsize</strong></p>
+<p><strong>t0: float</strong></p>
+<blockquote>
+<div><p>time start</p>
+</div></blockquote>
+<p><strong>t1</strong> : float</p>
+<blockquote>
+<div><p>time stop</p>
+</div></blockquote>
+<p><strong>colhk: plt.color</strong></p>
+<blockquote>
+<div><p>color of hk curve</p>
+</div></blockquote>
+<p><strong>colhk2:plt.color</strong></p>
+<blockquote>
+<div><p>color of hk curve2 ( if recirpocal)</p>
+</div></blockquote>
+<p><strong>linestylehk:</strong></p>
+<blockquote>
+<div><p>linestyle hk</p>
+</div></blockquote>
+<p><strong>coltcr:</strong></p>
+<blockquote>
+<div><p>color tcr curve</p>
+</div></blockquote>
+<p><strong>coltcr2:</strong></p>
+<blockquote>
+<div><p>color of tcr curve2 ( if recirpocal)</p>
+</div></blockquote>
+<p><strong>linestyletcr:</strong></p>
+<blockquote>
+<div><p>linestyle tcr</p>
+</div></blockquote>
+<p><strong>colgt:</strong></p>
+<blockquote>
+<div><p>color ground truth</p>
+</div></blockquote>
+<p><strong>inversegt:</strong></p>
+<blockquote>
+<div><p>invert ground truth</p>
+</div></blockquote>
+<p><strong>loggt: bool</strong></p>
+<blockquote>
+<div><p>apply a log10 factor to ground truth</p>
+</div></blockquote>
+<p><strong>gammagt:</strong></p>
+<blockquote>
+<div><p>applly a gamma factor to ground truth (if loggt ! )</p>
+</div></blockquote>
+<p><strong>fontsize:</strong></p>
+<blockquote>
+<div><p>font size of legend</p>
+</div></blockquote>
+<p><strong>visi:</strong></p>
+<blockquote>
+<div><p>display visibility indicator</p>
+</div></blockquote>
+<p><strong>axs :</strong></p>
+<blockquote class="last">
+<div><p>list of matplotlib axes</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.pltmob">
+<code class="descname">pltmob</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.pltmob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.pltmob" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot mobility</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>subject: str</strong></p>
+<blockquote>
+<div><p>subject to display () if &#8216;&#8217;, take the fist one from self.subject)</p>
+</div></blockquote>
+<p><strong>showvel</strong> :  boolean</p>
+<blockquote>
+<div><p>display filtered velocity</p>
+</div></blockquote>
+<p><strong>velth: float (0.7)</strong></p>
+<blockquote>
+<div><p>velocity threshold</p>
+</div></blockquote>
+<p><strong>fo</strong> : int (5)</p>
+<blockquote>
+<div><p>filter order</p>
+</div></blockquote>
+<p><strong>fw: float (0.02)</strong></p>
+<blockquote>
+<div><p>0 &lt; fw &lt; 1  (fN &lt;=&gt; 1)</p>
+</div></blockquote>
+<p><strong>time_offset</strong> : int</p>
+<blockquote class="last">
+<div><p>add time_offset to start later</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.cormoran import *
+&gt;&gt;&gt; S = CorSer(6)
+&gt;&gt;&gt; f,ax = S.plthkb(&#39;AP1&#39;,&#39;TorsoTopLeft&#39;,techno=&#39;HKB&#39;)
+&gt;&gt;&gt; #f,ax = S.pltvisi(&#39;AP1&#39;,&#39;TorsoTopLeft&#39;,techno=&#39;HKB&#39;,fig=f,ax=ax)
+&gt;&gt;&gt; f,ax = S.pltmob(fig=f,ax=ax)
+&gt;&gt;&gt; plt.title(&#39;hatch = visibility / gray= mobility&#39;)
+&gt;&gt;&gt; plt.show()
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.plttcr">
+<code class="descname">plttcr</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.plttcr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.plttcr" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot TCR devices</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : node name <a href="#id29"><span class="problematic" id="id30">|</span></a>number</p>
+<p><strong>b</strong> : node name | number</p>
+<p><strong>t0</strong> : start time</p>
+<p class="last"><strong>t1</strong> : stop time</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.pltvisi">
+<code class="descname">pltvisi</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>techno=''</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.pltvisi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.pltvisi" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot visibility between link a and b</p>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.cormoran import *
+&gt;&gt;&gt; S = CorSer(6)
+&gt;&gt;&gt; f,ax = S.plthkb(&#39;AP1&#39;,&#39;TorsoTopLeft&#39;,techno=&#39;HKB&#39;)
+&gt;&gt;&gt; f,ax = S.pltvisi(&#39;AP1&#39;,&#39;TorsoTopLeft&#39;,techno=&#39;HKB&#39;,fig=f,ax=ax)
+&gt;&gt;&gt; f,ax = S.pltmob(fig=f,ax=ax)
+&gt;&gt;&gt; plt.title(&#39;hatch = visibility / gray= mobility&#39;)
+&gt;&gt;&gt; plt.show()
+</pre></div>
+</div>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>color:</td>
+<td>fill color</td>
+</tr>
+<tr class="row-even"><td>hatch:</td>
+<td>hatch type</td>
+</tr>
+<tr class="row-odd"><td>label_pos: (&#8216;top&#8217;|&#8217;bottom&#8217;|&#8217;&#8216;)</td>
+<td>postion of the label</td>
+</tr>
+<tr class="row-even"><td>label_pos_off: float</td>
+<td>offset of postion of the label</td>
+</tr>
+<tr class="row-odd"><td>label_mob: str</td>
+<td>prefix of label in mobility</td>
+</tr>
+<tr class="row-even"><td>label_stat: str</td>
+<td>prefix of label static</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.savemat">
+<code class="descname">savemat</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.savemat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.savemat" title="Permalink to this definition">¶</a></dt>
+<dd><p>save in Matlab Format</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.showlink">
+<code class="descname">showlink</code><span class="sig-paren">(</span><em>a='AP1'</em>, <em>b='BackCenter'</em>, <em>technoa='HKB'</em>, <em>technob='HKB'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.showlink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.showlink" title="Permalink to this definition">¶</a></dt>
+<dd><p>show link configuation for a given frame</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : int</p>
+<blockquote>
+<div><p>link index</p>
+</div></blockquote>
+<p><strong>b</strong> : int</p>
+<blockquote>
+<div><p>link index</p>
+</div></blockquote>
+<p><strong>technoa</strong> : string</p>
+<blockquote>
+<div><p>default &#8216;HKB&#8217;|&#8217;TCR&#8217;|&#8217;BS&#8217;</p>
+</div></blockquote>
+<p><strong>technob</strong></p>
+<blockquote>
+<div><p>default &#8216;HKB&#8217;|&#8217;TCR&#8217;|&#8217;BS&#8217;</p>
+</div></blockquote>
+<p><strong>phi</strong> : float</p>
+<blockquote class="last">
+<div><p>antenna elevation in rad</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.showpattern">
+<code class="descname">showpattern</code><span class="sig-paren">(</span><em>a</em>, <em>techno='HKB'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.showpattern"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.showpattern" title="Permalink to this definition">¶</a></dt>
+<dd><p>show pattern configuation for a given link and frame</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : int</p>
+<blockquote>
+<div><p>link index</p>
+</div></blockquote>
+<p><strong>technoa</strong> : string</p>
+<blockquote>
+<div><p>&#8216;HKB&#8217;|&#8217;TCR&#8217;|&#8217;BS&#8217;</p>
+</div></blockquote>
+<p><strong>technob</strong></p>
+<blockquote>
+<div><p>default &#8216;HKB&#8217;|&#8217;TCR&#8217;|&#8217;BS&#8217;</p>
+</div></blockquote>
+<p><strong>phi</strong> : float</p>
+<blockquote>
+<div><p>antenna elevation in rad</p>
+</div></blockquote>
+<p><strong>fig :</strong></p>
+<p><strong>ax  :</strong></p>
+<p><strong>t</strong> : float</p>
+<p><strong>phi</strong> : float</p>
+<blockquote>
+<div><p>pi/2</p>
+</div></blockquote>
+<p class="last"><strong>ap</strong> : boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.snapshot">
+<code class="descname">snapshot</code><span class="sig-paren">(</span><em>t0=0</em>, <em>offset=15.5</em>, <em>title=True</em>, <em>save=False</em>, <em>fig=[]</em>, <em>ax=[]</em>, <em>figsize=(10</em>, <em>10)</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.snapshot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.snapshot" title="Permalink to this definition">¶</a></dt>
+<dd><p>single snapshot plot</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>t0: float</strong></p>
+<p><strong>offset</strong> : float</p>
+<p><strong>title</strong> : boolean</p>
+<p><strong>save</strong> : boolean</p>
+<p><strong>fig</strong></p>
+<p><strong>ax</strong></p>
+<p class="last"><strong>figsize</strong> : tuple</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.snapshots">
+<code class="descname">snapshots</code><span class="sig-paren">(</span><em>t0=0</em>, <em>t1=10</em>, <em>offset=15.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.snapshots"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.snapshots" title="Permalink to this definition">¶</a></dt>
+<dd><p>take snapshots</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>t0</strong> : float</p>
+<p class="last"><strong>t1</strong> : float</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.visidev">
+<code class="descname">visidev</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>technoa='HKB'</em>, <em>technob='HKB'</em>, <em>dsf=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.visidev"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.visidev" title="Permalink to this definition">¶</a></dt>
+<dd><p>get link visibility status</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>visi</strong> : pandas Series</p>
+<blockquote class="last">
+<div><p>0  : LOS
+1  : NLOS</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.visidev2">
+<code class="descname">visidev2</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>technoa='HKB'</em>, <em>technob='HKB'</em>, <em>trange=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.visidev2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.visidev2" title="Permalink to this definition">¶</a></dt>
+<dd><p>get link visibility status</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>trange</strong> : nd array</p>
+<blockquote>
+<div><p>time range</p>
+</div></blockquote>
+<p><strong>visi</strong> : pandas Series</p>
+<blockquote class="last">
+<div><p>0  : LOS
+1  : NLOS</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.vlc">
+<code class="descname">vlc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/cormoran.html#CorSer.vlc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.vlc" title="Permalink to this definition">¶</a></dt>
+<dd><p>play video of the associated serie</p>
+</dd></dl>
+
+</dd></dl>
+
 <div class="section" id="notes">
 <h3>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h3>
 <p>Useful members</p>
@@ -490,46 +1347,64 @@ devdf  : device data frame</p>
 </div>
 
 
+           </div>
           </div>
-        </div>
-      </div>
-        <div class="clearer"></div>
-      </div>
-    </div>
+          <footer>
   
 
-    <div class="footer">
-        &copy; 2016, PyLayers developer team.
-      Last updated on Sep 21, 2017.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
-    <span style="padding-left: 5ex;">
-    <a href="../_sources/modules/pylayers.measures.cormoran.rst.txt"
-	    rel="nofollow">Show this page source</a>
-    </span>
-    </div>
-     <div class="rel">
-    
-    <div class="buttonPrevious">
-      <a href="generated/pylayers.measures.cormoran.cor_log.html">
-        Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="../py-modindex.html">
-        Next
-      </a>  
-    </div>
-    
-     </div>
-     <script type="text/javascript">
-       $("div.buttonNext, div.buttonPrevious").hover(
-           function () {
-               $(this).css('background-color', '#AFFFFF');
-           },
-           function () {
-               $(this).css('background-color', '#AFFFFF');
-           }
-       );
-     </script>
-  </body>
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team.
+      Last updated on Nov 07, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
 </html>

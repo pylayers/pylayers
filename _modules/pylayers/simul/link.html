@@ -1,146 +1,155 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pylayers.simul.link &mdash; Python 1 documentation</title>
+  
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  
+  
+
+  
+
+  
+  
     
-    <title>pylayers.simul.link &mdash; Python 1 documentation</title>
-    
-    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
     <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="author" title="About these documents"
+              href="../../../about.html"/>
+    <link rel="top" title="Python 1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/javascript" src="../../../_static/sidebar.js"></script>
-    <link rel="author" title="About these documents" href="../../../about.html" />
-    <link rel="top" title="Python 1 documentation" href="../../../index.html" />
-    <link rel="up" title="Module code" href="../../index.html" />
-<script type="text/javascript">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34943220-1']);
-  _gaq.push(['_trackPageview']);
+          
+            <a href="../../../index.html" class="icon icon-home"> Python
+          
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
-
-  </head>
-  <body role="document">
-
-    <div class="header-wrapper">
-      <div class="header">
-          <p class="logo"><a href="../../../index.html">
-            <img src="../../../_static/pylayers.png" alt="Logo"/>
-          </a>
-          </p><div class="navbar">
-          <ul>
-            <li><a href="../../../download.html">Download</a></li>
-            <li><a href="../../../notebook/TOC.html">User Guide</a></li>
-            <li><a href="../../../modules/pylayers.html">Reference</a></li>
-       </ul>
-
-<div class="search_form">
-
-<div id="cse" style="width: 100%;"></div>
-<script>
-  (function() {
-       var cx = '004820205189002234612:sa15qzuf2ca';
-           var gcse = document.createElement('script');
-               gcse.type = 'text/javascript';
-                   gcse.async = true;
-                       gcse.src = (document.location.protocol == 'https:' ?
-                           'https:' : 'http:') +
-                               '//cse.google.com/cse.js?cx=' + cx;
-                                   var s =
-                                   document.getElementsByTagName('script')[0];
-                                       s.parentNode.insertBefore(gcse, s);
-                                         })();
-</script>
-<gcse:search></gcse:search>
-</div>
-</div> <!-- end navbar --></div>
-    </div>
-
-    <div class="content-wrapper">
-
-      <div class="sphinxsidebar">
-	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
-	<!-- rellinks[1:] is an ugly hack to avoid link to module
-	    index  -->
-	<div class="rellink">
-	<a href="../../../py-modindex.html" title="Python Module Index"
-	    >Modules
-	    <br>
-	    <span class="smallrellink">
-	    Python Module Index
-	    </span>
-	    <span class="hiddenrellink">
-	    Python Module Index
-	    </span>
-	    
-	    </a>
-	</div>
-	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="../../index.html" title="Module code" >
-	Up
-	<br>
-	<span class="smallrellink">
-	Module code
-	</span>
-	<span class="hiddenrellink">
-	Module code
-	</span>
-	
-	</a>
-	</div>
-    </div>
-    <p style="text-align: center; background-color: #BFFFFF">This documentation is
-
-    for Python <strong>version 1</strong>
-    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
-    
-    <h3>Citing</h3>
-    <p>If you use the software, please consider
-    <a href="../../../about.html#citing-pylayers">citing pylayers</a>.</p>
-    <h3>This page</h3>
-	
-    
-    </div>
-	  </div>
-
-
-      <div class="content">
+          
             
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+            <img src="../../../_static/pylayers.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#radio-propagation-simulation">2&nbsp;&nbsp;&nbsp;Radio Propagation Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#handling-agent-mobility">3&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#wireless-body-area-network-related-classes">4&nbsp;&nbsp;&nbsp;Wireless Body Area Network Related Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#some-simulation-examples">5&nbsp;&nbsp;&nbsp;Some Simulation Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#algorithms-for-localization">6&nbsp;&nbsp;&nbsp;Algorithms for Localization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#measurements-tools">7&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#pylayers-tools">8&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#references">9&nbsp;&nbsp;&nbsp;References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/pylayers.html">PyLayers Modules Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>pylayers.simul.link</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <h1>Source code for pylayers.simul.link</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
@@ -149,9 +158,7 @@
 
 <span class="sd">.. currentmodule:: pylayers.simul.link</span>
 
-
 <span class="sd">=======</span>
-<span class="sd">This module runs the electromagnetic simulation at the link level.</span>
 
 <span class="sd">This module runs the electromagnetic simulation for a link.</span>
 <span class="sd">A deterministic link has two termination points and an associated Layout</span>
@@ -170,10 +177,9 @@
 <span class="sd">A common factor of both statistical (SLink) and deterministic channel (DLink)</span>
 <span class="sd">is the exitence of :math:`\alpha_k` and :math:`\tau_k`</span>
 
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
+<span class="sd">.. autoclass:: Link</span>
+<span class="sd">    :members:</span>
 
-<span class="sd">    Link.__add__</span>
 
 
 <span class="sd">SLink Class</span>
@@ -181,10 +187,8 @@
 
 <span class="sd">Slink is for statistical links.</span>
 
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    SLink.onbody</span>
+<span class="sd">.. autoclass:: SLink</span>
+<span class="sd">    :members: </span>
 
 <span class="sd">DLink Class</span>
 <span class="sd">===========</span>
@@ -193,57 +197,14 @@
 
 <span class="sd">&gt;&gt;&gt; from pylayers.simul.link import *</span>
 <span class="sd">&gt;&gt;&gt; L = DLink(verbose=False)</span>
-<span class="sd">&gt;&gt;&gt; aktk = L.eval()</span>
+<span class="sd">&gt;&gt;&gt; L.eval()</span>
+<span class="sd">&gt;&gt;&gt; L.pltcir()</span>
 
 <span class="sd">DLink simulation</span>
 <span class="sd">----------------</span>
 
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    DLink.eval</span>
-<span class="sd">    DLink._show3</span>
-
-
-<span class="sd">DLink init</span>
-<span class="sd">----------</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    DLink.__init__</span>
-<span class="sd">    DLink.__repr__</span>
-<span class="sd">    DLink.reset_config</span>
-<span class="sd">    DLink.check_grpname</span>
-
-
-<span class="sd">search in hdf5 file</span>
-<span class="sd">-------------------</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    DLink.checkh5</span>
-<span class="sd">    DLink.array_exist</span>
-<span class="sd">    DLink.get_grpname</span>
-<span class="sd">    DLink.get_idx</span>
-
-
-<span class="sd">Modify hdf5 file</span>
-<span class="sd">----------------</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-
-<span class="sd">    DLink.save_init</span>
-<span class="sd">    DLink.save</span>
-<span class="sd">    DLink.load</span>
-<span class="sd">    DLink.stack</span>
-<span class="sd">    DLink._delete</span>
-
-
-
+<span class="sd">.. autoclass:: DLink</span>
+<span class="sd">    :members:</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -284,7 +245,7 @@
 
 
 
-<span class="k">class</span> <span class="nc">Link</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
+<div class="viewcode-block" id="Link"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.Link">[docs]</a><span class="k">class</span> <span class="nc">Link</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Link evaluation metaclass</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -301,10 +262,10 @@
         <span class="n">us</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">tk</span><span class="p">)</span>
         <span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ak</span> <span class="o">=</span> <span class="n">ak</span><span class="p">[</span><span class="n">us</span><span class="p">]</span>
         <span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">tk</span> <span class="o">=</span> <span class="n">tk</span><span class="p">[</span><span class="n">us</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">L</span></div>
+        <span class="k">return</span> <span class="n">L</span></div></div>
 
 
-<span class="k">class</span> <span class="nc">SLink</span><span class="p">(</span><span class="n">Link</span><span class="p">):</span>
+<div class="viewcode-block" id="SLink"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.SLink">[docs]</a><span class="k">class</span> <span class="nc">SLink</span><span class="p">(</span><span class="n">Link</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Statistical Link evaluation class</span>
@@ -312,7 +273,7 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">SLink</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="SLink.onbody"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.SLink.onbody.html#pylayers.simul.link.SLink.onbody">[docs]</a>    <span class="k">def</span> <span class="nf">onbody</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">dida</span><span class="p">,</span> <span class="n">didb</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<div class="viewcode-block" id="SLink.onbody"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.SLink.onbody">[docs]</a>    <span class="k">def</span> <span class="nf">onbody</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">dida</span><span class="p">,</span> <span class="n">didb</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Statistical evaluation of a on-body link</span>
 
 <span class="sd">        Parameters</span>
@@ -361,11 +322,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ak</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">tk</span> <span class="o">=</span> <span class="n">getchannel</span><span class="p">(</span><span class="n">emplacement</span><span class="o">=</span><span class="n">emp</span><span class="p">,</span> <span class="n">intersection</span><span class="o">=</span><span class="n">eng</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">eng</span> <span class="o">=</span> <span class="n">eng</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ak</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">tk</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ak</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">tk</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span></div></div>
 
 
 
-<span class="k">class</span> <span class="nc">DLink</span><span class="p">(</span><span class="n">Link</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink">[docs]</a><span class="k">class</span> <span class="nc">DLink</span><span class="p">(</span><span class="n">Link</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Deterministic Link Class</span>
 
 <span class="sd">    Attributes</span>
@@ -516,6 +477,7 @@
                    <span class="s1">&#39;wav&#39;</span><span class="p">:</span><span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(),</span>
                    <span class="s1">&#39;cutoff&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span>
                    <span class="s1">&#39;threshold&#39;</span><span class="p">:</span><span class="mf">0.8</span><span class="p">,</span>
+                   <span class="s1">&#39;delay_excess_max_ns&#39;</span><span class="p">:</span><span class="mi">500</span><span class="p">,</span>
                    <span class="s1">&#39;save_opt&#39;</span><span class="p">:[</span><span class="s1">&#39;sig&#39;</span><span class="p">,</span><span class="s1">&#39;ray2&#39;</span><span class="p">,</span><span class="s1">&#39;ray&#39;</span><span class="p">,</span><span class="s1">&#39;Ct&#39;</span><span class="p">,</span><span class="s1">&#39;H&#39;</span><span class="p">],</span>
                    <span class="s1">&#39;save_idx&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
                    <span class="s1">&#39;force_create&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
@@ -696,6 +658,10 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">cutoff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cutoff</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">delay_excess_max_ns</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_delay_excess_max_ns</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">threshold</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -895,6 +861,17 @@
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;ca&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;cb&#39;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">checkh5</span><span class="p">()</span>
 
+    <span class="nd">@delay_excess_max_ns.setter</span>
+    <span class="k">def</span> <span class="nf">delay_excess_max_ns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">delay_excess_max_ns</span><span class="p">):</span>
+
+        <span class="n">delay_excess_max_ns</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">delay_excess_max_ns</span><span class="p">,</span><span class="mf">0.</span><span class="p">)</span>
+       
+        <span class="bp">self</span><span class="o">.</span><span class="n">_delay_excess_max_ns</span> <span class="o">=</span> <span class="n">delay_excess_max_ns</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;ca&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;cb&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">checkh5</span>
+
+
     <span class="nd">@fGHz.setter</span>
     <span class="k">def</span> <span class="nf">fGHz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">freq</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
@@ -999,11 +976,13 @@
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;----------------------------- </span><span class="se">\n</span><span class="s1">&#39;</span>
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;cutoff : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;threshold :&#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;delay_excess_max : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delay_excess_max_ns</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; ns </span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;dist_excess_max : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delay_excess_max_ns</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; m </span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;No Layout specified&#39;</span>
         <span class="k">return</span> <span class="n">s</span></div>
 
-    <span class="k">def</span> <span class="nf">inforay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">iray</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.inforay"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.inforay">[docs]</a>    <span class="k">def</span> <span class="nf">inforay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">iray</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provide full information about a specified ray</span>
 
 <span class="sd">        Parameters</span>
@@ -1026,7 +1005,7 @@
             <span class="n">C</span> <span class="o">=</span> <span class="n">dist</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">iray</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">iray</span><span class="p">,</span><span class="mi">0</span><span class="p">]],</span>
                         <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">iray</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">iray</span><span class="p">,</span><span class="mi">0</span><span class="p">]]]</span> <span class="p">)</span>
             <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">PM</span><span class="p">,</span><span class="n">C</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">locbas</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">locbas</span><span class="p">()</span></div>
 
     <span class="c1"># def initfreq(self):</span>
     <span class="c1">#     &quot;&quot;&quot; Automatic freq determination from</span>
@@ -1082,7 +1061,7 @@
     <span class="c1">#         self.fGHz = np.array([2.3,2.4,2.5])</span>
 
 
-    <span class="k">def</span> <span class="nf">init_positions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.init_positions"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.init_positions">[docs]</a>    <span class="k">def</span> <span class="nf">init_positions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; initialize random positions for a link</span>
 
 <span class="sd">        Parameters</span>
@@ -1129,9 +1108,9 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">b</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span></div>
 
-<div class="viewcode-block" id="DLink.reset_config"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.reset_config.html#pylayers.simul.link.DLink.reset_config">[docs]</a>    <span class="k">def</span> <span class="nf">reset_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.reset_config"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.reset_config">[docs]</a>    <span class="k">def</span> <span class="nf">reset_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; reset configuration when a new layout is loaded</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1176,7 +1155,7 @@
             <span class="k">pass</span></div>
 
 
-<div class="viewcode-block" id="DLink.checkh5"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.checkh5.html#pylayers.simul.link.DLink.checkh5">[docs]</a>    <span class="k">def</span> <span class="nf">checkh5</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.checkh5"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.checkh5">[docs]</a>    <span class="k">def</span> <span class="nf">checkh5</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; check existence of previous simulations run with the same parameters.</span>
 
 
@@ -1193,7 +1172,7 @@
 
 
 
-<div class="viewcode-block" id="DLink.save_init"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.save_init.html#pylayers.simul.link.DLink.save_init">[docs]</a>    <span class="k">def</span> <span class="nf">save_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename_long</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.save_init"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.save_init">[docs]</a>    <span class="k">def</span> <span class="nf">save_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename_long</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; initialize the hdf5 file for link saving </span>
 
 <span class="sd">        Parameters</span>
@@ -1242,7 +1221,7 @@
             <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Links: issue when initializing h5py file&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DLink.stack"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.stack.html#pylayers.simul.link.DLink.stack">[docs]</a>    <span class="k">def</span> <span class="nf">stack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">array</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.stack"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.stack">[docs]</a>    <span class="k">def</span> <span class="nf">stack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">array</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; stack new array in h5py file</span>
 <span class="sd">            for a given key (dataframe/group)</span>
 
@@ -1304,7 +1283,7 @@
 
 
 
-<div class="viewcode-block" id="DLink.save"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.save.html#pylayers.simul.link.DLink.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">obj</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">grpname</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.save"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">obj</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">grpname</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Save a given object in the correct group</span>
 
 <span class="sd">        Parameters</span>
@@ -1333,7 +1312,7 @@
             <span class="k">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">__class__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; from &#39;</span><span class="o">+</span> <span class="n">grpname</span> <span class="o">+</span> <span class="s1">&#39; saved&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="DLink.load"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.load.html#pylayers.simul.link.DLink.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">obj</span><span class="p">,</span><span class="n">grpname</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.load"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">obj</span><span class="p">,</span><span class="n">grpname</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Load a given object in the correct grp</span>
 
 <span class="sd">        Parameters</span>
@@ -1360,7 +1339,7 @@
             <span class="k">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">__class__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; from &#39;</span><span class="o">+</span> <span class="n">grpname</span> <span class="o">+</span> <span class="s1">&#39; loaded&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="DLink.get_grpname"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.get_grpname.html#pylayers.simul.link.DLink.get_grpname">[docs]</a>    <span class="k">def</span> <span class="nf">get_grpname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.get_grpname"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.get_grpname">[docs]</a>    <span class="k">def</span> <span class="nf">get_grpname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Determine the data group name for the given configuration</span>
 
 <span class="sd">        Notes</span>
@@ -1441,7 +1420,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s1">&#39;H&#39;</span><span class="p">][</span><span class="s1">&#39;grpname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grpname</span></div>
 
 
-<div class="viewcode-block" id="DLink.check_grpname"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.check_grpname.html#pylayers.simul.link.DLink.check_grpname">[docs]</a>    <span class="k">def</span> <span class="nf">check_grpname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.check_grpname"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.check_grpname">[docs]</a>    <span class="k">def</span> <span class="nf">check_grpname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Check if the key&#39;s data with a given groupname</span>
 <span class="sd">            already exists in the h5py file</span>
 
@@ -1472,7 +1451,7 @@
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Link exist: issue during stacking&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="DLink.get_idx"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.get_idx.html#pylayers.simul.link.DLink.get_idx">[docs]</a>    <span class="k">def</span> <span class="nf">get_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">array</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.get_idx"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.get_idx">[docs]</a>    <span class="k">def</span> <span class="nf">get_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">array</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; try to get the index of the requested array in the group key</span>
 <span class="sd">            of the hdf5 file.</span>
 <span class="sd">            If array doesn&#39;t exist, the hdf5file[key] array is stacked</span>
@@ -1521,7 +1500,7 @@
         <span class="k">return</span> <span class="n">u_opt</span><span class="p">,</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="DLink.array_exist"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.array_exist.html#pylayers.simul.link.DLink.array_exist">[docs]</a>    <span class="k">def</span> <span class="nf">array_exist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">array</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span> <span class="p">:</span>
+<div class="viewcode-block" id="DLink.array_exist"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.array_exist">[docs]</a>    <span class="k">def</span> <span class="nf">array_exist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">array</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span> <span class="p">:</span>
         <span class="sd">&quot;&quot;&quot; check an array key has already been stored in h5py file</span>
 
 
@@ -1617,7 +1596,7 @@
 
         <span class="k">return</span> <span class="n">ua</span></div>
 
-    <span class="k">def</span> <span class="nf">evalH</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.evalH"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.evalH">[docs]</a>    <span class="k">def</span> <span class="nf">evalH</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; evaluate channel transfer function</span>
 
 <span class="sd">        Notes</span>
@@ -1633,9 +1612,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">locbas</span><span class="p">(</span><span class="n">Ta</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Ta</span><span class="p">,</span> <span class="n">Tb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Tb</span><span class="p">)</span>
         <span class="c1"># Transmission channel calculation</span>
         <span class="n">H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">debug</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="n">H</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="n">H</span></div>
 
-<div class="viewcode-block" id="DLink.eval"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.eval.html#pylayers.simul.link.DLink.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.eval"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; evaluate the link</span>
 
 
@@ -1725,6 +1704,11 @@
             <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
+        <span class="k">if</span> <span class="s1">&#39;delay_excess_max_ns&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;delay_excess_max_ns&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">delay_excess_max_ns</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">delay_excess_max_ns</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;delay_excess_max_ns&#39;</span><span class="p">]</span>
+
         <span class="k">if</span> <span class="s1">&#39;cutoff&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cutoff&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1784,9 +1768,11 @@
         <span class="k">else</span> <span class="p">:</span>
             <span class="c1">## 1 is the default signature determination algorithm</span>
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alg&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                
                 <span class="n">Si</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cutoff</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cutoff&#39;</span><span class="p">],</span>
                         <span class="n">diffraction</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;diffraction&#39;</span><span class="p">],</span>
                         <span class="n">threshold</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;threshold&#39;</span><span class="p">],</span>
+                        <span class="n">delay_excess_max_ns</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;delay_excess_max_ns&#39;</span><span class="p">],</span>
                         <span class="n">nD</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nD&#39;</span><span class="p">],</span>
                         <span class="n">nR</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nR&#39;</span><span class="p">],</span>
                         <span class="n">nT</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nT&#39;</span><span class="p">],</span>
@@ -1954,7 +1940,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">checkh5</span><span class="p">()</span></div>
 
 
-    <span class="k">def</span> <span class="nf">afp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">az</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">tilt</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s1">&#39;V&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.adp"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.adp">[docs]</a>    <span class="k">def</span> <span class="nf">adp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">imax</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; construct the angular delay profile</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        imax : int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adpmes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">afpmes</span><span class="o">.</span><span class="n">toadp</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adpmes</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">imax</span><span class="o">=</span><span class="n">imax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adprt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">afprt</span><span class="o">.</span><span class="n">toadp</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adprt</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">imax</span><span class="o">=</span><span class="n">imax</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="DLink.afp"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.afp">[docs]</a>    <span class="k">def</span> <span class="nf">afp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Evaluate angular frequency profile </span>
 
 <span class="sd">        Parameters</span>
@@ -1965,44 +1963,120 @@
 <span class="sd">        az : azimuth angle (radian)  </span>
 <span class="sd">        tilt : tilt angle (-pi/2&lt;tilt&lt;pi/2) </span>
 <span class="sd">        polar : string</span>
+<span class="sd">        win : string &#39;rect&#39; | &#39;hamming&#39;</span>
+<span class="sd">        _filemeas : string </span>
+<span class="sd">        _filecal : string </span>
+<span class="sd">        ang_offset : </span>
+<span class="sd">        BW : float </span>
+<span class="sd">            bandwidth</span>
+<span class="sd">        ext : string </span>
+<span class="sd">            &#39;txt&#39; | &#39;mat&#39;</span>
+<span class="sd">        dirmeas : string </span>
+<span class="sd">            directory of the data in the project path </span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        If a measurement file is given the angular range is obtained from the measurement</span>
+<span class="sd">        otherwise the variable az is used. </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;fGHz&#39;</span><span class="p">:</span><span class="mf">32.6</span><span class="p">,</span>
+                     <span class="s1">&#39;az&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                     <span class="s1">&#39;tilt&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+                     <span class="s1">&#39;polar&#39;</span><span class="p">:</span><span class="s1">&#39;V&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;win&#39;</span><span class="p">:</span><span class="s1">&#39;rect&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;_filemeas&#39;</span><span class="p">:</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;_filecal&#39;</span><span class="p">:</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;ang_offset&#39;</span> <span class="p">:</span> <span class="mf">0.37</span><span class="p">,</span>
+                     <span class="s1">&#39;BW&#39;</span><span class="p">:</span> <span class="mf">1.6</span><span class="p">,</span>
+                     <span class="s1">&#39;ext&#39;</span><span class="p">:</span><span class="s1">&#39;txt&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;dirmeas&#39;</span><span class="p">:</span><span class="s1">&#39;meas&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;refinement&#39;</span><span class="p">:</span><span class="bp">False</span>
+                    <span class="p">}</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> 
 
+        <span class="n">fGHz</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;fGHz&#39;</span><span class="p">)</span>
+        <span class="n">az</span>   <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;az&#39;</span><span class="p">)</span>
+        <span class="n">tilt</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;tilt&#39;</span><span class="p">)</span>
+        <span class="n">polar</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;polar&#39;</span><span class="p">)</span>
+        <span class="n">win</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;win&#39;</span><span class="p">)</span>               <span class="c1"># argument for loadmes</span>
+        <span class="n">_filemeas</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;_filemeas&#39;</span><span class="p">)</span>   <span class="c1"># argument for loadmes</span>
+        <span class="n">_filecal</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;_filecal&#39;</span><span class="p">)</span>     <span class="c1"># argument for loadmes</span>
+        <span class="n">dirmeas</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dirmeas&#39;</span><span class="p">)</span>      <span class="c1"># argument for loadmes</span>
+        <span class="n">ang_offset</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ang_offset&#39;</span><span class="p">)</span> <span class="c1"># argument for loadmes</span>
+        <span class="n">BW</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;BW&#39;</span><span class="p">)</span>                 <span class="c1"># argument for loadmes</span>
+        <span class="n">ext</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ext&#39;</span><span class="p">)</span>               <span class="c1"># argument for loadmes</span>
+        <span class="n">refinement</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;refinement&#39;</span><span class="p">)</span>  <span class="c1"># argument for loadmes</span>
+
+        <span class="c1"># read measurement if available</span>
+        <span class="k">if</span> <span class="n">_filemeas</span><span class="o">!=</span><span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">fcGHz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">afpmes</span> <span class="o">=</span> <span class="n">AFPchannel</span><span class="p">(</span><span class="n">tx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span><span class="n">rx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">afpmes</span><span class="o">.</span><span class="n">loadmes</span><span class="p">(</span><span class="n">_filemeas</span><span class="p">,</span>
+                                <span class="n">_filecal</span><span class="p">,</span>
+                                 <span class="n">fcGHz</span><span class="o">=</span><span class="n">fcGHz</span><span class="p">,</span>
+                                 <span class="n">BW</span><span class="o">=</span><span class="n">BW</span><span class="p">,</span>
+                                 <span class="n">win</span><span class="o">=</span><span class="n">win</span><span class="p">,</span>
+                                 <span class="n">ang_offset</span><span class="o">=</span><span class="n">ang_offset</span><span class="p">,</span>
+                                 <span class="n">ext</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span>
+                                 <span class="n">dirmeas</span><span class="o">=</span><span class="n">dirmeas</span><span class="p">,</span>
+                                 <span class="n">refinement</span><span class="o">=</span><span class="n">refinement</span><span class="p">)</span>
+            <span class="n">az</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">afpmes</span><span class="o">.</span><span class="n">az</span>
+            <span class="c1">#</span>
+            <span class="c1"># afpmes.x</span>
+            <span class="c1"># afpmes.y</span>
+            <span class="c1"># afpmes.fcGHz</span>
+            <span class="c1"># afpmes.az     measure angular range </span>
+            <span class="c1"># afpmes.azrt   ray tracing angular range  </span>
         <span class="c1"># create an empty AFP </span>
         <span class="c1"># tx = a</span>
         <span class="c1"># rx = b </span>
         <span class="c1"># angular range (a) : phi </span>
         <span class="c1">#</span>
-        <span class="n">afp</span> <span class="o">=</span> <span class="n">AFPchannel</span><span class="p">(</span><span class="n">tx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span><span class="n">rx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span><span class="n">az</span><span class="o">=</span><span class="n">az</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">ph</span> <span class="ow">in</span> <span class="n">az</span><span class="p">:</span>
+       
+        <span class="bp">self</span><span class="o">.</span><span class="n">afprt</span> <span class="o">=</span> <span class="n">AFPchannel</span><span class="p">(</span><span class="n">tx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span><span class="n">rx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span><span class="n">az</span><span class="o">=</span><span class="n">az</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">ph</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">az</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Tb</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">MATP</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="o">.</span><span class="n">sl</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="o">.</span><span class="n">el</span><span class="p">,</span><span class="n">ph</span><span class="p">,</span><span class="n">tilt</span><span class="p">,</span><span class="n">polar</span><span class="p">)</span>
             <span class="c1"># self._update_show3(ant=&#39;b&#39;)</span>
             <span class="c1"># pdb.set_trace()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">evalH</span><span class="p">()</span>
+            <span class="n">E</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">k</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dpadp</span> <span class="o">=</span> <span class="n">E</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> 
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dpadp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">dpadp</span><span class="p">,</span><span class="n">E</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="o">...</span><span class="p">]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">!=</span><span class="mi">1</span><span class="p">:</span>
                 <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="mi">1j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,:]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="mi">1j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">fGHz</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">afp</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">afp</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">S</span><span class="p">)))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">afprt</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">afprt</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">S</span><span class="p">)))</span>
             <span class="k">except</span><span class="p">:</span>
-                <span class="n">afp</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">afprt</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">!=</span><span class="mi">1</span><span class="p">:</span>
-            <span class="n">afp</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">x</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">afprt</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">x</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">afprt</span><span class="o">.</span><span class="n">fcGHz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">afprt</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">afprt</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">afp</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">fGHz</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">afprt</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">fGHz</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">afprt</span><span class="o">.</span><span class="n">fcGHz</span> <span class="o">=</span> <span class="n">fGHz</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">dpdp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dpadp</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dpap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dpadp</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+        <span class="c1">#return(afp)</span>
 
-        <span class="k">return</span><span class="p">(</span><span class="n">afp</span><span class="p">)</span>
 
 
-
-    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.select"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.select">[docs]</a>    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cid</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;button_press_event&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">OnClick</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">OnClick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.OnClick"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.OnClick">[docs]</a>    <span class="k">def</span> <span class="nf">OnClick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">event</span><span class="p">):</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">xdata</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">ydata</span>
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
@@ -2016,9 +2090,9 @@
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_show3</span><span class="p">()</span>
-        <span class="k">print</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">print</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.show"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show the link</span>
 
 <span class="sd">        Parameters</span>
@@ -2072,10 +2146,12 @@
                    <span class="s1">&#39;axis&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
                    <span class="s1">&#39;lr&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
                    <span class="s1">&#39;ls&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+                   <span class="s1">&#39;fig&#39;</span><span class="p">:[],</span>
+                   <span class="s1">&#39;ax&#39;</span><span class="p">:[],</span>
                    <span class="s1">&#39;figsize&#39;</span><span class="p">:(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>
                    <span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span>
-                   <span class="s1">&#39;rays&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
-                   <span class="s1">&#39;bsig&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                   <span class="s1">&#39;rays&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                   <span class="s1">&#39;bsig&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
                    <span class="s1">&#39;laddr&#39;</span><span class="p">:[(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)],</span>
                    <span class="s1">&#39;cmap&#39;</span><span class="p">:</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">hot</span><span class="p">,</span>
                    <span class="s1">&#39;pol&#39;</span><span class="p">:</span><span class="s1">&#39;tot&#39;</span><span class="p">,</span>
@@ -2083,6 +2159,7 @@
                    <span class="s1">&#39;width&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
                    <span class="s1">&#39;alpha&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
                    <span class="s1">&#39;col&#39;</span><span class="p">:</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;radius&#39;</span><span class="p">:</span><span class="mi">90</span><span class="p">,</span>
                    <span class="s1">&#39;dB&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
                    <span class="s1">&#39;labels&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
                    <span class="s1">&#39;aw&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
@@ -2092,10 +2169,27 @@
             <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">=</span><span class="n">defaults</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">]</span><span class="o">==</span><span class="p">[]:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;figsize&#39;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">]</span> 
+
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">]</span><span class="o">==</span><span class="p">[]:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">]</span>
+
         <span class="c1">#</span>
         <span class="c1"># Layout</span>
         <span class="c1">#</span>
-        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;figsize&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">],</span><span class="n">aw</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;aw&#39;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;axis&#39;</span><span class="p">])</span>
+       
+        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span>
+                              <span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                              <span class="n">fig</span> <span class="o">=</span> <span class="n">fig</span><span class="p">,</span>
+                              <span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span><span class="p">,</span>
+                              <span class="n">labels</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">],</span>
+                              <span class="n">aw</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;aw&#39;</span><span class="p">],</span>
+                              <span class="n">axis</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;axis&#39;</span><span class="p">])</span>
         <span class="c1">#</span>
         <span class="c1"># Point A</span>
         <span class="c1">#</span>
@@ -2114,21 +2208,22 @@
         <span class="c1"># Plot Rays</span>
         <span class="c1">#</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;rays&#39;</span><span class="p">]:</span>
-            <span class="n">ECtt</span><span class="p">,</span><span class="n">ECpp</span><span class="p">,</span><span class="n">ECtp</span><span class="p">,</span><span class="n">ECpt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;tt&#39;</span><span class="p">:</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">ECtt</span>
-            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;pp&#39;</span><span class="p">:</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">ECpp</span>
-            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;tp&#39;</span><span class="p">:</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">ECtp</span>
-            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;pt&#39;</span><span class="p">:</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">ECpt</span>
-            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;tot&#39;</span><span class="p">:</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">ECtt</span><span class="o">+</span><span class="n">ECpp</span><span class="o">+</span><span class="n">ECpt</span><span class="o">+</span><span class="n">ECtp</span>
-            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;co&#39;</span><span class="p">:</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">ECtt</span><span class="o">+</span><span class="n">ECpp</span>
-            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;cross&#39;</span><span class="p">:</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">ECtp</span><span class="o">+</span><span class="n">ECpt</span>
+            <span class="c1">#ECtt,ECpp,ECtp,ECpt = self.C.energy()</span>
+            <span class="c1">#if kwargs[&#39;pol&#39;]==&#39;tt&#39;:</span>
+            <span class="c1">#    val = ECtt</span>
+            <span class="c1">#if kwargs[&#39;pol&#39;]==&#39;pp&#39;:</span>
+            <span class="c1">#    val = ECpp</span>
+            <span class="c1">#if kwargs[&#39;pol&#39;]==&#39;tp&#39;:</span>
+            <span class="c1">#    val = ECtp</span>
+            <span class="c1">#if kwargs[&#39;pol&#39;]==&#39;pt&#39;:</span>
+            <span class="c1">#    val = ECpt</span>
+            <span class="c1">#if kwargs[&#39;pol&#39;]==&#39;tot&#39;:</span>
+            <span class="c1">#    val = ECtt+ECpp+ECpt+ECtp</span>
+            <span class="c1">#if kwargs[&#39;pol&#39;]==&#39;co&#39;:</span>
+            <span class="c1">#    val = ECtt+ECpp</span>
+            <span class="c1">#if kwargs[&#39;pol&#39;]==&#39;cross&#39;:</span>
+            <span class="c1">#&quot;    val = ECtp+ECpt</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">()[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> 
 
             <span class="n">clm</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cmap&#39;</span><span class="p">]</span>
             <span class="c1">#</span>
@@ -2142,18 +2237,27 @@
             <span class="n">vmin</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
             <span class="n">vmax</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> 
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dB&#39;</span><span class="p">]:</span>
-                <span class="n">vmin</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">vmin</span><span class="p">)</span>
-                <span class="n">vmax</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">vmax</span><span class="p">)</span>
+                <span class="n">vmin</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">vmin</span><span class="p">)</span>
+                <span class="n">vmax</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">vmax</span><span class="p">)</span>
+            
+            
+            <span class="c1">#</span>
+            <span class="c1"># limitation of the vizualization zone around the center of the link </span>
+            <span class="c1">#</span>
+            <span class="n">pm</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">pm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;radius&#39;</span><span class="p">],</span><span class="n">pm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;radius&#39;</span><span class="p">])</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">pm</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;radius&#39;</span><span class="p">],</span><span class="n">pm</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;radius&#39;</span><span class="p">])</span>
 
             <span class="k">for</span> <span class="n">ir</span>  <span class="ow">in</span> <span class="n">lr</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dB&#39;</span><span class="p">]:</span>
-                    <span class="n">RayEnergy</span><span class="o">=</span><span class="nb">max</span><span class="p">((</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="n">ir</span><span class="p">]</span><span class="o">/</span><span class="n">val</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="o">+</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dyn&#39;</span><span class="p">]),</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dyn&#39;</span><span class="p">]</span>
+                    <span class="n">RayEnergy</span><span class="o">=</span><span class="nb">max</span><span class="p">((</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="n">ir</span><span class="p">]</span><span class="o">/</span><span class="n">val</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="o">+</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dyn&#39;</span><span class="p">]),</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dyn&#39;</span><span class="p">]</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">RayEnergy</span><span class="o">=</span><span class="n">val</span><span class="p">[</span><span class="n">ir</span><span class="p">]</span><span class="o">/</span><span class="n">val</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
 
                 <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;col&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;cmap&#39;</span><span class="p">:</span>
                     <span class="n">col</span> <span class="o">=</span> <span class="n">clm</span><span class="p">(</span><span class="n">RayEnergy</span><span class="p">)</span>
-                    <span class="n">width</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="n">RayEnergy</span>
+                    <span class="c1">#width = 10*RayEnergy</span>
+                    <span class="n">width</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> 
                     <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">col</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;col&#39;</span><span class="p">]</span>
@@ -2173,15 +2277,16 @@
                 <span class="n">sm</span><span class="o">.</span><span class="n">_A</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">sm</span><span class="p">)</span>
         <span class="c1">#</span>
-        <span class="c1"># Plot Rays</span>
+        <span class="c1"># Plot signature</span>
         <span class="c1">#</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;bsig&#39;</span><span class="p">]:</span>
             <span class="k">for</span> <span class="n">addr</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;laddr&#39;</span><span class="p">]:</span> 
                 <span class="n">seq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Si</span><span class="p">[</span><span class="n">addr</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">2</span><span class="o">*</span><span class="n">addr</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span><span class="mi">2</span><span class="o">*</span><span class="n">addr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">2</span><span class="p">,:]</span>
                 <span class="n">Si</span> <span class="o">=</span> <span class="n">Signature</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+                <span class="n">isvalid</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">u</span> <span class="o">=</span> <span class="n">Si</span><span class="o">.</span><span class="n">sig2ray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
                 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">Si</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span></div>
 
 <div class="viewcode-block" id="DLink._show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink._show3.html#pylayers.simul.link.DLink._show3">[docs]</a>    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rays</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">lay</span><span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">ant</span><span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">newfig</span><span class="o">=</span> <span class="bp">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; display the simulation scene using Mayavi</span>
@@ -2411,7 +2516,7 @@
         <span class="c1"># else:</span>
         <span class="c1">#     ds.children[0].children[0].actor.property.opacity=1.</span>
 
-    <span class="k">def</span> <span class="nf">plt_cir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.plt_cir"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.plt_cir">[docs]</a>    <span class="k">def</span> <span class="nf">plt_cir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot link channel impulse response</span>
 
 <span class="sd">        Parameters</span>
@@ -2422,6 +2527,8 @@
 <span class="sd">        fftshift : boolean </span>
 <span class="sd">        rays : boolean</span>
 <span class="sd">            display rays contributors</span>
+<span class="sd">        fspl : boolean</span>
+<span class="sd">            display free space path loss</span>
 <span class="sd">        </span>
 <span class="sd">        See Also</span>
 <span class="sd">        --------</span>
@@ -2436,6 +2543,8 @@
                     <span class="s1">&#39;Nf&#39;</span><span class="p">:</span><span class="mi">1000</span><span class="p">,</span>
                     <span class="s1">&#39;rays&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
                     <span class="s1">&#39;fspl&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                    <span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span>
+                    <span class="s1">&#39;vmax&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">40</span>
                     <span class="p">}</span>
 
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -2450,32 +2559,45 @@
             <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">]</span>
+        
+        <span class="n">taumax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="n">BWGHz</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;BWGHz&#39;</span><span class="p">]</span>
 
+        <span class="n">Nf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;Nf&#39;</span><span class="p">],</span><span class="n">taumax</span><span class="o">*</span><span class="n">BWGHz</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
         <span class="c1"># getcir is a Tchannel method </span>
-        <span class="n">ir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">getcir</span><span class="p">(</span><span class="n">BWGHz</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;BWGHz&#39;</span><span class="p">],</span><span class="n">Nf</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;Nf&#39;</span><span class="p">])</span>
+
+        <span class="n">ir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">getcir</span><span class="p">(</span><span class="n">BWGHz</span> <span class="o">=</span><span class="n">BWGHz</span><span class="p">,</span><span class="n">Nf</span><span class="o">=</span><span class="n">Nf</span><span class="p">)</span>
         <span class="n">ir</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;vmin&#39;</span><span class="p">],</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;vmax&#39;</span><span class="p">])</span>
+
+
         <span class="n">delay</span> <span class="o">=</span> <span class="n">ir</span><span class="o">.</span><span class="n">x</span> 
         <span class="n">dist</span> <span class="o">=</span> <span class="n">delay</span><span class="o">*</span><span class="mf">0.3</span>
         <span class="n">FSPL0</span> <span class="o">=</span> <span class="o">-</span><span class="mf">32.4</span><span class="o">-</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span> 
         <span class="n">FSPLG</span> <span class="o">=</span> <span class="n">FSPL0</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="o">.</span><span class="n">GdBmax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="o">.</span><span class="n">GdBmax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> 
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fspl&#39;</span><span class="p">]:</span>
+            <span class="c1"># Free space path loss</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">delay</span><span class="p">,</span><span class="n">FSPL0</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;FSPL&#39;</span><span class="p">)</span>
+            <span class="c1"># Free space path loss + gain</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">delay</span><span class="p">,</span><span class="n">FSPLG</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;FSPL+Gtmax+Grmax&#39;</span><span class="p">)</span>
 
 
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;rays&#39;</span><span class="p">]</span> <span class="p">:</span> 
+            <span class="c1"># energy of each ray</span>
             <span class="n">ER</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">())</span>
             <span class="n">color_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ER</span><span class="p">))</span><span class="c1">#np.linspace( 0, np.pi, len(ER))</span>
+            <span class="c1"># sort rays by increasing energy</span>
             <span class="n">uER</span> <span class="o">=</span> <span class="n">ER</span><span class="o">.</span><span class="n">argsort</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">colors</span><span class="o">=</span> <span class="n">color_range</span><span class="p">[</span><span class="n">uER</span><span class="p">]</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">[</span><span class="n">uER</span><span class="p">],</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">uER</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]),</span><span class="n">c</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;hot&#39;</span><span class="p">)</span>
+            <span class="c1"># most important rays , it=0 ir=0 , if =0 </span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">[</span><span class="n">uER</span><span class="p">],</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">uER</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])),</span><span class="n">c</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;hot&#39;</span><span class="p">)</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">)</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">)</span><span class="o">+</span><span class="mi">10</span><span class="p">])</span>
 
         <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">,</span><span class="n">ir</span></div>
 
 
-    <span class="k">def</span> <span class="nf">plt_doa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.plt_doa"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.plt_doa">[docs]</a>    <span class="k">def</span> <span class="nf">plt_doa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;plot direction of arrival and departure</span>
 
 <span class="sd">        Parameters</span>
@@ -2508,9 +2630,9 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;doa&#39;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">plotd</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">plotd</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
         
-    <span class="k">def</span> <span class="nf">plt_dod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.plt_dod"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.plt_dod">[docs]</a>    <span class="k">def</span> <span class="nf">plt_dod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;plot direction of arrival and departure</span>
 
 <span class="sd">        Parameters</span>
@@ -2543,9 +2665,9 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;dod&#39;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">plotd</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">plotd</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">plt_dspread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.plt_dspread"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.plt_dspread">[docs]</a>    <span class="k">def</span> <span class="nf">plt_dspread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot delay spread</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;fig&#39;</span><span class="p">:[],</span>
@@ -2568,9 +2690,9 @@
 
         <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="n">bins</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">)])</span>
-        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span></div>
 
-    <span class="k">def</span> <span class="nf">plt_aspread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.plt_aspread"><a class="viewcode-back" href="../../../modules/pylayers.simul.link.html#pylayers.simul.link.DLink.plt_aspread">[docs]</a>    <span class="k">def</span> <span class="nf">plt_aspread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot angular spread</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;fig&#39;</span><span class="p">:[],</span>
@@ -2593,7 +2715,7 @@
 
         <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">doa</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">bins</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">doa</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span></div>
 
     <span class="k">def</span> <span class="nf">_autocufoff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; automatically determine minimum cutoff</span>
@@ -2620,44 +2742,71 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">uus</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span> <span class="o">=</span> <span class="mi">2</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span></div>
 
 <span class="k">if</span> <span class="p">(</span><span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">):</span>
     <span class="c1">#plt.ion()</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 </pre></div>
 
+           </div>
           </div>
-        </div>
-      </div>
-        <div class="clearer"></div>
-      </div>
-    </div>
+          <footer>
   
 
-    <div class="footer">
-        &copy; 2016, PyLayers developer team.
-      Last updated on Sep 21, 2017.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
-    </div>
-     <div class="rel">
-    
-    <div class="buttonPrevious">
-      <a href="../../../py-modindex.html">
-        Previous
-      </a>  
-    </div>
-    
-     </div>
-     <script type="text/javascript">
-       $("div.buttonNext, div.buttonPrevious").hover(
-           function () {
-               $(this).css('background-color', '#AFFFFF');
-           },
-           function () {
-               $(this).css('background-color', '#AFFFFF');
-           }
-       );
-     </script>
-  </body>
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team.
+      Last updated on Nov 07, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
 </html>

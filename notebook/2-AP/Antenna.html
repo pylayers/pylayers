@@ -1,195 +1,181 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Description of antennas &mdash; Python 1 documentation</title>
+  
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  
+  
+
+  
+
+  
+  
     
-    <title>Description of antennas &mdash; Python 1 documentation</title>
-    
-    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
     <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="author" title="About these documents"
+              href="../../about.html"/>
+    <link rel="top" title="Python 1 documentation" href="../../index.html"/>
+        <link rel="up" title="1   Overview" href="../TOC.html"/>
+        <link rel="next" title="Scalar Spherical Harmonics" href="AntennaSSH.html"/>
+        <link rel="prev" title="Slabs and Materials" href="SlabsMaterials.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/javascript" src="../../_static/sidebar.js"></script>
-    <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="Python 1 documentation" href="../../index.html" />
-    <link rel="up" title="1   Overview" href="../TOC.html" />
-    <link rel="next" title="Scalar Spherical Harmonics" href="AntennaSSH.html" />
-    <link rel="prev" title="Slabs and Materials" href="SlabsMaterials.html" />
-<script type="text/javascript">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34943220-1']);
-  _gaq.push(['_trackPageview']);
+          
+            <a href="../../index.html" class="icon icon-home"> Python
+          
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
-
-  </head>
-  <body role="document">
-
-    <div class="header-wrapper">
-      <div class="header">
-          <p class="logo"><a href="../../index.html">
-            <img src="../../_static/pylayers.png" alt="Logo"/>
+          
+            
+            <img src="../../_static/pylayers.png" class="logo" />
+          
           </a>
-          </p><div class="navbar">
-          <ul>
-            <li><a href="../../download.html">Download</a></li>
-            <li><a href="../TOC.html">User Guide</a></li>
-            <li><a href="../../modules/pylayers.html">Reference</a></li>
-       </ul>
 
-<div class="search_form">
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
 
-<div id="cse" style="width: 100%;"></div>
-<script>
-  (function() {
-       var cx = '004820205189002234612:sa15qzuf2ca';
-           var gcse = document.createElement('script');
-               gcse.type = 'text/javascript';
-                   gcse.async = true;
-                       gcse.src = (document.location.protocol == 'https:' ?
-                           'https:' : 'http:') +
-                               '//cse.google.com/cse.js?cx=' + cx;
-                                   var s =
-                                   document.getElementsByTagName('script')[0];
-                                       s.parentNode.insertBefore(gcse, s);
-                                         })();
-</script>
-<gcse:search></gcse:search>
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
 </div>
-</div> <!-- end navbar --></div>
-    </div>
 
-    <div class="content-wrapper">
+          
+        </div>
 
-      <div class="sphinxsidebar">
-	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
-	<!-- rellinks[1:] is an ugly hack to avoid link to module
-	    index  -->
-	<div class="rellink">
-	<a href="SlabsMaterials.html" title="Slabs and Materials"
-	    accesskey="P">Previous
-	    <br>
-	    <span class="smallrellink">
-	    Slabs and Materials
-	    </span>
-	    <span class="hiddenrellink">
-	    Slabs and Materials
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="AntennaSSH.html" title="Scalar Spherical Harmonics"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    Scalar Spheri...
-	    </span>
-	    <span class="hiddenrellink">
-	    Scalar Spherical Harmonics
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="../../py-modindex.html" title="Python Module Index"
-	    >Modules
-	    <br>
-	    <span class="smallrellink">
-	    Python Module Index
-	    </span>
-	    <span class="hiddenrellink">
-	    Python Module Index
-	    </span>
-	    
-	    </a>
-	</div>
-	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="../TOC.html" title="1   Overview" >
-	Up
-	<br>
-	<span class="smallrellink">
-	1   Overview
-	</span>
-	<span class="hiddenrellink">
-	1   Overview
-	</span>
-	
-	</a>
-	</div>
-    </div>
-    <p style="text-align: center; background-color: #BFFFFF">This documentation is
-
-    for Python <strong>version 1</strong>
-    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
-    
-    <h3>Citing</h3>
-    <p>If you use the software, please consider
-    <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
-    <h3>This page</h3>
-	<ul>
-<li><a class="reference internal" href="#">Description of antennas</a><ul>
-<li><a class="reference internal" href="#synthesis-of-the-radiation-pattern">Synthesis of the radiation pattern</a></li>
-<li><a class="reference internal" href="#defining-antenna-gain-from-analytic-formulas">Defining Antenna gain from analytic formulas</a></li>
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../TOC.html#radio-propagation-simulation">2&nbsp;&nbsp;&nbsp;Radio Propagation Simulation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#environment-description">2.1&nbsp;&nbsp;&nbsp;Environment Description</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../TOC.html#description-of-antennas">2.2&nbsp;&nbsp;&nbsp;Description of Antennas</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Description of antennas</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#synthesis-of-the-radiation-pattern">Synthesis of the radiation pattern</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#defining-antenna-gain-from-analytic-formulas">Defining Antenna gain from analytic formulas</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="AntennaSSH.html">Scalar Spherical Harmonics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AntennaVSH.html">Vector Spherical Harmonics Representation of Antennas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AntennaVSH.html#evaluation-of-vector-spherical-harmonics-coefficients">Evaluation of Vector Spherical Harmonics Coefficients</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#multiwall-motley-keenan-simulation">2.3&nbsp;&nbsp;&nbsp;Multiwall Motley-Keenan Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#ray-tracing-tool">2.4&nbsp;&nbsp;&nbsp;Ray Tracing Tool</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#handling-agent-mobility">3&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#wireless-body-area-network-related-classes">4&nbsp;&nbsp;&nbsp;Wireless Body Area Network Related Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#some-simulation-examples">5&nbsp;&nbsp;&nbsp;Some Simulation Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#algorithms-for-localization">6&nbsp;&nbsp;&nbsp;Algorithms for Localization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#measurements-tools">7&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#pylayers-tools">8&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#references">9&nbsp;&nbsp;&nbsp;References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/pylayers.html">PyLayers Modules Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 </ul>
 
-    
-    </div>
-	  </div>
-
-
-      <div class="content">
             
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
+      
+    <li>Description of antennas</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/notebook/2-AP/Antenna.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <div class="section" id="description-of-antennas">
 <h1>Description of antennas<a class="headerlink" href="#description-of-antennas" title="Permalink to this headline">¶</a></h1>
-<p>PyLayers has a very rich set of tools for handling antenna radiation
-pattern. Antennas can be described in different manners and read from
-different specific file formats.</p>
+<p>PyLayers has a rich set of tools for handling antenna radiation pattern.
+Antennas can be described in different manners and read from different
+specific file formats.</p>
 <p>The description goes from a simple antenna gain formula to a full
 polarization description, compressed or not, using scalar or vector
 spherical harmonics decomposition.</p>
@@ -197,7 +183,7 @@ spherical harmonics decomposition.</p>
 illustrated. The <code class="docutils literal"><span class="pre">Antenna</span></code> class is stored in the
 <a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.antprop.antenna.html">antenna.py</a>
 module which is placed in the <code class="docutils literal"><span class="pre">antprop</span></code> module.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>from pylayers.antprop.antenna import *
+<div class="code highlight-none"><div class="highlight"><pre><span></span>from pylayers.antprop.antenna import *
 %matplotlib inline
 </pre></div>
 </div>
@@ -206,14 +192,14 @@ file name as argument of the constructor. Lets start by loading an
 antenna from a <code class="docutils literal"><span class="pre">vsh3</span></code> file which correspond to a vector spherical
 harmonics representation of an antenna measured in SATIMO near field
 chamber.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A = Antenna(&#39;S1R1.vsh3&#39;)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>A = Antenna(&#39;S1R1.vsh3&#39;)
 </pre></div>
 </div>
-<p>The object antenna can show itself just by typing it&#8217;s name.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A
+<p>The object antenna shows itself just by typing it&#8217;s name.</p>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>A
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>Antenna type : vsh3
+<div class="highlight-none"><div class="highlight"><pre><span></span>type : vsh3
 ------------------------
 ------------------------
 file name : S1R1.vsh3
@@ -221,6 +207,33 @@ fmin : 0.80GHz
 fmax : 5.95GHz
 step : 50.00MHz
 Nf : 104
+Br
+-------------
+Nf   : 104
+fmin (GHz) : 0.8
+fmax (GHz) : 5.95
+Ncoeff s3 : 72
+
+Bi
+-------------
+Nf   : 104
+fmin (GHz) : 0.8
+fmax (GHz) : 5.95
+Ncoeff s3 : 72
+
+Cr
+-------------
+Nf   : 104
+fmin (GHz) : 0.8
+fmax (GHz) : 5.95
+Ncoeff s3 : 72
+
+Ci
+-------------
+Nf   : 104
+fmin (GHz) : 0.8
+fmax (GHz) : 5.95
+Ncoeff s3 : 72
 Not evaluated
 </pre></div>
 </div>
@@ -234,7 +247,7 @@ the project it is possible to invoke the <code class="docutils literal"><span cl
 <p>Antenna files should be stored in the sub-directory <code class="docutils literal"><span class="pre">ant</span></code> of the
 current project. The current project is located with the <code class="docutils literal"><span class="pre">$BASENAME</span></code>
 environment variable.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>!echo $BASENAME
+<div class="code highlight-none"><div class="highlight"><pre><span></span>!echo $BASENAME
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>/home/uguen/Bureau/P1
@@ -242,7 +255,7 @@ environment variable.</p>
 </div>
 <p>We can use the <code class="docutils literal"><span class="pre">ls</span></code> method to determine the number of files of
 different type</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>lvsh3 = A.ls(&#39;vsh3&#39;)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>lvsh3 = A.ls(&#39;vsh3&#39;)
 lssh3 = A.ls(&#39;sh3&#39;)
 lmat = A.ls(&#39;mat&#39;)
 print &quot;Number of antenna in .vsh3 format : &quot;,len(lvsh3)
@@ -252,10 +265,10 @@ print lssh3[0:5]
 print lmat[0:5]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>Number of antenna in .vsh3 format :  2
-Number of antenna in .sh3 format :  4
-[&#39;S1R1.vsh3&#39;, &#39;defant.vsh3&#39;]
-[&#39;S17R1.sh3&#39;, &#39;S17R2m.sh3&#39;, &#39;S1R1.sh3&#39;, &#39;S2R2.sh3&#39;]
+<div class="highlight-none"><div class="highlight"><pre><span></span>Number of antenna in .vsh3 format :  5
+Number of antenna in .sh3 format :  6
+[&#39;AaltoHorn.vsh3&#39;, &#39;CEA_OTA.vsh3&#39;, &#39;CEA_OTA_p2.vsh3&#39;, &#39;S1R1.vsh3&#39;, &#39;defant.vsh3&#39;]
+[&#39;Aalto.sh3&#39;, &#39;AaltoHorn.sh3&#39;, &#39;S17R1.sh3&#39;, &#39;S17R2m.sh3&#39;, &#39;S1R1.sh3&#39;]
 []
 </pre></div>
 </div>
@@ -281,7 +294,7 @@ synthesis has been numpyfied in the
 module.</p>
 <p><a class="reference external" href="./AntennaVSH.html">Description of Vector Spherical Harmonics</a></p>
 <p>The coefficients of the antenna also have a <strong>repr</strong></p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.C
+<div class="code highlight-none"><div class="highlight"><pre><span></span>A.C
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>Br
@@ -316,10 +329,10 @@ Ncoeff s3 : 72
 <div class="section" id="synthesis-of-the-radiation-pattern">
 <h2>Synthesis of the radiation pattern<a class="headerlink" href="#synthesis-of-the-radiation-pattern" title="Permalink to this headline">¶</a></h2>
 <p>The radiation pattern is synthetized with the following call</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.eval(grid=True)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>A.eval(grid=True)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>20*np.log10(np.max(A.sqG))
+<div class="code highlight-none"><div class="highlight"><pre><span></span>20*np.log10(np.max(A.sqG))
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>2.2267467105871743
@@ -329,7 +342,7 @@ Ncoeff s3 : 72
 of frequencies <code class="docutils literal"><span class="pre">fGHz</span></code> + If <code class="docutils literal"><span class="pre">phd</span></code> (phi in degree) is specified the
 diagram is given as a function of <span class="math">\(\theta\)</span> + If <code class="docutils literal"><span class="pre">thd</span></code> (theta in
 degree) is specified the diagram is given as a function of <span class="math">\(\phi\)</span></p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(20,10))
+<div class="code highlight-none"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(20,10))
 a1 = f.add_subplot(121,projection=&#39;polar&#39;)
 f1,a1 = A.plotG(fGHz=[3,4,5.6],plan=&#39;theta&#39;,angdeg=0,GmaxdB=5,fig=f,ax=a1,show=False)
 a2 = f1.add_subplot(122,projection=&#39;polar&#39;)
@@ -338,7 +351,7 @@ f2.tight_layout()
 </pre></div>
 </div>
 <img alt="../../_images/Antenna_16_0.png" src="../../_images/Antenna_16_0.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(20,10))
+<div class="code highlight-none"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(20,10))
 a1 = f.add_subplot(121)
 f1,a1 = A.plotG(fGHz=[3,4,5.6],plan=&#39;theta&#39;,angdeg=0,fig=f,ax=a1,show=False,polar=False)
 a2 = f.add_subplot(122)
@@ -347,25 +360,25 @@ f2.tight_layout()
 </pre></div>
 </div>
 <img alt="../../_images/Antenna_17_0.png" src="../../_images/Antenna_17_0.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.fGHz[96]
+<div class="code highlight-none"><div class="highlight"><pre><span></span>A.fGHz[96]
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>5.6000000000000005
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.plotG(fGHz=[5.6],plan=&#39;phi&#39;,angdeg=90,GmaxdB=5)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>A.plotG(fGHz=[5.6],plan=&#39;phi&#39;,angdeg=90,GmaxdB=5)
 </pre></div>
 </div>
 <img alt="../../_images/Antenna_19_0.png" src="../../_images/Antenna_19_0.png" />
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fe195a6d890&gt;,
- &lt;matplotlib.projections.polar.PolarAxes at 0x7fe195aabf10&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fa56b225250&gt;,
+ &lt;matplotlib.projections.polar.PolarAxes at 0x7fa56b24b250&gt;)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.pol3d(R=5,St=8,Sp=8)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>A.pol3d(R=5,St=8,Sp=8)
 </pre></div>
 </div>
 <p>The vector spherical coefficients can be dispalayed as follows</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig = plt.figure(figsize=(8,8))
+<div class="code highlight-none"><div class="highlight"><pre><span></span>fig = plt.figure(figsize=(8,8))
 A.C.show(typ=&#39;s3&#39;)
 plt.tight_layout()
 </pre></div>
@@ -376,88 +389,110 @@ plt.tight_layout()
 <h2>Defining Antenna gain from analytic formulas<a class="headerlink" href="#defining-antenna-gain-from-analytic-formulas" title="Permalink to this headline">¶</a></h2>
 <p>An antenna can also be defined from closed-form expressions. Available
 antennas are the following + Omni + Gauss + WirePlate + 3GPP</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>Ag = Antenna(typ=&#39;Gauss&#39;)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>Ag = Antenna(typ=&#39;Gauss&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>Ag.plotG()
+<div class="code highlight-none"><div class="highlight"><pre><span></span>Ag.plotG()
 </pre></div>
 </div>
 <img alt="../../_images/Antenna_25_0.png" src="../../_images/Antenna_25_0.png" />
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fe1948daa50&gt;,
- &lt;matplotlib.projections.polar.PolarAxes at 0x7fe1948f74d0&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fa5695f53d0&gt;,
+ &lt;matplotlib.projections.polar.PolarAxes at 0x7fa5578d96d0&gt;)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>Ao = Antenna(&#39;Omni&#39;)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>Ao = Antenna(&#39;Omni&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>Ao.plotG()
+<div class="code highlight-none"><div class="highlight"><pre><span></span>Ao.plotG()
 </pre></div>
 </div>
 <img alt="../../_images/Antenna_27_0.png" src="../../_images/Antenna_27_0.png" />
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fe1909e5110&gt;,
- &lt;matplotlib.projections.polar.PolarAxes at 0x7fe1909e5750&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fa5577e3510&gt;,
+ &lt;matplotlib.projections.polar.PolarAxes at 0x7fa557836e10&gt;)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A3 = Antenna(&#39;3gpp&#39;)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>A3 = Antenna(&#39;3gpp&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A3.plotG()
+<div class="code highlight-none"><div class="highlight"><pre><span></span>A3.plotG()
 </pre></div>
 </div>
 <img alt="../../_images/Antenna_29_0.png" src="../../_images/Antenna_29_0.png" />
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fe1908e4f90&gt;,
- &lt;matplotlib.projections.polar.PolarAxes at 0x7fe1908caf50&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fa5577e3ed0&gt;,
+ &lt;matplotlib.projections.polar.PolarAxes at 0x7fa557d48150&gt;)
 </pre></div>
 </div>
 </div>
 </div>
 
 
+           </div>
           </div>
-        </div>
-      </div>
-        <div class="clearer"></div>
-      </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="AntennaSSH.html" class="btn btn-neutral float-right" title="Scalar Spherical Harmonics" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="SlabsMaterials.html" class="btn btn-neutral" title="Slabs and Materials" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
     </div>
   
 
-    <div class="footer">
-        &copy; 2016, PyLayers developer team.
-      Last updated on Sep 20, 2017.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
-    <span style="padding-left: 5ex;">
-    <a href="../../_sources/notebook/2-AP/Antenna.rst.txt"
-	    rel="nofollow">Show this page source</a>
-    </span>
-    </div>
-     <div class="rel">
-    
-    <div class="buttonPrevious">
-      <a href="SlabsMaterials.html">
-        Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="AntennaSSH.html">
-        Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
-      <a href="../../py-modindex.html">
-        Previous
-      </a>  
-    </div>
-    
-     </div>
-     <script type="text/javascript">
-       $("div.buttonNext, div.buttonPrevious").hover(
-           function () {
-               $(this).css('background-color', '#AFFFFF');
-           },
-           function () {
-               $(this).css('background-color', '#AFFFFF');
-           }
-       );
-     </script>
-  </body>
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team.
+      Last updated on Nov 07, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
 </html>

@@ -1,146 +1,155 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pylayers.antprop.rays &mdash; Python 1 documentation</title>
+  
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  
+  
+
+  
+
+  
+  
     
-    <title>pylayers.antprop.rays &mdash; Python 1 documentation</title>
-    
-    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
     <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="author" title="About these documents"
+              href="../../../about.html"/>
+    <link rel="top" title="Python 1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/javascript" src="../../../_static/sidebar.js"></script>
-    <link rel="author" title="About these documents" href="../../../about.html" />
-    <link rel="top" title="Python 1 documentation" href="../../../index.html" />
-    <link rel="up" title="Module code" href="../../index.html" />
-<script type="text/javascript">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34943220-1']);
-  _gaq.push(['_trackPageview']);
+          
+            <a href="../../../index.html" class="icon icon-home"> Python
+          
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
-
-  </head>
-  <body role="document">
-
-    <div class="header-wrapper">
-      <div class="header">
-          <p class="logo"><a href="../../../index.html">
-            <img src="../../../_static/pylayers.png" alt="Logo"/>
-          </a>
-          </p><div class="navbar">
-          <ul>
-            <li><a href="../../../download.html">Download</a></li>
-            <li><a href="../../../notebook/TOC.html">User Guide</a></li>
-            <li><a href="../../../modules/pylayers.html">Reference</a></li>
-       </ul>
-
-<div class="search_form">
-
-<div id="cse" style="width: 100%;"></div>
-<script>
-  (function() {
-       var cx = '004820205189002234612:sa15qzuf2ca';
-           var gcse = document.createElement('script');
-               gcse.type = 'text/javascript';
-                   gcse.async = true;
-                       gcse.src = (document.location.protocol == 'https:' ?
-                           'https:' : 'http:') +
-                               '//cse.google.com/cse.js?cx=' + cx;
-                                   var s =
-                                   document.getElementsByTagName('script')[0];
-                                       s.parentNode.insertBefore(gcse, s);
-                                         })();
-</script>
-<gcse:search></gcse:search>
-</div>
-</div> <!-- end navbar --></div>
-    </div>
-
-    <div class="content-wrapper">
-
-      <div class="sphinxsidebar">
-	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
-	<!-- rellinks[1:] is an ugly hack to avoid link to module
-	    index  -->
-	<div class="rellink">
-	<a href="../../../py-modindex.html" title="Python Module Index"
-	    >Modules
-	    <br>
-	    <span class="smallrellink">
-	    Python Module Index
-	    </span>
-	    <span class="hiddenrellink">
-	    Python Module Index
-	    </span>
-	    
-	    </a>
-	</div>
-	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="../../index.html" title="Module code" >
-	Up
-	<br>
-	<span class="smallrellink">
-	Module code
-	</span>
-	<span class="hiddenrellink">
-	Module code
-	</span>
-	
-	</a>
-	</div>
-    </div>
-    <p style="text-align: center; background-color: #BFFFFF">This documentation is
-
-    for Python <strong>version 1</strong>
-    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
-    
-    <h3>Citing</h3>
-    <p>If you use the software, please consider
-    <a href="../../../about.html#citing-pylayers">citing pylayers</a>.</p>
-    <h3>This page</h3>
-	
-    
-    </div>
-	  </div>
-
-
-      <div class="content">
+          
             
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+            <img src="../../../_static/pylayers.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#radio-propagation-simulation">2&nbsp;&nbsp;&nbsp;Radio Propagation Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#handling-agent-mobility">3&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#wireless-body-area-network-related-classes">4&nbsp;&nbsp;&nbsp;Wireless Body Area Network Related Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#some-simulation-examples">5&nbsp;&nbsp;&nbsp;Some Simulation Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#algorithms-for-localization">6&nbsp;&nbsp;&nbsp;Algorithms for Localization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#measurements-tools">7&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#pylayers-tools">8&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#references">9&nbsp;&nbsp;&nbsp;References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/pylayers.html">PyLayers Modules Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>pylayers.antprop.rays</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <h1>Source code for pylayers.antprop.rays</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/python</span>
@@ -150,37 +159,8 @@
 <span class="sd">Class Rays</span>
 <span class="sd">==========</span>
 
-<span class="sd">This modules contains Rays class</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated</span>
-
-<span class="sd">    Rays.__init__</span>
-<span class="sd">    Rays.__len__</span>
-<span class="sd">    Rays.__repr__</span>
-<span class="sd">    Rays.sort</span>
-<span class="sd">    Rays.extract</span>
-<span class="sd">    Rays.mirror</span>
-<span class="sd">    Rays.to3D</span>
-<span class="sd">    Rays.locbas</span>
-<span class="sd">    Rays.fillinter</span>
-<span class="sd">    Rays.length</span>
-<span class="sd">    Rays.eval</span>
-<span class="sd">    Rays.ray</span>
-<span class="sd">    Rays.typ</span>
-<span class="sd">    Rays.info</span>
-<span class="sd">    Rays.signature</span>
-<span class="sd">    Rays.show</span>
-<span class="sd">    Rays.show3d</span>
-<span class="sd">    Rays._show3</span>
-<span class="sd">    Rays.reciprocal</span>
-<span class="sd">    Rays.check_reciprocity</span>
-
-<span class="sd">    to3D </span>
-<span class="sd">    simplify</span>
-<span class="sd">    locbas</span>
-<span class="sd">    fillinter</span>
-<span class="sd">    eval</span>
+<span class="sd">.. autoclass:: Rays</span>
+<span class="sd">    :members:</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="k">try</span><span class="p">:</span>
@@ -199,6 +179,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.cm</span> <span class="kn">as</span> <span class="nn">cm</span> 
 <span class="kn">import</span> <span class="nn">struct</span> <span class="kn">as</span> <span class="nn">stru</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">as</span> <span class="nn">geu</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
@@ -212,7 +193,7 @@
 <span class="kn">import</span> <span class="nn">h5py</span>
 
 
-<span class="k">class</span> <span class="nc">Rays</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays">[docs]</a><span class="k">class</span> <span class="nc">Rays</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Class hendling a set of rays</span>
 
 <span class="sd">    Attributes</span>
@@ -348,7 +329,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">s</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">saveh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">idx</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.saveh5"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.saveh5">[docs]</a>    <span class="k">def</span> <span class="nf">saveh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">idx</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save rays in hdf5 format</span>
 
 <span class="sd">        Parameters</span>
@@ -392,11 +373,11 @@
             <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Rays: issue when writting h5py file&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Rays: issue when writting h5py file&#39;</span><span class="p">)</span></div>
 
 
 
-    <span class="k">def</span> <span class="nf">loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="o">=</span><span class="p">[],</span><span class="n">idx</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.loadh5"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.loadh5">[docs]</a>    <span class="k">def</span> <span class="nf">loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="o">=</span><span class="p">[],</span><span class="n">idx</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load rays hdf5 format</span>
 
 <span class="sd">        Parameters</span>
@@ -439,7 +420,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">val</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">val</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_saveh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Save rays h5py format compliant with Links Class</span>
@@ -574,7 +555,7 @@
         <span class="c1">#     return self.eval(self.fGHz)</span>
 
 
-<div class="viewcode-block" id="Rays.reciprocal"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.reciprocal.html#pylayers.antprop.rays.Rays.reciprocal">[docs]</a>    <span class="k">def</span> <span class="nf">reciprocal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.reciprocal"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.reciprocal">[docs]</a>    <span class="k">def</span> <span class="nf">reciprocal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; switch tx and rx</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -592,7 +573,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">r</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Rays.check_reciprocity"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.check_reciprocity.html#pylayers.antprop.rays.Rays.check_reciprocity">[docs]</a>    <span class="k">def</span> <span class="nf">check_reciprocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">r</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.check_reciprocity"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.check_reciprocity">[docs]</a>    <span class="k">def</span> <span class="nf">check_reciprocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">r</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; check ray reciprocity in comparing two reciprocal rays</span>
 
 <span class="sd">        Parameters</span>
@@ -652,7 +633,7 @@
 
 
 
-<div class="viewcode-block" id="Rays.sort"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.sort.html#pylayers.antprop.rays.Rays.sort">[docs]</a>    <span class="k">def</span> <span class="nf">sort</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.sort"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.sort">[docs]</a>    <span class="k">def</span> <span class="nf">sort</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sort rays</span>
 <span class="sd">        </span>
 <span class="sd">        TODO : not finished </span>
@@ -661,7 +642,7 @@
         <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dis</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Rays.extract"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.extract.html#pylayers.antprop.rays.Rays.extract">[docs]</a>    <span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">nr</span><span class="p">,</span><span class="n">L</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.extract"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.extract">[docs]</a>    <span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">nr</span><span class="p">,</span><span class="n">L</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Extract a single ray</span>
 
 <span class="sd">        Parameters</span>
@@ -724,7 +705,7 @@
 
    
 
-<div class="viewcode-block" id="Rays.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.show.html#pylayers.antprop.rays.Rays.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.show"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  plot 2D rays within the simulated environment</span>
 
 <span class="sd">        Parameters</span>
@@ -750,6 +731,7 @@
 <span class="sd">            True</span>
 <span class="sd">        points : boolean</span>
 <span class="sd">            True</span>
+<span class="sd">        ER : ray energy </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;rlist&#39;</span><span class="p">:[],</span>
@@ -764,16 +746,20 @@
                     <span class="s1">&#39;ms&#39;</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span>
                     <span class="s1">&#39;layout&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
                     <span class="s1">&#39;points&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;labels&#39;</span><span class="p">:</span><span class="bp">True</span>
+                    <span class="s1">&#39;labels&#39;</span><span class="p">:</span><span class="bp">False</span>
                    <span class="p">}</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-        <span class="c1">#if kwargs[&#39;fig&#39;] ==[]:</span>
-        <span class="c1">#    fig = plt.figure()</span>
-        <span class="c1">#if kwargs[&#39;ax&#39;] ==[]:</span>
-        <span class="c1">#    ax = fig.add_subplot(111)</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">]</span> <span class="o">==</span><span class="p">[]:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">]</span> <span class="o">==</span><span class="p">[]:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+        
+        <span class="c1">#</span>
+        <span class="c1"># display the Layout </span>
+        <span class="c1">#</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;layout&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;L&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="p">[]:</span>
                 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;L&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -790,27 +776,55 @@
             <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pRx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pRx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;og&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ms&#39;</span><span class="p">])</span>
         <span class="c1"># i=-1 all rays</span>
         <span class="c1"># else block of interactions i</span>
-
+        
+        <span class="c1"># plot all rays </span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;rlist&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="p">[]:</span>
 
+            <span class="c1"># list of group of interactions</span>
             <span class="n">lgrint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">lgrint</span><span class="p">:</span>
+                <span class="c1"># list of rays </span>
                 <span class="n">lray</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;pt&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]))</span>
+
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filled</span> <span class="p">:</span>
                     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;rays index :&#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;rayidx&#39;</span><span class="p">]))</span>
+
                 <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">lray</span><span class="p">:</span>
+
+                    <span class="n">addr_ray</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>
+                    <span class="n">index_ray</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a2ir</span><span class="p">(</span><span class="n">addr_ray</span><span class="p">)</span>
+
                     <span class="n">ray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">pTx</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
                                      <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;pt&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">],</span>
                                      <span class="bp">self</span><span class="o">.</span><span class="n">pRx</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))))</span>
                                      <span class="p">))</span>
-                    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ray</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">ray</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span>
-                            <span class="n">alpha</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alpharay&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;colray&#39;</span><span class="p">],</span><span class="n">linewidth</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;widthray&#39;</span><span class="p">])</span>
+
+                    <span class="k">if</span> <span class="s1">&#39;ER&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ray</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">ray</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span>
+                            <span class="n">alpha</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alpharay&#39;</span><span class="p">],</span>
+                            <span class="n">color</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;colray&#39;</span><span class="p">],</span>
+                            <span class="n">linewidth</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;widthray&#39;</span><span class="p">])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">EdB</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ER</span><span class="p">[</span><span class="n">index_ray</span><span class="p">])</span>
+                        <span class="n">ERdB</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">E</span><span class="p">)</span>
+                        <span class="n">vscale</span>  <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">ERdB</span><span class="p">)</span><span class="o">-</span><span class="n">EdB</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">ERdB</span><span class="p">)</span><span class="o">-</span><span class="nb">min</span><span class="p">(</span><span class="n">ERdB</span><span class="p">))</span>
+                        <span class="n">widthray</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="n">vscale</span>
+                        <span class="n">alpharay</span> <span class="o">=</span> <span class="n">vscale</span>
+                        <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+                        <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">hot</span> 
+                        <span class="n">colorray</span> <span class="o">=</span> <span class="n">cmap</span><span class="p">(</span><span class="n">vscale</span><span class="p">)</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ray</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">ray</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span>
+                                <span class="n">alpha</span> <span class="o">=</span> <span class="n">alpharay</span><span class="p">,</span>
+                                <span class="n">color</span> <span class="o">=</span> <span class="n">colorray</span><span class="p">,</span>
+                                <span class="n">linewidth</span> <span class="o">=</span> <span class="n">widthray</span><span class="p">)</span>
+
                     <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filled</span> <span class="p">:</span>
                         <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;rays index :&#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;rayidx&#39;</span><span class="p">][</span><span class="n">lray</span><span class="p">]))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">rlist</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;rlist&#39;</span><span class="p">]</span>
+            <span class="c1"># 3D ray </span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is3D</span><span class="p">:</span>
                 <span class="n">nbi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ray2nbi</span><span class="p">[</span><span class="n">rlist</span><span class="p">]</span>
                 <span class="n">nr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">nbi</span><span class="p">,</span><span class="n">rlist</span><span class="p">))</span>
@@ -819,7 +833,7 @@
 
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">unb</span><span class="p">:</span>
                     <span class="n">raynb</span> <span class="o">=</span> <span class="p">(</span><span class="n">nr</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">unr</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-                    <span class="n">nbr</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">raynb</span><span class="p">)</span>
+                    <span class="n">nbr</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">raynb</span><span class="p">)</span>
                     <span class="n">ptidx</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;rayidx&#39;</span><span class="p">]</span><span class="o">==</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">raynb</span><span class="p">]</span>
                     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">ptidx</span><span class="p">:</span>
 
@@ -828,8 +842,11 @@
                                          <span class="bp">self</span><span class="o">.</span><span class="n">pRx</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))))</span>
                                          <span class="p">))</span>
                         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ray</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">ray</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span>
-                                <span class="n">alpha</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alpharay&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;colray&#39;</span><span class="p">],</span><span class="n">linewidth</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;widthray&#39;</span><span class="p">])</span>
+                                <span class="n">alpha</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alpharay&#39;</span><span class="p">],</span>
+                                <span class="n">color</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;colray&#39;</span><span class="p">],</span>
+                                <span class="n">linewidth</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;widthray&#39;</span><span class="p">])</span>
                         <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+            <span class="c1"># 2D ray </span>
             <span class="k">else</span><span class="p">:</span>
 
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">rlist</span><span class="p">:</span>
@@ -842,8 +859,11 @@
                                          <span class="bp">self</span><span class="o">.</span><span class="n">pRx</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))))</span>
                                          <span class="p">))</span>
                         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ray</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">ray</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span>
-                                <span class="n">alpha</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alpharay&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;colray&#39;</span><span class="p">],</span><span class="n">linewidth</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;widthray&#39;</span><span class="p">])</span>
+                                <span class="n">alpha</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alpharay&#39;</span><span class="p">],</span>
+                                <span class="n">color</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;colray&#39;</span><span class="p">],</span>
+                                <span class="n">linewidth</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;widthray&#39;</span><span class="p">])</span>
                         <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
                         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filled</span> <span class="p">:</span>
                             <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;rays index :&#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;rayidx&#39;</span><span class="p">][</span><span class="n">lray</span><span class="p">]))</span>
 
@@ -852,6 +872,7 @@
 
                 <span class="c1"># raynb = (nr[1,unr[i]]).astype(int)</span>
                 <span class="c1"># nbr=len(raynb)</span>
+                
                 <span class="c1"># ptidx = [np.where(self[i][&#39;rayidx&#39;]==x)[0][0] for x in raynb]</span>
                 <span class="c1"># # current number of interactions</span>
                 <span class="c1"># cnbi = i + 2</span>
@@ -861,7 +882,7 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Rays.mirror"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.mirror.html#pylayers.antprop.rays.Rays.mirror">[docs]</a>    <span class="k">def</span> <span class="nf">mirror</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">za</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">zb</span><span class="o">=</span> <span class="p">[]):</span>
+<div class="viewcode-block" id="Rays.mirror"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.mirror">[docs]</a>    <span class="k">def</span> <span class="nf">mirror</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">za</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">zb</span><span class="o">=</span> <span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; mirror a ray termination</span>
 
 <span class="sd">        Parameters</span>
@@ -965,7 +986,7 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">d</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Rays.to3D"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.to3D.html#pylayers.antprop.rays.Rays.to3D">[docs]</a>    <span class="k">def</span> <span class="nf">to3D</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rmoutceilR</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.to3D"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.to3D">[docs]</a>    <span class="k">def</span> <span class="nf">to3D</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rmoutceilR</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; transform 2D ray to 3D ray</span>
 
 <span class="sd">        Parameters</span>
@@ -1495,7 +1516,7 @@
         <span class="n">r3d</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">_filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r3d</span><span class="o">.</span><span class="n">nray</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">r3d</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Rays.length"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.length.html#pylayers.antprop.rays.Rays.length">[docs]</a>    <span class="k">def</span> <span class="nf">length</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.length"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.length">[docs]</a>    <span class="k">def</span> <span class="nf">length</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate length of rays</span>
 
 <span class="sd">        Parameters</span>
@@ -1524,13 +1545,17 @@
         <span class="k">for</span> <span class="n">ir</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="k">print</span> <span class="bp">self</span><span class="p">[</span><span class="n">ik</span><span class="p">][</span><span class="s1">&#39;si&#39;</span><span class="p">]</span>
 
-<div class="viewcode-block" id="Rays.locbas"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.locbas.html#pylayers.antprop.rays.Rays.locbas">[docs]</a>    <span class="k">def</span> <span class="nf">locbas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.locbas"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.locbas">[docs]</a>    <span class="k">def</span> <span class="nf">locbas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate ray local bas</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
 <span class="sd">        L : Layout</span>
+
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
 
 <span class="sd">       </span>
 
@@ -1631,6 +1656,7 @@
                 <span class="c1"># For the diffraction case the normal is replaced by the unit</span>
                 <span class="c1"># vector along the wedge directed upward.</span>
                 <span class="c1">#</span>
+
                 <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;norm&#39;</span><span class="p">][:,</span> <span class="n">uwall</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">uwall</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">norm</span><span class="p">[</span><span class="n">mapping</span><span class="p">[</span><span class="n">nstrswall</span><span class="p">],:]</span><span class="o">.</span><span class="n">T</span>
                 <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;norm&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">,</span> <span class="n">ufloor</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ufloor</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ufloor</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
                 <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;norm&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">,</span> <span class="n">uceil</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">uceil</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">uceil</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
@@ -1695,13 +1721,12 @@
                                 <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phd</span><span class="p">),</span>
                                 <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">phd</span><span class="p">))])</span>
 
-                <span class="c1"># Bo0 : 3 x 2 x r</span>
-                <span class="n">Bo0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">eth</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:],</span>
-                                      <span class="n">eph</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="c1"># Bo0 : 3 x 3 x r</span>
+                <span class="n">Bo0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">si</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="p">:],</span>
+                                      <span class="n">eth</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">,</span> <span class="p">:],</span>
+                                      <span class="n">eph</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">,</span> <span class="p">:]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-                <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;Bo0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">si</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:],</span>
-                                                 <span class="n">eth</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:],</span>
-                                                 <span class="n">eph</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;Bo0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Bo0</span>
 
                 <span class="c1">#</span>
                 <span class="c1"># scalar product si . norm</span>
@@ -1769,10 +1794,10 @@
                 <span class="n">ew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">wn</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
                 <span class="n">ev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-                <span class="c1">#  Bi 3 x 2 x i x r</span>
-                <span class="n">Bi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">ew</span><span class="p">,</span> <span class="n">ev</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="c1">#  Bi 3 x 3 x i x r</span>
+                <span class="n">Bi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">es_in</span><span class="p">,</span><span class="n">ew</span><span class="p">,</span><span class="n">ev</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
                 <span class="c1">#  self[k][&#39;Bi&#39;] 3 x 3 x i x r</span>
-                <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;Bi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">es_in</span><span class="p">,</span><span class="n">ew</span><span class="p">,</span><span class="n">ev</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;Bi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Bi</span>  
                 <span class="c1">################################</span>
 
                 <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">s_out</span><span class="p">,</span> <span class="n">vn</span><span class="p">,</span> <span class="n">axisa</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">axisb</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">axisc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -1787,11 +1812,11 @@
                 <span class="n">ew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">wn</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
                 <span class="n">ev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-                <span class="c1">#  Bi 3 x 2 x i x r</span>
-                <span class="n">Bo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">ew</span><span class="p">,</span> <span class="n">ev</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="c1">#  Bi 3 x 3 x i x r</span>
+                <span class="n">Bo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">es_out</span><span class="p">,</span><span class="n">ew</span><span class="p">,</span><span class="n">ev</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
                  <span class="c1"># self[k][&#39;Bo&#39;] 3 x 3 x i x r </span>
-                <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;Bo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">es_out</span><span class="p">,</span><span class="n">ew</span><span class="p">,</span><span class="n">ev</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;Bo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Bo</span>
                 <span class="c1">#</span>
                 <span class="c1"># AOA (rad)</span>
                 <span class="c1">#</span>
@@ -1799,11 +1824,11 @@
                 <span class="c1"># th : ,r</span>
                 <span class="c1"># fix doa/dod reciprocity</span>
                 <span class="c1">#th = np.arccos(si[2, -1, :])</span>
-                <span class="n">tha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="o">-</span><span class="n">si</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>
+                <span class="n">tha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">si</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>
 
                 <span class="c1"># th : ,r</span>
                 <span class="c1">#ph = np.arctan2(si[1, -1, :], si[0, -1, :])</span>
-                <span class="n">pha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="o">-</span><span class="n">si</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="o">-</span><span class="n">si</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>
+                <span class="n">pha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">si</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="n">si</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>
 
                 <span class="c1"># aoa : 2 x r  (radians)</span>
                 <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;aoa&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">tha</span><span class="p">,</span> <span class="n">pha</span><span class="p">))</span>
@@ -1813,13 +1838,15 @@
                 <span class="n">eph</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">pha</span><span class="p">),</span>
                                 <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">pha</span><span class="p">),</span>
                                 <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pha</span><span class="p">))])</span>
-                <span class="c1"># Bo0 : 3 x 2 x r</span>
-                <span class="n">BiN</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">eth</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:],</span>
-                                      <span class="n">eph</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="c1"># Bo0 : 3 x 3 x r</span>
+                <span class="n">BiN</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">si</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="bp">None</span><span class="p">,:],</span>
+                                      <span class="n">eth</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">,</span> <span class="p">:],</span>
+                                      <span class="n">eph</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">,</span> <span class="p">:]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 
-                <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;BiN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="o">-</span><span class="n">si</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:],</span><span class="n">eth</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:],</span>
-                                                   <span class="n">eph</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;BiN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">BiN</span>
+                <span class="c1">#self[k][&#39;BiN&#39;] = np.concatenate((-si[:,-1,np.newaxis,:],eth[:,np.newaxis,:],</span>
+                <span class="c1">#                                   eph[:,np.newaxis,:]),axis=1)</span>
 
                 <span class="c1"># Creation of B from Bi and Bo</span>
                 <span class="c1"># is done after the potential diffraction </span>
@@ -2008,8 +2035,8 @@
                     <span class="n">ew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">wn</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
                     <span class="n">ev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-                    <span class="c1">#  Bid 3 x 2 x (i,r)diff</span>
-                    <span class="n">Bid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">ev</span><span class="p">,</span> <span class="n">ew</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="c1">#  Bid 3 x 3 x (i,r)diff</span>
+                    <span class="n">Bid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">e_sid</span><span class="p">,</span><span class="n">ev</span><span class="p">,</span> <span class="n">ew</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
                     <span class="c1">#update Bi for diffracted rays</span>
                     <span class="n">Bi</span><span class="p">[:,:,</span><span class="n">udiff</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">udiff</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Bid</span>
@@ -2027,8 +2054,8 @@
                     <span class="n">e_sod</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">sod</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
                     <span class="n">ew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">wn</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
                     <span class="n">ev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-                    <span class="c1">#  Bod 3 x 2 x (i,r)diff</span>
-                    <span class="n">Bod</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">ev</span><span class="p">,</span> <span class="n">ew</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="c1">#  Bod 3 x 3 x (i,r)diff</span>
+                    <span class="n">Bod</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">e_sod</span><span class="p">,</span><span class="n">ev</span><span class="p">,</span> <span class="n">ew</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
                     <span class="c1">#update Bo for diffracted rays</span>
                     <span class="n">Bo</span><span class="p">[:,:,</span><span class="n">udiff</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">udiff</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Bod</span>
@@ -2041,14 +2068,15 @@
                 <span class="c1"># pasting (Bo0,B,BiN)</span>
                 <span class="c1">#</span>
 
-                <span class="c1"># B : 3 x 2 x i x r</span>
+                <span class="c1"># B : 3 x 3 x i x r</span>
 
                 <span class="n">Bo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">Bo0</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:],</span> <span class="n">Bo</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
                 <span class="n">Bi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">Bi</span><span class="p">,</span> <span class="n">BiN</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
-                <span class="c1"># B : 2 x 2 x i x r</span>
+                <span class="c1"># B : 3 x 3 x i x r</span>
 
                 <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;B&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;xv...,xw...-&gt;vw...&#39;</span><span class="p">,</span> <span class="n">Bi</span><span class="p">,</span> <span class="n">Bo</span><span class="p">)</span>
+                <span class="c1">#self[k][&#39;B&#39;] = np.einsum(&#39;vx...,xw...-&gt;vw...&#39;, Bi, Bo)</span>
 
                 <span class="c1">#BiN = np.array([si[:,-1,:], eth, eph])    # ndim x 3 x Nray</span>
                 <span class="c1">#self[k][&#39;BiN&#39;]=BiN</span>
@@ -2081,7 +2109,8 @@
                 <span class="c1">#  tha = pi - thd</span>
                 <span class="c1">#  pha = phd - pi</span>
                 <span class="c1">#</span>
-                <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;aoa&#39;</span><span class="p">]</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">-</span><span class="n">thd</span><span class="p">,</span> <span class="n">phd</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
+                <span class="c1">#self[k][&#39;aoa&#39;] =  np.vstack((np.pi-thd, phd-np.pi))</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;aoa&#39;</span><span class="p">]</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">thd</span><span class="p">,</span><span class="n">phd</span><span class="p">))</span>
                 <span class="n">E</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
                 <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;B&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">((</span><span class="n">E</span><span class="p">,</span><span class="n">E</span><span class="p">))</span>
                 <span class="n">ze</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
@@ -2093,7 +2122,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_luw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">luw</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">isbased</span><span class="o">=</span><span class="bp">True</span></div>
 
-<div class="viewcode-block" id="Rays.fillinter"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.fillinter.html#pylayers.antprop.rays.Rays.fillinter">[docs]</a>    <span class="k">def</span> <span class="nf">fillinter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">append</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.fillinter"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.fillinter">[docs]</a>    <span class="k">def</span> <span class="nf">fillinter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">append</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  fill ray interactions</span>
 
 <span class="sd">        Parameters</span>
@@ -2135,7 +2164,6 @@
         <span class="n">D</span> <span class="o">=</span> <span class="n">IntD</span><span class="p">(</span><span class="n">slab</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">)</span>
 
         <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(())</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">los</span><span class="p">:</span>
             <span class="n">idxts</span> <span class="o">=</span> <span class="mi">1</span>
             <span class="n">nbrayt</span> <span class="o">=</span> <span class="mi">1</span>
@@ -2277,14 +2305,14 @@
                 <span class="c1"># 2x2,(i+1)xr</span>
 
                 <span class="c1">#</span>
-                <span class="c1"># self[k][&#39;B&#39;] 2 x 2 x i x r</span>
+                <span class="c1"># self[k][&#39;B&#39;] 3 x 3 x i x r</span>
                 <span class="c1">#</span>
-                <span class="c1"># first unitary matrix (2x2xr)</span>
+                <span class="c1"># first unitary matrix (3x3xr)</span>
                 <span class="n">b0</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;B&#39;</span><span class="p">][:,:,</span><span class="mi">0</span><span class="p">,:]</span>
                 <span class="c1"># first unitary matrix 1:</span>
                 <span class="c1"># dimension i and r are merged</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="n">b</span>  <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;B&#39;</span><span class="p">][:,:,</span><span class="mi">1</span><span class="p">:,:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">size2</span><span class="o">-</span><span class="n">nbray</span><span class="p">,</span><span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
+                    <span class="n">b</span>  <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;B&#39;</span><span class="p">][:,:,</span><span class="mi">1</span><span class="p">:,:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">size2</span><span class="o">-</span><span class="n">nbray</span><span class="p">,</span><span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
                 <span class="k">except</span><span class="p">:</span>
                     <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
 
@@ -2352,10 +2380,11 @@
                 <span class="c1"># -------</span>
                 <span class="c1"># B.idx refers to an interaction index</span>
                 <span class="c1"># whereas B0.idx refers to a ray number</span>
+                <span class="c1"># B.stack(data=b.T, idx=idxf)</span>
+                <span class="c1"># B0.stack(data=b0.T,idx=self[k][&#39;rayidx&#39;])</span>
 
                 <span class="n">B</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">b</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="n">idxf</span><span class="p">)</span>
                 <span class="n">B0</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">b0</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">idx</span><span class="o">=</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;rayidx&#39;</span><span class="p">])</span>
-
                 <span class="c1">### Reflexion</span>
                 <span class="c1">############</span>
                 <span class="c1">### wall reflexion</span>
@@ -2407,8 +2436,8 @@
                 <span class="c1">#self[k][&#39;rayidx&#39;] = ze</span>
                 <span class="c1">#self.raypt = 1</span>
                 <span class="c1">#self._ray2nbi=ze</span>
-                <span class="n">B</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:,:],</span> <span class="n">idx</span><span class="o">=</span><span class="n">ze</span><span class="p">)</span>
-                <span class="n">B0</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:,:],</span><span class="n">idx</span><span class="o">=</span><span class="n">ze</span><span class="p">)</span>
+                <span class="n">B</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:,:],</span> <span class="n">idx</span><span class="o">=</span><span class="n">ze</span><span class="p">)</span>
+                <span class="n">B0</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:,:],</span><span class="n">idx</span><span class="o">=</span><span class="n">ze</span><span class="p">)</span>
 
         <span class="n">T</span><span class="o">.</span><span class="n">create_dusl</span><span class="p">(</span><span class="n">tsl</span><span class="p">)</span>
         <span class="n">R</span><span class="o">.</span><span class="n">create_dusl</span><span class="p">(</span><span class="n">rsl</span><span class="p">)</span>
@@ -2423,7 +2452,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">filled</span> <span class="o">=</span> <span class="bp">True</span></div>
 
-<div class="viewcode-block" id="Rays.eval"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.eval.html#pylayers.antprop.rays.Rays.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">]),</span><span class="n">ib</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="Rays.eval"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">]),</span><span class="n">ib</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot;  field evaluation of rays  </span>
 
 <span class="sd">        Parameters</span>
@@ -2453,13 +2482,15 @@
         <span class="c1"># just an axis extension (np.newaxis)</span>
         <span class="c1">#pdb.set_trace()</span>
 
-        <span class="c1"># 1 x i x 2 x 2</span>
+        <span class="c1"># 1 x i x 3 x 3</span>
         <span class="n">B</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="o">...</span><span class="p">]</span>
-        <span class="c1"># 1 x r x 2 x 2</span>
+        <span class="n">B</span>  <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+        <span class="c1"># 1 x r x 3 x 3</span>
         <span class="n">B0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">B0</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="o">...</span><span class="p">]</span>
+        <span class="n">B0</span>  <span class="o">=</span> <span class="n">B0</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
 
-        <span class="c1"># Ct : f x r x 2 x 2</span>
-        <span class="n">Ct</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">I</span><span class="o">.</span><span class="n">nf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nray</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+        <span class="c1"># Ct : f x r x 3 x 3</span>
+        <span class="n">Ct</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">I</span><span class="o">.</span><span class="n">nf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nray</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
 
         <span class="c1"># delays : ,r</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">delays</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nray</span><span class="p">))</span>
@@ -2494,11 +2525,11 @@
                 <span class="c1"># reshape error can be tricky to debug.</span>
                 <span class="c1">#</span>
                 <span class="c1"># f , r , l , 2 , 2</span>
-                <span class="n">A</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">I</span><span class="o">.</span><span class="n">I</span><span class="p">[:,</span> <span class="n">rrl</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">I</span><span class="o">.</span><span class="n">nf</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">A</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">I</span><span class="o">.</span><span class="n">I</span><span class="p">[:,</span> <span class="n">rrl</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">I</span><span class="o">.</span><span class="n">nf</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
                 <span class="c1"># get the corresponding unitary matrix B</span>
                 <span class="c1"># 1 , r , l , 2 , 2</span>
                 <span class="c1">#Bl = B[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2,order=&#39;F&#39;)</span>
-                <span class="n">Bl</span> <span class="o">=</span> <span class="n">B</span><span class="p">[:,</span> <span class="n">rrl</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">Bl</span> <span class="o">=</span> <span class="n">B</span><span class="p">[:,</span> <span class="n">rrl</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
                 <span class="c1"># get the first unitary matrix B0l</span>
                 <span class="n">B0l</span> <span class="o">=</span> <span class="n">B0</span><span class="p">[:,</span><span class="n">ir</span><span class="p">,:,</span> <span class="p">:]</span>
                 <span class="c1"># get alpha</span>
@@ -2606,21 +2637,33 @@
         <span class="c1"># true LOS when no interaction</span>
         <span class="c1">#</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">los</span><span class="p">:</span>
-            <span class="n">Ct</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:,:]</span>
+            <span class="n">Ct</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,:,:]</span>
             <span class="c1">#self[0][&#39;dis&#39;] = self[0][&#39;si&#39;][0]</span>
             <span class="c1"># Fris</span>
-            <span class="n">Ct</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">Ct</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">*</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;dis&#39;</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span>
+            <span class="n">Ct</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">Ct</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">*</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;dis&#39;</span><span class="p">][</span><span class="bp">None</span><span class="p">,</span> <span class="p">:,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">delays</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;dis&#39;</span><span class="p">]</span><span class="o">/</span><span class="mf">0.3</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dis</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;dis&#39;</span><span class="p">]</span>
 
 
         <span class="c1"># To be corrected in a future version</span>
+        <span class="c1">#</span>
+        <span class="c1">#  Ct : nf , Nray , theta , phi </span>
+        <span class="c1">#</span>
+        <span class="c1">#  to </span>
+        <span class="c1">#</span>
+        <span class="c1">#  Ct : Nray x nf , theta , phi </span>
+        <span class="c1">#</span>
         <span class="n">Ct</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">Ct</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
-        <span class="n">c11</span> <span class="o">=</span> <span class="n">Ct</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">c12</span> <span class="o">=</span> <span class="n">Ct</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">c21</span> <span class="o">=</span> <span class="n">Ct</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">c22</span> <span class="o">=</span> <span class="n">Ct</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1">#c11 = Ct[:,:,0,0]</span>
+        <span class="c1">#c12 = Ct[:,:,0,1]</span>
+        <span class="c1">#c21 = Ct[:,:,1,0]</span>
+        <span class="c1">#c22 = Ct[:,:,1,1]</span>
+        
+        <span class="n">c11</span> <span class="o">=</span> <span class="n">Ct</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">c12</span> <span class="o">=</span> <span class="n">Ct</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">c21</span> <span class="o">=</span> <span class="n">Ct</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">c22</span> <span class="o">=</span> <span class="n">Ct</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
 
 
         <span class="c1">#</span>
@@ -2645,8 +2688,11 @@
         <span class="n">Cn</span><span class="o">.</span><span class="n">tang</span> <span class="o">=</span> <span class="n">aod</span><span class="o">.</span><span class="n">T</span>
         <span class="n">Cn</span><span class="o">.</span><span class="n">tangl</span> <span class="o">=</span> <span class="n">aod</span><span class="o">.</span><span class="n">T</span>
         <span class="c1"># r x 2</span>
-        <span class="n">Cn</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="n">aoa</span><span class="o">.</span><span class="n">T</span>
-        <span class="n">Cn</span><span class="o">.</span><span class="n">rangl</span> <span class="o">=</span> <span class="n">aoa</span><span class="o">.</span><span class="n">T</span>
+        <span class="c1">#</span>
+        <span class="c1"># recover angle of arrival convention </span>
+        <span class="c1">#</span>
+        <span class="n">Cn</span><span class="o">.</span><span class="n">rang</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">-</span><span class="n">aoa</span><span class="o">.</span><span class="n">T</span><span class="p">[:,[</span><span class="mi">0</span><span class="p">]],</span><span class="n">aoa</span><span class="o">.</span><span class="n">T</span><span class="p">[:,[</span><span class="mi">1</span><span class="p">]]</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">])</span> 
+        <span class="n">Cn</span><span class="o">.</span><span class="n">rangl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">-</span><span class="n">aoa</span><span class="o">.</span><span class="n">T</span><span class="p">[:,[</span><span class="mi">0</span><span class="p">]],</span><span class="n">aoa</span><span class="o">.</span><span class="n">T</span><span class="p">[:,[</span><span class="mi">1</span><span class="p">]]</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">])</span>
         <span class="c1"># add aoa and aod</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="bp">True</span>
@@ -2654,14 +2700,14 @@
         <span class="k">return</span><span class="p">(</span><span class="n">Cn</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">rayfromseg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ls</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.rayfromseg"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.rayfromseg">[docs]</a>    <span class="k">def</span> <span class="nf">rayfromseg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ls</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39; DEPRECATED </span>
 <span class="sd">            use raysfromnstr instead</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="ne">DeprecationWarning</span><span class="p">(</span><span class="s1">&#39;function name update: use raysfromnstr instead&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rayfromnstr</span><span class="p">(</span><span class="n">ls</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rayfromnstr</span><span class="p">(</span><span class="n">ls</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">rayfromnstr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ls</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.rayfromnstr"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.rayfromnstr">[docs]</a>    <span class="k">def</span> <span class="nf">rayfromnstr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; returns the indexes of rays for a given interaction list</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -2676,18 +2722,18 @@
                 <span class="c1"># ipdb.set_trace()</span>
                 <span class="n">ui</span><span class="p">,</span> <span class="n">ur</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">aib</span> <span class="o">==</span> <span class="n">i</span><span class="p">)</span>
                 <span class="n">lur</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;rayidx&#39;</span><span class="p">][</span><span class="n">ur</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">lur</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">lur</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">rayfromdelay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">t0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">t1</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="Rays.rayfromdelay"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.rayfromdelay">[docs]</a>    <span class="k">def</span> <span class="nf">rayfromdelay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">t0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">t1</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; returns the indexes of rays between 2 timestamps t0 and t1</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">t1</span> <span class="o">==</span> <span class="p">[]:</span>
             <span class="n">t1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">delays</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">delays</span><span class="o">&gt;</span><span class="n">t0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delays</span><span class="o">&lt;</span><span class="n">t1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">u</span>
+        <span class="k">return</span> <span class="n">u</span></div>
 
 
-    <span class="k">def</span> <span class="nf">ray2slab</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">ir</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.ray2slab"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.ray2slab">[docs]</a>    <span class="k">def</span> <span class="nf">ray2slab</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">ir</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; return the slabs for a given interaction index </span>
 
 
@@ -2707,10 +2753,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">v</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">t</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="o">!=</span><span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">t</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">v</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">ir</span><span class="p">][</span><span class="s1">&#39;sig&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">v</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">ir</span><span class="p">][</span><span class="s1">&#39;sig&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span></div>
 
 
-<div class="viewcode-block" id="Rays.ray"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.ray.html#pylayers.antprop.rays.Rays.ray">[docs]</a>    <span class="k">def</span> <span class="nf">ray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.ray"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.ray">[docs]</a>    <span class="k">def</span> <span class="nf">ray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; returns the index of interactions of r</span>
 
 <span class="sd">        Parameters</span>
@@ -2732,7 +2778,7 @@
         <span class="n">raypos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_ray2nbi</span><span class="p">[</span><span class="n">r</span><span class="p">]][</span><span class="s1">&#39;rayidx&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">r</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_ray2nbi</span><span class="p">[</span><span class="n">r</span><span class="p">]][</span><span class="s1">&#39;rays&#39;</span><span class="p">][:,</span><span class="n">raypos</span><span class="p">][:,</span><span class="mi">0</span><span class="p">])</span></div>
 
-    <span class="k">def</span> <span class="nf">ir2a</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ir</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.ir2a"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.ir2a">[docs]</a>    <span class="k">def</span> <span class="nf">ir2a</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ir</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; index ray 2 address ray</span>
 
 <span class="sd">        Parameters</span>
@@ -2747,27 +2793,27 @@
         <span class="k">assert</span> <span class="n">ir</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">nray</span><span class="p">,</span> <span class="s2">&quot;wrong ray index&quot;</span>
         <span class="n">ni</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ray2nbi</span><span class="p">[</span><span class="n">ir</span><span class="p">]</span>
         <span class="n">ur</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">ni</span><span class="p">][</span><span class="s1">&#39;rayidx&#39;</span><span class="p">]</span><span class="o">==</span><span class="n">ir</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">ni</span><span class="p">,</span><span class="n">ur</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">ni</span><span class="p">,</span><span class="n">ur</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">a2ir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">t</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.a2ir"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.a2ir">[docs]</a>    <span class="k">def</span> <span class="nf">a2ir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">t</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  address ray 2 index ray</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        t = (ni,ux) : tuple address (group of interactions, index)</span>
-<span class="sd">            address ray </span>
+<span class="sd">            ray address  </span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        ir : integer</span>
-<span class="sd">            index ray </span>
+<span class="sd">            ray index  </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="s2">&quot;wrong number of interactions&quot;</span>
         <span class="n">ir</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;rayidx&#39;</span><span class="p">][</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">ray2nbi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">r</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.ray2nbi"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.ray2nbi">[docs]</a>    <span class="k">def</span> <span class="nf">ray2nbi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">r</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Get interaction block/number of interactions of a given ray</span>
 
 <span class="sd">        Parameters</span>
@@ -2783,9 +2829,9 @@
 <span class="sd">            interaction block number</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ray2nbi</span><span class="p">[</span><span class="n">r</span><span class="p">]</span>
-        <span class="k">return</span> 
+        <span class="k">return</span> <span class="n">i</span> </div>
 
-    <span class="k">def</span> <span class="nf">ray2iidx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ir</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.ray2iidx"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.ray2iidx">[docs]</a>    <span class="k">def</span> <span class="nf">ray2iidx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ir</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Get interactions index of a given ray</span>
 
 <span class="sd">        Parameters</span>
@@ -2802,17 +2848,17 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">unbi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ray2nbi</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span>
         <span class="n">ur</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">unbi</span><span class="p">][</span><span class="s1">&#39;rayidx&#39;</span><span class="p">]</span><span class="o">==</span><span class="n">ir</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">unbi</span><span class="p">][</span><span class="s1">&#39;rays&#39;</span><span class="p">][:,</span><span class="n">ur</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">unbi</span><span class="p">][</span><span class="s1">&#39;rays&#39;</span><span class="p">][:,</span><span class="n">ur</span><span class="p">]</span></div>
 
 
-    <span class="k">def</span> <span class="nf">ray2sig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ir</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.ray2sig"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.ray2sig">[docs]</a>    <span class="k">def</span> <span class="nf">ray2sig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ir</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get signature to corresponding ray</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">unbi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ray2nbi</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span>
         <span class="n">ur</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">unbi</span><span class="p">][</span><span class="s1">&#39;rayidx&#39;</span><span class="p">]</span><span class="o">==</span><span class="n">ir</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">unbi</span><span class="p">][</span><span class="s1">&#39;sig&#39;</span><span class="p">][:,:,</span><span class="n">ur</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">unbi</span><span class="p">][</span><span class="s1">&#39;sig&#39;</span><span class="p">][:,:,</span><span class="n">ur</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">ray2sig2d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ir</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.ray2sig2d"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.ray2sig2d">[docs]</a>    <span class="k">def</span> <span class="nf">ray2sig2d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ir</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get signature to corresponding ray</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">sig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ray2sig</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span>
@@ -2820,9 +2866,9 @@
         <span class="n">sig</span> <span class="o">=</span> <span class="n">sig</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1">#Â remove extremal 0</span>
         <span class="n">unfc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">sig</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="c1">#Â index floor cell</span>
         <span class="n">sig2d</span> <span class="o">=</span> <span class="n">sig</span><span class="p">[:,</span><span class="n">unfc</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">sig2d</span>
+        <span class="k">return</span> <span class="n">sig2d</span></div>
 
-    <span class="k">def</span> <span class="nf">ray2inter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ir</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">Si</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.ray2inter"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.ray2inter">[docs]</a>    <span class="k">def</span> <span class="nf">ray2inter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ir</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">Si</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get interaction list (Gi style) from a ray</span>
 
 <span class="sd">        Parameters</span>
@@ -2834,10 +2880,10 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">sig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ray2sig2d</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">Si</span><span class="o">.</span><span class="n">sig2inter</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">sig</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Si</span><span class="o">.</span><span class="n">sig2inter</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">sig</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">slab_nb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ir</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.slab_nb"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.slab_nb">[docs]</a>    <span class="k">def</span> <span class="nf">slab_nb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ir</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; returns the slab numbers of r</span>
 
 <span class="sd">        Parameters</span>
@@ -2855,7 +2901,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">raypos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_ray2nbi</span><span class="p">[</span><span class="n">ir</span><span class="p">]][</span><span class="s1">&#39;rayidx&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">ir</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_ray2nbi</span><span class="p">[</span><span class="n">ir</span><span class="p">]][</span><span class="s1">&#39;sig&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">raypos</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_ray2nbi</span><span class="p">[</span><span class="n">ir</span><span class="p">]][</span><span class="s1">&#39;sig&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">raypos</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span></div>
 
     <span class="k">def</span> <span class="nf">vis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ir</span><span class="p">,</span><span class="n">L</span><span class="p">):</span>
         <span class="n">typ</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Tx&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;Rx&#39;</span><span class="p">]</span> 
@@ -2881,7 +2927,7 @@
         <span class="k">print</span> <span class="n">st</span>
         <span class="k">print</span><span class="p">(</span><span class="n">slab</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Rays.typ"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.typ.html#pylayers.antprop.rays.Rays.typ">[docs]</a>    <span class="k">def</span> <span class="nf">typ</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ir</span><span class="p">,</span><span class="n">fromR</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.typ"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.typ">[docs]</a>    <span class="k">def</span> <span class="nf">typ</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ir</span><span class="p">,</span><span class="n">fromR</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; returns interactions list type of a given ray</span>
 
 <span class="sd">        Parameters</span>
@@ -2909,7 +2955,7 @@
             <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ray</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
             <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">I</span><span class="o">.</span><span class="n">typ</span><span class="p">[</span><span class="n">a</span><span class="p">])</span></div>
 
-    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ir</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">ifGHz</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;dumpray.ray&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.dump"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ir</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">ifGHz</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;dumpray.ray&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; dump the full information of a ray in a file </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nbi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ray2nbi</span><span class="p">[</span><span class="n">ir</span><span class="p">]</span>  
@@ -2975,10 +3021,10 @@
                               <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">nbi</span><span class="p">][</span><span class="s1">&#39;Bo&#39;</span><span class="p">][</span><span class="n">l</span><span class="p">,:,</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">ur</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 
 
-        <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="Rays.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.info.html#pylayers.antprop.rays.Rays.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ir</span><span class="p">,</span><span class="n">ifGHz</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">bB</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">matrix</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.info"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ir</span><span class="p">,</span><span class="n">ifGHz</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">bB</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">matrix</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides information for a given ray r</span>
 
 <span class="sd">        Parameters</span>
@@ -3080,7 +3126,7 @@
                     <span class="n">addr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ir2a</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span>
                     <span class="n">Bo0</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">addr</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;Bo0&#39;</span><span class="p">][:,:,</span><span class="n">addr</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> 
                     <span class="n">Bi1</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">addr</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;Bi&#39;</span><span class="p">][:,:,</span><span class="mi">0</span><span class="p">,</span><span class="n">addr</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> 
-                    <span class="n">U</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Bi1</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">Bo0</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">])</span>
+                    <span class="n">U</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Bi1</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">Bo0</span><span class="p">)</span>
                     <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">B0</span><span class="p">,</span><span class="n">U</span><span class="p">)</span> 
                     <span class="n">lmat</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">B0</span><span class="p">)</span>
                     <span class="n">ltran</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">B0</span><span class="p">)</span>
@@ -3099,18 +3145,18 @@
                         <span class="n">lmat</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
                         <span class="n">ltran</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
                 <span class="c1"># evaluate matrix product</span>
-                <span class="n">PM0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-                <span class="n">PM1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">PM0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+                <span class="n">PM1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">lmat</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
                     <span class="n">PM0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">PM0</span><span class="p">,</span><span class="n">m</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">ltran</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
                     <span class="n">PM1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">PM1</span><span class="p">,</span><span class="n">m</span><span class="p">)</span>
                 <span class="k">print</span><span class="p">(</span><span class="s2">&quot;matrix product with interactions (dB)&quot;</span><span class="p">)</span>
-                <span class="k">print</span><span class="p">(</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">PM0</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])),</span><span class="s1">&#39;  &#39;</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">PM0</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])))</span>
-                <span class="k">print</span><span class="p">(</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">PM0</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])),</span><span class="s1">&#39;  &#39;</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">PM0</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])))</span>
+                <span class="k">print</span><span class="p">(</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">PM0</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])),</span><span class="s1">&#39;  &#39;</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">PM0</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])))</span>
+                <span class="k">print</span><span class="p">(</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">PM0</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])),</span><span class="s1">&#39;  &#39;</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">PM0</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">])))</span>
                 <span class="k">print</span><span class="p">(</span><span class="s2">&quot;matrix product without interactions (dB)&quot;</span><span class="p">)</span>
-                <span class="k">print</span><span class="p">(</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">PM1</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])),</span><span class="s1">&#39;  &#39;</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">PM1</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])))</span>
-                <span class="k">print</span><span class="p">(</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">PM1</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])),</span><span class="s1">&#39;  &#39;</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">PM1</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])))</span>
+                <span class="k">print</span><span class="p">(</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">PM1</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])),</span><span class="s1">&#39;  &#39;</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">PM1</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])))</span>
+                <span class="k">print</span><span class="p">(</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">PM1</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])),</span><span class="s1">&#39;  &#39;</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">PM1</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">])))</span>
                 <span class="k">return</span><span class="p">(</span><span class="n">PM0</span><span class="p">)</span>
 
             <span class="k">else</span><span class="p">:</span>
@@ -3118,7 +3164,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">print</span> <span class="s1">&#39;Rays have not been evaluated yet&#39;</span></div>
 
-<div class="viewcode-block" id="Rays.signature"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.signature.html#pylayers.antprop.rays.Rays.signature">[docs]</a>    <span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ni</span> <span class="p">,</span><span class="n">nr</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.signature"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.signature">[docs]</a>    <span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ni</span> <span class="p">,</span><span class="n">nr</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; extract ray signature</span>
 
 <span class="sd">        Parameters</span>
@@ -3143,7 +3189,7 @@
         <span class="n">sig</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">ni</span><span class="p">][</span><span class="s1">&#39;sig&#39;</span><span class="p">][:,:,</span><span class="n">nr</span><span class="p">]</span>
         <span class="k">return</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Rays.show3d"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.show3d.html#pylayers.antprop.rays.Rays.show3d">[docs]</a>    <span class="k">def</span> <span class="nf">show3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="Rays.show3d"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.show3d">[docs]</a>    <span class="k">def</span> <span class="nf">show3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                <span class="n">ray</span><span class="p">,</span>
                <span class="n">bdis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                <span class="n">bbas</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
@@ -3317,7 +3363,7 @@
         <span class="c1"># mlab.view(view[0],view[1],view[2],view[3])</span>
         <span class="k">return</span><span class="p">(</span><span class="n">f</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="Rays.show3"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
               <span class="n">L</span><span class="o">=</span><span class="p">[],</span>
               <span class="n">bdis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
               <span class="n">bstruc</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
@@ -3431,44 +3477,71 @@
             <span class="n">chaine</span> <span class="o">=</span> <span class="s2">&quot;geomview &quot;</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot; 2&gt;/dev/null &amp;&quot;</span>
             <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div></div>
 
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 </pre></div>
 
+           </div>
           </div>
-        </div>
-      </div>
-        <div class="clearer"></div>
-      </div>
-    </div>
+          <footer>
   
 
-    <div class="footer">
-        &copy; 2016, PyLayers developer team.
-      Last updated on Sep 21, 2017.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
-    </div>
-     <div class="rel">
-    
-    <div class="buttonPrevious">
-      <a href="../../../py-modindex.html">
-        Previous
-      </a>  
-    </div>
-    
-     </div>
-     <script type="text/javascript">
-       $("div.buttonNext, div.buttonPrevious").hover(
-           function () {
-               $(this).css('background-color', '#AFFFFF');
-           },
-           function () {
-               $(this).css('background-color', '#AFFFFF');
-           }
-       );
-     </script>
-  </body>
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team.
+      Last updated on Nov 07, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
 </html>

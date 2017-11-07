@@ -1,133 +1,176 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Table Of Content &mdash; Python 1 documentation</title>
+  
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  
+  
+
+  
+
+  
+  
     
-    <title>Table Of Content &mdash; Python 1 documentation</title>
-    
-    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/sidebar.js"></script>
-    <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="Python 1 documentation" href="../../index.html" />
-<script type="text/javascript">
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34943220-1']);
-  _gaq.push(['_trackPageview']);
+  
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
 
-</script>
+  
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  
 
-  </head>
-  <body>
+  
+        <link rel="author" title="About these documents"
+              href="../../about.html"/>
+    <link rel="top" title="Python 1 documentation" href="../../index.html"/>
+        <link rel="up" title="1   Overview" href="../TOC.html"/>
+        <link rel="next" title="Exploiting PyLayers for TC1 METIS Scenario (Alhassane Diallo Master student 2016 @IETR)" href="../2-AP/MetisRayTracing60GHzforTC1.html"/>
+        <link rel="prev" title="Handling Body Description and Mobility" href="../4-MOB/Body.html"/> 
 
-    <div class="header-wrapper">
-      <div class="header">
-          <p class="logo"><a href="../../index.html">
-            <img src="../../_static/pylayers.png" alt="Logo"/>
-          </a>
-          </p><div class="navbar">
-          <ul>
-            <li><a href="../../download.html">Download</a></li>
-            <li><a href="../TOC.html">User Guide</a></li>
-            <li><a href="../../modules/pylayers.html">Reference</a></li>
-       </ul>
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
 
-<div class="search_form">
+</head>
 
-<div id="cse" style="width: 100%;"></div>
-<script>
-  (function() {
-       var cx = '004820205189002234612:sa15qzuf2ca';
-           var gcse = document.createElement('script');
-               gcse.type = 'text/javascript';
-                   gcse.async = true;
-                       gcse.src = (document.location.protocol == 'https:' ?
-                           'https:' : 'http:') +
-                               '//cse.google.com/cse.js?cx=' + cx;
-                                   var s =
-                                   document.getElementsByTagName('script')[0];
-                                       s.parentNode.insertBefore(gcse, s);
-                                         })();
-</script>
-<gcse:search></gcse:search>
-</div>
-</div> <!-- end navbar --></div>
-    </div>
+<body class="wy-body-for-nav" role="document">
 
-    <div class="content-wrapper">
-
-      <div class="sphinxsidebar">
-	<div class="sphinxsidebarwrapper">
-	   <div class="rel rellarge">
-	     
-	<!-- rellinks[1:] is an ugly hack to avoid link to module
-	    index  -->
-	<!-- Ad a link to the 'up' page -->
-    </div>
-    <p style="text-align: center; background-color: #BFFFFF">This documentation is
-
-    for Python <strong>version 1</strong>
-    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
-    
-    <h3>Citing</h3>
-    <p>If you use the software, please consider
-    <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
-    <h3>This page</h3>
-	<ul>
-<li><a class="reference internal" href="#">Table Of Content</a><ul>
-<li><a class="reference internal" href="#cormoran-measurement-campaign">CORMORAN Measurement Campaign</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#motivation-for-creating-a-specific-tool">Motivation for creating a specific tool</a></li>
-<li><a class="reference internal" href="#prerequisite-installations">Prerequisite Installations</a><ul>
-<li><a class="reference internal" href="#the-corser-class">The <tt class="docutils literal"><span class="pre">CorSer</span></tt> Class</a><ul>
-<li><a class="reference internal" href="#plot-values">Plot values</a><ul>
-<li><a class="reference internal" href="#plot-distance">Plot distance</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#specify-time-bodytime-parameter">Specify time (<em>bodytime</em> parameter)</a></li>
-<li><a class="reference internal" href="#display-trajectory-trajectory-parameter">display trajectory (<em>trajectory</em> parameter)</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#using-pylayers-ray-tracing-with-corser-data">Using Pylayers Ray-tracing with CorSer data</a></li>
-</ul>
+  <div class="wy-grid-for-nav">
 
     
-    </div>
-	  </div>
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
 
+          
+            <a href="../../index.html" class="icon icon-home"> Python
+          
 
-      <div class="content">
+          
             
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
+            <img src="../../_static/pylayers.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#radio-propagation-simulation">2&nbsp;&nbsp;&nbsp;Radio Propagation Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#handling-agent-mobility">3&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../TOC.html#wireless-body-area-network-related-classes">4&nbsp;&nbsp;&nbsp;Wireless Body Area Network Related Classes</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Table Of Content</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cormoran-measurement-campaign">CORMORAN Measurement Campaign</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#motivation-for-creating-a-specific-tool">Motivation for creating a specific tool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisite-installations">Prerequisite Installations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-corser-class">The <code class="docutils literal"><span class="pre">CorSer</span></code> Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#plot-values">Plot values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#specify-time-bodytime-parameter">Specify time (<em>bodytime</em> parameter)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#display-trajectory-trajectory-parameter">display trajectory (<em>trajectory</em> parameter)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#using-pylayers-ray-tracing-with-corser-data">Using Pylayers Ray-tracing with CorSer data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#some-simulation-examples">5&nbsp;&nbsp;&nbsp;Some Simulation Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#algorithms-for-localization">6&nbsp;&nbsp;&nbsp;Algorithms for Localization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#measurements-tools">7&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#pylayers-tools">8&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#references">9&nbsp;&nbsp;&nbsp;References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/pylayers.html">PyLayers Modules Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
+      
+    <li>Table Of Content</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/notebook/5-SIM/Corser.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <div class="section" id="table-of-content">
 <h1>Table Of Content<a class="headerlink" href="#table-of-content" title="Permalink to this headline">¶</a></h1>
@@ -165,11 +208,8 @@
 </ol>
 </li>
 </ol>
-<div class="code python highlight-python"><div class="highlight"><pre>%matplotlib inline
+<div class="code highlight-none"><div class="highlight"><pre><span></span>%matplotlib inline
 import  pylayers.util.mayautil as myu
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
 </pre></div>
 </div>
 <div class="section" id="cormoran-measurement-campaign">
@@ -223,7 +263,7 @@ and simplify dissemination.</p>
 be installed following the installation notes here:
 <a class="reference external" href="https://github.com/pylayers/pylayers/blob/master/INSTALL.txt">https://github.com/pylayers/pylayers/blob/master/INSTALL.txt</a></li>
 <li>The CORMORAN measurements have to be downloaded from the gitlab
-repository (URL PROVIDED SHORTLY)</li>
+repository</li>
 <li>An environement variable $CORMORAN has to be set at the root of your
 CORMORAN measurements directory (help about setup of environement
 variables can be found in pylayers&#8217; INSTALL.txt</li>
@@ -231,16 +271,12 @@ variables can be found in pylayers&#8217; INSTALL.txt</li>
 <p>Once those 3 steps are satisfied, the CORMORAN exploitation measure tool
 is ready to be used.</p>
 <div class="section" id="the-corser-class">
-<h2>The <tt class="docutils literal"><span class="pre">CorSer</span></tt> Class<a class="headerlink" href="#the-corser-class" title="Permalink to this headline">¶</a></h2>
+<h2>The <code class="docutils literal"><span class="pre">CorSer</span></code> Class<a class="headerlink" href="#the-corser-class" title="Permalink to this headline">¶</a></h2>
 <p>The exploitation of measures tool takes place as a specific class named
 CorSer (which stands for Cormoran Series). Once PyLayers has been
 installed, it is possible to directly access to the class by importing
 it.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.measures.cormoran</span> <span class="kn">import</span> <span class="o">*</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>   &lt;matplotlib.figure.Figure at 0x2b2c34a62790&gt;
-
+<div class="code highlight-none"><div class="highlight"><pre><span></span>   from pylayers.measures.cormoran import *
 
 Get information on the Series
 </pre></div>
@@ -254,111 +290,561 @@ available measurements series using <em>cor_log()</em>. Then for each
 <li>The radio technology</li>
 <li>A short description of the serie</li>
 </ul>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">cor_log</span><span class="p">()</span>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>cor_log()
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>   ---------------------------------------------------------------------------
+   <div>
+   <style>
+       .dataframe thead tr:only-child th {
+           text-align: right;
+       }
 
-   UnicodeDecodeError                        Traceback (most recent call last)
+       .dataframe thead th {
+           text-align: left;
+       }
 
-   &lt;ipython-input-3-c403b83518f1&gt; in &lt;module&gt;()
-   ----&gt; 1 cor_log()
+       .dataframe tbody tr th {
+           vertical-align: top;
+       }
+   </style>
+   <table border="1" class="dataframe">
+     <thead>
+       <tr style="text-align: right;">
+         <th></th>
+         <th>serie</th>
+         <th>day</th>
+         <th>Subject</th>
+         <th>techno</th>
+         <th>Short Notes</th>
+       </tr>
+     </thead>
+     <tbody>
+       <tr>
+         <th>0</th>
+         <td>1</td>
+         <td>11</td>
+         <td>Bernard</td>
+         <td>TCR</td>
+         <td>Subject Walk circularly</td>
+       </tr>
+       <tr>
+         <th>1</th>
+         <td>2</td>
+         <td>11</td>
+         <td>Bernard</td>
+         <td>TCR</td>
+         <td>Subject Walk circularly</td>
+       </tr>
+       <tr>
+         <th>2</th>
+         <td>3</td>
+         <td>11</td>
+         <td>Bernard</td>
+         <td>TCR</td>
+         <td>Subject Walk circularly</td>
+       </tr>
+       <tr>
+         <th>3</th>
+         <td>4</td>
+         <td>11</td>
+         <td>Bernard</td>
+         <td>TCR</td>
+         <td>Subject Walk circularly</td>
+       </tr>
+       <tr>
+         <th>4</th>
+         <td>5</td>
+         <td>11</td>
+         <td>Nicolas</td>
+         <td>HKB+BS</td>
+         <td>Subject Walk circularly</td>
+       </tr>
+       <tr>
+         <th>5</th>
+         <td>6</td>
+         <td>11</td>
+         <td>Nicolas</td>
+         <td>HKB+BS</td>
+         <td>Subject Walk circularly</td>
+       </tr>
+       <tr>
+         <th>6</th>
+         <td>7</td>
+         <td>11</td>
+         <td>Nicolas</td>
+         <td>HKB+BS</td>
+         <td>Subject Walk circularly</td>
+       </tr>
+       <tr>
+         <th>7</th>
+         <td>8</td>
+         <td>11</td>
+         <td>Nicolas</td>
+         <td>HKB+BS</td>
+         <td>Subject Walk circularly</td>
+       </tr>
+       <tr>
+         <th>8</th>
+         <td>9</td>
+         <td>11</td>
+         <td>Bernard</td>
+         <td>TCR</td>
+         <td>INTERRUPTED  Subject Walk circularly ++ speed</td>
+       </tr>
+       <tr>
+         <th>9</th>
+         <td>10</td>
+         <td>11</td>
+         <td>Bernard</td>
+         <td>TCR</td>
+         <td>Subject Walk circularly ++ speed</td>
+       </tr>
+       <tr>
+         <th>10</th>
+         <td>11</td>
+         <td>11</td>
+         <td>Bernard</td>
+         <td>TCR</td>
+         <td>Subject Walk circularly ++ speed</td>
+       </tr>
+       <tr>
+         <th>11</th>
+         <td>12</td>
+         <td>11</td>
+         <td>Bernard</td>
+         <td>TCR</td>
+         <td>Subject Walk circularly ++ speed</td>
+       </tr>
+       <tr>
+         <th>12</th>
+         <td>13</td>
+         <td>11</td>
+         <td>Nicolas</td>
+         <td>HKB+BS</td>
+         <td>Subject Walk circularly without looking BS pho...</td>
+       </tr>
+       <tr>
+         <th>13</th>
+         <td>14</td>
+         <td>11</td>
+         <td>Nicolas</td>
+         <td>HKB+BS</td>
+         <td>Subject Walk circularly + Navigation movement</td>
+       </tr>
+       <tr>
+         <th>14</th>
+         <td>15</td>
+         <td>11</td>
+         <td>Nicolas</td>
+         <td>HKB+BS</td>
+         <td>Subject Walk slowly without looking BS phone h...</td>
+       </tr>
+       <tr>
+         <th>15</th>
+         <td>16</td>
+         <td>11</td>
+         <td>Nicolas</td>
+         <td>HKB+BS</td>
+         <td>Subject Walk slowly without looking BS phone h...</td>
+       </tr>
+       <tr>
+         <th>16</th>
+         <td>17</td>
+         <td>11</td>
+         <td>Bernard</td>
+         <td>TCR</td>
+         <td>Static subject pointing corners then yoga post...</td>
+       </tr>
+       <tr>
+         <th>17</th>
+         <td>18</td>
+         <td>11</td>
+         <td>Bernard</td>
+         <td>TCR</td>
+         <td>Static subject pointing corners then yoga post...</td>
+       </tr>
+       <tr>
+         <th>18</th>
+         <td>19</td>
+         <td>11</td>
+         <td>Bernard</td>
+         <td>TCR</td>
+         <td>Static subject pointing corners then yoga post...</td>
+       </tr>
+       <tr>
+         <th>19</th>
+         <td>20</td>
+         <td>11</td>
+         <td>Bernard</td>
+         <td>TCR</td>
+         <td>Static subject pointing corners then yoga post...</td>
+       </tr>
+       <tr>
+         <th>20</th>
+         <td>21</td>
+         <td>11</td>
+         <td>Nicolas</td>
+         <td>HKB+BS</td>
+         <td>Static subject pointing corners (withphone) th...</td>
+       </tr>
+       <tr>
+         <th>21</th>
+         <td>22</td>
+         <td>11</td>
+         <td>Nicolas</td>
+         <td>HKB+BS</td>
+         <td>Static subject pointing corners (withphone) th...</td>
+       </tr>
+       <tr>
+         <th>22</th>
+         <td>23</td>
+         <td>11</td>
+         <td>Nicolas</td>
+         <td>HKB+BS</td>
+         <td>INTERRUPTED Static subject pointing corners (w...</td>
+       </tr>
+       <tr>
+         <th>23</th>
+         <td>24</td>
+         <td>11</td>
+         <td>Nicolas</td>
+         <td>HKB+BS</td>
+         <td>Static subject pointing corners (withphone) th...</td>
+       </tr>
+       <tr>
+         <th>24</th>
+         <td>25</td>
+         <td>11</td>
+         <td>Bernard</td>
+         <td>TCR</td>
+         <td>Kung-fu Kata</td>
+       </tr>
+       <tr>
+         <th>25</th>
+         <td>26</td>
+         <td>11</td>
+         <td>Bernard</td>
+         <td>TCR</td>
+         <td>Kung-fu Kata with lost sensor</td>
+       </tr>
+       <tr>
+         <th>26</th>
+         <td>27</td>
+         <td>11</td>
+         <td>Nicolas</td>
+         <td>HKB+BS</td>
+         <td>subject open door, sit, type on leyboard, take...</td>
+       </tr>
+       <tr>
+         <th>27</th>
+         <td>28</td>
+         <td>11</td>
+         <td>Nicolas</td>
+         <td>HKB+BS</td>
+         <td>subject open door, sit, type on leyboard, take...</td>
+       </tr>
+       <tr>
+         <th>28</th>
+         <td>29</td>
+         <td>11</td>
+         <td>Nicolas</td>
+         <td>HKB+BS</td>
+         <td>Crossfade Yoga Posture with  phone BS left hand</td>
+       </tr>
+       <tr>
+         <th>29</th>
+         <td>30</td>
+         <td>11</td>
+         <td>Nicolas</td>
+         <td>HKB+BS</td>
+         <td>Crossfade SLOW Yoga Posture with  phone BS lef...</td>
+       </tr>
+       <tr>
+         <th>30</th>
+         <td>31</td>
+         <td>11</td>
+         <td>Nicolas</td>
+         <td>HKB+BS</td>
+         <td>Subject Walk circularly</td>
+       </tr>
+       <tr>
+         <th>31</th>
+         <td>32</td>
+         <td>11</td>
+         <td>Nicolas</td>
+         <td>TCR+HKB+BS</td>
+         <td>3 turns  circularly inc. speed sequentially</td>
+       </tr>
+       <tr>
+         <th>32</th>
+         <td>33</td>
+         <td>11</td>
+         <td>Nicolas</td>
+         <td>TCR+HKB+BS</td>
+         <td>3 turns  circularly inc. speed sequentially</td>
+       </tr>
+       <tr>
+         <th>33</th>
+         <td>34</td>
+         <td>11</td>
+         <td>Nicolas</td>
+         <td>TCR+HKB+BS</td>
+         <td>3 turns  circularly inc. Speed + muscle-buildi...</td>
+       </tr>
+       <tr>
+         <th>34</th>
+         <td>35</td>
+         <td>11</td>
+         <td>Nicolas</td>
+         <td>TCR+HKB+BS</td>
+         <td>3 turns  circularly inc. Speed + muscle-buildi...</td>
+       </tr>
+       <tr>
+         <th>35</th>
+         <td>1</td>
+         <td>12</td>
+         <td>Nicolas Jihad Eric</td>
+         <td>TCR</td>
+         <td>DATA ISSUE 3 FireMen Nav</td>
+       </tr>
+       <tr>
+         <th>36</th>
+         <td>2</td>
+         <td>12</td>
+         <td>Nicolas Jihad Eric</td>
+         <td>TCR</td>
+         <td>3 FireMen Nav (possible mocap issue)</td>
+       </tr>
+       <tr>
+         <th>37</th>
+         <td>3</td>
+         <td>12</td>
+         <td>Nicolas jihad Eric</td>
+         <td>TCR</td>
+         <td>3 FireMen Nav (possible mocap issue)</td>
+       </tr>
+       <tr>
+         <th>38</th>
+         <td>4</td>
+         <td>12</td>
+         <td>Nicolas Jihad Eric</td>
+         <td>TCR</td>
+         <td>INTERRUPTED 3 FireMen Nav</td>
+       </tr>
+       <tr>
+         <th>39</th>
+         <td>5</td>
+         <td>12</td>
+         <td>Nicolas Jihad Eric</td>
+         <td>TCR</td>
+         <td>subjects Random walk + new interfering subject...</td>
+       </tr>
+       <tr>
+         <th>40</th>
+         <td>6</td>
+         <td>12</td>
+         <td>Nicolas Jihad Eric</td>
+         <td>TCR</td>
+         <td>subjects Random walk + new interfering subject...</td>
+       </tr>
+       <tr>
+         <th>41</th>
+         <td>7</td>
+         <td>12</td>
+         <td>Nicolas Jihad Eric</td>
+         <td>TCR</td>
+         <td>subjects slow Random walk + interfering subjec...</td>
+       </tr>
+       <tr>
+         <th>42</th>
+         <td>8</td>
+         <td>12</td>
+         <td>Nicolas Jihad Eric</td>
+         <td>TCR</td>
+         <td>subjects slow Random walk + interfering subjec...</td>
+       </tr>
+       <tr>
+         <th>43</th>
+         <td>9</td>
+         <td>12</td>
+         <td>Nicolas Jihad Eric</td>
+         <td>TCR+HKB+BS</td>
+         <td>Subject??Slow motion: Indoor Nav then Firemen t...</td>
+       </tr>
+       <tr>
+         <th>44</th>
+         <td>10</td>
+         <td>12</td>
+         <td>Nicolas Jihad Eric</td>
+         <td>TCR+HKB+BS</td>
+         <td>Subject??Slow motion: Indoor Nav then Firemen t...</td>
+       </tr>
+       <tr>
+         <th>45</th>
+         <td>11</td>
+         <td>12</td>
+         <td>Nicolas Jihad Eric</td>
+         <td>TCR+HKB+BS</td>
+         <td>Subject??normal speed: Indoor Nav then Firemen ...</td>
+       </tr>
+       <tr>
+         <th>46</th>
+         <td>12</td>
+         <td>12</td>
+         <td>Nicolas Jihad Eric</td>
+         <td>TCR+HKB+BS</td>
+         <td>Subject??normal speed: Indoor Nav then Firemen ...</td>
+       </tr>
+       <tr>
+         <th>47</th>
+         <td>13</td>
+         <td>12</td>
+         <td>Nicolas Jihad Eric</td>
+         <td>TCR+HKB+BS</td>
+         <td>subjects Random walk + new interfering subject...</td>
+       </tr>
+       <tr>
+         <th>48</th>
+         <td>14</td>
+         <td>12</td>
+         <td>Nicolas Jihad Eric</td>
+         <td>TCR+HKB+BS</td>
+         <td>subjects Random walk + new interfering subject...</td>
+       </tr>
+       <tr>
+         <th>49</th>
+         <td>15</td>
+         <td>12</td>
+         <td>Nicolas Jihad Eric</td>
+         <td>TCR+HKB+BS</td>
+         <td>subjects Random walk + new interfering subject...</td>
+       </tr>
+       <tr>
+         <th>50</th>
+         <td>16</td>
+         <td>12</td>
+         <td>Nicolas Jihad Eric</td>
+         <td>TCR+HKB+BS</td>
+         <td>subjects Random walk + new interfering subject...</td>
+       </tr>
+       <tr>
+         <th>51</th>
+         <td>17</td>
+         <td>12</td>
+         <td>Nicolas Jihad Eric</td>
+         <td>HKB+BS</td>
+         <td>NO HKB Subject??normal speed: Indoor Nav then F...</td>
+       </tr>
+       <tr>
+         <th>52</th>
+         <td>18</td>
+         <td>12</td>
+         <td>Nicolas Jihad Eric</td>
+         <td>HKB+BS</td>
+         <td>NO HKB Subject??normal speed: Indoor Nav then F...</td>
+       </tr>
+       <tr>
+         <th>53</th>
+         <td>19</td>
+         <td>12</td>
+         <td>Nicolas Jihad Eric</td>
+         <td>HKB+BS</td>
+         <td>NO HKB Subject??normal speed: Indoor Nav then F...</td>
+       </tr>
+       <tr>
+         <th>54</th>
+         <td>20</td>
+         <td>12</td>
+         <td>Nicolas Jihad Eric</td>
+         <td>HKB+BS</td>
+         <td>NO HKB Subject??normal speed: Indoor Nav then F...</td>
+       </tr>
+       <tr>
+         <th>55</th>
+         <td>21</td>
+         <td>12</td>
+         <td>Nicolas Jihad Eric</td>
+         <td>HKB+BS</td>
+         <td>subjects Random walk + new interfering subject...</td>
+       </tr>
+       <tr>
+         <th>56</th>
+         <td>22</td>
+         <td>12</td>
+         <td>Nicolas Jihad Eric</td>
+         <td>HKB+BS</td>
+         <td>subjects Random walk + new interfering subject...</td>
+       </tr>
+       <tr>
+         <th>57</th>
+         <td>23</td>
+         <td>12</td>
+         <td>Nicolas Jihad Eric</td>
+         <td>HKB+BS</td>
+         <td>subjects Random walk + new interfering subject...</td>
+       </tr>
+       <tr>
+         <th>58</th>
+         <td>24</td>
+         <td>12</td>
+         <td>Nicolas Jihad Eric</td>
+         <td>HKB+BS</td>
+         <td>subjects Random walk + new interfering subject...</td>
+       </tr>
+     </tbody>
+   </table>
+   </div>
 
 
-   /home/uguen/anaconda/lib/python2.7/site-packages/IPython/core/displayhook.pyc in __call__(self, result)
-       236                 self.write_format_data(format_dict, md_dict)
-       237                 self.log_output(format_dict)
-   --&gt; 238             self.finish_displayhook()
-       239
-       240     def cull_cache(self):
 
-
-   /home/uguen/anaconda/lib/python2.7/site-packages/IPython/kernel/zmq/displayhook.pyc in finish_displayhook(self)
-        70         sys.stderr.flush()
-        71         if self.msg[&#39;content&#39;][&#39;data&#39;]:
-   ---&gt; 72             self.session.send(self.pub_socket, self.msg, ident=self.topic)
-        73         self.msg = None
-        74
-
-
-   /home/uguen/anaconda/lib/python2.7/site-packages/IPython/kernel/zmq/session.pyc in send(self, stream, msg_or_type, content, parent, ident, buffers, track, header, metadata)
-       647         if self.adapt_version:
-       648             msg = adapt(msg, self.adapt_version)
-   --&gt; 649         to_send = self.serialize(msg, ident)
-       650         to_send.extend(buffers)
-       651         longest = max([ len(s) for s in to_send ])
-
-
-   /home/uguen/anaconda/lib/python2.7/site-packages/IPython/kernel/zmq/session.pyc in serialize(self, msg, ident)
-       551             content = self.none
-       552         elif isinstance(content, dict):
-   --&gt; 553             content = self.pack(content)
-       554         elif isinstance(content, bytes):
-       555             # content is already packed, as in a relayed message
-
-
-   /home/uguen/anaconda/lib/python2.7/site-packages/IPython/kernel/zmq/session.pyc in &lt;lambda&gt;(obj)
-        83 # disallow nan, because it&#39;s not actually valid JSON
-        84 json_packer = lambda obj: jsonapi.dumps(obj, default=date_default,
-   ---&gt; 85     ensure_ascii=False, allow_nan=False,
-        86 )
-        87 json_unpacker = lambda s: jsonapi.loads(s)
-
-
-   /home/uguen/anaconda/lib/python2.7/site-packages/zmq/utils/jsonapi.pyc in dumps(o, **kwargs)
-        53         kwargs[&#39;separators&#39;] = (&#39;,&#39;, &#39;:&#39;)
-        54
-   ---&gt; 55     s = jsonmod.dumps(o, **kwargs)
-        56
-        57     if isinstance(s, unicode):
-
-
-   /home/uguen/anaconda/lib/python2.7/json/__init__.pyc in dumps(obj, skipkeys, ensure_ascii, check_circular, allow_nan, cls, indent, separators, encoding, default, sort_keys, **kw)
-       248         check_circular=check_circular, allow_nan=allow_nan, indent=indent,
-       249         separators=separators, encoding=encoding, default=default,
-   --&gt; 250         sort_keys=sort_keys, **kw).encode(obj)
-       251
-       252
-
-
-   /home/uguen/anaconda/lib/python2.7/json/encoder.pyc in encode(self, o)
-       208         if not isinstance(chunks, (list, tuple)):
-       209             chunks = list(chunks)
-   --&gt; 210         return &#39;&#39;.join(chunks)
-       211
-       212     def iterencode(self, o, _one_shot=False):
-
-
-   UnicodeDecodeError: &#39;ascii&#39; codec can&#39;t decode byte 0xc2 in position 5523: ordinal not in range(128)
-
-
-Load Serie
-</pre></div>
-</div>
-<hr class="docutils" />
+Load Serie<hr class="docutils" />
 <p>As an example, serie 6 from day 11 can be loaded using the following
 command:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">=</span><span class="n">CorSer</span><span class="p">(</span><span class="n">serie</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">day</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S=CorSer(serie=6,day=11,layout=True)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>load infrastructure node position: **** Processor coding : Intel-PC
+<div class="highlight-none"><div class="highlight"><pre><span></span>load infrastructure node position: **** Processor coding : Intel-PC
+(&#39;3GPP_omni.sh3&#39;, &#39; does not exist&#39;)
+(&#39;3GPP_omni.sh3&#39;, &#39; does not exist&#39;)
+(&#39;3GPP_omni.sh3&#39;, &#39; does not exist&#39;)
+(&#39;3GPP_omni.sh3&#39;, &#39; does not exist&#39;)
 
 load  Nicolas  body: **** Processor coding : Intel-PC
+(&#39;3GPP_HeadRight_3.sh3&#39;, &#39; does not exist&#39;)
+(&#39;3GPP_WristLeft_3.sh3&#39;, &#39; does not exist&#39;)
+(&#39;3GPP_WristRight_3.sh3&#39;, &#39; does not exist&#39;)
+(&#39;3GPP_ElbowLeft_3.sh3&#39;, &#39; does not exist&#39;)
+(&#39;3GPP_ElbowRight_3.sh3&#39;, &#39; does not exist&#39;)
+(&#39;3GPP_KneeLeft_3.sh3&#39;, &#39; does not exist&#39;)
+(&#39;3GPP_AnkleLeft_3.sh3&#39;, &#39; does not exist&#39;)
+(&#39;3GPP_AnkleRight_3.sh3&#39;, &#39; does not exist&#39;)
+(&#39;3GPP_HipRight_3.sh3&#39;, &#39; does not exist&#39;)
+(&#39;3GPP_BackCenter_3.sh3&#39;, &#39; does not exist&#39;)
+(&#39;3GPP_TorsoTopLeft_3.sh3&#39;, &#39; does not exist&#39;)
+(&#39;3GPP_TorsoTopRight_3.sh3&#39;, &#39; does not exist&#39;)
 
-BS data frame index:  Align on mocap OK... WARNING time-offset NOT applied
-No BS offset not yet set =&gt; use self.offset_setter
+BS data frame index:  Align on mocap OK... time-offset applied OK
 
 HKB data frame index: Align on mocap OK... time-offset applied OK
 
 Create distance Dataframe... OK
 </pre></div>
 </div>
-<p>Once loaded information about the serie (date, type, ...) can be
-obtained just by calling the object itself:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span>
+<div class="highlight-none"><div class="highlight"><pre><span></span>/home/uguen/Documents/rch/devel/pylayers/pylayers/measures/cormoran.py:5268: FutureWarning: fill_method is deprecated to .resample()
+the new syntax is .resample(...).ffill()
+  df = idf.resample(str(sf)+&#39;U&#39;,fill_method=&#39;ffill&#39;)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>   Filename: Sc20_S6_R2_HKBS
+<p>Once loaded information about the serie (date, type, ...) can be
+obtained just by calling the object itself:</p>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S
+</pre></div>
+</div>
+<pre class="literal-block">
+   filename : Sc20_S6_R2_HKBS
+   filewear : /home/uguen/data/CORMORAN/cormoran-measures/POST-TREATED/11-06-2014/BodyandWear/Nicolas_11-06-2014_HKBS.ini
+   filebody : /home/uguen/data/CORMORAN/cormoran-measures/POST-TREATED/11-06-2014/BodyandWear/Nicolas.ini
+   filemocap : /home/uguen/data/CORMORAN/cormoran-measures/RAW/11-06-2014/MOCAP/serie_006.c3d
    Day : 11/06/2014
    Serie : 6
    Scenario : 20
@@ -371,12 +857,26 @@ obtained just by calling the object itself:</p>
 
    BeSPoon : Sc20_S6_R2_HKBS.csv
    HIKOB : Sc2_0_S6_r2_HKB_Single.mat
+   ----------------------
+
+   VC file :[6]
+   Scenario :['2.0']
+   Meas Serie :[6]
+   Meas Run :[2]
+   Subject :['Nicolas']
+   techno :['HKB+BS']
+   video file :[ nan]
+   photo file :['100-0040']
+   Radio file :['SC2.0_S6_R2_HKB_single']
+   Date :['11/06/14']
+   Start time :['16:12']
+   Short Notes :['Subject Walk circularly']
+   notes pendant mesures :['mxc3xaame chose ras ']
 
 
 
 Available data
-</pre></div>
-</div>
+</pre>
 <hr class="docutils" />
 <blockquote>
 <div>Radio DataFrames</div></blockquote>
@@ -396,10 +896,23 @@ are available:</p>
 <p>In the example serie chosen, only HiKoB and Bespoon are available.</p>
 <p>Here is an example of the RSS values obtained by the HKB sensors for the
 120 available links and the 5 first available timestamp :</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">hkb</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.hkb.head(5)
 </pre></div>
 </div>
-   <div style="max-height:1000px;max-width:1500px;overflow:auto;">
+   <div>
+   <style>
+       .dataframe thead tr:only-child th {
+           text-align: right;
+       }
+
+       .dataframe thead th {
+           text-align: left;
+       }
+
+       .dataframe tbody tr th {
+           vertical-align: top;
+       }
+   </style>
    <table border="1" class="dataframe">
      <thead>
        <tr style="text-align: right;">
@@ -429,7 +942,7 @@ are available:</p>
      </thead>
      <tbody>
        <tr>
-         <th>0.000000</th>
+         <th>0.00</th>
          <td>NaN</td>
          <td>NaN</td>
          <td>NaN</td>
@@ -453,7 +966,7 @@ are available:</p>
          <td>NaN</td>
        </tr>
        <tr>
-         <th>0.010001</th>
+         <th>0.01</th>
          <td>NaN</td>
          <td>NaN</td>
          <td>NaN</td>
@@ -477,80 +990,80 @@ are available:</p>
          <td>NaN</td>
        </tr>
        <tr>
-         <th>0.020002</th>
-         <td>-60</td>
-         <td>-64</td>
-         <td>-61</td>
-         <td>-71</td>
-         <td>-81</td>
-         <td>-73</td>
-         <td>-78</td>
-         <td>-79</td>
-         <td>-84</td>
-         <td>-73</td>
+         <th>0.02</th>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
          <td>...</td>
-         <td>-64</td>
-         <td>-88</td>
-         <td>-64</td>
-         <td>-55</td>
-         <td>-63</td>
-         <td>-61</td>
-         <td>-77</td>
-         <td>-60</td>
-         <td>-84</td>
-         <td>-79</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
        </tr>
        <tr>
-         <th>0.030003</th>
-         <td>-60</td>
-         <td>-64</td>
-         <td>-61</td>
-         <td>-71</td>
-         <td>-81</td>
-         <td>-73</td>
-         <td>-78</td>
-         <td>-79</td>
-         <td>-84</td>
-         <td>-73</td>
+         <th>0.03</th>
+         <td>-60.0</td>
+         <td>-64.0</td>
+         <td>-61.0</td>
+         <td>-71.0</td>
+         <td>-81.0</td>
+         <td>-73.0</td>
+         <td>-78.0</td>
+         <td>-79.0</td>
+         <td>-84.0</td>
+         <td>-73.0</td>
          <td>...</td>
-         <td>-64</td>
-         <td>-88</td>
-         <td>-64</td>
-         <td>-55</td>
-         <td>-63</td>
-         <td>-61</td>
-         <td>-77</td>
-         <td>-60</td>
-         <td>-84</td>
-         <td>-79</td>
+         <td>-64.0</td>
+         <td>-88.0</td>
+         <td>-64.0</td>
+         <td>-55.0</td>
+         <td>-63.0</td>
+         <td>-61.0</td>
+         <td>-77.0</td>
+         <td>-60.0</td>
+         <td>-84.0</td>
+         <td>-79.0</td>
        </tr>
        <tr>
-         <th>0.040004</th>
-         <td>-60</td>
-         <td>-64</td>
-         <td>-61</td>
-         <td>-71</td>
-         <td>-81</td>
-         <td>-73</td>
-         <td>-78</td>
-         <td>-79</td>
-         <td>-84</td>
-         <td>-73</td>
+         <th>0.04</th>
+         <td>-60.0</td>
+         <td>-64.0</td>
+         <td>-61.0</td>
+         <td>-71.0</td>
+         <td>-81.0</td>
+         <td>-73.0</td>
+         <td>-78.0</td>
+         <td>-79.0</td>
+         <td>-84.0</td>
+         <td>-73.0</td>
          <td>...</td>
-         <td>-64</td>
-         <td>-88</td>
-         <td>-64</td>
-         <td>-55</td>
-         <td>-63</td>
-         <td>-61</td>
-         <td>-77</td>
-         <td>-60</td>
-         <td>-84</td>
-         <td>-79</td>
+         <td>-64.0</td>
+         <td>-88.0</td>
+         <td>-64.0</td>
+         <td>-55.0</td>
+         <td>-63.0</td>
+         <td>-61.0</td>
+         <td>-77.0</td>
+         <td>-60.0</td>
+         <td>-84.0</td>
+         <td>-79.0</td>
        </tr>
      </tbody>
    </table>
-   <p>5 rows × 120 columns</p>
+   <p>5 rows ?? 120 columns</p>
    </div>
 
 
@@ -566,10 +1079,23 @@ of the devices at any time stamps</li>
 distances between the different radio links.</li>
 </ul>
 <p>Here is the 5 last data of the device data frame...</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">devdf</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.devdf.tail(5)
 </pre></div>
 </div>
-<div style="max-height:1000px;max-width:1500px;overflow:auto;">
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -591,92 +1117,105 @@ distances between the different radio links.</li>
   </thead>
   <tbody>
     <tr>
-      <th>104.2</th>
-      <td> HKB:14</td>
-      <td> Nicolas</td>
-      <td> 0.158588</td>
+      <th>104.19</th>
+      <td>HKB:14</td>
+      <td>Nicolas</td>
+      <td>0.158588</td>
       <td>-1.574102</td>
-      <td> 0.526740</td>
-      <td> 0.012375</td>
+      <td>0.526740</td>
+      <td>0.012376</td>
       <td>-0.005046</td>
-      <td> 0.010521</td>
-      <td> 0.004119</td>
-      <td> 2.241849</td>
-      <td> 1.972888</td>
-      <td> 0.738384</td>
-      <td> 0.767065</td>
+      <td>0.010522</td>
+      <td>0.004120</td>
+      <td>2.242279</td>
+      <td>1.973267</td>
+      <td>0.738525</td>
+      <td>0.767212</td>
     </tr>
     <tr>
-      <th>104.2</th>
-      <td>  HKB:1</td>
-      <td>        </td>
-      <td> 0.018552</td>
+      <th>104.19</th>
+      <td>HKB:1</td>
+      <td></td>
+      <td>0.018552</td>
       <td>-2.749937</td>
-      <td> 0.979166</td>
-      <td> 0.000000</td>
-      <td> 0.000000</td>
-      <td> 0.000000</td>
-      <td> 0.000000</td>
-      <td> 0.000000</td>
-      <td> 0.000000</td>
-      <td> 0.000000</td>
-      <td> 0.000000</td>
+      <td>0.979166</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
     </tr>
     <tr>
-      <th>104.2</th>
-      <td> HKB:16</td>
-      <td> Nicolas</td>
+      <th>104.19</th>
+      <td>HKB:16</td>
+      <td>Nicolas</td>
       <td>-0.229677</td>
       <td>-1.445404</td>
-      <td> 0.175125</td>
-      <td> 0.010563</td>
+      <td>0.175125</td>
+      <td>0.010564</td>
       <td>-0.007414</td>
-      <td>-0.006640</td>
+      <td>-0.006641</td>
       <td>-0.003540</td>
-      <td> 0.547761</td>
-      <td> 0.122199</td>
-      <td>-0.250196</td>
-      <td>-0.471711</td>
+      <td>0.547866</td>
+      <td>0.122223</td>
+      <td>-0.250244</td>
+      <td>-0.471802</td>
     </tr>
     <tr>
-      <th>104.2</th>
-      <td> HKB:10</td>
-      <td> Nicolas</td>
-      <td> 0.262695</td>
+      <th>104.19</th>
+      <td>HKB:10</td>
+      <td>Nicolas</td>
+      <td>0.262695</td>
       <td>-1.433168</td>
-      <td> 1.143153</td>
-      <td> 0.057829</td>
-      <td>-0.048329</td>
-      <td>-0.030039</td>
-      <td>-0.010302</td>
-      <td> 0.924303</td>
-      <td>-0.697193</td>
-      <td> 0.368582</td>
-      <td>-0.482085</td>
+      <td>1.143153</td>
+      <td>0.057834</td>
+      <td>-0.048334</td>
+      <td>-0.030042</td>
+      <td>-0.010303</td>
+      <td>0.924481</td>
+      <td>-0.697327</td>
+      <td>0.368652</td>
+      <td>-0.482178</td>
     </tr>
     <tr>
-      <th>104.2</th>
-      <td>  HKB:3</td>
-      <td>        </td>
-      <td> 0.021135</td>
-      <td> 3.375590</td>
-      <td> 1.003871</td>
-      <td> 0.000000</td>
-      <td> 0.000000</td>
-      <td> 0.000000</td>
-      <td> 0.000000</td>
-      <td> 0.000000</td>
-      <td> 0.000000</td>
-      <td> 0.000000</td>
-      <td> 0.000000</td>
+      <th>104.19</th>
+      <td>HKB:3</td>
+      <td></td>
+      <td>0.021135</td>
+      <td>3.375590</td>
+      <td>1.003871</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
     </tr>
   </tbody>
 </table>
 </div><p>... and the 5 last data of the distance data frame:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">distdf</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.distdf.tail(5)
 </pre></div>
 </div>
-   <div style="max-height:1000px;max-width:1500px;overflow:auto;">
+   <div>
+   <style>
+       .dataframe thead tr:only-child th {
+           text-align: right;
+       }
+
+       .dataframe thead th {
+           text-align: left;
+       }
+
+       .dataframe tbody tr th {
+           vertical-align: top;
+       }
+   </style>
    <table border="1" class="dataframe">
      <thead>
        <tr style="text-align: right;">
@@ -706,128 +1245,128 @@ distances between the different radio links.</li>
      </thead>
      <tbody>
        <tr>
-         <th>104.159996</th>
-         <td> 6.102589</td>
-         <td> 6.125578</td>
-         <td> 6.135849</td>
-         <td> 1.308815</td>
-         <td> 1.163639</td>
-         <td> 1.131707</td>
-         <td> 1.387571</td>
-         <td> 1.322510</td>
-         <td> 1.350930</td>
-         <td> 1.223406</td>
+         <th>104.15</th>
+         <td>6.102589</td>
+         <td>6.125578</td>
+         <td>6.135849</td>
+         <td>1.308815</td>
+         <td>1.163639</td>
+         <td>1.131707</td>
+         <td>1.387571</td>
+         <td>1.322510</td>
+         <td>1.350930</td>
+         <td>1.223406</td>
          <td>...</td>
-         <td> 1.071233</td>
-         <td> 0.990922</td>
-         <td> 0.411064</td>
-         <td> 0.753501</td>
-         <td> 0.910143</td>
-         <td> 0.364396</td>
-         <td> 0.539795</td>
-         <td> 0.445009</td>
-         <td> 1.046829</td>
-         <td> 0.119864</td>
+         <td>1.071233</td>
+         <td>0.990922</td>
+         <td>0.411064</td>
+         <td>0.753501</td>
+         <td>0.910143</td>
+         <td>0.364396</td>
+         <td>0.539795</td>
+         <td>0.445009</td>
+         <td>1.046829</td>
+         <td>0.119864</td>
        </tr>
        <tr>
-         <th>104.169997</th>
-         <td> 6.102589</td>
-         <td> 6.125578</td>
-         <td> 6.135849</td>
-         <td> 1.309074</td>
-         <td> 1.163713</td>
-         <td> 1.131587</td>
-         <td> 1.387549</td>
-         <td> 1.322884</td>
-         <td> 1.350486</td>
-         <td> 1.223658</td>
+         <th>104.16</th>
+         <td>6.102589</td>
+         <td>6.125578</td>
+         <td>6.135849</td>
+         <td>1.309074</td>
+         <td>1.163713</td>
+         <td>1.131587</td>
+         <td>1.387549</td>
+         <td>1.322884</td>
+         <td>1.350486</td>
+         <td>1.223658</td>
          <td>...</td>
-         <td> 1.071489</td>
-         <td> 0.990873</td>
-         <td> 0.410944</td>
-         <td> 0.753502</td>
-         <td> 0.909901</td>
-         <td> 0.364396</td>
-         <td> 0.539682</td>
-         <td> 0.445027</td>
-         <td> 1.046903</td>
-         <td> 0.119868</td>
+         <td>1.071489</td>
+         <td>0.990873</td>
+         <td>0.410944</td>
+         <td>0.753502</td>
+         <td>0.909901</td>
+         <td>0.364396</td>
+         <td>0.539682</td>
+         <td>0.445027</td>
+         <td>1.046903</td>
+         <td>0.119868</td>
        </tr>
        <tr>
-         <th>104.179998</th>
-         <td> 6.102589</td>
-         <td> 6.125578</td>
-         <td> 6.135849</td>
-         <td> 1.309470</td>
-         <td> 1.163938</td>
-         <td> 1.131414</td>
-         <td> 1.387530</td>
-         <td> 1.323230</td>
-         <td> 1.350018</td>
-         <td> 1.223874</td>
+         <th>104.17</th>
+         <td>6.102589</td>
+         <td>6.125578</td>
+         <td>6.135849</td>
+         <td>1.309470</td>
+         <td>1.163938</td>
+         <td>1.131414</td>
+         <td>1.387530</td>
+         <td>1.323230</td>
+         <td>1.350018</td>
+         <td>1.223874</td>
          <td>...</td>
-         <td> 1.071624</td>
-         <td> 0.990832</td>
-         <td> 0.410933</td>
-         <td> 0.753522</td>
-         <td> 0.909759</td>
-         <td> 0.364316</td>
-         <td> 0.539533</td>
-         <td> 0.445038</td>
-         <td> 1.046936</td>
-         <td> 0.119734</td>
+         <td>1.071624</td>
+         <td>0.990832</td>
+         <td>0.410933</td>
+         <td>0.753522</td>
+         <td>0.909759</td>
+         <td>0.364316</td>
+         <td>0.539533</td>
+         <td>0.445038</td>
+         <td>1.046936</td>
+         <td>0.119734</td>
        </tr>
        <tr>
-         <th>104.189999</th>
-         <td> 6.102589</td>
-         <td> 6.125578</td>
-         <td> 6.135849</td>
-         <td> 1.309873</td>
-         <td> 1.164064</td>
-         <td> 1.131319</td>
-         <td> 1.387509</td>
-         <td> 1.323601</td>
-         <td> 1.349608</td>
-         <td> 1.224129</td>
+         <th>104.18</th>
+         <td>6.102589</td>
+         <td>6.125578</td>
+         <td>6.135849</td>
+         <td>1.309873</td>
+         <td>1.164064</td>
+         <td>1.131319</td>
+         <td>1.387509</td>
+         <td>1.323601</td>
+         <td>1.349608</td>
+         <td>1.224129</td>
          <td>...</td>
-         <td> 1.071955</td>
-         <td> 0.990734</td>
-         <td> 0.410871</td>
-         <td> 0.753529</td>
-         <td> 0.909520</td>
-         <td> 0.364281</td>
-         <td> 0.539368</td>
-         <td> 0.445063</td>
-         <td> 1.047000</td>
-         <td> 0.119982</td>
+         <td>1.071955</td>
+         <td>0.990734</td>
+         <td>0.410871</td>
+         <td>0.753529</td>
+         <td>0.909520</td>
+         <td>0.364281</td>
+         <td>0.539368</td>
+         <td>0.445063</td>
+         <td>1.047000</td>
+         <td>0.119982</td>
        </tr>
        <tr>
-         <th>104.200000</th>
-         <td> 6.102589</td>
-         <td> 6.125578</td>
-         <td> 6.135849</td>
-         <td> 1.310357</td>
-         <td> 1.164289</td>
-         <td> 1.131228</td>
-         <td> 1.387509</td>
-         <td> 1.323915</td>
-         <td> 1.349214</td>
-         <td> 1.224341</td>
+         <th>104.19</th>
+         <td>6.102589</td>
+         <td>6.125578</td>
+         <td>6.135849</td>
+         <td>1.310357</td>
+         <td>1.164289</td>
+         <td>1.131228</td>
+         <td>1.387509</td>
+         <td>1.323915</td>
+         <td>1.349214</td>
+         <td>1.224341</td>
          <td>...</td>
-         <td> 1.072294</td>
-         <td> 0.990736</td>
-         <td> 0.410651</td>
-         <td> 0.753482</td>
-         <td> 0.909291</td>
-         <td> 0.364271</td>
-         <td> 0.539394</td>
-         <td> 0.445110</td>
-         <td> 1.046967</td>
-         <td> 0.119830</td>
+         <td>1.072294</td>
+         <td>0.990736</td>
+         <td>0.410651</td>
+         <td>0.753482</td>
+         <td>0.909291</td>
+         <td>0.364271</td>
+         <td>0.539394</td>
+         <td>0.445110</td>
+         <td>1.046967</td>
+         <td>0.119830</td>
        </tr>
      </tbody>
    </table>
-   <p>5 rows × 122 columns</p>
+   <p>5 rows ?? 122 columns</p>
    </div>
 
 
@@ -842,10 +1381,10 @@ involved in the serie and:</p>
 <li>At wich Subject the device is related.</li>
 </ul>
 <p>Infrastrucure access point obviously don&#8217;t have related Subject.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">dev</span>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.dev
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>   Name in Dataframe     | Real Id | Body Id  | Subject
+<div class="highlight-none"><div class="highlight"><pre><span></span>   Name in Dataframe     | Real Id | Body Id  | Subject
    ========================================================
    AP4                   |       4 | HKB:4    |
    AP1                   |       1 | HKB:1    |
@@ -891,11 +1430,24 @@ given, the position for all time stamps are provided</li>
 </ul>
 <p>Hence, It is possible to get the positions of the HKB radio node 11 (Hip
 Right), between 5.0 seconds and 5.2 seconds with:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Positions</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">getdevp</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">])</span>
-<span class="n">Positions</span>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>Positions = S.getdevp(11,t=[5,5.2])
+Positions
 </pre></div>
 </div>
-<div style="max-height:1000px;max-width:1500px;overflow:auto;">
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -907,130 +1459,136 @@ Right), between 5.0 seconds and 5.2 seconds with:</p>
   </thead>
   <tbody>
     <tr>
-      <th>5.000480</th>
+      <th>5.00</th>
       <td>-0.139566</td>
-      <td> 0.224905</td>
-      <td> 1.016796</td>
+      <td>0.224905</td>
+      <td>1.016796</td>
     </tr>
     <tr>
-      <th>5.010481</th>
+      <th>5.01</th>
       <td>-0.139553</td>
-      <td> 0.224845</td>
-      <td> 1.016826</td>
+      <td>0.224845</td>
+      <td>1.016826</td>
     </tr>
     <tr>
-      <th>5.020482</th>
+      <th>5.02</th>
       <td>-0.139545</td>
-      <td> 0.224825</td>
-      <td> 1.016818</td>
+      <td>0.224825</td>
+      <td>1.016818</td>
     </tr>
     <tr>
-      <th>5.030483</th>
+      <th>5.03</th>
       <td>-0.139564</td>
-      <td> 0.224730</td>
-      <td> 1.016849</td>
+      <td>0.224730</td>
+      <td>1.016849</td>
     </tr>
     <tr>
-      <th>5.040484</th>
+      <th>5.04</th>
       <td>-0.139609</td>
-      <td> 0.224642</td>
-      <td> 1.016859</td>
+      <td>0.224642</td>
+      <td>1.016859</td>
     </tr>
     <tr>
-      <th>5.050485</th>
+      <th>5.05</th>
       <td>-0.139580</td>
-      <td> 0.224613</td>
-      <td> 1.016898</td>
+      <td>0.224613</td>
+      <td>1.016898</td>
     </tr>
     <tr>
-      <th>5.060486</th>
+      <th>5.06</th>
       <td>-0.139554</td>
-      <td> 0.224586</td>
-      <td> 1.016920</td>
+      <td>0.224586</td>
+      <td>1.016920</td>
     </tr>
     <tr>
-      <th>5.070487</th>
+      <th>5.07</th>
       <td>-0.139604</td>
-      <td> 0.224492</td>
-      <td> 1.016937</td>
+      <td>0.224492</td>
+      <td>1.016937</td>
     </tr>
     <tr>
-      <th>5.080488</th>
+      <th>5.08</th>
       <td>-0.139545</td>
-      <td> 0.224452</td>
-      <td> 1.016989</td>
+      <td>0.224452</td>
+      <td>1.016989</td>
     </tr>
     <tr>
-      <th>5.090489</th>
+      <th>5.09</th>
       <td>-0.139521</td>
-      <td> 0.224391</td>
-      <td> 1.016992</td>
+      <td>0.224391</td>
+      <td>1.016992</td>
     </tr>
     <tr>
-      <th>5.100489</th>
+      <th>5.10</th>
       <td>-0.139386</td>
-      <td> 0.224397</td>
-      <td> 1.016997</td>
+      <td>0.224397</td>
+      <td>1.016997</td>
     </tr>
     <tr>
-      <th>5.110490</th>
+      <th>5.11</th>
       <td>-0.139296</td>
-      <td> 0.224315</td>
-      <td> 1.017041</td>
+      <td>0.224315</td>
+      <td>1.017041</td>
     </tr>
     <tr>
-      <th>5.120491</th>
+      <th>5.12</th>
       <td>-0.139164</td>
-      <td> 0.224189</td>
-      <td> 1.017098</td>
+      <td>0.224189</td>
+      <td>1.017098</td>
     </tr>
     <tr>
-      <th>5.130492</th>
+      <th>5.13</th>
       <td>-0.138988</td>
-      <td> 0.224128</td>
-      <td> 1.017131</td>
+      <td>0.224128</td>
+      <td>1.017131</td>
     </tr>
     <tr>
-      <th>5.140493</th>
+      <th>5.14</th>
       <td>-0.138810</td>
-      <td> 0.224048</td>
-      <td> 1.017142</td>
+      <td>0.224048</td>
+      <td>1.017142</td>
     </tr>
     <tr>
-      <th>5.150494</th>
+      <th>5.15</th>
       <td>-0.138605</td>
-      <td> 0.223969</td>
-      <td> 1.017148</td>
+      <td>0.223969</td>
+      <td>1.017148</td>
     </tr>
     <tr>
-      <th>5.160495</th>
+      <th>5.16</th>
       <td>-0.138406</td>
-      <td> 0.223877</td>
-      <td> 1.017164</td>
+      <td>0.223877</td>
+      <td>1.017164</td>
     </tr>
     <tr>
-      <th>5.170496</th>
+      <th>5.17</th>
       <td>-0.138043</td>
-      <td> 0.223803</td>
-      <td> 1.017230</td>
+      <td>0.223803</td>
+      <td>1.017230</td>
     </tr>
     <tr>
-      <th>5.180497</th>
+      <th>5.18</th>
       <td>-0.137791</td>
-      <td> 0.223654</td>
-      <td> 1.017305</td>
+      <td>0.223654</td>
+      <td>1.017305</td>
     </tr>
     <tr>
-      <th>5.190498</th>
+      <th>5.19</th>
       <td>-0.137388</td>
-      <td> 0.223580</td>
-      <td> 1.017321</td>
+      <td>0.223580</td>
+      <td>1.017321</td>
+    </tr>
+    <tr>
+      <th>5.20</th>
+      <td>-0.137016</td>
+      <td>0.223465</td>
+      <td>1.017342</td>
     </tr>
   </tbody>
 </table>
 </div><p><strong>NOTE : You may also obtain a classical numpy array instead of this
 Pandas object by using the &#8220;*values*&#8221; method :</strong></p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Positions</span><span class="o">.</span><span class="n">values</span>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>Positions.values
 </pre></div>
 </div>
 <pre class="literal-block">
@@ -1053,7 +1611,8 @@ Pandas object by using the &#8220;*values*&#8221; method :</strong></p>
           [-0.1384055 ,  0.22387668,  1.01716443],
           [-0.13804305,  0.22380293,  1.01722955],
           [-0.13779123,  0.2236543 ,  1.01730511],
-          [-0.13738791,  0.22358025,  1.01732141]])
+          [-0.13738791,  0.22358025,  1.01732141],
+          [-0.13701614,  0.22346536,  1.01734192]])
 
 
 
@@ -1063,8 +1622,8 @@ Get link value (<em>S.getlink</em>)
 <p>The value of a link <em>a</em> and <em>b</em> at a specific time or range or time can
 be obtained by specifying:</p>
 <ul class="simple">
-<li>The device  (Name in dataframe OR real id OR body id)</li>
-<li>The device  (Name in dataframe OR real id OR body id)</li>
+<li>The device <span class="math">\(a\)</span> (Name in dataframe OR real id OR body id)</li>
+<li>The device <span class="math">\(b\)</span> (Name in dataframe OR real id OR body id)</li>
 <li>The radio <em>technoa</em> and <em>technob</em> (Precising the techno is optional
 except when an ambiguity occurs, therefore error is raised)</li>
 <li>a given time in second or a [start time,stop time]. If no time is
@@ -1073,43 +1632,17 @@ given, the position for all time stamps are provided</li>
 <p>Hence, It is possible to get the HKB values between radio node 11 (Hip
 Right) and node 16 (Ankle Right) , between 5 seconds and 5.2 seconds
 with:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Values</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">getlink</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">])</span>
-<span class="n">Values</span>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>   Values = S.getlink(11,16,t=[5,5.2])
+
+Get link distance (*S.getlinkd*)
 </pre></div>
 </div>
-<pre class="literal-block">
-   5.000500   -67
-   5.010501   -67
-   5.020502   -67
-   5.030503   -67
-   5.040504   -67
-   5.050505   -67
-   5.060506   -67
-   5.070507   -67
-   5.080508   -67
-   5.090509   -67
-   5.100510   -67
-   5.110511   -67
-   5.120512   -67
-   5.130513   -67
-   5.140514   -67
-   5.150515   -67
-   5.160516   -67
-   5.170517   -67
-   5.180518   -67
-   5.190519   -66
-   Name: HipRight-AnkleRight, dtype: float64
-
-
-
-Get link distance (<em>S.getlinkd</em>)
-</pre>
 <hr class="docutils" />
 <p>The ground truth distance separating a device <em>a</em> and device <em>b</em> at a
 specific time or range or time can be obtained by specifying:</p>
 <ul class="simple">
-<li>The device  (Name in dataframe OR real id OR body id)</li>
-<li>The device  (Name in dataframe OR real id OR body id)</li>
+<li>The device <span class="math">\(a\)</span> (Name in dataframe OR real id OR body id)</li>
+<li>The device <span class="math">\(b\)</span> (Name in dataframe OR real id OR body id)</li>
 <li>The radio <em>technoa</em> and <em>technob</em> (Precising the techno is optional
 except when an ambiguity occurs, therefore error is raised)</li>
 <li>a given time in second or a [start time,stop time]. If no time is
@@ -1118,33 +1651,7 @@ given, the position for all time stamps are provided</li>
 <p>Hence, It is possible to get the HKB values between radio node 11 (Hip
 Right) and node 16 (Ankle Right) , between 5 seconds and 5.2 seconds
 with:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Distances</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">getlinkd</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">])</span>
-<span class="n">Distances</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>   5.000480    0.845013
-   5.010481    0.845034
-   5.020482    0.845045
-   5.030483    0.845068
-   5.040484    0.845090
-   5.050485    0.845180
-   5.060486    0.845229
-   5.070487    0.845235
-   5.080488    0.845309
-   5.090489    0.845339
-   5.100489    0.845353
-   5.110490    0.845423
-   5.120491    0.845482
-   5.130492    0.845559
-   5.140493    0.845563
-   5.150494    0.845595
-   5.160495    0.845602
-   5.170496    0.845677
-   5.180497    0.845769
-   5.190498    0.845785
-   Name: HKB:11-HKB:16, dtype: float64
-
-
+<div class="code highlight-none"><div class="highlight"><pre><span></span>   Distances = S.getlinkd(11,16,t=[5,5.2])
 
 Visualizing the Data
 </pre></div>
@@ -1156,24 +1663,24 @@ Visualizing the Data
 <p>Because radio data in CorSer are stored into Pandas objects, convenient
 vizualization method are directly available. Most of them can be found
 here : <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/visualization.html">http://pandas.pydata.org/pandas-docs/stable/visualization.html</a></p>
-<p>As an example, it is possbile tthe previous obtained values and distance
-with :</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Ploting</span>
-<span class="n">ax</span><span class="o">=</span><span class="n">Values</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span> <span class="c">#plot values</span>
-<span class="n">l</span><span class="o">=</span><span class="n">Distances</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">secondary_y</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span> <span class="c"># plot distances on the right side</span>
+<p>As an example, it is possible to plot the previous obtained values and
+distance with :</p>
+<div class="code highlight-none"><div class="highlight"><pre><span></span># Ploting
+ax=Values.plot() #plot values
+l=Distances.plot(secondary_y=True,ax=ax) # plot distances on the right side
 
-<span class="c">##Labelling</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span> <span class="c"># add legend box</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;RSS Values (dBm)&#39;</span><span class="p">)</span> <span class="c">#set left ylabel</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">right_ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;Distances (m)&#39;</span><span class="p">)</span> <span class="c">#set right ylabel</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;time (s)&#39;</span><span class="p">)</span> <span class="c"># set xlabel</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">&#39;RSS and distance as a function of time&#39;</span><span class="p">)</span>
+##Labelling
+ax.legend() # add legend box
+ax.set_ylabel(&#39;RSS Values (dBm)&#39;) #set left ylabel
+ax.right_ax.set_ylabel(&#39;Distances (m)&#39;) #set right ylabel
+ax.set_xlabel(&#39;time (s)&#39;) # set xlabel
+ax.set_title(&#39;RSS and distance as a function of time&#39;)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b2c3bf51090&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7f04e8acea50&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Corser_75_1.png" src="../../_images/Corser_75_1.png" />
+<img alt="../../_images/Corser_27_1.png" src="../../_images/Corser_27_1.png" />
 <p>In addition, CorSer also provides specific plotting methods which
 includes extra features.</p>
 <blockquote>
@@ -1182,8 +1689,8 @@ includes extra features.</p>
 <p>The plot function allows to display the radio values of a link. The main
 parameters are always the same:</p>
 <ul class="simple">
-<li>The device  (Name in dataframe OR real id OR body id)</li>
-<li>The device  (Name in dataframe OR real id OR body id)</li>
+<li>The device <span class="math">\(a\)</span> (Name in dataframe OR real id OR body id)</li>
+<li>The device <span class="math">\(b\)</span> (Name in dataframe OR real id OR body id)</li>
 <li>The radio <em>techno</em> (Precising the techno is optional except when an
 ambiguity occurs, therefore error is raised)</li>
 <li>A given time in second or a [start time,stop time]. If no time is
@@ -1196,42 +1703,42 @@ more information</p>
 <p>Continuying with the same example, it is possible to plot the HKB values
 between radio node 11 (Hip Right) and node 16 (Ankle Right) , between 5
 seconds and 5.2 seconds with:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">])</span>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.plot(11,16,t=[5,5.2])
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b2c37140150&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b2c3c06fe50&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f04e8b56f90&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f04e8b6b450&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/Corser_82_1.png" src="../../_images/Corser_82_1.png" />
+<img alt="../../_images/Corser_29_1.png" src="../../_images/Corser_29_1.png" />
 <div class="section" id="plot-distance">
 <h4>Plot distance<a class="headerlink" href="#plot-distance" title="Permalink to this headline">¶</a></h4>
 <p>As well, it is possible to plot the distance using the <em>distance</em>
 parameter</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">],</span><span class="n">distance</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.plot(11,16,t=[5,5.2],distance = True)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b2c3c066150&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b2c3c0d6790&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f04e8931350&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f04e8946050&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/Corser_85_1.png" src="../../_images/Corser_85_1.png" />
+<img alt="../../_images/Corser_31_1.png" src="../../_images/Corser_31_1.png" />
 <p>It is also possible to get the same result than with the Pandas
 procedure with the following code :</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#plot value</span>
-<span class="n">f</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">],</span><span class="n">color</span> <span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>#plot value
+f,ax = S.plot(11,16,t=[5,5.2],color =&#39;b&#39;,title=False)
 
-<span class="c"># create right axis</span>
-<span class="n">ax2</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
+# create right axis
+ax2=ax.twinx()
 
-<span class="c"># plot distance</span>
-<span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">],</span><span class="n">color</span> <span class="o">=</span><span class="s">&#39;g&#39;</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-       <span class="n">distance</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-       <span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">)</span>
+# plot distance
+S.plot(11,16,t=[5,5.2],color =&#39;g&#39;,title=False,
+        distance=True,
+        fig=f,ax=ax2)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b2c3c1e65d0&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b2c3c1e66d0&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f04e88d9890&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f04e8770c50&gt;)
 </pre></div>
 </div>
 <hr class="docutils" />
@@ -1245,40 +1752,46 @@ interpretation.</p>
 the plot visibility (<em>S.pltvisi</em>) method is used. The <strong>hatched</strong> area
 denoted <strong>NLOS</strong> wheras <strong>clear</strong> area denotes <strong>LOS</strong>.</p>
 <p>Parameters are the same than those the <em>plot</em> method:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">16</span><span class="p">)</span>
-<span class="n">S</span><span class="o">.</span><span class="n">pltvisi</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>f,ax = S.plot(1,16)
+S.pltvisi(1,16,fig=f,ax=ax)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b2c3c1ef590&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b2c3c1fabd0&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>/home/uguen/Documents/rch/devel/pylayers/pylayers/mobility/ban/body.py:2516: VisibleDeprecationWarning: using a non-integer number instead of an integer will result in an error in the future
+  C = self.d[:,kta,frameId]
+/home/uguen/Documents/rch/devel/pylayers/pylayers/mobility/ban/body.py:2517: VisibleDeprecationWarning: using a non-integer number instead of an integer will result in an error in the future
+  D = self.d[:,khe,frameId]
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f04e88e4090&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f04e88788d0&gt;)
 </pre></div>
 </div>
 <hr class="docutils" />
 <p>As well it is possible to determine and indicate whether the subject is
 static or not by using the plot mobility method (<em>S.pltmob</em>). The
-succession of Static and Mobile sequences are denoted  and
- resplectively, where  is an index of the sequence.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">16</span><span class="p">)</span>
-<span class="n">S</span><span class="o">.</span><span class="n">pltmob</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+succession of Static and Mobile sequences are denoted <span class="math">\(S_x\)</span> and
+<span class="math">\(M_x\)</span> resplectively, where <span class="math">\(x\)</span> is an index of the sequence.</p>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>f,ax = S.plot(1,16)
+S.pltmob(fig=f,ax=ax)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b2c3c389110&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b2c3c37f890&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f04e8583750&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f04e8594790&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/Corser_96_1.png" src="../../_images/Corser_96_1.png" />
+<img alt="../../_images/Corser_37_1.png" src="../../_images/Corser_37_1.png" />
 <p>The 2 upmentionned methods can also be used simultaneously as shown in
 the following example :</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># plot data in green)</span>
-<span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">plthkb</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
-<span class="c"># plot optical occultation (hatched lines)</span>
-<span class="n">S</span><span class="o">.</span><span class="n">pltvisi</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-<span class="c"># plot subject mobility (grey areas)</span>
-<span class="n">S</span><span class="o">.</span><span class="n">pltmob</span><span class="p">(</span><span class="n">showvel</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">ylim</span><span class="o">=</span><span class="p">([</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="o">-</span><span class="mi">40</span><span class="p">]),</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<div class="code highlight-none"><div class="highlight"><pre><span></span># plot data in green)
+f,ax=S.plthkb(1,13,figsize=(10,5))
+# plot optical occultation (hatched lines)
+S.pltvisi(1,13,fig=f,ax=ax)
+# plot subject mobility (grey areas)
+S.pltmob(showvel=False,ylim=([-100,-40]),fig=f,ax=ax)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b2c3c3f8690&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b2c3c55bc10&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f04e85f2790&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f04e858b4d0&gt;)
 </pre></div>
 </div>
 <hr class="docutils" />
@@ -1294,39 +1807,38 @@ the infrastructure.</li>
 </ul>
 <p>By default, the use of the *S._show3* method display the complete
 scene with body(ies) and associated devices at 4 different timestamp</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">_show3</span><span class="p">()</span>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S._show3()
 
-<span class="c">#the following line is only used to display in the notebook a screenshot of the mayavi window</span>
-<span class="n">myu</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s">&#39;fig1&#39;</span><span class="p">)</span>
+#the following line is only used to display in the notebook a screenshot of the mayavi window
+myu.inotshow(&#39;fig1&#39;)
 </pre></div>
 </div>
-<pre class="literal-block">
-/home/uguen/anaconda/lib/python2.7/site-packages/traits/has_traits.py:1766: FutureWarning: comparison to <cite>None</cite> will result in an elementwise object comparison in the future.
-  setattr( self, name, value )
-</pre>
-<img alt="../../_images/Corser_103_1.png" src="../../_images/Corser_103_1.png" />
+<div class="highlight-none"><div class="highlight"><pre><span></span>/home/uguen/anaconda2/lib/python2.7/site-packages/mayavi/tools/camera.py:288: FutureWarning: elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison
+  if focalpoint is not None and not focalpoint == &#39;auto&#39;:
+</pre></div>
+</div>
+<img alt="../../_images/Corser_41_1.png" src="../../_images/Corser_41_1.png" />
 </div>
 </div>
 <div class="section" id="specify-time-bodytime-parameter">
 <h3>Specify time (<em>bodytime</em> parameter)<a class="headerlink" href="#specify-time-bodytime-parameter" title="Permalink to this headline">¶</a></h3>
 <p>In order to display scene at specific timestamps, the parameter
 <em>bodytime</em> can be used</p>
-<p>Example: to show the body position at ,  and
-.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">bodytime</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">30.</span><span class="p">,</span><span class="mf">90.</span><span class="p">])</span>
-
-<span class="c">#the following line is only used to display in the notebook a screenshot of the mayavi window</span>
-<span class="n">myu</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s">&#39;fig2&#39;</span><span class="p">)</span>
+<p>Example: to show the body position at <span class="math">\(t=0s\)</span>, <span class="math">\(t=30s\)</span> and
+<span class="math">\(t=90s\)</span>.</p>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S._show3(bodytime=[0.,30.,90.])
+#the following line is only used to display in the notebook a screenshot of the mayavi window
+myu.inotshow(&#39;fig2&#39;)
 </pre></div>
 </div>
-<img alt="../../_images/Corser_107_0.png" src="../../_images/Corser_107_0.png" />
+<img alt="../../_images/Corser_43_0.png" src="../../_images/Corser_43_0.png" />
 </div>
 <div class="section" id="display-trajectory-trajectory-parameter">
 <h3>display trajectory (<em>trajectory</em> parameter)<a class="headerlink" href="#display-trajectory-trajectory-parameter" title="Permalink to this headline">¶</a></h3>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">trajectory</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span><span class="n">bodytime</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">30.</span><span class="p">,</span><span class="mf">90.</span><span class="p">])</span>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S._show3(trajectory = True,bodytime=[0.,30.,90.])
 
-<span class="c">#the following line is only used to display in the notebook a screenshot of the mayavi window</span>
-<span class="n">myu</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s">&#39;fig3&#39;</span><span class="p">)</span>
+#the following line is only used to display in the notebook a screenshot of the mayavi window
+myu.inotshow(&#39;fig3&#39;)
 </pre></div>
 </div>
 <hr class="docutils" />
@@ -1334,81 +1846,118 @@ scene with body(ies) and associated devices at 4 different timestamp</p>
 window incluying a slider acting like a jog shuttle, to choose the
 timestamp to vizualize.</p>
 <p>Note : This function is note available in the notebook</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">_show3i</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">35</span><span class="p">)</span> <span class="c">#t=35 is an initialization value</span>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S._show3i(t=35) #t=35 is an initialization value
 
-<span class="c">#the following line is only used to display in the notebook a screenshot of the mayavi window</span>
-<span class="n">myu</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s">&#39;fig4&#39;</span><span class="p">)</span>
+#the following line is only used to display in the notebook a screenshot of the mayavi window
+myu.inotshow(&#39;fig4&#39;)
 </pre></div>
 </div>
-<pre class="literal-block">
-/home/uguen/anaconda/lib/python2.7/site-packages/traits/has_traits.py:1771: FutureWarning: comparison to <cite>None</cite> will result in an elementwise object comparison in the future.
-  setattr( self, name, value )
-</pre>
-<img alt="../../_images/Corser_113_1.png" src="../../_images/Corser_113_1.png" />
+<img alt="../../_images/Corser_47_0.png" src="../../_images/Corser_47_0.png" />
 <hr class="docutils" />
 <p>The visibility matrix can be displayed simultaneously to the 3D view.</p>
 <p>For that purpose a visibility/occultation matrix is computed the first
 time the vizualization is called. The following code displays the
 tisibility matrix and associated 3D scene at the inital time
-</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">imshowvisibility_i</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">35</span><span class="p">)</span>
+<span class="math">\(t=35s\)</span></p>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.imshowvisibility_i(t=35)
 
-<span class="c">#the following line is only used to display in the notebook a screenshot of the mayavi window</span>
-<span class="n">myu</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s">&#39;fig5&#39;</span><span class="p">)</span>
+#the following line is only used to display in the notebook a screenshot of the mayavi window
+myu.inotshow(&#39;fig5&#39;)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Visibility is computed only once, Please wait
+<div class="highlight-none"><div class="highlight"><pre><span></span>Visibility is computed only once, Please wait
 
 processing shadowing from  Nicolas
 </pre></div>
 </div>
-<img alt="../../_images/Corser_117_1.png" src="../../_images/Corser_117_1.png" />
-<img alt="../../_images/Corser_117_2.png" src="../../_images/Corser_117_2.png" />
+<img alt="../../_images/Corser_49_1.png" src="../../_images/Corser_49_1.png" />
+<img alt="../../_images/Corser_49_2.png" src="../../_images/Corser_49_2.png" />
 </div>
 </div>
 </div>
 <div class="section" id="using-pylayers-ray-tracing-with-corser-data">
 <h1>Using Pylayers Ray-tracing with CorSer data<a class="headerlink" href="#using-pylayers-ray-tracing-with-corser-data" title="Permalink to this headline">¶</a></h1>
-<p>Coming soon, work in progress</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pylayers.simul.simultraj</span> <span class="kn">as</span> <span class="nn">st</span>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>import pylayers.simul.simultraj as st
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#ST=st.Simul(S)</span>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>ST = st.Simul(S)
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Warning Unable to read graph Gr
+Warning Unable to read graph Gw
+Layout Graph loaded
 </pre></div>
 </div>
 </div>
 
 
+           </div>
           </div>
-        </div>
-      </div>
-        <div class="clearer"></div>
-      </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../2-AP/MetisRayTracing60GHzforTC1.html" class="btn btn-neutral float-right" title="Exploiting PyLayers for TC1 METIS Scenario (Alhassane Diallo Master student 2016 @IETR)" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../4-MOB/Body.html" class="btn btn-neutral" title="Handling Body Description and Mobility" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
     </div>
   
 
-    <div class="footer">
-        &copy; 2016, PyLayers developer team.
-      Last updated on Jun 25, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
-    <span style="padding-left: 5ex;">
-    <a href="../../_sources/notebook/5-SIM/Corser.txt"
-	    rel="nofollow">Show this page source</a>
-    </span>
-    </div>
-     <div class="rel rellarge">
-    
-    
-     </div>
-     <script type="text/javascript">
-       $("div.buttonNext, div.buttonPrevious").hover(
-           function () {
-               $(this).css('background-color', '#AFFFFF');
-           },
-           function () {
-               $(this).css('background-color', '#AFFFFF');
-           }
-       );
-     </script>
-  </body>
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team.
+      Last updated on Nov 07, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
 </html>

@@ -1,105 +1,180 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pylayers.location.geometric.constraints.tdoa &mdash; Python 1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
     
-    <title>pylayers.location.geometric.constraints.tdoa &mdash; PyLayers</title>
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="author" title="About these documents"
+              href="../../../../../about.html"/>
+    <link rel="top" title="Python 1 documentation" href="../../../../../index.html"/>
+        <link rel="up" title="Module code" href="../../../../index.html"/> 
+
+  
+  <script src="../../../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
     
-    <link rel="stylesheet" href="../../../../../_static/sphinxdoc.css" type="text/css" />
-    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../../../',
-        VERSION:     '1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../../../../index.html" />
-    <link rel="up" title="Module code" href="../../../../index.html" /> 
-  </head>
-  <body>
-<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
-    PyLayers
-<!--
-<a href="../../../../../index.html"><img src="../../../../../_static/logo.png" height="200" border="0"
-    alt="pylayers"/></a>
--->
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> Python
+          
+
+          
+            
+            <img src="../../../../../_static/pylayers.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
 </div>
 
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../../../../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../../../../../notebook/index.html">Documentation </a> |&nbsp;</li>
-        <li><a href="../../../../../download.html">Download </a> |&nbsp; </li>
-        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+          
+        </div>
 
-          <li><a href="../../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
-      </ul>
-    </div>
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../notebook/TOC.html#radio-propagation-simulation">2&nbsp;&nbsp;&nbsp;Radio Propagation Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../notebook/TOC.html#handling-agent-mobility">3&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../notebook/TOC.html#wireless-body-area-network-related-classes">4&nbsp;&nbsp;&nbsp;Wireless Body Area Network Related Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../notebook/TOC.html#some-simulation-examples">5&nbsp;&nbsp;&nbsp;Some Simulation Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../notebook/TOC.html#algorithms-for-localization">6&nbsp;&nbsp;&nbsp;Algorithms for Localization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../notebook/TOC.html#measurements-tools">7&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../notebook/TOC.html#pylayers-tools">8&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../notebook/TOC.html#references">9&nbsp;&nbsp;&nbsp;References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules/pylayers.html">PyLayers Modules Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
+</ul>
 
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../../../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+            
+          
         </div>
       </div>
+    </nav>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../../../index.html">Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+      
+    <li>pylayers.location.geometric.constraints.tdoa</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <h1>Source code for pylayers.location.geometric.constraints.tdoa</h1><div class="highlight"><pre>
-<span class="c"># -*- coding:Utf-8 -*-</span>
-<span class="c">#####################################################################</span>
-<span class="c">#This file is part of RGPA.</span>
+<span></span><span class="c1"># -*- coding:Utf-8 -*-</span>
+<span class="c1">#####################################################################</span>
+<span class="c1">#This file is part of RGPA.</span>
 
-<span class="c">#Foobar is free software: you can redistribute it and/or modify</span>
-<span class="c">#it under the terms of the GNU General Public License as published by</span>
-<span class="c">#the Free Software Foundation, either version 3 of the License, or</span>
-<span class="c">#(at your option) any later version.</span>
+<span class="c1">#Foobar is free software: you can redistribute it and/or modify</span>
+<span class="c1">#it under the terms of the GNU General Public License as published by</span>
+<span class="c1">#the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1">#(at your option) any later version.</span>
 
-<span class="c">#Foobar is distributed in the hope that it will be useful,</span>
-<span class="c">#but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-<span class="c">#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
-<span class="c">#GNU General Public License for more details.</span>
+<span class="c1">#Foobar is distributed in the hope that it will be useful,</span>
+<span class="c1">#but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#GNU General Public License for more details.</span>
 
-<span class="c">#You should have received a copy of the GNU General Public License</span>
-<span class="c">#along with Foobar.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#You should have received a copy of the GNU General Public License</span>
+<span class="c1">#along with Foobar.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
 
-<span class="c">#-------------------------------------------------------------------</span>
-<span class="c">#authors :</span>
-<span class="c">#Nicolas AMIOT          : nicolas.amiot@univ-rennes1.fr</span>
-<span class="c">#Bernard UGUEN          : bernard.uguen@univ-rennes1.fr</span>
-<span class="c">#Mohamed LAARAIEDH      : mohamed.laaraiedh@univ-rennes1.fr</span>
-<span class="c">#####################################################################</span>
+<span class="c1">#-------------------------------------------------------------------</span>
+<span class="c1">#authors :</span>
+<span class="c1">#Nicolas AMIOT          : nicolas.amiot@univ-rennes1.fr</span>
+<span class="c1">#Bernard UGUEN          : bernard.uguen@univ-rennes1.fr</span>
+<span class="c1">#Mohamed LAARAIEDH      : mohamed.laaraiedh@univ-rennes1.fr</span>
+<span class="c1">#####################################################################</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
@@ -107,7 +182,7 @@
 <span class="kn">from</span> <span class="nn">pylayers.location.geometric.constraints.constraint</span> <span class="kn">import</span> <span class="o">*</span>
 
 
-<span class="k">class</span> <span class="nc">TDOA</span><span class="p">(</span><span class="n">Constraint</span><span class="p">):</span>
+<div class="viewcode-block" id="TDOA"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.tdoa.html#pylayers.location.geometric.constraints.tdoa.TDOA">[docs]</a><span class="k">class</span> <span class="nc">TDOA</span><span class="p">(</span><span class="n">Constraint</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;      TDOA Constraint</span>
 
 <span class="sd">    Description and evaluation of TDOA constraints</span>
@@ -157,8 +232,8 @@
 
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">45</span><span class="p">])),</span> <span class="n">std</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">4.0</span><span class="p">)),</span> <span class="n">vcw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">]]),</span> <span class="n">origin</span><span class="o">=</span><span class="p">{}):</span>
-        <span class="n">Constraint</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s">&#39;TDOA&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">45</span><span class="p">])),</span> <span class="n">std</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">4.0</span><span class="p">)),</span> <span class="n">vcw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">]]),</span> <span class="n">origin</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="n">Constraint</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;TDOA&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tdoa_axes</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nv</span> <span class="o">/</span> <span class="mi">2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Dmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nv</span>
@@ -173,36 +248,36 @@
 
 
 <div class="viewcode-block" id="TDOA.update"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.tdoa.html#pylayers.location.geometric.constraints.tdoa.TDOA.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update constraint inforamtion</span>
+        <span class="sd">&quot;&quot;&quot; update constraint information</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># if self.p.any():</span>
-        <span class="c">#     self.runable = True</span>
-        <span class="c"># else:</span>
-        <span class="c">#     self.runable = False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">updc</span><span class="p">(</span><span class="s">&#39;p&#39;</span><span class="p">,</span><span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">updc</span><span class="p">(</span><span class="s">&#39;value&#39;</span><span class="p">,</span><span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">updc</span><span class="p">(</span><span class="s">&#39;std&#39;</span><span class="p">,</span><span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">std</span><span class="p">)</span>
+        <span class="c1"># if self.p.any():</span>
+        <span class="c1">#     self.runable = True</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     self.runable = False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">updc</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">,</span><span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">updc</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">updc</span><span class="p">(</span><span class="s1">&#39;std&#39;</span><span class="p">,</span><span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">std</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sstd</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">std</span> <span class="o">*</span> <span class="mf">0.3</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">range</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">*</span><span class="mf">0.3</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vcw</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="bp">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">annulus_bound</span><span class="p">()</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annulus_bound</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="TDOA.tdoa_axes"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.tdoa.html#pylayers.location.geometric.constraints.tdoa.TDOA.tdoa_axes">[docs]</a>    <span class="k">def</span> <span class="nf">tdoa_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;triedre [vn,wn,tn], support of the contraint</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c">#</span>
-        <span class="c"># Dmax</span>
-        <span class="c">#</span>
+        <span class="c1">#</span>
+        <span class="c1"># Dmax</span>
+        <span class="c1">#</span>
 
-        <span class="c">#</span>
-        <span class="c"># La boite du tdoa est tronquee</span>
-        <span class="c">#</span>
+        <span class="c1">#</span>
+        <span class="c1"># La boite du tdoa est tronquee</span>
+        <span class="c1">#</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">F1</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">F2</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
-        <span class="c">#</span>
-        <span class="c">#</span>
-        <span class="c">#</span>
+        <span class="c1">#</span>
+        <span class="c1">#</span>
+        <span class="c1">#</span>
         <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">F2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">F1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
         <span class="n">vn</span> <span class="o">=</span> <span class="n">v</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nv</span> <span class="o">*</span> <span class="mf">1.0</span><span class="p">)</span>
@@ -215,13 +290,13 @@
             <span class="n">nw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">w</span><span class="p">))</span>
             <span class="n">wn</span> <span class="o">=</span> <span class="n">w</span> <span class="o">/</span> <span class="p">(</span><span class="n">nw</span> <span class="o">*</span> <span class="mf">1.0</span><span class="p">)</span>
             <span class="n">tn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">vn</span><span class="p">,</span> <span class="n">wn</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">triedre</span> <span class="o">=</span> <span class="p">[</span><span class="n">wn</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">vn</span><span class="p">]</span>  <span class="c"># [z,x,y]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">triedre</span> <span class="o">=</span> <span class="p">[</span><span class="n">wn</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">vn</span><span class="p">]</span>  <span class="c1"># [z,x,y]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
             <span class="n">nw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">w</span><span class="p">))</span>
             <span class="n">wn</span> <span class="o">=</span> <span class="n">w</span> <span class="o">/</span> <span class="p">(</span><span class="n">nw</span> <span class="o">*</span> <span class="mf">1.0</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">triedre</span> <span class="o">=</span> <span class="p">[</span><span class="n">wn</span><span class="p">,</span> <span class="n">vn</span><span class="p">]</span>
-</div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">triedre</span> <span class="o">=</span> <span class="p">[</span><span class="n">wn</span><span class="p">,</span> <span class="n">vn</span><span class="p">]</span></div>
+
 <div class="viewcode-block" id="TDOA.tdoa_box"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.tdoa.html#pylayers.location.geometric.constraints.tdoa.TDOA.tdoa_box">[docs]</a>    <span class="k">def</span> <span class="nf">tdoa_box</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vcw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;create the inclusive box for a given vcw</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -254,7 +329,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">ep</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">offset</span> <span class="o">=</span> <span class="p">(</span><span class="n">cp</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">Dmax</span> <span class="o">/</span> <span class="n">ep</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">)</span>
-                <span class="c">#print &quot;ep &gt;0 : offset &quot;,offset</span>
+                <span class="c1">#print &quot;ep &gt;0 : offset &quot;,offset</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">offset</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">Dmax</span>
             <span class="n">pp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">F2</span> <span class="o">+</span> <span class="n">offset</span> <span class="o">*</span> <span class="n">vn</span>
@@ -262,7 +337,7 @@
         <span class="k">if</span> <span class="n">cm</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">em</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">offset</span> <span class="o">=</span> <span class="p">(</span><span class="n">cm</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">Dmax</span> <span class="o">/</span> <span class="n">em</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">)</span>
-                <span class="c">#print &quot;em &gt;0 : offset &quot;,offset</span>
+                <span class="c1">#print &quot;em &gt;0 : offset &quot;,offset</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">offset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Dmax</span>
             <span class="n">pm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">F1</span> <span class="o">+</span> <span class="n">offset</span> <span class="o">*</span> <span class="n">vn</span>
@@ -296,8 +371,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cm</span> <span class="o">=</span> <span class="n">cm</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">lbox</span> <span class="o">=</span> <span class="n">LBoxN</span><span class="p">(</span>
-            <span class="p">[</span><span class="n">BoxN</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">imin</span><span class="p">,</span> <span class="n">imax</span><span class="p">)),</span> <span class="n">ndim</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">)[</span><span class="mi">1</span><span class="p">])])</span>
-</div>
+            <span class="p">[</span><span class="n">BoxN</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">imin</span><span class="p">,</span> <span class="n">imax</span><span class="p">)),</span> <span class="n">ndim</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">)[</span><span class="mi">1</span><span class="p">])])</span></div>
+
 <div class="viewcode-block" id="TDOA.annulus_bound"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.tdoa.html#pylayers.location.geometric.constraints.tdoa.TDOA.annulus_bound">[docs]</a>    <span class="k">def</span> <span class="nf">annulus_bound</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Compute the minimum and maximum distance of the enclosing annulus of the constraint for a given self.vcw</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -308,39 +383,39 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">cmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drange</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">vcw</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sstd</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drange</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">vcw</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sstd</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">mean</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cmin</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmax</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cmin</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmax</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span></div>
+
 <div class="viewcode-block" id="TDOA.repart"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.tdoa.html#pylayers.location.geometric.constraints.tdoa.TDOA.repart">[docs]</a>    <span class="k">def</span> <span class="nf">repart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">DD</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span><span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sstd</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">DD</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sstd</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)))</span>
-</div>
+        <span class="k">return</span><span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sstd</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">DD</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sstd</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)))</span></div>
+
 <div class="viewcode-block" id="TDOA.rescale"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.tdoa.html#pylayers.location.geometric.constraints.tdoa.TDOA.rescale">[docs]</a>    <span class="k">def</span> <span class="nf">rescale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vcw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        rescale(vcw) :  rescale constraint with vcw factor</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vcw</span> <span class="o">=</span> <span class="n">vcw</span>
-        <span class="c">#print self.vcw</span>
-<span class="c">#               pdb.set_trace()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tdoa_box</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vcw</span><span class="p">)</span>
-        <span class="k">print</span> <span class="s">&#39;TDOA&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vcw</span>
-        <span class="c">#self.estvol() &lt;= TO BE DONE IN TDOA</span>
+        <span class="c1">#print self.vcw</span>
+<span class="c1">#               pdb.set_trace()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tdoa_box</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vcw</span><span class="p">)</span></div>
+        <span class="c1"># print &#39;TDOA&#39;, self.vcw</span>
+        <span class="c1">#self.estvol() &lt;= TO BE DONE IN TDOA</span>
 
-    <span class="c"># def inclusive(self, b):</span>
-    <span class="c">#     &quot;&quot;&quot;A box b is inclusive for the constraint if self.p is included in the box</span>
+    <span class="c1"># def inclusive(self, b):</span>
+    <span class="c1">#     &quot;&quot;&quot;A box b is inclusive for the constraint if self.p is included in the box</span>
 
-    <span class="c">#     Parameters</span>
-    <span class="c">#     ----------</span>
+    <span class="c1">#     Parameters</span>
+    <span class="c1">#     ----------</span>
 
-    <span class="c">#     b : BoxN</span>
-    <span class="c">#         test if self.p is included in box b</span>
+    <span class="c1">#     b : BoxN</span>
+    <span class="c1">#         test if self.p is included in box b</span>
 
-    <span class="c">#     &quot;&quot;&quot;</span>
-    <span class="c">#     if b.inbox(self.p):</span>
-    <span class="c">#         return True</span>
-    <span class="c">#     else:</span>
-    <span class="c">#         return False</span>
-</div>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     if b.inbox(self.p):</span>
+    <span class="c1">#         return True</span>
+    <span class="c1">#     else:</span>
+    <span class="c1">#         return False</span>
+
 <div class="viewcode-block" id="TDOA.valid"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.tdoa.html#pylayers.location.geometric.constraints.tdoa.TDOA.valid">[docs]</a>    <span class="k">def</span> <span class="nf">valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        valid(b) : check if box b is valid for the given constraint</span>
@@ -367,11 +442,11 @@
 
         <span class="k">if</span> <span class="n">DDcmin</span> <span class="o">+</span> <span class="n">DDcmax</span> <span class="o">&gt;</span> <span class="mi">15</span><span class="p">:</span>
             <span class="k">return</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="p">(</span><span class="n">DDcmin</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">DDcmax</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">):</span>  <span class="c"># si toute points sont inf a cmin ou sup a cmax</span>
-            <span class="k">return</span><span class="p">(</span><span class="s">&#39;out&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">DDcmin</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">DDcmax</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">):</span>  <span class="c1"># si toute points sont inf a cmin ou sup a cmax</span>
+            <span class="k">return</span><span class="p">(</span><span class="s1">&#39;out&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
-</div>
+            <span class="k">return</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="TDOA.valid_v"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.tdoa.html#pylayers.location.geometric.constraints.tdoa.TDOA.valid_v">[docs]</a>    <span class="k">def</span> <span class="nf">valid_v</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;check if vertex are valid for the given constraint</span>
 
@@ -382,8 +457,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ppb</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]))</span>
         <span class="n">nbbox</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">/</span> <span class="n">ppb</span>
-        <span class="n">DDbound</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&#39;bool&#39;</span><span class="p">)</span>
-        <span class="n">TB</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="n">nbbox</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&#39;bool&#39;</span><span class="p">)</span>
+        <span class="n">DDbound</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;bool&#39;</span><span class="p">)</span>
+        <span class="n">TB</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="n">nbbox</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;bool&#39;</span><span class="p">)</span>
 
         <span class="n">P0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:])</span>
         <span class="n">P1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>
@@ -391,15 +466,15 @@
         <span class="n">F2v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">P1</span> <span class="o">-</span> <span class="n">v</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">P1</span> <span class="o">-</span> <span class="n">v</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
         <span class="n">DD</span> <span class="o">=</span> <span class="p">(</span><span class="n">F1v</span> <span class="o">-</span> <span class="n">F2v</span><span class="p">)</span>
 
-<span class="c">#               if self.value &gt; 0:</span>
-<span class="c">#                       DD2 = (D&gt;=self.cmin) &amp; (D&lt;=self.cmax)</span>
-<span class="c">#               else :</span>
-<span class="c">#                       DD2 = (D&gt;=self.cmax) &amp; (D&lt;=self.cmin)</span>
+<span class="c1">#               if self.value &gt; 0:</span>
+<span class="c1">#                       DD2 = (D&gt;=self.cmin) &amp; (D&lt;=self.cmax)</span>
+<span class="c1">#               else :</span>
+<span class="c1">#                       DD2 = (D&gt;=self.cmax) &amp; (D&lt;=self.cmin)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="c"># calculate all distance from constraint origin to all vertexes</span>
-            <span class="c">#DD = np.sqrt(np.sum(D*D,axis=1))</span>
-            <span class="c"># for each box , find the vertex closest to the constraint origin and the farest.</span>
+            <span class="c1"># calculate all distance from constraint origin to all vertexes</span>
+            <span class="c1">#DD = np.sqrt(np.sum(D*D,axis=1))</span>
+            <span class="c1"># for each box , find the vertex closest to the constraint origin and the farest.</span>
             <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">DD</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nbbox</span><span class="p">,</span> <span class="n">ppb</span><span class="p">),</span>
                                  <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">DD</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nbbox</span><span class="p">,</span> <span class="n">ppb</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)))</span>
 
@@ -411,9 +486,9 @@
             <span class="n">DDbound</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">(</span><span class="n">DD</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmax</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="c"># calculate all distance from constraint origin to all vertexes</span>
-            <span class="c">#DD = np.sqrt(np.sum(D*D,axis=1))</span>
-            <span class="c"># for each box , find the vertex closest to the constraint origin and the farest.</span>
+            <span class="c1"># calculate all distance from constraint origin to all vertexes</span>
+            <span class="c1">#DD = np.sqrt(np.sum(D*D,axis=1))</span>
+            <span class="c1"># for each box , find the vertex closest to the constraint origin and the farest.</span>
             <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">DD</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nbbox</span><span class="p">,</span> <span class="n">ppb</span><span class="p">),</span>
                                  <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">DD</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nbbox</span><span class="p">,</span> <span class="n">ppb</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)))</span>
 
@@ -424,10 +499,10 @@
             <span class="n">DDbound</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">(</span><span class="n">DD</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmax</span><span class="p">)</span>
             <span class="n">DDbound</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">(</span><span class="n">DD</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmin</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">DDbound</span><span class="p">,</span> <span class="n">TB</span>
+        <span class="k">return</span> <span class="n">DDbound</span><span class="p">,</span> <span class="n">TB</span></div>
 
-<span class="c">#</span>
-<span class="c">#               return DD2</span></div>
+<span class="c1">#</span>
+<span class="c1">#               return DD2</span>
 <div class="viewcode-block" id="TDOA.inclusive"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.tdoa.html#pylayers.location.geometric.constraints.tdoa.TDOA.inclusive">[docs]</a>    <span class="k">def</span> <span class="nf">inclusive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; A box b is inclusive for the constraint if self.p is included in the box</span>
 
@@ -435,49 +510,67 @@
         <span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="n">inbox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">|</span> <span class="n">b</span><span class="o">.</span><span class="n">inbox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
             <span class="k">return</span> <span class="bp">True</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">False</span></div>
+            <span class="k">return</span> <span class="bp">False</span></div></div>
 </pre></div>
 
+           </div>
           </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team.
+      Last updated on Nov 07, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../../../../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../../../../../notebook/index.html">Documentation </a> |&nbsp;</li>
-        <li><a href="../../../../../download.html">Download </a> |&nbsp; </li>
-        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
-          <li><a href="../../../../index.html" >Module code</a> &raquo;</li> 
-      </ul>
-    </div>
+    </section>
 
-    <div class="footer">
-        &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 12, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
-    </div>
-<script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34943220-1']);
-  _gaq.push(['_setDomainName', 'pylayers.github.io']);
-  _gaq.push(['_setAllowLinker', true]);
-  _gaq.push(['_trackPageview']);
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })(); 
-</script> 
- 
-  </body>
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../../../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
 </html>

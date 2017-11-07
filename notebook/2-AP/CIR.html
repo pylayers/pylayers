@@ -1,191 +1,181 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Sorting and Cutting &mdash; Python 1 documentation</title>
+  
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  
+  
+
+  
+
+  
+  
     
-    <title>Sorting and Cutting &mdash; Python 1 documentation</title>
-    
-    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
     <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="author" title="About these documents"
+              href="../../about.html"/>
+    <link rel="top" title="Python 1 documentation" href="../../index.html"/>
+        <link rel="up" title="1   Overview" href="../TOC.html"/>
+        <link rel="next" title="Network Simulation Configuration" href="../5-SIM/SimulNetConfig.html"/>
+        <link rel="prev" title="The transmission channel" href="Channel.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/javascript" src="../../_static/sidebar.js"></script>
-    <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="Python 1 documentation" href="../../index.html" />
-    <link rel="up" title="1   Overview" href="../TOC.html" />
-    <link rel="next" title="Exploiting PyLayers for TC1 METIS Scenario (Alhassane Diallo Master student 2016 @IETR)" href="MetisRayTracing60GHzforTC1.html" />
-    <link rel="prev" title="The transmission channel" href="Channel.html" />
-<script type="text/javascript">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34943220-1']);
-  _gaq.push(['_trackPageview']);
+          
+            <a href="../../index.html" class="icon icon-home"> Python
+          
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
-
-  </head>
-  <body role="document">
-
-    <div class="header-wrapper">
-      <div class="header">
-          <p class="logo"><a href="../../index.html">
-            <img src="../../_static/pylayers.png" alt="Logo"/>
+          
+            
+            <img src="../../_static/pylayers.png" class="logo" />
+          
           </a>
-          </p><div class="navbar">
-          <ul>
-            <li><a href="../../download.html">Download</a></li>
-            <li><a href="../TOC.html">User Guide</a></li>
-            <li><a href="../../modules/pylayers.html">Reference</a></li>
-       </ul>
 
-<div class="search_form">
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
 
-<div id="cse" style="width: 100%;"></div>
-<script>
-  (function() {
-       var cx = '004820205189002234612:sa15qzuf2ca';
-           var gcse = document.createElement('script');
-               gcse.type = 'text/javascript';
-                   gcse.async = true;
-                       gcse.src = (document.location.protocol == 'https:' ?
-                           'https:' : 'http:') +
-                               '//cse.google.com/cse.js?cx=' + cx;
-                                   var s =
-                                   document.getElementsByTagName('script')[0];
-                                       s.parentNode.insertBefore(gcse, s);
-                                         })();
-</script>
-<gcse:search></gcse:search>
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
 </div>
-</div> <!-- end navbar --></div>
-    </div>
 
-    <div class="content-wrapper">
+          
+        </div>
 
-      <div class="sphinxsidebar">
-	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
-	<!-- rellinks[1:] is an ugly hack to avoid link to module
-	    index  -->
-	<div class="rellink">
-	<a href="Channel.html" title="The transmission channel"
-	    accesskey="P">Previous
-	    <br>
-	    <span class="smallrellink">
-	    The transmiss...
-	    </span>
-	    <span class="hiddenrellink">
-	    The transmission channel
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="MetisRayTracing60GHzforTC1.html" title="Exploiting PyLayers for TC1 METIS Scenario (Alhassane Diallo Master student 2016 @IETR)"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    Exploiting Py...
-	    </span>
-	    <span class="hiddenrellink">
-	    Exploiting PyLayers for TC1 METIS Scenario (Alhassane Diallo Master student 2016 @IETR)
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="../../py-modindex.html" title="Python Module Index"
-	    >Modules
-	    <br>
-	    <span class="smallrellink">
-	    Python Module Index
-	    </span>
-	    <span class="hiddenrellink">
-	    Python Module Index
-	    </span>
-	    
-	    </a>
-	</div>
-	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="../TOC.html" title="1   Overview" >
-	Up
-	<br>
-	<span class="smallrellink">
-	1   Overview
-	</span>
-	<span class="hiddenrellink">
-	1   Overview
-	</span>
-	
-	</a>
-	</div>
-    </div>
-    <p style="text-align: center; background-color: #BFFFFF">This documentation is
-
-    for Python <strong>version 1</strong>
-    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
-    
-    <h3>Citing</h3>
-    <p>If you use the software, please consider
-    <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
-    <h3>This page</h3>
-	<ul>
-<li><a class="reference internal" href="#">Sorting and Cutting</a></li>
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../TOC.html#radio-propagation-simulation">2&nbsp;&nbsp;&nbsp;Radio Propagation Simulation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#environment-description">2.1&nbsp;&nbsp;&nbsp;Environment Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#description-of-antennas">2.2&nbsp;&nbsp;&nbsp;Description of Antennas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#multiwall-motley-keenan-simulation">2.3&nbsp;&nbsp;&nbsp;Multiwall Motley-Keenan Simulation</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../TOC.html#ray-tracing-tool">2.4&nbsp;&nbsp;&nbsp;Ray Tracing Tool</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Signatures.html">Ray Signatures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Channel.html">The transmission channel</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Sorting and Cutting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ray-visuzalization">Ray visuzalization</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#handling-agent-mobility">3&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#wireless-body-area-network-related-classes">4&nbsp;&nbsp;&nbsp;Wireless Body Area Network Related Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#some-simulation-examples">5&nbsp;&nbsp;&nbsp;Some Simulation Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#algorithms-for-localization">6&nbsp;&nbsp;&nbsp;Algorithms for Localization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#measurements-tools">7&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#pylayers-tools">8&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TOC.html#references">9&nbsp;&nbsp;&nbsp;References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/pylayers.html">PyLayers Modules Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 </ul>
 
-    
-    </div>
-	  </div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">Python</a>
+      </nav>
 
 
-      <div class="content">
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
+      
+    <li>Sorting and Cutting</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/notebook/2-AP/CIR.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <div class="section" id="sorting-and-cutting">
+  <div class="code highlight-none"><div class="highlight"><pre><span></span>!date
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>dimanche 5 novembre 2017, 17:55:56 (UTC+0100)
+</pre></div>
+</div>
+<div class="section" id="sorting-and-cutting">
 <h1>Sorting and Cutting<a class="headerlink" href="#sorting-and-cutting" title="Permalink to this headline">¶</a></h1>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span># %load test_DLR.py
-import mayavi.mlab as mlab
-from pylayers.simul.simulem import * #Obsolete
+<div class="code highlight-none"><div class="highlight"><pre><span></span>import mayavi.mlab as mlab
 from pylayers.simul.link import *
 from pylayers.antprop.rays import *
 from pylayers.antprop.channel import *
@@ -196,7 +186,6 @@ from pylayers.util.project import *
 import pylayers.signal.bsignal as bs
 from datetime import datetime
 import time
-import pdb
 import pickle
 import numpy as np
 import pylayers.signal.waveform as wvf
@@ -205,10 +194,10 @@ import matplotlib.cm as cm
 %matplotlib inline
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span># Set the frequency range
+<div class="code highlight-none"><div class="highlight"><pre><span></span># Set the frequency range
 fGHz = np.arange(2,6,0.01)
 # Define the Layout
-L = Layout(&#39;DLR2.ini&#39;)
+L = Layout(&#39;DLR2.lay&#39;)
 # Create a link for the Layout
 S = DLink(L=L,fGHz=fGHz)
 S.eval(force=1,verbose=False,diffraction=1,cutoff=5)
@@ -216,12 +205,29 @@ S.eval(force=1,verbose=False,diffraction=1,cutoff=5)
 f,a=S.H.plot(idx=[0,1,2,3,4,20])
 </pre></div>
 </div>
-<img alt="../../_images/CIR_2_0.png" src="../../_images/CIR_2_0.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.wav
+<div class="highlight-none"><div class="highlight"><pre><span></span>Signatures:   0%|          | 0/100 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Warning Unable to read graph Gr
+Warning Unable to read graph Gw
+Layout Graph loaded
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Signatures:  33%|????????????      | 33.3333333333/100 [00:06&lt;00:12,  5.41it/s]/home/uguen/Documents/rch/devel/pylayers/pylayers/util/geomutil.py:3553: RuntimeWarning: invalid value encountered in double_scalars
+  ratio = np.linalg.norm(tahe[1]-tahe[0])/np.linalg.norm(p1-p0)
+Signatures: 100.0it [00:12, 10.72it/s]
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Warning : IntR class implemented for mat with only 1 layer
+</pre></div>
+</div>
+<img alt="../../_images/CIR_3_4.png" src="../../_images/CIR_3_4.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.wav
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>{&#39;Np&#39;: 3000,
- &#39;bandGHz&#39;: 0.499,
+ &#39;WGHz&#39;: 0.499,
+ &#39;fGHz&#39;: [],
  &#39;fcGHz&#39;: 4.493,
  &#39;feGHz&#39;: 100,
  &#39;te&#39;: 0.01,
@@ -230,172 +236,289 @@ f,a=S.H.plot(idx=[0,1,2,3,4,20])
  &#39;typ&#39;: &#39;generic&#39;}
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.a
+<p>Position of the transmitter</p>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.a
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>array([ 11.7605    ,  -4.55808685,   1.2       ])
+<div class="highlight-none"><div class="highlight"><pre><span></span>array([ 27.23497578,  -3.37396874,   1.2       ])
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.b
+<p>Position of the receiver</p>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.b
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>array([ 3.99350671,  0.03857113,  1.2       ])
+<div class="highlight-none"><div class="highlight"><pre><span></span>array([ 26.03317253,   0.50907312,   1.2       ])
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig=plt.figure(figsize=(20,5))
+<div class="code highlight-none"><div class="highlight"><pre><span></span>fig=plt.figure(figsize=(20,5))
 S.H.show(fig=fig)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f53d9f6a550&gt;,
- [&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f53d9f6a7d0&gt;,
-  &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f537bdf2e50&gt;])
-</pre></div>
-</div>
-<img alt="../../_images/CIR_6_1.png" src="../../_images/CIR_6_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>u = S.H.sort(typ=&#39;tau&#39;)
-</pre></div>
-</div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>print u
-</pre></div>
-</div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[ 0  1  2  3  5  6  7  8 16 17 35  4 56  9 57 10 70 69 18 19 58 11 71 20 72
- 21 73 74 37 36 12 22 13 23 24 25 38 39 26 14 40 27 41 42 43 28 59 60 44 45
- 15 29 30 46 47 31 48 49 61 62 32 50 51 64 63 33 52 53 65 66 34 54 55 67 68]
-</pre></div>
-</div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig=plt.figure(figsize=(20,5))
-S.H.show(fig=fig)
-</pre></div>
-</div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f537e3a13d0&gt;,
- [&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f537e3a1cd0&gt;,
-  &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f537bd9d890&gt;])
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fb65f14e950&gt;,
+ [&lt;matplotlib.axes._subplots.AxesSubplot at 0x7fb65f14e590&gt;,
+  &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fb65f0ad5d0&gt;])
 </pre></div>
 </div>
 <img alt="../../_images/CIR_9_1.png" src="../../_images/CIR_9_1.png" />
-<p>Let sort the <span class="math">\(H\)</span> channel by energy</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>#u = S.H.sort(typ=&#39;energy&#39;)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>u = S.H.sort(typ=&#39;tau&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>#fig=plt.figure(figsize=(20,5))
+<div class="code highlight-none"><div class="highlight"><pre><span></span>print u
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>[  0   3   4   1   2   5   6   7  14   8   9  15  17  16  19  18  21  20
+  41  42  10  22  11  12  23  24  25  26  43  27  28  29  44  45  46  47
+  48  13  49  50  52  51  91  92  30  31  93  94  32  53  33  54  55  56
+  58  57  59  95  34  35  60  96  61  62  97  98  63  99  64  65  66  67
+ 100 101 102 103 104 105 106 178 107 108  36 109  68 179 180 181  69 110
+ 111 112 113 114 115  70 116 182 183  37 184 186 185 187 188  71  72 189
+ 190 281 282 191  73 117 118 119 120 192 193  74 121  75 283 284 122 123
+  38 124 125 126  39 194  76 127  77 128 196 195 197 198  78 199 201 200
+ 202 203 285 286 129 130 131 287 288  79 132 133 204  80 134 205 135  81
+ 136  40 137 206 207  82 289 290  83 138 139 208  84 140 209 141 210 211
+ 213 212 214 142  85  86 143 144 145 215 146 147 148 216 218 217 219 291
+ 292 220 149 221 150 222 293 151 295 294 223 296 224 225 298 297 226 227
+ 229 228 300 299 230 152 302 301 303 362 361 231 304 232 306 305 153  87
+ 233 154  88 363 307 308 234 155 156 235 309 157 158  89 310  90 236 159
+ 312 311 238 237 160 161 162 239 163 164 240 165 241 242 243 244 245 365
+ 364 246 314 313 247 248 249 250 166 316 315 318 317 167 319 320 251 252
+ 253 254 168 169 255 256 257 321 322 324 323 170 325 258 326 327 171 259
+ 260 172 173 261 262 263 264 328 329 265 266 330 174 267 332 331 268 333
+ 269 270 334 335 336 338 337 339 340 366 367 368 341 271 369 342 343 344
+ 370 371 345 175 373 372 272 388 273 375 374 347 346 348 176 376 274 377
+ 275 276 349 350 351 378 379 390 389 177 352 380 353 354 381 277 278 382
+ 383 391 392 393 394 355 356 279 357 358 280 359 360 384 385 386 387]
+</pre></div>
+</div>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>fig=plt.figure(figsize=(20,5))
+S.H.show(fig=fig)
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fb65f0f5a10&gt;,
+ [&lt;matplotlib.axes._subplots.AxesSubplot at 0x7fb65f0f5890&gt;,
+  &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fb65ee8e0d0&gt;])
+</pre></div>
+</div>
+<img alt="../../_images/CIR_12_1.png" src="../../_images/CIR_12_1.png" />
+<p>Let sort the <span class="math">\(H\)</span> channel by energy</p>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>#u = S.H.sort(typ=&#39;energy&#39;)
+</pre></div>
+</div>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>#fig=plt.figure(figsize=(20,5))
 #S.H.show(fig=fig,cmap=cm.jet)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>wav = wvf.Waveform(fcGHz=4,bandGHz=4)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>wav = wvf.Waveform(fcGHz=4,bandGHz=4)
 wav.show()
 </pre></div>
 </div>
-<img alt="../../_images/CIR_13_0.png" src="../../_images/CIR_13_0.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>h  = S.H.totime()
+<img alt="../../_images/CIR_16_0.png" src="../../_images/CIR_16_0.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>h  = S.H.totime()
 # applyu waveform
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>h.y.shape
+<div class="code highlight-none"><div class="highlight"><pre><span></span>h.y.shape
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(75, 1, 1, 1203)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(395, 1, 1, 1203)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>print h.x.shape
+<div class="code highlight-none"><div class="highlight"><pre><span></span>print h.x.shape
 print h.y.shape
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>(1203,)
-(75, 1, 1, 1203)
+(395, 1, 1, 1203)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>h.y
+<div class="code highlight-none"><div class="highlight"><pre><span></span>h.y
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>array([[[[ -2.30524517e-07,   2.19248320e-06,   3.24492493e-06, ...,
-            2.45316508e-07,  -2.20743466e-06,  -3.23064732e-06]]],
+<div class="highlight-none"><div class="highlight"><pre><span></span>array([[[[ -8.84640250e-07+0.j,  -2.95891635e-05+0.j,  -2.79501434e-05+0.j,
+          ...,   7.11271584e-07+0.j,   2.97617735e-05+0.j,
+            2.77774080e-05+0.j]]],
 
 
-       [[[ -3.65232886e-07,   1.50970188e-06,   3.11438227e-06, ...,
-            3.76280412e-07,  -1.52078698e-06,  -3.10386983e-06]]],
+       [[[ -1.55259164e-06+0.j,   1.69641272e-05+0.j,   2.37751449e-05+0.j,
+          ...,   1.66419664e-06+0.j,  -1.70747975e-05+0.j,
+           -2.36643414e-05+0.j]]],
 
 
-       [[[ -4.44296614e-07,   1.04450251e-06,   2.99968350e-06, ...,
-            4.52474385e-07,  -1.05263732e-06,  -2.99204874e-06]]],
+       [[[ -2.01300323e-06+0.j,   1.14299650e-05+0.j,   2.05064784e-05+0.j,
+          ...,   2.09826715e-06+0.j,  -1.15143061e-05+0.j,
+           -2.04220084e-05+0.j]]],
 
 
        ...,
-       [[[ -6.02463207e-09,  -1.09695487e-08,  -6.53203433e-09, ...,
-            6.00607685e-09,   1.09906407e-08,   6.51382509e-09]]],
+       [[[ -1.26465240e-09+0.j,  -1.07994591e-09+0.j,   4.46189145e-10+0.j,
+          ...,   1.25629641e-09+0.j,   1.06626281e-09+0.j,
+           -4.42272656e-10+0.j]]],
 
 
-       [[[ -1.07975734e-09,  -2.44591937e-09,  -3.26228650e-09, ...,
-            1.07003177e-09,   2.45626244e-09,   3.25281693e-09]]],
+       [[[  1.08607744e-09+0.j,   3.94472614e-09+0.j,   2.56377092e-09+0.j,
+          ...,  -1.09464758e-09+0.j,  -3.94297943e-09+0.j,
+           -2.56547971e-09+0.j]]],
 
 
-       [[[ -1.07975734e-09,  -2.44591937e-09,  -3.26228650e-09, ...,
-            1.07003177e-09,   2.45626244e-09,   3.25281693e-09]]]])
+       [[[  5.73365139e-10+0.j,   4.02029385e-09+0.j,   3.14869656e-09+0.j,
+          ...,  -5.70935174e-10+0.j,  -4.02277662e-09+0.j,
+           -3.15049216e-09+0.j]]]])
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.H.taud
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.H.taud
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>array([  30.08422425,   31.12973737,   32.3892042 ,   33.69484275,
-         34.63152361,   35.76789661,   36.12562178,   36.12562178,
-         39.18344584,   39.18344584,   47.381087  ,   47.74410919,
-         48.05171594,   48.40970938,   48.8770642 ,   49.22905608,
-         51.42924659,   51.42924659,   51.76388666,   51.76388666,
-         52.72002827,   53.09743108,   53.32355372,   53.69671486,
-         54.06848788,   54.43654275,   56.38618076,   56.38618076,
-         56.73920326,   56.73920326,   58.95148217,   59.49182507,
-         59.89456675,   60.16042927,   60.42647703,   61.08485186,
-         62.25172488,   62.25172488,   62.27534138,   62.59097949,
-         62.78708581,   63.10016414,   63.14553925,   63.14553925,
-         63.42095982,   63.73092431,   65.40808929,   65.40808929,
-         65.70868066,   65.70868066,   68.78797801,   69.25161311,
-         69.82682807,   71.63648455,   71.63648455,   72.61297437,
-         73.05233773,   73.59785355,   75.31695724,   75.31695724,
-         76.36989611,   76.78776616,   77.30692745,   78.94530405,
-         78.94530405,   91.94107416,   92.28846687,   92.72087747,
-         94.09123826,   94.09123826,   98.75167269,   99.07518791,
-         99.47810241,  100.75660206,  100.75660206])
+<div class="highlight-none"><div class="highlight"><pre><span></span>array([ 13.54922922,  15.73472632,  18.09921579,  18.18926205,
+        19.42525108,  19.87081413,  20.10573256,  21.00810271,
+        21.63886507,  21.79103609,  22.83287935,  23.41453569,
+        24.15743389,  24.15743389,  27.03422376,  27.03422376,
+        27.88082458,  27.88082458,  28.35913401,  28.35913401,
+        29.3706625 ,  30.44069342,  30.48415259,  31.00628966,
+        31.16463407,  31.51640144,  31.72752458,  32.02171136,
+        32.17505893,  32.3583152 ,  32.76100669,  33.24740589,
+        33.3325751 ,  33.39512565,  34.51174529,  35.53358715,
+        35.53358715,  36.18098635,  36.45934118,  36.45934118,
+        36.89701883,  36.89701883,  37.03018251,  37.03018251,
+        37.05487517,  37.93836057,  38.04024925,  38.04024925,
+        38.11907362,  38.7726605 ,  39.57398772,  39.79094372,
+        40.37450314,  40.92601327,  41.34082454,  41.34082454,
+        41.35336146,  41.70058227,  41.92311287,  42.06519118,
+        42.60359435,  42.64901596,  42.67958988,  42.8191582 ,
+        42.88728486,  42.88728486,  43.27513842,  43.34819779,
+        43.41721672,  43.60673563,  43.74334588,  43.84537781,
+        43.95561989,  44.00838108,  44.14809971,  44.26134037,
+        44.34073189,  44.34073189,  44.56924002,  44.67769601,
+        44.90810177,  45.04502978,  45.43152434,  45.45786132,
+        45.48100497,  45.55149352,  45.55149352,  45.56420218,
+        46.13050405,  46.17923573,  46.44940681,  46.44940681,
+        46.57768037,  46.57768037,  46.83303052,  46.98960953,
+        47.03745118,  47.06449034,  47.06449034,  47.23988787,
+        47.51139597,  47.67323783,  47.67323783,  47.80224585,
+        47.80224585,  47.91249322,  48.16157885,  48.19146351,
+        48.19146351,  48.29178523,  48.29178523,  48.3459693 ,
+        48.74019908,  48.82148786,  49.63403748,  49.63893033,
+        49.63893033,  49.68422097,  49.68422097,  49.797206  ,
+        50.43571875,  50.63288924,  50.92477538,  50.92477538,
+        51.14923155,  51.22266808,  51.23284215,  51.26099368,
+        51.29919109,  51.29919109,  51.41116852,  51.77107192,
+        51.85367986,  51.98491479,  52.02987842,  52.03546361,
+        52.14918673,  52.14918673,  52.53802326,  52.596876  ,
+        52.79307008,  53.35195747,  53.66341142,  53.66341142,
+        54.43977841,  54.43977841,  54.9203413 ,  54.9203413 ,
+        54.9982192 ,  55.16437482,  55.16437482,  55.69947365,
+        55.69947365,  56.49042586,  56.53990649,  57.05408149,
+        57.1030737 ,  57.51754473,  57.75091527,  57.79931683,
+        58.0712317 ,  58.67884815,  59.22167863,  59.39305334,
+        59.89329862,  59.92635659,  59.92635659,  59.92941502,
+        59.97300247,  59.97300247,  59.97886659,  60.03087369,
+        60.51003584,  60.5615868 ,  60.59319091,  60.85610752,
+        60.89554952,  61.16751129,  61.21850861,  61.37968575,
+        61.99360628,  61.99360628,  62.02794389,  62.30692572,
+        62.32799173,  62.47007004,  62.58201463,  62.67004695,
+        62.67004695,  62.81841284,  62.83930739,  62.98023222,
+        63.00847321,  63.09127163,  63.22550464,  63.22550464,
+        63.26249611,  63.27484331,  63.27484331,  63.4519739 ,
+        63.47265989,  63.51431096,  63.61218162,  63.72211983,
+        63.76631881,  63.94255287,  64.05830019,  64.05830019,
+        64.14099856,  64.39055377,  64.44105887,  65.05882006,
+        65.43816159,  65.43816159,  65.45821991,  65.45821991,
+        65.59351836,  65.59351836,  65.70014121,  65.70014121,
+        65.82254987,  65.88588383,  66.10648755,  66.10648755,
+        66.30692325,  66.34865043,  66.34865043,  66.369795  ,
+        66.90745901,  66.96976697,  66.99738852,  66.99738852,
+        67.92938614,  67.9607514 ,  68.39884137,  68.42999146,
+        68.77790038,  68.79395374,  68.8545546 ,  68.8545546 ,
+        68.98116773,  69.01205497,  69.24160296,  69.28141168,
+        69.74176657,  69.81690039,  70.20208487,  70.30987655,
+        70.31297181,  70.45195486,  70.65644146,  70.76354104,
+        70.81243889,  70.81243889,  70.8425277 ,  70.8425277 ,
+        70.90471031,  70.99035803,  71.0377681 ,  71.22031114,
+        71.32656406,  71.33632935,  71.43970138,  71.46662118,
+        71.48681345,  71.62680769,  71.78350706,  71.99743699,
+        72.04418434,  72.11042924,  72.11042924,  72.33859195,
+        72.99542944,  72.99542944,  73.09910219,  73.09910219,
+        73.23576956,  73.23576956,  73.65778673,  73.75385368,
+        73.75385368,  73.79948846,  73.79948846,  73.86776865,
+        74.08692115,  74.08692115,  74.09095455,  74.29971229,
+        74.62887876,  74.83613596,  75.06260295,  75.29341388,
+        75.48771   ,  75.71722508,  76.24367629,  76.32476365,
+        76.32476365,  76.52742806,  76.52742806,  77.34559844,
+        77.68136431,  77.75822528,  77.90441691,  77.90441691,
+        78.18396968,  78.2709499 ,  78.592195  ,  79.01965292,
+        79.08372701,  79.099514  ,  79.33774991,  79.42358307,
+        79.48733156,  79.74006873,  79.88955875,  79.9256251 ,
+        79.98897348,  80.24013061,  80.30719913,  80.43676707,
+        80.70150628,  80.70150628,  80.70468532,  80.83361613,
+        80.98768061,  81.19880684,  81.3233407 ,  81.32695431,
+        81.38184325,  81.51138294,  81.51138294,  81.57349985,
+        81.57349985,  81.71588427,  81.81979321,  81.81979321,
+        81.87187802,  82.07239423,  82.20392778,  82.46137213,
+        82.76017299,  82.76017299,  82.8859065 ,  82.8859065 ,
+        82.94502935,  83.17474571,  83.42064739,  83.42064739,
+        83.55859217,  83.7465566 ,  84.03593472,  84.47412559,
+        84.47412559,  85.54553363,  85.54553363,  86.78179008,
+        87.06561183,  87.14975094,  87.43237823,  87.60752872,
+        87.88868393,  88.334265  ,  88.41741723,  88.5882879 ,
+        88.69578554,  88.77859917,  88.94877601,  89.05660609,
+        89.05660609,  89.10436456,  89.14562453,  89.22802066,
+        89.33320079,  89.33320079,  89.39734198,  89.46277317,
+        89.90877478,  90.57009646,  90.57009646,  90.65119784,
+        90.65119784,  90.81786583,  90.81786583,  91.32134352,
+        91.32134352,  96.31614982,  96.64781796,  97.06080937,
+        97.06293441,  97.39205941,  97.80190814,  98.37073099,
+        98.37073099,  99.10203447,  99.10203447])
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.H.y.shape
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.H.y.shape
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(75, 1, 1, 400)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(395, 1, 1, 400)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>u = S.H.sort(typ=&#39;tau&#39;)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>u = S.H.sort(typ=&#39;tau&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>Ehf = np.sum(np.abs(S.H.y),axis=-1)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>Ehf = np.sum(np.abs(S.H.y),axis=-1)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>Ehf.shape
+<div class="code highlight-none"><div class="highlight"><pre><span></span>Ehf.shape
 plt.plot(h.taud,abs(Ehf[:,0,0]))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f5378c42810&gt;]
-</pre></div>
-</div>
-<img alt="../../_images/CIR_22_1.png" src="../../_images/CIR_22_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>Eh = np.sum(np.abs(h.y),axis=-1)
-</pre></div>
-</div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>Eh.shape
-</pre></div>
-</div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(75, 1, 1)
-</pre></div>
-</div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.plot(h.taud,abs(Eh[:,0,0]))
-</pre></div>
-</div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f537bb8c450&gt;]
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fb65da4f990&gt;]
 </pre></div>
 </div>
 <img alt="../../_images/CIR_25_1.png" src="../../_images/CIR_25_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>hw = S.H.applywav(wav.sfg)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>Eh = np.sum(np.abs(h.y),axis=-1)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>Nray = h.y.shape[0]
+<div class="code highlight-none"><div class="highlight"><pre><span></span>Eh.shape
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(395, 1, 1)
+</pre></div>
+</div>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>plt.plot(h.taud,abs(Eh[:,0,0]))
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fb65d98af10&gt;]
+</pre></div>
+</div>
+<img alt="../../_images/CIR_28_1.png" src="../../_images/CIR_28_1.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>hw = S.H.applywav(wav.sfg)
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py:1243: VisibleDeprecationWarning: converting an array with ndim &gt; 0 to an index will result in an error in the future
+  pstop2 = pstart2 + np.where(u2.x[pstart2:dim2]==xnew[-1])[0]
+/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py:1358: VisibleDeprecationWarning: converting an array with ndim &gt; 0 to an index will result in an error in the future
+  x_new = self.x[imin:imax]
+/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py:1363: VisibleDeprecationWarning: converting an array with ndim &gt; 0 to an index will result in an error in the future
+  y_new = self.y[..., imin:imax]
+/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.py:4326: VisibleDeprecationWarning: using a non-integer number instead of an integer will result in an error in the future
+  rir  = np.zeros((shy[0],N))
+</pre></div>
+</div>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>Nray = h.y.shape[0]
 ir = 0
 it = 0
 plt.figure()
@@ -415,153 +538,180 @@ for k in range(Nray):
     plt.plot(hw.x,hw.y[k,:],&#39;k&#39;,alpha=max(alpha[k],0.3))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7f5378cf5850&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>/home/uguen/anaconda2/lib/python2.7/site-packages/numpy/core/numeric.py:482: ComplexWarning: Casting complex values to real discards the imaginary part
+  return array(a, dtype, copy=False, order=order)
 </pre></div>
 </div>
-<img alt="../../_images/CIR_27_1.png" src="../../_images/CIR_27_1.png" />
-<img alt="../../_images/CIR_27_2.png" src="../../_images/CIR_27_2.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.ir.plot()
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7fb65d7d8210&gt;
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f5378ca7f10&gt;,
- array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7f5378d93e10&gt;]], dtype=object))
+<div class="highlight-none"><div class="highlight"><pre><span></span>/home/uguen/anaconda2/lib/python2.7/site-packages/matplotlib/backends/backend_agg.py:166: ComplexWarning: Casting complex values to real discards the imaginary part
+  self._renderer.draw_path(gc, path, transform, rgbFace)
 </pre></div>
 </div>
-<img alt="../../_images/CIR_28_1.png" src="../../_images/CIR_28_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.ir.plot(typ=&#39;v&#39;)
+<img alt="../../_images/CIR_30_3.png" src="../../_images/CIR_30_3.png" />
+<img alt="../../_images/CIR_30_4.png" src="../../_images/CIR_30_4.png" />
+</div>
+<div class="section" id="ray-visuzalization">
+<h1>Ray visuzalization<a class="headerlink" href="#ray-visuzalization" title="Permalink to this headline">¶</a></h1>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[10:20])
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f5378761d50&gt;,
- array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7f5378808850&gt;]], dtype=object))
-</pre></div>
-</div>
-<img alt="../../_images/CIR_29_1.png" src="../../_images/CIR_29_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>len(alpha)
-</pre></div>
-</div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>75
-</pre></div>
-</div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.plot(h.taud)
-</pre></div>
-</div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f53785c2490&gt;]
-</pre></div>
-</div>
-<img alt="../../_images/CIR_31_1.png" src="../../_images/CIR_31_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[10:20])
-</pre></div>
-</div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f5378761590&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f53785ecbd0&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fb65c6c3b90&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fb65c613210&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/CIR_32_1.png" src="../../_images/CIR_32_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R.keys()
+<img alt="../../_images/CIR_32_2.png" src="../../_images/CIR_32_2.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.R.keys()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[2, 3, 4, 5, 6, 7, 8, 9]
+<div class="highlight-none"><div class="highlight"><pre><span></span>[2, 3, 4, 5, 6, 7, 8, 9, 10]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R
-</pre></div>
-</div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>problem
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.R
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>Rays3D
 ----------
-2 / 1 : [0]
-3 / 4 : [1 2 3 4]
-4 / 11 : [ 5  6  7  8  9 10 11 12 13 14 15]
-5 / 19 : [16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34]
-6 / 21 : [35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55]
-7 / 13 : [56 57 58 59 60 61 62 63 64 65 66 67 68]
-8 / 4 : [69 70 71 72]
-9 / 2 : [73 74]
------
+2 / 3 : [0 1 2]
+3 / 11 : [ 3  4  5  6  7  8  9 10 11 12 13]
+4 / 27 : [14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38
+ 39 40]
+5 / 50 : [41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65
+ 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90]
+6 / 87 : [ 91  92  93  94  95  96  97  98  99 100 101 102 103 104 105 106 107 108
+ 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126
+ 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144
+ 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162
+ 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177]
+7 / 103 : [178 179 180 181 182 183 184 185 186 187 188 189 190 191 192 193 194 195
+ 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213
+ 214 215 216 217 218 219 220 221 222 223 224 225 226 227 228 229 230 231
+ 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 248 249
+ 250 251 252 253 254 255 256 257 258 259 260 261 262 263 264 265 266 267
+ 268 269 270 271 272 273 274 275 276 277 278 279 280]
+8 / 80 : [281 282 283 284 285 286 287 288 289 290 291 292 293 294 295 296 297 298
+ 299 300 301 302 303 304 305 306 307 308 309 310 311 312 313 314 315 316
+ 317 318 319 320 321 322 323 324 325 326 327 328 329 330 331 332 333 334
+ 335 336 337 338 339 340 341 342 343 344 345 346 347 348 349 350 351 352
+ 353 354 355 356 357 358 359 360]
+9 / 27 : [361 362 363 364 365 366 367 368 369 370 371 372 373 374 375 376 377 378
+ 379 380 381 382 383 384 385 386 387]
+10 / 7 : [388 389 390 391 392 393 394]
+N2Drays : 81
+from 815 signatures
+#Rays/#Sig: 0.0993865030675
+pTx : [ 27.23497578  -3.37396874   1.2       ]
+pRx : [ 26.03317253   0.50907312   1.2       ]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[0:10])
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[0:10])
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f53784a03d0&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f53784a0090&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fb65c478d90&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fb65c48a690&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/CIR_35_1.png" src="../../_images/CIR_35_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[20:30])
+<img alt="../../_images/CIR_35_2.png" src="../../_images/CIR_35_2.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[20:30])
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f53785e40d0&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f5378447c90&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fb65c2b57d0&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fb65c2c40d0&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/CIR_36_1.png" src="../../_images/CIR_36_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[40:50])
+<img alt="../../_images/CIR_36_2.png" src="../../_images/CIR_36_2.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[40:50])
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f5378454690&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f5378352bd0&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fb65c0f1110&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fb65c0f19d0&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/CIR_37_1.png" src="../../_images/CIR_37_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[50:60])
+<img alt="../../_images/CIR_37_2.png" src="../../_images/CIR_37_2.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[50:60])
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f537839dbd0&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f537859c250&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fb65bfa2a10&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fb65bf35310&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/CIR_38_1.png" src="../../_images/CIR_38_1.png" />
+<img alt="../../_images/CIR_38_2.png" src="../../_images/CIR_38_2.png" />
 </div>
 
 
+           </div>
           </div>
-        </div>
-      </div>
-        <div class="clearer"></div>
-      </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../5-SIM/SimulNetConfig.html" class="btn btn-neutral float-right" title="Network Simulation Configuration" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Channel.html" class="btn btn-neutral" title="The transmission channel" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
     </div>
   
 
-    <div class="footer">
-        &copy; 2016, PyLayers developer team.
-      Last updated on Sep 20, 2017.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
-    <span style="padding-left: 5ex;">
-    <a href="../../_sources/notebook/2-AP/CIR.rst.txt"
-	    rel="nofollow">Show this page source</a>
-    </span>
-    </div>
-     <div class="rel">
-    
-    <div class="buttonPrevious">
-      <a href="Channel.html">
-        Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="MetisRayTracing60GHzforTC1.html">
-        Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
-      <a href="../../py-modindex.html">
-        Previous
-      </a>  
-    </div>
-    
-     </div>
-     <script type="text/javascript">
-       $("div.buttonNext, div.buttonPrevious").hover(
-           function () {
-               $(this).css('background-color', '#AFFFFF');
-           },
-           function () {
-               $(this).css('background-color', '#AFFFFF');
-           }
-       );
-     </script>
-  </body>
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team.
+      Last updated on Nov 07, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
 </html>

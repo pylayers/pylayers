@@ -1,98 +1,173 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pylayers.location.locarule &mdash; Python 1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
     
-    <title>pylayers.location.locarule &mdash; PyLayers</title>
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="author" title="About these documents"
+              href="../../../about.html"/>
+    <link rel="top" title="Python 1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
     
-    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../../index.html" />
-    <link rel="up" title="Module code" href="../../index.html" /> 
-  </head>
-  <body>
-<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
-    PyLayers
-<!--
-<a href="../../../index.html"><img src="../../../_static/logo.png" height="200" border="0"
-    alt="pylayers"/></a>
--->
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Python
+          
+
+          
+            
+            <img src="../../../_static/pylayers.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
 </div>
 
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
-        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
-        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+          
+        </div>
 
-          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
-      </ul>
-    </div>
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#radio-propagation-simulation">2&nbsp;&nbsp;&nbsp;Radio Propagation Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#handling-agent-mobility">3&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#wireless-body-area-network-related-classes">4&nbsp;&nbsp;&nbsp;Wireless Body Area Network Related Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#some-simulation-examples">5&nbsp;&nbsp;&nbsp;Some Simulation Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#algorithms-for-localization">6&nbsp;&nbsp;&nbsp;Algorithms for Localization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#measurements-tools">7&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#pylayers-tools">8&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#references">9&nbsp;&nbsp;&nbsp;References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/pylayers.html">PyLayers Modules Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
+</ul>
 
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+            
+          
         </div>
       </div>
+    </nav>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>pylayers.location.locarule</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <h1>Source code for pylayers.location.locarule</h1><div class="highlight"><pre>
-<span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
+<span></span><span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
 <span class="kn">import</span> <span class="nn">ConfigParser</span>
 <span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="kn">as</span> <span class="nn">sps</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
 
 
-<span class="c">##### global info PL_model</span>
-<span class="c">#config = ConfigParser.ConfigParser()</span>
-<span class="c">#config.read(basename+&#39;/ini/EMSolver.ini&#39;)</span>
-<span class="c">#plm_opt = dict(config.items(&#39;PL_MODEL&#39;))</span>
-<span class="c">#sigmaRSS = float(plm_opt[&#39;sigmarss&#39;])# dBm !!!!!!</span>
-<span class="c">#f = float(plm_opt[&#39;f&#39;])</span>
-<span class="c">#RSSnp = float(plm_opt[&#39;rssnp&#39;])</span>
-<span class="c">#d0 = float(plm_opt[&#39;d0&#39;])</span>
-<span class="c">#PL_method = plm_opt[&#39;method&#39;] # mean, median , mode</span>
+<span class="c1">##### global info PL_model</span>
+<span class="c1">#config = ConfigParser.ConfigParser()</span>
+<span class="c1">#config.read(basename+&#39;/ini/EMSolver.ini&#39;)</span>
+<span class="c1">#plm_opt = dict(config.items(&#39;PL_MODEL&#39;))</span>
+<span class="c1">#sigmaRSS = float(plm_opt[&#39;sigmarss&#39;])# dBm !!!!!!</span>
+<span class="c1">#f = float(plm_opt[&#39;f&#39;])</span>
+<span class="c1">#RSSnp = float(plm_opt[&#39;rssnp&#39;])</span>
+<span class="c1">#d0 = float(plm_opt[&#39;d0&#39;])</span>
+<span class="c1">#PL_method = plm_opt[&#39;method&#39;] # mean, median , mode</span>
 
 <div class="viewcode-block" id="Take_all"><a class="viewcode-back" href="../../../modules/pylayers.location.locarule.html#pylayers.location.locarule.Take_all">[docs]</a><span class="k">class</span> <span class="nc">Take_all</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -111,14 +186,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">cd</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="c">### select RAT</span>
+        <span class="c1">### select RAT</span>
         <span class="k">if</span> <span class="n">RAT</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">Rat</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">RAT</span>
 
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">RAT</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">Rat</span> <span class="o">=</span> <span class="p">[</span><span class="n">RAT</span><span class="p">]</span>
 
-        <span class="c">### select LDP</span>
+        <span class="c1">### select LDP</span>
         <span class="k">if</span> <span class="n">LDP</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">Ldp</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">LDP</span>
 
@@ -132,146 +207,146 @@
                     <span class="n">cd</span><span class="p">[</span><span class="n">ldp</span><span class="p">][</span><span class="n">rat</span><span class="p">]</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span>
                         <span class="n">net</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">rat</span><span class="p">],</span> <span class="n">ldp</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
                 <span class="k">except</span><span class="p">:</span>
-                    <span class="k">pass</span>  <span class="c"># if the specified RAT doesn&#39;t exist in the PN</span>
+                    <span class="k">pass</span>  <span class="c1"># if the specified RAT doesn&#39;t exist in the PN</span>
 
-        <span class="k">return</span> <span class="n">cd</span>
+        <span class="k">return</span> <span class="n">cd</span></div></div>
 
-<span class="c">#class Take_all_Pr():</span>
-<span class="c">#       &quot;&quot;&quot;</span>
-<span class="c">#       Take Pr for any RAT.</span>
-<span class="c">#</span>
-<span class="c">#       Take_all_Pr.take(net=Network.Network,RAT=None)</span>
-<span class="c">#       if RAT= None : All RAT are processed</span>
-<span class="c">#       &quot;&quot;&quot;</span>
+<span class="c1">#class Take_all_Pr():</span>
+<span class="c1">#       &quot;&quot;&quot;</span>
+<span class="c1">#       Take Pr for any RAT.</span>
+<span class="c1">#</span>
+<span class="c1">#       Take_all_Pr.take(net=Network.Network,RAT=None)</span>
+<span class="c1">#       if RAT= None : All RAT are processed</span>
+<span class="c1">#       &quot;&quot;&quot;</span>
 
-<span class="c">#       def take(self,net,RAT=None):</span>
-<span class="c">#               cd = {}</span>
-
-
-<span class="c">#               if RAT == None :</span>
-<span class="c">#                       Rat = net.RAT</span>
-
-<span class="c">#               elif isinstance(Rat,str):</span>
-<span class="c">#                       Rat = [RAT]</span>
-<span class="c">#    &quot;&quot;&quot;</span>
-<span class="c">#    Take Pr for any RAT.</span>
-<span class="c">#    </span>
-<span class="c">#    Take_all_Pr.take(net=Network.Network,RAT=None)        </span>
-<span class="c">#    if RAT= None : All RAT are processed</span>
-<span class="c">#    &quot;&quot;&quot;</span>
-
-<span class="c">#    def take(self,net,RAT=None):</span>
-<span class="c">#        cd = {}</span>
+<span class="c1">#       def take(self,net,RAT=None):</span>
+<span class="c1">#               cd = {}</span>
 
 
-<span class="c">#        if RAT == None :</span>
-<span class="c">#            Rat = net.RAT</span>
+<span class="c1">#               if RAT == None :</span>
+<span class="c1">#                       Rat = net.RAT</span>
 
-<span class="c">#        elif isinstance(Rat,str):</span>
-<span class="c">#            Rat = [RAT]</span>
+<span class="c1">#               elif isinstance(Rat,str):</span>
+<span class="c1">#                       Rat = [RAT]</span>
+<span class="c1">#    &quot;&quot;&quot;</span>
+<span class="c1">#    Take Pr for any RAT.</span>
+<span class="c1">#    </span>
+<span class="c1">#    Take_all_Pr.take(net=Network.Network,RAT=None)        </span>
+<span class="c1">#    if RAT= None : All RAT are processed</span>
+<span class="c1">#    &quot;&quot;&quot;</span>
 
-<span class="c">#        cd[&#39;Pr&#39;]={}</span>
-<span class="c">#        for rat in Rat:</span>
-<span class="c">#            cd[&#39;Pr&#39;][rat]=nx.get_edge_attributes(net.SubNet[rat],ldp).items()</span>
-
-<span class="c">#               cd[&#39;Pr&#39;]={}</span>
-<span class="c">#               for rat in Rat:</span>
-<span class="c">#                       cd[&#39;Pr&#39;][rat]=nx.get_edge_attributes(net.SubNet[rat],ldp).items()</span>
-
-
-<span class="c">#class Take_all_TOA():</span>
-<span class="c">#       &quot;&quot;&quot;</span>
-<span class="c">#       Take TOA for any RAT.</span>
-<span class="c">#</span>
-<span class="c">#       Take_all_Pr.take(net=Network.Network,RAT=None)</span>
-<span class="c">#       if RAT= None : All RAT are processed</span>
-<span class="c">#       &quot;&quot;&quot;</span>
-<span class="c">#       def take(self,net,RAT=None):</span>
-<span class="c">#               cd = {}</span>
-<span class="c">#               if RAT == None :</span>
-<span class="c">#                       Rat = net.RAT</span>
-<span class="c">#               elif isinstance(Rat,str):</span>
-<span class="c">#                       Rat = [RAT]</span>
-<span class="c">#               cd[&#39;TOA&#39;]={}</span>
-<span class="c">#               for rat in Rat:</span>
-<span class="c">#                       cd[&#39;TOA&#39;][rat]=nx.get_edge_attributes(net.SubNet[rat],ldp).items()</span>
-<span class="c">#class Qconnect():</span>
-<span class="c">#    &quot;&quot;&quot;</span>
-<span class="c">#            take only nodes from a given RAT assuming connectivity probability</span>
-<span class="c">#</span>
-<span class="c">#            p(n1,n2) = Q((10 np log_10(d_(1,2)/R))/sigma_sh)</span>
-<span class="c">#    &quot;&quot;&quot;</span>
-<span class="c">#    Take TOA for any RAT.</span>
-<span class="c">#    </span>
-<span class="c">#    Take_all_Pr.take(net=Network.Network,RAT=None)        </span>
-<span class="c">#    if RAT= None : All RAT are processed</span>
-<span class="c">#    &quot;&quot;&quot;</span>
-<span class="c">#    def take(self,net,RAT=None):</span>
-<span class="c">#        cd = {}</span>
-
-<span class="c">#        if RAT == None :</span>
-<span class="c">#            Rat = net.RAT</span>
-
-<span class="c">#        elif isinstance(Rat,str):</span>
-<span class="c">#            Rat = [RAT]</span>
-
-<span class="c">#        cd[&#39;TOA&#39;]={}</span>
-<span class="c">#        for rat in Rat:</span>
-<span class="c">#            cd[&#39;TOA&#39;][rat]=nx.get_edge_attributes(net.SubNet[rat],ldp).items()</span>
-
-<span class="c">#            with R = 10^((P_0-P_th)/10np)</span>
-<span class="c">#</span>
-<span class="c">#            p_0 = 1/2 with d1,2 =R</span>
-<span class="c">#</span>
-
-<span class="c">#    &quot;&quot;&quot;</span>
-<span class="c">#class Qconnect():</span>
-<span class="c">#    &quot;&quot;&quot;</span>
-<span class="c">#        take only nodes from a given RAT assuming connectivity</span>
-<span class="c">#        probability</span>
-<span class="c">#    </span>
-<span class="c">#        p(n1,n2) = Q((10 np log_10(d_(1,2)/R))/sigma_sh)</span>
-
-<span class="c">#        with R = 10^((P_0-P_th)/10np) </span>
-
-<span class="c">#        p_0 = 1/2 with d1,2 =R</span>
+<span class="c1">#    def take(self,net,RAT=None):</span>
+<span class="c1">#        cd = {}</span>
 
 
-<span class="c">#    &quot;&quot;&quot;</span>
-<span class="c">#    </span>
-<span class="c">#    def take(self,net,RAT=None,LDP=None):</span>
+<span class="c1">#        if RAT == None :</span>
+<span class="c1">#            Rat = net.RAT</span>
 
-<span class="c">#        if Rat == None :</span>
-<span class="c">#            Rat = net.RAT</span>
+<span class="c1">#        elif isinstance(Rat,str):</span>
+<span class="c1">#            Rat = [RAT]</span>
 
-<span class="c">#        elif isinstance(Rat,str):</span>
-<span class="c">#            Rat = [Rat]</span>
+<span class="c1">#        cd[&#39;Pr&#39;]={}</span>
+<span class="c1">#        for rat in Rat:</span>
+<span class="c1">#            cd[&#39;Pr&#39;][rat]=nx.get_edge_attributes(net.SubNet[rat],ldp).items()</span>
 
-
-<span class="c">#            </span>
-<span class="c">#            for rat in Rat:</span>
-<span class="c">#                d=nx.get_edge_attributes(self.net.SubNet[rat],&#39;d&#39;)</span>
-<span class="c">#                P=nx.get_edge_attributes(self.net.SubNet[rat],&#39;Pr&#39;)</span>
-<span class="c">#                </span>
-
-<span class="c">#        for ldp in Ldp:</span>
-<span class="c">#            cd[ldp]={}</span>
-<span class="c">#            for rat in Rat:</span>
-<span class="c">#                try:</span>
-<span class="c">#                    cd[ldp][rat]=nx.get_edge_attributes(net.SubNet[rat],ldp).items()</span>
-<span class="c">#                except: </span>
-<span class="c"># if the</span>
-<span class="c">#                    specified RAT doesn&#39;t</span>
-<span class="c">#                    exist in the PN</span>
+<span class="c1">#               cd[&#39;Pr&#39;]={}</span>
+<span class="c1">#               for rat in Rat:</span>
+<span class="c1">#                       cd[&#39;Pr&#39;][rat]=nx.get_edge_attributes(net.SubNet[rat],ldp).items()</span>
 
 
+<span class="c1">#class Take_all_TOA():</span>
+<span class="c1">#       &quot;&quot;&quot;</span>
+<span class="c1">#       Take TOA for any RAT.</span>
+<span class="c1">#</span>
+<span class="c1">#       Take_all_Pr.take(net=Network.Network,RAT=None)</span>
+<span class="c1">#       if RAT= None : All RAT are processed</span>
+<span class="c1">#       &quot;&quot;&quot;</span>
+<span class="c1">#       def take(self,net,RAT=None):</span>
+<span class="c1">#               cd = {}</span>
+<span class="c1">#               if RAT == None :</span>
+<span class="c1">#                       Rat = net.RAT</span>
+<span class="c1">#               elif isinstance(Rat,str):</span>
+<span class="c1">#                       Rat = [RAT]</span>
+<span class="c1">#               cd[&#39;TOA&#39;]={}</span>
+<span class="c1">#               for rat in Rat:</span>
+<span class="c1">#                       cd[&#39;TOA&#39;][rat]=nx.get_edge_attributes(net.SubNet[rat],ldp).items()</span>
+<span class="c1">#class Qconnect():</span>
+<span class="c1">#    &quot;&quot;&quot;</span>
+<span class="c1">#            take only nodes from a given RAT assuming connectivity probability</span>
+<span class="c1">#</span>
+<span class="c1">#            p(n1,n2) = Q((10 np log_10(d_(1,2)/R))/sigma_sh)</span>
+<span class="c1">#    &quot;&quot;&quot;</span>
+<span class="c1">#    Take TOA for any RAT.</span>
+<span class="c1">#    </span>
+<span class="c1">#    Take_all_Pr.take(net=Network.Network,RAT=None)        </span>
+<span class="c1">#    if RAT= None : All RAT are processed</span>
+<span class="c1">#    &quot;&quot;&quot;</span>
+<span class="c1">#    def take(self,net,RAT=None):</span>
+<span class="c1">#        cd = {}</span>
 
-<span class="c">#            R = pow(10,()) </span>
-<span class="c">#            var = 10*RSSnp*np.log10(d/R)</span>
-<span class="c">#            </span>
-<span class="c">#N=sps.uniform(scale=)</span>
-<span class="c">#            </span>
-</div></div>
+<span class="c1">#        if RAT == None :</span>
+<span class="c1">#            Rat = net.RAT</span>
+
+<span class="c1">#        elif isinstance(Rat,str):</span>
+<span class="c1">#            Rat = [RAT]</span>
+
+<span class="c1">#        cd[&#39;TOA&#39;]={}</span>
+<span class="c1">#        for rat in Rat:</span>
+<span class="c1">#            cd[&#39;TOA&#39;][rat]=nx.get_edge_attributes(net.SubNet[rat],ldp).items()</span>
+
+<span class="c1">#            with R = 10^((P_0-P_th)/10np)</span>
+<span class="c1">#</span>
+<span class="c1">#            p_0 = 1/2 with d1,2 =R</span>
+<span class="c1">#</span>
+
+<span class="c1">#    &quot;&quot;&quot;</span>
+<span class="c1">#class Qconnect():</span>
+<span class="c1">#    &quot;&quot;&quot;</span>
+<span class="c1">#        take only nodes from a given RAT assuming connectivity</span>
+<span class="c1">#        probability</span>
+<span class="c1">#    </span>
+<span class="c1">#        p(n1,n2) = Q((10 np log_10(d_(1,2)/R))/sigma_sh)</span>
+
+<span class="c1">#        with R = 10^((P_0-P_th)/10np) </span>
+
+<span class="c1">#        p_0 = 1/2 with d1,2 =R</span>
+
+
+<span class="c1">#    &quot;&quot;&quot;</span>
+<span class="c1">#    </span>
+<span class="c1">#    def take(self,net,RAT=None,LDP=None):</span>
+
+<span class="c1">#        if Rat == None :</span>
+<span class="c1">#            Rat = net.RAT</span>
+
+<span class="c1">#        elif isinstance(Rat,str):</span>
+<span class="c1">#            Rat = [Rat]</span>
+
+
+<span class="c1">#            </span>
+<span class="c1">#            for rat in Rat:</span>
+<span class="c1">#                d=nx.get_edge_attributes(self.net.SubNet[rat],&#39;d&#39;)</span>
+<span class="c1">#                P=nx.get_edge_attributes(self.net.SubNet[rat],&#39;Pr&#39;)</span>
+<span class="c1">#                </span>
+
+<span class="c1">#        for ldp in Ldp:</span>
+<span class="c1">#            cd[ldp]={}</span>
+<span class="c1">#            for rat in Rat:</span>
+<span class="c1">#                try:</span>
+<span class="c1">#                    cd[ldp][rat]=nx.get_edge_attributes(net.SubNet[rat],ldp).items()</span>
+<span class="c1">#                except: </span>
+<span class="c1"># if the</span>
+<span class="c1">#                    specified RAT doesn&#39;t</span>
+<span class="c1">#                    exist in the PN</span>
+
+
+
+<span class="c1">#            R = pow(10,()) </span>
+<span class="c1">#            var = 10*RSSnp*np.log10(d/R)</span>
+<span class="c1">#            </span>
+<span class="c1">#N=sps.uniform(scale=)</span>
+<span class="c1">#            </span>
+
 <div class="viewcode-block" id="merge_rules"><a class="viewcode-back" href="../../../modules/pylayers.location.locarule.html#pylayers.location.locarule.merge_rules">[docs]</a><span class="k">def</span> <span class="nf">merge_rules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">RAT</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">LDP</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="n">rules</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -280,46 +355,64 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">rules</span><span class="p">)</span></div>
 </pre></div>
 
+           </div>
           </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team.
+      Last updated on Nov 07, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
-        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
-        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
-          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
-      </ul>
-    </div>
+    </section>
 
-    <div class="footer">
-        &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 12, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
-    </div>
-<script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34943220-1']);
-  _gaq.push(['_setDomainName', 'pylayers.github.io']);
-  _gaq.push(['_setAllowLinker', true]);
-  _gaq.push(['_trackPageview']);
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })(); 
-</script> 
- 
-  </body>
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
 </html>

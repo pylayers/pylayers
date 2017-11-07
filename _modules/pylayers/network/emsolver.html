@@ -1,104 +1,179 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pylayers.network.emsolver &mdash; Python 1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
     
-    <title>pylayers.network.emsolver &mdash; PyLayers</title>
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="author" title="About these documents"
+              href="../../../about.html"/>
+    <link rel="top" title="Python 1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
     
-    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../../index.html" />
-    <link rel="up" title="Module code" href="../../index.html" /> 
-  </head>
-  <body>
-<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
-    PyLayers
-<!--
-<a href="../../../index.html"><img src="../../../_static/logo.png" height="200" border="0"
-    alt="pylayers"/></a>
--->
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Python
+          
+
+          
+            
+            <img src="../../../_static/pylayers.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
 </div>
 
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
-        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
-        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+          
+        </div>
 
-          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
-      </ul>
-    </div>
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#radio-propagation-simulation">2&nbsp;&nbsp;&nbsp;Radio Propagation Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#handling-agent-mobility">3&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#wireless-body-area-network-related-classes">4&nbsp;&nbsp;&nbsp;Wireless Body Area Network Related Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#some-simulation-examples">5&nbsp;&nbsp;&nbsp;Some Simulation Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#algorithms-for-localization">6&nbsp;&nbsp;&nbsp;Algorithms for Localization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#measurements-tools">7&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#pylayers-tools">8&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#references">9&nbsp;&nbsp;&nbsp;References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/pylayers.html">PyLayers Modules Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
+</ul>
 
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+            
+          
         </div>
       </div>
+    </nav>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>pylayers.network.emsolver</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <h1>Source code for pylayers.network.emsolver</h1><div class="highlight"><pre>
-<span class="c"># -*- coding:Utf-8 -*-</span>
-<span class="c">#####################################################################</span>
-<span class="c">#This file is part of Network.</span>
+<span></span><span class="c1"># -*- coding:Utf-8 -*-</span>
+<span class="c1">#####################################################################</span>
+<span class="c1">#authors :</span>
+<span class="c1">#Nicolas AMIOT        : nicolas.amiot@univ-rennes1.fr</span>
+<span class="c1">#Bernard UGUEN        : bernard.uguen@univ-rennes1.fr</span>
+<span class="c1">#####################################################################</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
-<span class="c">#Foobar is free software: you can redistribute it and/or modify</span>
-<span class="c">#it under the terms of the GNU General Public License as published by</span>
-<span class="c">#the Free Software Foundation, either version 3 of the License, or</span>
-<span class="c">#(at your option) any later version.</span>
+<span class="sd">.. currentmodule:: pylayers.antprop.</span>
 
-<span class="c">#Foobar is distributed in the hope that it will be useful,</span>
-<span class="c">#but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-<span class="c">#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
-<span class="c">#GNU General Public License for more details.</span>
+<span class="sd">This module handles electromagnetic solver </span>
+<span class="sd">Class EMsolver</span>
+<span class="sd">--------------</span>
+<span class="sd">    </span>
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
 
-<span class="c">#You should have received a copy of the GNU General Public License</span>
-<span class="c">#along with Foobar.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">    EMsolver.save_model</span>
+<span class="sd">    EMsolver.load_model</span>
+<span class="sd">    EMsolver.solve</span>
 
-<span class="c">#-------------------------------------------------------------------</span>
-<span class="c">#authors :</span>
-<span class="c">#Nicolas AMIOT        : nicolas.amiot@univ-rennes1.fr</span>
-<span class="c">#Bernard UGUEN        : bernard.uguen@univ-rennes1.fr</span>
-<span class="c">#####################################################################</span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">pkgutil</span>
 
@@ -112,7 +187,7 @@
 <span class="kn">import</span> <span class="nn">pylayers.antprop.slab</span>
 
 <span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
-<span class="kn">import</span> <span class="nn">pylayers.antprop.multiwall</span> <span class="kn">as</span> <span class="nn">mw</span>
+<span class="kn">import</span> <span class="nn">pylayers.antprop.loss</span> <span class="kn">as</span> <span class="nn">lo</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.network.model</span> <span class="kn">import</span> <span class="n">PLSmodel</span>
 
@@ -120,7 +195,7 @@
 <span class="kn">import</span> <span class="nn">pdb</span>
 
 
-<span class="k">class</span> <span class="nc">EMSolver</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="EMSolver"><a class="viewcode-back" href="../../../modules/pylayers.network.emsolver.html#pylayers.network.emsolver.EMSolver">[docs]</a><span class="k">class</span> <span class="nc">EMSolver</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Invoque an electromagnetic solver</span>
 
 <span class="sd">    Attributes</span>
@@ -131,16 +206,17 @@
 <span class="sd">    ems_opt</span>
 <span class="sd">    toa_opt</span>
 <span class="sd">    EMS_method</span>
-<span class="sd">       </span>
+
 <span class="sd">    sigmaTOA</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 
-<span class="sd">    During dynamic simulation, on a regular basis nodes needs radio information</span>
-<span class="sd">    about their neighbors. This radio information can be obtained with</span>
-<span class="sd">    different technique from statistical model to site specific simulation</span>
-<span class="sd">    using ray tracing.</span>
+<span class="sd">    During dynamic simulation, on a regular basis nodes need radio information</span>
+<span class="sd">    about their neighbors. This radio information can be obtained from</span>
+<span class="sd">    different techniques :</span>
+<span class="sd">        + statistical model</span>
+<span class="sd">        + site specific simulation using ray tracing.</span>
 
 <span class="sd">    EMS_method = { &#39;multiwall&#39;,&#39;raytracing&#39;}</span>
 
@@ -149,21 +225,23 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">()):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">config</span>  <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fileini</span> <span class="o">=</span><span class="s">&#39;EMSolver.ini&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fileini</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRSIMUL&#39;</span><span class="p">]))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ems_opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;EMS_config&#39;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">toa_opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;TOA&#39;</span><span class="p">))</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">EMS_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ems_opt</span><span class="p">[</span><span class="s">&#39;method&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sigmaTOA</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">toa_opt</span><span class="p">[</span><span class="s">&#39;sigmatoa&#39;</span><span class="p">])</span> <span class="c"># meters !!!!!!</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span>  <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fileini</span> <span class="o">=</span><span class="s1">&#39;EMSolver.ini&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fileini</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIRSIMUL&#39;</span><span class="p">]))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ems_opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;EMS_config&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toa_opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;TOA&#39;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">EMS_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ems_opt</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigmaTOA</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">toa_opt</span><span class="p">[</span><span class="s1">&#39;sigmatoa&#39;</span><span class="p">])</span> <span class="c1"># meters !!!!!!</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">L</span>
 
 
-    <span class="k">def</span> <span class="nf">save_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">RAT</span><span class="p">,</span><span class="n">model</span><span class="p">):</span>
+<div class="viewcode-block" id="EMSolver.save_model"><a class="viewcode-back" href="../../../modules/pylayers.network.emsolver.html#pylayers.network.emsolver.EMSolver.save_model">[docs]</a>    <span class="k">def</span> <span class="nf">save_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">RAT</span><span class="p">,</span><span class="n">model</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;save a RAT model</span>
 
 <span class="sd">        Parameters</span>
@@ -173,25 +251,25 @@
 <span class="sd">            RAT name</span>
 <span class="sd">        model : dictionnary</span>
 <span class="sd">            parameters of the PL model</span>
-<span class="sd">           </span>
-<span class="sd">           </span>
+
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">fileini</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fileini</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRSIMUL&#39;</span><span class="p">])</span>
-        <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileini</span><span class="p">,</span> <span class="s">&quot;a&quot;</span><span class="p">)</span>
+        <span class="n">fileini</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fileini</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIRSIMUL&#39;</span><span class="p">])</span>
+        <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileini</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>
         <span class="n">nconfig</span>     <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
-        <span class="n">nconfig</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="n">RAT</span><span class="o">+</span><span class="s">&#39;_PLM&#39;</span><span class="p">)</span>
-        <span class="n">nconfig</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">RAT</span><span class="o">+</span><span class="s">&#39;_PLM&#39;</span><span class="p">,</span><span class="s">&#39;sigrss&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">sigrss</span><span class="p">))</span>
-        <span class="n">nconfig</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">RAT</span><span class="o">+</span><span class="s">&#39;_PLM&#39;</span><span class="p">,</span><span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">f</span><span class="p">))</span>
-        <span class="n">nconfig</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">RAT</span><span class="o">+</span><span class="s">&#39;_PLM&#39;</span><span class="p">,</span><span class="s">&#39;rssnp&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">rssnp</span><span class="p">))</span>
-        <span class="n">nconfig</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">RAT</span><span class="o">+</span><span class="s">&#39;_PLM&#39;</span><span class="p">,</span><span class="s">&#39;d0&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">d0</span><span class="p">))</span>
-        <span class="n">nconfig</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">RAT</span><span class="o">+</span><span class="s">&#39;_PLM&#39;</span><span class="p">,</span><span class="s">&#39;method&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">method</span><span class="p">))</span>
+        <span class="n">nconfig</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="n">RAT</span><span class="o">+</span><span class="s1">&#39;_PLM&#39;</span><span class="p">)</span>
+        <span class="n">nconfig</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">RAT</span><span class="o">+</span><span class="s1">&#39;_PLM&#39;</span><span class="p">,</span><span class="s1">&#39;sigrss&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">sigrss</span><span class="p">))</span>
+        <span class="n">nconfig</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">RAT</span><span class="o">+</span><span class="s1">&#39;_PLM&#39;</span><span class="p">,</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">f</span><span class="p">))</span>
+        <span class="n">nconfig</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">RAT</span><span class="o">+</span><span class="s1">&#39;_PLM&#39;</span><span class="p">,</span><span class="s1">&#39;rssnp&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">rssnp</span><span class="p">))</span>
+        <span class="n">nconfig</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">RAT</span><span class="o">+</span><span class="s1">&#39;_PLM&#39;</span><span class="p">,</span><span class="s1">&#39;d0&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">d0</span><span class="p">))</span>
+        <span class="n">nconfig</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">RAT</span><span class="o">+</span><span class="s1">&#39;_PLM&#39;</span><span class="p">,</span><span class="s1">&#39;method&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">method</span><span class="p">))</span>
         <span class="n">nconfig</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
-        <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
 
-    <span class="k">def</span> <span class="nf">load_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">RAT</span><span class="p">):</span>
+<div class="viewcode-block" id="EMSolver.load_model"><a class="viewcode-back" href="../../../modules/pylayers.network.emsolver.html#pylayers.network.emsolver.EMSolver.load_model">[docs]</a>    <span class="k">def</span> <span class="nf">load_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">RAT</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load a path loss shadowing model for a RAT</span>
 
 <span class="sd">        Parameters</span>
@@ -203,40 +281,43 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">ratopt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">RAT</span><span class="o">+</span><span class="s">&#39;_PLM&#39;</span><span class="p">))</span>
-       
-        <span class="c"># Path Loss Shadowing model</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">RAT</span><span class="p">]</span> <span class="o">=</span> <span class="n">PLSmodel</span><span class="p">(</span><span class="n">f</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">ratopt</span><span class="p">[</span><span class="s">&#39;f&#39;</span><span class="p">]),</span>
-                                   <span class="n">rssnp</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">ratopt</span><span class="p">[</span><span class="s">&#39;rssnp&#39;</span><span class="p">]),</span>
-                                   <span class="n">d0</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">ratopt</span><span class="p">[</span><span class="s">&#39;d0&#39;</span><span class="p">]),</span>
-                                   <span class="n">sigrss</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">ratopt</span><span class="p">[</span><span class="s">&#39;sigrss&#39;</span><span class="p">]),</span>
-                                   <span class="n">method</span> <span class="o">=</span> <span class="n">ratopt</span><span class="p">[</span><span class="s">&#39;method&#39;</span><span class="p">])</span>
+        <span class="n">ratopt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">RAT</span><span class="o">+</span><span class="s1">&#39;_PLM&#39;</span><span class="p">))</span>
+
+        <span class="c1"># Path Loss Shadowing model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">RAT</span><span class="p">]</span> <span class="o">=</span> <span class="n">PLSmodel</span><span class="p">(</span><span class="n">f</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">ratopt</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">]),</span>
+                                   <span class="n">rssnp</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">ratopt</span><span class="p">[</span><span class="s1">&#39;rssnp&#39;</span><span class="p">]),</span>
+                                   <span class="n">d0</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">ratopt</span><span class="p">[</span><span class="s1">&#39;d0&#39;</span><span class="p">]),</span>
+                                   <span class="n">sigrss</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">ratopt</span><span class="p">[</span><span class="s1">&#39;sigrss&#39;</span><span class="p">]),</span>
+                                   <span class="n">method</span> <span class="o">=</span> <span class="n">ratopt</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">])</span></div>
 
 
-    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">LDP</span><span class="p">,</span><span class="n">RAT</span><span class="p">,</span><span class="n">epwr</span><span class="p">,</span><span class="n">sens</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; computes and returns a LDP value a given method</span>
+<div class="viewcode-block" id="EMSolver.solve"><a class="viewcode-back" href="../../../modules/pylayers.network.emsolver.html#pylayers.network.emsolver.EMSolver.solve">[docs]</a>    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">LDP</span><span class="p">,</span><span class="n">RAT</span><span class="p">,</span><span class="n">epwr</span><span class="p">,</span><span class="n">sens</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; computes and returns a LDP value </span>
+
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">       </span>
+
 <span class="sd">        p : np.array</span>
 <span class="sd">        e : np.array</span>
 <span class="sd">        LDP : string</span>
 <span class="sd">            Type of LDP ( TOA, Pr, .... any other are to be add in teh todo list)</span>
 <span class="sd">        epwr : list</span>
-<span class="sd">           nodes emmited power</span>
+<span class="sd">           nodes transmitted power</span>
 <span class="sd">        sens : list</span>
 <span class="sd">            nodes sensitivity</span>
-<span class="sd">               </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">       </span>
+
 <span class="sd">        value : float</span>
 <span class="sd">            A LDP value :     * A time in ns for LDP =&#39;TOA&#39;</span>
 <span class="sd">                    * A received power in dBm for LDP =&#39;Pr&#39;</span>
 <span class="sd">        std : float</span>
 <span class="sd">            A LDP value standard deviation:     * A time in ns for LDP =&#39;TOA&#39;</span>
 <span class="sd">                                * A received power in dBm for LDP =&#39;Pr&#39;</span>
+
+<span class="sd">        LDP (Location Dependent Parameter) </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -252,43 +333,47 @@
                 <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">RAT</span><span class="p">]</span>
 
 
-<span class="c">#        if self.EMS_method == &#39;direct&#39;:</span>
-<span class="c">#            dd={} # distance dictionnary</span>
+<span class="c1">#        if self.EMS_method == &#39;direct&#39;:</span>
+<span class="c1">#            dd={} # distance dictionnary</span>
 
-<span class="c">#            if len(e) &gt; 0:</span>
-<span class="c">#                lp=np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])</span>
-<span class="c">#                d=np.sqrt(np.sum((lp[:,0]-lp[:,1])**2,axis=1))</span>
-<span class="c">#                if LDP == &#39;TOA&#39;:</span>
-<span class="c">#                    std = self.sigmaTOA*sp.randn(len(d))</span>
-<span class="c">#                    return ([[max(0.0,(d[i]+std[i])*0.3),self.sigmaTOA*0.3] for i in range(len(d))],d)</span>
+<span class="c1">#            if len(e) &gt; 0:</span>
+<span class="c1">#                lp=np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])</span>
+<span class="c1">#                d=np.sqrt(np.sum((lp[:,0]-lp[:,1])**2,axis=1))</span>
+<span class="c1">#                if LDP == &#39;TOA&#39;:</span>
+<span class="c1">#                    std = self.sigmaTOA*sp.randn(len(d))</span>
+<span class="c1">#                    return ([[max(0.0,(d[i]+std[i])*0.3),self.sigmaTOA*0.3] for i in range(len(d))],d)</span>
 
-<span class="c">#                elif LDP == &#39;Pr&#39;:</span>
-<span class="c">#                    std = self.model.sigrss*sp.randn(len(d))</span>
-<span class="c">#                    r=model.getPL(d,model.sigrss)</span>
-<span class="c">#                    return ([[- r[i]-model.PL0,model.sigrss] for i in range(len(d))],d)</span>
-<span class="c">#               </span>
-<span class="c">#           </span>
-
-
-
-<span class="c">#                else :</span>
-<span class="c">#                    raise NameError(&#39;invalid LDP name&#39;)</span>
-<span class="c">#            else :</span>
-<span class="c">#                return ([[0.],[0.]])</span>
+<span class="c1">#                elif LDP == &#39;Pr&#39;:</span>
+<span class="c1">#                    std = self.model.sigrss*sp.randn(len(d))</span>
+<span class="c1">#                    r=model.getPL(d,model.sigrss)</span>
+<span class="c1">#                    return ([[- r[i]-model.PL0,model.sigrss] for i in range(len(d))],d)</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
 
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">EMS_method</span> <span class="o">==</span> <span class="s">&#39;multiwall&#39;</span><span class="p">:</span>
 
-            <span class="n">dd</span><span class="o">=</span><span class="p">{}</span> <span class="c"># distance dictionnary</span>
+<span class="c1">#                else :</span>
+<span class="c1">#                    raise NameError(&#39;invalid LDP name&#39;)</span>
+<span class="c1">#            else :</span>
+<span class="c1">#                return ([[0.],[0.]])</span>
+
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">EMS_method</span> <span class="o">==</span> <span class="s1">&#39;multiwall&#39;</span><span class="p">:</span>
+
+            <span class="n">dd</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1"># distance dictionnary</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
 
                 <span class="n">lp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">p</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]],</span><span class="n">p</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]]))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="p">))])</span>
-                <span class="c"># euclidian distance</span>
+                <span class="c1"># MW is 2D only now.</span>
+                <span class="c1"># This explain the following licenses</span>
+                <span class="n">lp</span> <span class="o">=</span> <span class="n">lp</span><span class="p">[:,:,:</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">dim</span> <span class="o">=</span> <span class="n">lp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="c1"># d euclidian distance</span>
                 <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">lp</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">lp</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
                 <span class="n">slp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">lp</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
 
-                <span class="c"># evaluation of all LDPs</span>
-                <span class="k">if</span> <span class="n">LDP</span><span class="o">==</span><span class="s">&#39;all&#39;</span><span class="p">:</span>
+                <span class="c1"># evaluation of all LDPs</span>
+                <span class="k">if</span> <span class="n">LDP</span><span class="o">==</span><span class="s1">&#39;all&#39;</span><span class="p">:</span>
                     <span class="n">pa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
                     <span class="n">lpa</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pa</span><span class="p">)</span>
                     <span class="n">Pr</span> <span class="o">=</span> <span class="p">[]</span>
@@ -299,41 +384,46 @@
                     <span class="n">lepwr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(())</span>
 
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lpa</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-                        <span class="c"># excess time of flight + losses computation</span>
-                        <span class="c">#</span>
-                        <span class="c"># Losst returns 4 parameters  </span>
-                        <span class="c">#   Lo Lp Edo Edp</span>
-                        <span class="c">#</span>
-                        <span class="c">#</span>
-                        <span class="n">MW</span> <span class="o">=</span> <span class="n">mw</span><span class="o">.</span><span class="n">Losst</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">model</span><span class="o">.</span><span class="n">f</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">lpa</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-                        <span class="c"># MW = mw.Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])</span>
-                        <span class="c"># loss free space</span>
-                        <span class="n">frees</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">frees</span><span class="p">,</span><span class="n">mw</span><span class="o">.</span><span class="n">PL</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">f</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">lpa</span><span class="p">],</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">model</span><span class="o">.</span><span class="n">rssnp</span><span class="p">)</span> <span class="p">))</span>
-                        <span class="c"># Pr.extend(lepwr - MW[0] - frees)</span>
-                       
-                        <span class="c"># WARNING : only one polarization is taken into</span>
-                        <span class="c"># account here</span>
-                        <span class="c"># save losses computation</span>
+                        <span class="c1"># excess time of flight + losses computation</span>
+                        <span class="c1">#</span>
+                        <span class="c1"># Losst returns 4 parameters</span>
+                        <span class="c1">#   Lo Lp Edo Edp</span>
+                        <span class="c1">#</span>
+                        <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+                        <span class="n">MW</span> <span class="o">=</span> <span class="n">lo</span><span class="o">.</span><span class="n">Losst</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">model</span><span class="o">.</span><span class="n">f</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">lpa</span><span class="p">,:</span><span class="n">dim</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="p">,:</span><span class="n">dim</span><span class="p">])</span>
+                        <span class="c1"># MW = lo.Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])</span>
+                        <span class="c1"># loss free space</span>
+
+                        <span class="n">frees</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">frees</span><span class="p">,</span>
+                                         <span class="n">lo</span><span class="o">.</span><span class="n">PL</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">model</span><span class="o">.</span><span class="n">f</span><span class="p">]),</span>
+                                         <span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">lpa</span><span class="p">,:</span><span class="n">dim</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+                                         <span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="p">,:</span><span class="n">dim</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
+                                         <span class="n">model</span><span class="o">.</span><span class="n">rssnp</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="p">))</span>
+
+                        <span class="c1"># Pr.extend(lepwr - MW[0] - frees)</span>
+                        <span class="c1"># WARNING : only one polarization is taken into</span>
+                        <span class="c1"># account here</span>
+                        <span class="c1"># save losses computation</span>
 
                         <span class="n">loss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">loss</span><span class="p">,</span><span class="n">MW</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
-                        <span class="c"># save excess tof computation</span>
+                        <span class="c1"># save excess tof computation</span>
                         <span class="n">TOA</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">TOA</span><span class="p">,</span><span class="n">MW</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
 
-                    <span class="c"># emmited power for the first nodes of computed edges</span>
+                    <span class="c1"># emmited power for the first nodes of computed edges</span>
                     <span class="n">lepwr1</span> <span class="o">=</span> <span class="p">[</span><span class="n">epwr</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">RAT</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">e</span><span class="p">]</span>
                     <span class="n">lepwr2</span> <span class="o">=</span> <span class="p">[</span><span class="n">epwr</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">RAT</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">e</span><span class="p">]</span>
                     <span class="n">Pr</span> <span class="o">=</span> <span class="n">lepwr1</span> <span class="o">-</span> <span class="n">loss</span> <span class="o">-</span> <span class="n">frees</span>
 
-                    <span class="c"># concatenate reverse link</span>
+                    <span class="c1"># concatenate reverse link</span>
                     <span class="n">Pr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">Pr</span><span class="p">,</span> <span class="n">lepwr2</span> <span class="o">-</span> <span class="n">loss</span> <span class="o">-</span> <span class="n">frees</span><span class="p">))</span>
                     <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">Pr</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
                     <span class="n">P</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sigrss</span>
                     <span class="n">lsens</span> <span class="o">=</span> <span class="p">[</span><span class="n">sens</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">RAT</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">e</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">sens</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">RAT</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">e</span><span class="p">]</span>
 
-                    <span class="c"># visibility or not</span>
+                    <span class="c1"># visibility or not</span>
                     <span class="n">v</span> <span class="o">=</span> <span class="n">P</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">lsens</span>
 
-                    <span class="c"># same toa for link and reverse link</span>
+                    <span class="c1"># same toa for link and reverse link</span>
                     <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">TOA</span><span class="o">+</span><span class="n">d</span><span class="o">/</span><span class="mf">0.3</span><span class="p">,</span><span class="n">TOA</span><span class="o">+</span><span class="n">d</span><span class="o">/</span><span class="mf">0.3</span><span class="p">))</span>
                     <span class="n">T</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">T</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
                     <span class="n">T</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sigmaTOA</span><span class="o">*</span><span class="mf">0.3</span>
@@ -343,77 +433,101 @@
 
 
 
-<span class="c">#                elif LDP == &#39;Pr&#39;:</span>
-<span class="c">#                    pa = np.vstack(p.values())</span>
-<span class="c">#                    pn = p.keys()</span>
-<span class="c">#                    lpa = len(pa)</span>
-<span class="c">#                    Lwo = []</span>
-<span class="c">#                    frees=[]</span>
-<span class="c">#                    lepwr=[]</span>
-<span class="c">#                    for i in range(lpa-1):</span>
-<span class="c">#                        MW.append(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i]))</span>
-<span class="c">#                        Lwo.extend(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])[0])</span>
-<span class="c">#                        frees.extend(PL(pa[i+1:lpa],model.f,pa[i],model.rssnp))</span>
-<span class="c">#                        lepwr.extend(epwr[i+1:lpa])</span>
-<span class="c">#                    return ([[lepwr[i] - Lwo[i]-frees[i],model.sigrss] for i in range(len(Lwo))],d)</span>
-<span class="c">#           </span>
-<span class="c">#                elif LDP == &#39;TOA&#39;: #### NOT CORRECT !</span>
-<span class="c">#                    std = self.sigmaTOA*sp.randn(len(d))</span>
-<span class="c">#                    return ([[max(0.0,(d[i]+std[i])*0.3),self.sigmaTOA*0.3] for i in range(len(d))],d)</span>
+<span class="c1">#                elif LDP == &#39;Pr&#39;:</span>
+<span class="c1">#                    pa = np.vstack(p.values())</span>
+<span class="c1">#                    pn = p.keys()</span>
+<span class="c1">#                    lpa = len(pa)</span>
+<span class="c1">#                    Lwo = []</span>
+<span class="c1">#                    frees=[]</span>
+<span class="c1">#                    lepwr=[]</span>
+<span class="c1">#                    for i in range(lpa-1):</span>
+<span class="c1">#                        lo.append(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i]))</span>
+<span class="c1">#                        Lwo.extend(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])[0])</span>
+<span class="c1">#                        frees.extend(PL(pa[i+1:lpa],model.f,pa[i],model.rssnp))</span>
+<span class="c1">#                        lepwr.extend(epwr[i+1:lpa])</span>
+<span class="c1">#                    return ([[lepwr[i] - Lwo[i]-frees[i],model.sigrss] for i in range(len(Lwo))],d)</span>
+<span class="c1">#           </span>
+<span class="c1">#                elif LDP == &#39;TOA&#39;: #### NOT CORRECT !</span>
+<span class="c1">#                    std = self.sigmaTOA*sp.randn(len(d))</span>
+<span class="c1">#                    return ([[max(0.0,(d[i]+std[i])*0.3),self.sigmaTOA*0.3] for i in range(len(d))],d)</span>
 
 
             <span class="k">else</span> <span class="p">:</span>
                 <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">)),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">)),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">)),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">)))</span>
 
 
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;raytracing&#39;</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s">&#39;Okay, I think we</span><span class="se">\&#39;</span><span class="s">ve got something to append in the TODO list&#39;</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;raytracing&#39;</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s1">&#39;Okay, I think we</span><span class="se">\&#39;</span><span class="s1">ve got something to append in the TODO list&#39;</span>
 
 
         <span class="k">else</span> <span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;invalid method name&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;invalid method name&#39;</span><span class="p">)</span></div></div>
+
+
+
+
+
+
 </pre></div>
 
+           </div>
           </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team.
+      Last updated on Nov 07, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
-        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
-        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
-          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
-      </ul>
-    </div>
+    </section>
 
-    <div class="footer">
-        &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 12, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
-    </div>
-<script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34943220-1']);
-  _gaq.push(['_setDomainName', 'pylayers.github.io']);
-  _gaq.push(['_setAllowLinker', true]);
-  _gaq.push(['_trackPageview']);
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })(); 
-</script> 
- 
-  </body>
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
 </html>
