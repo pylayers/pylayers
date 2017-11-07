@@ -1734,8 +1734,8 @@
 <div class="viewcode-block" id="Pattern.gain"><a class="viewcode-back" href="../../../modules/pylayers.antprop.antenna.html#pylayers.antprop.antenna.Pattern.gain">[docs]</a>    <span class="k">def</span> <span class="nf">gain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  calculates antenna gain</span>
 <span class="sd">        </span>
-<span class="sd">        Info</span>
-<span class="sd">        ----</span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
 
 <span class="sd">        This function updates the following attributes</span>
 
@@ -1755,7 +1755,7 @@
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 
-<span class="sd">        .. math:: G(\\theta,phi) = |F_{\\theta}|^2 + |F_{\\phi}|^2</span>
+<span class="sd">        .. math:: G(\\theta,\\phi) = |F_{\\theta}|^2 + |F_{\\phi}|^2</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fp</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Fp</span><span class="p">)</span>
@@ -5665,7 +5665,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 06, 2017.
+      Last updated on Nov 07, 2017.
 
     </p>
   </div>
