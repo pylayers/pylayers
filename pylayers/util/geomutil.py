@@ -9,86 +9,44 @@ Geometry Module (:mod:`pylayers.util.geomutil`)
 Geomview Class
 ==============
 
-.. autosummary::
-    :toctree: generated/
-
-Geomview.__init__
-Geomview.show3
+.. autoclass:: Geomview
+    :members:
 
 Geomlist Class
 ==============
 
-.. autosummary::
-    :toctree: generated/
-
-    Geomlist.__init__
-    Geomlist.append
+.. autoclass:: Geomview
+    :members:
 
 GeomVect Class
 ==============
 
-.. autosummary::
-    :toctree: generated/
-
-    GeomVect.__init__
-    GeomVect.segments
-    GeomVect.geomBase
-    GeomVect.points
+.. autoclass:: GeomVect
+    :members:
 
 Geomoff Class
 =============
 
-.. autosummary::
-    :toctree: generated/
-
-    Geomoff.__init__
-    Geomoff.loadpt
-    Geomoff.savept
-    Geomoff.polygon
-    Geomoff.polygons
-    Geomoff.cylinder
-    Geomoff.box
-    Geomoff.pattern
+.. autoclass:: Geomoff
+    :members:
 
 Plot_Shapely Class
 ==================
 
-.. autosummary::
-    :toctree: generated/
-
-    Plot_shapely.__init__
-    Plot_shapely.plot_coords
-    Plot_shapely.plot_ligne
-    Plot_shapely.plot_polygon
-    Plot_shapely.plot_multi
+.. autoclass:: Plot_Shaplely
+    :members:
 
 LineString Class
 ==================
 
-.. autosummary::
-    :toctree: generated/
-
-    LineString.__init__
-    LineString.plot
+.. autoclass:: LineString
+    :members:
 
 PolyGon Class
 =============
 
-.. autosummary::
-    :toctree: generated/
-
-    Polygon.__init__
-    Polygon.plot
-    Polygon.__init__
-    Polygon.__add__
-    Polygon.__repr__
-    Polygon.ndarray
-    Polygon.signedarea
-    Polygon.plot
-    Polygon.simplify
-    Polygon.buildGv
-    Polygon.showGv
-    Polygon.ptconvex
+.. autoclass:: Polygon
+    :members:
 
 
 Utility Functions
@@ -205,8 +163,8 @@ def ispoint(tpts, pt, tol=0.05):
 
         k : point index if point exists, 0 otherwise
 
-        Example
-        -------
+        Examples
+        --------
 
             >>> from pylayers.util.geomutil.util import *
             >>> tpts= (np.array([[1,2,3],[5,6,7]]),np.array([-1,-2,-3]))
@@ -304,9 +262,10 @@ def ndarray(poly):
 
     Examples
     --------
-    >>> from pylayers.util.geomutil import *
-    >>> p1 = np.array([[0,1,1,0],[0,0,1,1]])
-    >>> P1 = Polygon(p1)
+
+        >>> from pylayers.util.geomutil import *
+        >>> p1 = np.array([[0,1,1,0],[0,0,1,1]])
+        >>> P1 = Polygon(p1)
 
     """
     lring = poly.exterior

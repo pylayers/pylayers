@@ -1,3 +1,10 @@
+"""
+
+.. autoclass:: RSS
+    :members:
+
+"""
+
 # -*- coding:Utf-8 -*-
 #####################################################################
 #This file is part of RGPA.
@@ -32,6 +39,7 @@ from pylayers.location.geometric.util.boxn import *
 from pylayers.location.geometric.constraints.constraint import *
 #from pylayers.location.algebraic.RSSLocation import *
 from pylayers.network.model import *
+
 
 
 class RSS(Constraint):

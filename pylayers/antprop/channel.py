@@ -97,8 +97,8 @@ except:
 class AFPchannel(bs.FUsignal):
     """ Angular Frequency Profile channel
 
-    Members
-    -------
+    Attributes
+    ----------
 
     x : np.array
         frequency ,Nf
@@ -270,14 +270,15 @@ class AFPchannel(bs.FUsignal):
 class ADPchannel(bs.TUsignal):
     """ Angular Delay Profile channel
 
-    Members
-    -------
+    Attributes
+    ----------
 
-    a : 
-    offset :
+    az : array
+        azimuth in radian 
+    ang_offset :
     theta :  float 
-    phi : 
-    tau : 
+    phi : float 
+    tau : float 
     _filename : string
         short filename for saving     
 
@@ -2699,8 +2700,8 @@ class Tchannel(bs.FUsignal):
     This channel contains all the spatial information for each individual ray. 
     Warning : This is a frequency domain channel deriving from bs.FUsignal 
 
-    Members
-    -------
+    Attributes
+    ----------
 
         ray transfer functions  (nray,nfreq)
     dod  :

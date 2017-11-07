@@ -1725,7 +1725,16 @@ class SlabDB(dict):
     DB : slab dictionnary
 
     """
-    def __init__(self,fileslab='', filemat='',ds={},dm={}):
+    def __init__(self,fileslab='',
+                 filemat='',
+                 ds={},
+                 dm={'AIR':
+                     {'mur':(1+0j),'epr':(1+0j),'roughness':0.0,'sigma':0.0},
+                     '_AIR':
+                     {'mur':(1+0j),'epr':(1+0j),'roughness':0.0,'sigma':0.0},
+                     'METAL':
+                     {'mur':(1+0j),'epr':(1+0j),'roughness':0.0,'sigma':10000000}}
+                     ):
         """ class constructor
 
         Parameters

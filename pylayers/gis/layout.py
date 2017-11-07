@@ -9017,9 +9017,7 @@ class Layout(pro.PyLayers):
             # Draw segment slab per slab with proper linewidth and color 
             #
             for lmat in sllist:
-                print(lmat)
-                if lmat=='DOOR':
-                    pdb.set_trace()
+                #print(lmat)
                 lseg = self.name[lmat]
                 if lseg != []:
                     lseg2 = [np.where(np.array(self.Gs.edges()) == i)[0] for i in lseg]

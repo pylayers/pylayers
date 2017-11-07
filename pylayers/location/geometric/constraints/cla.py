@@ -4,29 +4,8 @@
 Constraint Layer Array (CLA) Class
 ==================================
 
-.. autosummary::
-   :toctree: generated/
-
-   CLA.__init__
-   CLA.__repr__
-   CLA.info
-   CLA.update
-   CLA.compute
-   CLA.rescale
-   CLA.annulus_bound
-   CLA.append
-   CLA.remove
-   CLA.setvcw
-   CLA.merge2
-   CLA.valid_v
-   CLA.refine
-   CLA.show3
-   CLA.prob
-   CLA.gapdetect
-   CLA.gapdetect2
-   CLA.min_dist
-   CLA.estpos
-   CLA.estpos2
+.. autoclass:: CLA
+   :members:
 
 """
 #####################################################################

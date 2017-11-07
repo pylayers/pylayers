@@ -1,3 +1,9 @@
+"""
+
+.. autoclass::  TDOA
+    :members:
+
+"""
 # -*- coding:Utf-8 -*-
 #####################################################################
 #This file is part of RGPA.

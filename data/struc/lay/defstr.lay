@@ -45,5 +45,5 @@ REINFORCED_CONCRETE = {'sigma': 3.0, 'roughness': 0.0, 'epr': (8.69999980927+0j)
 
 [indoor]
 zceil = 3
-zfloor = 3
+zfloor = 0
 

@@ -1,5 +1,7 @@
 #!/usr/bin/python
 #-*- coding:Utf-8 -*-
+"""
+"""
 import numpy as np
 
 from pylayers.location.geometric.constraints.cla import *
