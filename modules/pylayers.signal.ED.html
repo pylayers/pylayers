@@ -35,9 +35,7 @@
         <link rel="author" title="About these documents"
               href="../about.html"/>
     <link rel="top" title="Python 1 documentation" href="../index.html"/>
-        <link rel="up" title="PyLayers Modules References" href="pylayers.html"/>
-        <link rel="next" title="pylayers.signal.ED.ED.__init__" href="generated/pylayers.signal.ED.ED.__init__.html"/>
-        <link rel="prev" title="pylayers.signal.DF.DF.ir" href="generated/pylayers.signal.DF.DF.ir.html"/> 
+        <link rel="up" title="PyLayers Modules References" href="pylayers.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -171,56 +169,217 @@
 <tbody valign="top">
 </tbody>
 </table>
-<div class="section" id="energy-detector">
-<h2>Energy Detector<a class="headerlink" href="#energy-detector" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="energy-detector-ed">
+<h2>Energy Detector &#8216;ED&#8217;<a class="headerlink" href="#energy-detector-ed" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pylayers.signal.ED.ED">
+<em class="property">class </em><code class="descclassname">pylayers.signal.ED.</code><code class="descname">ED</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/ED.html#ED"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.ED.ED" title="Permalink to this definition">¶</a></dt>
+<dd><p>Energy Detector Class</p>
+<p>This class implements an energy detector receiver</p>
+<p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.__init__.html#pylayers.signal.ED.ED.__init__" title="pylayers.signal.ED.ED.__init__"><code class="xref py py-obj docutils literal"><span class="pre">ED.__init__</span></code></a>(**kwargs)</td>
-<td>Constructor</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.__repr__.html#pylayers.signal.ED.ED.__repr__" title="pylayers.signal.ED.ED.__repr__"><code class="xref py py-obj docutils literal"><span class="pre">ED.__repr__</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.apply.html#pylayers.signal.ED.ED.apply" title="pylayers.signal.ED.ED.apply"><code class="xref py py-obj docutils literal"><span class="pre">ED.apply</span></code></a>(s[,&nbsp;typ])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.signal.ED.ED.apply" title="pylayers.signal.ED.ED.apply"><code class="xref py py-obj docutils literal"><span class="pre">apply</span></code></a>(s[,&nbsp;typ])</td>
 <td>apply signal</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.moment.html#pylayers.signal.ED.ED.moment" title="pylayers.signal.ED.ED.moment"><code class="xref py py-obj docutils literal"><span class="pre">ED.moment</span></code></a>([typ])</td>
-<td>evaluate mean and variance of output signal y</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.pdf.html#pylayers.signal.ED.ED.pdf" title="pylayers.signal.ED.ED.pdf"><code class="xref py py-obj docutils literal"><span class="pre">ED.pdf</span></code></a>(E[,&nbsp;Ei])</td>
-<td>calculates decision problem densities under H0 and H1</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.errprob.html#pylayers.signal.ED.ED.errprob" title="pylayers.signal.ED.ED.errprob"><code class="xref py py-obj docutils literal"><span class="pre">ED.errprob</span></code></a>(E[,&nbsp;Ei,&nbsp;thresh,&nbsp;typ])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.signal.ED.ED.errprob" title="pylayers.signal.ED.ED.errprob"><code class="xref py py-obj docutils literal"><span class="pre">errprob</span></code></a>(E[,&nbsp;Ei,&nbsp;thresh,&nbsp;typ])</td>
 <td>calculates error probability</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.roc.html#pylayers.signal.ED.ED.roc" title="pylayers.signal.ED.ED.roc"><code class="xref py py-obj docutils literal"><span class="pre">ED.roc</span></code></a>(E[,&nbsp;typ])</td>
-<td>determines receiver operating curve</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
+<td>generic help</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.plot.html#pylayers.signal.ED.ED.plot" title="pylayers.signal.ED.ED.plot"><code class="xref py py-obj docutils literal"><span class="pre">ED.plot</span></code></a>(E)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.signal.ED.ED.moment" title="pylayers.signal.ED.ED.moment"><code class="xref py py-obj docutils literal"><span class="pre">moment</span></code></a>([typ])</td>
+<td>evaluate mean and variance of output signal y</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.signal.ED.ED.pdf" title="pylayers.signal.ED.ED.pdf"><code class="xref py py-obj docutils literal"><span class="pre">pdf</span></code></a>(E[,&nbsp;Ei])</td>
+<td>calculates decision problem densities under H0 and H1</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.signal.ED.ED.plot" title="pylayers.signal.ED.ED.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>(E)</td>
 <td>plot decision problem densities</td>
 </tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.signal.ED.ED.roc" title="pylayers.signal.ED.ED.roc"><code class="xref py py-obj docutils literal"><span class="pre">roc</span></code></a>(E[,&nbsp;typ])</td>
+<td>determines receiver operating curve</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.signal.ED.ED.update" title="pylayers.signal.ED.ED.update"><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></a>()</td>
+<td>updating</td>
+</tr>
 </tbody>
 </table>
-<div class="section" id="references">
-<h3>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div>Cite the relevant literature, e.g. <a class="reference internal" href="#r2" id="id1">[R2]</a>.  You may also cite these
-references in the notes section above.</div></blockquote>
-<table class="docutils citation" frame="void" id="r2" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
+<dl class="method">
+<dt id="pylayers.signal.ED.ED.apply">
+<code class="descname">apply</code><span class="sig-paren">(</span><em>s</em>, <em>typ='ideal'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/ED.html#ED.apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.ED.ED.apply" title="Permalink to this definition">¶</a></dt>
+<dd><p>apply signal</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R2]</a></td><td>O. McNoleg, &#8220;The integration of GIS, remote sensing,
-expert systems and adaptive co-kriging for environmental habitat
-modelling of the Highland Haggis using object-oriented, fuzzy-logic
-and neural-network techniques,&#8221; Computers &amp; Geosciences, vol. 22,
-pp. 585-588, 1996.</td></tr>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>s</strong> : input signal</p>
+<p><strong>typ</strong> : &#8216;real&#8217; | &#8216;ideal&#8217;</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>y</strong> : <span class="math">\(F_2\{\beta^2 F_1\{x\}^2\}\)</span></p>
+<blockquote class="last">
+<div><p><span class="math">\(F{x}\)</span> means a filtering of x with filter <span class="math">\(F\)</span></p>
+</div></blockquote>
+</td>
+</tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.ED.ED.errprob">
+<code class="descname">errprob</code><span class="sig-paren">(</span><em>E</em>, <em>Ei=0</em>, <em>thresh=2e-09</em>, <em>typ='thresh'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/ED.html#ED.errprob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.ED.ED.errprob" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates error probability</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>E</strong> : float</p>
+<blockquote>
+<div><p>Legitimate Signal Energy</p>
+</div></blockquote>
+<p><strong>Ei</strong> : float</p>
+<blockquote>
+<div><p>Interferer Signal Energy</p>
+</div></blockquote>
+<p><strong>thresh</strong> : float</p>
+<p><strong>typ</strong> : string</p>
+<blockquote>
+<div><p>&#8216;thresh&#8217;
+&#8216;scale&#8217;: for IEEE.802.11.6 standard
+&#8216;both&#8217; : both kind of decision</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>errp</strong> : error probability</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">scipy.stats.ncf</span></code>, <a class="reference internal" href="#pylayers.signal.ED.ED.pdf" title="pylayers.signal.ED.ED.pdf"><code class="xref py py-obj docutils literal"><span class="pre">ED.pdf</span></code></a></p>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.ED.ED.moment">
+<code class="descname">moment</code><span class="sig-paren">(</span><em>typ='struc'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/ED.html#ED.moment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.ED.ED.moment" title="Permalink to this definition">¶</a></dt>
+<dd><p>evaluate mean and variance of output signal y</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : string</p>
+<blockquote class="last">
+<div><p>&#8216;struc&#8217; structural evaluation of moments
+&#8216;emp&#8217; empirical evaluation of moments</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p><span class="math">\(R_y(\tau)=2R_x^2(\tau)+R_x^2(0)\)</span></p>
+<p>This function updates the order and scale or the Energy Detector</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.ED.ED.pdf">
+<code class="descname">pdf</code><span class="sig-paren">(</span><em>E</em>, <em>Ei=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/ED.html#ED.pdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.ED.ED.pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates decision problem densities under H0 and H1</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>E</strong> : float</p>
+<blockquote>
+<div><p>Legitimate Signal Energy</p>
+</div></blockquote>
+<p><strong>Ei</strong> : float</p>
+<blockquote class="last">
+<div><p>Interferer Signal Energy</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">scipy.stats.chi2</span></code>, <code class="xref py py-obj docutils literal"><span class="pre">scipy.stats.ncx2</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.ED.ED.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>E</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/ED.html#ED.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.ED.ED.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot decision problem densities</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>E</strong> : float</p>
+<blockquote class="last">
+<div><p>value of signal energy</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.ED.ED.roc">
+<code class="descname">roc</code><span class="sig-paren">(</span><em>E</em>, <em>typ='thresh'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/ED.html#ED.roc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.ED.ED.roc" title="Permalink to this definition">¶</a></dt>
+<dd><p>determines receiver operating curve</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>E</strong> : float</p>
+<blockquote>
+<div><p>Energy (J)</p>
+</div></blockquote>
+<p><strong>typ</strong> : string</p>
+<blockquote>
+<div><p>&#8216;thresh&#8217; | &#8216;both&#8217; | &#8216;scale&#8217;</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>terr</strong> : error probability</p>
+<p><strong>tpfa</strong> : false alarm probability</p>
+<p class="last"><strong>tpd</strong> : detection probability</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Iterate on energy from 0 to 10*E</p>
+<p class="rubric">Examples</p>
+<dl class="docutils">
+<dt>... plot:</dt>
+<dd><p class="first">include-source:</p>
+<div class="last highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.signal.ED import *
+&gt;&gt;&gt; EnDet = ED(BGHz=0.5,Tns=20)
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.ED.ED.update">
+<code class="descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/ED.html#ED.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.ED.ED.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>updating</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 
@@ -228,15 +387,6 @@ pp. 585-588, 1996.</td></tr>
            </div>
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="generated/pylayers.signal.ED.ED.__init__.html" class="btn btn-neutral float-right" title="pylayers.signal.ED.ED.__init__" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="generated/pylayers.signal.DF.DF.ir.html" class="btn btn-neutral" title="pylayers.signal.DF.DF.ir" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

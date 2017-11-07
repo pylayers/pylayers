@@ -164,22 +164,8 @@
 
 <span class="sd">.. currentmodule:: pylayers.signal.DF</span>
 
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    DF.__init__</span>
-<span class="sd">    DF.filter</span>
-<span class="sd">    DF.simplify</span>
-<span class="sd">    DF.flipc</span>
-<span class="sd">    DF.freqz</span>
-<span class="sd">    DF.factorize</span>
-<span class="sd">    DF.wnxcorr</span>
-<span class="sd">    DF.match</span>
-<span class="sd">    DF.butter</span>
-<span class="sd">    DF.ellip_bp</span>
-<span class="sd">    DF.remez</span>
-<span class="sd">    DF.zplane</span>
-<span class="sd">    DF.ir</span>
+<span class="sd">.. autoclass:: DF</span>
+<span class="sd">    :members:</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -190,7 +176,7 @@
 <span class="kn">import</span> <span class="nn">numpy.fft</span> <span class="kn">as</span> <span class="nn">fft</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 
-<span class="k">class</span> <span class="nc">DF</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
+<div class="viewcode-block" id="DF"><a class="viewcode-back" href="../../../modules/pylayers.signal.DF.html#pylayers.signal.DF.DF">[docs]</a><span class="k">class</span> <span class="nc">DF</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Digital Filter Class</span>
 
 <span class="sd">    Methods</span>
@@ -292,7 +278,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="DF.simplify"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.simplify.html#pylayers.signal.DF.DF.simplify">[docs]</a>    <span class="k">def</span> <span class="nf">simplify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">):</span>
+<div class="viewcode-block" id="DF.simplify"><a class="viewcode-back" href="../../../modules/pylayers.signal.DF.html#pylayers.signal.DF.DF.simplify">[docs]</a>    <span class="k">def</span> <span class="nf">simplify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; simplify transfer function </span>
 
 <span class="sd">        Parameters</span>
@@ -313,8 +299,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span><span class="n">ip</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">,</span><span class="n">iz</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DF.flipc"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.flipc.html#pylayers.signal.DF.DF.flipc">[docs]</a>    <span class="k">def</span> <span class="nf">flipc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DF.flipc"><a class="viewcode-back" href="../../../modules/pylayers.signal.DF.html#pylayers.signal.DF.DF.flipc">[docs]</a>    <span class="k">def</span> <span class="nf">flipc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; flip coefficient </span>
+<span class="sd">        </span>
+<span class="sd">        This is equivalent to the transformation </span>
 
 <span class="sd">        z -&gt; 1/z</span>
 
@@ -325,13 +313,21 @@
         <span class="n">F</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
         <span class="k">return</span><span class="p">(</span><span class="n">F</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DF.match"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.match.html#pylayers.signal.DF.DF.match">[docs]</a>    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DF.match"><a class="viewcode-back" href="../../../modules/pylayers.signal.DF.html#pylayers.signal.DF.DF.match">[docs]</a>    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot; return a match filter</span>
 
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
 
-<span class="sd">        if $$H(z)=\frac{1+b_1z^1+...+b_Nz^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$</span>
 
-<span class="sd">        if $$H_m(z)=\frac{b_N+b_{N-1}z^1+...+z^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$</span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        if $$H(z)=\\frac{1+b_1z^1+...+b_Nz^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$</span>
+<span class="sd">        </span>
+<span class="sd">        it returns </span>
+
+<span class="sd">        $$H_m(z)=\\frac{b_N+b_{N-1}z^1+...+z^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -343,7 +339,7 @@
             <span class="n">MF</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="n">MF</span><span class="o">.</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">r</span>
             <span class="k">return</span><span class="p">(</span><span class="n">MF</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DF.filter"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.filter.html#pylayers.signal.DF.DF.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">causal</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="DF.filter"><a class="viewcode-back" href="../../../modules/pylayers.signal.DF.html#pylayers.signal.DF.DF.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">causal</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; filter s</span>
 
 <span class="sd">        Parameters</span>
@@ -357,6 +353,21 @@
 
 <span class="sd">        y : np.array | TUsignal</span>
 <span class="sd">            output signal</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        </span>
+<span class="sd">        .. plot::</span>
+<span class="sd">            :include-source:</span>
+<span class="sd">            </span>
+<span class="sd">            &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">            &gt;&gt;&gt; df = DF(b=np.array([1,1],a=np.array([1,-1]))</span>
+<span class="sd">            &gt;&gt;&gt; N = 100 </span>
+<span class="sd">            &gt;&gt;&gt; s = np.zeros(N)</span>
+<span class="sd">            &gt;&gt;&gt; s[0] = 1</span>
+<span class="sd">            &gt;&gt;&gt; y = df.filter(s)</span>
+<span class="sd">            &gt;&gt;&gt; plt.stem(np.arange(N),x)</span>
+<span class="sd">            &gt;&gt;&gt; plt.stem(np.arange(N),y)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="ow">is</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">:</span>
@@ -373,7 +384,7 @@
             <span class="n">y</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">y</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DF.factorize"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.factorize.html#pylayers.signal.DF.DF.factorize">[docs]</a>    <span class="k">def</span> <span class="nf">factorize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DF.factorize"><a class="viewcode-back" href="../../../modules/pylayers.signal.DF.html#pylayers.signal.DF.DF.factorize">[docs]</a>    <span class="k">def</span> <span class="nf">factorize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; factorize the filter into a minimal phase and maximal phase</span>
 
 <span class="sd">        Returns</span>
@@ -401,7 +412,7 @@
 
 
 
-<div class="viewcode-block" id="DF.wnxcorr"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.wnxcorr.html#pylayers.signal.DF.DF.wnxcorr">[docs]</a>    <span class="k">def</span> <span class="nf">wnxcorr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DF.wnxcorr"><a class="viewcode-back" href="../../../modules/pylayers.signal.DF.html#pylayers.signal.DF.DF.wnxcorr">[docs]</a>    <span class="k">def</span> <span class="nf">wnxcorr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; filtered noise output autocorrelation</span>
 
 <span class="sd">        Parameters</span>
@@ -425,7 +436,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">Rn</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="DF.freqz"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.freqz.html#pylayers.signal.DF.DF.freqz">[docs]</a>    <span class="k">def</span> <span class="nf">freqz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DF.freqz"><a class="viewcode-back" href="../../../modules/pylayers.signal.DF.html#pylayers.signal.DF.DF.freqz">[docs]</a>    <span class="k">def</span> <span class="nf">freqz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; freqz :  evaluation of filter transfer function</span>
 
 <span class="sd">        The function evaluates an FUsignal</span>
@@ -470,7 +481,7 @@
             <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span></div>
 
         <span class="c1">#show()</span>
-<div class="viewcode-block" id="DF.butter"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.butter.html#pylayers.signal.DF.DF.butter">[docs]</a>    <span class="k">def</span> <span class="nf">butter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">w</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;low&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="DF.butter"><a class="viewcode-back" href="../../../modules/pylayers.signal.DF.html#pylayers.signal.DF.DF.butter">[docs]</a>    <span class="k">def</span> <span class="nf">butter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">w</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;low&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Butterwoth digital filter design</span>
 
 <span class="sd">        Parameters</span>
@@ -497,7 +508,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">b</span>  <span class="o">=</span> <span class="n">b</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">a</span>  <span class="o">=</span> <span class="n">a</span></div>
 
-<div class="viewcode-block" id="DF.ellip_bp"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.ellip_bp.html#pylayers.signal.DF.DF.ellip_bp">[docs]</a>    <span class="k">def</span> <span class="nf">ellip_bp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">wp</span><span class="p">,</span><span class="n">ws</span><span class="p">,</span><span class="n">gpass</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">gstop</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+<div class="viewcode-block" id="DF.ellip_bp"><a class="viewcode-back" href="../../../modules/pylayers.signal.DF.html#pylayers.signal.DF.DF.ellip_bp">[docs]</a>    <span class="k">def</span> <span class="nf">ellip_bp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">wp</span><span class="p">,</span><span class="n">ws</span><span class="p">,</span><span class="n">gpass</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">gstop</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Elliptic Bandpath filter</span>
 
 <span class="sd">        Parameters</span>
@@ -518,7 +529,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">b</span>  <span class="o">=</span> <span class="n">b</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">a</span>  <span class="o">=</span> <span class="n">a</span></div>
 
-<div class="viewcode-block" id="DF.remez"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.remez.html#pylayers.signal.DF.DF.remez">[docs]</a>    <span class="k">def</span> <span class="nf">remez</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">numtaps</span><span class="o">=</span><span class="mi">401</span><span class="p">,</span><span class="n">bands</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.11</span><span class="p">,</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.21</span><span class="p">,</span><span class="mf">0.5</span><span class="p">),</span><span class="n">desired</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0001</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.0001</span><span class="p">)):</span>
+<div class="viewcode-block" id="DF.remez"><a class="viewcode-back" href="../../../modules/pylayers.signal.DF.html#pylayers.signal.DF.DF.remez">[docs]</a>    <span class="k">def</span> <span class="nf">remez</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">numtaps</span><span class="o">=</span><span class="mi">401</span><span class="p">,</span><span class="n">bands</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.11</span><span class="p">,</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.21</span><span class="p">,</span><span class="mf">0.5</span><span class="p">),</span><span class="n">desired</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0001</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.0001</span><span class="p">)):</span>
         <span class="sd">&quot;&quot;&quot; FIR design Remez algorithm</span>
 
 <span class="sd">        Parameters</span>
@@ -544,7 +555,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">remez</span><span class="p">(</span><span class="n">numtaps</span><span class="p">,</span> <span class="n">bands</span><span class="p">,</span> <span class="n">desired</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">Hz</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;bandpass&#39;</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">grid_density</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DF.zplane"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.zplane.html#pylayers.signal.DF.DF.zplane">[docs]</a>    <span class="k">def</span> <span class="nf">zplane</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">):</span>
+<div class="viewcode-block" id="DF.zplane"><a class="viewcode-back" href="../../../modules/pylayers.signal.DF.html#pylayers.signal.DF.DF.zplane">[docs]</a>    <span class="k">def</span> <span class="nf">zplane</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Display filter in the complex plane</span>
 
 <span class="sd">        Parameters</span>
@@ -573,7 +584,7 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DF.ir"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.ir.html#pylayers.signal.DF.DF.ir">[docs]</a>    <span class="k">def</span> <span class="nf">ir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">show</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="DF.ir"><a class="viewcode-back" href="../../../modules/pylayers.signal.DF.html#pylayers.signal.DF.DF.ir">[docs]</a>    <span class="k">def</span> <span class="nf">ir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">show</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; returns impulse response</span>
 
 <span class="sd">        Returns</span>
@@ -590,7 +601,7 @@
             <span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">),</span><span class="n">ir</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="n">ir</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ir</span><span class="p">))</span> <span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">ir</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span></div>
+        <span class="k">return</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span></div></div>
 
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>

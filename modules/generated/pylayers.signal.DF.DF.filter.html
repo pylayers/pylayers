@@ -34,10 +34,7 @@
   
         <link rel="author" title="About these documents"
               href="../../about.html"/>
-    <link rel="top" title="Python 1 documentation" href="../../index.html"/>
-        <link rel="up" title="pylayers.signal.DF" href="../pylayers.signal.DF.html"/>
-        <link rel="next" title="pylayers.signal.DF.DF.simplify" href="pylayers.signal.DF.DF.simplify.html"/>
-        <link rel="prev" title="pylayers.signal.DF.DF.__init__" href="pylayers.signal.DF.DF.__init__.html"/> 
+    <link rel="top" title="Python 1 documentation" href="../../index.html"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -140,12 +137,6 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../../index.html">Docs</a> &raquo;</li>
       
-          <li><a href="../../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
-      
-          <li><a href="../pylayers.html">PyLayers Modules References</a> &raquo;</li>
-      
-          <li><a href="../pylayers.signal.DF.html">pylayers.signal.DF</a> &raquo;</li>
-      
     <li>pylayers.signal.DF.DF.filter</li>
       <li class="wy-breadcrumbs-aside">
         
@@ -184,6 +175,18 @@
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import matplotlib.pyplot as plt
+&gt;&gt;&gt; df = DF(b=np.array([1,1],a=np.array([1,-1]))
+&gt;&gt;&gt; N = 100
+&gt;&gt;&gt; s = np.zeros(N)
+&gt;&gt;&gt; s[0] = 1
+&gt;&gt;&gt; y = df.filter(s)
+&gt;&gt;&gt; plt.stem(np.arange(N),x)
+&gt;&gt;&gt; plt.stem(np.arange(N),y)
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-signal-DF-DF-filter-1.py">Source code</a>)</p>
 </dd></dl>
 
 </div>
@@ -192,15 +195,6 @@
            </div>
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="pylayers.signal.DF.DF.simplify.html" class="btn btn-neutral float-right" title="pylayers.signal.DF.DF.simplify" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="pylayers.signal.DF.DF.__init__.html" class="btn btn-neutral" title="pylayers.signal.DF.DF.__init__" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>
