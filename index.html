@@ -200,18 +200,17 @@ div.banner-container{
 
 div#examples_carousel .carousel-control {
     position: absolute;
-    top: 97%;
-    left: 213px;
-    width: 25px;
+    top: 50%;
+/*    left: 0%;
+    width: 5%;
     height: 25px;
     font-size: 37px;
-    line-height: 19px;
-    color: rgba(35, 47, 62, 1);
+    line-height: 19px;*/
+    /*color: rgba(35, 47, 62, 1);*/
     background: #FFFFFF;
 }
 
 div#examples_carousel .carousel-control.right {
-
 }
 
 div#index_carousel_tn {
@@ -232,19 +231,33 @@ div#examples_carousel .carousel-indicators li {
     background-color: rgba(35, 47, 32, .45);
 }
 
+
+.carousel, .item {
+    height: 100%;
+}
+
+.carousel-inner img {
+   width: 100%;
+   margin: auto;
+}
+.carousel-caption {
+   position: absolute;
+   top:auto;
+}
+
 </style>
 
 <div class="container">
   <div class="span9">
     <div id="examples_carousel" class="carousel slide", data-ride=carousel>
       <!-- Carousel items -->
-      <div class="carousel-inner">
+      <div class="carousel-inner role="listbox" style=" width:100%; height: 500px  !important;">
 
       
 
         <div class="active item">
-          <div class="inner-item">
-            <img src="_static/example1.png" width=700>
+          <div class="inner-item" >
+            <img src="_static/example1.png" width=500>
             <div class="carousel-caption">
                 <p>Fast Indoor Coverage with MultiWall Model</p>
             </div>    
@@ -253,7 +266,7 @@ div#examples_carousel .carousel-indicators li {
 
         <div class="item">
           <div class="inner-item">
-            <img src="_static/example2.png" width=900>
+            <img src="_static/example2.png" width=500>
             <div class="carousel-caption">
                 <p>Body Area Network simulation using C3D motion capture body abstraction</p>
             </div>    
@@ -262,7 +275,7 @@ div#examples_carousel .carousel-indicators li {
 
         <div class="item">
           <div class="inner-item">
-            <img src="_static/example3.png" width=900>
+            <img src="_static/example3.png" width=500>
             <div class="carousel-caption">
                 <p>Compact description of antennas using spherical harmonics decomposition</p>
             </div>    
@@ -271,7 +284,7 @@ div#examples_carousel .carousel-indicators li {
 
         <div class="item">
           <div class="inner-item">
-            <img src="./_images/cormofig2.png" width=900>
+            <img src="./_images/cormofig2.png" width=500>
             <div class="carousel-caption">
                 <p>Human mobility in WBAN</p>
             </div>    
@@ -279,7 +292,7 @@ div#examples_carousel .carousel-indicators li {
         </div>
         <!-- <div class="item">
           <div class="inner-item">
-            <img src="_static/example5.png" width=900>
+            <img src="_static/example5.png" width=500>
             <div class="carousel-caption">
                 <p>Calulation of Aggregated Channel Impulse Response over Time
                 Stamped Trajectories</p>
@@ -289,7 +302,7 @@ div#examples_carousel .carousel-indicators li {
 
         <div class="item">
           <div class="inner-item">
-            <img src="_static/example6.png" width=900>
+            <img src="_static/example6.png" width=500>
             <div class="carousel-caption">
                 <p>Handling of IR-UWB signals</p>
             </div>    
@@ -298,7 +311,7 @@ div#examples_carousel .carousel-indicators li {
 
         <div class="item">
           <div class="inner-item">
-            <img src="_static/example7.png" width=900>
+            <img src="_static/example7.png" width=500>
             <div class="carousel-caption">
                 <p>Validation with Measurement Data</p>
             </div>    
@@ -307,7 +320,7 @@ div#examples_carousel .carousel-indicators li {
 
         <div class="item">
           <div class="inner-item">
-            <img src="_static/example8.png" width=900>
+            <img src="_static/example8.png" width=500>
             <div class="carousel-caption">
                 <p>Graphs, Signatures, Rays and  Multipath Channel</p>
             </div>    
