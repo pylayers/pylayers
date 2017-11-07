@@ -6,3 +6,4 @@ s[0] = 1
 y = df.filter(s)
 plt.stem(np.arange(N),x)
 plt.stem(np.arange(N),y)
+plt.show()
