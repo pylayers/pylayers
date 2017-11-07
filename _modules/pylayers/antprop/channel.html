@@ -426,14 +426,15 @@
 <div class="viewcode-block" id="ADPchannel"><a class="viewcode-back" href="../../../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.ADPchannel">[docs]</a><span class="k">class</span> <span class="nc">ADPchannel</span><span class="p">(</span><span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Angular Delay Profile channel</span>
 
-<span class="sd">    Members</span>
-<span class="sd">    -------</span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
 
-<span class="sd">    a : </span>
-<span class="sd">    offset :</span>
+<span class="sd">    az : array</span>
+<span class="sd">        azimuth in radian </span>
+<span class="sd">    ang_offset :</span>
 <span class="sd">    theta :  float </span>
-<span class="sd">    phi : </span>
-<span class="sd">    tau : </span>
+<span class="sd">    phi : float </span>
+<span class="sd">    tau : float </span>
 <span class="sd">    _filename : string</span>
 <span class="sd">        short filename for saving     </span>
 
@@ -2855,8 +2856,8 @@
 <span class="sd">    This channel contains all the spatial information for each individual ray. </span>
 <span class="sd">    Warning : This is a frequency domain channel deriving from bs.FUsignal </span>
 
-<span class="sd">    Members</span>
-<span class="sd">    -------</span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
 
 <span class="sd">        ray transfer functions  (nray,nfreq)</span>
 <span class="sd">    dod  :</span>

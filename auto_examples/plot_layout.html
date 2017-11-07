@@ -162,26 +162,44 @@
 </div>
 <div class="section" id="some-layout">
 <h1>Some Layout<a class="headerlink" href="#some-layout" title="Permalink to this headline">¶</a></h1>
-<p>This example display a set of available Layout file</p>
+<p>This example display randomly N layout from
+the set of all available Layout file</p>
 <p>The file extension is .lay</p>
+<ul class="sphx-glr-horizontal">
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_layout_001.png"><img alt="../_images/sphx_glr_plot_layout_001.png" src="../_images/sphx_glr_plot_layout_001.png" style="width: 235.0px; height: 235.0px;" /></a>
+</li>
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_layout_002.png"><img alt="../_images/sphx_glr_plot_layout_002.png" src="../_images/sphx_glr_plot_layout_002.png" style="width: 235.0px; height: 235.0px;" /></a>
+</li>
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_layout_003.png"><img alt="../_images/sphx_glr_plot_layout_003.png" src="../_images/sphx_glr_plot_layout_003.png" style="width: 235.0px; height: 235.0px;" /></a>
+</li>
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_layout_004.png"><img alt="../_images/sphx_glr_plot_layout_004.png" src="../_images/sphx_glr_plot_layout_004.png" style="width: 235.0px; height: 235.0px;" /></a>
+</li>
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_layout_005.png"><img alt="../_images/sphx_glr_plot_layout_005.png" src="../_images/sphx_glr_plot_layout_005.png" style="width: 235.0px; height: 235.0px;" /></a>
+</li>
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_layout_006.png"><img alt="../_images/sphx_glr_plot_layout_006.png" src="../_images/sphx_glr_plot_layout_006.png" style="width: 235.0px; height: 235.0px;" /></a>
+</li>
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_layout_007.png"><img alt="../_images/sphx_glr_plot_layout_007.png" src="../_images/sphx_glr_plot_layout_007.png" style="width: 235.0px; height: 235.0px;" /></a>
+</li>
+</ul>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
-<span class="n">L</span> <span class="o">=</span>  <span class="n">Layout</span><span class="p">()</span>
+<span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">()</span>
 <span class="n">lL</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">ls</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">tL</span> <span class="ow">in</span> <span class="n">lL</span><span class="p">:</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="k">for</span> <span class="n">tL</span> <span class="ow">in</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">lL</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
     <span class="k">if</span> <span class="s1">&#39;Munich&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tL</span><span class="p">:</span>
         <span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="n">tL</span><span class="p">,</span><span class="n">bbuild</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">bgraphs</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">tL</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Total running time of the script:</strong>
-(0 minutes 47.881 seconds)</p>
+(0 minutes 4.892 seconds)</p>
 <div class="sphx-glr-download container">
 <strong>Download Python source code:</strong> <a class="reference download internal" href="../_downloads/plot_layout.py" download=""><code class="xref download docutils literal"><span class="pre">plot_layout.py</span></code></a></div>
 <div class="sphx-glr-download container">
