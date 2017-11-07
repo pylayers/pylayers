@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Exploiting PyLayers for TC1 METIS Scenario (Alhassane Diallo Master student 2016 @IETR) &mdash; Python 1 documentation</title>
+  <title>TC1 METIS Scenario &mdash; Python 1 documentation</title>
   
 
   
@@ -95,28 +95,21 @@
 <li class="toctree-l1"><a class="reference internal" href="../TOC.html#handling-agent-mobility">3&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../TOC.html#wireless-body-area-network-related-classes">4&nbsp;&nbsp;&nbsp;Wireless Body Area Network Related Classes</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../TOC.html#some-simulation-examples">5&nbsp;&nbsp;&nbsp;Some Simulation Examples</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Exploiting PyLayers for TC1 METIS Scenario (Alhassane Diallo Master student 2016 &#64;IETR)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">TC1 METIS Scenario</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">??Introduction</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#description-of-test-case-1-virtual-reality-office">Description of Test Case 1: Virtual reality office</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#deployment-considerations">Deployment considerations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#parameters-of-ap-files">Parameters of AP files</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#in-the-generation-of-the-ap-files-the-following-parameters-are-used">In the generation of the AP files the following parameters are used:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#frequency-60000-000000">FREQUENCY 60000.000000</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#max-number-ref-2-000000">MAX_NUMBER_REF 2.000000</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pts-density-0-000000">PTS_DENSITY 0.000000</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pts-average-attenuation-18-000000">PTS_AVERAGE_ATTENUATION 18.000000</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#test-case-1-virtual-reality-office">Test Case 1: Virtual reality office</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deployment-considerations">Deployment considerations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parameters-of-ap-files">Parameters of AP files</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#displaying-only-the-files-of-tc-1">Displaying only the files of TC 1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#scenario-of-tc-1">Scenario of TC 1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#propagation-model-environment-and-link-topology">Propagation model (Environment and Link Topology)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#material-validation">Material Validation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#path-gain-simulation">Path Gain Simulation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#saving-the-grid-file">Saving the Grid File</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#simulation">Simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#description-of-pylayers">Description of PyLayers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#reading-tc1-metis-layout">Reading TC1_METIS layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#vizualisation-of-the-layout">Vizualisation of the Layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#displaying-subsegments-of-the-layout">Displaying Subsegments of the Layout</a></li>
@@ -183,7 +176,7 @@
       
           <li><a href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
       
-    <li>Exploiting PyLayers for TC1 METIS Scenario (Alhassane Diallo Master student 2016 &#64;IETR)</li>
+    <li>TC1 METIS Scenario</li>
       <li class="wy-breadcrumbs-aside">
         
           
@@ -197,57 +190,403 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="exploiting-pylayers-for-tc1-metis-scenario-alhassane-diallo-master-student-2016-ietr">
-<h1>Exploiting PyLayers for TC1 METIS Scenario (Alhassane Diallo Master student 2016 &#64;IETR)<a class="headerlink" href="#exploiting-pylayers-for-tc1-metis-scenario-alhassane-diallo-master-student-2016-ietr" title="Permalink to this headline">¶</a></h1>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>import numpy as np
+  <div class="section" id="tc1-metis-scenario">
+<h1>TC1 METIS Scenario<a class="headerlink" href="#tc1-metis-scenario" title="Permalink to this headline">¶</a></h1>
+<p>(by Alhassane Diallo Master student 2016 &#64;IETR)</p>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import os
 import os.path as op
-
-basename = os.environ[&#39;BASENAME&#39;]
-
 %matplotlib inline
 </pre></div>
 </div>
 <div class="section" id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<h2>??Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>The European project called &#8220;METIS&#8221; has defined twelve test cases (TCs)
 to cover the practical applications of 5G system and simulation needs
 for the coming 5G system. For this reason, they have made available &#8220;Ray
 tracing data&#8221; from their
-<a class="reference external" href="https://www.metis2020.com/documents/simulations/">website</a> . The
-provided data is used here to perform simulation with PyLayers which is
-an open source software developped by the Propagation Team in IETR. The
+<a class="reference external" href="https://www.metis2020.com/documents/simulations/">website</a>. The
+provided data is used here to perform simulation with PyLayers The
 following code displays all available data.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>for root, dirs, files in os.walk(&#39;../Metis&#39;):
-    #print root
+<div class="code highlight-none"><div class="highlight"><pre><span></span>import os
+basename =os.environ[&#39;BASENAME&#39;]
+for root, dirs, files in os.walk(basename+&#39;/meas/Metis&#39;):
+    print root
     if len(dirs)==0:
         for f in files:
             pass
             filename = root+&#39;/&#39;+f
             print filename.replace(basename,&#39;&#39;)
-    #for d in dirs:
-    #for f in files:
-    #    print dirs+f
+    for d in dirs:
+            for f in files:
+            print d+f
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>/home/uguen/Bureau/P1/meas/Metis
+/home/uguen/Bureau/P1/meas/Metis/Ray-Tracing-files-for-TC2-Part-III
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-III/Pico.z01
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-III/Ray-Tracing-files-for-TC2-Part-III.zip
+/home/uguen/Bureau/P1/meas/Metis/Ray-Tracing-files-for-TC2-Part-I
+MacroReadme.txt
+/home/uguen/Bureau/P1/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro
+1st floorinfo.txt
+1st floorDeployment_TC2_for_PL.pptx
+8th floorinfo.txt
+8th floorDeployment_TC2_for_PL.pptx
+12th floorinfo.txt
+12th floorDeployment_TC2_for_PL.pptx
+/home/uguen/Bureau/P1/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 7 Ant 20 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 7 Ant 21 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 8 Ant 23 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 1 Ant 3 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 5 Ant 13 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 8 Ant 22 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 3 Ant 8 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 1 Ant 2 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 4 Ant 10 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 7 Ant 19 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 9 Ant 25 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 3 Ant 9 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 5 Ant 14 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 2 Ant 5 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 2 Ant 6 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 6 Ant 18 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 6 Ant 16 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 5 Ant 15 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 4 Ant 11 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 2 Ant 4 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 6 Ant 17 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 8 Ant 24 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 1 Ant 1 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 9 Ant 27 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 3 Ant 7 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 4 Ant 12 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/1st floor/Site 9 Ant 26 Path Loss.txt
+/home/uguen/Bureau/P1/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 7 Ant 20 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 7 Ant 21 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 8 Ant 23 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 1 Ant 3 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 5 Ant 13 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 8 Ant 22 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 3 Ant 8 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 1 Ant 2 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 4 Ant 10 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 7 Ant 19 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 9 Ant 25 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 3 Ant 9 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 5 Ant 14 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 2 Ant 5 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 2 Ant 6 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 6 Ant 18 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 6 Ant 16 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 5 Ant 15 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 4 Ant 11 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 2 Ant 4 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 6 Ant 17 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 8 Ant 24 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 1 Ant 1 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 9 Ant 27 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 3 Ant 7 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 4 Ant 12 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/8th floor/Site 9 Ant 26 Path Loss.txt
+/home/uguen/Bureau/P1/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 7 Ant 20 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 7 Ant 21 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 8 Ant 23 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 1 Ant 3 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 5 Ant 13 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 8 Ant 22 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 3 Ant 8 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 1 Ant 2 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 4 Ant 10 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 7 Ant 19 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 9 Ant 25 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 3 Ant 9 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 5 Ant 14 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 2 Ant 5 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 2 Ant 6 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 6 Ant 18 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 6 Ant 16 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 5 Ant 15 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 4 Ant 11 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 2 Ant 4 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 6 Ant 17 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 8 Ant 24 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 1 Ant 1 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 9 Ant 27 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 3 Ant 7 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 4 Ant 12 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-I/Macro/12th floor/Site 9 Ant 26 Path Loss.txt
+/home/uguen/Bureau/P1/meas/Metis/Ray-Tracing-files-for-TC4-1
+/home/uguen/Bureau/P1/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 12 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 6 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Readme.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 5 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 1 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 25 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 23 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 22 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 19 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 11 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 13 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 14 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 20 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 4 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 26 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 29 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 17 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 3 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 18 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 30 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 28 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 24 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 7 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 10 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 21 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 16 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 27 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 8 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 2 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 15 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC4-1/Small Cells/Site 9 Path Loss.txt
+/home/uguen/Bureau/P1/meas/Metis/Metis_TC2_mobility_trace_3
+METIS_TC2_mobility_traces-3METIS_TC2_mobility_traces-3.zip
+/home/uguen/Bureau/P1/meas/Metis/Metis_TC2_mobility_trace_3/METIS_TC2_mobility_traces-3
+/meas/Metis/Metis_TC2_mobility_trace_3/METIS_TC2_mobility_traces-3/Readme.txt
+/meas/Metis/Metis_TC2_mobility_trace_3/METIS_TC2_mobility_traces-3/METIS_carTrace.txt
+/meas/Metis/Metis_TC2_mobility_trace_3/METIS_TC2_mobility_traces-3/METIS_pedTrace.txt
+/meas/Metis/Metis_TC2_mobility_trace_3/METIS_TC2_mobility_traces-3/METIS_busTrace.txt
+/home/uguen/Bureau/P1/meas/Metis/Ray-Tracing-files-for-TC3
+/home/uguen/Bureau/P1/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP20PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP10PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP32PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP09PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP28PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP04PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP03PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP19PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP31PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP34PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP05PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP16PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP22PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP24PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP25PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP36PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP11PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP14PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP35PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP27PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP13PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP23PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP33PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP12PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP30PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP01PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP21PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP06PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP07PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP02PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP26PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP08PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP17PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP18PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP29PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/AP15PtsDensity0.001.txt
+/meas/Metis/Ray-Tracing-files-for-TC3/Ray-Tracing-files-for-TC3/Parameter description.txt
+/home/uguen/Bureau/P1/meas/Metis/Ray-Tracing-files-for-TC2-Part-II
+/home/uguen/Bureau/P1/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II
+/home/uguen/Bureau/P1/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 88 Ant 88 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 62 Ant 62 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 86 Ant 86 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 93 Ant 93 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 65 Ant 65 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 94 Ant 94 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 84 Ant 84 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 74 Ant 74 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 67 Ant 67 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 79 Ant 79 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 63 Ant 63 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 66 Ant 66 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 61 Ant 61 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 73 Ant 73 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 99 Ant 99 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 77 Ant 77 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 6 Ant 6 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 90 Ant 90 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 83 Ant 83 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 95 Ant 95 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 69 Ant 69 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 68 Ant 68 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 89 Ant 89 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 82 Ant 82 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 71 Ant 71 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 85 Ant 85 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 81 Ant 81 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 97 Ant 97 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 58 Ant 58 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 78 Ant 78 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 76 Ant 76 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 8 Ant 8 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 87 Ant 87 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 59 Ant 59 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 7 Ant 7 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 80 Ant 80 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 96 Ant 96 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 60 Ant 60 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 98 Ant 98 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 92 Ant 92 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 70 Ant 70 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 9 Ant 9 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 64 Ant 64 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 72 Ant 72 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 75 Ant 75 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/1st floor/Site 91 Ant 91 Path Loss.txt
+/home/uguen/Bureau/P1/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 24 Ant 24 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 45 Ant 45 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 33 Ant 33 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 88 Ant 88 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 62 Ant 62 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 54 Ant 54 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 34 Ant 34 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 86 Ant 86 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 47 Ant 47 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 103 Ant 103 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 93 Ant 93 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 50 Ant 50 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 65 Ant 65 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 22 Ant 22 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 94 Ant 94 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 26 Ant 26 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 27 Ant 27 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 48 Ant 48 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 84 Ant 84 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 74 Ant 74 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 67 Ant 67 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 79 Ant 79 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 63 Ant 63 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 104 Ant 104 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 46 Ant 46 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 30 Ant 30 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 49 Ant 49 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 66 Ant 66 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 61 Ant 61 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 107 Ant 107 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 73 Ant 73 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 99 Ant 99 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 77 Ant 77 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 10 Ant 10 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 6 Ant 6 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 90 Ant 90 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 83 Ant 83 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 95 Ant 95 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 23 Ant 23 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 4 Ant 4 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 69 Ant 69 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 68 Ant 68 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 89 Ant 89 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 52 Ant 52 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 36 Ant 36 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 82 Ant 82 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 71 Ant 71 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 5 Ant 5 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 37 Ant 37 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 31 Ant 31 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 19 Ant 19 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 106 Ant 106 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 53 Ant 53 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 56 Ant 56 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 85 Ant 85 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 81 Ant 81 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 97 Ant 97 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 28 Ant 28 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 58 Ant 58 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 78 Ant 78 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 42 Ant 42 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 13 Ant 13 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 16 Ant 16 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 76 Ant 76 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 17 Ant 17 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 3 Ant 3 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 25 Ant 25 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 18 Ant 18 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 35 Ant 35 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 102 Ant 102 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 8 Ant 8 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 87 Ant 87 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 14 Ant 14 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 59 Ant 59 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 105 Ant 105 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 40 Ant 40 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 108 Ant 108 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 1 Ant 1 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 7 Ant 7 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 29 Ant 29 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 80 Ant 80 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 96 Ant 96 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 60 Ant 60 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 32 Ant 32 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 39 Ant 39 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 100 Ant 100 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 51 Ant 51 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 11 Ant 11 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 38 Ant 38 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 57 Ant 57 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 21 Ant 21 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 98 Ant 98 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 12 Ant 12 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 92 Ant 92 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 2 Ant 2 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 70 Ant 70 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 9 Ant 9 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 41 Ant 41 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 64 Ant 64 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 44 Ant 44 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 20 Ant 20 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 101 Ant 101 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 72 Ant 72 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 43 Ant 43 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 75 Ant 75 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 55 Ant 55 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 91 Ant 91 Path Loss.txt
+/meas/Metis/Ray-Tracing-files-for-TC2-Part-II/Pico_Ray-Tracing-files-for-TC2-Part-II/8th floor/Site 15 Ant 15 Path Loss.txt
+/home/uguen/Bureau/P1/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis
+/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap1_raytrace.txt
+/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap3_raytrace.txt
+/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_metis_grid.ini
+/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap5_raytrace.txt
+/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap4_raytrace.txt
+/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap5_raytrace_PS.txt
+/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap1_raytrace_PS.txt
+/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap2_raytrace_PS.txt
+/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap3_raytrace_PS.txt
+/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap4_raytrace_PS.txt
+/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap2_raytrace.txt
+/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/Parameter description.txt
 </pre></div>
 </div>
 </div>
 </div>
-<div class="section" id="description-of-test-case-1-virtual-reality-office">
-<h1>Description of Test Case 1: Virtual reality office<a class="headerlink" href="#description-of-test-case-1-virtual-reality-office" title="Permalink to this headline">¶</a></h1>
-<p>Test case 1 the virtual reality office, is an indoor test case where
+<div class="section" id="test-case-1-virtual-reality-office">
+<h1>Test Case 1: Virtual reality office<a class="headerlink" href="#test-case-1-virtual-reality-office" title="Permalink to this headline">¶</a></h1>
+<p>Test case 1, the virtual reality office, is an indoor test case where
 very high data rates are investigated targeting also implementations at
 a reasonable cost. A realistic office environmental model for this test
 case is attained by explicitly considering walls, screens, desks, chairs
-and people. To maintain reasonable cost, one single backhaul fiber
-connection is assumed for one AP. Applying multiple access points
-requires to use in-band wireless backhaul.</p>
+and people.</p>
 <p>The environmental model geometry, is given by the dimensions of the
 rooms, cubicle offices and tables. The indoor office model is
 illustrated in the following two and three-dimensional figures.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>from IPython.display import Image
+<div class="code highlight-none"><div class="highlight"><pre><span></span>from IPython.display import Image
 </pre></div>
 </div>
 <div class="figure" id="id1">
@@ -258,16 +597,17 @@ illustrated in the following two and three-dimensional figures.</p>
 <img alt="alt text" src="notebook/2-AP/../Data_TC1/METIS_TC1_3D.png" />
 <p class="caption"><span class="caption-text">alt text</span></p>
 </div>
-<p>The above figures available from METIS&#8217; deliverable [D6.1] show the
-initial room size of 20 m x 10 m, however it was later scaled to 25 m x
-12.5 m. The room size of 25 m x 12.5 m was used to obtained the ray
-tracing data available from METIS&#8217; website.</p>
+<p>The above figures available from METIS&#8217; deliverable [D6.1]
+(<a class="reference external" href="https://www.metis2020.com/wp-content/uploads/deliverables/METIS_D6.1_v1.pdf">https://www.metis2020.com/wp-content/uploads/deliverables/METIS_D6.1_v1.pdf</a>)
+show the initial room size of 20 m x 10 m, however it was later scaled
+to 25 m x 12.5 m. The room size of 25 m x 12.5 m was used to obtained
+the ray tracing data available from METIS&#8217; website.</p>
 <p>The respective heights and materials of these objects are given in the
 following table.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>from tabulate import tabulate
+<div class="code highlight-none"><div class="highlight"><pre><span></span>from tabulate import tabulate
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>table = [[&quot;Object&quot;,&quot;Height[m]&quot;,&quot;Material&quot;],[&quot;Room&quot;,2.9,&quot;Concrete&quot;],[&quot;Cubicle&quot;,1.5,&quot;Wood&quot;],[&quot;Table&quot;,1.5,&quot;Wood&quot;]]
+<div class="code highlight-none"><div class="highlight"><pre><span></span>table = [[&quot;Object&quot;,&quot;Height[m]&quot;,&quot;Material&quot;],[&quot;Room&quot;,2.9,&quot;Concrete&quot;],[&quot;Cubicle&quot;,1.5,&quot;Wood&quot;],[&quot;Table&quot;,1.5,&quot;Wood&quot;]]
 print tabulate(table)
 </pre></div>
 </div>
@@ -294,51 +634,38 @@ next figure. The coordinates of the APs are as follows: AP1 (2.5, 2.5,
 2.85), AP2 (2.5, 10, 2.85), AP3 (22.5, 10, 2.85), AP4 (22.5, 2.5, 2.85),
 AP5 (12.5, 6.25, 2.85). This scenario is assumed to be isolated from
 outside interferences.</p>
-</div>
 <div class="section" id="parameters-of-ap-files">
-<h1>Parameters of AP files<a class="headerlink" href="#parameters-of-ap-files" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="in-the-generation-of-the-ap-files-the-following-parameters-are-used">
-<h2>In the generation of the AP files the following parameters are used:<a class="headerlink" href="#in-the-generation-of-the-ap-files-the-following-parameters-are-used" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="frequency-60000-000000">
-<h2>FREQUENCY 60000.000000<a class="headerlink" href="#frequency-60000-000000" title="Permalink to this headline">¶</a></h2>
-<p>The carrier frequency in MHz, i.e. 60000 is 60 GHz.</p>
-</div>
-<div class="section" id="max-number-ref-2-000000">
-<h2>MAX_NUMBER_REF 2.000000<a class="headerlink" href="#max-number-ref-2-000000" title="Permalink to this headline">¶</a></h2>
-<p>The number of reflections allowed for the propagation paths.</p>
-</div>
-<div class="section" id="pts-density-0-000000">
-<h2>PTS_DENSITY 0.000000<a class="headerlink" href="#pts-density-0-000000" title="Permalink to this headline">¶</a></h2>
-<p>This is the number of point sources per square meter [m^2], the point
-sources are 80% on walls and 20% in space (uniformly in the 3D space of
-the whole room). A point source is a point that reflects in any
-direction, hence any AP and UE pair that has line-of-sight path to a
-point source has a propagation path using this point source.</p>
-</div>
-<div class="section" id="pts-average-attenuation-18-000000">
-<h2>PTS_AVERAGE_ATTENUATION 18.000000<a class="headerlink" href="#pts-average-attenuation-18-000000" title="Permalink to this headline">¶</a></h2>
-<p>PTS_SIGMA 5.000000</p>
-<p>These two determine the attenuation [in dB] of the propagation path
-using a point source, the attenuation is a normal distributed random
-variable with the above parameters, i.e. mean PTS_AVERAGE_ATTENUATION
-and standard deviation PTS_SIGMA.</p>
-<p>FORMAT [xAp yAp zAp xUe yUe zUe PATHGAIN]</p>
-<p>This is the format of the table, i.e. the three first values [xAp yAp
-zAp] are the AP position and the next three [xUe yUe zUe] is the UE
-position the last is the pathgain in dB.</p>
-</div>
-</div>
-<div class="section" id="displaying-only-the-files-of-tc-1">
-<h1>Displaying only the files of TC 1<a class="headerlink" href="#displaying-only-the-files-of-tc-1" title="Permalink to this headline">¶</a></h1>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>lfile = !ls
+<h2>Parameters of AP files<a class="headerlink" href="#parameters-of-ap-files" title="Permalink to this headline">¶</a></h2>
+<p>In the generation of the AP files the following parameters are used:</p>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>FREQUENCY = 60000.000000
+# The carrier frequency in MHz, i.e. 60000 is 60 GHz.
+
+MAX_NUMBER_REF=2
+
+# The number of reflections allowed for the propagation paths.
+
+#PTS_DENSITY = 0.000000
+
+#This is the number of point sources per square meter [m^2], the point sources
+#are 80% on walls and 20% in space (uniformly in the 3D space of the whole
+#room). A point source is a point that reflects in any direction, hence any AP
+#and UE pair that has line-of-sight path to a point source has a propagation
+#path using this point source.
+
+PTS_AVERAGE_ATTENUATION=18.000000
+
+PTS_SIGMA=5.000000
+
+#These two parameters determine the attenuation [in dB] of the propagation path using a point source, the attenuation is a normal distributed random variable with the above parameters, i.e. mean PTS_AVERAGE_ATTENUATION and standard deviation PTS_SIGMA.
+
+# FORMAT =  [xAp yAp zAp xUe yUe zUe PATHGAIN]
+
+#This is the format of the table, i.e. the three first values [xAp yAp zAp] are the AP position and the next three [xUe yUe zUe] is the UE position the last is the pathgain in dB.
+
+# Displaying only the files of TC1
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>#for fi in lfile:
-    #print fi
-</pre></div>
-</div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>fap1 = basename+&#39;/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap1_raytrace.txt&#39;
+<div class="code highlight-none"><div class="highlight"><pre><span></span>fap1 = basename+&#39;/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap1_raytrace.txt&#39;
 fap2 = basename+&#39;/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap2_raytrace.txt&#39;
 fap3 = basename+&#39;/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap3_raytrace.txt&#39;
 fap4 = basename+&#39;/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap4_raytrace.txt&#39;
@@ -348,12 +675,13 @@ lfile = [fap1,fap2,fap3,fap4,fap5]
 </pre></div>
 </div>
 </div>
+</div>
 <div class="section" id="scenario-of-tc-1">
 <h1>Scenario of TC 1<a class="headerlink" href="#scenario-of-tc-1" title="Permalink to this headline">¶</a></h1>
 <p>The next figure shows the position of the five APs in the grid. Each AP
 is represented by a red triangle and the blue color is the grid (all
 UEs).</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>def SCENARIO(df,fGHz=60,title=&#39;title&#39;):
+<div class="code highlight-none"><div class="highlight"><pre><span></span>def SCENARIO(df,fGHz=60,title=&#39;title&#39;):
     df[&#39;d&#39;]=np.sqrt((df[&#39;xue&#39;]-df[&#39;xap&#39;])**2+(df[&#39;yue&#39;]-df[&#39;yap&#39;])**2+(df[&#39;zue&#39;]-df[&#39;zap&#39;])**2)
     plt.plot(df[&#39;xue&#39;].values,df[&#39;yue&#39;].values,&#39;.b&#39;, label=&#39;UEs&#39;)
     plt.plot(df[&#39;xap&#39;].values,df[&#39;yap&#39;].values,&#39;^r&#39;,ms=15,label=&#39;BS&#39;)
@@ -365,7 +693,7 @@ UEs).</p>
     #legend.get_frame().set_facecolor(&#39;#00FFCC&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>def readdata(filename):
+<div class="code highlight-none"><div class="highlight"><pre><span></span>def readdata(filename):
     with open(filename) as fd:
         lis = fd.readlines()
     data = lis[8:-1]
@@ -381,7 +709,7 @@ UEs).</p>
     return(df)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(10,6))
+<div class="code highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(10,6))
 for k,f in enumerate(lfile):
     df = readdata(f)
     plt.subplot(2,3,k+1)
@@ -390,7 +718,7 @@ for k,f in enumerate(lfile):
     #plt.savefig(&#39;TC1_deploiement_scenario&#39;)
 </pre></div>
 </div>
-<img alt="../../_images/MetisRayTracing60GHzforTC1_16_0.png" src="../../_images/MetisRayTracing60GHzforTC1_16_0.png" />
+<img alt="../../_images/MetisRayTracing60GHzforTC1_15_0.png" src="../../_images/MetisRayTracing60GHzforTC1_15_0.png" />
 </div>
 <div class="section" id="propagation-model-environment-and-link-topology">
 <h1>Propagation model (Environment and Link Topology)<a class="headerlink" href="#propagation-model-environment-and-link-topology" title="Permalink to this headline">¶</a></h1>
@@ -408,7 +736,7 @@ well as distance dependencies of free-space loss and material constants
 for penetration and reflection losses need to be specified. Therefore,
 the propagation characteristics of the used materials are given by METIS
 in [D6.1] as following:</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>table = [[&quot;Material&quot;,&quot;realPermittivity&quot;,&quot;imagPermittivity&quot;,&quot;Penetration Loss&quot;],[&quot;Concrete&quot;,6.14,0.3,71.5],[&quot;Wood&quot;,1.64,0.11,8.6],]
+<div class="code highlight-none"><div class="highlight"><pre><span></span>table = [[&quot;Material&quot;,&quot;realPermittivity&quot;,&quot;imagPermittivity&quot;,&quot;Penetration Loss&quot;],[&quot;Concrete&quot;,6.14,0.3,71.5],[&quot;Wood&quot;,1.64,0.11,8.6],]
 print tabulate(table)
 </pre></div>
 </div>
@@ -419,9 +747,9 @@ Wood      1.64              0.11              8.6
 --------  ----------------  ----------------  ----------------
 </pre></div>
 </div>
-<p>Given  and  which denote the real and the imaginary part of the
+<p>Given ????? and ????? which denote the real and the imaginary part of the
 permitivity, the complex relative permitivity of the material is
-computed by: =-i.</p>
+computed by: ??=?????-i?????.</p>
 </div>
 <div class="section" id="material-validation">
 <h1>Material Validation<a class="headerlink" href="#material-validation" title="Permalink to this headline">¶</a></h1>
@@ -429,82 +757,104 @@ computed by: =-i.</p>
 the signal after the reflection. This is known as the validation of the
 materials as shown in the following figures. The next library is first
 imported from PyLayers.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>from pylayers.antprop.slab import *
+<div class="code highlight-none"><div class="highlight"><pre><span></span>from pylayers.antprop.slab import *
 </pre></div>
 </div>
 <p>Firsly, we check the available material from SlabDB() which is (slab
 data based) of PyLayers.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S=SlabDB()
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S=SlabDB()
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>#S
+<p>At that stage the oject is empty.</p>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>List of Slabs
+-----------------------------
 </pre></div>
 </div>
 <p>The materials &#8220;CONCRETE_TC1_METIS&#8221; and &#8220;WOOD_TC1_METIS&#8221; are not
 included in the data base, therefore the two materials are added in the
 next cell.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.mat.add(name=&#39;CONCRETE_TC1_METIS&#39;,cval=6.14-1j*0.3,typ=&#39;reim&#39;,fGHz=60)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.mat.add(name=&#39;CONCRETE_TC1_METIS&#39;,cval=6.14-1j*0.3,typ=&#39;reim&#39;,fGHz=60)
 S.mat.add(name=&#39;WOOD_TC1_METIS&#39;,cval=1.64-0.11*1j,typ=&#39;reim&#39;,fGHz=60)
 </pre></div>
 </div>
 <p>Then, the electromagnetics parameters of the added materials are
 displayed as following:</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.mat[&#39;CONCRETE_TC1_METIS&#39;]
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.mat[&#39;CONCRETE_TC1_METIS&#39;]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>{&#39;epr&#39;: array(6.14),
+<div class="highlight-none"><div class="highlight"><pre><span></span>{&#39;a&#39;: None,
+ &#39;b&#39;: None,
+ &#39;c&#39;: None,
+ &#39;d&#39;: None,
+ &#39;epr&#39;: array(6.14),
  &#39;epr2&#39;: array(-0.3),
  &#39;epsr&#39;: (6.14-0.3j),
  &#39;fGHz&#39;: 60,
- &#39;index&#39;: 17,
  &#39;mur&#39;: 1,
  &#39;n&#39;: (2.478641222659018-0.060517027889612891j),
  &#39;name&#39;: &#39;CONCRETE_TC1_METIS&#39;,
  &#39;roughness&#39;: 0,
- &#39;sigma&#39;: 1.0}
+ &#39;sigma&#39;: 1.0011123470522802}
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.mat[&#39;WOOD_TC1_METIS&#39;]
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.mat[&#39;WOOD_TC1_METIS&#39;]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>{&#39;epr&#39;: array(1.64),
+<div class="highlight-none"><div class="highlight"><pre><span></span>{&#39;a&#39;: None,
+ &#39;b&#39;: None,
+ &#39;c&#39;: None,
+ &#39;d&#39;: None,
+ &#39;epr&#39;: array(1.64),
  &#39;epr2&#39;: array(-0.11),
  &#39;epsr&#39;: (1.64-0.11j),
  &#39;fGHz&#39;: 60,
- &#39;index&#39;: 18,
  &#39;mur&#39;: 1,
  &#39;n&#39;: (1.2813439984332509-0.042923680188341806j),
  &#39;name&#39;: &#39;WOOD_TC1_METIS&#39;,
  &#39;roughness&#39;: 0,
- &#39;sigma&#39;: 0.36666666666666664}
+ &#39;sigma&#39;: 0.36707452725250272}
 </pre></div>
 </div>
 <p>The next cell adds the thickness of the materials.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.add(&#39;CONCRETE_TC1_METIS&#39;,lmatname=[&#39;CONCRETE_TC1_METIS&#39;],lthick=[0.108])
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.add(&#39;CONCRETE_TC1_METIS&#39;,lmatname=[&#39;CONCRETE_TC1_METIS&#39;],lthick=[0.108])
 S.add(&#39;WOOD_TC1_METIS&#39;,lmatname=[&#39;WOOD_TC1_METIS&#39;],lthick=[0.019])
 </pre></div>
 </div>
 <p>Finally, the data base is displayed to check the existence of the added
 materials.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>#S
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>List of Slabs
+-----------------------------
+
+CONCRETE_TC1_METIS : CONCRETE_TC1_METIS | [0.108]
+       black 1
+       epr :6.14    sigma : 1.00111234705
+WOOD_TC1_METIS : WOOD_TC1_METIS | [0.019]
+       black 1
+       epr :1.64    sigma : 0.367074527253
 </pre></div>
 </div>
 <p>After adding the materials with their characteristics, they are then
 evaluated within the used frequency band and angle range.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>fGHz= np.arange(59,61,0.1)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>fGHz= np.arange(59,61,0.1)
 theta = np.arange(0,np.pi/2,0.01)
-S[&#39;CONCRETE_TC1_METIS&#39;].ev(fGHz,theta)
-S[&#39;WOOD_TC1_METIS&#39;].ev(fGHz,theta)
+S[&#39;CONCRETE_TC1_METIS&#39;].eval(fGHz,theta)
+S[&#39;WOOD_TC1_METIS&#39;].eval(fGHz,theta)
 </pre></div>
 </div>
 <p>The material validation consists of plotting Reflection and Transmission
 Coefficients and compare with the Penetration loss given in the above
 table.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>f,a=S[&#39;CONCRETE_TC1_METIS&#39;].plotwrt(var=&#39;f&#39;)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>f,a=S[&#39;CONCRETE_TC1_METIS&#39;].plotwrt(var=&#39;f&#39;)
 </pre></div>
 </div>
 <img alt="../../_images/MetisRayTracing60GHzforTC1_36_0.png" src="../../_images/MetisRayTracing60GHzforTC1_36_0.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>f,a=S[&#39;WOOD_TC1_METIS&#39;].plotwrt(var=&#39;f&#39;)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>f,a=S[&#39;WOOD_TC1_METIS&#39;].plotwrt(var=&#39;f&#39;)
 </pre></div>
 </div>
 <img alt="../../_images/MetisRayTracing60GHzforTC1_37_0.png" src="../../_images/MetisRayTracing60GHzforTC1_37_0.png" />
@@ -522,23 +872,23 @@ coefficients for the concrete material have a constant amplitude of -9
 dB from 59 to 61GHz.</p>
 <p>In the next graph, we plot the frequency of both coefficients as a
 function of the angle.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig = plt.figure(figsize=(10,10))
+<div class="code highlight-none"><div class="highlight"><pre><span></span>fig = plt.figure(figsize=(10,10))
 S[&#39;CONCRETE_TC1_METIS&#39;].pcolor()
 </pre></div>
 </div>
 <img alt="../../_images/MetisRayTracing60GHzforTC1_39_0.png" src="../../_images/MetisRayTracing60GHzforTC1_39_0.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig = plt.figure(figsize=(10,10))
+<div class="code highlight-none"><div class="highlight"><pre><span></span>fig = plt.figure(figsize=(10,10))
 S[&#39;WOOD_TC1_METIS&#39;].pcolor()
 </pre></div>
 </div>
 <img alt="../../_images/MetisRayTracing60GHzforTC1_40_0.png" src="../../_images/MetisRayTracing60GHzforTC1_40_0.png" />
 <p>The above graphs describe the behavior of the waves when they arrive on
 a given surface. Some waves are reflected and others are refracted. It
-can be seen that <span class="math">\(R_{per}\)</span> and <span class="math">\(R_{par}\)</span> are complementary
-to <span class="math">\(T_{per}\)</span> and <span class="math">\(T_{par}\)</span> respectively.</p>
+can be seen that <span class="math">\(R_{\perp}\)</span> and <span class="math">\(R_{\para}\)</span> are
+complementary to <span class="math">\(T_{\perp}\)</span> and <span class="math">\(T_{\para}\)</span> respectively.</p>
 <p>Now we represent the amplitudes of both coefficients in the different
 interfaces (air/concrete and air/wood) as shown in the next figures.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>sl = SlabDB(filemat=&#39;matDB.ini&#39;,fileslab=&#39;slabDB.ini&#39;)
 mat   = sl.mat
 lmat  = [mat[&#39;AIR&#39;],mat[&#39;CONCRETE_TC1_METIS&#39;]]
 II    = MatInterface(lmat,0,fGHz,theta)
@@ -552,7 +902,7 @@ plt.tight_layout()
 air/concrete interface have a constant amplitude of 0.4 dB over the
 frequency band. However, the transmission coefficients have a difference
 of amplitude which equal to 0.8 dB.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>sl = SlabDB(filemat=&#39;matDB.ini&#39;,fileslab=&#39;slabDB.ini&#39;)
 mat   = sl.mat
 lmat  = [mat[&#39;AIR&#39;],mat[&#39;WOOD_TC1_METIS&#39;]]
 II    = MatInterface(lmat,0,fGHz,theta)
@@ -563,17 +913,17 @@ plt.tight_layout()
 </div>
 <img alt="../../_images/MetisRayTracing60GHzforTC1_44_0.png" src="../../_images/MetisRayTracing60GHzforTC1_44_0.png" />
 <div class="line-block">
-<div class="line">As regards to the air/wood interface, it is clear that the amplitude</div>
+<div class="line">As regards to the air/wood interface, it is clear that the amplitude
+of both reflections and transmission coefficients</div>
+<div class="line">increased roughly from 0.12 dB to 1 dB and from 1 dB to 2 dB
+respectively.</div>
 </div>
-<p>of both reflections and transmission coefficients
-| increased roughly from 0.12 dB to 1 dB and from 1 dB to 2 dB
-respectively.</p>
 </div>
 <div class="section" id="path-gain-simulation">
 <h1>Path Gain Simulation<a class="headerlink" href="#path-gain-simulation" title="Permalink to this headline">¶</a></h1>
 <p>The path gain of each AP and free-space path loss are shown in the next
 figure.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>def PathLoss(df,fGHz=60,title=&#39;title&#39;):
+<div class="code highlight-none"><div class="highlight"><pre><span></span>def PathLoss(df,fGHz=60,title=&#39;title&#39;):
     &quot;&quot;&quot; Display Path Loss
 
     Parameters
@@ -594,7 +944,7 @@ figure.</p>
     plt.legend()
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>def readdata(filename):
+<div class="code highlight-none"><div class="highlight"><pre><span></span>def readdata(filename):
     with open(filename) as fd:
         lis = fd.readlines()
     data = lis[8:-1]
@@ -611,7 +961,7 @@ figure.</p>
     return(df)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(12,12))
+<div class="code highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(12,12))
 for k,f in enumerate(lfile):
     df = readdata(f)
     plt.subplot(2,3,k+1)
@@ -632,7 +982,7 @@ with the AP.</p>
 <h1>Saving the Grid File<a class="headerlink" href="#saving-the-grid-file" title="Permalink to this headline">¶</a></h1>
 <p>This next cell is for saving the grid in a file in a proper format for
 being used by Pylayers coverage module.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>fd = open(&quot;tc1_metis_grid.ini&quot;,&quot;w&quot;)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>fd = open(&quot;tc1_metis_grid.ini&quot;,&quot;w&quot;)
 fd.write(&quot;[coordinates]\n&quot;)
 for k in np.arange(len(df[&#39;xue&#39;])):
     fd.write(str(k+1)+&quot; = &quot;+str(df[&#39;xue&#39;][k])+&quot; &quot;+str(df[&#39;yue&#39;][k])+&quot; &quot;+str(df[&#39;zue&#39;][k])+&#39;\n&#39;)
@@ -642,33 +992,13 @@ fd.close()
 </div>
 <div class="section" id="simulation">
 <h1>Simulation<a class="headerlink" href="#simulation" title="Permalink to this headline">¶</a></h1>
-</div>
-<div class="section" id="description-of-pylayers">
-<h1>Description of PyLayers<a class="headerlink" href="#description-of-pylayers" title="Permalink to this headline">¶</a></h1>
-<p>The simulation of this project is based on PyLayers which is an open
-source propagation and localization simulator designed to simulate
-dynamic scenarios including (Nicolas A. et al., 2013): a) the realistic
-movement of pedestrians inside a building, b) the transmission channel
-synthesis for multiple radio access technologies, c) the position
-estimation relying on location-dependent parameters originated from the
-simulated physical layer. It is developed in order to tackle indoor
-localization problems. It addresses multiple simulation issues such as
-(radio and localization) and each part of the simulation is independent
-to another. The estimation of the channel is made by using a fast
-graph-based ray tracing method. From the simulated data, location
-dependent parameters such as the received power or time of arrival can
-be deduced. The realistic movement of pedestrians into a building layout
-is modeled with a virtual forces approach. The simulated data can be
-directly used with one of the built in localization algorithms or be
-exported to various standards extensions.</p>
 <p>In order to simulate with PyLayers, the following libraries are first
 imported.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>from pylayers.antprop.coverage import *
+<div class="code highlight-none"><div class="highlight"><pre><span></span>from pylayers.antprop.coverage import *
 from pylayers.gis.layout import *
 from pylayers.util.project import *
 from pylayers.simul.link import *
 import pylayers.signal.waveform as wvf
-import pdb
 %matplotlib inline
 </pre></div>
 </div>
@@ -678,7 +1008,7 @@ import pdb
 <p>The TC1 Metis layout has been edited with JOSM editor (Java
 OpenStreetMap Editor) and the edited layout is shown with the air wall
 as following:</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>L=Layout(&#39;TC1_METIS.ini&#39;)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>L=Layout(&#39;TC1_METIS.lay&#39;)
 f,a=L.showG(&#39;s&#39;,aw=1)
 a.axis(&#39;on&#39;)
 </pre></div>
@@ -688,7 +1018,7 @@ a.axis(&#39;on&#39;)
 </div>
 <img alt="../../_images/MetisRayTracing60GHzforTC1_54_1.png" src="../../_images/MetisRayTracing60GHzforTC1_54_1.png" />
 <p>This next cell is for displaying the layout in 3D.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>#ll L.show3()
+<div class="code highlight-none"><div class="highlight"><pre><span></span>#ll L.show3()
 </pre></div>
 </div>
 </div>
@@ -696,7 +1026,7 @@ a.axis(&#39;on&#39;)
 <h1>Vizualisation of the Layout<a class="headerlink" href="#vizualisation-of-the-layout" title="Permalink to this headline">¶</a></h1>
 <p>After reading the Layout in the above figure, it can be visualized as
 follows:</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>#L.dumpr()
+<div class="code highlight-none"><div class="highlight"><pre><span></span>#L.dumpr()
 f=plt.figure(figsize=(30,30))
 ax=f.gca()
 f,ax=L.showG(f=f,ax=ax,graph=&#39;s&#39;,labels=True,font_size=18,node_size=220,node_color=&#39;c&#39;)
@@ -712,7 +1042,7 @@ with negative index are the highest points (vertexes).</p>
 </div>
 <div class="section" id="displaying-subsegments-of-the-layout">
 <h1>Displaying Subsegments of the Layout<a class="headerlink" href="#displaying-subsegments-of-the-layout" title="Permalink to this headline">¶</a></h1>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>f,a=L.showG(&#39;s&#39;,subseg=True,figsize=(10,10))
+<div class="code highlight-none"><div class="highlight"><pre><span></span>f,a=L.showG(&#39;s&#39;,subseg=True,figsize=(10,10))
 </pre></div>
 </div>
 <img alt="../../_images/MetisRayTracing60GHzforTC1_60_0.png" src="../../_images/MetisRayTracing60GHzforTC1_60_0.png" />
@@ -726,7 +1056,7 @@ materials. The graph of structure is shown here with the air wall (aw).
 The node is defined as a discrete position in the graph whereas the edge
 is the link (connection) between two vertexes that can be either direct
 or not.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>f=plt.figure(figsize=(10,10))
+<div class="code highlight-none"><div class="highlight"><pre><span></span>f=plt.figure(figsize=(10,10))
 a=f.gca()
 f,a = L.showG(&#39;s&#39;,aw=1,fig=f,ax=a)
 a.axis(&#39;off&#39;)
@@ -744,7 +1074,7 @@ rooms in terms of electromagnetic propagation inside the layout. In this
 graph the vertexes are represented by distinct points and the edges by
 connected pieces of arcs (also called edges) that join the corresponding
 pair of points.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>f=plt.figure(figsize=(10,10))
+<div class="code highlight-none"><div class="highlight"><pre><span></span>f=plt.figure(figsize=(10,10))
 a=f.gca()
 f,a=L.showG(&#39;st&#39;,fig=f,ax=a,labels=&#39;t&#39;,fontsize=18,aw=1)
 </pre></div>
@@ -760,7 +1090,8 @@ point location, and each edge represents a visible connection between
 them. That means, if the line segment connecting two locations does not
 pass through any obstacle, an edge (connection) is drawn between them in
 the graph.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>f,a=L.showG(&#39;v&#39;)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>L.build()
+f,a=L.showG(&#39;v&#39;)
 </pre></div>
 </div>
 <img alt="../../_images/MetisRayTracing60GHzforTC1_66_0.png" src="../../_images/MetisRayTracing60GHzforTC1_66_0.png" />
@@ -771,29 +1102,33 @@ the graph.</p>
 between the nodes. There are three interactions type: reflection,
 diffraction and transmission. This graph is directly used to determine
 rays signatures.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>f=plt.figure(figsize=(10,10))
-a = f.gca()
-f,a=L.showG(&#39;i&#39;,fig=f,ax=a)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>f,a=L._showGi()
 </pre></div>
 </div>
 <img alt="../../_images/MetisRayTracing60GHzforTC1_68_0.png" src="../../_images/MetisRayTracing60GHzforTC1_68_0.png" />
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7f62b4f442d0&gt;
+</pre></div>
+</div>
+<p>On the 2 figure above this is a representation of the graph of
+interactions with nodes corresponding to the true position on th e right
+and nodes position calculated from the graph topology.</p>
 </div>
 </div>
 <div class="section" id="defining-ap-and-ues">
 <h1>Defining AP and UEs<a class="headerlink" href="#defining-ap-and-ues" title="Permalink to this headline">¶</a></h1>
 <p>The following graph shows the position of AP5 and all users equipment.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A=np.array([df[&#39;xap&#39;].values,df[&#39;yap&#39;].values,df[&#39;zap&#39;].values,])
+<div class="code highlight-none"><div class="highlight"><pre><span></span>A=np.array([df[&#39;xap&#39;].values,df[&#39;yap&#39;].values,df[&#39;zap&#39;].values,])
 B=np.array([df[&#39;xue&#39;].values,df[&#39;yue&#39;].values,df[&#39;zue&#39;].values,])
 </pre></div>
 </div>
 <p>Defining a frequency range</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>fGHz=np.linspace(59,61,0.1)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>fGHz=np.linspace(59,61,0.1)
 </pre></div>
 </div>
 </div>
 <div class="section" id="plotting-the-los">
 <h1>Plotting the LOS<a class="headerlink" href="#plotting-the-los" title="Permalink to this headline">¶</a></h1>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A
+<div class="code highlight-none"><div class="highlight"><pre><span></span>A
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>array([[ 12.5 ,  12.5 ,  12.5 , ...,  12.5 ,  12.5 ,  12.5 ],
@@ -801,7 +1136,7 @@ B=np.array([df[&#39;xue&#39;].values,df[&#39;yue&#39;].values,df[&#39;zue&#39;].
        [  2.85,   2.85,   2.85, ...,   2.85,   2.85,   2.85]])
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>B
+<div class="code highlight-none"><div class="highlight"><pre><span></span>B
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>array([[  0.5 ,   0.5 ,   0.5 , ...,  24.5 ,  24.5 ,  24.5 ],
@@ -809,7 +1144,7 @@ B=np.array([df[&#39;xue&#39;].values,df[&#39;yue&#39;].values,df[&#39;zue&#39;].
        [  0.75,   0.75,   0.75, ...,   0.75,   0.75,   0.75]])
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span># figure instanciation
+<div class="code highlight-none"><div class="highlight"><pre><span></span># figure instanciation
 f = plt.figure(figsize=(10,5))
 ax = f.add_subplot(111)
 r = np.array((A,B))
@@ -829,11 +1164,11 @@ plt.savefig(&#39;LOS for AP middle&#39;)
 <div class="section" id="multi-wall-model-motley-kennan-model">
 <h1>Multi-wall Model: Motley Kennan Model<a class="headerlink" href="#multi-wall-model-motley-kennan-model" title="Permalink to this headline">¶</a></h1>
 <p>In the following figure we plot the radio link between C=AP5 and D.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>C=np.array([12.5,6.25,2.85])
+<div class="code highlight-none"><div class="highlight"><pre><span></span>C=np.array([12.5,6.25,2.85])
 D=np.array([0.5,8.5,0.75])
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span># figure instanciation
+<div class="code highlight-none"><div class="highlight"><pre><span></span># figure instanciation
 f = plt.figure(figsize=(10,5))
 ax = f.add_subplot(111)
 r = np.array((C,D))
@@ -861,9 +1196,11 @@ better optimization; however it is also time consuming. Thus, it is
 relevant to proceed with a simple and fast approach as the Motley Kennan
 model.</p>
 <p>Mathematically the Motley Kennan model can be written the following
-expression: PL = 20<em>log 10 (4  d/) +p</em>(WAF) + k*(FAF) where p is
-the number of walls, WAF is wall attenuation factor, k is the number of
-floors and FAF means the floor attenuation factor.</p>
+expression:</p>
+<div class="math">
+\[ \begin{align}\begin{aligned}      PL = 20*log_{10}  {4 \pi d}{\lambda}  +p*(WAF) + k*(FAF)\\where :math:`p` is the number of walls, :math:`WAF` is wall attenuation\end{aligned}\end{align} \]</div>
+<p>factor, <span class="math">\(k\)</span> is the number of floors and <span class="math">\(FAF\)</span> means the
+floor attenuation factor.</p>
 <p>This specific model accommodates wide range of frequencies with the
 appropriate choice of attenuation factors. The measured attenuation
 values of different materials at different frequencies can be found in
@@ -881,10 +1218,10 @@ antenna radiation pattern at 3GHz and 5.95GHz with a maximum gain of
 5dB.</p>
 <div class="section" id="polar-representation">
 <h2>Polar Representation<a class="headerlink" href="#polar-representation" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A = Antenna(&#39;S1R1.vsh3&#39;)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>A = Antenna(&#39;S1R1.vsh3&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(20,20))
+<div class="code highlight-none"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(20,20))
 a1 = f.add_subplot(121,projection=&#39;polar&#39;)
 f1,a1 = A.plotG(fGHz=[3,32],plan=&#39;theta&#39;,angdeg=0,GmaxdB=5,fig=f,ax=a1,show=False)
 a2 = f1.add_subplot(122,projection=&#39;polar&#39;)

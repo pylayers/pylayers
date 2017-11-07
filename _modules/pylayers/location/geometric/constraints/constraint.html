@@ -159,14 +159,8 @@
 <span class="sd">Constraint Class</span>
 <span class="sd">================</span>
 
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    Constraint.__init__</span>
-<span class="sd">    Constraint.__repr__</span>
-<span class="sd">    Constraint.updc</span>
-<span class="sd">    Constraint.info</span>
-<span class="sd">    Constraint.show3</span>
+<span class="sd">.. autoclass:: Constraint</span>
+<span class="sd">    :members:</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1">#####################################################################</span>
@@ -200,7 +194,7 @@
 <span class="kn">from</span> <span class="nn">pylayers.location.geometric.util</span> <span class="kn">import</span> <span class="n">geomview</span> <span class="k">as</span> <span class="n">g</span>
 
 
-<span class="k">class</span> <span class="nc">Constraint</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Constraint"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.constraint.html#pylayers.location.geometric.constraints.constraint.Constraint">[docs]</a><span class="k">class</span> <span class="nc">Constraint</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Constraint class</span>
 
 
@@ -339,7 +333,7 @@
 
         <span class="k">return</span> <span class="n">s</span></div>
 
-<div class="viewcode-block" id="Constraint.updc"><a class="viewcode-back" href="../../../../../modules/generated/pylayers.location.geometric.constraints.constraint.Constraint.updc.html#pylayers.location.geometric.constraints.constraint.Constraint.updc">[docs]</a>    <span class="k">def</span> <span class="nf">updc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;p&#39;</span><span class="p">,</span><span class="n">value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(())):</span>
+<div class="viewcode-block" id="Constraint.updc"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.constraint.html#pylayers.location.geometric.constraints.constraint.Constraint.updc">[docs]</a>    <span class="k">def</span> <span class="nf">updc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;p&#39;</span><span class="p">,</span><span class="n">value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(())):</span>
         <span class="sd">&quot;&quot;&quot; update values of a constraint</span>
 
 <span class="sd">        Example :</span>
@@ -391,7 +385,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">usable</span> <span class="o">=</span> <span class="bp">False</span></div>
 
 
-    <span class="k">def</span> <span class="nf">info_old</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Constraint.info_old"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.constraint.html#pylayers.location.geometric.constraints.constraint.Constraint.info_old">[docs]</a>    <span class="k">def</span> <span class="nf">info_old</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; display info on constraint</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">print</span> <span class="s2">&quot;Type         : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span>
@@ -417,7 +411,7 @@
             <span class="k">print</span> <span class="s2">&quot;sstd (m)&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sstd</span>
         <span class="k">print</span> <span class="s2">&quot;-------------------&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lbox</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
-        <span class="k">print</span> <span class="s2">&quot;-------------------&quot;</span>
+        <span class="k">print</span> <span class="s2">&quot;-------------------&quot;</span></div>
 
     <span class="c1"># def info(self):</span>
 
@@ -425,7 +419,7 @@
     <span class="c1">#     print &#39;{0:3} , {1:10}, {2:10}, {3:7}, {4:1}, {5:1}, {6:1}, {7:1}&#39;.format(&#39;type&#39;, &#39;p&#39;, &#39;value&#39;, &#39;std&#39;, &#39;runable&#39; , &#39;usable&#39; , &#39;obsolete&#39; , &#39;evaluated&#39;)</span>
     <span class="c1">#     np.set_printoptions(precision=3)</span>
     <span class="c1">#     print &#39;{0:3} , {1:10}, {2:10}, {3:7}, {4:1}, {5:1}, {6:1}, {7:1}&#39;.format(self.type, self.p, self.value, self.std, self.runable, self.usable , self.obsolete , self.evaluated)</span>
-<div class="viewcode-block" id="Constraint.info"><a class="viewcode-back" href="../../../../../modules/generated/pylayers.location.geometric.constraints.constraint.Constraint.info.html#pylayers.location.geometric.constraints.constraint.Constraint.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Constraint.info"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.constraint.html#pylayers.location.geometric.constraints.constraint.Constraint.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -495,7 +489,7 @@
 
 
 
-<div class="viewcode-block" id="Constraint.show3"><a class="viewcode-back" href="../../../../../modules/generated/pylayers.location.geometric.constraints.constraint.Constraint.show3.html#pylayers.location.geometric.constraints.constraint.Constraint.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Constraint.show3"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.constraint.html#pylayers.location.geometric.constraints.constraint.Constraint.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; display constraint on Geomview</span>
 
 <span class="sd">        The filename is boxes{Id}.list</span>
@@ -590,7 +584,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s1">&#39;constraint is not runnable. It can not be displayed&#39;</span></div>
+            <span class="k">print</span> <span class="s1">&#39;constraint is not runnable. It can not be displayed&#39;</span></div></div>
 </pre></div>
 
            </div>

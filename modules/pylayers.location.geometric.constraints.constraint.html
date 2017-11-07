@@ -36,7 +36,7 @@
               href="../about.html"/>
     <link rel="top" title="Python 1 documentation" href="../index.html"/>
         <link rel="up" title="PyLayers Modules Reference" href="pylayers.html"/>
-        <link rel="next" title="pylayers.location.geometric.constraints.constraint.Constraint.__init__" href="generated/pylayers.location.geometric.constraints.constraint.Constraint.__init__.html"/>
+        <link rel="next" title="pylayers.location.geometric.constraints.exclude" href="pylayers.location.geometric.constraints.exclude.html"/>
         <link rel="prev" title="pylayers.location.geometric.constraints.cla" href="pylayers.location.geometric.constraints.cla.html"/> 
 
   
@@ -194,29 +194,130 @@
 <span id="pylayers-location-geometric-constraints-constraint"></span><h1>pylayers.location.geometric.constraints.constraint<a class="headerlink" href="#module-pylayers.location.geometric.constraints.constraint" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="constraint-class">
 <h2>Constraint Class<a class="headerlink" href="#constraint-class" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
+<dl class="class">
+<dt id="pylayers.location.geometric.constraints.constraint.Constraint">
+<em class="property">class </em><code class="descclassname">pylayers.location.geometric.constraints.constraint.</code><code class="descname">Constraint</code><span class="sig-paren">(</span><em>type</em>, <em>id='0'</em>, <em>p=array([]</em>, <em>dtype=float64)</em>, <em>origin={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/constraint.html#Constraint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.constraint.Constraint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constraint class</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>time</strong> : float</p>
+<blockquote>
+<div><p>time stamp</p>
+</div></blockquote>
+<p><strong>lbox</strong> : LBoxN</p>
+<blockquote>
+<div><p>LBoxN intialisation
+self.usable = True
+self.visible = True
+self.obsolete = False</p>
+</div></blockquote>
+<p><strong>runable</strong> : boolean</p>
+<blockquote>
+<div><p>A constriat is runable if it has a center</p>
+</div></blockquote>
+<p><strong>usable: boolean</strong></p>
+<blockquote>
+<div><p>a constraint is usable is it has a std AND a value AND is visible</p>
+</div></blockquote>
+<p><strong>visible</strong> : boolean</p>
+<blockquote>
+<div><p>is the constraint visible (used for simulnet simulation</p>
+</div></blockquote>
+<p><strong>parmsh</strong> : dictionary</p>
+<blockquote class="last">
+<div><dl class="docutils">
+<dt>keys</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">[&#8216;display&#8217;]=True     # launch geomview interactively</span><dd><p class="first last">[&#8216;mode&#8217;]=&#8217;Current&#8217;   # display current box or full constraint
+[&#8216;scene&#8217;]=True      # display whole scene
+[&#8216;point&#8217;]=True       # display constraint point(s)
+[&#8216;boxes&#8217;]=True       # display constraint box
+[&#8216;estimated&#8217;]=True  # display estimated point
+[&#8216;estimated_LS&#8217;]=False # display estimated point with LS method
+[&#8216;quadric&#8217;]=True   # display sphere or hyperbola
+[&#8216;grid&#8217;]=True       # display grid
+[&#8216;grav&#8217;]=True</p>
+</dd>
+</dl>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="pylayers.simul.simulnet.html#module-pylayers.simul.simulnet" title="pylayers.simul.simulnet"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.simul.simulnet</span></code></a>, <a class="reference internal" href="pylayers.location.localization.html#module-pylayers.location.localization" title="pylayers.location.localization"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.location.localization</span></code></a></p>
+</div>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="6%" />
+<col width="94%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Constraint.C_Id</td>
+<td>(Contraint Identity automatically increased for new instanciation)</td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td>(str) contraint type (TOA,TDOA,RSS)</td>
+</tr>
+<tr class="row-odd"><td>p</td>
+<td>(nd.array) Constraint center</td>
+</tr>
+<tr class="row-even"><td>self.Id</td>
+<td>(str) Constraint.C_Id</td>
+</tr>
+<tr class="row-odd"><td>ndim</td>
+<td>(int) Constraint dimension (2D/3D)</td>
+</tr>
+<tr class="row-even"><td>origin</td>
+<td>(dict) origin of the contraint, (used for simulnet simulation &#8216;id&#8217; : id of the node generating the constraint &#8216;link&#8217; : edge of network graph Gr &#8216;rat&#8217; : RAT on which constraint has been obtained &#8216;ldp&#8217; : type of observable</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
 <colgroup>
 <col width="10%" />
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.constraint.Constraint.__init__.html#pylayers.location.geometric.constraints.constraint.Constraint.__init__" title="pylayers.location.geometric.constraints.constraint.Constraint.__init__"><code class="xref py py-obj docutils literal"><span class="pre">Constraint.__init__</span></code></a>(type[,&nbsp;id,&nbsp;p,&nbsp;dtype,&nbsp;origin])</td>
-<td></td>
+<tr class="row-odd"><td>info()</td>
+<td>(Display information about constraint)</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.constraint.Constraint.__repr__.html#pylayers.location.geometric.constraints.constraint.Constraint.__repr__" title="pylayers.location.geometric.constraints.constraint.Constraint.__repr__"><code class="xref py py-obj docutils literal"><span class="pre">Constraint.__repr__</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.constraint.Constraint.updc.html#pylayers.location.geometric.constraints.constraint.Constraint.updc" title="pylayers.location.geometric.constraints.constraint.Constraint.updc"><code class="xref py py-obj docutils literal"><span class="pre">Constraint.updc</span></code></a>([name,&nbsp;value,&nbsp;dtype])</td>
-<td>update values of a constraint</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.constraint.Constraint.info.html#pylayers.location.geometric.constraints.constraint.Constraint.info" title="pylayers.location.geometric.constraints.constraint.Constraint.info"><code class="xref py py-obj docutils literal"><span class="pre">Constraint.info</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.constraint.Constraint.show3.html#pylayers.location.geometric.constraints.constraint.Constraint.show3" title="pylayers.location.geometric.constraints.constraint.Constraint.show3"><code class="xref py py-obj docutils literal"><span class="pre">Constraint.show3</span></code></a>()</td>
-<td>display constraint on Geomview</td>
+<tr class="row-even"><td>show3()</td>
+<td>(display constraint on Geomview. Parameters tahnks to self.parmsh)</td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.constraint.Constraint.info">
+<code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/constraint.html#Constraint.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.constraint.Constraint.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.constraint.Constraint.info_old">
+<code class="descname">info_old</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/constraint.html#Constraint.info_old"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.constraint.Constraint.info_old" title="Permalink to this definition">¶</a></dt>
+<dd><p>display info on constraint</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.constraint.Constraint.show3">
+<code class="descname">show3</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/constraint.html#Constraint.show3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.constraint.Constraint.show3" title="Permalink to this definition">¶</a></dt>
+<dd><p>display constraint on Geomview</p>
+<p>The filename is boxes{Id}.list</p>
+<p>Id is the Id of the current constraint</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.constraint.Constraint.updc">
+<code class="descname">updc</code><span class="sig-paren">(</span><em>name='p'</em>, <em>value=array([]</em>, <em>dtype=float64)</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/constraint.html#Constraint.updc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.constraint.Constraint.updc" title="Permalink to this definition">¶</a></dt>
+<dd><p>update values of a constraint</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 
@@ -227,7 +328,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="generated/pylayers.location.geometric.constraints.constraint.Constraint.__init__.html" class="btn btn-neutral float-right" title="pylayers.location.geometric.constraints.constraint.Constraint.__init__" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="pylayers.location.geometric.constraints.exclude.html" class="btn btn-neutral float-right" title="pylayers.location.geometric.constraints.exclude" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="pylayers.location.geometric.constraints.cla.html" class="btn btn-neutral" title="pylayers.location.geometric.constraints.cla" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
