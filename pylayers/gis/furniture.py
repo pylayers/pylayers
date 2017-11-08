@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 """ Handle Furnitures
 
+.. curentmoddue:: pylayers.gis.furniture 
+
+.. autosummary
+
 """
 
 import numpy as np

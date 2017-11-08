@@ -1,20 +1,14 @@
 # -*- coding: utf-8 -*-
 """
+.. currentmodule:: pylayers.antprop.readvrml
 
-Utility Functions
-=================
-
-.. automodule::
-    :members:
-
-
-VLayout Class
-=============
-
-.. autoclass:: Vlayout
-    :members:
+.. autosummary::
 
 """
+from __future__ import print_function
+import doctest
+import os
+import glob
 import os
 import doctest
 import glob

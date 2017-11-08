@@ -1,5 +1,16 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
+from __future__ import print_function
+"""
+.. currentmodule:: pylayers.antprop.interactions
+
+.. autosummary::
+    :members:
+
+"""
+import doctest
+import os
+import glob
 import pdb
 import os
 import pdb
@@ -472,7 +483,7 @@ class IntB(Inter):
             #return(self.olf[:, np.newaxis, np.newaxis, np.newaxis]*data[np.newaxis, :, :, :])
             return(np.ones((len(fGHz),1,1,1))*data[None, :, :, :])
         else:
-            print 'no B interactions to evaluate'
+            print('no B interactions to evaluate')
             return(self.data[:, None, None, None])
 
 #####Interaction Loss in not used for speed purpose
@@ -765,7 +776,7 @@ class IntT(Inter):
                     #    m = m.lower()
                     # get alpha and gamma for divergence factor
                     if len(self.slab[m]['lmat']) > 1:
-                        print 'Warning : IntR class implemented for mat with only 1 layer '
+                        print('Warning : IntR class implemented for mat with only 1 layer ')
                     a = 1./np.sqrt(np.array(([self.slab[m]['lmat'][0]['epr']])) \
                                * np.ones(len(ut), dtype=complex))
                     g = (1.-np.sin(ut)**2)/(1.-a*np.sin(ut)**2)
@@ -871,7 +882,7 @@ class IntD(Inter):
         else :
             self.A = self.data[:, None, None, None]
             return(self.A)
-            print 'not yet implemented'
+            print('not yet implemented')
         # else:
         #     self.A = self.data[:, None, None, None]
         #     print 'no D interaction to evaluate'
@@ -879,5 +890,5 @@ class IntD(Inter):
 
 if (__name__ == "__main__"):
     plt.ion()
-    print "testing pylayers/antprop/interactions.py"
+    print("testing pylayers/antprop/interactions.py")
     doctest.testmod()

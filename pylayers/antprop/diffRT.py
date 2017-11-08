@@ -1,3 +1,14 @@
+"""
+.. currentmodule:: pylayers.antprop.diffRT
+
+.. autosummary::
+    :members:
+
+"""
+from __future__ import print_function
+import doctest
+import os
+import glob
 #!/usr/bin/python
 # -*- coding: latin1 -*-
 import numpy as np

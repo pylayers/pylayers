@@ -1,55 +1,11 @@
 # -*- coding: utf-8 -*-
 #
+from __future__ import print_function
 r"""
 
 .. currentmodule:: pylayers.simul.link
 
-=======
-
-This module runs the electromagnetic simulation for a link.
-A deterministic link has two termination points and an associated Layout
-whereas a statistical link do not need any of those precursor object.
-
-It stores simulated objects in `hdf5` format.
-
-
-Link Class
-===========
-
-Link is a MetaClass, which derives from `Tchannel`.
-Tchannel is a transmission channel i.e a radio channel
-which includes both link termination antennas.
-
-A common factor of both statistical (SLink) and deterministic channel (DLink)
-is the exitence of :math:`\alpha_k` and :math:`\tau_k`
-
-.. autoclass:: Link
-    :members:
-
-
-
-SLink Class
-===========
-
-Slink is for statistical links.
-
-.. autoclass:: SLink
-    :members: 
-
-DLink Class
-===========
-
-Dlink is for deterministic links
-
->>> from pylayers.simul.link import *
->>> L = DLink(verbose=False)
->>> L.eval()
->>> L.pltcir()
-
-DLink simulation
-----------------
-
-.. autoclass:: DLink
+.. autosummary::
     :members:
 
 """
@@ -92,6 +48,14 @@ import pdb
 
 
 class Link(PyLayers):
+    """
+        Link is a MetaClass, which derives from `Tchannel`.
+        Tchannel is a transmission channel i.e a radio channel
+        which includes both link termination antennas.
+
+        A common factor of both statistical (SLink) and deterministic channel (DLink)
+        is the exitence of :math:`\alpha_k` and :math:`\tau_k`
+     """
     def __init__(self):
         """ Link evaluation metaclass
         """
@@ -838,11 +802,11 @@ class DLink(Link):
             ray index
 
         """
-        print "Ray : "+str(iray)
+        print("Ray : "+str(iray))
         if not self.R.evaluated:
             self.R.eval()
         PM = self.R.info(iray,ifGHz=0,matrix=1)
-        print "Propagation Channel 2x2 (C):"
+        print("Propagation Channel 2x2 (C):")
         self.C.inforay(iray)
         if self.C.islocal:
             # back to global frame

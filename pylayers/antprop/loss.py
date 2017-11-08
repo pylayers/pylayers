@@ -1,5 +1,16 @@
 # -*- coding:Utf-8 -*-
 #from numpy import *
+from __future__ import print_function
+"""
+.. currentmodule:: pylayers.antprop.loss
+
+.. autosummary::
+    :members:
+
+"""
+import doctest
+import os
+import glob
 import doctest
 import logging
 import numpy as np
@@ -1163,7 +1174,7 @@ def Loss0(S,rx,ry,f,p):
     Nx  = len(rx)
     Ny  = len(ry)
     Lw  = np.zeros((Nx,Ny))
-    print shape(Lw)
+    print(shape(Lw))
     i   = 0
     for x in rx:
         j   = 0

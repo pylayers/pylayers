@@ -1,17 +1,34 @@
-# coding: utf-8
+"""
+.. currentmodule:: pylayers.antprop.diffraction
 
-# This notebook is an implementation from the paper ["Fast UTD Diffraction
-# Coefficient Using Only One Suare
-# Root"](http://onlinelibrary.wiley.com/doi/10.1002/mop.28298/pdf) from Jean
-# Francois Legendre and Thierry Marsault.
-# $N$ est compris entre 0 et 1. 0 est la lame de coupeau et 1 est le demi-plan
+.. autosummary::
 
+"""
+from __future__ import print_function
+import doctest
+import os
+import glob
 import numpy as np
 import matplotlib.pyplot as plt
 import pdb
 
 def diff(fGHz,phi0,phi,si,sd,N,beta):
-    """
+    """  diffraction coefficient 
+    
+    Parameters
+    ----------
+
+    fGHz : np.array
+    phi0 : np.array
+    phi : np.array
+    si : np.array
+    sd : np.array 
+    N : np.array
+    beta : np.array
+
+    Notes
+    -----
+
     axis 0 : fGHz
     axis 1 : phi0 (incident angle on face 0)
     axis 2 : phi  (diffraction from face 0 )
@@ -19,6 +36,7 @@ def diff(fGHz,phi0,phi,si,sd,N,beta):
     axis 4 : distance sd
     axis 5 : N
     axis 6 : beta
+
     """
 
     # MDA reshaping

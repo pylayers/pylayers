@@ -2,21 +2,9 @@
 # -*- coding: utf-8 -*-
 #
 """
-  Run simulation with full human trajectory
-
 .. currentmodule:: pylayers.simul.simultraj
 
-Simul class
-===========
-
-.. autoclass:: Simul
-    :members:
-
-See Also
---------
-
-pylayers.simul.link
-
+.. autosummary::
 
 """
 import doctest

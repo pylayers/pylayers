@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: latin1 -*-
+from __future__ import print_function
 from __future__ import division, print_function, absolute_import 
 import os
 import sys
@@ -10,21 +11,29 @@ else:
     import _pickle as cPickle
 import doctest
 #import objxml
+import pdb
+import copy
 import numpy as np
 import scipy as sp
+from scipy.interpolate import interp1d
 import matplotlib.pylab as plt
 import struct as stru
 import ConfigParser
-from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 import pylayers.util.plotutil as plu
 from pylayers.util.easygui import *
-from scipy.interpolate import interp1d
-import copy
-import pdb
-import copy
+from pylayers.util.project import *
 
+"""
+.. currentmodule:: pylayers.antprop.slab
 
+.. autosummary::
+    :members:
+
+"""
+import doctest
+import os
+import glob
 class Interface(PyLayers):
     """ Interface between 2 medium
 

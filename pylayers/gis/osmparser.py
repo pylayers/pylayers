@@ -2,25 +2,9 @@
 """
 Module OSMParser
 
-This module provides classes to handle open street map (OSM) objects
+.. currentmodule:: pylayers.gis.osmparser
 
-.. autoclass:: Way
-    :members:
-
-.. autoclass:: Coords 
-    :members:
-
-.. autoclass:: Nodes 
-    :members:
-
-.. autoclass:: Ways 
-    :members:
-
-.. autoclass:: Relations 
-    :members:
-
-.. autoclass:: FloorPlan 
-    :members:
+.. autosummary::
 
 """
 from osmapi import OsmApi

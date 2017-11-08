@@ -1,21 +1,14 @@
 """
-
-Function Coeff model
-===================
+.. currentmodule:: pylayers.antprop.coeffModel
 
 .. autosummary::
-   :toctree: generated/
-
-   relative_error
-   RepAzimuth1
-   mode_energy
-   mode_energy2
-   level_energy
-   modeMax
-   lmreshape
-   sshModel
+    :members:
 
 """
+from __future__ import print_function
+import doctest
+import os
+import glob
 import doctest
 import pdb
 import numpy as np

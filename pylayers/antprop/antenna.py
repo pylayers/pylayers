@@ -1,4 +1,11 @@
 #-*- coding:Utf-8 -*-
+"""
+.. currentmodule:: pylayers.antprop.antenna
+
+.. autosummary::
+    :members:
+
+"""
 from __future__ import print_function
 import doctest
 import os

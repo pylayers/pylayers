@@ -1,13 +1,9 @@
 """
-
-Class Coverage
-==============
+.. currentmodule:: pylayers.antprop.coverage
 
 .. autosummary::
     :members:
-    :toctree: generated/
-
-
+    
 """
 from pylayers.util.project import *
 #from pylayers.measures.mesuwb import *

@@ -5,6 +5,12 @@
 #
 #
 #
+"""
+.. currentmodule:: pylayers.gis.layout
+
+.. autosummary:: 
+
+"""
 from __future__ import print_function
 try:
     from tvtk.api import tvtk

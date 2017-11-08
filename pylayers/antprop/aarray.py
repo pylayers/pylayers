@@ -6,44 +6,12 @@ import matplotlib.pyplot as plt
 import scipy.signal as si
 import doctest
 import pdb
-
 r"""
 
 .. currentmodule:: pylayers.antprop.aarray
 
-This module handles antenna arrays
-
-Array class
-===========
-
 .. autosummary::
     :members:
-    :toctree: generated/
-
-
-ULAarray class
-==============
-
-.. autosummary::
-    :members:
-    :toctree: generated/
-
-    set_position 
-
-UCAarray
-========
-
-.. autosummary::
-    :members:
-    :toctree: generated/
-
-AntArray class
-==============
-
-.. autosummary::
-    :members:
-    :toctree: generated/
-
 
 """
 class TXRU(object):

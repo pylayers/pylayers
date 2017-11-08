@@ -1,5 +1,16 @@
 #from pylayers.antprop.antenna import *
 #from pylayers.antprop.antvsh import *
+"""
+.. currentmodule:: pylayers.antprop.antssh
+
+.. autosummary::
+    :members:
+
+"""
+from __future__ import print_function
+import doctest
+import os
+import glob
 from pylayers.antprop.spharm import *
 
 import numpy as np

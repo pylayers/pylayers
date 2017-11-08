@@ -1,4 +1,11 @@
 # -*t coding:Utf-8 -*-
+"""
+.. currentmodeul:: pylayters.antprop.channel 
+
+.. autosummary::
+    :members:
+
+"""
 from __future__ import print_function
 import doctest
 import pdb

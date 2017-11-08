@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 r"""
 
-.. currentmodule:: pylayers.gis.selectL
+.. currentmodule:: pylayers.gis.selectl
+
+.. autosummary::
 
 """
 import os

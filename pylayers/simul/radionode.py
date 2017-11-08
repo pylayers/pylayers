@@ -1,22 +1,16 @@
 #/usr/bin/python
 # -*- coding: utf-8 -*-
 """
+.. currentmodule:: pylayers.antprop.radionode
 
-RadioNode Class
-===============
-
-A radio Node is a data structure which store positions of
-a radio node at several time step.
-
-This data structure is used in DLink.
-
-.. autoclass:: RadioNode
-    :members: 
-
-
+.. autosummary::
+    :members:
 
 """
-
+from __future__ import print_function
+import doctest
+import os
+import glob
 import os
 import sys 
 import doctest

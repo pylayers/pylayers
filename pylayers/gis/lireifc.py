@@ -1,5 +1,14 @@
 # -*- coding: utf-8 -*-
+"""
+.. currentmodule:: pylayers.antprop.lireifc
 
+.. autosummary:: 
+
+"""
+from __future__ import print_function
+import doctest
+import os
+import glob
 import sys
 import os
 import numpy as np

@@ -1,4 +1,15 @@
 #-*- coding:Utf-8 -*-
+from __future__ import print_function
+"""
+.. currentmodule:: pylayers.antprop.signature
+
+.. autosummary::
+    :members:
+
+"""
+import doctest
+import os
+import glob
 import doctest
 import numpy as np
 #import scipy as sp
@@ -633,26 +644,26 @@ class Signatures(PyLayers,dict):
         # print "source : ", self.source
         # print "target : ", self.target
         size = {}
-        print self.__class__.__name__ + '\n' + '----------'+'\n'
+        print(self.__class__.__name__ + '\n' + '----------'+'\n')
         #s = s + str(self.__sizeof__())+'\n'
         for k in self:
             size[k] = len(self[k])/2
-        print 'from cycle : '+ str(self.source) + ' to cycle ' + str(self.target)+'\n'
+        print('from cycle : '+ str(self.source) + ' to cycle ' + str(self.target)+'\n')
         pyu.printout('Reflection',pyu.BLUE)
-        print '  '
+        print('  ')
         pyu.printout('Transmission',pyu.GREEN)
-        print '  '
+        print('  ')
         pyu.printout('Diffraction',pyu.RED)
-        print '  \n'
+        print('  \n')
         for k in self:
-            print str(k) + ' : ' + str(size[k])
+            print(str(k) + ' : ' + str(size[k]))
             a = np.swapaxes(self[k].reshape(size[k],2,k),0,2)
             # nl x 2 x nsig
             for i in range(k):
 
                 nstr=a[i,0,:]
                 typ=a[i,1,:]
-                print '[',
+                print('[',)
                 for n,t in zip(nstr,typ):
                     if t==1:
                         pyu.printout(str(n),pyu.BLUE)
@@ -660,8 +671,8 @@ class Signatures(PyLayers,dict):
                         pyu.printout(str(n),pyu.GREEN)
                     if t==3:
                         pyu.printout(str(n),pyu.RED)
-                print ']'
-            print'\n'
+                print(']')
+            print('\n')
                 # s = s + '   '+ str(a[i,0,:]) + '\n'
 
                 # s = s + '   '+ str(a[i,1,:]) + '\n'
@@ -1158,8 +1169,8 @@ class Signatures(PyLayers,dict):
         pt_target = np.array(self.L.Gt.node[self.target]['polyg'].centroid.coords.xy)
         d_source_target = np.linalg.norm(pt_source - pt_target)
         
-        #print "source,lis :",self.source,lis
-        #print "target,lit :",self.target,lit
+        #print("source,lis :",self.source,lis)
+        #print("target,lit :",self.target,lit)
         # for u in lit: 
         #     print u
         # print "-------------"
@@ -2018,7 +2029,7 @@ class Signatures(PyLayers,dict):
             ax.plot(prx[0],prx[1],'xb')
 
             if ni not in self.keys():
-                print "incorrect number of interactions"
+                print("incorrect number of interactions")
             pos={}
 
             try:
@@ -2035,12 +2046,12 @@ class Signatures(PyLayers,dict):
                     if ii == 3:
                         inter.append('D')
             except:
-                print "signature index out of bounds of signature"
+                print("signature index out of bounds of signature")
 
             line = np.vstack((line,prx))
             ax.plot(line[:,0],line[:,1])
             plt.draw()
-            print inter
+            print(inter)
             st = raw_input()
             ax.cla()
             if st == 'n':
@@ -2058,7 +2069,7 @@ class Signatures(PyLayers,dict):
                         ni=nit[uni]
                         us = 0
             else:
-                print 'press n for next signature'
+                print('press n for next signature')
 
 
     def rays(self,ptx=0,prx=1):
@@ -2901,7 +2912,7 @@ class Signatures(PyLayers,dict):
                 # NEVER TESTED !!!!!!!!!!!
                 y[uDy1,uDy2]=a[uDf]
             except:
-                print "signatures.image diffraction line 3672 Not yet tested !"
+                print("signatures.image diffraction line 3672 Not yet tested !")
 
                 pass #print 'no D'
 
@@ -2937,7 +2948,7 @@ class Signatures(PyLayers,dict):
                     ly=np.split(y,nsp)
                     del A
                     del y
-                    print nsp
+                    print(nsp)
                     for s in range(nsp):
 
                         lm=np.linalg.solve(lA[s], ly[s])
@@ -3017,7 +3028,7 @@ class Signature(object):
 
     def info(self):
         for k in self.__dict__.keys():
-            print k, ':', self.__dict__[k]
+            print(k, ':', self.__dict__[k])
 
     def ev2(self, L):
         """  evaluation of Signature
@@ -3575,6 +3586,6 @@ class Signature(object):
 
 if __name__ == "__main__":
     plt.ion()
-    print "testing pylayers/antprop/signature.py"
+    print("testing pylayers/antprop/signature.py")
     doctest.testmod()
-    print "-------------------------------------"
+    print("-------------------------------------")

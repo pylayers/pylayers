@@ -1,3 +1,14 @@
+"""
+.. currentmodule:: pylayers.antprop.deygout
+
+.. autosummary::
+    :members:
+
+"""
+from __future__ import print_function
+import doctest
+import os
+import glob
 import numpy as np
 import time
 import pdb

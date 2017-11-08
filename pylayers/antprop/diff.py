@@ -1,7 +1,19 @@
+"""
+.. currentmodule:: pylayers.antprop.diff
+
+.. autosummary::
+    :members:
+
+"""
+from __future__ import print_function
+import doctest
+import os
+import glob
 import numpy as np
 import scipy.special as sps
 import matplotlib.pyplot as plt
 import pdb
+
 def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2):
     """ Luebbers Diffration coefficient
 

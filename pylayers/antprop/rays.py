@@ -1,20 +1,22 @@
 #!/usr/bin/python
 # -*- coding: latin1 -*-
+from __future__ import print_function
 """
+.. currentmodule:: pylayers.antprop.rays
 
-Class Rays
-==========
-
-.. autoclass:: Rays
+.. autosummary::
     :members:
 
 """
+import doctest
+import os
+import glob
 try:
     from tvtk.api import tvtk
     from mayavi.sources.vtk_data_source import VTKDataSource
     from mayavi import mlab
 except:
-    print 'Layout:Mayavi is not installed'
+    print('Layout:Mayavi is not installed')
 import pdb
 import os
 import copy
@@ -296,7 +298,7 @@ class Rays(PyLayers, dict):
                 if not grpname in fh5['ray'].keys():
                     fh5['ray'].create_group(grpname)
                 else :
-                    print 'ray/'+grpname +'already exists in '+filenameh5
+                    print('ray/'+grpname +'already exists in '+filenameh5)
                 f = fh5['ray/'+grpname]
 
                 
@@ -304,7 +306,7 @@ class Rays(PyLayers, dict):
                 if not grpname in fh5['ray2'].keys():
                     fh5['ray2'].create_group(grpname)
                 else :
-                    print 'ray2/'+grpname +'already exists in '+filenameh5
+                    print('ray2/'+grpname +'already exists in '+filenameh5)
                 f = fh5['ray2/'+grpname]
              # keys not saved as attribute of h5py file
             notattr = ['I','B','B0','dis']
@@ -1389,7 +1391,7 @@ class Rays(PyLayers, dict):
             return None
 
         for ir in self:
-            print self[ik]['si']
+            print(self[ik]['si'])
 
     def locbas(self, L):
         """ calculate ray local bas
@@ -2762,15 +2764,15 @@ class Rays(PyLayers, dict):
         st = ''
         for t in typ:
             st = st + t+'      ' 
-        print st
+        print(st)
         st = ''
         for s in slab_nb:
             st = st + str(s)+'     ' 
-        print st
+        print(st)
         st = ''
         for z in tz:
             st = st + str(z)+'     ' 
-        print st
+        print(st)
         print(slab)
 
     def typ(self, ir,fromR=True):
@@ -2887,9 +2889,9 @@ class Rays(PyLayers, dict):
         """
 
         if self.evaluated:
-            print '-------------------------'
-            print 'Informations of ray #', ir
-            print '-------------------------\n'
+            print('-------------------------')
+            print('Informations of ray #', ir)
+            print('-------------------------\n')
 
             ray = self.ray(ir)
             typ = self.typ(ir)
@@ -2897,7 +2899,7 @@ class Rays(PyLayers, dict):
             # if there is a diffraction, phi0, phi, beta are shown
             if 'D' in typ:
                 diff =True
-                print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7}, {5:10}, {6:10}, {7:4}, {8:4}, {9:4}'\
+                print('{0:5} , {1:4}, {2:10}, {3:7}, {4:7}, {5:10}, {6:10}, {7:4}, {8:4}, {9:4}'\
                         .format('Index',
                                 'type',
                                 'slab', 
@@ -2907,19 +2909,19 @@ class Rays(PyLayers, dict):
                                 'gamma2',
                                 'phi0',
                                 'phi',
-                                'beta')
+                                'beta'))
             else :
                 diff =False
-                print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7}, {5:10}, {6:10}'\
+                print('{0:5} , {1:4}, {2:10}, {3:7}, {4:7}, {5:10}, {6:10}'\
                      .format('Index',
                         'type',
                         'slab',
                         'nstr',
                         'th(rad)',
                         'alpha',
-                        'gamma2')
-            print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'\
-                  .format(ir, 'B0','-', '-', '-', '-', '-')
+                        'gamma2'))
+            print('{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'\
+                  .format(ir, 'B0','-', '-', '-', '-', '-'))
 
             for iidx, i in enumerate(typ):
                 # import ipdb
@@ -2949,24 +2951,25 @@ class Rays(PyLayers, dict):
                         for ii, Ii in enumerate(Iidx):
                             if Ii == ray[iidx]:
                                 if i=='D': 
-                                    print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10}, {6:10}, {7:3.4}, {8:3.4}, {9:3.4}'\
-                                    .format(Ii, i, slab, slabnb[iidx], th[ii], alpha[ii], gamma[ii],phi0,phi,beta)
+                                    print('{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10}, {6:10}, {7:3.4}, {8:3.4}, {9:3.4}'\
+                                    .format(Ii, i, slab, slabnb[iidx], th[ii], alpha[ii], gamma[ii],phi0,phi,beta))
                                 else:
-                                    print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'\
-                                    .format(Ii, i, slab, slabnb[iidx], th[ii], alpha[ii], gamma[ii])
+                                    print('{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'\
+                                    .format(Ii, i, slab, slabnb[iidx], th[ii], alpha[ii], gamma[ii]))
+
                     else:
                         if bB:
-                            print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'.format(ray[iidx], 'B', '-', '-', '-', '-', '-')
+                            print('{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'.format(ray[iidx], 'B', '-', '-', '-', '-', '-'))
                 #              print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format(ray[iidx], i, '-', '-', '-', '-')
 
             if matrix:
-                print '\n----------------------------------------'
-                print ' Matrix of ray #', ir, 'at f=', self.I.fGHz[ifGHz]
-                print '----------------------------------------'
+                print('\n----------------------------------------')
+                print(' Matrix of ray #', ir, 'at f=', self.I.fGHz[ifGHz])
+                print('----------------------------------------')
                 lmat = []
                 ltran = []
                 if bB:
-                    print 'rotation matrix#', 'type: B0'
+                    print('rotation matrix#', 'type: B0')
                     
                     B0 = self.B0.data[ir,:,:]
                     addr = self.ir2a(ir)
@@ -2978,14 +2981,14 @@ class Rays(PyLayers, dict):
                     ltran.append(B0)
                     print(B0)
                 for iidx, i in enumerate(typ):
-                    print 'interaction #', ray[iidx], 'type:', i
+                    print('interaction #', ray[iidx], 'type:', i)
                     # f x l x 2 x 2
                     I = self.I.I[ifGHz, ray[iidx], :, :]
                     print(I)
                     lmat.append(I)
                    
                     if bB:
-                        print 'rotation matrix#',[ray[iidx]], 'type: B'
+                        print('rotation matrix#',[ray[iidx]], 'type: B')
                         B = self.B.data[ray[iidx], :, :]
                         print(B) 
                         lmat.append(B)
@@ -3006,9 +3009,9 @@ class Rays(PyLayers, dict):
                 return(PM0)
 
             else:
-                print '\nto display matrix, use matrix=True on call'
+                print('\nto display matrix, use matrix=True on call')
         else:
-            print 'Rays have not been evaluated yet'
+            print('Rays have not been evaluated yet')
 
     def signature(self, ni ,nr):
         """ extract ray signature

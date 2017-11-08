@@ -1,4 +1,15 @@
 # -*- coding:Utf-8 -*-
+"""
+.. currentmodule:: pylayers.antprop.spharm
+
+.. autosummary::
+    :members:
+
+"""
+from __future__ import print_function
+import doctest
+import os
+import glob
 import doctest
 import subprocess
 import os

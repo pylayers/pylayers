@@ -7,6 +7,10 @@
 #
 r"""
 
+.. currentmodule: building 
+    
+.. autosummary::
+
 """
 from __future__ import print_function
 try:

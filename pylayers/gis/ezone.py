@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 
-This module handles the description of an earth zone
+.. currentmodule:: pylayers.gis.ezone*
 
-.. autoclass:: DEM
-    :members:
-
-.. autoclass:: Ezone 
-    :members:
+.. autosummary::
 
 """
 import h5py

@@ -1,5 +1,6 @@
 #!/usr/bin/python
 #-*- coding:Utf-8 -*-
+from __future__ import print_function
 from pylayers.signal.bsignal import *
 from pylayers.antprop.aarray import *
 from pylayers.util.project import *
@@ -16,8 +17,9 @@ import math as mt
 from pylayers.measures.vna.E5072A import *
 import ipdb
 """
+.. curentmodule:: pylayers.antprop.mesmimo
 
-.. autoclass:: MIMO
+.. autosummary::
     :members: 
 
 """
