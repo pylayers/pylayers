@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from pylayers.measures.mesuwb import *
 from pylayers.antprop.loss import *
 S = Simul()
-S.layout('WHERE1.ini')
+S.layout('WHERE1.lay')
 fGHz = 4
 Tx,Rx = ptw1()
 Lwo,Lwp,Edo,Edp = Losst(S.L,fGHz,Tx.T,Rx[1,0:2],dB=True)

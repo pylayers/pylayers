@@ -1,0 +1,17 @@
+<map id="inheritance9a91799cfe" name="inheritance9a91799cfe">
+<area shape="rect" id="node1" href="pylayers.antprop.channel.ADPchannel.html#pylayers.antprop.channel.ADPchannel" target="_top" title="Angular Delay Profile channel" alt="" coords="511,153,609,179"/>
+<area shape="rect" id="node2" title="Uniform signal in time domain" alt="" coords="381,153,457,179"/>
+<area shape="rect" id="node14" href="pylayers.antprop.channel.TUchannel.html#pylayers.antprop.channel.TUchannel" target="_top" title="Uniform channel in delay domain" alt="" coords="515,203,605,228"/>
+<area shape="rect" id="node3" href="pylayers.antprop.channel.AFPchannel.html#pylayers.antprop.channel.AFPchannel" target="_top" title="Angular Frequency Profile channel" alt="" coords="512,5,608,31"/>
+<area shape="rect" id="node4" title="FUsignal : Uniform signal in Frequency Domain" alt="" coords="381,80,457,105"/>
+<area shape="rect" id="node10" href="pylayers.antprop.channel.Mchannel.html#pylayers.antprop.channel.Mchannel" target="_top" title="Handle the measured channel" alt="" coords="519,55,601,80"/>
+<area shape="rect" id="node15" href="pylayers.antprop.channel.Tchannel.html#pylayers.antprop.channel.Tchannel" target="_top" title="Handle the transmission channel" alt="" coords="521,104,599,129"/>
+<area shape="rect" id="node5" title="Signal with an embedded time base" alt="" coords="132,129,204,155"/>
+<area shape="rect" id="node8" title="FBsignal : Base signal in Frequency domain" alt="" coords="252,80,327,105"/>
+<area shape="rect" id="node9" title="Signal with an embedded uniform Base" alt="" coords="253,129,325,155"/>
+<area shape="rect" id="node12" title="Based signal in Time domain" alt="" coords="252,179,327,204"/>
+<area shape="rect" id="node6" title="Generic PyLayers Meta Class" alt="" coords="5,155,84,180"/>
+<area shape="rect" id="node7" href="pylayers.antprop.channel.Ctilde.html#pylayers.antprop.channel.Ctilde" target="_top" title="container for the 4 components of the polarimetric ray channel" alt="" coords="132,179,204,204"/>
+<area shape="rect" id="node11" href="pylayers.antprop.channel.TBchannel.html#pylayers.antprop.channel.TBchannel" target="_top" title="radio channel in non uniform delay domain" alt="" coords="375,203,463,228"/>
+<area shape="rect" id="node13" href="pylayers.antprop.channel.TUDchannel.html#pylayers.antprop.channel.TUDchannel" target="_top" title="Uniform channel in Time domain with delay" alt="" coords="657,203,756,228"/>
+</map>

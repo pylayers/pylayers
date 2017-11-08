@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pylayers.antprop.coverage &mdash; Python 1 documentation</title>
+  <title>pylayers.antprop.coverage &mdash; PyLayers</title>
   
 
   
@@ -34,7 +34,7 @@
   
         <link rel="author" title="About these documents"
               href="../../../about.html"/>
-    <link rel="top" title="Python 1 documentation" href="../../../index.html"/>
+    <link rel="top" title="PyLayers" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.4
+                0.5
               </div>
             
           
@@ -88,27 +88,77 @@
             
             
                 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#radio-propagation-simulation">2&nbsp;&nbsp;&nbsp;Radio Propagation Simulation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#handling-agent-mobility">3&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#wireless-body-area-network-related-classes">4&nbsp;&nbsp;&nbsp;Wireless Body Area Network Related Classes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#some-simulation-examples">5&nbsp;&nbsp;&nbsp;Some Simulation Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#algorithms-for-localization">6&nbsp;&nbsp;&nbsp;Algorithms for Localization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#measurements-tools">7&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#pylayers-tools">8&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../notebook/TOC.html#references">9&nbsp;&nbsp;&nbsp;References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/pylayers.html">PyLayers Modules Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html">&#8220;</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html#some-layout">Some Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html">8 Random Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html">1&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#classes">2&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#class-inheritance-diagram">3&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id1">4&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id2">5&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id3">6&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id4">7&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id5">8&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id6">9&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id7">10&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id8">11&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id9">12&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id10">13&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id11">14&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id12">15&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id13">16&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id14">17&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id15">18&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id16">19&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id17">20&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id18">21&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id19">22&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id20">23&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id21">24&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id22">25&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id23">26&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id24">27&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id25">28&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id26">29&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id28">30&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id29">31&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id32">32&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id33">33&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id34">34&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id35">35&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id36">36&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id37">37&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id38">38&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id39">39&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id40">40&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id41">41&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id47">42&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id54">43&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id55">44&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id56">45&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id57">46&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id58">47&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id59">48&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id60">49&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id61">50&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id92">51&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id93">52&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id100">53&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id101">54&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id102">55&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id103">56&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id104">57&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id105">58&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id106">59&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id107">60&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
 </ul>
 
             
@@ -194,7 +244,7 @@
     <span class="k">print</span> <span class="s1">&#39;mayavi not installed&#39;</span>
 
 
-<div class="viewcode-block" id="Coverage"><a class="viewcode-back" href="../../../modules/pylayers.antprop.coverage.html#pylayers.antprop.coverage.Coverage">[docs]</a><span class="k">class</span> <span class="nc">Coverage</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
+<div class="viewcode-block" id="Coverage"><a class="viewcode-back" href="../../../api/pylayers.antprop.coverage.Coverage.html#pylayers.antprop.coverage.Coverage">[docs]</a><span class="k">class</span> <span class="nc">Coverage</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Handle Layout Coverage</span>
 
 <span class="sd">        Methods</span>
@@ -338,7 +388,7 @@
                 <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s1">&#39; filename : &#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">filespa</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Coverage.creategrid"><a class="viewcode-back" href="../../../modules/pylayers.antprop.coverage.html#pylayers.antprop.coverage.Coverage.creategrid">[docs]</a>    <span class="k">def</span> <span class="nf">creategrid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">,</span><span class="n">boundary</span><span class="o">=</span><span class="p">[],</span><span class="n">_fileini</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Coverage.creategrid"><a class="viewcode-back" href="../../../api/pylayers.antprop.coverage.Coverage.html#pylayers.antprop.coverage.Coverage.creategrid">[docs]</a>    <span class="k">def</span> <span class="nf">creategrid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">,</span><span class="n">boundary</span><span class="o">=</span><span class="p">[],</span><span class="n">_fileini</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create a grid</span>
 
 <span class="sd">        Parameters</span>
@@ -373,7 +423,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">ng</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="Coverage.where1"><a class="viewcode-back" href="../../../modules/pylayers.antprop.coverage.html#pylayers.antprop.coverage.Coverage.where1">[docs]</a>    <span class="k">def</span> <span class="nf">where1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Coverage.where1"><a class="viewcode-back" href="../../../api/pylayers.antprop.coverage.Coverage.html#pylayers.antprop.coverage.Coverage.where1">[docs]</a>    <span class="k">def</span> <span class="nf">where1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Unfinished : Not sure this is the right place (too specific)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -428,7 +478,7 @@
             <span class="k">except</span><span class="p">:</span>
                 <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="Coverage.cover"><a class="viewcode-back" href="../../../modules/pylayers.antprop.coverage.html#pylayers.antprop.coverage.Coverage.cover">[docs]</a>    <span class="k">def</span> <span class="nf">cover</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sinr</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">snr</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">best</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Coverage.cover"><a class="viewcode-back" href="../../../api/pylayers.antprop.coverage.Coverage.html#pylayers.antprop.coverage.Coverage.cover">[docs]</a>    <span class="k">def</span> <span class="nf">cover</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sinr</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">snr</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">best</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; run the coverage calculation</span>
 
 <span class="sd">        Parameters</span>
@@ -614,7 +664,7 @@
         <span class="k">if</span> <span class="n">best</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">evbestsv</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Coverage.evsnr"><a class="viewcode-back" href="../../../modules/pylayers.antprop.coverage.html#pylayers.antprop.coverage.Coverage.evsnr">[docs]</a>    <span class="k">def</span> <span class="nf">evsnr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Coverage.evsnr"><a class="viewcode-back" href="../../../api/pylayers.antprop.coverage.Coverage.html#pylayers.antprop.coverage.Coverage.evsnr">[docs]</a>    <span class="k">def</span> <span class="nf">evsnr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculates signal to noise ratio</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -623,7 +673,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">snro</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmWo</span><span class="o">/</span><span class="n">NmW</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">snrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmWp</span><span class="o">/</span><span class="n">NmW</span></div>
 
-<div class="viewcode-block" id="Coverage.evsinr"><a class="viewcode-back" href="../../../modules/pylayers.antprop.coverage.html#pylayers.antprop.coverage.Coverage.evsinr">[docs]</a>    <span class="k">def</span> <span class="nf">evsinr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Coverage.evsinr"><a class="viewcode-back" href="../../../api/pylayers.antprop.coverage.Coverage.html#pylayers.antprop.coverage.Coverage.evsinr">[docs]</a>    <span class="k">def</span> <span class="nf">evsinr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculates sinr</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -646,7 +696,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sinro</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmWo</span><span class="o">/</span><span class="p">(</span><span class="n">ImWo</span><span class="o">+</span><span class="n">NmW</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sinrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmWp</span><span class="o">/</span><span class="p">(</span><span class="n">ImWp</span><span class="o">+</span><span class="n">NmW</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Coverage.evbestsv"><a class="viewcode-back" href="../../../modules/pylayers.antprop.coverage.html#pylayers.antprop.coverage.Coverage.evbestsv">[docs]</a>    <span class="k">def</span> <span class="nf">evbestsv</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Coverage.evbestsv"><a class="viewcode-back" href="../../../api/pylayers.antprop.coverage.Coverage.html#pylayers.antprop.coverage.Coverage.evbestsv">[docs]</a>    <span class="k">def</span> <span class="nf">evbestsv</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; determine the best server map</span>
 
 <span class="sd">        Notes</span>
@@ -943,7 +993,7 @@
 <span class="c1">#        if self.show:</span>
 <span class="c1">#            plt.show()</span>
 <span class="c1">#</span>
-<div class="viewcode-block" id="Coverage.plot"><a class="viewcode-back" href="../../../modules/pylayers.antprop.coverage.html#pylayers.antprop.coverage.Coverage.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Coverage.plot"><a class="viewcode-back" href="../../../api/pylayers.antprop.coverage.Coverage.html#pylayers.antprop.coverage.Coverage.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;typ&#39;</span><span class="p">:</span> <span class="s1">&#39;pr&#39;</span><span class="p">,</span>
@@ -992,7 +1042,7 @@
 
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span></div>
 
-<div class="viewcode-block" id="Coverage.show"><a class="viewcode-back" href="../../../modules/pylayers.antprop.coverage.html#pylayers.antprop.coverage.Coverage.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Coverage.show"><a class="viewcode-back" href="../../../api/pylayers.antprop.coverage.Coverage.html#pylayers.antprop.coverage.Coverage.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show coverage</span>
 
 <span class="sd">        Parameters</span>
@@ -1304,7 +1354,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 07, 2017.
+      Last updated on Nov 08, 2017.
 
     </p>
   </div>

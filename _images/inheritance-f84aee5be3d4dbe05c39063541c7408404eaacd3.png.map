@@ -1,0 +1,12 @@
+<map id="inheritancee17641f0c8" name="inheritancee17641f0c8">
+<area shape="rect" id="node1" href="pylayers.antprop.aarray.AntArray.html#pylayers.antprop.aarray.AntArray" target="_top" title="Class AntArray" alt="" coords="376,29,455,55"/>
+<area shape="rect" id="node5" href="pylayers.antprop.aarray.Combiner.html#pylayers.antprop.aarray.Combiner" target="_top" title="Combiner" alt="" coords="503,5,587,31"/>
+<area shape="rect" id="node7" href="pylayers.antprop.aarray.Precoder.html#pylayers.antprop.aarray.Precoder" target="_top" title="Precoder" alt="" coords="505,55,584,80"/>
+<area shape="rect" id="node2" href="pylayers.antprop.aarray.Array.html#pylayers.antprop.aarray.Array" target="_top" title="Array class" alt="" coords="254,79,326,104"/>
+<area shape="rect" id="node9" href="pylayers.antprop.aarray.UCArray.html#pylayers.antprop.aarray.UCArray" target="_top" title="Uniform Circular Array" alt="" coords="378,79,453,104"/>
+<area shape="rect" id="node10" href="pylayers.antprop.aarray.ULArray.html#pylayers.antprop.aarray.ULArray" target="_top" title="Uniform Linear Array" alt="" coords="379,128,452,153"/>
+<area shape="rect" id="node3" href="pylayers.antprop.antenna.Antenna.html#pylayers.antprop.antenna.Antenna" target="_top" title="Antenna" alt="" coords="252,29,328,55"/>
+<area shape="rect" id="node4" href="pylayers.antprop.antenna.Pattern.html#pylayers.antprop.antenna.Pattern" target="_top" title="Class Pattern" alt="" coords="132,55,204,80"/>
+<area shape="rect" id="node6" title="Generic PyLayers Meta Class" alt="" coords="5,55,84,80"/>
+<area shape="rect" id="node8" href="pylayers.antprop.aarray.TXRU.html#pylayers.antprop.aarray.TXRU" target="_top" title="Tranceiver Units" alt="" coords="9,5,81,31"/>
+</map>
