@@ -120,22 +120,38 @@
 <li class="toctree-l3"><a class="reference internal" href="#class-inheritance-diagram">1.2.3&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#pylayers-gis-lireifc-module">1.3&nbsp;&nbsp;&nbsp;pylayers.gis.lireifc Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#antennas-and-propagation">1.4&nbsp;&nbsp;&nbsp;Antennas and Propagation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.antenna.html">pylayers.antprop.antenna</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.aarray.html">pylayers.antprop.aarray</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.antssh.html">pylayers.antprop.antssh</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.antvsh.html">pylayers.antprop.antvsh</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.spharm.html">pylayers.antprop.spharm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.slab.html">pylayers.antprop.slab</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.signature.html">pylayers.antprop.signature</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.interactions.html">pylayers.antprop.interactions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.rays.html">pylayers.antprop.rays</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.html">pylayers.antprop.loss</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.html">pylayers.antprop.channel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.html">pylayers.antprop.loss</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.coverage.html">pylayers.antprop.coverage</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.coeffModel.html">pylayers.antprop.coeffModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#antennas-and-propagation">1.3&nbsp;&nbsp;&nbsp;Antennas and Propagation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pylayers.antprop.antenna">1.4&nbsp;&nbsp;&nbsp;pylayers.antprop.antenna Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#examples">1.4.1&nbsp;&nbsp;&nbsp;Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pattern-class">1.4.2&nbsp;&nbsp;&nbsp;Pattern Class</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#antenna-class">1.4.3&nbsp;&nbsp;&nbsp;Antenna Class</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">1.4.4&nbsp;&nbsp;&nbsp;Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/pylayers.antprop.antenna.BeamGauss.html">BeamGauss</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/pylayers.antprop.antenna.F0.html">F0</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/pylayers.antprop.antenna.F1.html">F1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/pylayers.antprop.antenna.compdiag.html">compdiag</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/pylayers.antprop.antenna.forcesympol.html">forcesympol</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/pylayers.antprop.antenna.show3D.html">show3D</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">1.4.5&nbsp;&nbsp;&nbsp;Classes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/pylayers.antprop.antenna.AntPosRot.html">AntPosRot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/pylayers.antprop.antenna.Antenna.html">Antenna</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/pylayers.antprop.antenna.Pattern.html">Pattern</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">1.4.6&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#materials-and-slabs">1.4.6.1&nbsp;&nbsp;&nbsp;Materials and Slabs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ray-tracing">1.4.6.2&nbsp;&nbsp;&nbsp;Ray Tracing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#channel">1.4.6.3&nbsp;&nbsp;&nbsp;Channel</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#simulations">1.5&nbsp;&nbsp;&nbsp;Simulations</a><ul>
@@ -281,42 +297,55 @@
            <div itemprop="articleBody">
             
   <div class="section" id="pylayers-modules-references">
-<h1><a class="toc-backref" href="#id7">1&nbsp;&nbsp;&nbsp;PyLayers Modules References</a><a class="headerlink" href="#pylayers-modules-references" title="Permalink to this headline">¶</a></h1>
+<h1><a class="toc-backref" href="#id14">1&nbsp;&nbsp;&nbsp;PyLayers Modules References</a><a class="headerlink" href="#pylayers-modules-references" title="Permalink to this headline">¶</a></h1>
 <div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="auto-toc simple">
-<li><a class="reference internal" href="#pylayers-modules-references" id="id7">1&nbsp;&nbsp;&nbsp;PyLayers Modules References</a><ul class="auto-toc">
-<li><a class="reference internal" href="#environment-description" id="id8">1.1&nbsp;&nbsp;&nbsp;Environment Description</a></li>
-<li><a class="reference internal" href="#pylayers-gis-layout-module" id="id9">1.2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a><ul class="auto-toc">
-<li><a class="reference internal" href="#functions" id="id10">1.2.1&nbsp;&nbsp;&nbsp;Functions</a></li>
-<li><a class="reference internal" href="#classes" id="id11">1.2.2&nbsp;&nbsp;&nbsp;Classes</a></li>
-<li><a class="reference internal" href="#class-inheritance-diagram" id="id12">1.2.3&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+<li><a class="reference internal" href="#pylayers-modules-references" id="id14">1&nbsp;&nbsp;&nbsp;PyLayers Modules References</a><ul class="auto-toc">
+<li><a class="reference internal" href="#environment-description" id="id15">1.1&nbsp;&nbsp;&nbsp;Environment Description</a></li>
+<li><a class="reference internal" href="#pylayers-gis-layout-module" id="id16">1.2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a><ul class="auto-toc">
+<li><a class="reference internal" href="#functions" id="id17">1.2.1&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li><a class="reference internal" href="#classes" id="id18">1.2.2&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li><a class="reference internal" href="#class-inheritance-diagram" id="id19">1.2.3&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#pylayers-gis-lireifc-module" id="id13">1.3&nbsp;&nbsp;&nbsp;pylayers.gis.lireifc Module</a></li>
-<li><a class="reference internal" href="#antennas-and-propagation" id="id14">1.4&nbsp;&nbsp;&nbsp;Antennas and Propagation</a></li>
-<li><a class="reference internal" href="#simulations" id="id15">1.5&nbsp;&nbsp;&nbsp;Simulations</a></li>
-<li><a class="reference internal" href="#localization-algorithms" id="id16">1.6&nbsp;&nbsp;&nbsp;Localization Algorithms</a></li>
-<li><a class="reference internal" href="#measurement-data" id="id17">1.7&nbsp;&nbsp;&nbsp;Measurement Data</a></li>
-<li><a class="reference internal" href="#instrumentation" id="id18">1.8&nbsp;&nbsp;&nbsp;Instrumentation</a></li>
-<li><a class="reference internal" href="#agents-and-bodies-mobility" id="id19">1.9&nbsp;&nbsp;&nbsp;Agents and Bodies Mobility</a></li>
-<li><a class="reference internal" href="#networks" id="id20">1.10&nbsp;&nbsp;&nbsp;Networks</a></li>
-<li><a class="reference internal" href="#physical-layer" id="id21">1.11&nbsp;&nbsp;&nbsp;Physical Layer</a></li>
-<li><a class="reference internal" href="#signal-processing" id="id22">1.12&nbsp;&nbsp;&nbsp;Signal Processing</a></li>
-<li><a class="reference internal" href="#utility-classes-and-functions" id="id23">1.13&nbsp;&nbsp;&nbsp;Utility classes and functions</a></li>
+<li><a class="reference internal" href="#antennas-and-propagation" id="id20">1.3&nbsp;&nbsp;&nbsp;Antennas and Propagation</a></li>
+<li><a class="reference internal" href="#module-pylayers.antprop.antenna" id="id21">1.4&nbsp;&nbsp;&nbsp;pylayers.antprop.antenna Module</a><ul class="auto-toc">
+<li><a class="reference internal" href="#examples" id="id22">1.4.1&nbsp;&nbsp;&nbsp;Examples</a></li>
+<li><a class="reference internal" href="#pattern-class" id="id23">1.4.2&nbsp;&nbsp;&nbsp;Pattern Class</a></li>
+<li><a class="reference internal" href="#antenna-class" id="id24">1.4.3&nbsp;&nbsp;&nbsp;Antenna Class</a></li>
+<li><a class="reference internal" href="#id9" id="id25">1.4.4&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li><a class="reference internal" href="#id10" id="id26">1.4.5&nbsp;&nbsp;&nbsp;Classes</a></li>
+<li><a class="reference internal" href="#id11" id="id27">1.4.6&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a><ul class="auto-toc">
+<li><a class="reference internal" href="#materials-and-slabs" id="id28">1.4.6.1&nbsp;&nbsp;&nbsp;Materials and Slabs</a></li>
+<li><a class="reference internal" href="#ray-tracing" id="id29">1.4.6.2&nbsp;&nbsp;&nbsp;Ray Tracing</a></li>
+<li><a class="reference internal" href="#channel" id="id30">1.4.6.3&nbsp;&nbsp;&nbsp;Channel</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#simulations" id="id31">1.5&nbsp;&nbsp;&nbsp;Simulations</a></li>
+<li><a class="reference internal" href="#localization-algorithms" id="id32">1.6&nbsp;&nbsp;&nbsp;Localization Algorithms</a></li>
+<li><a class="reference internal" href="#measurement-data" id="id33">1.7&nbsp;&nbsp;&nbsp;Measurement Data</a></li>
+<li><a class="reference internal" href="#instrumentation" id="id34">1.8&nbsp;&nbsp;&nbsp;Instrumentation</a></li>
+<li><a class="reference internal" href="#agents-and-bodies-mobility" id="id35">1.9&nbsp;&nbsp;&nbsp;Agents and Bodies Mobility</a></li>
+<li><a class="reference internal" href="#networks" id="id36">1.10&nbsp;&nbsp;&nbsp;Networks</a></li>
+<li><a class="reference internal" href="#physical-layer" id="id37">1.11&nbsp;&nbsp;&nbsp;Physical Layer</a></li>
+<li><a class="reference internal" href="#signal-processing" id="id38">1.12&nbsp;&nbsp;&nbsp;Signal Processing</a></li>
+<li><a class="reference internal" href="#utility-classes-and-functions" id="id39">1.13&nbsp;&nbsp;&nbsp;Utility classes and functions</a></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="section" id="environment-description">
-<h2><a class="toc-backref" href="#id8">1.1&nbsp;&nbsp;&nbsp;Environment Description</a><a class="headerlink" href="#environment-description" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id15">1.1&nbsp;&nbsp;&nbsp;Environment Description</a><a class="headerlink" href="#environment-description" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 </div>
 </div>
 <div class="section" id="pylayers-gis-layout-module">
-<h2><a class="toc-backref" href="#id9">1.2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a><a class="headerlink" href="#pylayers-gis-layout-module" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id16">1.2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a><a class="headerlink" href="#pylayers-gis-layout-module" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="functions">
-<h3><a class="toc-backref" href="#id10">1.2.1&nbsp;&nbsp;&nbsp;Functions</a><a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id17">1.2.1&nbsp;&nbsp;&nbsp;Functions</a><a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -357,7 +386,7 @@
 </table>
 </div>
 <div class="section" id="classes">
-<h3><a class="toc-backref" href="#id11">1.2.2&nbsp;&nbsp;&nbsp;Classes</a><a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id18">1.2.2&nbsp;&nbsp;&nbsp;Classes</a><a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -374,54 +403,1605 @@
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Pool</span></code></td>
 <td>alias of <code class="xref py py-class docutils literal"><span class="pre">ProcessPool</span></code></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">SelectL</span></code>(L,&nbsp;fig,&nbsp;ax)</td>
-<td>Associates a Layout and a figure</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">combinations</span></code></td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">combinations</span></code></td>
 <td>combinations(iterable, r) &#8211;&gt; combinations object</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">partial</span></code></td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">partial</span></code></td>
 <td>partial(func, <a href="#id1"><span class="problematic" id="id2">*</span></a>args, <a href="#id3"><span class="problematic" id="id4">**</span></a>keywords) - new function with partial application</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">product</span></code></td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">product</span></code></td>
 <td>product(<a href="#id5"><span class="problematic" id="id6">*</span></a>iterables) &#8211;&gt; product object</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="class-inheritance-diagram">
-<h3><a class="toc-backref" href="#id12">1.2.3&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a><a class="headerlink" href="#class-inheritance-diagram" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id19">1.2.3&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a><a class="headerlink" href="#class-inheritance-diagram" title="Permalink to this headline">¶</a></h3>
 <img src="../_images/inheritance-c2fed8bc1c538927b8113e5dfb6f0f5ccf1097c2.png" alt="Inheritance diagram of pylayers.gis.layout.Layout" usemap="#inheritancefe12c89667" class="inheritance"/>
 <map id="inheritancefe12c89667" name="inheritancefe12c89667">
 <area shape="rect" id="node1" href="pylayers.gis.layout.html#pylayers.gis.layout.Layout" target="_top" title="Layout" alt="" coords="132,5,204,31"/>
 </map>
 </div>
 </div>
-<div class="section" id="pylayers-gis-lireifc-module">
-<h2><a class="toc-backref" href="#id13">1.3&nbsp;&nbsp;&nbsp;pylayers.gis.lireifc Module</a><a class="headerlink" href="#pylayers-gis-lireifc-module" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div>pylayers.gui.editor
-pylayers.gis.lireifc
-pylayers.gis.lireifc2
-pylayers.gis.osmparser
-pylayers.gis.readvrml</div></blockquote>
-</div>
 <div class="section" id="antennas-and-propagation">
-<h2><a class="toc-backref" href="#id14">1.4&nbsp;&nbsp;&nbsp;Antennas and Propagation</a><a class="headerlink" href="#antennas-and-propagation" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id20">1.3&nbsp;&nbsp;&nbsp;Antennas and Propagation</a><a class="headerlink" href="#antennas-and-propagation" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.antenna.html">pylayers.antprop.antenna</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.aarray.html">pylayers.antprop.aarray</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.antssh.html">pylayers.antprop.antssh</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.antvsh.html">pylayers.antprop.antvsh</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.spharm.html">pylayers.antprop.spharm</a></li>
-</ul>
 </div>
+</div>
+<div class="section" id="module-pylayers.antprop.antenna">
+<span id="pylayers-antprop-antenna-module"></span><h2><a class="toc-backref" href="#id21">1.4&nbsp;&nbsp;&nbsp;pylayers.antprop.antenna Module</a><a class="headerlink" href="#module-pylayers.antprop.antenna" title="Permalink to this headline">¶</a></h2>
+<p>This module handles antennas
+An antenna can be loaded from various file formats among</p>
+<ul class="simple">
+<li>.vsh2</li>
+<li>.vsh3</li>
+<li>.sh2</li>
+<li>.sh3</li>
+<li>.mat</li>
+<li>.trx</li>
+</ul>
+<p>Antenna derives from Pattern</p>
+<div class="section" id="examples">
+<h3><a class="toc-backref" href="#id22">1.4.1&nbsp;&nbsp;&nbsp;Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import matplotlib.pyplot as plt
+&gt;&gt;&gt; from pylayers.antprop.antenna import *
+&gt;&gt;&gt; A = Antenna()
+&gt;&gt;&gt; fig,ax = A.plotG(fGHz=[2,3,4],plan=&#39;theta&#39;,angdeg=0)
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-1.py">Source code</a>)</p>
+</div>
+<div class="section" id="pattern-class">
+<h3><a class="toc-backref" href="#id23">1.4.2&nbsp;&nbsp;&nbsp;Pattern Class</a><a class="headerlink" href="#pattern-class" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pylayers.antprop.antenna.Pattern">
+<em class="property">class </em><code class="descclassname">pylayers.antprop.antenna.</code><code class="descname">Pattern</code><a class="headerlink" href="#pylayers.antprop.antenna.Pattern" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class Pattern</p>
+<p>MetaClass of Antenna</p>
+<p>A pattern is evaluated with the 3 np.array parameters</p>
+<p>theta
+phi
+fGHz</p>
+<p>This class implements pattern methods.
+The name of a pattern method starts by p.
+Each pattern method has a unique dictionnary argument &#8216;param&#8217;</p>
+<dl class="docutils">
+<dt>If self.grid dimensions are</dt>
+<dd>Nt x Np x Nf</dd>
+<dt>else:</dt>
+<dd>Ndir x Nf</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pylayers.antprop.antenna.html#pylayers.antprop.antenna.Pattern.eval" title="pylayers.antprop.antenna.Pattern.eval"><code class="xref py py-obj docutils literal"><span class="pre">eval</span></code></a>(**kwargs)</td>
+<td>evaluate pattern functions</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pylayers.antprop.antenna.html#pylayers.antprop.antenna.Pattern.gain" title="pylayers.antprop.antenna.Pattern.gain"><code class="xref py py-obj docutils literal"><span class="pre">gain</span></code></a>()</td>
+<td>calculates antenna gain</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
+<td>generic help</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pylayers.antprop.antenna.html#pylayers.antprop.antenna.Pattern.plotG" title="pylayers.antprop.antenna.Pattern.plotG"><code class="xref py py-obj docutils literal"><span class="pre">plotG</span></code></a>(**kwargs)</td>
+<td>antenna plot gain in 2D</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pylayers.antprop.antenna.html#pylayers.antprop.antenna.Pattern.radF" title="pylayers.antprop.antenna.Pattern.radF"><code class="xref py py-obj docutils literal"><span class="pre">radF</span></code></a>()</td>
+<td>evaluate radiation fonction w.r.t polarization</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pylayers.antprop.antenna.Pattern.html#pylayers.antprop.antenna.Pattern.ssh" title="pylayers.antprop.antenna.Pattern.ssh"><code class="xref py py-obj docutils literal"><span class="pre">ssh</span></code></a>([L,&nbsp;dsf])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pylayers.antprop.antenna.Pattern.html#pylayers.antprop.antenna.Pattern.vsh" title="pylayers.antprop.antenna.Pattern.vsh"><code class="xref py py-obj docutils literal"><span class="pre">vsh</span></code></a>([threshold])</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern._Pattern__p3gpp">
+<code class="descname">_Pattern__p3gpp</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern._Pattern__p3gpp" title="Permalink to this definition">¶</a></dt>
+<dd><p>3GPP antenna pattern</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>thtilt</strong> : theta tilt antenna</p>
+<p><strong>hpbwv</strong> : half power beamwidth v</p>
+<p><strong>hpbwh</strong> : half power beamwidth h</p>
+<p><strong>sllv</strong> : side lobe level</p>
+<p><strong>fbrh</strong> : front back ratio</p>
+<p><strong>gm     :</strong></p>
+<p><strong>pol</strong> : h | v | c</p>
+<p><strong>if pattern</strong></p>
+<blockquote>
+<div><p>Ft  nth x nphi x nf
+Fp  nth x nphi x nf</p>
+</div></blockquote>
+<p><strong>else</strong></p>
+<blockquote class="last">
+<div><p>Ft  ndir x nf (==nth, ==nph)
+Fp  ndir x nf (==nth, ==nph)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern._Pattern__pArray">
+<code class="descname">_Pattern__pArray</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern._Pattern__pArray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Array factor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Sc</strong> : np.array</p>
+<blockquote class="last">
+<div><p>coupling S matrix</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Nd : Number of directions
+Np : Number of points (antenna elements)
+Nf : Number of frequency
+Nb : Number of beams</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern._Pattern__pGauss">
+<code class="descname">_Pattern__pGauss</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern._Pattern__pGauss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gauss pattern</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p0</strong> : phi main lobe (0-2pi)</p>
+<p><strong>p3</strong> : 3dB aperture angle</p>
+<p><strong>t0</strong> : theta main lobe (0-pi)</p>
+<p><strong>t3</strong> : 3dB aperture angle</p>
+<p class="last"><strong>TODO</strong> : finish implementation of polar</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern._Pattern__pHertz">
+<code class="descname">_Pattern__pHertz</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern._Pattern__pHertz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hertz dipole</p>
+<p>param = {&#8216;param&#8217;:{&#8216;le&#8217;:np.array([0,0,1])}}
+le unit vector defining the dipole orientation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern._Pattern__pHuygens">
+<code class="descname">_Pattern__pHuygens</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern._Pattern__pHuygens" title="Permalink to this definition">¶</a></dt>
+<dd><p>Huygens source</p>
+<p>param : dict</p>
+<p>le : direction of electric current
+n  : normal to aperture</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern._Pattern__pOmni">
+<code class="descname">_Pattern__pOmni</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern._Pattern__pOmni" title="Permalink to this definition">¶</a></dt>
+<dd><p>omnidirectional pattern</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>param</strong> : dict</p>
+<blockquote>
+<div><p>dictionnary of parameters
++ pol : string</p>
+<blockquote>
+<div><p>&#8216;t&#8217;| &#8216;p&#8217;</p>
+</div></blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>GmaxdB</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">float</span><dd><p class="first last">0</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p><strong>self.grid is used for switching between :</strong></p>
+<blockquote class="last">
+<div><p>if True   angular grid : nth x nph x nf
+if False  direction    : ndir x nf</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern._Pattern__paperture">
+<code class="descname">_Pattern__paperture</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern._Pattern__paperture" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aperture Pattern</p>
+<p>Aperture in the (x,y) plane. Main lobe in theta=0 direction</p>
+<p>polar indicates the orientation of the Electric field either &#8216;x&#8217; or &#8216;y&#8217;</p>
+<p>See theoretical background in :</p>
+<p><a class="reference external" href="http://www.ece.rutgers.edu/~orfanidi/ewa/ch18.pdf">http://www.ece.rutgers.edu/~orfanidi/ewa/ch18.pdf</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>HPBW_x_deg</strong> : float</p>
+<blockquote>
+<div><p>Half Power Beamwidth (degrees)</p>
+</div></blockquote>
+<p><strong>HPBW_y_deg</strong> : float</p>
+<blockquote class="last">
+<div><p>Half Power Beamwidth (degrees)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern._Pattern__paperture2">
+<code class="descname">_Pattern__paperture2</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern._Pattern__paperture2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aperture Pattern</p>
+<p>Aperture in the (x,y) plane. Main lobe in theta=0 direction</p>
+<p>polar indicates the orientation of the Electric field either &#8216;x&#8217; or &#8216;y&#8217;</p>
+<p>See theoretical background in :</p>
+<p><a class="reference external" href="http://www.ece.rutgers.edu/~orfanidi/ewa/ch18.pdf">http://www.ece.rutgers.edu/~orfanidi/ewa/ch18.pdf</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>HPBW_x_deg</strong> : float</p>
+<blockquote>
+<div><p>Half Power Beamwidth (degrees)</p>
+</div></blockquote>
+<p><strong>HPBW_y_deg</strong> : float</p>
+<blockquote class="last">
+<div><p>Half Power Beamwidth (degrees)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern._Pattern__pazel">
+<code class="descname">_Pattern__pazel</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern._Pattern__pazel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Azimuth Elevation pattern from file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> : ANT filename</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern._Pattern__pcst">
+<code class="descname">_Pattern__pcst</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern._Pattern__pcst" title="Permalink to this definition">¶</a></dt>
+<dd><p>read antenna in text format</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern._Pattern__pdipole">
+<code class="descname">_Pattern__pdipole</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern._Pattern__pdipole" title="Permalink to this definition">¶</a></dt>
+<dd><p>dipole antenna along z axis</p>
+<blockquote>
+<div><p>From Balanis (Formula 4.62(a))</p>
+<div class="math">
+\[F_{ heta}(  heta,\phi) = \left[  \]</div>
+</div></blockquote>
+<p>rac{cosleft(
+rac{kl}{2}cos     heta
+ight)- cosleft(
+rac{kl}{2}
+ight)}{sin     heta} 
+ight]</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern._Pattern__phorn">
+<code class="descname">_Pattern__phorn</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern._Pattern__phorn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Horn antenna</p>
+<p><a class="reference external" href="http://www.ece.rutgers.edu/~orfanidi/ewa/ch18.pdf">http://www.ece.rutgers.edu/~orfanidi/ewa/ch18.pdf</a> (18.2)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>Half Power Beamwidth (degrees)</strong></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern._Pattern__phplanesectoralhorn">
+<code class="descname">_Pattern__phplanesectoralhorn</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern._Pattern__phplanesectoralhorn" title="Permalink to this definition">¶</a></dt>
+<dd><p>H plane sectoral horn</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rho1</strong> : float</p>
+<blockquote>
+<div><p>sector radius (meter)</p>
+</div></blockquote>
+<p><strong>a1</strong> : float</p>
+<blockquote>
+<div><p>aperture dimension along x (greatest value in meters)</p>
+</div></blockquote>
+<p><strong>b1</strong> : float</p>
+<blockquote class="last">
+<div><p>aperture dimension along y (greatest value in meters)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Maximum gain in theta =0 
+Polarized along y axis (Jx=0,Jz=0)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern._Pattern__psh3">
+<code class="descname">_Pattern__psh3</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern._Pattern__psh3" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate pattern for sh3</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern._Pattern__pvsh1">
+<code class="descname">_Pattern__pvsh1</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern._Pattern__pvsh1" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate pattern from VSH Coeffs (shape 1)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>theta</strong> : ndarray (1xNdir)</p>
+<p><strong>phi</strong> : ndarray (1xNdir)</p>
+<p><strong>k</strong> : int</p>
+<blockquote>
+<div><p>frequency index</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Ft , Fp</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern._Pattern__pvsh3">
+<code class="descname">_Pattern__pvsh3</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern._Pattern__pvsh3" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate pattern from vsh3</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern._Pattern__pwireplate">
+<code class="descname">_Pattern__pwireplate</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern._Pattern__pwireplate" title="Permalink to this definition">¶</a></dt>
+<dd><p>pattern wire plate antenna</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern.eval">
+<code class="descname">eval</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>evaluate pattern functions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>th: list</strong></p>
+<blockquote>
+<div><p>[]</p>
+</div></blockquote>
+<p><strong>ph: list</strong></p>
+<blockquote>
+<div><p>[]</p>
+</div></blockquote>
+<p><strong>pt</strong> : np.array (3,N)</p>
+<p><strong>pr</strong> : np.array (3,N)</p>
+<p><strong>azoffset</strong> : int (0)</p>
+<p><strong>Rfloor:bool</strong></p>
+<blockquote>
+<div><p>if true add gain value to reflected ray on the floor. 
+values are append at the end of sqG.</p>
+</div></blockquote>
+<p><strong>fGHz:list</strong></p>
+<blockquote>
+<div><p>[]</p>
+</div></blockquote>
+<p><strong>nth: int</strong></p>
+<blockquote>
+<div><p>90</p>
+</div></blockquote>
+<p><strong>nph: int</strong></p>
+<blockquote>
+<div><p>181</p>
+</div></blockquote>
+<p><strong>first: boolean</strong></p>
+<blockquote>
+<div><p>True if first call (to define self.param)</p>
+</div></blockquote>
+<p><strong>grid:  boolean</strong></p>
+<blockquote>
+<div><p>True for pattern mode, False for Ray Tracing mode</p>
+</div></blockquote>
+<p><strong>th0</strong> : float</p>
+<blockquote>
+<div><p>theta initial value</p>
+</div></blockquote>
+<p><strong>th1</strong> : float</p>
+<blockquote>
+<div><p>theta finale value</p>
+</div></blockquote>
+<p><strong>ph0</strong> : float</p>
+<blockquote>
+<div><p>phi initial value</p>
+</div></blockquote>
+<p><strong>ph1</strong> : float</p>
+<blockquote class="last">
+<div><p>phi final value</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.aarray import *
+&gt;&gt;&gt; A0=Antenna(&#39;Omni&#39;,param={&#39;pol&#39;:&#39;t&#39;,&#39;GmaxdB&#39;:0})
+&gt;&gt;&gt; A1=Antenna(&#39;Gauss&#39;)
+&gt;&gt;&gt; A2=Antenna(&#39;3gpp&#39;)
+&gt;&gt;&gt; A3=ULArray()
+&gt;&gt;&gt; A0.eval()
+&gt;&gt;&gt; A1.eval()
+&gt;&gt;&gt; A2.eval()
+&gt;&gt;&gt; #A3.eval()
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern.gain">
+<code class="descname">gain</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern.gain" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates antenna gain</p>
+<p class="rubric">Notes</p>
+<div class="math">
+\[G(\theta,\phi) = |F_{\theta}|^2 + |F_{\phi}|^2\]</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern.plotG">
+<code class="descname">plotG</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern.plotG" title="Permalink to this definition">¶</a></dt>
+<dd><p>antenna plot gain in 2D</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fGHz</strong> : frequency</p>
+<p><strong>plan</strong> : &#8216;theta&#8217; | &#8216;phi&#8217; depending on the selected plan to be displayed</p>
+<p><strong>angdeg</strong> : phi or theta in degrees, if plan==&#8217;phi&#8217; it corresponds to theta</p>
+<p><strong>GmaxdB</strong> :  max gain to be displayed</p>
+<p><strong>polar</strong> : boolean</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">fig</p>
+<p class="last">ax</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import matplotlib.pyplot as plt
+&gt;&gt;&gt; from pylayers.antprop.antenna import *
+&gt;&gt;&gt; A = Antenna(&#39;defant.vsh3&#39;)
+&gt;&gt;&gt; fig,ax = A.plotG(fGHz=[2,3,4],plan=&#39;theta&#39;,angdeg=0)
+&gt;&gt;&gt; fig,ax = A.plotG(fGHz=[2,3,4],plan=&#39;phi&#39;,angdeg=90)
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-2.py">Source code</a>)</p>
+<div class="figure" id="id12">
+<img alt="../_images/pylayers-2_00.png" src="../_images/pylayers-2_00.png" />
+<p class="caption"><span class="caption-text">(<a class="reference external" href="../modules/pylayers-2_00.png">png</a>, <a class="reference external" href="../modules/pylayers-2_00.hires.png">hires.png</a>, <a class="reference external" href="../modules/pylayers-2_00.pdf">pdf</a>)</span></p>
+</div>
+<div class="figure" id="id13">
+<img alt="../_images/pylayers-2_01.png" src="../_images/pylayers-2_01.png" />
+<p class="caption"><span class="caption-text">(<a class="reference external" href="../modules/pylayers-2_01.png">png</a>, <a class="reference external" href="../modules/pylayers-2_01.hires.png">hires.png</a>, <a class="reference external" href="../modules/pylayers-2_01.pdf">pdf</a>)</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern.radF">
+<code class="descname">radF</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern.radF" title="Permalink to this definition">¶</a></dt>
+<dd><p>evaluate radiation fonction w.r.t polarization</p>
+<p>self.pol : &#8216;t&#8217; : theta , &#8216;p&#8217; : phi n, &#8216;c&#8217; : circular</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="antenna-class">
+<h3><a class="toc-backref" href="#id24">1.4.3&nbsp;&nbsp;&nbsp;Antenna Class</a><a class="headerlink" href="#antenna-class" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pylayers.antprop.antenna.Antenna">
+<em class="property">class </em><code class="descclassname">pylayers.antprop.antenna.</code><code class="descname">Antenna</code><span class="sig-paren">(</span><em>typ='Omni'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna" title="Permalink to this definition">¶</a></dt>
+<dd><p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="89%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>name</td>
+<td>(Antenna name)</td>
+</tr>
+<tr class="row-even"><td>nf</td>
+<td>(number of frequency)</td>
+</tr>
+<tr class="row-odd"><td>nth</td>
+<td>(number of theta)</td>
+</tr>
+<tr class="row-even"><td>nph</td>
+<td>(number of phi)</td>
+</tr>
+<tr class="row-odd"><td>Ft</td>
+<td>(Normalized Ftheta    (ntheta,nphi,nf))</td>
+</tr>
+<tr class="row-even"><td>Fp</td>
+<td>(Normalized Fphi      (ntheta,nphi,nf))</td>
+</tr>
+<tr class="row-odd"><td>sqG</td>
+<td>(square root of gain  (ntheta,nphi,nf))</td>
+</tr>
+<tr class="row-even"><td>theta</td>
+<td>(theta base            1 x ntheta)</td>
+</tr>
+<tr class="row-odd"><td>phi</td>
+<td>(phi base              1 x phi)</td>
+</tr>
+<tr class="row-even"><td>C</td>
+<td>(VSH Coefficients)</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pylayers.antprop.antenna.html#pylayers.antprop.antenna.Antenna.info" title="pylayers.antprop.antenna.Antenna.info"><code class="xref py py-obj docutils literal"><span class="pre">info</span></code></a>()</td>
+<td>gives info about antenna object</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pylayers.antprop.antenna.html#pylayers.antprop.antenna.Antenna.show3" title="pylayers.antprop.antenna.Antenna.show3"><code class="xref py py-obj docutils literal"><span class="pre">show3</span></code></a>([k,&nbsp;po,&nbsp;T,&nbsp;txru,&nbsp;typ,&nbsp;mode,&nbsp;silent])</td>
+<td>show3 geomview</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pylayers.antprop.antenna.html#pylayers.antprop.antenna.Antenna.plot3d" title="pylayers.antprop.antenna.Antenna.plot3d"><code class="xref py py-obj docutils literal"><span class="pre">plot3d</span></code></a>([k,&nbsp;typ,&nbsp;col])</td>
+<td>show 3D pattern in matplotlib</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="54%" />
+<col width="46%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>vsh</td>
+<td>(calculates Vector Spherical Harmonics)</td>
+</tr>
+<tr class="row-even"><td>Antenna trx file can be stored in various order</td>
+<td>natural : HFSS ncp     : near filed chamber</td>
+</tr>
+<tr class="row-odd"><td>It is important when initializing an antenna object</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>to be aware of the typ of trx file</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>.trx (ASCII Vectorial antenna Pattern)</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>F   Phi   Theta  Fphi  Ftheta</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.Fsynth">
+<code class="descname">Fsynth</code><span class="sig-paren">(</span><em>theta=[]</em>, <em>phi=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fsynth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform Antenna synthesis</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>theta</strong> : np.array</p>
+<p><strong>phi</strong> :   np.array</p>
+<blockquote class="last">
+<div><p>call Antenna.Fpatt or Antenna.Fsynth3</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The antenna pattern synthesis is done either from spherical
+harmonics coefficients or from an analytical expression of the
+radiation pattern.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.Fsynth1">
+<code class="descname">Fsynth1</code><span class="sig-paren">(</span><em>theta</em>, <em>phi</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fsynth1" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate complex antenna pattern  from VSH Coefficients (shape 1)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>theta</strong> : ndarray (1xNdir)</p>
+<p><strong>phi</strong> : ndarray (1xNdir)</p>
+<p><strong>k</strong> : int</p>
+<blockquote>
+<div><p>frequency index</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Ft , Fp</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.Fsynth2">
+<code class="descname">Fsynth2</code><span class="sig-paren">(</span><em>theta</em>, <em>phi</em>, <em>typ='vsh'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fsynth2" title="Permalink to this definition">¶</a></dt>
+<dd><p>pattern synthesis from shape 2 vsh coeff</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>theta</strong> : array 1 x Nt</p>
+<p><strong>phi</strong> : array 1 x Np</p>
+<p><strong>pattern</strong> : boolean</p>
+<blockquote>
+<div><p>default False</p>
+</div></blockquote>
+<p><strong>typ</strong> : string</p>
+<blockquote class="last">
+<div><p>{vsh | ssh}</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Calculate complex antenna pattern from VSH Coefficients (shape 2)
+for the specified directions (theta,phi)
+theta and phi arrays needs to have the same size</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.Fsynth2b">
+<code class="descname">Fsynth2b</code><span class="sig-paren">(</span><em>theta</em>, <em>phi</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fsynth2b" title="Permalink to this definition">¶</a></dt>
+<dd><p>pattern synthesis from shape 2 vsh coefficients</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>theta</strong> : 1 x Nt</p>
+<p class="last"><strong>phi</strong> : 1 x Np</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Calculate complex antenna pattern from VSH Coefficients (shape 2)
+for the specified directions (theta,phi)
+theta and phi arrays needs to have the same size</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.Fsynth2s">
+<code class="descname">Fsynth2s</code><span class="sig-paren">(</span><em>dsf=1</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fsynth2s" title="Permalink to this definition">¶</a></dt>
+<dd><p>pattern synthesis from shape 2 vsh coefficients</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>phi</strong></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Calculate complex antenna pattern from VSH Coefficients (shape 2)
+for the specified directions (theta,phi)
+theta and phi arrays needs to have the same size</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.Fsynth3">
+<code class="descname">Fsynth3</code><span class="sig-paren">(</span><em>theta=[]</em>, <em>phi=[]</em>, <em>typ='vsh'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fsynth3" title="Permalink to this definition">¶</a></dt>
+<dd><p>synthesis of a complex antenna pattern from SH coefficients
+(vsh or ssh  in shape 3)</p>
+<p>Ndir is the number of directions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>theta</strong> : ndarray (1xNdir if not pattern)  (1xNtheta if pattern)</p>
+<p><strong>phi</strong> : ndarray (1xNdir if not pattter)  (1xNphi if pattern)</p>
+<p><strong>pattern</strong> : boolean</p>
+<blockquote>
+<div><p>if True theta and phi are reorganized for building the pattern</p>
+</div></blockquote>
+<p><strong>typ</strong> : &#8216;vsh&#8217; | &#8216;ssh&#8217; | &#8216;hfss&#8217;</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">if self.grid:</p>
+<blockquote>
+<div><p>Fth   : ndarray (Ntheta x Nphi)
+Fph   : ndarray (Ntheta x Nphi)</p>
+</div></blockquote>
+<p>else:</p>
+<blockquote class="last">
+<div><p>Fth   : ndarray (1 x Ndir)
+Fph   : ndarray (1 x Ndir)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.channel._vec2scalA</span></code></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.antenna import *
+&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; import matplotlib.pylab as plt
+&gt;&gt;&gt; A = Antenna(&#39;defant.vsh3&#39;)
+&gt;&gt;&gt; F = A.eval(grid=True)
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-3.py">Source code</a>)</p>
+<p>All Br,Cr,Bi,Ci have the same (l,m) index in order to evaluate only
+once the V,W function</p>
+<p>If the data comes from a cst file like the antenna used in WHERE1 D4.1
+the pattern is multiplied by $frac{4pi}{120pi}=frac{1}{sqrt{30}$</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.cart2pol">
+<code class="descname">cart2pol</code><span class="sig-paren">(</span><em>Fx</em>, <em>Fy</em>, <em>Fz</em>, <em>ith</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.cart2pol" title="Permalink to this definition">¶</a></dt>
+<dd><p>converts Fx,Fy,Fz to Ftheta, Fphi for theta=ith</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Fx</strong> : np.array</p>
+<p><strong>Fy</strong> : np.array</p>
+<p><strong>Fz</strong> : np.array</p>
+<p class="last"><strong>ith</strong> : theta index</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="pylayers.antprop.antenna.html#pylayers.antprop.antenna.Antenna.pol2cart" title="pylayers.antprop.antenna.Antenna.pol2cart"><code class="xref py py-obj docutils literal"><span class="pre">pol2cart</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.checkpole">
+<code class="descname">checkpole</code><span class="sig-paren">(</span><em>kf=0</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.checkpole" title="Permalink to this definition">¶</a></dt>
+<dd><p>display the reconstructed field on pole for integrity verification</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>kf</strong> : int</p>
+<blockquote class="last">
+<div><p>frequency index default 0</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.coeffshow">
+<code class="descname">coeffshow</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.coeffshow" title="Permalink to this definition">¶</a></dt>
+<dd><p>display antenna coefficient</p>
+<dl class="docutils">
+<dt>typ</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">string</span><dd>&#8216;ssh&#8217; <a href="#id7"><span class="problematic" id="id8">|</span></a>&#8216;vsh&#8217;</dd>
+</dl>
+<p>L  : maximum level
+kf : frequency index
+vmin  : float
+vmax  : float</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.elec_delay">
+<code class="descname">elec_delay</code><span class="sig-paren">(</span><em>tau</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.elec_delay" title="Permalink to this definition">¶</a></dt>
+<dd><p>apply an electrical delay</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tau</strong> : float</p>
+<blockquote class="last">
+<div><p>electrical delay in nanoseconds</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This function applies an electrical delay math::<cite>exp{+2 j pi f tau)</cite>
+on the phase of diagram math::<code class="docutils literal"><span class="pre">F_{\theta}</span></code> and math::<cite>F_{phi}</cite></p>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.antenna import *
+&gt;&gt;&gt; A = Antenna(&#39;S2R2.sh3&#39;)
+&gt;&gt;&gt; A.eval()
+&gt;&gt;&gt; tau = A.getdelay()
+&gt;&gt;&gt; A.elec_delay(tau)
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-4.py">Source code</a>)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.errel">
+<code class="descname">errel</code><span class="sig-paren">(</span><em>kf=-1</em>, <em>dsf=1</em>, <em>typ='s3'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.errel" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates error between antenna pattern and reference pattern</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>kf</strong> : integer</p>
+<blockquote>
+<div><p>frequency index. If k=-1 integration over all frequency</p>
+</div></blockquote>
+<p><strong>dsf</strong> : down sampling factor</p>
+<p><strong>typ :</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>errelTh</strong> : float</p>
+<blockquote>
+<div><p>relative error on <span class="math">\(F_{\theta}\)</span></p>
+</div></blockquote>
+<p><strong>errelPh</strong> : float</p>
+<blockquote>
+<div><p>relative error on <span class="math">\(F_{\phi}\)</span></p>
+</div></blockquote>
+<p class="last"><strong>errel</strong> : float</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<div class="math">
+\[ \begin{align}\begin{aligned}\epsilon_r^{\theta} =
+\frac{|F_{\theta}(\theta,\phi)-\hat{F}_{\theta}(\theta,\phi)|^2}
+     {|F_{\theta}(\theta,\phi)|^2}\\\epsilon_r^{\phi} =
+\frac{|F_{\phi}(\theta,\phi)-\hat{F}_{\phi}(\theta,\phi)|^2}
+     {|F_{\theta}(\theta,\phi)|^2}\end{aligned}\end{align} \]</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.getdelay">
+<code class="descname">getdelay</code><span class="sig-paren">(</span><em>delayCandidates=array([-10.</em>, <em>-9.999</em>, <em>-9.998</em>, <em>...</em>, <em>9.997</em>, <em>9.998</em>, <em>9.999])</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.getdelay" title="Permalink to this definition">¶</a></dt>
+<dd><p>get electrical delay</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>delayCandidates</strong> : ndarray dalay in (ns)</p>
+<blockquote>
+<div><p>default np.arange(-10,10,0.001)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>electricalDelay</strong> : float</p>
+<p><strong>Author</strong> : Troels Pedersen (Aalborg University)</p>
+<blockquote class="last">
+<div><p>B.Uguen</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.info">
+<code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>gives info about antenna object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.initvsh">
+<code class="descname">initvsh</code><span class="sig-paren">(</span><em>lmax=45</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.initvsh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a void vsh structure</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fGHz</strong> : array</p>
+<p><strong>lmax</strong> : int</p>
+<blockquote class="last">
+<div><p>level max</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.load_atoll">
+<code class="descname">load_atoll</code><span class="sig-paren">(</span><em>directory='ant'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.load_atoll" title="Permalink to this definition">¶</a></dt>
+<dd><p>load antenna from Atoll file</p>
+<p>Atoll format provides Antenna gain given for the horizontal and vertical plane 
+for different frequencies and different tilt values</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>directory</strong> : string</p>
+<p class="last"><strong>The dictionnary attol is created</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.load_trx">
+<code class="descname">load_trx</code><span class="sig-paren">(</span><em>directory='ant'</em>, <em>nf=104</em>, <em>ntheta=181</em>, <em>nphi=90</em>, <em>ncol=6</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.load_trx" title="Permalink to this definition">¶</a></dt>
+<dd><p>load a trx file (deprecated)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>directory</strong> : str</p>
+<blockquote>
+<div><p>directory where is located the trx file (default : ant)</p>
+</div></blockquote>
+<p><strong>nf</strong> : float</p>
+<blockquote>
+<div><p>number of frequency points</p>
+</div></blockquote>
+<p><strong>ntheta</strong> : float</p>
+<blockquote>
+<div><p>number of theta</p>
+</div></blockquote>
+<p><strong>nphi</strong> : float</p>
+<blockquote>
+<div><p>number of phi</p>
+</div></blockquote>
+<p class="last"><strong>TODO</strong> : DEPRECATED (Fix the Ft and Fp format with Nf as last axis)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.loadhfss">
+<code class="descname">loadhfss</code><span class="sig-paren">(</span><em>lfa=[]</em>, <em>Nt=72</em>, <em>Np=37</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.loadhfss" title="Permalink to this definition">¶</a></dt>
+<dd><p>load antenna from HFSS file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lfa</strong> : list of antenna file</p>
+<p><strong>Nt</strong> : int</p>
+<blockquote>
+<div><p>Number of angle theta</p>
+</div></blockquote>
+<p><strong>Np</strong> : int</p>
+<blockquote class="last">
+<div><p>Number of angle phi</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>One file per frequency point</p>
+<p>th , ph , abs_grlz,th_absdB,th_phase,ph_absdB,ph_phase_ax_ratio</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.loadmat">
+<code class="descname">loadmat</code><span class="sig-paren">(</span><em>directory='ant'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.loadmat" title="Permalink to this definition">¶</a></dt>
+<dd><p>load an antenna stored in a mat file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>directory</strong> : str , optional</p>
+<blockquote class="last">
+<div><p>default &#8216;ant&#8217;</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import matplotlib.pyplot as plt
+&gt;&gt;&gt; from pylayers.antprop.antenna import *
+&gt;&gt;&gt; A = Antenna(&#39;S1R1.mat&#39;,directory=&#39;ant/UWBAN/Matfile&#39;)
+&gt;&gt;&gt; f,a = A.plotG(plan=&#39;theta&#39;,angdeg=0)
+&gt;&gt;&gt; f,a = A.plotG(plan=&#39;phi&#39;,angdeg=90,fig=f,ax=a)
+&gt;&gt;&gt; txt = plt.title(&#39;S1R1 antenna : st loadmat&#39;)
+&gt;&gt;&gt; plt.show()
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-5.py">Source code</a>)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.loadsh2">
+<code class="descname">loadsh2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.loadsh2" title="Permalink to this definition">¶</a></dt>
+<dd><p>load  spherical harmonics coefficient in shape  2</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.loadsh3">
+<code class="descname">loadsh3</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.loadsh3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load antenna&#8217;s sh3 file</p>
+<p>sh3 file contains a thesholded version of ssh coefficients in shape 3</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.loadtrx">
+<code class="descname">loadtrx</code><span class="sig-paren">(</span><em>directory</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.loadtrx" title="Permalink to this definition">¶</a></dt>
+<dd><p>load trx file (SATIMO Near Field Chamber raw data)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>directory</strong></p>
+<p><strong>self._filename: short name of the antenna file</strong></p>
+<p><strong>the file is seek in the $BASENAME/ant directory</strong></p>
+<p><strong>.. todo:</strong></p>
+<blockquote>
+<div><p>consider using an ini file for the header</p>
+</div></blockquote>
+<p><strong>Trx header structure</strong></p>
+<p><strong>fmin fmax Nf  phmin   phmax   Nphi    thmin    thmax    Ntheta  #EDelay</strong></p>
+<p><strong>0     1   2   3       4       5       6        7        8       9</strong></p>
+<p class="last"><strong>1     10  121 0       6.19    72      0        3.14     37      0</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.loadvsh2">
+<code class="descname">loadvsh2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.loadvsh2" title="Permalink to this definition">¶</a></dt>
+<dd><p>load antenna from .vsh2 file format</p>
+<p>Load antenna&#8217;s vsh2 file which only contains
+the vsh coefficients in shape 2</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.loadvsh3">
+<code class="descname">loadvsh3</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.loadvsh3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load antenna&#8217;s vsh3 file</p>
+<p>vsh3 file contains a thresholded version of vsh coefficients in shape 3</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.loadvsh3_old">
+<code class="descname">loadvsh3_old</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.loadvsh3_old" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load antenna vsh coefficients in shape 3</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.ls">
+<code class="descname">ls</code><span class="sig-paren">(</span><em>typ='vsh3'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.ls" title="Permalink to this definition">¶</a></dt>
+<dd><p>list the antenna files in antenna project directory</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : string optional</p>
+<blockquote>
+<div><p>{&#8216;mat&#8217;|&#8217;trx&#8217;|&#8217;vsh2&#8217;|&#8217;sh2&#8217;|&#8217;vsh3&#8217;|&#8217;sh3&#8217;}</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>lfile_s</strong> : list</p>
+<blockquote class="last">
+<div><p>sorted list of all the .str file of strdir</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.minsh3">
+<code class="descname">minsh3</code><span class="sig-paren">(</span><em>emax=0.05</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.minsh3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create antenna&#8217;s vsh3 file which only contains
+the significant vsh coefficients in shape 3,
+in order to obtain a reconstruction maximal error =  emax</p>
+<p>This function requires a reading of .trx file before being executed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>emax</strong> : float</p>
+<blockquote class="last">
+<div><p>error default 0.05</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.movie_vsh">
+<code class="descname">movie_vsh</code><span class="sig-paren">(</span><em>mode='linear'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.movie_vsh" title="Permalink to this definition">¶</a></dt>
+<dd><p>animates vector spherical coeff w.r.t frequency</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mode</strong> : string</p>
+<blockquote class="last">
+<div><p>&#8216;linear&#8217; |</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.mse">
+<code class="descname">mse</code><span class="sig-paren">(</span><em>Fth</em>, <em>Fph</em>, <em>N=0</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.mse" title="Permalink to this definition">¶</a></dt>
+<dd><p>mean square error between original and reconstructed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Fth</strong> : np.array</p>
+<p><strong>Fph</strong> : np.array</p>
+<p class="last"><strong>N</strong> : int</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Calculate the relative mean square error between original pattern A.Ftheta , A.Fphi and the
+pattern given as argument of the function  Fth , Fph</p>
+<p>The mse is evaluated on both polarization and normalized over the energy of each
+original pattern.</p>
+<p>The function returns the maximum between those two errors</p>
+<p>N is a parameter which allows to suppress value at the pole for the calculation of the error
+if N=0 all values are kept else   N &lt; n &lt; Nt - N</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.pattern">
+<code class="descname">pattern</code><span class="sig-paren">(</span><em>theta=[]</em>, <em>phi=[]</em>, <em>typ='s3'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.pattern" title="Permalink to this definition">¶</a></dt>
+<dd><p>return multidimensionnal radiation patterns</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>theta</strong> : array</p>
+<blockquote>
+<div><p>1xNt</p>
+</div></blockquote>
+<p><strong>phi</strong> : array</p>
+<blockquote>
+<div><p>1xNp</p>
+</div></blockquote>
+<p><strong>typ</strong> : string</p>
+<blockquote class="last">
+<div><p>{s1|s2|s3}</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.photo">
+<code class="descname">photo</code><span class="sig-paren">(</span><em>directory=''</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.photo" title="Permalink to this definition">¶</a></dt>
+<dd><p>show a picture of the antenna</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>directory</strong> : string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.plot3d">
+<code class="descname">plot3d</code><span class="sig-paren">(</span><em>k=0</em>, <em>typ='Gain'</em>, <em>col=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.plot3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>show 3D pattern in matplotlib</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>k</strong> : frequency index</p>
+<p><strong>typ =  &#8216;Gain&#8217;</strong></p>
+<blockquote>
+<div><p>= &#8216;Ftheta&#8217;
+= &#8216;Fphi&#8217;</p>
+</div></blockquote>
+<p><strong>if col  -&gt; color coded plot3D</strong></p>
+<p class="last"><strong>else    -&gt; simple plot3D</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.pol2cart">
+<code class="descname">pol2cart</code><span class="sig-paren">(</span><em>ith</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.pol2cart" title="Permalink to this definition">¶</a></dt>
+<dd><p>converts FTheta, FPhi to Fx,Fy,Fz for theta=ith</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ith</strong> : theta index</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Fx</p>
+<p>Fy</p>
+<p class="last">Fz</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="pylayers.antprop.antenna.html#pylayers.antprop.antenna.Antenna.cart2pol" title="pylayers.antprop.antenna.Antenna.cart2pol"><code class="xref py py-obj docutils literal"><span class="pre">cart2pol</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.pol3d">
+<code class="descname">pol3d</code><span class="sig-paren">(</span><em>k=0</em>, <em>R=50</em>, <em>St=4</em>, <em>Sp=4</em>, <em>silent=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.pol3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display polarisation diagram  in 3D</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>k</strong> : int</p>
+<blockquote>
+<div><p>frequency index</p>
+</div></blockquote>
+<p><strong>R</strong> : float</p>
+<blockquote>
+<div><p>radius of the sphere</p>
+</div></blockquote>
+<p><strong>St</strong> : int</p>
+<blockquote>
+<div><p>downsampling factor along theta</p>
+</div></blockquote>
+<p><strong>Sp</strong> : int</p>
+<blockquote>
+<div><p>downsampling factor along phi</p>
+</div></blockquote>
+<p><strong>silent</strong> : Boolean</p>
+<blockquote>
+<div><p>(if True the file is created and not displayed&#8217;)</p>
+</div></blockquote>
+<p><strong>The file created is named</strong> : Polar{ifreq}.list</p>
+<p class="last"><strong>it is placed in the /geom directory of the project</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.savesh2">
+<code class="descname">savesh2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.savesh2" title="Permalink to this definition">¶</a></dt>
+<dd><p>save coeff in  .sh2 antenna file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.savesh3">
+<code class="descname">savesh3</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.savesh3" title="Permalink to this definition">¶</a></dt>
+<dd><p>save antenna in sh3 format</p>
+<p>create a .sh3 antenna file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.savevsh2">
+<code class="descname">savevsh2</code><span class="sig-paren">(</span><em>filename=''</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.savevsh2" title="Permalink to this definition">¶</a></dt>
+<dd><p>save coeff in  a .vsh2 antenna file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> : string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.savevsh3">
+<code class="descname">savevsh3</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.savevsh3" title="Permalink to this definition">¶</a></dt>
+<dd><p>save antenna in vsh3 format</p>
+<p>Create a .vsh3 antenna file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.show3">
+<code class="descname">show3</code><span class="sig-paren">(</span><em>k=0</em>, <em>po=[]</em>, <em>T=[]</em>, <em>txru=0</em>, <em>typ='G'</em>, <em>mode='linear'</em>, <em>silent=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.show3" title="Permalink to this definition">¶</a></dt>
+<dd><p>show3 geomview</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>k</strong> : frequency index</p>
+<p><strong>po</strong> : poition of the antenna</p>
+<p><strong>T</strong> : GCS of the antenna</p>
+<p><strong>typ</strong> : string</p>
+<blockquote>
+<div><p>&#8216;G&#8217; | &#8216;Ft&#8217; | &#8216;Fp&#8217;</p>
+</div></blockquote>
+<p><strong>mode</strong> : string</p>
+<blockquote>
+<div><p>&#8216;linear&#8217;| &#8216;not implemented&#8217;</p>
+</div></blockquote>
+<p><strong>silent</strong> : boolean</p>
+<blockquote class="last">
+<div><p>True    | False</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.antenna import *
+&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; import matplotlib.pylab as plt
+&gt;&gt;&gt; A = Antenna(&#39;defant.sh3&#39;)
+&gt;&gt;&gt; #A.show3()
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="id9">
+<h3><a class="toc-backref" href="#id25">1.4.4&nbsp;&nbsp;&nbsp;Functions</a><a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">AFLegendre</span></code>(N,&nbsp;M,&nbsp;x)</td>
+<td>calculate Pmm1n and Pmp1n</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">AFLegendre2</span></code>(L,&nbsp;M,&nbsp;x)</td>
+<td>calculate Pmm1l and Pmp1l</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">AFLegendre3</span></code>(L,&nbsp;M,&nbsp;x)</td>
+<td>calculate Pmm1l and Pmp1l</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pylayers.antprop.antenna.BeamGauss.html#pylayers.antprop.antenna.BeamGauss" title="pylayers.antprop.antenna.BeamGauss"><code class="xref py py-obj docutils literal"><span class="pre">BeamGauss</span></code></a>(theta,&nbsp;phi[,&nbsp;Gmax,&nbsp;HPBW_az,&nbsp;...])</td>
+<td>Beam with a Gaussian shape</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CartToSphere</span></code>(theta,&nbsp;phi,&nbsp;ex,&nbsp;ey,&nbsp;ez[,&nbsp;...])</td>
+<td>Convert from Cartesian to Spherical</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pylayers.antprop.antenna.F0.html#pylayers.antprop.antenna.F0" title="pylayers.antprop.antenna.F0"><code class="xref py py-obj docutils literal"><span class="pre">F0</span></code></a>(nu,&nbsp;sigma)</td>
+<td>F0 function for horn antenna pattern</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pylayers.antprop.antenna.F1.html#pylayers.antprop.antenna.F1" title="pylayers.antprop.antenna.F1"><code class="xref py py-obj docutils literal"><span class="pre">F1</span></code></a>(nu,&nbsp;sigma)</td>
+<td>F1 function for horn antenna pattern</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">RepAzimuth1</span></code>(Ec,&nbsp;theta,&nbsp;phi[,&nbsp;th,&nbsp;typ])</td>
+<td>response in azimuth</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">SSHFunc</span></code>(L,&nbsp;theta,&nbsp;phi)</td>
+<td>ssh function</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">SSHFunc2</span></code>(L,&nbsp;theta,&nbsp;phi)</td>
+<td>ssh function version 2</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">VW</span></code>(l,&nbsp;m,&nbsp;theta,&nbsp;phi)</td>
+<td>evaluate vector Spherical Harmonics basis functions</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">VW0</span></code>(n,&nbsp;m,&nbsp;x,&nbsp;phi,&nbsp;Pmm1n,&nbsp;Pmp1n)</td>
+<td>evaluate vector Spherical Harmonics basis functions</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">VW2</span></code>(l,&nbsp;m,&nbsp;x,&nbsp;phi,&nbsp;Pmm1l,&nbsp;Pmp1l)</td>
+<td>evaluate vector Spherical Harmonics basis functions</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">cformat</span></code>(x,&nbsp;y,&nbsp;**kwargs)</td>
+<td>complex format</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pylayers.antprop.antenna.compdiag.html#pylayers.antprop.antenna.compdiag" title="pylayers.antprop.antenna.compdiag"><code class="xref py py-obj docutils literal"><span class="pre">compdiag</span></code></a>(k,&nbsp;A,&nbsp;th,&nbsp;ph,&nbsp;Fthr,&nbsp;Fphr[,&nbsp;typ,&nbsp;...])</td>
+<td>makes comparison between original pattern and reconstructed pattern</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">cylinder</span></code>(fig,&nbsp;pa,&nbsp;pb,&nbsp;R)</td>
+<td>plot a cylinder</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">displot</span></code>(pt,&nbsp;ph[,&nbsp;arrow])</td>
+<td>discontinuous plot</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">factorial</span></code>(n[,&nbsp;exact])</td>
+<td>The factorial of a number or array of numbers.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pylayers.antprop.antenna.forcesympol.html#pylayers.antprop.antenna.forcesympol" title="pylayers.antprop.antenna.forcesympol"><code class="xref py py-obj docutils literal"><span class="pre">forcesympol</span></code></a>(A)</td>
+<td>plot VSH transform vsh basis in 3D plot</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">index_vsh</span></code>(L,&nbsp;M)</td>
+<td>vector spherical harmonics indexing</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">indexssh</span></code>(L[,&nbsp;mirror])</td>
+<td>create [l,m] indexation from Lmax</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">indexvsh</span></code>(L)</td>
+<td>calculate index of vsh</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">level_energy</span></code>(A,&nbsp;l[,&nbsp;ifreq,&nbsp;L])</td>
+<td>calculates energy of the level l</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">lmreshape</span></code>(coeff[,&nbsp;L])</td>
+<td>level and mode reshaping</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">make_axes_locatable</span></code>(axes)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">modeMax</span></code>(coeff[,&nbsp;L,&nbsp;ifreq])</td>
+<td>calculates maximal mode</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">mode_energy</span></code>(C,&nbsp;M[,&nbsp;L,&nbsp;ifreq])</td>
+<td>calculates mode energy</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">mode_energy2</span></code>(A,&nbsp;m[,&nbsp;ifreq,&nbsp;L])</td>
+<td>calculates mode energy (version 2)</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">mulcplot</span></code>(x,&nbsp;y,&nbsp;**kwargs)</td>
+<td>handling multiple complex variable plots</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plotVW</span></code>(l,&nbsp;m,&nbsp;theta,&nbsp;phi[,&nbsp;sf])</td>
+<td>plot VSH transform vsh basis in 3D plot</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">pol3D</span></code>(fig,&nbsp;rho,&nbsp;theta,&nbsp;phi[,&nbsp;sf,&nbsp;shade,&nbsp;title])</td>
+<td>polar 3D  surface plot</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">polycol</span></code>(lpoly[,&nbsp;var])</td>
+<td>plot a collection of polygon</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">rc</span></code>(group,&nbsp;**kwargs)</td>
+<td>Set the current rc params.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">rectplot</span></code>(x,&nbsp;xpos[,&nbsp;ylim])</td>
+<td>plot rectangles on an axis</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">relative_error</span></code>(Eth_original,&nbsp;Eph_original,&nbsp;...)</td>
+<td>calculate relative error between original and model</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">shadow</span></code>(data,&nbsp;ax)</td>
+<td>data : np.array</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pylayers.antprop.antenna.show3D.html#pylayers.antprop.antenna.show3D" title="pylayers.antprop.antenna.show3D"><code class="xref py py-obj docutils literal"><span class="pre">show3D</span></code></a>(F,&nbsp;theta,&nbsp;phi,&nbsp;k[,&nbsp;col])</td>
+<td>show 3D matplotlib diagram</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">ssh</span></code>(A[,&nbsp;L,&nbsp;dsf])</td>
+<td>This function calculates the Scalar Spherical Harmonics coefficients</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">sshModel</span></code>(c,&nbsp;d[,&nbsp;L])</td>
+<td>calculates sshModel</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">vsh</span></code>(A[,&nbsp;dsf])</td>
+<td>This function calculates the Vector Spherical Harmonics coefficients</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">zeros</span></code>(shape[,&nbsp;dtype,&nbsp;order])</td>
+<td>Return a new array of given shape and type, filled with zeros.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id10">
+<h3><a class="toc-backref" href="#id26">1.4.5&nbsp;&nbsp;&nbsp;Classes</a><a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="../api/pylayers.antprop.antenna.AntPosRot.html#pylayers.antprop.antenna.AntPosRot" title="pylayers.antprop.antenna.AntPosRot"><code class="xref py py-obj docutils literal"><span class="pre">AntPosRot</span></code></a>(name,&nbsp;p,&nbsp;T)</td>
+<td>Antenna + position + Rotation</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pylayers.antprop.antenna.html#pylayers.antprop.antenna.Antenna" title="pylayers.antprop.antenna.Antenna"><code class="xref py py-obj docutils literal"><span class="pre">Antenna</span></code></a>([typ])</td>
+<td><p class="rubric">Attributes</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">FontProperties</span></code>([family,&nbsp;style,&nbsp;variant,&nbsp;...])</td>
+<td>A class for storing and manipulating font properties.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">MaxNLocator</span></code>(*args,&nbsp;**kwargs)</td>
+<td>Select no more than N intervals at nice locations.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pylayers.antprop.antenna.html#pylayers.antprop.antenna.Pattern" title="pylayers.antprop.antenna.Pattern"><code class="xref py py-obj docutils literal"><span class="pre">Pattern</span></code></a>()</td>
+<td>Class Pattern</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">PolyCollection</span></code>(verts[,&nbsp;sizes,&nbsp;closed])</td>
+<td><p class="rubric">Attributes</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">PyLayers</span></code></td>
+<td>Generic PyLayers Meta Class</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">SCoeff</span></code>([typ,&nbsp;fmin,&nbsp;fmax,&nbsp;lmax,&nbsp;data,&nbsp;dtype,&nbsp;...])</td>
+<td>scalar Spherical Harmonics coefficients</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">SSHCoeff</span></code>(Cx,&nbsp;Cy,&nbsp;Cz)</td>
+<td>scalar spherical harmonics</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">VCoeff</span></code>(typ[,&nbsp;fmin,&nbsp;fmax,&nbsp;data,&nbsp;dtype,&nbsp;ind,&nbsp;...])</td>
+<td>Spherical Harmonics Coefficient</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff</span></code>(Br,&nbsp;Bi,&nbsp;Cr,&nbsp;Ci)</td>
+<td>Vector Spherical Harmonics Coefficients class</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">VectorCoeff</span></code>(typ[,&nbsp;fmin,&nbsp;fmax,&nbsp;data,&nbsp;dtype,&nbsp;...])</td>
+<td>class vector spherical harmonics</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id11">
+<h3><a class="toc-backref" href="#id27">1.4.6&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a><a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="materials-and-slabs">
+<h4><a class="toc-backref" href="#id28">1.4.6.1&nbsp;&nbsp;&nbsp;Materials and Slabs</a><a class="headerlink" href="#materials-and-slabs" title="Permalink to this headline">¶</a></h4>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.slab.html">pylayers.antprop.slab</a></li>
 </ul>
 </div>
+</div>
+<div class="section" id="ray-tracing">
+<h4><a class="toc-backref" href="#id29">1.4.6.2&nbsp;&nbsp;&nbsp;Ray Tracing</a><a class="headerlink" href="#ray-tracing" title="Permalink to this headline">¶</a></h4>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.signature.html">pylayers.antprop.signature</a></li>
@@ -429,6 +2009,9 @@ pylayers.gis.readvrml</div></blockquote>
 <li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.rays.html">pylayers.antprop.rays</a></li>
 </ul>
 </div>
+</div>
+<div class="section" id="channel">
+<h4><a class="toc-backref" href="#id30">1.4.6.3&nbsp;&nbsp;&nbsp;Channel</a><a class="headerlink" href="#channel" title="Permalink to this headline">¶</a></h4>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.loss.html">pylayers.antprop.loss</a></li>
@@ -439,8 +2022,10 @@ pylayers.gis.readvrml</div></blockquote>
 </ul>
 </div>
 </div>
+</div>
+</div>
 <div class="section" id="simulations">
-<h2><a class="toc-backref" href="#id15">1.5&nbsp;&nbsp;&nbsp;Simulations</a><a class="headerlink" href="#simulations" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id31">1.5&nbsp;&nbsp;&nbsp;Simulations</a><a class="headerlink" href="#simulations" title="Permalink to this headline">¶</a></h2>
 <p>This section describes the different simulation modules
 for using PyLayers.</p>
 <div class="toctree-wrapper compound">
@@ -466,7 +2051,7 @@ for using PyLayers.</p>
 </div>
 </div>
 <div class="section" id="localization-algorithms">
-<h2><a class="toc-backref" href="#id16">1.6&nbsp;&nbsp;&nbsp;Localization Algorithms</a><a class="headerlink" href="#localization-algorithms" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id32">1.6&nbsp;&nbsp;&nbsp;Localization Algorithms</a><a class="headerlink" href="#localization-algorithms" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pylayers.location.localization.html">pylayers.location.localization</a><ul class="simple">
@@ -512,7 +2097,7 @@ for using PyLayers.</p>
 </div>
 </div>
 <div class="section" id="measurement-data">
-<h2><a class="toc-backref" href="#id17">1.7&nbsp;&nbsp;&nbsp;Measurement Data</a><a class="headerlink" href="#measurement-data" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id33">1.7&nbsp;&nbsp;&nbsp;Measurement Data</a><a class="headerlink" href="#measurement-data" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pylayers.measures.mesuwb.html">pylayers.measures.mesuwb</a><ul>
@@ -535,12 +2120,12 @@ for using PyLayers.</p>
 </div>
 </div>
 <div class="section" id="instrumentation">
-<h2><a class="toc-backref" href="#id18">1.8&nbsp;&nbsp;&nbsp;Instrumentation</a><a class="headerlink" href="#instrumentation" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id34">1.8&nbsp;&nbsp;&nbsp;Instrumentation</a><a class="headerlink" href="#instrumentation" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 </div>
 </div>
 <div class="section" id="agents-and-bodies-mobility">
-<h2><a class="toc-backref" href="#id19">1.9&nbsp;&nbsp;&nbsp;Agents and Bodies Mobility</a><a class="headerlink" href="#agents-and-bodies-mobility" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id35">1.9&nbsp;&nbsp;&nbsp;Agents and Bodies Mobility</a><a class="headerlink" href="#agents-and-bodies-mobility" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pylayers.mobility.agent.html">pylayers.mobility.agent</a><ul>
@@ -571,7 +2156,7 @@ for using PyLayers.</p>
 </div>
 </div>
 <div class="section" id="networks">
-<h2><a class="toc-backref" href="#id20">1.10&nbsp;&nbsp;&nbsp;Networks</a><a class="headerlink" href="#networks" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id36">1.10&nbsp;&nbsp;&nbsp;Networks</a><a class="headerlink" href="#networks" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pylayers.network.communication.html">pylayers.network.communication</a></li>
@@ -596,7 +2181,7 @@ for using PyLayers.</p>
 </div>
 </div>
 <div class="section" id="physical-layer">
-<h2><a class="toc-backref" href="#id21">1.11&nbsp;&nbsp;&nbsp;Physical Layer</a><a class="headerlink" href="#physical-layer" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id37">1.11&nbsp;&nbsp;&nbsp;Physical Layer</a><a class="headerlink" href="#physical-layer" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pylayers.simul.radionode.html">pylayers.simul.radionode</a><ul>
@@ -623,7 +2208,7 @@ for using PyLayers.</p>
 </div>
 </div>
 <div class="section" id="signal-processing">
-<h2><a class="toc-backref" href="#id22">1.12&nbsp;&nbsp;&nbsp;Signal Processing</a><a class="headerlink" href="#signal-processing" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id38">1.12&nbsp;&nbsp;&nbsp;Signal Processing</a><a class="headerlink" href="#signal-processing" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
@@ -644,7 +2229,7 @@ for using PyLayers.</p>
 </div>
 </div>
 <div class="section" id="utility-classes-and-functions">
-<h2><a class="toc-backref" href="#id23">1.13&nbsp;&nbsp;&nbsp;Utility classes and functions</a><a class="headerlink" href="#utility-classes-and-functions" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id39">1.13&nbsp;&nbsp;&nbsp;Utility classes and functions</a><a class="headerlink" href="#utility-classes-and-functions" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pylayers.util.CDF.html">pylayers.util.CDF</a></li>
