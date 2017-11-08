@@ -1,15 +1,9 @@
 #-*- coding:Utf-8 -*-
+from __future__ import print_function
 r""""
 .. currentmodule:: pylayers.signal.ED
 
 .. autosummary::
-    :toctree: generated
-
-Energy Detector 'ED'
-====================
-
-.. autoclass:: ED
-    :members:
 
 
 """
