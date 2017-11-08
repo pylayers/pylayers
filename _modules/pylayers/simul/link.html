@@ -266,7 +266,7 @@
 
 
 
-<div class="viewcode-block" id="Link"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.Link">[docs]</a><span class="k">class</span> <span class="nc">Link</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
+<div class="viewcode-block" id="Link"><a class="viewcode-back" href="../../../api/pylayers.simul.link.Link.html#pylayers.simul.link.Link">[docs]</a><span class="k">class</span> <span class="nc">Link</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Link evaluation metaclass</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -286,7 +286,7 @@
         <span class="k">return</span> <span class="n">L</span></div>
 
 
-<div class="viewcode-block" id="SLink"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.SLink">[docs]</a><span class="k">class</span> <span class="nc">SLink</span><span class="p">(</span><span class="n">Link</span><span class="p">):</span>
+<div class="viewcode-block" id="SLink"><a class="viewcode-back" href="../../../api/pylayers.simul.link.SLink.html#pylayers.simul.link.SLink">[docs]</a><span class="k">class</span> <span class="nc">SLink</span><span class="p">(</span><span class="n">Link</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Statistical Link evaluation class</span>
@@ -294,7 +294,7 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">SLink</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="SLink.onbody"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.SLink.onbody">[docs]</a>    <span class="k">def</span> <span class="nf">onbody</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">dida</span><span class="p">,</span> <span class="n">didb</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<div class="viewcode-block" id="SLink.onbody"><a class="viewcode-back" href="../../../api/pylayers.simul.link.SLink.html#pylayers.simul.link.SLink.onbody">[docs]</a>    <span class="k">def</span> <span class="nf">onbody</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">dida</span><span class="p">,</span> <span class="n">didb</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Statistical evaluation of a on-body link</span>
 
 <span class="sd">        Parameters</span>
@@ -347,7 +347,7 @@
 
 
 
-<div class="viewcode-block" id="DLink"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.DLink">[docs]</a><span class="k">class</span> <span class="nc">DLink</span><span class="p">(</span><span class="n">Link</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink">[docs]</a><span class="k">class</span> <span class="nc">DLink</span><span class="p">(</span><span class="n">Link</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Deterministic Link Class</span>
 
 <span class="sd">    Attributes</span>
@@ -1003,7 +1003,7 @@
             <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;No Layout specified&#39;</span>
         <span class="k">return</span> <span class="n">s</span>
 
-<div class="viewcode-block" id="DLink.inforay"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.DLink.inforay">[docs]</a>    <span class="k">def</span> <span class="nf">inforay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">iray</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.inforay"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.inforay">[docs]</a>    <span class="k">def</span> <span class="nf">inforay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">iray</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provide full information about a specified ray</span>
 
 <span class="sd">        Parameters</span>
@@ -1082,7 +1082,7 @@
     <span class="c1">#         self.fGHz = np.array([2.3,2.4,2.5])</span>
 
 
-<div class="viewcode-block" id="DLink.init_positions"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.DLink.init_positions">[docs]</a>    <span class="k">def</span> <span class="nf">init_positions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.init_positions"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.init_positions">[docs]</a>    <span class="k">def</span> <span class="nf">init_positions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; initialize random positions for a link</span>
 
 <span class="sd">        Parameters</span>
@@ -1131,7 +1131,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">cb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span></div>
 
-<div class="viewcode-block" id="DLink.reset_config"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.DLink.reset_config">[docs]</a>    <span class="k">def</span> <span class="nf">reset_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.reset_config"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.reset_config">[docs]</a>    <span class="k">def</span> <span class="nf">reset_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; reset configuration when a new layout is loaded</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1176,7 +1176,7 @@
             <span class="k">pass</span></div>
 
 
-<div class="viewcode-block" id="DLink.checkh5"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.DLink.checkh5">[docs]</a>    <span class="k">def</span> <span class="nf">checkh5</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.checkh5"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.checkh5">[docs]</a>    <span class="k">def</span> <span class="nf">checkh5</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; check existence of previous simulations run with the same parameters.</span>
 
 
@@ -1193,7 +1193,7 @@
 
 
 
-<div class="viewcode-block" id="DLink.save_init"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.DLink.save_init">[docs]</a>    <span class="k">def</span> <span class="nf">save_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename_long</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.save_init"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.save_init">[docs]</a>    <span class="k">def</span> <span class="nf">save_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename_long</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; initialize the hdf5 file for link saving </span>
 
 <span class="sd">        Parameters</span>
@@ -1242,7 +1242,7 @@
             <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Links: issue when initializing h5py file&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DLink.stack"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.DLink.stack">[docs]</a>    <span class="k">def</span> <span class="nf">stack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">array</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.stack"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.stack">[docs]</a>    <span class="k">def</span> <span class="nf">stack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">array</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; stack new array in h5py file</span>
 <span class="sd">            for a given key (dataframe/group)</span>
 
@@ -1304,7 +1304,7 @@
 
 
 
-<div class="viewcode-block" id="DLink.save"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.DLink.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">obj</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">grpname</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.save"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">obj</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">grpname</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Save a given object in the correct group</span>
 
 <span class="sd">        Parameters</span>
@@ -1333,7 +1333,7 @@
             <span class="k">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">__class__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; from &#39;</span><span class="o">+</span> <span class="n">grpname</span> <span class="o">+</span> <span class="s1">&#39; saved&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="DLink.load"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.DLink.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">obj</span><span class="p">,</span><span class="n">grpname</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.load"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">obj</span><span class="p">,</span><span class="n">grpname</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Load a given object in the correct grp</span>
 
 <span class="sd">        Parameters</span>
@@ -1360,7 +1360,7 @@
             <span class="k">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">__class__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; from &#39;</span><span class="o">+</span> <span class="n">grpname</span> <span class="o">+</span> <span class="s1">&#39; loaded&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="DLink.get_grpname"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.DLink.get_grpname">[docs]</a>    <span class="k">def</span> <span class="nf">get_grpname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.get_grpname"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.get_grpname">[docs]</a>    <span class="k">def</span> <span class="nf">get_grpname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Determine the data group name for the given configuration</span>
 
 <span class="sd">        Notes</span>
@@ -1441,7 +1441,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s1">&#39;H&#39;</span><span class="p">][</span><span class="s1">&#39;grpname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grpname</span></div>
 
 
-<div class="viewcode-block" id="DLink.check_grpname"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.DLink.check_grpname">[docs]</a>    <span class="k">def</span> <span class="nf">check_grpname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.check_grpname"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.check_grpname">[docs]</a>    <span class="k">def</span> <span class="nf">check_grpname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Check if the key&#39;s data with a given groupname</span>
 <span class="sd">            already exists in the h5py file</span>
 
@@ -1472,7 +1472,7 @@
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Link exist: issue during stacking&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="DLink.get_idx"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.DLink.get_idx">[docs]</a>    <span class="k">def</span> <span class="nf">get_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">array</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.get_idx"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.get_idx">[docs]</a>    <span class="k">def</span> <span class="nf">get_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">array</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; try to get the index of the requested array in the group key</span>
 <span class="sd">            of the hdf5 file.</span>
 <span class="sd">            If array doesn&#39;t exist, the hdf5file[key] array is stacked</span>
@@ -1521,7 +1521,7 @@
         <span class="k">return</span> <span class="n">u_opt</span><span class="p">,</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="DLink.array_exist"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.DLink.array_exist">[docs]</a>    <span class="k">def</span> <span class="nf">array_exist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">array</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span> <span class="p">:</span>
+<div class="viewcode-block" id="DLink.array_exist"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.array_exist">[docs]</a>    <span class="k">def</span> <span class="nf">array_exist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">array</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span> <span class="p">:</span>
         <span class="sd">&quot;&quot;&quot; check an array key has already been stored in h5py file</span>
 
 
@@ -1617,7 +1617,7 @@
 
         <span class="k">return</span> <span class="n">ua</span></div>
 
-<div class="viewcode-block" id="DLink.evalH"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.DLink.evalH">[docs]</a>    <span class="k">def</span> <span class="nf">evalH</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.evalH"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.evalH">[docs]</a>    <span class="k">def</span> <span class="nf">evalH</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; evaluate channel transfer function</span>
 
 <span class="sd">        Notes</span>
@@ -1635,7 +1635,7 @@
         <span class="n">H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">debug</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="n">H</span></div>
 
-<div class="viewcode-block" id="DLink.eval"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.DLink.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.eval"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; evaluate the link</span>
 
 
@@ -1961,7 +1961,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">checkh5</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="DLink.adp"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.DLink.adp">[docs]</a>    <span class="k">def</span> <span class="nf">adp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">imax</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.adp"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.adp">[docs]</a>    <span class="k">def</span> <span class="nf">adp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">imax</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; construct the angular delay profile</span>
 
 <span class="sd">        Parameters</span>
@@ -1973,7 +1973,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">adprt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">afprt</span><span class="o">.</span><span class="n">toadp</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">adprt</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">imax</span><span class="o">=</span><span class="n">imax</span><span class="p">)</span></div>
         
-<div class="viewcode-block" id="DLink.afp"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.DLink.afp">[docs]</a>    <span class="k">def</span> <span class="nf">afp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.afp"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.afp">[docs]</a>    <span class="k">def</span> <span class="nf">afp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Evaluate angular frequency profile </span>
 
 <span class="sd">        Parameters</span>
@@ -2113,7 +2113,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_show3</span><span class="p">()</span>
         <span class="k">print</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DLink.show"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.DLink.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.show"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show the link</span>
 
 <span class="sd">        Parameters</span>
@@ -2537,7 +2537,7 @@
         <span class="c1"># else:</span>
         <span class="c1">#     ds.children[0].children[0].actor.property.opacity=1.</span>
 
-<div class="viewcode-block" id="DLink.plt_cir"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.DLink.plt_cir">[docs]</a>    <span class="k">def</span> <span class="nf">plt_cir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.plt_cir"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.plt_cir">[docs]</a>    <span class="k">def</span> <span class="nf">plt_cir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot link channel impulse response</span>
 
 <span class="sd">        Parameters</span>
@@ -2618,7 +2618,7 @@
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">,</span><span class="n">ir</span></div>
 
 
-<div class="viewcode-block" id="DLink.plt_doa"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.DLink.plt_doa">[docs]</a>    <span class="k">def</span> <span class="nf">plt_doa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.plt_doa"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.plt_doa">[docs]</a>    <span class="k">def</span> <span class="nf">plt_doa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;plot direction of arrival and departure</span>
 
 <span class="sd">        Parameters</span>
@@ -2653,7 +2653,7 @@
         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;doa&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">plotd</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
         
-<div class="viewcode-block" id="DLink.plt_dod"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.DLink.plt_dod">[docs]</a>    <span class="k">def</span> <span class="nf">plt_dod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.plt_dod"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.plt_dod">[docs]</a>    <span class="k">def</span> <span class="nf">plt_dod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;plot direction of arrival and departure</span>
 
 <span class="sd">        Parameters</span>
@@ -2688,7 +2688,7 @@
         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;dod&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">plotd</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DLink.plt_dspread"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.DLink.plt_dspread">[docs]</a>    <span class="k">def</span> <span class="nf">plt_dspread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.plt_dspread"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.plt_dspread">[docs]</a>    <span class="k">def</span> <span class="nf">plt_dspread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot delay spread</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;fig&#39;</span><span class="p">:[],</span>
@@ -2713,7 +2713,7 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">)])</span>
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span></div>
 
-<div class="viewcode-block" id="DLink.plt_aspread"><a class="viewcode-back" href="../../../api/references.html#pylayers.simul.link.DLink.plt_aspread">[docs]</a>    <span class="k">def</span> <span class="nf">plt_aspread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.plt_aspread"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.plt_aspread">[docs]</a>    <span class="k">def</span> <span class="nf">plt_aspread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot angular spread</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;fig&#39;</span><span class="p">:[],</span>
