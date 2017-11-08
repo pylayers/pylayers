@@ -711,6 +711,12 @@ class Pattern(PyLayers):
 
         filename : ANT filename
 
+        Notes 
+        -----
+
+        The 3D pattern is obtained by taking the product 
+        of azimuth pattern and elevation pattern.
+
         """
 
 

@@ -14,7 +14,7 @@ phi0 = np.ones(Nr)#np.linspace(0.01,2*np.pi-0.01,Nr)#40*np.pi/180.
 phi = np.linspace(0.01,2*np.pi-0.01,Nr)
 
 #phi = np.linspace(0,3*np.pi/2,10)
-dm = MatDB()
+dm = MatDB(_fileini='matDB.ini')
 mat0 = dm['METAL']
 matN = dm['METAL']
 si = 10000.*np.ones(Nr)
