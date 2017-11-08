@@ -35,7 +35,7 @@
         <link rel="author" title="About these documents"
               href="../about.html"/>
     <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="PyLayers Modules References" href="pylayers.html"/>
+        <link rel="up" title="1   PyLayers Modules References" href="pylayers.html"/>
         <link rel="prev" title="pylayers.signal.waveform" href="pylayers.signal.waveform.html"/> 
 
   
@@ -90,15 +90,19 @@
             
                 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#environment-description">2&nbsp;&nbsp;&nbsp;Environment Description</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#handling-agent-mobility">3&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#wireless-body-area-network-related-classes">4&nbsp;&nbsp;&nbsp;Wireless Body Area Network Related Classes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#some-simulation-examples">5&nbsp;&nbsp;&nbsp;Some Simulation Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#algorithms-for-localization">6&nbsp;&nbsp;&nbsp;Algorithms for Localization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#measurements-tools">7&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#pylayers-tools">8&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#references">9&nbsp;&nbsp;&nbsp;References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.html">PyLayers Modules References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#basic-usage">2&nbsp;&nbsp;&nbsp;Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#environment-description">3&nbsp;&nbsp;&nbsp;Environment Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#materials-and-slabs">4&nbsp;&nbsp;&nbsp;Materials and Slabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#description-of-antennas">5&nbsp;&nbsp;&nbsp;Description of Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#coverage-simulation">6&nbsp;&nbsp;&nbsp;Coverage Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#ray-tracing-simulation">7&nbsp;&nbsp;&nbsp;Ray Tracing Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#handling-agent-mobility">8&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#other-simulation-examples">9&nbsp;&nbsp;&nbsp;Other Simulation Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#localization-algorithms">10&nbsp;&nbsp;&nbsp;Localization Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#measurements-tools">11&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#pylayers-tools">12&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#references">13&nbsp;&nbsp;&nbsp;References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pylayers.html">1&nbsp;&nbsp;&nbsp;PyLayers Modules References</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
@@ -141,7 +145,7 @@
       
           <li><a href="../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
       
-          <li><a href="pylayers.html">PyLayers Modules References</a> &raquo;</li>
+          <li><a href="pylayers.html">1&nbsp;&nbsp;&nbsp;PyLayers Modules References</a> &raquo;</li>
       
     <li>pylayers.signal.DF</li>
       <li class="wy-breadcrumbs-aside">
@@ -165,7 +169,7 @@
 <p>This class implements a LTI digital filter</p>
 <dl class="class">
 <dt id="pylayers.signal.DF.DF">
-<em class="property">class </em><code class="descclassname">pylayers.signal.DF.</code><code class="descname">DF</code><span class="sig-paren">(</span><em>b=array([1])</em>, <em>a=array([1])</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/DF.html#DF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.DF.DF" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pylayers.signal.DF.</code><code class="descname">DF</code><span class="sig-paren">(</span><em>b=array([1])</em>, <em>a=array([1])</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.signal.DF.DF" title="Permalink to this definition">¶</a></dt>
 <dd><p>Digital Filter Class</p>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
@@ -211,7 +215,7 @@
 </table>
 <dl class="method">
 <dt id="pylayers.signal.DF.DF.butter">
-<code class="descname">butter</code><span class="sig-paren">(</span><em>order=5</em>, <em>w=0.25</em>, <em>typ='low'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/DF.html#DF.butter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.DF.DF.butter" title="Permalink to this definition">¶</a></dt>
+<code class="descname">butter</code><span class="sig-paren">(</span><em>order=5</em>, <em>w=0.25</em>, <em>typ='low'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.signal.DF.DF.butter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Butterwoth digital filter design</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -244,7 +248,7 @@
 
 <dl class="method">
 <dt id="pylayers.signal.DF.DF.ellip_bp">
-<code class="descname">ellip_bp</code><span class="sig-paren">(</span><em>wp</em>, <em>ws</em>, <em>gpass=0.5</em>, <em>gstop=20</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/DF.html#DF.ellip_bp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.DF.DF.ellip_bp" title="Permalink to this definition">¶</a></dt>
+<code class="descname">ellip_bp</code><span class="sig-paren">(</span><em>wp</em>, <em>ws</em>, <em>gpass=0.5</em>, <em>gstop=20</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.signal.DF.DF.ellip_bp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Elliptic Bandpath filter</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -266,7 +270,7 @@
 
 <dl class="method">
 <dt id="pylayers.signal.DF.DF.factorize">
-<code class="descname">factorize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/DF.html#DF.factorize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.DF.DF.factorize" title="Permalink to this definition">¶</a></dt>
+<code class="descname">factorize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.signal.DF.DF.factorize" title="Permalink to this definition">¶</a></dt>
 <dd><p>factorize the filter into a minimal phase and maximal phase</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -285,7 +289,7 @@ Fmax : maximal phase filter</p>
 
 <dl class="method">
 <dt id="pylayers.signal.DF.DF.filter">
-<code class="descname">filter</code><span class="sig-paren">(</span><em>s</em>, <em>causal=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/DF.html#DF.filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.DF.DF.filter" title="Permalink to this definition">¶</a></dt>
+<code class="descname">filter</code><span class="sig-paren">(</span><em>s</em>, <em>causal=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.signal.DF.DF.filter" title="Permalink to this definition">¶</a></dt>
 <dd><p>filter s</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -322,7 +326,7 @@ Fmax : maximal phase filter</p>
 
 <dl class="method">
 <dt id="pylayers.signal.DF.DF.flipc">
-<code class="descname">flipc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/DF.html#DF.flipc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.DF.DF.flipc" title="Permalink to this definition">¶</a></dt>
+<code class="descname">flipc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.signal.DF.DF.flipc" title="Permalink to this definition">¶</a></dt>
 <dd><p>flip coefficient</p>
 <p>This is equivalent to the transformation</p>
 <p>z -&gt; 1/z</p>
@@ -330,7 +334,7 @@ Fmax : maximal phase filter</p>
 
 <dl class="method">
 <dt id="pylayers.signal.DF.DF.freqz">
-<code class="descname">freqz</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/DF.html#DF.freqz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.DF.DF.freqz" title="Permalink to this definition">¶</a></dt>
+<code class="descname">freqz</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.signal.DF.DF.freqz" title="Permalink to this definition">¶</a></dt>
 <dd><p>freqz :  evaluation of filter transfer function</p>
 <p>The function evaluates an FUsignal</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -353,7 +357,7 @@ Fmax : maximal phase filter</p>
 
 <dl class="method">
 <dt id="pylayers.signal.DF.DF.ir">
-<code class="descname">ir</code><span class="sig-paren">(</span><em>N=100</em>, <em>show=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/DF.html#DF.ir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.DF.DF.ir" title="Permalink to this definition">¶</a></dt>
+<code class="descname">ir</code><span class="sig-paren">(</span><em>N=100</em>, <em>show=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.signal.DF.DF.ir" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns impulse response</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -371,7 +375,7 @@ Fmax : maximal phase filter</p>
 
 <dl class="method">
 <dt id="pylayers.signal.DF.DF.match">
-<code class="descname">match</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/DF.html#DF.match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.DF.DF.match" title="Permalink to this definition">¶</a></dt>
+<code class="descname">match</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.signal.DF.DF.match" title="Permalink to this definition">¶</a></dt>
 <dd><p>return a match filter</p>
 <p class="rubric">Notes</p>
 <p>if $$H(z)=\frac{1+b_1z^1+...+b_Nz^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$</p>
@@ -381,7 +385,7 @@ Fmax : maximal phase filter</p>
 
 <dl class="method">
 <dt id="pylayers.signal.DF.DF.remez">
-<code class="descname">remez</code><span class="sig-paren">(</span><em>numtaps=401</em>, <em>bands=(0</em>, <em>0.1</em>, <em>0.11</em>, <em>0.2</em>, <em>0.21</em>, <em>0.5)</em>, <em>desired=(0.0001</em>, <em>1</em>, <em>0.0001)</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/DF.html#DF.remez"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.DF.DF.remez" title="Permalink to this definition">¶</a></dt>
+<code class="descname">remez</code><span class="sig-paren">(</span><em>numtaps=401</em>, <em>bands=(0</em>, <em>0.1</em>, <em>0.11</em>, <em>0.2</em>, <em>0.21</em>, <em>0.5)</em>, <em>desired=(0.0001</em>, <em>1</em>, <em>0.0001)</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.signal.DF.DF.remez" title="Permalink to this definition">¶</a></dt>
 <dd><p>FIR design Remez algorithm</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -404,7 +408,7 @@ desired = (0.0001,1,0.0001))</p>
 
 <dl class="method">
 <dt id="pylayers.signal.DF.DF.simplify">
-<code class="descname">simplify</code><span class="sig-paren">(</span><em>tol=1e-16</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/DF.html#DF.simplify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.DF.DF.simplify" title="Permalink to this definition">¶</a></dt>
+<code class="descname">simplify</code><span class="sig-paren">(</span><em>tol=1e-16</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.signal.DF.DF.simplify" title="Permalink to this definition">¶</a></dt>
 <dd><p>simplify transfer function</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -422,7 +426,7 @@ desired = (0.0001,1,0.0001))</p>
 
 <dl class="method">
 <dt id="pylayers.signal.DF.DF.wnxcorr">
-<code class="descname">wnxcorr</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/DF.html#DF.wnxcorr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.DF.DF.wnxcorr" title="Permalink to this definition">¶</a></dt>
+<code class="descname">wnxcorr</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.signal.DF.DF.wnxcorr" title="Permalink to this definition">¶</a></dt>
 <dd><p>filtered noise output autocorrelation</p>
 <dl class="docutils">
 <dt>var</dt>
@@ -432,7 +436,7 @@ desired = (0.0001,1,0.0001))</p>
 
 <dl class="method">
 <dt id="pylayers.signal.DF.DF.zplane">
-<code class="descname">zplane</code><span class="sig-paren">(</span><em>title=''</em>, <em>fontsize=18</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/DF.html#DF.zplane"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.DF.DF.zplane" title="Permalink to this definition">¶</a></dt>
+<code class="descname">zplane</code><span class="sig-paren">(</span><em>title=''</em>, <em>fontsize=18</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.signal.DF.DF.zplane" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display filter in the complex plane</p>
 </dd></dl>
 
@@ -459,7 +463,7 @@ desired = (0.0001,1,0.0001))</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 07, 2017.
+      Last updated on Nov 08, 2017.
 
     </p>
   </div>
