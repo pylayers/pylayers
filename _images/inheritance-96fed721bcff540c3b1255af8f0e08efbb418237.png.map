@@ -1,0 +1,10 @@
+<map id="inheritance9a91799cfe" name="inheritance9a91799cfe">
+<area shape="rect" id="node1" href="#pylayers.antprop.channel.ADPchannel" target="_top" title="ADPchannel" alt="" coords="511,153,609,179"/>
+<area shape="rect" id="node14" href="#pylayers.antprop.channel.TUchannel" target="_top" title="TUchannel" alt="" coords="515,203,605,228"/>
+<area shape="rect" id="node3" href="../api/pylayers.antprop.channel.AFPchannel.html#pylayers.antprop.channel.AFPchannel" target="_top" title="AFPchannel" alt="" coords="512,5,608,31"/>
+<area shape="rect" id="node10" href="#pylayers.antprop.channel.Mchannel" target="_top" title="Mchannel" alt="" coords="519,55,601,80"/>
+<area shape="rect" id="node15" href="../api/pylayers.antprop.channel.Tchannel.html#pylayers.antprop.channel.Tchannel" target="_top" title="Tchannel" alt="" coords="521,104,599,129"/>
+<area shape="rect" id="node7" href="#pylayers.antprop.channel.Ctilde" target="_top" title="Ctilde" alt="" coords="132,179,204,204"/>
+<area shape="rect" id="node11" href="#pylayers.antprop.channel.TBchannel" target="_top" title="TBchannel" alt="" coords="375,203,463,228"/>
+<area shape="rect" id="node13" href="#pylayers.antprop.channel.TUDchannel" target="_top" title="TUDchannel" alt="" coords="657,203,756,228"/>
+</map>

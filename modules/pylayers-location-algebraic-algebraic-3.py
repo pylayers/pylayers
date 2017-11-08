@@ -1,5 +1,0 @@
-nodes, ldp, BN0 = scenario()
-S = algloc(nodes, ldp)
-rs_mode = S.get_range_std('mode')
-rs_median = S.get_range_std('median')
-rs_mean = S.get_range_std('mean')
