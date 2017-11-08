@@ -1,0 +1,483 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Pattern &mdash; PyLayers</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="author" title="About these documents"
+              href="../about.html"/>
+    <link rel="top" title="PyLayers" href="../index.html"/>
+        <link rel="up" title="1   PyLayers Modules References" href="../modules/pylayers.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Python
+          
+
+          
+            
+            <img src="../_static/pylayers.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#basic-usage">2&nbsp;&nbsp;&nbsp;Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#environment-description">3&nbsp;&nbsp;&nbsp;Environment Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#materials-and-slabs">4&nbsp;&nbsp;&nbsp;Materials and Slabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#description-of-antennas">5&nbsp;&nbsp;&nbsp;Description of Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#coverage-simulation">6&nbsp;&nbsp;&nbsp;Coverage Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#ray-tracing-simulation">7&nbsp;&nbsp;&nbsp;Ray Tracing Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#handling-agent-mobility">8&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#other-simulation-examples">9&nbsp;&nbsp;&nbsp;Other Simulation Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#localization-algorithms">10&nbsp;&nbsp;&nbsp;Localization Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#measurements-tools">11&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#pylayers-tools">12&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#references">13&nbsp;&nbsp;&nbsp;References</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../modules/pylayers.html">1&nbsp;&nbsp;&nbsp;PyLayers Modules References</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#environment-description">1.1&nbsp;&nbsp;&nbsp;Environment Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#pylayers-gis-layout-module">1.2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#antennas-and-propagation">1.3&nbsp;&nbsp;&nbsp;Antennas and Propagation</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.antenna">1.4&nbsp;&nbsp;&nbsp;pylayers.antprop.antenna Module</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../modules/pylayers.html#examples">1.4.1&nbsp;&nbsp;&nbsp;Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/pylayers.html#pattern-class">1.4.2&nbsp;&nbsp;&nbsp;Pattern Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/pylayers.html#antenna-class">1.4.3&nbsp;&nbsp;&nbsp;Antenna Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/pylayers.html#id3">1.4.4&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../modules/pylayers.html#id4">1.4.5&nbsp;&nbsp;&nbsp;Classes</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.antenna.AntPosRot.html">AntPosRot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.antenna.Antenna.html">Antenna</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Pattern</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/pylayers.html#id5">1.4.6&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.aarray">1.5&nbsp;&nbsp;&nbsp;pylayers.antprop.aarray Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.spharm">1.6&nbsp;&nbsp;&nbsp;pylayers.antprop.spharm Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.antssh">1.7&nbsp;&nbsp;&nbsp;pylayers.antprop.antssh Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.antvsh">1.8&nbsp;&nbsp;&nbsp;pylayers.antprop.antvsh Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#simulations">1.9&nbsp;&nbsp;&nbsp;Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#localization-algorithms">1.10&nbsp;&nbsp;&nbsp;Localization Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#measurement-data">1.11&nbsp;&nbsp;&nbsp;Measurement Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#instrumentation">1.12&nbsp;&nbsp;&nbsp;Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#agents-and-bodies-mobility">1.13&nbsp;&nbsp;&nbsp;Agents and Bodies Mobility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#networks">1.14&nbsp;&nbsp;&nbsp;Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#physical-layer">1.15&nbsp;&nbsp;&nbsp;Physical Layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#signal-processing">1.16&nbsp;&nbsp;&nbsp;Signal Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#utility-classes-and-functions">1.17&nbsp;&nbsp;&nbsp;Utility classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_layout.html">8 Random Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
+      
+          <li><a href="../modules/pylayers.html">1&nbsp;&nbsp;&nbsp;PyLayers Modules References</a> &raquo;</li>
+      
+    <li>Pattern</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api/pylayers.antprop.antenna.Pattern.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pattern">
+<h1>Pattern<a class="headerlink" href="#pattern" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.antprop.antenna.Pattern">
+<em class="property">class </em><code class="descclassname">pylayers.antprop.antenna.</code><code class="descname">Pattern</code><a class="headerlink" href="#pylayers.antprop.antenna.Pattern" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">pylayers.util.project.PyLayers</span></code></p>
+<p>Class Pattern</p>
+<p>MetaClass of Antenna</p>
+<p>A pattern is evaluated with the 3 np.array parameters</p>
+<p>theta
+phi
+fGHz</p>
+<p>This class implements pattern methods.
+The name of a pattern method starts by p.
+Each pattern method has a unique dictionnary argument &#8216;param&#8217;</p>
+<dl class="docutils">
+<dt>If self.grid dimensions are</dt>
+<dd>Nt x Np x Nf</dd>
+<dt>else:</dt>
+<dd>Ndir x Nf</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="../modules/pylayers.html#pylayers.antprop.antenna.Pattern.eval" title="pylayers.antprop.antenna.Pattern.eval"><code class="xref py py-obj docutils literal"><span class="pre">eval</span></code></a>(**kwargs)</td>
+<td>evaluate pattern functions</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/pylayers.html#pylayers.antprop.antenna.Pattern.gain" title="pylayers.antprop.antenna.Pattern.gain"><code class="xref py py-obj docutils literal"><span class="pre">gain</span></code></a>()</td>
+<td>calculates antenna gain</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
+<td>generic help</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/pylayers.html#pylayers.antprop.antenna.Pattern.plotG" title="pylayers.antprop.antenna.Pattern.plotG"><code class="xref py py-obj docutils literal"><span class="pre">plotG</span></code></a>(**kwargs)</td>
+<td>antenna plot gain in 2D</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/pylayers.html#pylayers.antprop.antenna.Pattern.radF" title="pylayers.antprop.antenna.Pattern.radF"><code class="xref py py-obj docutils literal"><span class="pre">radF</span></code></a>()</td>
+<td>evaluate radiation fonction w.r.t polarization</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.antenna.Pattern.ssh" title="pylayers.antprop.antenna.Pattern.ssh"><code class="xref py py-obj docutils literal"><span class="pre">ssh</span></code></a>([L,&nbsp;dsf])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.antenna.Pattern.vsh" title="pylayers.antprop.antenna.Pattern.vsh"><code class="xref py py-obj docutils literal"><span class="pre">vsh</span></code></a>([threshold])</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Summary</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="../modules/pylayers.html#pylayers.antprop.antenna.Pattern.eval" title="pylayers.antprop.antenna.Pattern.eval"><code class="xref py py-obj docutils literal"><span class="pre">eval</span></code></a>(**kwargs)</td>
+<td>evaluate pattern functions</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/pylayers.html#pylayers.antprop.antenna.Pattern.gain" title="pylayers.antprop.antenna.Pattern.gain"><code class="xref py py-obj docutils literal"><span class="pre">gain</span></code></a>()</td>
+<td>calculates antenna gain</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/pylayers.html#pylayers.antprop.antenna.Pattern.plotG" title="pylayers.antprop.antenna.Pattern.plotG"><code class="xref py py-obj docutils literal"><span class="pre">plotG</span></code></a>(**kwargs)</td>
+<td>antenna plot gain in 2D</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/pylayers.html#pylayers.antprop.antenna.Pattern.radF" title="pylayers.antprop.antenna.Pattern.radF"><code class="xref py py-obj docutils literal"><span class="pre">radF</span></code></a>()</td>
+<td>evaluate radiation fonction w.r.t polarization</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.antenna.Pattern.ssh" title="pylayers.antprop.antenna.Pattern.ssh"><code class="xref py py-obj docutils literal"><span class="pre">ssh</span></code></a>([L,&nbsp;dsf])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.antenna.Pattern.vsh" title="pylayers.antprop.antenna.Pattern.vsh"><code class="xref py py-obj docutils literal"><span class="pre">vsh</span></code></a>([threshold])</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Documentation</p>
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern.eval">
+<code class="descname">eval</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>evaluate pattern functions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>th: list</strong></p>
+<blockquote>
+<div><p>[]</p>
+</div></blockquote>
+<p><strong>ph: list</strong></p>
+<blockquote>
+<div><p>[]</p>
+</div></blockquote>
+<p><strong>pt</strong> : np.array (3,N)</p>
+<p><strong>pr</strong> : np.array (3,N)</p>
+<p><strong>azoffset</strong> : int (0)</p>
+<p><strong>Rfloor:bool</strong></p>
+<blockquote>
+<div><p>if true add gain value to reflected ray on the floor. 
+values are append at the end of sqG.</p>
+</div></blockquote>
+<p><strong>fGHz:list</strong></p>
+<blockquote>
+<div><p>[]</p>
+</div></blockquote>
+<p><strong>nth: int</strong></p>
+<blockquote>
+<div><p>90</p>
+</div></blockquote>
+<p><strong>nph: int</strong></p>
+<blockquote>
+<div><p>181</p>
+</div></blockquote>
+<p><strong>first: boolean</strong></p>
+<blockquote>
+<div><p>True if first call (to define self.param)</p>
+</div></blockquote>
+<p><strong>grid:  boolean</strong></p>
+<blockquote>
+<div><p>True for pattern mode, False for Ray Tracing mode</p>
+</div></blockquote>
+<p><strong>th0</strong> : float</p>
+<blockquote>
+<div><p>theta initial value</p>
+</div></blockquote>
+<p><strong>th1</strong> : float</p>
+<blockquote>
+<div><p>theta finale value</p>
+</div></blockquote>
+<p><strong>ph0</strong> : float</p>
+<blockquote>
+<div><p>phi initial value</p>
+</div></blockquote>
+<p><strong>ph1</strong> : float</p>
+<blockquote class="last">
+<div><p>phi final value</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.aarray import *
+&gt;&gt;&gt; A0=Antenna(&#39;Omni&#39;,param={&#39;pol&#39;:&#39;t&#39;,&#39;GmaxdB&#39;:0})
+&gt;&gt;&gt; A1=Antenna(&#39;Gauss&#39;)
+&gt;&gt;&gt; A2=Antenna(&#39;3gpp&#39;)
+&gt;&gt;&gt; A3=ULArray()
+&gt;&gt;&gt; A0.eval()
+&gt;&gt;&gt; A1.eval()
+&gt;&gt;&gt; A2.eval()
+&gt;&gt;&gt; #A3.eval()
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern.gain">
+<code class="descname">gain</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern.gain" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates antenna gain</p>
+<p class="rubric">Notes</p>
+<div class="math">
+\[G(\theta,\phi) = |F_{\theta}|^2 + |F_{\phi}|^2\]</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern.plotG">
+<code class="descname">plotG</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern.plotG" title="Permalink to this definition">¶</a></dt>
+<dd><p>antenna plot gain in 2D</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fGHz</strong> : frequency</p>
+<p><strong>plan</strong> : &#8216;theta&#8217; | &#8216;phi&#8217; depending on the selected plan to be displayed</p>
+<p><strong>angdeg</strong> : phi or theta in degrees, if plan==&#8217;phi&#8217; it corresponds to theta</p>
+<p><strong>GmaxdB</strong> :  max gain to be displayed</p>
+<p><strong>polar</strong> : boolean</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">fig</p>
+<p class="last">ax</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import matplotlib.pyplot as plt
+&gt;&gt;&gt; from pylayers.antprop.antenna import *
+&gt;&gt;&gt; A = Antenna(&#39;defant.vsh3&#39;)
+&gt;&gt;&gt; fig,ax = A.plotG(fGHz=[2,3,4],plan=&#39;theta&#39;,angdeg=0)
+&gt;&gt;&gt; fig,ax = A.plotG(fGHz=[2,3,4],plan=&#39;phi&#39;,angdeg=90)
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../api/pylayers-antprop-antenna-Pattern-1.py">Source code</a>)</p>
+<div class="figure" id="id1">
+<img alt="../_images/pylayers-antprop-antenna-Pattern-1_00.png" src="../_images/pylayers-antprop-antenna-Pattern-1_00.png" />
+<p class="caption"><span class="caption-text">(<a class="reference external" href="../api/pylayers-antprop-antenna-Pattern-1_00.png">png</a>, <a class="reference external" href="../api/pylayers-antprop-antenna-Pattern-1_00.hires.png">hires.png</a>, <a class="reference external" href="../api/pylayers-antprop-antenna-Pattern-1_00.pdf">pdf</a>)</span></p>
+</div>
+<div class="figure" id="id2">
+<img alt="../_images/pylayers-antprop-antenna-Pattern-1_01.png" src="../_images/pylayers-antprop-antenna-Pattern-1_01.png" />
+<p class="caption"><span class="caption-text">(<a class="reference external" href="../api/pylayers-antprop-antenna-Pattern-1_01.png">png</a>, <a class="reference external" href="../api/pylayers-antprop-antenna-Pattern-1_01.hires.png">hires.png</a>, <a class="reference external" href="../api/pylayers-antprop-antenna-Pattern-1_01.pdf">pdf</a>)</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern.radF">
+<code class="descname">radF</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern.radF" title="Permalink to this definition">¶</a></dt>
+<dd><p>evaluate radiation fonction w.r.t polarization</p>
+<p>self.pol : &#8216;t&#8217; : theta , &#8216;p&#8217; : phi n, &#8216;c&#8217; : circular</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern.ssh">
+<code class="descname">ssh</code><span class="sig-paren">(</span><em>L=89</em>, <em>dsf=1</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern.ssh" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern.vsh">
+<code class="descname">vsh</code><span class="sig-paren">(</span><em>threshold=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Pattern.vsh" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team.
+      Last updated on Nov 08, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

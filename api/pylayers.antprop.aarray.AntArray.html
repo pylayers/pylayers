@@ -1,0 +1,488 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>AntArray &mdash; PyLayers</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="author" title="About these documents"
+              href="../about.html"/>
+    <link rel="top" title="PyLayers" href="../index.html"/>
+        <link rel="up" title="1   PyLayers Modules References" href="../modules/pylayers.html"/>
+        <link rel="prev" title="xyztok" href="pylayers.antprop.aarray.xyztok.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Python
+          
+
+          
+            
+            <img src="../_static/pylayers.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#basic-usage">2&nbsp;&nbsp;&nbsp;Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#environment-description">3&nbsp;&nbsp;&nbsp;Environment Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#materials-and-slabs">4&nbsp;&nbsp;&nbsp;Materials and Slabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#description-of-antennas">5&nbsp;&nbsp;&nbsp;Description of Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#coverage-simulation">6&nbsp;&nbsp;&nbsp;Coverage Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#ray-tracing-simulation">7&nbsp;&nbsp;&nbsp;Ray Tracing Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#handling-agent-mobility">8&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#other-simulation-examples">9&nbsp;&nbsp;&nbsp;Other Simulation Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#localization-algorithms">10&nbsp;&nbsp;&nbsp;Localization Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#measurements-tools">11&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#pylayers-tools">12&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#references">13&nbsp;&nbsp;&nbsp;References</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../modules/pylayers.html">1&nbsp;&nbsp;&nbsp;PyLayers Modules References</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#environment-description">1.1&nbsp;&nbsp;&nbsp;Environment Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#pylayers-gis-layout-module">1.2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#antennas-and-propagation">1.3&nbsp;&nbsp;&nbsp;Antennas and Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.antenna">1.4&nbsp;&nbsp;&nbsp;pylayers.antprop.antenna Module</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.aarray">1.5&nbsp;&nbsp;&nbsp;pylayers.antprop.aarray Module</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../modules/pylayers.html#id6">1.5.1&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../modules/pylayers.html#id7">1.5.2&nbsp;&nbsp;&nbsp;Classes</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">AntArray</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.aarray.Array.html">Array</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.aarray.Combiner.html">Combiner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.aarray.Precoder.html">Precoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.aarray.TXRU.html">TXRU</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.aarray.UCArray.html">UCArray</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.aarray.ULArray.html">ULArray</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/pylayers.html#id8">1.5.3&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.spharm">1.6&nbsp;&nbsp;&nbsp;pylayers.antprop.spharm Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.antssh">1.7&nbsp;&nbsp;&nbsp;pylayers.antprop.antssh Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.antvsh">1.8&nbsp;&nbsp;&nbsp;pylayers.antprop.antvsh Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#simulations">1.9&nbsp;&nbsp;&nbsp;Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#localization-algorithms">1.10&nbsp;&nbsp;&nbsp;Localization Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#measurement-data">1.11&nbsp;&nbsp;&nbsp;Measurement Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#instrumentation">1.12&nbsp;&nbsp;&nbsp;Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#agents-and-bodies-mobility">1.13&nbsp;&nbsp;&nbsp;Agents and Bodies Mobility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#networks">1.14&nbsp;&nbsp;&nbsp;Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#physical-layer">1.15&nbsp;&nbsp;&nbsp;Physical Layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#signal-processing">1.16&nbsp;&nbsp;&nbsp;Signal Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#utility-classes-and-functions">1.17&nbsp;&nbsp;&nbsp;Utility classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_layout.html">8 Random Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
+      
+          <li><a href="../modules/pylayers.html">1&nbsp;&nbsp;&nbsp;PyLayers Modules References</a> &raquo;</li>
+      
+    <li>AntArray</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api/pylayers.antprop.aarray.AntArray.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="antarray">
+<h1>AntArray<a class="headerlink" href="#antarray" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.antprop.aarray.AntArray">
+<em class="property">class </em><code class="descclassname">pylayers.antprop.aarray.</code><code class="descname">AntArray</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.aarray.AntArray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="pylayers.antprop.aarray.Array.html#pylayers.antprop.aarray.Array" title="pylayers.antprop.aarray.Array"><code class="xref py py-class docutils literal"><span class="pre">pylayers.antprop.aarray.Array</span></code></a>, <a class="reference internal" href="../modules/pylayers.html#pylayers.antprop.antenna.Antenna" title="pylayers.antprop.antenna.Antenna"><code class="xref py py-class docutils literal"><span class="pre">pylayers.antprop.antenna.Antenna</span></code></a></p>
+<p>Class AntArray</p>
+<p>This class inherits from Array and Antenna classes</p>
+<dl class="docutils">
+<dt>An AntArray is the combination of an </dt>
+<dd><ul class="first last simple">
+<li>an Array and an Antenna</li>
+<li>an Array and an AntArray</li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Fsynth</span></code>([theta,&nbsp;phi])</td>
+<td>Perform Antenna synthesis</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Fsynth1</span></code>(theta,&nbsp;phi)</td>
+<td>calculate complex antenna pattern  from VSH Coefficients (shape 1)</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Fsynth2</span></code>(theta,&nbsp;phi[,&nbsp;typ])</td>
+<td>pattern synthesis from shape 2 vsh coeff</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Fsynth2b</span></code>(theta,&nbsp;phi)</td>
+<td>pattern synthesis from shape 2 vsh coefficients</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Fsynth2s</span></code>([dsf])</td>
+<td>pattern synthesis from shape 2 vsh coefficients</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Fsynth3</span></code>([theta,&nbsp;phi,&nbsp;typ])</td>
+<td>synthesis of a complex antenna pattern from SH coefficients</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">cart2pol</span></code>(Fx,&nbsp;Fy,&nbsp;Fz,&nbsp;ith)</td>
+<td>converts Fx,Fy,Fz to Ftheta, Fphi for theta=ith</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">checkpole</span></code>([kf])</td>
+<td>display the reconstructed field on pole for integrity verification</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">coeffshow</span></code>(**kwargs)</td>
+<td>display antenna coefficient</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">elec_delay</span></code>(tau)</td>
+<td>apply an electrical delay</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">errel</span></code>([kf,&nbsp;dsf,&nbsp;typ])</td>
+<td>calculates error between antenna pattern and reference pattern</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">eval</span></code>(**kwargs)</td>
+<td>evaluate pattern functions</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">gain</span></code>()</td>
+<td>calculates antenna gain</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">getdelay</span></code>([delayCandidates])</td>
+<td>get electrical delay</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
+<td>generic help</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">info</span></code>()</td>
+<td>gives info about antenna object</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">initvsh</span></code>([lmax])</td>
+<td>Initialize a void vsh structure</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">load_atoll</span></code>([directory])</td>
+<td>load antenna from Atoll file</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">load_trx</span></code>([directory,&nbsp;nf,&nbsp;ntheta,&nbsp;nphi,&nbsp;ncol])</td>
+<td>load a trx file (deprecated)</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">loadhfss</span></code>([lfa,&nbsp;Nt,&nbsp;Np])</td>
+<td>load antenna from HFSS file</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">loadmat</span></code>([directory])</td>
+<td>load an antenna stored in a mat file</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">loadsh2</span></code>()</td>
+<td>load  spherical harmonics coefficient in shape  2</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">loadsh3</span></code>()</td>
+<td>Load antenna&#8217;s sh3 file</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">loadtrx</span></code>(directory)</td>
+<td>load trx file (SATIMO Near Field Chamber raw data)</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">loadvsh2</span></code>()</td>
+<td>load antenna from .vsh2 file format</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">loadvsh3</span></code>()</td>
+<td>Load antenna&#8217;s vsh3 file</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">loadvsh3_old</span></code>()</td>
+<td>Load antenna vsh coefficients in shape 3</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">ls</span></code>([typ])</td>
+<td>list the antenna files in antenna project directory</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">minsh3</span></code>([emax])</td>
+<td>Create antenna&#8217;s vsh3 file which only contains</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">movie_vsh</span></code>([mode])</td>
+<td>animates vector spherical coeff w.r.t frequency</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">mse</span></code>(Fth,&nbsp;Fph[,&nbsp;N])</td>
+<td>mean square error between original and reconstructed</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">pattern</span></code>([theta,&nbsp;phi,&nbsp;typ])</td>
+<td>return multidimensionnal radiation patterns</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">photo</span></code>([directory])</td>
+<td>show a picture of the antenna</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot3d</span></code>([k,&nbsp;typ,&nbsp;col])</td>
+<td>show 3D pattern in matplotlib</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plotG</span></code>(**kwargs)</td>
+<td>antenna plot gain in 2D</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">pol2cart</span></code>(ith)</td>
+<td>converts FTheta, FPhi to Fx,Fy,Fz for theta=ith</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">pol3d</span></code>([k,&nbsp;R,&nbsp;St,&nbsp;Sp,&nbsp;silent])</td>
+<td>Display polarisation diagram  in 3D</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">radF</span></code>()</td>
+<td>evaluate radiation fonction w.r.t polarization</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">savesh2</span></code>()</td>
+<td>save coeff in  .sh2 antenna file</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">savesh3</span></code>()</td>
+<td>save antenna in sh3 format</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">savevsh2</span></code>([filename])</td>
+<td>save coeff in  a .vsh2 antenna file</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">savevsh3</span></code>()</td>
+<td>save antenna in vsh3 format</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">show</span></code>()</td>
+<td>show array configuration in 3D</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">show3</span></code>([k,&nbsp;po,&nbsp;T,&nbsp;txru,&nbsp;typ,&nbsp;mode,&nbsp;silent])</td>
+<td>show3 geomview</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">ssh</span></code>([L,&nbsp;dsf])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.aarray.AntArray.steervec" title="pylayers.antprop.aarray.AntArray.steervec"><code class="xref py py-obj docutils literal"><span class="pre">steervec</span></code></a>(ang[,&nbsp;nbit])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">vsh</span></code>([threshold])</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Summary</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.aarray.AntArray.steervec" title="pylayers.antprop.aarray.AntArray.steervec"><code class="xref py py-obj docutils literal"><span class="pre">steervec</span></code></a>(ang[,&nbsp;nbit])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Documentation</p>
+<dl class="method">
+<dt id="pylayers.antprop.aarray.AntArray.steervec">
+<code class="descname">steervec</code><span class="sig-paren">(</span><em>ang</em>, <em>nbit=3</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.aarray.AntArray.steervec" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ang</strong> : Mx2  (steering directions)</p>
+<blockquote>
+<div><p>[[theta0,phi0],[theta1,phi1],....,[theta(M-1),phi(M-1)]]</p>
+</div></blockquote>
+<p><strong>nbit</strong> : phase quantization number of bits</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>W</strong> : np.array  (Na x Ndir x Nf)</p>
+<blockquote class="last">
+<div><p>steering matrix</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="pylayers.antprop.aarray.xyztok.html" class="btn btn-neutral" title="xyztok" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team.
+      Last updated on Nov 08, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,567 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>VCoeff &mdash; PyLayers</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="author" title="About these documents"
+              href="../about.html"/>
+    <link rel="top" title="PyLayers" href="../index.html"/>
+        <link rel="up" title="1   PyLayers Modules References" href="../modules/pylayers.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Python
+          
+
+          
+            
+            <img src="../_static/pylayers.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#basic-usage">2&nbsp;&nbsp;&nbsp;Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#environment-description">3&nbsp;&nbsp;&nbsp;Environment Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#materials-and-slabs">4&nbsp;&nbsp;&nbsp;Materials and Slabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#description-of-antennas">5&nbsp;&nbsp;&nbsp;Description of Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#coverage-simulation">6&nbsp;&nbsp;&nbsp;Coverage Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#ray-tracing-simulation">7&nbsp;&nbsp;&nbsp;Ray Tracing Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#handling-agent-mobility">8&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#other-simulation-examples">9&nbsp;&nbsp;&nbsp;Other Simulation Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#localization-algorithms">10&nbsp;&nbsp;&nbsp;Localization Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#measurements-tools">11&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#pylayers-tools">12&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#references">13&nbsp;&nbsp;&nbsp;References</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../modules/pylayers.html">1&nbsp;&nbsp;&nbsp;PyLayers Modules References</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#environment-description">1.1&nbsp;&nbsp;&nbsp;Environment Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#pylayers-gis-layout-module">1.2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#antennas-and-propagation">1.3&nbsp;&nbsp;&nbsp;Antennas and Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.antenna">1.4&nbsp;&nbsp;&nbsp;pylayers.antprop.antenna Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.aarray">1.5&nbsp;&nbsp;&nbsp;pylayers.antprop.aarray Module</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.spharm">1.6&nbsp;&nbsp;&nbsp;pylayers.antprop.spharm Module</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../modules/pylayers.html#class-vectorcoeff">1.6.1&nbsp;&nbsp;&nbsp;Class VectorCoeff</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/pylayers.html#class-sshcoeff">1.6.2&nbsp;&nbsp;&nbsp;class SSHCoeff</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/pylayers.html#class-scoeff">1.6.3&nbsp;&nbsp;&nbsp;class SCoeff</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/pylayers.html#class-vcoeff">1.6.4&nbsp;&nbsp;&nbsp;class VCoeff</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/pylayers.html#class-vshcoeff">1.6.5&nbsp;&nbsp;&nbsp;class VSHCoeff</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/pylayers.html#utility-functions">1.6.6&nbsp;&nbsp;&nbsp;Utility Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/pylayers.html#id9">1.6.7&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../modules/pylayers.html#id10">1.6.8&nbsp;&nbsp;&nbsp;Classes</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.spharm.SCoeff.html">SCoeff</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.spharm.SSHCoeff.html">SSHCoeff</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">VCoeff</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.spharm.VSHCoeff.html">VSHCoeff</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.spharm.VectorCoeff.html">VectorCoeff</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/pylayers.html#id11">1.6.9&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.antssh">1.7&nbsp;&nbsp;&nbsp;pylayers.antprop.antssh Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.antvsh">1.8&nbsp;&nbsp;&nbsp;pylayers.antprop.antvsh Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#simulations">1.9&nbsp;&nbsp;&nbsp;Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#localization-algorithms">1.10&nbsp;&nbsp;&nbsp;Localization Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#measurement-data">1.11&nbsp;&nbsp;&nbsp;Measurement Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#instrumentation">1.12&nbsp;&nbsp;&nbsp;Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#agents-and-bodies-mobility">1.13&nbsp;&nbsp;&nbsp;Agents and Bodies Mobility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#networks">1.14&nbsp;&nbsp;&nbsp;Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#physical-layer">1.15&nbsp;&nbsp;&nbsp;Physical Layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#signal-processing">1.16&nbsp;&nbsp;&nbsp;Signal Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#utility-classes-and-functions">1.17&nbsp;&nbsp;&nbsp;Utility classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_layout.html">8 Random Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
+      
+          <li><a href="../modules/pylayers.html">1&nbsp;&nbsp;&nbsp;PyLayers Modules References</a> &raquo;</li>
+      
+    <li>VCoeff</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api/pylayers.antprop.spharm.VCoeff.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="vcoeff">
+<h1>VCoeff<a class="headerlink" href="#vcoeff" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.antprop.spharm.VCoeff">
+<em class="property">class </em><code class="descclassname">pylayers.antprop.spharm.</code><code class="descname">VCoeff</code><span class="sig-paren">(</span><em>typ</em>, <em>fmin=0.6</em>, <em>fmax=6</em>, <em>data=array([]</em>, <em>dtype=float64)</em>, <em>ind=array([]</em>, <em>dtype=float64)</em>, <em>k=array([]</em>, <em>dtype=float64)</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.spharm.VCoeff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Spherical Harmonics Coefficient</p>
+<p>d = np.array [Nf,N+1,M+1]</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="82%" />
+<col width="18%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>s1  shape 1   np.array [ Nf x (N+1) x (M+1) ]</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>s2  shape 2   np.array [ Nf x (N+1)*(M+1)   ]</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>s3  shape 3   np.array [ Nf x K     ]</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>ind [ K x 2]</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VCoeff.delete" title="pylayers.antprop.spharm.VCoeff.delete"><code class="xref py py-obj docutils literal"><span class="pre">delete</span></code></a>(ind,&nbsp;typ)</td>
+<td>delete coeff</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VCoeff.delete3" title="pylayers.antprop.spharm.VCoeff.delete3"><code class="xref py py-obj docutils literal"><span class="pre">delete3</span></code></a>(ind)</td>
+<td>delete coeff.s3</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VCoeff.inits1" title="pylayers.antprop.spharm.VCoeff.inits1"><code class="xref py py-obj docutils literal"><span class="pre">inits1</span></code></a>(data)</td>
+<td>initialize shape 1 format</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VCoeff.inits2" title="pylayers.antprop.spharm.VCoeff.inits2"><code class="xref py py-obj docutils literal"><span class="pre">inits2</span></code></a>(data)</td>
+<td>initialize shape 2 format</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VCoeff.inits3" title="pylayers.antprop.spharm.VCoeff.inits3"><code class="xref py py-obj docutils literal"><span class="pre">inits3</span></code></a>(data,&nbsp;ind,&nbsp;k)</td>
+<td>initialize shape 3 format</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VCoeff.plot" title="pylayers.antprop.spharm.VCoeff.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>([typ,&nbsp;title,&nbsp;xl,&nbsp;yl,&nbsp;log,&nbsp;stem,&nbsp;color])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VCoeff.put" title="pylayers.antprop.spharm.VCoeff.put"><code class="xref py py-obj docutils literal"><span class="pre">put</span></code></a>(typ)</td>
+<td>recover last deleted coeff</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VCoeff.put3" title="pylayers.antprop.spharm.VCoeff.put3"><code class="xref py py-obj docutils literal"><span class="pre">put3</span></code></a>(i,&nbsp;i3)</td>
+<td>function put 3</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VCoeff.s1tos2" title="pylayers.antprop.spharm.VCoeff.s1tos2"><code class="xref py py-obj docutils literal"><span class="pre">s1tos2</span></code></a>([L2])</td>
+<td>convert shape 1 &#8211;&gt; shape 2</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VCoeff.s3tos2" title="pylayers.antprop.spharm.VCoeff.s3tos2"><code class="xref py py-obj docutils literal"><span class="pre">s3tos2</span></code></a>()</td>
+<td>transform shape3 to shape 2</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VCoeff.show" title="pylayers.antprop.spharm.VCoeff.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>([typ,&nbsp;k,&nbsp;L,&nbsp;M,&nbsp;kmax,&nbsp;seuildb,&nbsp;titre,&nbsp;...])</td>
+<td>show coeff</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Summary</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VCoeff.delete" title="pylayers.antprop.spharm.VCoeff.delete"><code class="xref py py-obj docutils literal"><span class="pre">delete</span></code></a>(ind,&nbsp;typ)</td>
+<td>delete coeff</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VCoeff.delete3" title="pylayers.antprop.spharm.VCoeff.delete3"><code class="xref py py-obj docutils literal"><span class="pre">delete3</span></code></a>(ind)</td>
+<td>delete coeff.s3</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VCoeff.inits1" title="pylayers.antprop.spharm.VCoeff.inits1"><code class="xref py py-obj docutils literal"><span class="pre">inits1</span></code></a>(data)</td>
+<td>initialize shape 1 format</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VCoeff.inits2" title="pylayers.antprop.spharm.VCoeff.inits2"><code class="xref py py-obj docutils literal"><span class="pre">inits2</span></code></a>(data)</td>
+<td>initialize shape 2 format</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VCoeff.inits3" title="pylayers.antprop.spharm.VCoeff.inits3"><code class="xref py py-obj docutils literal"><span class="pre">inits3</span></code></a>(data,&nbsp;ind,&nbsp;k)</td>
+<td>initialize shape 3 format</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VCoeff.plot" title="pylayers.antprop.spharm.VCoeff.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>([typ,&nbsp;title,&nbsp;xl,&nbsp;yl,&nbsp;log,&nbsp;stem,&nbsp;color])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VCoeff.put" title="pylayers.antprop.spharm.VCoeff.put"><code class="xref py py-obj docutils literal"><span class="pre">put</span></code></a>(typ)</td>
+<td>recover last deleted coeff</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VCoeff.put3" title="pylayers.antprop.spharm.VCoeff.put3"><code class="xref py py-obj docutils literal"><span class="pre">put3</span></code></a>(i,&nbsp;i3)</td>
+<td>function put 3</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VCoeff.s1tos2" title="pylayers.antprop.spharm.VCoeff.s1tos2"><code class="xref py py-obj docutils literal"><span class="pre">s1tos2</span></code></a>([L2])</td>
+<td>convert shape 1 &#8211;&gt; shape 2</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VCoeff.s3tos2" title="pylayers.antprop.spharm.VCoeff.s3tos2"><code class="xref py py-obj docutils literal"><span class="pre">s3tos2</span></code></a>()</td>
+<td>transform shape3 to shape 2</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VCoeff.show" title="pylayers.antprop.spharm.VCoeff.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>([typ,&nbsp;k,&nbsp;L,&nbsp;M,&nbsp;kmax,&nbsp;seuildb,&nbsp;titre,&nbsp;...])</td>
+<td>show coeff</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Documentation</p>
+<dl class="method">
+<dt id="pylayers.antprop.spharm.VCoeff.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><em>ind</em>, <em>typ</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.spharm.VCoeff.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete coeff</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ind</strong> : int</p>
+<p><strong>typ</strong> : int</p>
+<blockquote class="last">
+<div><p>2  shape 2  (Nf , N*M   )
+3  shape 3  (Nf , K )  T ( K x 2 )</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.VCoeff.delete3">
+<code class="descname">delete3</code><span class="sig-paren">(</span><em>ind</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.spharm.VCoeff.delete3" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete coeff.s3</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ind</strong> : int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.VCoeff.inits1">
+<code class="descname">inits1</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.spharm.VCoeff.inits1" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize shape 1 format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> : shape 1 data</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.VCoeff.inits2">
+<code class="descname">inits2</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.spharm.VCoeff.inits2" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize shape 2 format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> : shape 2 data</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.VCoeff.inits3">
+<code class="descname">inits3</code><span class="sig-paren">(</span><em>data</em>, <em>ind</em>, <em>k</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.spharm.VCoeff.inits3" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize shape 3 format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : shape 3 data</p>
+<blockquote class="last">
+<div><p>ind   : ishape 3 indexing
+k     : k</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.VCoeff.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>typ='s3'</em>, <em>title=''</em>, <em>xl=False</em>, <em>yl=False</em>, <em>log=False</em>, <em>stem=True</em>, <em>color='b'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.spharm.VCoeff.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.VCoeff.put">
+<code class="descname">put</code><span class="sig-paren">(</span><em>typ</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.spharm.VCoeff.put" title="Permalink to this definition">¶</a></dt>
+<dd><p>recover last deleted coeff</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : int</p>
+<blockquote class="last">
+<div><p>2 : shape 2  (Nf , N*M   )
+3 : shape 3  (Nf , K )  T ( K x 2 )</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.VCoeff.put3">
+<code class="descname">put3</code><span class="sig-paren">(</span><em>i</em>, <em>i3</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.spharm.VCoeff.put3" title="Permalink to this definition">¶</a></dt>
+<dd><p>function put 3</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>i</strong> : int</p>
+<p class="last"><strong>i3</strong> : int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.VCoeff.s1tos2">
+<code class="descname">s1tos2</code><span class="sig-paren">(</span><em>L2=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.spharm.VCoeff.s1tos2" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert shape 1 &#8211;&gt; shape 2</p>
+<p>shape 1   array [ Nf , (L+1) , (M+1) ]
+shape 2   array [ Nf , (L+1) * (M+1) ]</p>
+<p>l = 0...L2
+m = 0...M2</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L2</strong> : int &lt;= L1</p>
+<blockquote class="last">
+<div><p>shape 1 has 3 axis - shape 2 has 2 axis
+by default all s1 coefficients are kept L2=-1 means L2=min(L1,M1) because M2 must be equal to L2</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="../modules/generated/pylayers.antprop.spharm.index_vsh.html#pylayers.antprop.spharm.index_vsh" title="pylayers.antprop.spharm.index_vsh"><code class="xref py py-obj docutils literal"><span class="pre">index_vsh</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.VCoeff.s3tos2">
+<code class="descname">s3tos2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.spharm.VCoeff.s3tos2" title="Permalink to this definition">¶</a></dt>
+<dd><p>transform shape3 to shape 2</p>
+<p>s2  shape 2   array [ Nf x (L+1)*(M+1) ]
+s3  shape 3   array [ Nf x K     ] ind [ K x 2]</p>
+<p class="rubric">Notes</p>
+<p>The shape of s2 is (Lmax+1)*(Lmax+2)/2</p>
+<p>k2  : is the list of conserved indices in shape 3
+ind3 : np.array (K3, 2) are the conserved (l,m) indices</p>
+<p>ind3 and k2 have one common dimension</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.VCoeff.show">
+<code class="descname">show</code><span class="sig-paren">(</span><em>typ='s1'</em>, <em>k=0</em>, <em>L=-1</em>, <em>M=-1</em>, <em>kmax=1000</em>, <em>seuildb=50</em>, <em>titre='SHC'</em>, <em>xl=True</em>, <em>yl=True</em>, <em>fontsize=14</em>, <em>dB=True</em>, <em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object&gt;</em>, <em>anim=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.spharm.VCoeff.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>show coeff</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> :  string</p>
+<blockquote>
+<div><p>default (&#8216;s1&#8217;)
+&#8216;s1&#8217;  shape 1  (Nf , N , M )
+&#8216;s2&#8217;  shape 2  (Nf , N*M   )
+&#8216;s3&#8217;  shape 3  (Nf , K )  T ( K x 2 )</p>
+</div></blockquote>
+<p><strong>k</strong> : integer</p>
+<blockquote>
+<div><p>frequency index default 0</p>
+</div></blockquote>
+<p><strong>N, M = maximal value for degree, mode respectively</strong></p>
+<p class="last"><strong>(not to be defined if &#8216;s2&#8217; or &#8216;s3&#8217;)</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team.
+      Last updated on Nov 08, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
