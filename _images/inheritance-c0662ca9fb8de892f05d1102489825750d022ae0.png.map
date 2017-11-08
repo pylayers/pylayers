@@ -1,0 +1,6 @@
+<map id="inheritancef02071ec21" name="inheritancef02071ec21">
+<area shape="rect" id="node1" href="pylayers.simul.link.DLink.html#pylayers.simul.link.DLink" target="_top" title="Deterministic Link Class" alt="" coords="252,5,324,31"/>
+<area shape="rect" id="node2" href="pylayers.simul.link.Link.html#pylayers.simul.link.Link" target="_top" title="Link is a MetaClass, which derives from `Tchannel`." alt="" coords="132,31,204,56"/>
+<area shape="rect" id="node4" href="pylayers.simul.link.SLink.html#pylayers.simul.link.SLink" target="_top" title="SLink" alt="" coords="252,55,324,80"/>
+<area shape="rect" id="node3" title="Generic PyLayers Meta Class" alt="" coords="5,31,84,56"/>
+</map>

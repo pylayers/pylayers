@@ -175,6 +175,17 @@
             
   <h1>Source code for pylayers.antprop.signature</h1><div class="highlight"><pre>
 <span></span><span class="c1">#-*- coding:Utf-8 -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. currentmodule:: pylayers.antprop.signature</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :members:</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">doctest</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">doctest</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="c1">#import scipy as sp</span>
@@ -809,26 +820,26 @@
         <span class="c1"># print &quot;source : &quot;, self.source</span>
         <span class="c1"># print &quot;target : &quot;, self.target</span>
         <span class="n">size</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="s1">&#39;----------&#39;</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="s1">&#39;----------&#39;</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="c1">#s = s + str(self.__sizeof__())+&#39;\n&#39;</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="n">size</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">])</span><span class="o">/</span><span class="mi">2</span>
-        <span class="k">print</span> <span class="s1">&#39;from cycle : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; to cycle &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;from cycle : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; to cycle &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="n">pyu</span><span class="o">.</span><span class="n">printout</span><span class="p">(</span><span class="s1">&#39;Reflection&#39;</span><span class="p">,</span><span class="n">pyu</span><span class="o">.</span><span class="n">BLUE</span><span class="p">)</span>
-        <span class="k">print</span> <span class="s1">&#39;  &#39;</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;  &#39;</span><span class="p">)</span>
         <span class="n">pyu</span><span class="o">.</span><span class="n">printout</span><span class="p">(</span><span class="s1">&#39;Transmission&#39;</span><span class="p">,</span><span class="n">pyu</span><span class="o">.</span><span class="n">GREEN</span><span class="p">)</span>
-        <span class="k">print</span> <span class="s1">&#39;  &#39;</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;  &#39;</span><span class="p">)</span>
         <span class="n">pyu</span><span class="o">.</span><span class="n">printout</span><span class="p">(</span><span class="s1">&#39;Diffraction&#39;</span><span class="p">,</span><span class="n">pyu</span><span class="o">.</span><span class="n">RED</span><span class="p">)</span>
-        <span class="k">print</span> <span class="s1">&#39;  </span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;  </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
-            <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+            <span class="k">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
             <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="n">k</span><span class="p">],</span><span class="mi">2</span><span class="p">,</span><span class="n">k</span><span class="p">),</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
             <span class="c1"># nl x 2 x nsig</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
 
                 <span class="n">nstr</span><span class="o">=</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">,:]</span>
                 <span class="n">typ</span><span class="o">=</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">,:]</span>
-                <span class="k">print</span> <span class="s1">&#39;[&#39;</span><span class="p">,</span>
+                <span class="k">print</span><span class="p">(</span><span class="s1">&#39;[&#39;</span><span class="p">,)</span>
                 <span class="k">for</span> <span class="n">n</span><span class="p">,</span><span class="n">t</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">nstr</span><span class="p">,</span><span class="n">typ</span><span class="p">):</span>
                     <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
                         <span class="n">pyu</span><span class="o">.</span><span class="n">printout</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="n">pyu</span><span class="o">.</span><span class="n">BLUE</span><span class="p">)</span>
@@ -836,8 +847,8 @@
                         <span class="n">pyu</span><span class="o">.</span><span class="n">printout</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="n">pyu</span><span class="o">.</span><span class="n">GREEN</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span>
                         <span class="n">pyu</span><span class="o">.</span><span class="n">printout</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="n">pyu</span><span class="o">.</span><span class="n">RED</span><span class="p">)</span>
-                <span class="k">print</span> <span class="s1">&#39;]&#39;</span>
-            <span class="k">print</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span></div>
+                <span class="k">print</span><span class="p">(</span><span class="s1">&#39;]&#39;</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
                 <span class="c1"># s = s + &#39;   &#39;+ str(a[i,0,:]) + &#39;\n&#39;</span>
 
                 <span class="c1"># s = s + &#39;   &#39;+ str(a[i,1,:]) + &#39;\n&#39;</span>
@@ -1334,8 +1345,8 @@
         <span class="n">pt_target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">][</span><span class="s1">&#39;polyg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">centroid</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">xy</span><span class="p">)</span>
         <span class="n">d_source_target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">pt_source</span> <span class="o">-</span> <span class="n">pt_target</span><span class="p">)</span>
         
-        <span class="c1">#print &quot;source,lis :&quot;,self.source,lis</span>
-        <span class="c1">#print &quot;target,lit :&quot;,self.target,lit</span>
+        <span class="c1">#print(&quot;source,lis :&quot;,self.source,lis)</span>
+        <span class="c1">#print(&quot;target,lit :&quot;,self.target,lit)</span>
         <span class="c1"># for u in lit: </span>
         <span class="c1">#     print u</span>
         <span class="c1"># print &quot;-------------&quot;</span>
@@ -2194,7 +2205,7 @@
             <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">prx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">prx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;xb&#39;</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">ni</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="k">print</span> <span class="s2">&quot;incorrect number of interactions&quot;</span>
+                <span class="k">print</span><span class="p">(</span><span class="s2">&quot;incorrect number of interactions&quot;</span><span class="p">)</span>
             <span class="n">pos</span><span class="o">=</span><span class="p">{}</span>
 
             <span class="k">try</span><span class="p">:</span>
@@ -2211,12 +2222,12 @@
                     <span class="k">if</span> <span class="n">ii</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                         <span class="n">inter</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">)</span>
             <span class="k">except</span><span class="p">:</span>
-                <span class="k">print</span> <span class="s2">&quot;signature index out of bounds of signature&quot;</span>
+                <span class="k">print</span><span class="p">(</span><span class="s2">&quot;signature index out of bounds of signature&quot;</span><span class="p">)</span>
 
             <span class="n">line</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">line</span><span class="p">,</span><span class="n">prx</span><span class="p">))</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">line</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">line</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
-            <span class="k">print</span> <span class="n">inter</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">inter</span><span class="p">)</span>
             <span class="n">st</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">()</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">cla</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">st</span> <span class="o">==</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span>
@@ -2234,7 +2245,7 @@
                         <span class="n">ni</span><span class="o">=</span><span class="n">nit</span><span class="p">[</span><span class="n">uni</span><span class="p">]</span>
                         <span class="n">us</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">print</span> <span class="s1">&#39;press n for next signature&#39;</span></div>
+                <span class="k">print</span><span class="p">(</span><span class="s1">&#39;press n for next signature&#39;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Signatures.rays"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.Signatures.html#pylayers.antprop.signature.Signatures.rays">[docs]</a>    <span class="k">def</span> <span class="nf">rays</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ptx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">prx</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
@@ -3077,7 +3088,7 @@
                 <span class="c1"># NEVER TESTED !!!!!!!!!!!</span>
                 <span class="n">y</span><span class="p">[</span><span class="n">uDy1</span><span class="p">,</span><span class="n">uDy2</span><span class="p">]</span><span class="o">=</span><span class="n">a</span><span class="p">[</span><span class="n">uDf</span><span class="p">]</span>
             <span class="k">except</span><span class="p">:</span>
-                <span class="k">print</span> <span class="s2">&quot;signatures.image diffraction line 3672 Not yet tested !&quot;</span>
+                <span class="k">print</span><span class="p">(</span><span class="s2">&quot;signatures.image diffraction line 3672 Not yet tested !&quot;</span><span class="p">)</span>
 
                 <span class="k">pass</span> <span class="c1">#print &#39;no D&#39;</span>
 
@@ -3113,7 +3124,7 @@
                     <span class="n">ly</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">nsp</span><span class="p">)</span>
                     <span class="k">del</span> <span class="n">A</span>
                     <span class="k">del</span> <span class="n">y</span>
-                    <span class="k">print</span> <span class="n">nsp</span>
+                    <span class="k">print</span><span class="p">(</span><span class="n">nsp</span><span class="p">)</span>
                     <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsp</span><span class="p">):</span>
 
                         <span class="n">lm</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">lA</span><span class="p">[</span><span class="n">s</span><span class="p">],</span> <span class="n">ly</span><span class="p">[</span><span class="n">s</span><span class="p">])</span>
@@ -3193,7 +3204,7 @@
 
 <div class="viewcode-block" id="Signature.info"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.Signature.html#pylayers.antprop.signature.Signature.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="k">print</span> <span class="n">k</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">k</span><span class="p">]</span></div>
+            <span class="k">print</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">k</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="Signature.ev2"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.Signature.html#pylayers.antprop.signature.Signature.ev2">[docs]</a>    <span class="k">def</span> <span class="nf">ev2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  evaluation of Signature</span>
@@ -3751,9 +3762,9 @@
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
-    <span class="k">print</span> <span class="s2">&quot;testing pylayers/antprop/signature.py&quot;</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;testing pylayers/antprop/signature.py&quot;</span><span class="p">)</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
-    <span class="k">print</span> <span class="s2">&quot;-------------------------------------&quot;</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;-------------------------------------&quot;</span><span class="p">)</span>
 </pre></div>
 
            </div>

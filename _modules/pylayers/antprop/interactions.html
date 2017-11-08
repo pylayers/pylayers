@@ -176,6 +176,17 @@
   <h1>Source code for pylayers.antprop.interactions</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/python</span>
 <span class="c1"># -*- coding: utf8 -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. currentmodule:: pylayers.antprop.interactions</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :members:</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">doctest</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
@@ -648,7 +659,7 @@
             <span class="c1">#return(self.olf[:, np.newaxis, np.newaxis, np.newaxis]*data[np.newaxis, :, :, :])</span>
             <span class="k">return</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">),</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s1">&#39;no B interactions to evaluate&#39;</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;no B interactions to evaluate&#39;</span><span class="p">)</span>
             <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">])</span></div></div>
 
 <span class="c1">#####Interaction Loss in not used for speed purpose</span>
@@ -941,7 +952,7 @@
                     <span class="c1">#    m = m.lower()</span>
                     <span class="c1"># get alpha and gamma for divergence factor</span>
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">slab</span><span class="p">[</span><span class="n">m</span><span class="p">][</span><span class="s1">&#39;lmat&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                        <span class="k">print</span> <span class="s1">&#39;Warning : IntR class implemented for mat with only 1 layer &#39;</span>
+                        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Warning : IntR class implemented for mat with only 1 layer &#39;</span><span class="p">)</span>
                     <span class="n">a</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="bp">self</span><span class="o">.</span><span class="n">slab</span><span class="p">[</span><span class="n">m</span><span class="p">][</span><span class="s1">&#39;lmat&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;epr&#39;</span><span class="p">]]))</span> \
                                <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ut</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">))</span>
                     <span class="n">g</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ut</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ut</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
@@ -1047,7 +1058,7 @@
         <span class="k">else</span> <span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">]</span>
             <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">)</span>
-            <span class="k">print</span> <span class="s1">&#39;not yet implemented&#39;</span></div></div>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;not yet implemented&#39;</span><span class="p">)</span></div></div>
         <span class="c1"># else:</span>
         <span class="c1">#     self.A = self.data[:, None, None, None]</span>
         <span class="c1">#     print &#39;no D interaction to evaluate&#39;</span>
@@ -1055,7 +1066,7 @@
 
 <span class="k">if</span> <span class="p">(</span><span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">):</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
-    <span class="k">print</span> <span class="s2">&quot;testing pylayers/antprop/interactions.py&quot;</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;testing pylayers/antprop/interactions.py&quot;</span><span class="p">)</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 </pre></div>
 
