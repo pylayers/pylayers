@@ -1,0 +1,1193 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Body &mdash; PyLayers</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="author" title="About these documents"
+              href="../about.html"/>
+    <link rel="top" title="PyLayers" href="../index.html"/>
+        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/>
+        <link rel="next" title="Cylinder" href="pylayers.mobility.ban.body.Cylinder.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Python
+          
+
+          
+            
+            <img src="../_static/pylayers.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_layout.html">8 Random Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.selectl">3&nbsp;&nbsp;&nbsp;pylayers.gis.selectl Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.srtm">4&nbsp;&nbsp;&nbsp;pylayers.gis.srtm Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.osmparser">5&nbsp;&nbsp;&nbsp;pylayers.gis.osmparser Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.ezone">6&nbsp;&nbsp;&nbsp;pylayers.gis.ezone Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.antenna">7&nbsp;&nbsp;&nbsp;pylayers.antprop.antenna Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.aarray">8&nbsp;&nbsp;&nbsp;pylayers.antprop.aarray Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.spharm">9&nbsp;&nbsp;&nbsp;pylayers.antprop.spharm Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.antssh">10&nbsp;&nbsp;&nbsp;pylayers.antprop.antssh Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.antvsh">11&nbsp;&nbsp;&nbsp;pylayers.antprop.antvsh Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.slab">12&nbsp;&nbsp;&nbsp;pylayers.antprop.slab Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.signature">13&nbsp;&nbsp;&nbsp;pylayers.antprop.signature Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.interactions">14&nbsp;&nbsp;&nbsp;pylayers.antprop.interactions Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.diffraction">15&nbsp;&nbsp;&nbsp;pylayers.antprop.diffraction Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.diffRT">16&nbsp;&nbsp;&nbsp;pylayers.antprop.diffRT Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.rays">17&nbsp;&nbsp;&nbsp;pylayers.antprop.rays Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.loss">18&nbsp;&nbsp;&nbsp;pylayers.antprop.loss Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.channel">19&nbsp;&nbsp;&nbsp;pylayers.antprop.channel Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id39">20&nbsp;&nbsp;&nbsp;pylayers.antprop.loss Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.coverage">21&nbsp;&nbsp;&nbsp;pylayers.antprop.coverage Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.coeffModel">22&nbsp;&nbsp;&nbsp;pylayers.antprop.coeffModel Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.simul.link">23&nbsp;&nbsp;&nbsp;pylayers.simul.link Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.simul.exploit">24&nbsp;&nbsp;&nbsp;pylayers.simul.exploit Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.simul.exploit_simulnet">25&nbsp;&nbsp;&nbsp;pylayers.simul.exploit_simulnet Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.simul.simulnet">26&nbsp;&nbsp;&nbsp;pylayers.simul.simulnet Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.simul.simultraj">27&nbsp;&nbsp;&nbsp;pylayers.simul.simultraj Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.exploit.simnet">28&nbsp;&nbsp;&nbsp;pylayers.exploit.simnet Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.mesuwb">29&nbsp;&nbsp;&nbsp;pylayers.measures.mesuwb Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.mesmimo">30&nbsp;&nbsp;&nbsp;pylayers.measures.mesmimo Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.cormoran">31&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">35&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">36&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">37&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">38&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">39&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="references.html#body-class">39.1&nbsp;&nbsp;&nbsp;Body Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#cylinder-class">39.2&nbsp;&nbsp;&nbsp;Cylinder Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#id131">39.3&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="references.html#id132">39.4&nbsp;&nbsp;&nbsp;Classes</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Body</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.mobility.ban.body.Cylinder.html">Cylinder</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#id133">39.5&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id134">40&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
+      
+    <li>Body</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api/pylayers.mobility.ban.body.Body.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="body">
+<h1>Body<a class="headerlink" href="#body" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.mobility.ban.body.Body">
+<em class="property">class </em><code class="descclassname">pylayers.mobility.ban.body.</code><code class="descname">Body</code><span class="sig-paren">(</span><em>_filebody='John.ini'</em>, <em>_filemocap=[]</em>, <em>_filewear=[]</em>, <em>traj=[]</em>, <em>unit='cm'</em>, <em>loop=True</em>, <em>centered=True</em>, <em>multi_subject_mocap=False</em>, <em>color='white'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="pylayers.util.project.PyLayers.html#pylayers.util.project.PyLayers" title="pylayers.util.project.PyLayers"><code class="xref py py-class docutils literal"><span class="pre">pylayers.util.project.PyLayers</span></code></a></p>
+<p>Class  to manage a Body model</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.load" title="pylayers.mobility.ban.body.Body.load"><code class="xref py py-obj docutils literal"><span class="pre">load</span></code></a>([_filebody,&nbsp;_filemocap,&nbsp;unit,&nbsp;_filewear])</td>
+<td>load a body ini file</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.center" title="pylayers.mobility.ban.body.Body.center"><code class="xref py py-obj docutils literal"><span class="pre">center</span></code></a>([force])</td>
+<td>centering the body</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.posvel" title="pylayers.mobility.ban.body.Body.posvel"><code class="xref py py-obj docutils literal"><span class="pre">posvel</span></code></a>(traj,&nbsp;t)</td>
+<td>calculate position and velocity</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.loadC3D" title="pylayers.mobility.ban.body.Body.loadC3D"><code class="xref py py-obj docutils literal"><span class="pre">loadC3D</span></code></a>([filename,&nbsp;nframes,&nbsp;unit])</td>
+<td>load nframes of motion capture C3D file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.settopos" title="pylayers.mobility.ban.body.Body.settopos"><code class="xref py py-obj docutils literal"><span class="pre">settopos</span></code></a>([traj,&nbsp;t,&nbsp;cs,&nbsp;treadmill,&nbsp;p0])</td>
+<td>translate the body on a time stamped trajectory</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.setccs" title="pylayers.mobility.ban.body.Body.setccs"><code class="xref py py-obj docutils literal"><span class="pre">setccs</span></code></a>([frameId,&nbsp;topos])</td>
+<td>set cylinder coordinate system</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.setdcs" title="pylayers.mobility.ban.body.Body.setdcs"><code class="xref py py-obj docutils literal"><span class="pre">setdcs</span></code></a>([topos,&nbsp;frameId])</td>
+<td>set device coordinate system (dcs) from a topos</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.geomfile" title="pylayers.mobility.ban.body.Body.geomfile"><code class="xref py py-obj docutils literal"><span class="pre">geomfile</span></code></a>(**kwargs)</td>
+<td>create a geomview file from a body configuration</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.plot3d" title="pylayers.mobility.ban.body.Body.plot3d"><code class="xref py py-obj docutils literal"><span class="pre">plot3d</span></code></a>([iframe,&nbsp;topos,&nbsp;fig,&nbsp;ax,&nbsp;col])</td>
+<td>scatter 3d plot</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.movie" title="pylayers.mobility.ban.body.Body.movie"><code class="xref py py-obj docutils literal"><span class="pre">movie</span></code></a>(**kwargs)</td>
+<td>creates a geomview movie</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.cylinder_basis_k" title="pylayers.mobility.ban.body.Body.cylinder_basis_k"><code class="xref py py-obj docutils literal"><span class="pre">cylinder_basis_k</span></code></a>(frameId)</td>
+<td>cylinder basis k</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.cyl_antenna" title="pylayers.mobility.ban.body.Body.cyl_antenna"><code class="xref py py-obj docutils literal"><span class="pre">cyl_antenna</span></code></a>(cylinderId,&nbsp;l,&nbsp;alpha[,&nbsp;frameId])</td>
+<td>cylinder antenna</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Summary</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.anim" title="pylayers.mobility.ban.body.Body.anim"><code class="xref py py-obj docutils literal"><span class="pre">anim</span></code></a>()</td>
+<td>animate body</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.animc3d" title="pylayers.mobility.ban.body.Body.animc3d"><code class="xref py py-obj docutils literal"><span class="pre">animc3d</span></code></a>()</td>
+<td>animate c3d file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.body_link" title="pylayers.mobility.ban.body.Body.body_link"><code class="xref py py-obj docutils literal"><span class="pre">body_link</span></code></a>([topos,&nbsp;frameId])</td>
+<td>body link</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.c3d2traj" title="pylayers.mobility.ban.body.Body.c3d2traj"><code class="xref py py-obj docutils literal"><span class="pre">c3d2traj</span></code></a>()</td>
+<td>convert c3d file to trajectory</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.ccsfromc3d" title="pylayers.mobility.ban.body.Body.ccsfromc3d"><code class="xref py py-obj docutils literal"><span class="pre">ccsfromc3d</span></code></a>(config)</td>
+<td>Create ccs from C3D file</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.center" title="pylayers.mobility.ban.body.Body.center"><code class="xref py py-obj docutils literal"><span class="pre">center</span></code></a>([force])</td>
+<td>centering the body</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.chronophoto" title="pylayers.mobility.ban.body.Body.chronophoto"><code class="xref py py-obj docutils literal"><span class="pre">chronophoto</span></code></a>(**kwargs)</td>
+<td>chronophotography of the body movement</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.cyl_antenna" title="pylayers.mobility.ban.body.Body.cyl_antenna"><code class="xref py py-obj docutils literal"><span class="pre">cyl_antenna</span></code></a>(cylinderId,&nbsp;l,&nbsp;alpha[,&nbsp;frameId])</td>
+<td>cylinder antenna</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.cylfromc3d" title="pylayers.mobility.ban.body.Body.cylfromc3d"><code class="xref py py-obj docutils literal"><span class="pre">cylfromc3d</span></code></a>([centered])</td>
+<td>Create cylinders from C3D file</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.cylinder_basis_k" title="pylayers.mobility.ban.body.Body.cylinder_basis_k"><code class="xref py py-obj docutils literal"><span class="pre">cylinder_basis_k</span></code></a>(frameId)</td>
+<td>cylinder basis k</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.dpdf" title="pylayers.mobility.ban.body.Body.dpdf"><code class="xref py py-obj docutils literal"><span class="pre">dpdf</span></code></a>([tr,&nbsp;tunit,&nbsp;poffset])</td>
+<td>device position dataframe</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.export_csv" title="pylayers.mobility.ban.body.Body.export_csv"><code class="xref py py-obj docutils literal"><span class="pre">export_csv</span></code></a>([unit,&nbsp;df,&nbsp;_filename,&nbsp;col])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.mobility.ban.body.Body.frame2time" title="pylayers.mobility.ban.body.Body.frame2time"><code class="xref py py-obj docutils literal"><span class="pre">frame2time</span></code></a>(f)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.geomfile" title="pylayers.mobility.ban.body.Body.geomfile"><code class="xref py py-obj docutils literal"><span class="pre">geomfile</span></code></a>(**kwargs)</td>
+<td>create a geomview file from a body configuration</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.getdevT" title="pylayers.mobility.ban.body.Body.getdevT"><code class="xref py py-obj docutils literal"><span class="pre">getdevT</span></code></a>([id,&nbsp;t,&nbsp;frameId])</td>
+<td>get device orientation</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.getdevp" title="pylayers.mobility.ban.body.Body.getdevp"><code class="xref py py-obj docutils literal"><span class="pre">getdevp</span></code></a>([id])</td>
+<td>get device position</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.init_traj" title="pylayers.mobility.ban.body.Body.init_traj"><code class="xref py py-obj docutils literal"><span class="pre">init_traj</span></code></a>()</td>
+<td>create trajectory object from given trajectory or mocap</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.intersectBody" title="pylayers.mobility.ban.body.Body.intersectBody"><code class="xref py py-obj docutils literal"><span class="pre">intersectBody</span></code></a>(A,&nbsp;B[,&nbsp;topos,&nbsp;frameId,&nbsp;cyl])</td>
+<td>intersect Body</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.intersectBody3" title="pylayers.mobility.ban.body.Body.intersectBody3"><code class="xref py py-obj docutils literal"><span class="pre">intersectBody3</span></code></a>(A,&nbsp;B[,&nbsp;topos,&nbsp;frameId])</td>
+<td>intersect body new version</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.load" title="pylayers.mobility.ban.body.Body.load"><code class="xref py py-obj docutils literal"><span class="pre">load</span></code></a>([_filebody,&nbsp;_filemocap,&nbsp;unit,&nbsp;_filewear])</td>
+<td>load a body ini file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.loadC3D" title="pylayers.mobility.ban.body.Body.loadC3D"><code class="xref py py-obj docutils literal"><span class="pre">loadC3D</span></code></a>([filename,&nbsp;nframes,&nbsp;unit])</td>
+<td>load nframes of motion capture C3D file</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.movie" title="pylayers.mobility.ban.body.Body.movie"><code class="xref py py-obj docutils literal"><span class="pre">movie</span></code></a>(**kwargs)</td>
+<td>creates a geomview movie</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.network" title="pylayers.mobility.ban.body.Body.network"><code class="xref py py-obj docutils literal"><span class="pre">network</span></code></a>()</td>
+<td>evaluate network topology and dynamics</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.plot3d" title="pylayers.mobility.ban.body.Body.plot3d"><code class="xref py py-obj docutils literal"><span class="pre">plot3d</span></code></a>([iframe,&nbsp;topos,&nbsp;fig,&nbsp;ax,&nbsp;col])</td>
+<td>scatter 3d plot</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.posvel" title="pylayers.mobility.ban.body.Body.posvel"><code class="xref py py-obj docutils literal"><span class="pre">posvel</span></code></a>(traj,&nbsp;t)</td>
+<td>calculate position and velocity</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.rdpdf" title="pylayers.mobility.ban.body.Body.rdpdf"><code class="xref py py-obj docutils literal"><span class="pre">rdpdf</span></code></a>()</td>
+<td>real device position dataframe</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.setacs" title="pylayers.mobility.ban.body.Body.setacs"><code class="xref py py-obj docutils literal"><span class="pre">setacs</span></code></a>()</td>
+<td>set antenna coordinate system (acs) from a topos or a set of frames</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.setccs" title="pylayers.mobility.ban.body.Body.setccs"><code class="xref py py-obj docutils literal"><span class="pre">setccs</span></code></a>([frameId,&nbsp;topos])</td>
+<td>set cylinder coordinate system</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.setcs" title="pylayers.mobility.ban.body.Body.setcs"><code class="xref py py-obj docutils literal"><span class="pre">setcs</span></code></a>([topos,&nbsp;frameId])</td>
+<td>set coordinates systems from a topos or a frame id</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.setdcs" title="pylayers.mobility.ban.body.Body.setdcs"><code class="xref py py-obj docutils literal"><span class="pre">setdcs</span></code></a>([topos,&nbsp;frameId])</td>
+<td>set device coordinate system (dcs) from a topos</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.settopos" title="pylayers.mobility.ban.body.Body.settopos"><code class="xref py py-obj docutils literal"><span class="pre">settopos</span></code></a>([traj,&nbsp;t,&nbsp;cs,&nbsp;treadmill,&nbsp;p0])</td>
+<td>translate the body on a time stamped trajectory</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.show" title="pylayers.mobility.ban.body.Body.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>(**kwargs)</td>
+<td>show a 2D plane projection of the body</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.show3" title="pylayers.mobility.ban.body.Body.show3"><code class="xref py py-obj docutils literal"><span class="pre">show3</span></code></a>(**kwargs)</td>
+<td>create geomfile for frame iframe</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.mobility.ban.body.Body.time2frame" title="pylayers.mobility.ban.body.Body.time2frame"><code class="xref py py-obj docutils literal"><span class="pre">time2frame</span></code></a>(t)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Documentation</p>
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.anim">
+<code class="descname">anim</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.anim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.anim" title="Permalink to this definition">¶</a></dt>
+<dd><p>animate body</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.animc3d">
+<code class="descname">animc3d</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.animc3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.animc3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>animate c3d file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.body_link">
+<code class="descname">body_link</code><span class="sig-paren">(</span><em>topos=True</em>, <em>frameId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.body_link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.body_link" title="Permalink to this definition">¶</a></dt>
+<dd><p>body link</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>topos</strong> :  boolean</p>
+<blockquote>
+<div><p>default True</p>
+</div></blockquote>
+<p><strong>frameId</strong> : int</p>
+<blockquote>
+<div><p>used in case topos == False. Indicates the frame Id.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>link_vis</strong> : np.array (,nlinks)</p>
+<blockquote>
+<div><p>number of intersected cylinder on the link</p>
+</div></blockquote>
+<p>links is a list of couple of strings inticating the different links</p>
+<p class="last">between devices.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.c3d2traj">
+<code class="descname">c3d2traj</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.c3d2traj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.c3d2traj" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert c3d file to trajectory</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.ccsfromc3d">
+<code class="descname">ccsfromc3d</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.ccsfromc3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.ccsfromc3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create ccs from C3D file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> : dictionnary</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.center">
+<code class="descname">center</code><span class="sig-paren">(</span><em>force=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.center"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.center" title="Permalink to this definition">¶</a></dt>
+<dd><p>centering the body</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>self.pg</strong> : center of gravity</p>
+<p><strong>self.vg</strong> : velocity</p>
+<p><strong>self.d</strong> : set of centered frames</p>
+<p><strong>self.smocap</strong> : integrated distance</p>
+<p class="last"><strong>self.vmocap</strong> : averaged velocity</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The center method creates a centered version of the motion capture data stored in
+self.d
+It also calculates :
+self.smocap : total distance along trajectory
+self.vmocap : averaged speed along trajectory</p>
+<p>Here only the projection of the body centroid in the plan 0xy is calculated</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.chronophoto">
+<code class="descname">chronophoto</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.chronophoto"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.chronophoto" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>chronophotography of the body movement</dt>
+<dd>(a.k.a. position as a function of time)</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tstart</strong> : float</p>
+<blockquote>
+<div><p>starting time in second</p>
+</div></blockquote>
+<p><strong>tend</strong> : float</p>
+<blockquote>
+<div><p>ending time in second,</p>
+</div></blockquote>
+<p><strong>tstep</strong> : float</p>
+<blockquote>
+<div><p>time step between tstart and tend</p>
+</div></blockquote>
+<p><strong>sstep</strong> : float</p>
+<blockquote>
+<div><p>spatial step (distance between 2 instant)</p>
+</div></blockquote>
+<p><strong>planes</strong> : list</p>
+<blockquote>
+<div><p>list of planes to be displayed [&#8216;xz&#8217;,&#8217;xy&#8217;,&#8217;yz&#8217;]</p>
+</div></blockquote>
+<p><strong>dev</strong> : bool</p>
+<blockquote>
+<div><p>show devices</p>
+</div></blockquote>
+<p><strong>dev</strong> : bool</p>
+<blockquote>
+<div><p>show devices ids</p>
+</div></blockquote>
+<p><strong>See Also</strong></p>
+<p><strong>&#8212;&#8212;&#8211;</strong></p>
+<p class="last"><strong>http://en.wikipedia.org/wiki/Chronophotography</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.cyl_antenna">
+<code class="descname">cyl_antenna</code><span class="sig-paren">(</span><em>cylinderId</em>, <em>l</em>, <em>alpha</em>, <em>frameId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.cyl_antenna"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.cyl_antenna" title="Permalink to this definition">¶</a></dt>
+<dd><p>cylinder antenna</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cylinderId</strong> : int</p>
+<p><strong>index of cylinder</strong></p>
+<p><strong>l</strong> : distance from origin of cylider</p>
+<p><strong>alpha</strong> : angle from reference direction</p>
+<p class="last"><strong>frameId</strong> : frameId</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.cylfromc3d">
+<code class="descname">cylfromc3d</code><span class="sig-paren">(</span><em>centered=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.cylfromc3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.cylfromc3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create cylinders from C3D file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>centered</strong> : boolean</p>
+<blockquote class="last">
+<div><p>False</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.cylinder_basis_k">
+<code class="descname">cylinder_basis_k</code><span class="sig-paren">(</span><em>frameId</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.cylinder_basis_k"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.cylinder_basis_k" title="Permalink to this definition">¶</a></dt>
+<dd><p>cylinder basis k</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>frameId</strong> : int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.dpdf">
+<code class="descname">dpdf</code><span class="sig-paren">(</span><em>tr=[]</em>, <em>tunit='ns'</em>, <em>poffset=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.dpdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.dpdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>device position dataframe
+return a dataframe with body and devices positions along the self.traj</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tr</strong> : ndarray</p>
+<blockquote>
+<div><p>timerange</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">cdf: pd.DataFrame</p>
+<blockquote class="last">
+<div><p>complete device data frame</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.export_csv">
+<code class="descname">export_csv</code><span class="sig-paren">(</span><em>unit='mm', df=[], _filename='default.csv', col=['dev_id', 'dev_x', 'dev_y', 'dev_z', 'timestamp'], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.export_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.export_csv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.frame2time">
+<code class="descname">frame2time</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.frame2time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.frame2time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.geomfile">
+<code class="descname">geomfile</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.geomfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.geomfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a geomview file from a body configuration</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>iframe</strong> : int</p>
+<p><strong>frame id (useless if topos==True)</strong></p>
+<p><strong>verbose</strong> : boolean</p>
+<p><strong>topos</strong> : boolean</p>
+<p><strong>frame id or topos</strong></p>
+<p><strong>wire</strong> : boolean</p>
+<p><strong>body as a wire or cylinder</strong></p>
+<p><strong>ccs</strong> : boolean</p>
+<p><strong>display cylinder coordinate system</strong></p>
+<p><strong>cacs</strong> : boolean</p>
+<p><strong>display cylinder antenna coordinate system</strong></p>
+<p><strong>acs</strong> : boolean</p>
+<p><strong>display antenna coordinate system</strong></p>
+<p><strong>struc</strong> : boolean</p>
+<p><strong>displat structure layout</strong></p>
+<p><strong>tag</strong> : string</p>
+<p><strong>filestruc</strong> : string</p>
+<p class="last"><strong>name of the Layout</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This function creates either a 3d representation of the frame iframe
+or if topos==True a representation of the current topos.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.getdevT">
+<code class="descname">getdevT</code><span class="sig-paren">(</span><em>id=-1</em>, <em>t=[]</em>, <em>frameId=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.getdevT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.getdevT" title="Permalink to this definition">¶</a></dt>
+<dd><p>get device orientation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>id</strong> : str | list</p>
+<blockquote>
+<div><p>device id.</p>
+</div></blockquote>
+<p><strong>frameId</strong> : int</p>
+<blockquote>
+<div><p>frameid</p>
+</div></blockquote>
+<p><strong>t</strong> : float</p>
+<blockquote>
+<div><p>time</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">device orientation</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.getdevp">
+<code class="descname">getdevp</code><span class="sig-paren">(</span><em>id=-1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.getdevp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.getdevp" title="Permalink to this definition">¶</a></dt>
+<dd><p>get device position</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>id</strong> : str | list</p>
+<blockquote>
+<div><p>device id.</p>
+</div></blockquote>
+<p><strong>frameId</strong> : int</p>
+<blockquote>
+<div><p>frameid</p>
+</div></blockquote>
+<p><strong>t</strong> : float</p>
+<blockquote>
+<div><p>time</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">device position</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.init_traj">
+<code class="descname">init_traj</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.init_traj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.init_traj" title="Permalink to this definition">¶</a></dt>
+<dd><p>create trajectory object from given trajectory or mocap</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.intersectBody">
+<code class="descname">intersectBody</code><span class="sig-paren">(</span><em>A</em>, <em>B</em>, <em>topos=True</em>, <em>frameId=0</em>, <em>cyl=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.intersectBody"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.intersectBody" title="Permalink to this definition">¶</a></dt>
+<dd><p>intersect Body</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : np.array (3,)</p>
+<p><strong>B</strong> : np.array (3,)</p>
+<p><strong>topos</strong> : boolean</p>
+<p><strong>frameId</strong> : 0</p>
+<p><strong>cyl</strong> : list</p>
+<blockquote>
+<div><p>exclusion list</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>intersect</strong> : np.array (,ncyl)</p>
+<blockquote class="last">
+<div><p>O : AB not intersected by cylinder
+1 : AB intersected by cylinder</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.intersectBody3">
+<code class="descname">intersectBody3</code><span class="sig-paren">(</span><em>A</em>, <em>B</em>, <em>topos=True</em>, <em>frameId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.intersectBody3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.intersectBody3" title="Permalink to this definition">¶</a></dt>
+<dd><p>intersect body new version</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong></p>
+<p><strong>B</strong></p>
+<p><strong>topos</strong></p>
+<p><strong>frameId</strong></p>
+<p><strong>cyl</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>intersect</strong> : np.array (,ncyl)</p>
+<blockquote class="last">
+<div><p>O : AB not intersected by cylinder
+1 : AB intersected by cylinder</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>_filebody='John.ini'</em>, <em>_filemocap=[]</em>, <em>unit=[]</em>, <em>_filewear=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>load a body ini file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>_filebody</strong> : body short filename</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>A body .ini file contains 4 sections</p>
+<ul class="simple">
+<li>section [nodes]</li>
+</ul>
+<p>Node number = Node name
++ section [cylinder]
+CylinderId = {&#8216;t&#8217;:tail node number, &#8216;h&#8217;:head node number , &#8216;r&#8217;: cylinder&#8217; radius}
++ section [wearable]
++ section [mocap]</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.loadC3D">
+<code class="descname">loadC3D</code><span class="sig-paren">(</span><em>filename='07_01.c3d'</em>, <em>nframes=-1</em>, <em>unit='cm'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.loadC3D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.loadC3D" title="Permalink to this definition">¶</a></dt>
+<dd><p>load nframes of motion capture C3D file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : string</p>
+<blockquote>
+<div><p>file name</p>
+</div></blockquote>
+<p><strong>nframes</strong> : int</p>
+<blockquote>
+<div><p>number of frames</p>
+</div></blockquote>
+<p><strong>unit</strong> : str (mm|cm|mm</p>
+<blockquote>
+<div><p>unit of c3d file</p>
+</div></blockquote>
+<p><strong>rot</strong> : list [&#8216;x&#8217;,&#8217;y&#8217;,&#8217;z&#8217;]</p>
+<blockquote class="last">
+<div><p>swap axes of the c3d file</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.movie">
+<code class="descname">movie</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.movie"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.movie" title="Permalink to this definition">¶</a></dt>
+<dd><p>creates a geomview movie</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lframe</strong> : []</p>
+<p><strong>verbose</strong> : False</p>
+<p><strong>topos</strong> : True</p>
+<p><strong>wire</strong> : True</p>
+<p><strong>ccs</strong> : False</p>
+<p><strong>dcs</strong> : False</p>
+<p><strong>struc</strong> : True</p>
+<p><strong>traj</strong> : []</p>
+<p class="last"><strong>filestruc:&#8217;DLR.off&#8217;</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Body.geomfile" title="pylayers.mobility.ban.body.Body.geomfile"><code class="xref py py-obj docutils literal"><span class="pre">Body.geomfile</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.network">
+<code class="descname">network</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.network" title="Permalink to this definition">¶</a></dt>
+<dd><p>evaluate network topology and dynamics</p>
+<p>This function evaluates distance, velocity and acceleration of the
+radio network nodes</p>
+<p>self.D2 : distances between radio nodes
+self.V2 : velocities between radio nodes
+self.A2 : accelerations between radio nodes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.plot3d">
+<code class="descname">plot3d</code><span class="sig-paren">(</span><em>iframe=0</em>, <em>topos=False</em>, <em>fig=[]</em>, <em>ax=[]</em>, <em>col='b'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.plot3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.plot3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>scatter 3d plot</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>iframe</strong> : int</p>
+<p><strong>topos</strong> : boolean</p>
+<p><strong>fig :</strong></p>
+<p><strong>ax :</strong></p>
+<p><strong>col</strong> : string</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">fig,ax</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.posvel">
+<code class="descname">posvel</code><span class="sig-paren">(</span><em>traj</em>, <em>t</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.posvel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.posvel" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate position and velocity</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>traj</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">Tajectory DataFrame</span><dd>nx3</dd>
+<dt>t</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">float</span><dd>trajectory time for evaluation of topos</dd>
+</dl>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>kf</strong> : frame integer index</p>
+<blockquote class="last">
+<div><p>kt  : trajectory integer index
+vsn : normalized speed vector along motion capture trajectory (source)
+wsn : planar vector orthogonal to vsn
+vtn : normalized speed vector along motion trajectory (target)
+wtn : planar vector orthogonal to wtn</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p>rac{s_k}{s_{max}} s_{max}`</p>
+<blockquote>
+<div><p>k_f is the index of the topos motion capture into the MOCAP</p>
+<blockquote>
+<div></div></blockquote>
+<dl class="docutils">
+<dt><a href="#id1"><span class="problematic" id="id2">|</span></a>__________|__________|____________|___________|_____</dt>
+<dd>kf=2</dd>
+</dl>
+<p>tmin                                                   tmax
+0         smax               sk</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.rdpdf">
+<code class="descname">rdpdf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.rdpdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.rdpdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>real device position dataframe</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.setacs">
+<code class="descname">setacs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.setacs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.setacs" title="Permalink to this definition">¶</a></dt>
+<dd><p>set antenna coordinate system (acs) from a topos or a set of frames</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.setccs">
+<code class="descname">setccs</code><span class="sig-paren">(</span><em>frameId=0</em>, <em>topos=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.setccs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.setccs" title="Permalink to this definition">¶</a></dt>
+<dd><p>set cylinder coordinate system</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frameId</strong> : int</p>
+<p><strong>frame id in the mocap dataframe (default 0)</strong></p>
+<p><strong>topos</strong> : boolean</p>
+<p><strong>default False</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>self.ccs</strong> : ndarray (nc,3,3)</p>
+<p>Notes</p>
+<p>There are as many frames as cylinders (body graph edges)</p>
+<p>ccs is a MDA (nc x 3 x 3 ) where nc denotes the number of cylinders</p>
+<p>For each cylinder there is an attached coordinate systems</p>
+<p>1st vector</p>
+<p class="last">2nd</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.setcs">
+<code class="descname">setcs</code><span class="sig-paren">(</span><em>topos=True</em>, <em>frameId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.setcs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.setcs" title="Permalink to this definition">¶</a></dt>
+<dd><p>set coordinates systems from a topos or a frame id</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>topos</strong> : boolean</p>
+<blockquote>
+<div><p>default : True</p>
+</div></blockquote>
+<p><strong>frameId</strong> : int</p>
+<blockquote class="last">
+<div><p>default 0</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.mobility.ban.body.setccs</span></code>, <code class="xref py py-obj docutils literal"><span class="pre">pylayers.mobility.ban.body.setdcs</span></code>, <code class="xref py py-obj docutils literal"><span class="pre">pylayers.mobility.ban.body.setacs</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.setdcs">
+<code class="descname">setdcs</code><span class="sig-paren">(</span><em>topos=True</em>, <em>frameId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.setdcs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.setdcs" title="Permalink to this definition">¶</a></dt>
+<dd><p>set device coordinate system (dcs) from a topos</p>
+<p>This method evaluates the set of all dcs.
+It provides the information necessary for device placement on
+the body.</p>
+<p>If N is the number of antenna an dcs is an MDA of size 3x4xN</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>topos</strong> : boolean</p>
+<blockquote>
+<div><p>default : True</p>
+</div></blockquote>
+<p><strong>frameId</strong> : int</p>
+<blockquote>
+<div><p>default 0</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>self.dcs</strong> : dictionnary</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; import pylayers.mobility.trajectory as tr
+&gt;&gt;&gt; import pylayers.mobility.ban.body as body
+&gt;&gt;&gt; import matplotlib.pyplot as plt
+&gt;&gt;&gt; time = np.arange(0,10,0.1)
+&gt;&gt;&gt; v = 4000/3600.
+&gt;&gt;&gt; x = v*time
+&gt;&gt;&gt; y = np.zeros(len(time))
+&gt;&gt;&gt; traj = tr.Trajectory()
+&gt;&gt;&gt; traj.generate()
+&gt;&gt;&gt; bc = body.Body()
+&gt;&gt;&gt; bc.settopos(traj,2.3,2)
+&gt;&gt;&gt; bc.setccs(topos=True)
+&gt;&gt;&gt; bc.setdcs()
+&gt;&gt;&gt; bc.show(plane=&#39;yz&#39;,color=&#39;b&#39;,widthfactor=80)
+&gt;&gt;&gt; plt.show()
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../api/pylayers-mobility-ban-body-Body-1.py">Source code</a>, <a class="reference external" href="../api/pylayers-mobility-ban-body-Body-1.png">png</a>, <a class="reference external" href="../api/pylayers-mobility-ban-body-Body-1.hires.png">hires.png</a>, <a class="reference external" href="../api/pylayers-mobility-ban-body-Body-1.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/pylayers-mobility-ban-body-Body-1.png" src="../_images/pylayers-mobility-ban-body-Body-1.png" />
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.settopos">
+<code class="descname">settopos</code><span class="sig-paren">(</span><em>traj=[]</em>, <em>t=0</em>, <em>cs=True</em>, <em>treadmill=False</em>, <em>p0=array([ 0.</em>, <em>0.])</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.settopos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.settopos" title="Permalink to this definition">¶</a></dt>
+<dd><p>translate the body on a time stamped trajectory</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>traj</strong> : ndarray (3,N)</p>
+<p><strong>t,x,y</strong></p>
+<p><strong>t</strong> : float</p>
+<p><strong>time for evaluation of topos (seconds) this value should be in the</strong></p>
+<p><strong>range of the trajectory timestamp</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">self.topos</p>
+<p class="last">self.vtopos</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.util.geomutil.affine</span></code></p>
+</div>
+<p class="rubric">Notes</p>
+<p>topos is the current spatial global position of a body configuration.
+this method takes as argument a trajectory and a time value t in the
+trajectory time-scale.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; import pylayers.mobility.trajectory as tr
+&gt;&gt;&gt; import pylayers.mobility.ban.body as body
+&gt;&gt;&gt; import matplotlib.pyplot as plt
+&gt;&gt;&gt; time = np.arange(0,10,0.1)
+&gt;&gt;&gt; v = 4000/3600.
+&gt;&gt;&gt; x = v*time
+&gt;&gt;&gt; y = np.zeros(len(time))
+&gt;&gt;&gt; traj = tr.Trajectory()
+&gt;&gt;&gt; traj.generate()
+&gt;&gt;&gt; John = body.Body()
+&gt;&gt;&gt; John.settopos(traj,2.3)
+&gt;&gt;&gt; fig,ax = John.show(plane=&#39;xz&#39;,color=&#39;b&#39;)
+&gt;&gt;&gt; plt.title(&#39;xz&#39;)
+&gt;&gt;&gt; plt.show()
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../api/pylayers-mobility-ban-body-Body-2.py">Source code</a>, <a class="reference external" href="../api/pylayers-mobility-ban-body-Body-2.png">png</a>, <a class="reference external" href="../api/pylayers-mobility-ban-body-Body-2.hires.png">hires.png</a>, <a class="reference external" href="../api/pylayers-mobility-ban-body-Body-2.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/pylayers-mobility-ban-body-Body-2.png" src="../_images/pylayers-mobility-ban-body-Body-2.png" />
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.show">
+<code class="descname">show</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>show a 2D plane projection of the body</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frameiId</strong> : int</p>
+<p><strong>plane</strong> : string</p>
+<blockquote>
+<div><p>&#8216;yz&#8217; | &#8216;xz&#8217; | &#8216;xy&#8217;</p>
+</div></blockquote>
+<p><strong>widthfactor</strong> : int</p>
+<p><strong>topos</strong> : boolean</p>
+<blockquote>
+<div><p>default False</p>
+</div></blockquote>
+<p><strong>offset = np.array()</strong></p>
+<blockquote>
+<div><p>1,3</p>
+</div></blockquote>
+<p class="last"><strong>Todo</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.show3">
+<code class="descname">show3</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.show3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.show3" title="Permalink to this definition">¶</a></dt>
+<dd><p>create geomfile for frame iframe</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>iframe</strong> : int</p>
+<p><strong>frame number (useless if topos == True)</strong></p>
+<p><strong>topos</strong> : boolean</p>
+<p><strong>if True shows the current body topos</strong></p>
+<p class="last"><strong>tag</strong> : aditional string for naming file .off (useless if topos==False)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.time2frame">
+<code class="descname">time2frame</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.time2frame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.time2frame" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pylayers.mobility.ban.body.Cylinder.html" class="btn btn-neutral float-right" title="Cylinder" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team.
+      Last updated on Nov 08, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
