@@ -1,253 +1,390 @@
 
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>&lt;no title&gt; &mdash; PyLayers</title>
-  
-
-  
-  
-
-  
-
-  
-  
+<!-- saved from url=(0045)http://pylayers.github.io/pylayers/index.html -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="google-site-verification" content="rT0A6_-it7hp5yyvhFef_auUEXRhSBi5bRefEgQrG_M" />
+        <meta name="keywords" content="Radio Planning Tool,UWB,Radio Propagation,Indoor
+        Localization,Wireless Body Area Network,IEEE 802.15.6,IEEE
+        802.154a,IEEE 802.11.ac, IEEE 802.11.ah, GIS, Open Street Map, Indoor
+            Open Street Map, OSM ,FemtoCells, SmallCells, IoT , Smart Grid , 
+            FP7 WHERE2,FP7 WHERE1,FP7 UCELLS,
+            CORMORAN,ANR,IETR,Antennas, Spherical Harmonics, OFDM , Wireless
+            Sensor Networks, Github">
+        <title>PyLayers : Propagation and Localization Simulator </title>
     
-
-  
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="about.html"/>
-    <link rel="top" title="PyLayers" href="#"/>
-        <link rel="next" title="User Manual" href="notebook/index.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
-</head>
-
-<body class="wy-body-for-nav" role="document">
-
-  <div class="wy-grid-for-nav">
-
+    <link rel="stylesheet" href="./_static/sphinxdoc.css" type="text/css">
+    <link rel="stylesheet" href="./_static/pygments.css" type="text/css">
+    <link rel="stylesheet" href="./_static/force.css" type="text/css">
+    <link href="./_static/bootstrap_2_1.min.css" rel="stylesheet" type="text/css">
     
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
-            <a href="#" class="icon icon-home"> Python
-          
-
-          
-            
-            <img src="_static/pylayers.png" class="logo" />
-          
-          </a>
-
-          
-            
-            
-              <div class="version">
-                0.5
-              </div>
-            
-          
-
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-                <ul>
-<li class="toctree-l1"><a class="reference internal" href="notebook/index.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auto_examples/plot_layout.html">8 Random Layout</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.gis.selectl">3&nbsp;&nbsp;&nbsp;pylayers.gis.selectl Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.gis.srtm">4&nbsp;&nbsp;&nbsp;pylayers.gis.srtm Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.gis.osmparser">5&nbsp;&nbsp;&nbsp;pylayers.gis.osmparser Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.gis.ezone">6&nbsp;&nbsp;&nbsp;pylayers.gis.ezone Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.antprop.antenna">7&nbsp;&nbsp;&nbsp;pylayers.antprop.antenna Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.antprop.aarray">8&nbsp;&nbsp;&nbsp;pylayers.antprop.aarray Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.antprop.spharm">9&nbsp;&nbsp;&nbsp;pylayers.antprop.spharm Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.antprop.antssh">10&nbsp;&nbsp;&nbsp;pylayers.antprop.antssh Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.antprop.antvsh">11&nbsp;&nbsp;&nbsp;pylayers.antprop.antvsh Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.antprop.slab">12&nbsp;&nbsp;&nbsp;pylayers.antprop.slab Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.antprop.signature">13&nbsp;&nbsp;&nbsp;pylayers.antprop.signature Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.antprop.interactions">14&nbsp;&nbsp;&nbsp;pylayers.antprop.interactions Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.antprop.diffraction">15&nbsp;&nbsp;&nbsp;pylayers.antprop.diffraction Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.antprop.diffRT">16&nbsp;&nbsp;&nbsp;pylayers.antprop.diffRT Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.antprop.rays">17&nbsp;&nbsp;&nbsp;pylayers.antprop.rays Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.antprop.loss">18&nbsp;&nbsp;&nbsp;pylayers.antprop.loss Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.antprop.channel">19&nbsp;&nbsp;&nbsp;pylayers.antprop.channel Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#id39">20&nbsp;&nbsp;&nbsp;pylayers.antprop.loss Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.antprop.coverage">21&nbsp;&nbsp;&nbsp;pylayers.antprop.coverage Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.antprop.coeffModel">22&nbsp;&nbsp;&nbsp;pylayers.antprop.coeffModel Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.simul.link">23&nbsp;&nbsp;&nbsp;pylayers.simul.link Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.simul.exploit">24&nbsp;&nbsp;&nbsp;pylayers.simul.exploit Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.simul.exploit_simulnet">25&nbsp;&nbsp;&nbsp;pylayers.simul.exploit_simulnet Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.simul.simulnet">26&nbsp;&nbsp;&nbsp;pylayers.simul.simulnet Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.simul.simultraj">27&nbsp;&nbsp;&nbsp;pylayers.simul.simultraj Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.exploit.simnet">28&nbsp;&nbsp;&nbsp;pylayers.exploit.simnet Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.measures.mesuwb">29&nbsp;&nbsp;&nbsp;pylayers.measures.mesuwb Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.measures.mesmimo">30&nbsp;&nbsp;&nbsp;pylayers.measures.mesmimo Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.measures.cormoran">31&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.signal.device">35&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/references.html#module-pylayers.signal.DF">36&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
-</ul>
-
-            
-          
-        </div>
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="#">Python</a>
-      </nav>
-
-
-      
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          
+    <script type="text/javascript" async="" src="./_static/ga.js"></script><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+   
+    <link rel="top" title="PyLayers" href="http://pylayers.github.io/pylayers/index.html#"> 
 
  
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <style>
+  .carousel-inner > .item > img,
+  .carousel-inner > .item > a > img {
+      width: 70%;
+      margin: auto;
+  }
+  </style>
 
 
 
-<div role="navigation" aria-label="breadcrumbs navigation">
-  <ul class="wy-breadcrumbs">
-    <li><a href="#">Docs</a> &raquo;</li>
-      
-    <li>&lt;no title&gt;</li>
-      <li class="wy-breadcrumbs-aside">
-        
-          
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
-          
-        
-      </li>
-  </ul>
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-            
-  <div class="toctree-wrapper compound">
+    <script>window["_GOOG_TRANS_EXT_VER"] = "1";</script>
+</head>
+
+<body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+<a href="#"><img src="_static/pylayers.png" height="200" border="0"
+    alt="pylayers"/>PyLayers</a>
 </div>
 
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="./index.html#">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="./notebook/TOC.html">Documentation </a> |&nbsp;</li>
+        <li><a href="./auto_examples/index.html">Gallery</a> |&nbsp;</li>
+        <li><a href="./api/references.html">References</a> |&nbsp;</li>
+        <li><a href="./genindex.html">Index</a> |&nbsp;</li>
+         <li><a href="https://github.com/pylayers/pylayers">Download</a> |&nbsp; </li>
 
-           </div>
-          </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="notebook/index.html" class="btn btn-neutral float-right" title="User Manual" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
+      </ul>
     </div>
-  
 
-  <hr/>
+<div class="sphinxsidebar">
+<div class="sidebarblock">
+<h3>Contact</h3>
+  <ul class="simple">
+    <li>
+        <a class="reference external" href="http://groups.google.com/group/pylayers-users/">
+            Users mailing list</a> 
+        </li>
 
-  <div role="contentinfo">
-    <p>
-        &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 08, 2017.
+    <li><a class="reference external" href="https://github.com/pylayers/pylayers/issues">
+            Issue tracker</a></li>
 
-    </p>
-  </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    <li><a class="reference external"
 
-</footer>
+    <li><a class="reference external" href="https://twitter.com/PyLayers">
+        <img src="./_static/twitter.png" i="" width="40" ,="" alt="Twitter"></a></li>
+  </ul>
+<a href="https://github.com/pylayers/pylayers"> 
+<img src="./_static/github.jpg" alt="octocat" width="96">
+</a>
 
+</div>
         </div>
       </div>
 
-    </section>
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+<h2> Propagation and Localisation Simulator</h2>
 
+<table align="left" style="margin-left: 0px">
+<tbody><tr>
+  <td width="60%">
+<blockquote>
+<p>Python Suite for Radio Channel Simulation 
+<!-- </p>
+</blockquote>
+  </td>
+    <td width="40%">
+        <img src="./_images/cormofig2.png">
+</td> -->
+</tr>
+
+<!-- <table class="contentstable" align="center" style="margin-left: 30px"><tbody><tr>
+  <td width="25%">
+    <p class="biglink"><a class="biglink"
+        href="./notebook/TOC.html">Documentation</a><br>
+       <span class="linkdescr"></span></p>
+  </td>
+  <!--
+  <td width="25%">
+  <!--
+    <p cl ass="biglink"><a class="biglink" href="examples.html">Examples</a><br/>
+       <span class="linkdescr"></span></p>
+  </td>
+  //-->
+  <!-- <td width="25%">
+      <p class="biglink"><a class="biglink"
+          href="./modules/pylayers.html">API References</a><br>
+        <span class="linkdescr"></span></p>
+  </td> -->
+ <!--  <td width="25%">
+    <p clas="" s="biglink"><a class="biglink" href="http://pylayers.github.io/pylayers/acknowledgments.html">Acknowledgements</a><br>
+       <span class="linkdescr"></span></p>
+  </td> -->
+<!--   </tr>
+</tbody></table> -->
+
+
+
+<tr>
+ <td width="60%">
+<blockquote>
+<h2>Main Features</h2>
+<ul class="simple">
+<li> Site Specific Radio Channel Simulator (Rays,Delays,DOA,DOD)
+<li> Indoor Radio Coverage 
+<li> Human Mobility Simulator for Wearables and WBAN
+<li> Rich Antenna Patterns Description 
+<li> Indoor Localization Platform
+<li> Handling of various Radio Standards including Ultra Wideband 
+<li> Handling Millimeter Wave Simulation (5G)
+</li>
+</ul>
+</tr>
+</tbody>
+</table>
+<!--li> Open Street Map format layout edition with <a href="http://josm.openstreetmap.de/">JOSM</a>
+</li><li> Standalone python modules for handling material,slab,antennas,channel,mobility,algorithms, ...
+</li><li> Handling of Impulse Radio Ultra Wideband Band (IR-UWB) waveforms
+</li><li> Compact UWB Antenna modeling using spherical harmonics representations 
+</li><li> Fast indoor coverage using a Motley Keenan Multiwall Model
+</li><li> Ray tracing tool based on Rays Signatures 
+</li><li> Agent mobility based on <a href="http://simpy.sourceforge.net/">SimPy </a>
+</li><li> Human mobility input from motion capture files
+</li><li> Localization algorithms (geometric and algebraic) 
+</li><li> Hierarchical storage of various level of traces in HDF5 format 
+</li><li> Outputs for event-driven simulator <a
+    href="http://wsnet.gforge.inria.fr/">WSNET</a> -->
+<!--
+</li><li> <a href="./documentation/PyFlyer.pdf">The PyLayers Flyer</a> 
+-->
+
+<a class="twitter-timeline" href="https://twitter.com/PyLayers" data-widget-id="738744409072799744">Tweets de @PyLayers</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+<h2>Related Projects</h2>
+<ul class="simple">
+    <li> <a href="./cormoran.html">ANR CORMORAN </a></li>
+    <li> <a href="http://www.kn-s.dlr.de/where2/news.php"> FP7 WHERE2 </a> </li>
+</ul>
+
+<!--
+<h2>Related Presentations</h2>
+<ul>
+    <li><a
+        href="http://slideviewer.herokuapp.com/github/pylayers/pylayers/blob/master/doc/notebook/9-PRES/IC1004AalborgTD10021.ipynb?create=1#/0">
+        An Indoor Propagation Tool for Studying LOcalization in WBAN context
+    <li><a href="http://slideviewer.herokuapp.com/github/pylayers/pylayers/blob/master/doc/notebook/9-PRES/IC1004AalborgTD10058.ipynb?create=1#/0">
+</ul>
+-->
+
+<style>
+div.inner-item {
+    text-align: left;
+}
+
+div.banner-container{
+    width: 100%;
+}
+
+div#examples_carousel .carousel-control {
+    position: absolute;
+    top: 97%;
+    left: 213px;
+    width: 25px;
+    height: 25px;
+    font-size: 37px;
+    line-height: 19px;
+    color: rgba(35, 47, 62, 1);
+    background: #FFFFFF;
+}
+
+div#examples_carousel .carousel-control.right {
+
+}
+
+div#index_carousel_tn {
+    width: 600px;
+}
+
+div#examples_carousel .carousel-indicators {
+    position: absolute;
+    top: 98%;
+    left: 3 13px;
+}
+
+div#examples_carousel .carousel-indicators .active {
+    background-color: rgba(35, 47, 32, 1);
+}
+
+div#examples_carousel .carousel-indicators li {
+    background-color: rgba(35, 47, 32, .45);
+}
+
+</style>
+
+<div class="container">
+  <div class="span9">
+    <div id="examples_carousel" class="carousel slide", data-ride=carousel>
+      <!-- Carousel items -->
+      <div class="carousel-inner">
+        <div class="active item">
+          <div class="inner-item">
+            <img src="_static/example1.png" width=700>
+            <div class="carousel-caption">
+                <p>Fast Indoor Coverage with MultiWall Model</p>
+            </div>    
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="inner-item">
+            <img src="_static/example2.png" width=900>
+            <div class="carousel-caption">
+                <p>Body Area Network simulation using C3D motion capture body abstraction</p>
+            </div>    
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="inner-item">
+            <img src="_static/example3.png" width=900>
+            <div class="carousel-caption">
+                <p>Compact description of antennas using spherical harmonics decomposition</p>
+            </div>    
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="inner-item">
+            <img src="./_images/cormofig2.png" width=900>
+            <div class="carousel-caption">
+                <p>Human mobility in WBAN</p>
+            </div>    
+          </div>
+        </div>
+        <!-- <div class="item">
+          <div class="inner-item">
+            <img src="_static/example5.png" width=900>
+            <div class="carousel-caption">
+                <p>Calulation of Aggregated Channel Impulse Response over Time
+                Stamped Trajectories</p>
+            </div>    
+          </div>
+        </div> -->
+
+        <div class="item">
+          <div class="inner-item">
+            <img src="_static/example6.png" width=900>
+            <div class="carousel-caption">
+                <p>Handling of IR-UWB signals</p>
+            </div>    
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="inner-item">
+            <img src="_static/example7.png" width=900>
+            <div class="carousel-caption">
+                <p>Validation with Measurement Data</p>
+            </div>    
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="inner-item">
+            <img src="_static/example8.png" width=900>
+            <div class="carousel-caption">
+                <p>Graphs, Signatures, Rays and  Multipath Channel</p>
+            </div>    
+          </div>
+        </div>
+
+      </div>
+      <!-- Carousel nav -->
+      <a class="carousel-control left" href="#examples_carousel" data-slide="prev">&lsaquo;</a>
+      <a class="carousel-control right" href="#examples_carousel" data-slide="next">&rsaquo;</a>
+    </div>
   </div>
-  
+</div>
 
 
-  
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'1',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<h2>Acknowledments</h2>
+-->
+<ul class="simple">
+<a class="reference external image-reference" href="http://www.kn-s.dlr.de/where2/news.php">
+    <img alt="_images/WHERE2_Logo.jpg" src="./_static/logoIETR.jpg" style="width: 100.0px "></a>
+<a class="reference external image-reference" href="http://www.kn-s.dlr.de/where2/news.php">
+    <img alt="_images/WHERE2_Logo.jpg" src="./_static/logoUR1.jpg" style="width: 100.0px "></a>
+<a class="reference external image-reference" href="http://www.kn-s.dlr.de/where2/news.php">
+    <img alt="_images/WHERE2_Logo.jpg" src="./_static/logoESIR.png" style="width: 100.0px "></a>
+<a class="reference external image-reference" href="http://www.kn-s.dlr.de/where2/news.php">
+    <img alt="_images/WHERE2_Logo.jpg" src="./_static/WHERE2_Logo.jpg" style="width: 100.0px "></a>
+<a class="reference internal image-reference"
+    href="http://www-leti.cea.fr/fr/Les-actualites/Le-projet-CORMORAN-explore-de-nouvelles-pistes2"><img
+    alt="_images/logo_CORMORAN.png" src="./_static/logo_CORMORAN.png" style="width: 100.0px"></a>
+<a href="http://www.test-pagerank.com/" title="Test PageRank" target="_blank"><img src="http://www.test-pagerank.com/pagerankCurrent.php?url=http://www.pylayers.org&color=g" alt="Resultat test PageRank"/></a>
+</ul>
 
-  
+<!---
+<h2>News</h2>
+<ul>
+    <li> <b>June 9, 2013 </b>: PyLayers has been presented in session Radio Channel
+    Modeling for Localisation of <a
+        href="http://icc2013.spsc.tugraz.at/Schedule">ICC2013 Workshop on
+        Advances in Network Localisation and Navigation</a> in Budapest<br>
+   N.Amiot,M.Laaraiedh,B.Uguen,"PyLayers: An Open Source Dynamic Simulator for Indoor Propagation and Localisation"
+    <li> <b>August  23, 2013 </b>: PyLayers has been presented at
+    `EuroScipy 2013` <a href='https://www.euroscipy.org/schedule/presentation/16/'> PyLayers :
+        A Graph Based Python Open Source Indoor Propagation Simulator</a>
+</ul>    
+-->
 
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="./index.html#">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="./notebook/TOC.html">Documentation </a> |&nbsp;</li>
+        <li><a href="https://github.com/pylayers/">Github</a> </li>
+ 
+      </ul>
+    </div>
 
-  
-  
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
-      });
-  </script>
-   
+    <div class="footer">
+        © Copyright 2016, PyLayers developer team, IETR.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+<script src="_static/jquery.js"></script>
 
-</body>
-</html>
+</body></html>
