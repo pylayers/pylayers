@@ -17,8 +17,8 @@ The modulus of the cross product between :math:`\mathbf{u}` and :math:`\mathbf{v
 
 :math:`\mathbf{u} \times \mathbf{v} = \alpha \mathbf{z} \;\; \textrm{with} \;\;\alpha > 0`
 
-.. autosummary::
-    :toctree:
+.. autoclass:: Cone
+    :members:
 
 """
 import numpy as np

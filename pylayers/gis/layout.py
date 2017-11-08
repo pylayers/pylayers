@@ -5,14 +5,6 @@
 #
 #
 #
-r"""
-
-.. currentmodule:: pylayers.gis.layout
-
-.. autoclass:: Layout
-   :members: 
-
-"""
 from __future__ import print_function
 try:
     from tvtk.api import tvtk
@@ -134,8 +126,6 @@ class Layout(pro.PyLayers):
 
     This class uses `networkx` to store Layout information
 
-    Graphs
-    ------
     Gs : structure
     Gt : topology 
     Gv : visibility
@@ -144,14 +134,10 @@ class Layout(pro.PyLayers):
     Gm :  
     Gw : ways 
 
-    Integer
-    -------
     Np
     Ns 
     Nss 
 
-    Tuple
-    -----
     ax  : (xmin,ymin,xmax,ymax)
     axn : (0,Dx,0,Dy)
 
@@ -176,36 +162,24 @@ class Layout(pro.PyLayers):
     p2pc
     pg
 
-    array
-    -----
     pt : points coordinates  
     tahe : segment tail head 
     tgs : graph to segment
     tsg : segment to graph 
     upnt : array of point index
 
-    sparse array
-    ------------
-
     s2pc : segment to point coordinates
     s2pu : segment to point index
     sgsg 
 
-    Slabs
-    -----
     sl 
 
 
-    String
-    ------
     typ  : 'indoor' | 'outdoor'
     coordinates : 'cart','lonlat'
     version
     _filename 
     _hash
-
-    Dictionnaries
-    -------------
 
     _shseg : keys / segment index 
              values / shapely LineString
@@ -216,15 +190,10 @@ class Layout(pro.PyLayers):
     display : dictionnary for controling various visualization
     dsseg : 
 
-    boolean 
-    -------
-
     indoor : if True allow indoor penetration 
     isbuilt 
     diffraction 
 
-    heights
-    -------
     maxheight
     zceil 
     zfloor 
@@ -4453,6 +4422,9 @@ class Layout(pro.PyLayers):
 
             Examples
             --------
+
+            .. plot::
+                :include-source:
 
             >>> from pylayers.gis.layout import *
             >>> L = Layout('TA-Office.ini')
@@ -8904,24 +8876,24 @@ class Layout(pro.PyLayers):
         .. plot::
             :include-source:
 
-            >>> from pylayers.gis.layout import  *
-            >>> import matplotlib.pyplot as plt
-            >>> L = Layout('TA-Office.ini')
-            >>> L.dumpr()
-            >>> fig = plt.figure(figsize=(10,10))
-            >>> ax = fig.add_subplot(221)
-            >>> fig,ax = L.showG('s',fig=fig,ax=ax)
-            >>> tis = plt.title("Gs")
-            >>> ax = fig.add_subplot(222)
-            >>> fig,ax = L.showG('t',fig=fig,ax=ax)
-            >>> tit = plt.title("Gt")
-            >>> ax = fig.add_subplot(223)
-            >>> fig,ax = L.showG('r',fig=fig,ax=ax)
-            >>> tic = plt.title("Gr")
-            >>> ax = fig.add_subplot(224)
-            >>> fig,ax = L.showG('v',fig=fig,ax=ax)
-            >>> tiv = plt.title("Gv")
-            >>> plt.show()
+        >>> from pylayers.gis.layout import  *
+        >>> import matplotlib.pyplot as plt
+        >>> L = Layout('TA-Office.ini')
+        >>> L.dumpr()
+        >>> fig = plt.figure(figsize=(10,10))
+        >>> ax = fig.add_subplot(221)
+        >>> fig,ax = L.showG('s',fig=fig,ax=ax)
+        >>> tis = plt.title("Gs")
+        >>> ax = fig.add_subplot(222)
+        >>> fig,ax = L.showG('t',fig=fig,ax=ax)
+        >>> tit = plt.title("Gt")
+        >>> ax = fig.add_subplot(223)
+        >>> fig,ax = L.showG('r',fig=fig,ax=ax)
+        >>> tic = plt.title("Gr")
+        >>> ax = fig.add_subplot(224)
+        >>> fig,ax = L.showG('v',fig=fig,ax=ax)
+        >>> tiv = plt.title("Gv")
+        >>> plt.show()
 
         See Also
         --------

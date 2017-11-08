@@ -1,20 +1,5 @@
 # -*- coding:Utf-8 -*-
 #from numpy import *
-"""
-
-.. currentmodule:: pylayers.antprop.loss
-
-Loss module
-===========
-
-This module implements path loss models for various situations.
-
-
-.. automodule:: 
-    :members:
-
-"""
-
 import doctest
 import logging
 import numpy as np
@@ -780,7 +765,7 @@ def Losst(L,fGHz,p1,p2,dB=True):
         >>> from pylayers.measures.mesuwb import *
         >>> from pylayers.antprop.loss import *
         >>> S = Simul()
-        >>> S.layout('WHERE1.ini')
+        >>> S.layout('WHERE1.lay')
         >>> fGHz = 4
         >>> Tx,Rx = ptw1()
         >>> Lwo,Lwp,Edo,Edp = Losst(S.L,fGHz,Tx.T,Rx[1,0:2],dB=True)

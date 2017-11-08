@@ -1,47 +1,5 @@
 #-*- coding:Utf-8 -*-
-"""
-
-.. currentmodule:: pylayers.antprop.antenna
-
-This module handles antennas
-An antenna can be loaded from various file formats among
-
-+ .vsh2
-+ .vsh3
-+ .sh2
-+ .sh3
-+ .mat
-+ .trx
-
-Antenna derives from Pattern 
-
-Examples
---------
-
-.. plot::
-    :include-source:
-
-    >>> import matplotlib.pyplot as plt
-    >>> from pylayers.antprop.antenna import *
-    >>> A = Antenna()
-    >>> fig,ax = A.plotG(fGHz=[2,3,4],plan='theta',angdeg=0)
-
-Pattern Class
--------------
-
-.. autoclass:: Pattern
-    :members:
-    :private-members:
-
-Antenna Class
--------------
-
-.. autoclass:: Antenna
-    :members:
-
-
-"""
-#from __future__ import print_function
+from __future__ import print_function
 import doctest
 import os
 import glob
@@ -5294,7 +5252,8 @@ class AntPosRot(Antenna):
         Antenna._show3(self,newfig=False,interact=False,T=self.T,po=self.p,**kwargs)
 
     def field(self,p):
-        """
+        """ calculate field 
+
         Parameters
         ----------
 
@@ -5314,7 +5273,7 @@ class AntPosRot(Antenna):
         ph = np.arctan2(u[:,1],u[:,0])
         tang = np.vstack((th,ph)).T
         #print("global",tang*rad_to_deg)
-        Rt, tangl = geu.BTB_tx(tang, self.T)
+        Rt, tangl = geu.BTB(tang, self.T)
         #print("local",tangl*rad_to_deg)
         self.eval(th=tangl[:,0],ph=tangl[:,1],grid=False)
         E = (self.Ft[:,None,:]*self.T[:,2][None,:,None]+self.Fp[:,None,:]*self.T[:,0][None,:,None])

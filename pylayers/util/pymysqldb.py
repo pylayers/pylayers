@@ -1,6 +1,11 @@
 import MySQLdb as msql
 import pylayers.util.pyutil as pyu
 import pdb
+"""
+.. autoclass:: Database
+    :members:
+
+"""
 
 class Database:
     def __init__(self, host, user, passwd, dbname):

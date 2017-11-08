@@ -3,16 +3,9 @@
 #
 """
 
-.. currentmodule:: pylayers.location.learning.loclearn
-
 .. autosummary::
-    :toctree: generated/
+    :members:
 
-    ffnetwork
-    knn_learn
-    ffann_learn
-    svm_learn
-    lreg_learn
 
 """
 

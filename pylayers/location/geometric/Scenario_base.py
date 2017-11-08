@@ -27,7 +27,7 @@ from pylayers.location.geometric.constraints.exclude import *
 from pylayers.location.geometric.constraints.rss import *
 from pylayers.location.geometric.constraints.toa import *
 from pylayers.location.geometric.constraints.tdoa import *
-from pylayers.loaction.geometric.constraints.cla import *
+from pylayers.location.geometric.constraints.cla import *
 
 
 

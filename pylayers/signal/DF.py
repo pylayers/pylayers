@@ -9,22 +9,8 @@ This class implements a LTI digital filter
 
 .. currentmodule:: pylayers.signal.DF
 
-.. autosummary::
-    :toctree: generated/
-
-    DF.__init__
-    DF.filter
-    DF.simplify
-    DF.flipc
-    DF.freqz
-    DF.factorize
-    DF.wnxcorr
-    DF.match
-    DF.butter
-    DF.ellip_bp
-    DF.remez
-    DF.zplane
-    DF.ir
+.. autoclass:: DF
+    :members:
 
 """
 import numpy as np
@@ -37,6 +23,18 @@ import matplotlib.pyplot as plt
 
 class DF(PyLayers):
     """ Digital Filter Class
+
+    Attributes
+    ----------
+
+    a : array 
+        transfer function coefficients denominator 
+    b : array
+        transfer function coefficients numerator 
+    p : array dtype=complex
+        transfer function poles 
+    z : array dtype=complex
+        transfer function zeros 
 
     Methods
     -------
@@ -159,7 +157,9 @@ class DF(PyLayers):
         self.z = np.delete(self.z,iz)
 
     def flipc(self):
-        """
+        """ flip coefficient 
+        
+        This is equivalent to the transformation 
 
         z -> 1/z
 
@@ -173,10 +173,18 @@ class DF(PyLayers):
     def match(self):
         r""" return a match filter
 
+        Returns
+        -------
 
-        if $$H(z)=\frac{1+b_1z^1+...+b_Nz^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$
 
-        if $$H_m(z)=\frac{b_N+b_{N-1}z^1+...+z^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$
+        Notes
+        -----
+
+        if $$H(z)=\\frac{1+b_1z^1+...+b_Nz^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$
+        
+        it returns 
+
+        $$H_m(z)=\\frac{b_N+b_{N-1}z^1+...+z^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$
         
         """
 
@@ -202,6 +210,22 @@ class DF(PyLayers):
 
         y : np.array | TUsignal
             output signal
+
+        Examples
+        --------
+        
+        .. plot::
+            :include-source:
+            
+            >>> import matplotlib.pyplot as plt
+            >>> df = DF(b=np.array([1,1],a=np.array([1,-1]))
+            >>> N = 100 
+            >>> s = np.zeros(N)
+            >>> s[0] = 1
+            >>> y = df.filter(s)
+            >>> plt.stem(np.arange(N),x)
+            >>> plt.stem(np.arange(N),y)
+            >>> plt.show()
 
         """
         if type(s) is bs.TUsignal:

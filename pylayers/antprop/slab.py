@@ -1,71 +1,5 @@
 #!/usr/bin/python
 # -*- coding: latin1 -*-
-"""
-This module implements the Material and Slab class which are used 
-in the ray tracing engine rays.py. 
-It exploits heavily numpy broadcasting mechanism :
-
-
-The adopted axis convention is the following
-
-+ nf : axis = 0 frequency axis
-+ nt : axis = 1 angular axis
-+ p  : axis = 2 parallel polarization axis
-+ o  : axis = 3 orhogonal polarization axis
-
-
-.. currentmodule:: pylayers.antprop.slab
-
-.. autosummary::
-    :toctree: generated/
-
-Interface Class
-===============
-
-.. autoclass:: Interface
-    :members:
-
-MatInterface Class
-==================
-
-.. autoclass:: MatInterface
-    :members:
-
-
-Mat Class
-=========
-
-.. autoclass:: Mat 
-    :members:
-
-MatDB Class
-===========
-
-.. autoclass:: MatDB 
-    :members:
-
-Slab Class
-==========
-
-.. autoclass:: Slab
-    :members:
-
-
-SlabDB Class
-============
-
-.. autoclass:: SlabDB
-    :members:
-
-Utility Functions
-==================
-
-.. autosummary::
-    :toctree: generated/
-
-    calsig
-
-"""
 from __future__ import division, print_function, absolute_import 
 import os
 import sys
@@ -94,6 +28,15 @@ import copy
 class Interface(PyLayers):
     """ Interface between 2 medium
 
+    Notes
+    -----
+
+    The adopted axis convention is the following
+
+    + nf : axis = 0 frequency axis
+    + nt : axis = 1 angular axis
+    + p  : axis = 2 parallel polarization axis
+    + o  : axis = 3 orhogonal polarization axis
     Attributes
     ----------
 
@@ -151,8 +94,8 @@ class Interface(PyLayers):
 
         .. math::
 
-            R = \left[\begin{array}[cc](R_o & 0\\0 & R_p)\end{array}\right]
-            T = \left[\begin{array}[cc](T_o & 0\\0 & T_p)\end{array}\right]
+            R = \left[\begin{array}[cc]R_{\perp} & 0\\0 & R_{\para}\end{array}\right]
+            T = \left[\begin{array}[cc]T_{\perp} & 0\\0 & T_{\para}\end{array}\right]
 
         R : np.array (f , th , 2, 2)
         T : np.array (f , th , 2, 2)

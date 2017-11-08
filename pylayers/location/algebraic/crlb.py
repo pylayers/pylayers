@@ -1,9 +1,9 @@
 import os
-from numpy import *
-from scipy import *
+import numpy as np
+import scipy as sp  
 from scipy import optimize
-from string import *
-from numpy.linalg import *
+import string as stri
+import numpy.linalg as la 
 
 
 class CRBLocation(object):

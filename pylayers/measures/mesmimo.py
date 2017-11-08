@@ -15,9 +15,15 @@ from time import sleep
 import math as mt
 from pylayers.measures.vna.E5072A import *
 import ipdb
+"""
+
+.. autoclass:: MIMO
+    :members: 
+
+"""
 
 class MIMO(object):
-    """ This class handles the data coming from the MIMO Channel Sounder IETR lab
+    """ This class handles the data coming from a MIMO Channel Sounder 
 
     Parameters
     ----------
@@ -66,7 +72,7 @@ class MIMO(object):
 
         for k in defaults:
             if k not in kwargs:
-                kwargs[k]=defaults[k]exit
+                kwargs[k]=defaults[k]
 
         _filename = kwargs.pop('_filename')
         rep = kwargs.pop('rep')

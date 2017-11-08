@@ -1,5 +1,20 @@
 # -*- coding: utf-8 -*-
 
+"""
+
+PyLayers GUI
+
+.. autommodule::
+    :members:
+
+
+To run this code. type 
+
+python PylayersGui.py 
+
+
+"""
+
 from pylayers.simul.link import *
 import pylayers.util.pyutil as pyu
 import pylayers.signal.standard as std

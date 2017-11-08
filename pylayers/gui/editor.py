@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+""" Qt Standalone Layout editor 
+
+.. automodule::
+    :members:
+
+"""
+
 import sys, os, random
 
 if 'QT_API' in os.environ:

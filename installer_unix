@@ -8,6 +8,7 @@ conda install seaborn --yes
 conda install PIL --yes
 conda install basemap --yes
 conda install wxpython --yes
+conda install -c conda-forge scikit-rf
 pip install protobuf 
 pip install tqdm
 pip install descartes
@@ -19,4 +20,6 @@ pip install pyshp
 pip install Image
 pip install pathos
 pip install SimPy==2.2
+pip install scikit-commpy
+
 python setup.py install

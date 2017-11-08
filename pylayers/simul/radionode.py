@@ -1,6 +1,7 @@
 #/usr/bin/python
 # -*- coding: utf-8 -*-
 """
+
 RadioNode Class
 ===============
 
@@ -9,18 +10,7 @@ a radio node at several time step.
 
 This data structure is used in DLink.
 
-Members of a radionode are
-
-position    : 3xNt
-time        : 1xNt
-orientation : 3x3xNt
-typ         : 'tx' or 'rx'
-name        : string
-
-.. automodule::
-    :members:
-
-.. autoclass::
+.. autoclass:: RadioNode
     :members: 
 
 

@@ -1,22 +1,4 @@
 #-*- coding:Utf-8 -*-
-"""
-
-.. automodule:: 
-    :members:
-
-Class Signatures
-================
-
-.. autoclass:: Signatures 
-    :members:
-
-Class Signature
-===============
-
-.. autoclass:: Signature
-    :members:
-
-"""
 import doctest
 import numpy as np
 #import scipy as sp

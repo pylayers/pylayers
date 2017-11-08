@@ -44,23 +44,25 @@ def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2,mode='tab',debug=False):
     Examples
     --------
 
+    .. plot::
+        :include-source:
 
-    >>> import numpy as np
-    >>> from pylayers.antprop.slab import *
-    >>> Nf=3
-    >>> Nr=10
-    >>> Nb=5
-    >>> fGHz = np.linspace(0,10,Nf)
-    >>> N = np.linspace(1,10,Nb)#320/180.
-    >>> phi0 = np.linspace(0.01,2*np.pi-0.01,Nr)#40*np.pi/180.
-    >>> phi = np.linspace(0.01,2*np.pi-0.01,Nr)
-    >>> dm = MatDB()
-    >>> mat0 = dm['METAL']
-    >>> matN = dm['METAL']
-    >>> si = 10000.*np.ones(Nr)
-    >>> sd = 1.*np.ones(Nr)
-    >>> plt.ion()
-    >>> Ds,Dh,D1,D2,D3,D4 = diff(fGHz,phi0,phi,si,sd,N,mat0,matN)
+        >>> import numpy as np
+        >>> from pylayers.antprop.slab import *
+        >>> Nf=3
+        >>> Nr=10
+        >>> Nb=5
+        >>> fGHz = np.linspace(0,10,Nf)
+        >>> N = np.linspace(1,10,Nb)#320/180.
+        >>> phi0 = np.linspace(0.01,2*np.pi-0.01,Nr)#40*np.pi/180.
+        >>> phi = np.linspace(0.01,2*np.pi-0.01,Nr)
+        >>> dm = MatDB()
+        >>> mat0 = dm['METAL']
+        >>> matN = dm['METAL']
+        >>> si = 10000.*np.ones(Nr)
+        >>> sd = 1.*np.ones(Nr)
+        >>> plt.ion()
+        >>> Ds,Dh,D1,D2,D3,D4 = diff(fGHz,phi0,phi,si,sd,N,mat0,matN)
 
     """
 
@@ -463,13 +465,16 @@ def FreF(x) :
 
     Examples
     --------
+    
+    .. plot::
+        :include-source:
 
-    >>> import matplotlib.pyplot as plt
-    >>> import numpy as np
-    >>> x = np.logspace(-4,2,400);
-    >>> F = FreF(x)
-    >>> plt.semilogx(x,,np.abs(F))
-    >>> plt.grid()
+        >>> import matplotlib.pyplot as plt
+        >>> import numpy as np
+        >>> x = np.logspace(-4,2,400);
+        >>> F = FreF(x)
+        >>> plt.semilogx(x,,np.abs(F))
+        >>> plt.grid()
 
     """
     ejp4  = np.exp(1j*np.pi/4)
@@ -510,7 +515,9 @@ def FreF2(x):
 
     Parameters
     ----------
+
     Not working for large argument
+
 
     """
     y     = np.empty(x.shape,dtype=complex)
@@ -553,13 +560,16 @@ def R(th,k,er,err,sigma,ur,urr,deltah):
 
     Examples
     --------
+    
+    .. plot::
+        :include-source:
 
-    >>> import numpy as np
-    >>> th = np.linspace(0,np.pi/2,180)[None,:]
-    >>> fGHz = 0.3
-    >>> lamda = 0.3/fGHz
-    >>> k = np.array([2*np.pi/2])[:,None]
-    >>> Rs,Rh = R(th,k,9,0,0.01,1,0,0)
+        >>> import numpy as np
+        >>> th = np.linspace(0,np.pi/2,180)[None,:]
+        >>> fGHz = 0.3
+        >>> lamda = 0.3/fGHz
+        >>> k = np.array([2*np.pi/2])[:,None]
+        >>> Rs,Rh = R(th,k,9,0,0.01,1,0,0)
 
     """
 

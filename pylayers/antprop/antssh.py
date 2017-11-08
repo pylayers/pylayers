@@ -1,18 +1,3 @@
-"""
-.. currentmodule:: pylayers.antprop.antssh
-
-Scalar Spherical Harmonics Functions
-====================================
-
-.. autosummary::
-  :toctree: generated/
-
-   SSHFunc
-   SSHFunc2
-   SphereToCart
-   CartToSphere
-
-"""
 #from pylayers.antprop.antenna import *
 #from pylayers.antprop.antvsh import *
 from pylayers.antprop.spharm import *

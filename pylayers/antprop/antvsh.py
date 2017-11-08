@@ -1,12 +1,3 @@
-"""
-.. currentmodule:: pylayers.antprop.antvsh
-
-
-.. autosummary::
-    :toctree: /generated
-
-    vsh
-"""
 import pdb
 import doctest
 from pylayers.antprop.spharm import *

@@ -45,10 +45,10 @@ class TDoALocation(object):
     """
 
     def __init__(self,RN1, RN2, TDoA, TDoAStd):
-        self.RN1    = RN1
-        self.RN2    = RN2
-        self.TDoA       = TDoA
-        self.TDoAStd    = TDoAStd
+        self.RN1  = RN1
+        self.RN2  = RN2
+        self.TDoA  = TDoA
+        self.TDoAStd  = TDoAStd
 
     def __init__(self,RN1):
         self.RN1    = RN1
@@ -94,11 +94,11 @@ class TDoALocation(object):
         This applies LS approximation on TDoA to get position P.
         Return P
         """
-        shRN    = shape(RN1)                    # shape of RN
+        shRN    = np.shape(RN1)                    # shape of RN
         RNnum   = shRN[1]                       # Number of reference nodes
         c       = 3e08                      # Speed of light
         # Construct the vector K (see theory)
-        k1      = (sum((RN1-RN2)*(RN1-RN2),axis=0)).reshape(RNnum,1)    # first half of K
+        k1      = (np.sum((RN1-RN2)*(RN1-RN2),axis=0)).reshape(RNnum,1)    # first half of K
 
         RDoA    = c*TDoA                    # Range of arrival (meters)
         RDoA2   = (RDoA*RDoA).reshape(RNnum,1)
@@ -107,23 +107,23 @@ class TDoALocation(object):
         K       = k1-k2
 
         # Construct the matrix A (see theory)
-        A       = hstack((RN1.T - RN2.T,RDoA))
-        A2   = dot(transpose(A),A)
+        A  = np.hstack((RN1.T - RN2.T,RDoA))
+        A2  = np.dot(transpose(A),A)
 
-        [U,S,V]=svd(A2)
+        [U,S,V]=la.svd(A2)
         J = 1/S
-        rA=rank(A)
-        m,n=shape(A)
+        rA = la.rank(A)
+        m,n = np.shape(A)
         f=0
-        if log10(cond(A2))>=c*max(TDoAStd):
+        if np.log10(la.cond(A2))>=c*max(TDoAStd):
             f=f+1
             for i in range(n-rA):
-                u = where(J==max(J))
+                u = np.where(J==max(J))
                 J[u] = 0
 
-        A2i = dot(dot(V.T,diag(J)),U.T)
+        A2i = np.dot(np.dot(V.T,np.diag(J)),U.T)
         # Apply LS operator
-        Pr      = 0.5*dot(A2i,dot(A.T,K))
+        Pr      = 0.5*np.dot(A2i,np.dot(A.T,K))
         P       = Pr[:shRN[0],:]
         # Return the estimated position
         return P
