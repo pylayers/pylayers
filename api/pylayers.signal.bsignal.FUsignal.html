@@ -1,0 +1,761 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>FUsignal &mdash; PyLayers</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="author" title="About these documents"
+              href="../about.html"/>
+    <link rel="top" title="PyLayers" href="../index.html"/>
+        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/>
+        <link rel="next" title="Noise" href="pylayers.signal.bsignal.Noise.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Python
+          
+
+          
+            
+            <img src="../_static/pylayers.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_layout.html">8 Random Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.selectl">3&nbsp;&nbsp;&nbsp;pylayers.gis.selectl Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.srtm">4&nbsp;&nbsp;&nbsp;pylayers.gis.srtm Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.osmparser">5&nbsp;&nbsp;&nbsp;pylayers.gis.osmparser Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.ezone">6&nbsp;&nbsp;&nbsp;pylayers.gis.ezone Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.antenna">7&nbsp;&nbsp;&nbsp;pylayers.antprop.antenna Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.aarray">8&nbsp;&nbsp;&nbsp;pylayers.antprop.aarray Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.spharm">9&nbsp;&nbsp;&nbsp;pylayers.antprop.spharm Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.antssh">10&nbsp;&nbsp;&nbsp;pylayers.antprop.antssh Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.antvsh">11&nbsp;&nbsp;&nbsp;pylayers.antprop.antvsh Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.slab">12&nbsp;&nbsp;&nbsp;pylayers.antprop.slab Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.signature">13&nbsp;&nbsp;&nbsp;pylayers.antprop.signature Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.interactions">14&nbsp;&nbsp;&nbsp;pylayers.antprop.interactions Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.diffraction">15&nbsp;&nbsp;&nbsp;pylayers.antprop.diffraction Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.diffRT">16&nbsp;&nbsp;&nbsp;pylayers.antprop.diffRT Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.rays">17&nbsp;&nbsp;&nbsp;pylayers.antprop.rays Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.loss">18&nbsp;&nbsp;&nbsp;pylayers.antprop.loss Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.channel">19&nbsp;&nbsp;&nbsp;pylayers.antprop.channel Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id39">20&nbsp;&nbsp;&nbsp;pylayers.antprop.loss Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.coverage">21&nbsp;&nbsp;&nbsp;pylayers.antprop.coverage Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.coeffModel">22&nbsp;&nbsp;&nbsp;pylayers.antprop.coeffModel Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.simul.link">23&nbsp;&nbsp;&nbsp;pylayers.simul.link Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.simul.exploit">24&nbsp;&nbsp;&nbsp;pylayers.simul.exploit Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.simul.exploit_simulnet">25&nbsp;&nbsp;&nbsp;pylayers.simul.exploit_simulnet Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.simul.simulnet">26&nbsp;&nbsp;&nbsp;pylayers.simul.simulnet Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.simul.simultraj">27&nbsp;&nbsp;&nbsp;pylayers.simul.simultraj Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.exploit.simnet">28&nbsp;&nbsp;&nbsp;pylayers.exploit.simnet Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.mesuwb">29&nbsp;&nbsp;&nbsp;pylayers.measures.mesuwb Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.mesmimo">30&nbsp;&nbsp;&nbsp;pylayers.measures.mesmimo Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.cormoran">31&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="references.html#bsignal-class">34.1&nbsp;&nbsp;&nbsp;Bsignal Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#usignal-class">34.2&nbsp;&nbsp;&nbsp;Usignal Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#tbsignal-class">34.3&nbsp;&nbsp;&nbsp;TBsignal Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#tusignal-class">34.4&nbsp;&nbsp;&nbsp;TUsignal Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#fbsignal-class">34.5&nbsp;&nbsp;&nbsp;FBsignal Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#fusignal-class">34.6&nbsp;&nbsp;&nbsp;FUsignal Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#fhsignal-class">34.7&nbsp;&nbsp;&nbsp;FHsignal Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#noise-class">34.8&nbsp;&nbsp;&nbsp;Noise Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#id115">34.9&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="references.html#id116">34.10&nbsp;&nbsp;&nbsp;Classes</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="pylayers.signal.bsignal.Bsignal.html">Bsignal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.signal.bsignal.FBsignal.html">FBsignal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.signal.bsignal.FHsignal.html">FHsignal</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">FUsignal</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.signal.bsignal.Noise.html">Noise</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.signal.bsignal.TBsignal.html">TBsignal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.signal.bsignal.TUsignal.html">TUsignal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.signal.bsignal.Usignal.html">Usignal</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#id117">34.11&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
+      
+    <li>FUsignal</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api/pylayers.signal.bsignal.FUsignal.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="fusignal">
+<h1>FUsignal<a class="headerlink" href="#fusignal" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.signal.bsignal.FUsignal">
+<em class="property">class </em><code class="descclassname">pylayers.signal.bsignal.</code><code class="descname">FUsignal</code><span class="sig-paren">(</span><em>x=array([]</em>, <em>dtype=float64)</em>, <em>y=array([]</em>, <em>dtype=float64)</em>, <em>label=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="references.html#pylayers.signal.bsignal.FBsignal" title="pylayers.signal.bsignal.FBsignal"><code class="xref py py-class docutils literal"><span class="pre">pylayers.signal.bsignal.FBsignal</span></code></a>, <a class="reference internal" href="pylayers.signal.bsignal.Usignal.html#pylayers.signal.bsignal.Usignal" title="pylayers.signal.bsignal.Usignal"><code class="xref py py-class docutils literal"><span class="pre">pylayers.signal.bsignal.Usignal</span></code></a></p>
+<p>FUsignal : Uniform signal in Frequency Domain</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="9%" />
+<col width="91%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>x</td>
+<td>(nd.array((1xN)))</td>
+</tr>
+<tr class="row-even"><td>y</td>
+<td>(Complex nd.array((... x N ))</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.symH" title="pylayers.signal.bsignal.FUsignal.symH"><code class="xref py py-obj docutils literal"><span class="pre">symH</span></code></a>([parity])</td>
+<td>enforce Hermitian symetry</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.symHz" title="pylayers.signal.bsignal.FUsignal.symHz"><code class="xref py py-obj docutils literal"><span class="pre">symHz</span></code></a>(Nz[,&nbsp;scale])</td>
+<td>Force Hermitian symmetry with zero padding</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.enthrsh" title="pylayers.signal.bsignal.FUsignal.enthrsh"><code class="xref py py-obj docutils literal"><span class="pre">enthrsh</span></code></a>([thresh])</td>
+<td>Energy thresholding of an FUsignal</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.dBthrsh" title="pylayers.signal.bsignal.FUsignal.dBthrsh"><code class="xref py py-obj docutils literal"><span class="pre">dBthrsh</span></code></a>([threshdB])</td>
+<td>dBthrsh : dB thresholding of an FUsignal</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.ift" title="pylayers.signal.bsignal.FUsignal.ift"><code class="xref py py-obj docutils literal"><span class="pre">ift</span></code></a>([Nz,&nbsp;ffts,&nbsp;beta])</td>
+<td>Inverse Fourier Transform - returns the associated TUsignal</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">resample</span></code>(x_new[,&nbsp;kind])</td>
+<td>resample the Usignal with a new x base</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.newdf" title="pylayers.signal.bsignal.FUsignal.newdf"><code class="xref py py-obj docutils literal"><span class="pre">newdf</span></code></a>(df)</td>
+<td>resample the FUsignal using phase and module interpolation</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.zp" title="pylayers.signal.bsignal.FUsignal.zp"><code class="xref py py-obj docutils literal"><span class="pre">zp</span></code></a>(N)</td>
+<td>zero padding until length N</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plotri</span></code>([nb])</td>
+<td>plot real and imaginary part</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plotdB</span></code>([mask,&nbsp;n,&nbsp;phase])</td>
+<td>usage : plotdB()</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.get" title="pylayers.signal.bsignal.FUsignal.get"><code class="xref py py-obj docutils literal"><span class="pre">get</span></code></a>(k)</td>
+<td>get the kth signal from the FUsignal</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="82%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>align</td>
+<td>(align two FUsignal on a same frequency base)</td>
+</tr>
+<tr class="row-even"><td>window   :</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Summary</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.applyFriis" title="pylayers.signal.bsignal.FUsignal.applyFriis"><code class="xref py py-obj docutils literal"><span class="pre">applyFriis</span></code></a>()</td>
+<td>apply Friis factor</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.dBthrsh" title="pylayers.signal.bsignal.FUsignal.dBthrsh"><code class="xref py py-obj docutils literal"><span class="pre">dBthrsh</span></code></a>([threshdB])</td>
+<td>dBthrsh : dB thresholding of an FUsignal</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.decimate" title="pylayers.signal.bsignal.FUsignal.decimate"><code class="xref py py-obj docutils literal"><span class="pre">decimate</span></code></a>([N])</td>
+<td>decimate FUsignal by N</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.dftresamp" title="pylayers.signal.bsignal.FUsignal.dftresamp"><code class="xref py py-obj docutils literal"><span class="pre">dftresamp</span></code></a>(df_new)</td>
+<td>non finished</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.energy" title="pylayers.signal.bsignal.FUsignal.energy"><code class="xref py py-obj docutils literal"><span class="pre">energy</span></code></a>([axis,&nbsp;Friis,&nbsp;mode])</td>
+<td>calculate energy along a given axis of the FUsignal</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.enthrsh" title="pylayers.signal.bsignal.FUsignal.enthrsh"><code class="xref py py-obj docutils literal"><span class="pre">enthrsh</span></code></a>([thresh])</td>
+<td>Energy thresholding of an FUsignal</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.get" title="pylayers.signal.bsignal.FUsignal.get"><code class="xref py py-obj docutils literal"><span class="pre">get</span></code></a>(k)</td>
+<td>get the kth signal from the FUsignal</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.ifft" title="pylayers.signal.bsignal.FUsignal.ifft"><code class="xref py py-obj docutils literal"><span class="pre">ifft</span></code></a>([Npt])</td>
+<td>Inverse Fourier transform</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.ift" title="pylayers.signal.bsignal.FUsignal.ift"><code class="xref py py-obj docutils literal"><span class="pre">ift</span></code></a>([Nz,&nbsp;ffts,&nbsp;beta])</td>
+<td>Inverse Fourier Transform - returns the associated TUsignal</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.iftshift" title="pylayers.signal.bsignal.FUsignal.iftshift"><code class="xref py py-obj docutils literal"><span class="pre">iftshift</span></code></a>([Nz])</td>
+<td>apply the inverse fftshift operator to come back in time</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.info" title="pylayers.signal.bsignal.FUsignal.info"><code class="xref py py-obj docutils literal"><span class="pre">info</span></code></a>()</td>
+<td>Display Information about the FUsignal</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.newdf" title="pylayers.signal.bsignal.FUsignal.newdf"><code class="xref py py-obj docutils literal"><span class="pre">newdf</span></code></a>(df)</td>
+<td>resample the FUsignal using phase and module interpolation</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.show" title="pylayers.signal.bsignal.FUsignal.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>(**kwargs)</td>
+<td>imshow visualization of Modulus and Phase</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.symH" title="pylayers.signal.bsignal.FUsignal.symH"><code class="xref py py-obj docutils literal"><span class="pre">symH</span></code></a>([parity])</td>
+<td>enforce Hermitian symetry</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.symHz" title="pylayers.signal.bsignal.FUsignal.symHz"><code class="xref py py-obj docutils literal"><span class="pre">symHz</span></code></a>(Nz[,&nbsp;scale])</td>
+<td>Force Hermitian symmetry with zero padding</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.tap" title="pylayers.signal.bsignal.FUsignal.tap"><code class="xref py py-obj docutils literal"><span class="pre">tap</span></code></a>(**kwargs)</td>
+<td>calculates channel taps</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.zp" title="pylayers.signal.bsignal.FUsignal.zp"><code class="xref py py-obj docutils literal"><span class="pre">zp</span></code></a>(N)</td>
+<td>zero padding until length N</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Documentation</p>
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUsignal.applyFriis">
+<code class="descname">applyFriis</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.applyFriis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.applyFriis" title="Permalink to this definition">¶</a></dt>
+<dd><p>apply Friis factor</p>
+<p>The Friis factor is multiplied to y</p>
+<div class="math">
+\[ \begin{align}\begin{aligned}y := \( \frac{-j c}{4 \pi f} \) y\\x is frequency in GHz\end{aligned}\end{align} \]</div>
+<p>boolean <cite>isFriis</cite> is set to <cite>True</cite></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUsignal.dBthrsh">
+<code class="descname">dBthrsh</code><span class="sig-paren">(</span><em>threshdB=40</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.dBthrsh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.dBthrsh" title="Permalink to this definition">¶</a></dt>
+<dd><p>dBthrsh : dB thresholding of an FUsignal</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUsignal.decimate">
+<code class="descname">decimate</code><span class="sig-paren">(</span><em>N=2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.decimate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.decimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>decimate FUsignal by N
+Parameters
+&#8212;&#8212;&#8212;-
+N : int</p>
+<blockquote>
+<div>decimation factor (default 2)</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUsignal.dftresamp">
+<code class="descname">dftresamp</code><span class="sig-paren">(</span><em>df_new</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.dftresamp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.dftresamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>non finished</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>df_new :</strong></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUsignal.energy">
+<code class="descname">energy</code><span class="sig-paren">(</span><em>axis=-1</em>, <em>Friis=False</em>, <em>mode='mean'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.energy" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate energy along a given axis of the FUsignal</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>axis</strong> : (default 0)</p>
+<p><strong>Friis</strong> : boolean</p>
+<p><strong>mode</strong> : string</p>
+<blockquote class="last">
+<div><p>mean (default)  | center | integ | first | last</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>If Friis is true energy is multiplied by</p>
+<p><span class="math">\(\frac{-j*c}{4 pi fGHz}\)</span></p>
+<p>axis = 0 is ray axis</p>
+<p>if mode == &#8216;mean&#8217;</p>
+<p><span class="math">\(E=\frac{1}{K} \sum_k |y_k|^2\)</span></p>
+<p>if mode == &#8216;integ&#8217;</p>
+<p><span class="math">\(E=\delta_x \sum_k |y_k|^2\)</span></p>
+<p>if mode == &#8216;center&#8217;</p>
+<p><span class="math">\(E= |y_{K/2}|^2\)</span></p>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; ip = TUsignal()
+&gt;&gt;&gt; ip.EnImpulse()
+&gt;&gt;&gt; En1 = ip.energy()
+&gt;&gt;&gt; assert((En1&gt;0.99) &amp; (En1&lt;1.01))
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUsignal.enthrsh">
+<code class="descname">enthrsh</code><span class="sig-paren">(</span><em>thresh=99.99</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.enthrsh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.enthrsh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Energy thresholding of an FUsignal</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>thresh</strong> : float</p>
+<blockquote>
+<div><p>threshold in percentage (default 99.99)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>EMH2</strong> : cumul energie H</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUsignal.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>k</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the kth signal from the FUsignal</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>k</strong> : indes to get</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>G</strong> : FUsignal</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUsignal.ifft">
+<code class="descname">ifft</code><span class="sig-paren">(</span><em>Npt=-1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.ifft"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.ifft" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inverse Fourier transform</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Npt</strong> : int</p>
+<blockquote>
+<div><p>default -1 (same number as x)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>tc</strong> : TUsignal</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<div class="math">
+\[x = \textrm{linspace}(0,\frac{1}{\delta f},N)\]</div>
+<div class="math">
+\[y = [0,\mathbb{X}_u^T]\]</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUsignal.ift">
+<code class="descname">ift</code><span class="sig-paren">(</span><em>Nz=1</em>, <em>ffts=0</em>, <em>beta=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.ift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.ift" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inverse Fourier Transform - returns the associated TUsignal</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Nz</strong> : Number of zeros (-1) No forcing</p>
+<p><strong>ffts</strong> : 0 (no fftshift 1:fftshift)</p>
+<p><strong>beta</strong> : kaiser window shape</p>
+<blockquote>
+<div><p>0   : rectangular 
+5   : similar to a Hamming
+6   : similar to a Hanning
+8.6 : similar to a blackman</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">uh :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="pylayers.signal.bsignal.FHsignal.html#pylayers.signal.bsignal.FHsignal.ifft" title="pylayers.signal.bsignal.FHsignal.ifft"><code class="xref py py-obj docutils literal"><span class="pre">FHsignal.ifft</span></code></a>, <a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.symH" title="pylayers.signal.bsignal.FUsignal.symH"><code class="xref py py-obj docutils literal"><span class="pre">FUsignal.symH</span></code></a>, <a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.symHz" title="pylayers.signal.bsignal.FUsignal.symHz"><code class="xref py py-obj docutils literal"><span class="pre">FUsignal.symHz</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>1 - Force Hermitian symmetry &#8211;&gt; FHsignal with or without zero padding
+2 - Inverse Fourier transform with or without fftshift</p>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.signal.bsignal import *
+&gt;&gt;&gt; e = TUsignal()
+&gt;&gt;&gt; e.EnImpulse()
+&gt;&gt;&gt; E  = e.fft()
+&gt;&gt;&gt; EU = E.unrex()
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUsignal.iftshift">
+<code class="descname">iftshift</code><span class="sig-paren">(</span><em>Nz=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.iftshift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.iftshift" title="Permalink to this definition">¶</a></dt>
+<dd><p>apply the inverse fftshift operator to come back in time</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUsignal.info">
+<code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display Information about the FUsignal</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUsignal.newdf">
+<code class="descname">newdf</code><span class="sig-paren">(</span><em>df</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.newdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.newdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>resample the FUsignal using phase and module interpolation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>df</strong></p>
+<p><strong>Returns</strong></p>
+<p><strong>&#8212;&#8212;-</strong></p>
+<blockquote class="last">
+<div><p>U : FUsignal</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUsignal.show">
+<code class="descname">show</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>imshow visualization of Modulus and Phase</p>
+<p>vmin : 
+vmax : 
+cmap : colormap</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUsignal.symH">
+<code class="descname">symH</code><span class="sig-paren">(</span><em>parity=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.symH"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.symH" title="Permalink to this definition">¶</a></dt>
+<dd><p>enforce Hermitian symetry</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>parity</strong> : integer</p>
+<blockquote>
+<div><p>0 even 1 odd</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>V</strong> : FHsignal</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUsignal.symHz">
+<code class="descname">symHz</code><span class="sig-paren">(</span><em>Nz</em>, <em>scale='extract'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.symHz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.symHz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force Hermitian symmetry with zero padding</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Nz</strong> :  int</p>
+<blockquote>
+<div><p>Number of zero above f[-1]</p>
+</div></blockquote>
+<p><strong>scale</strong> : string</p>
+<blockquote>
+<div><p>default : &#8216;extract&#8217; | &#8216;cir&#8217;</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>SH</strong> : FHsignal</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>The signal is rescaled in order to conserve energy</p>
+<p>Let denotes the FUsignal as <span class="math">\(mathcal{X}_d\)</span>
+The Fourier matrix is :math:<a href="#id1"><span class="problematic" id="id2">`</span></a>left[ matrix{mathbb{1}\</p>
+<blockquote class="last">
+<div>mathbb{W}_d\
+mathbb{W}_u}right]`</div></blockquote>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">FHSignal</span></code></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; N     = 11
+&gt;&gt;&gt; x     = np.linspace(2,11,N)
+&gt;&gt;&gt; y1    = sp.randn(N)+1j*sp.rand(N)
+&gt;&gt;&gt; y2    = sp.randn(N)+1j*sp.rand(N)
+&gt;&gt;&gt; y1[0] = 0
+&gt;&gt;&gt; y2[0] = 0
+&gt;&gt;&gt; y     = np.vstack((y1,y2))
+&gt;&gt;&gt; S     = FUsignal(x,y)
+&gt;&gt;&gt; FH =  S.symHz(10)
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUsignal.tap">
+<code class="descname">tap</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.tap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.tap" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates channel taps</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fcGHz</strong> : float</p>
+<blockquote>
+<div><p>center frequency GHz</p>
+</div></blockquote>
+<p><strong>WGHz</strong> :  float</p>
+<blockquote>
+<div><p>bandwidth GHz</p>
+</div></blockquote>
+<p><strong>Ntap</strong> :  number of taps</p>
+<p><strong>baseband</strong> : boolean</p>
+<blockquote>
+<div><p>default : True</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">htapi</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>[Tse] David Tse, <a class="reference external" href="http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf">http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf</a> page 26</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUsignal.zp">
+<code class="descname">zp</code><span class="sig-paren">(</span><em>N</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.zp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.zp" title="Permalink to this definition">¶</a></dt>
+<dd><p>zero padding until length N</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>N</strong> : int</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">FUsignal</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pylayers.signal.bsignal.Noise.html" class="btn btn-neutral float-right" title="Noise" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team.
+      Last updated on Nov 08, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

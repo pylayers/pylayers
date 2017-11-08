@@ -1,0 +1,11 @@
+<map id="inheritance545e9d5345" name="inheritance545e9d5345">
+<area shape="rect" id="node1" href="#pylayers.signal.bsignal.Bsignal" target="_top" title="Signal with an embedded time base" alt="" coords="132,55,204,80"/>
+<area shape="rect" id="node3" href="#pylayers.signal.bsignal.FBsignal" target="_top" title="FBsignal : Base signal in Frequency domain" alt="" coords="252,5,327,31"/>
+<area shape="rect" id="node6" href="pylayers.signal.bsignal.Usignal.html#pylayers.signal.bsignal.Usignal" target="_top" title="Signal with an embedded uniform Base" alt="" coords="253,55,325,80"/>
+<area shape="rect" id="node9" href="#pylayers.signal.bsignal.TBsignal" target="_top" title="Based signal in Time domain" alt="" coords="252,104,327,129"/>
+<area shape="rect" id="node2" href="pylayers.util.project.PyLayers.html#pylayers.util.project.PyLayers" target="_top" title="Generic PyLayers Meta Class" alt="" coords="5,55,84,80"/>
+<area shape="rect" id="node5" href="#pylayers.signal.bsignal.FUsignal" target="_top" title="FUsignal : Uniform signal in Frequency Domain" alt="" coords="375,19,451,44"/>
+<area shape="rect" id="node4" href="pylayers.signal.bsignal.FHsignal.html#pylayers.signal.bsignal.FHsignal" target="_top" title="FHsignal : Hermitian uniform signal in Frequency domain" alt="" coords="499,19,575,44"/>
+<area shape="rect" id="node8" href="#pylayers.signal.bsignal.TUsignal" target="_top" title="Uniform signal in time domain" alt="" coords="375,92,451,117"/>
+<area shape="rect" id="node7" href="#pylayers.signal.bsignal.Noise" target="_top" title="Create noise" alt="" coords="501,92,573,117"/>
+</map>
