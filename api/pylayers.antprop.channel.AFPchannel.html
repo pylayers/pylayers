@@ -1,0 +1,568 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>AFPchannel &mdash; PyLayers</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="author" title="About these documents"
+              href="../about.html"/>
+    <link rel="top" title="PyLayers" href="../index.html"/>
+        <link rel="up" title="Environment Description" href="../modules/pylayers.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Python
+          
+
+          
+            
+            <img src="../_static/pylayers.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#basic-usage">2&nbsp;&nbsp;&nbsp;Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#environment-description">3&nbsp;&nbsp;&nbsp;Environment Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#materials-and-slabs">4&nbsp;&nbsp;&nbsp;Materials and Slabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#description-of-antennas">5&nbsp;&nbsp;&nbsp;Description of Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#coverage-simulation">6&nbsp;&nbsp;&nbsp;Coverage Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#ray-tracing-simulation">7&nbsp;&nbsp;&nbsp;Ray Tracing Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#handling-agent-mobility">8&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#other-simulation-examples">9&nbsp;&nbsp;&nbsp;Other Simulation Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#localization-algorithms">10&nbsp;&nbsp;&nbsp;Localization Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#measurements-tools">11&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#pylayers-tools">12&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#references">13&nbsp;&nbsp;&nbsp;References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html">Environment Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.gis.layout">pylayers.gis.layout Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#antennas-and-propagation">Antennas and Propagation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.antenna">pylayers.antprop.antenna Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.aarray">pylayers.antprop.aarray Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.spharm">pylayers.antprop.spharm Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.antssh">pylayers.antprop.antssh Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.antvsh">pylayers.antprop.antvsh Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.slab">pylayers.antprop.slab Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.signature">pylayers.antprop.signature Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.interactions">pylayers.antprop.interactions Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.rays">pylayers.antprop.rays Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.loss">pylayers.antprop.loss Module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.channel">pylayers.antprop.channel Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#tbchannel-class">TBchannel class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#tuchannel-class">TUchannel class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#tudchannel">TUDchannel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#tchannel">Tchannel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#mchannel">Mchannel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#afpchannel">AFPchannel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#adpchannel">ADPchannel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#ctilde">Ctilde</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../modules/pylayers.html#id24">Classes</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.ADPchannel.html">ADPchannel</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">AFPchannel</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.Ctilde.html">Ctilde</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.Mchannel.html">Mchannel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.TBchannel.html">TBchannel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.TUDchannel.html">TUDchannel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.TUchannel.html">TUchannel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.Tchannel.html">Tchannel</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#id25">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#id26">pylayers.antprop.loss Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.coverage">pylayers.antprop.coverage Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.coeffModel">pylayers.antprop.coeffModel Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#simulations">Simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.simul.link">pylayers.simul.link Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.simul.exploit">pylayers.simul.exploit Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.simul.exploit_simulnet">pylayers.simul.exploit_simulnet Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.simul.simulnet">pylayers.simul.simulnet Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#pylayers-simul-simultraj-module">pylayers.simul.simultraj Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.exploit.simnet">pylayers.exploit.simnet Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#measurement-data">Measurement Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#instrumentation">Instrumentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#agents-and-bodies-mobility">Agents and Bodies Mobility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#networks">Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#physical-layer">Physical Layer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#signal-processing">Signal Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#utility-classes-and-functions">Utility classes and functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_layout.html">8 Random Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
+      
+          <li><a href="../modules/pylayers.html">Environment Description</a> &raquo;</li>
+      
+    <li>AFPchannel</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api/pylayers.antprop.channel.AFPchannel.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="afpchannel">
+<h1>AFPchannel<a class="headerlink" href="#afpchannel" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.antprop.channel.AFPchannel">
+<em class="property">class </em><code class="descclassname">pylayers.antprop.channel.</code><code class="descname">AFPchannel</code><span class="sig-paren">(</span><em>x=array([]</em>, <em>dtype=float64)</em>, <em>y=array([]</em>, <em>dtype=float64)</em>, <em>tx=array([]</em>, <em>dtype=float64)</em>, <em>rx=array([]</em>, <em>dtype=float64)</em>, <em>az=array([]</em>, <em>dtype=float64)</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.channel.AFPchannel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../modules/pylayers.signal.bsignal.html#pylayers.signal.bsignal.FUsignal" title="pylayers.signal.bsignal.FUsignal"><code class="xref py py-class docutils literal"><span class="pre">pylayers.signal.bsignal.FUsignal</span></code></a></p>
+<p>Angular Frequency Profile channel</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="9%" />
+<col width="91%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>x</td>
+<td>(np.array) frequency ,Nf</td>
+</tr>
+<tr class="row-even"><td>y</td>
+<td>(np.array) Amplitude Na,Nf</td>
+</tr>
+<tr class="row-odd"><td>tx</td>
+<td>(np.array) tx coordinate (,3)</td>
+</tr>
+<tr class="row-even"><td>rx</td>
+<td>(np.array) rx coordinates (,3)</td>
+</tr>
+<tr class="row-odd"><td>az</td>
+<td>(np.array (,Na)) AFP azimutal range in radians</td>
+</tr>
+<tr class="row-even"><td>theta</td>
+<td>(link elevation angle)</td>
+</tr>
+<tr class="row-odd"><td>phi</td>
+<td>(link (txrx) azimuth angle (with offset))</td>
+</tr>
+<tr class="row-even"><td>tau</td>
+<td>(link delay (ns))</td>
+</tr>
+<tr class="row-odd"><td>offset</td>
+<td>(float angle in radians) azimuth offset w.r.t global frame</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">abs</span></code>()</td>
+<td>return the absolute value of an Usignal</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">alignc</span></code>(u2)</td>
+<td>align 2 Usignal</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">append</span></code>(bs)</td>
+<td>append bs to Bsignal</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">applyFriis</span></code>()</td>
+<td>apply Friis factor</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">cformat</span></code>(**kwargs)</td>
+<td>complex format</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">dBthrsh</span></code>([threshdB])</td>
+<td>dBthrsh : dB thresholding of an FUsignal</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">decimate</span></code>([N])</td>
+<td>decimate FUsignal by N</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">dftresamp</span></code>(df_new)</td>
+<td>non finished</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">dx</span></code>()</td>
+<td>get the time step of Usignal.x</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">energy</span></code>([axis,&nbsp;Friis,&nbsp;mode])</td>
+<td>calculate energy along a given axis of the FUsignal</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">enthrsh</span></code>([thresh])</td>
+<td>Energy thresholding of an FUsignal</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">eprfl</span></code>([axis])</td>
+<td>Energy profile</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">expand</span></code>(a)</td>
+<td>expand the time support by a scale factor a</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">extract</span></code>(u)</td>
+<td>extract a subset of signal from index</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">fftshift</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">flatteny</span></code>([yrange,&nbsp;reversible])</td>
+<td>flatten y array</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">gating</span></code>(xmin,&nbsp;xmax)</td>
+<td>gating between xmin and xmax</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get</span></code>(k)</td>
+<td>get the kth signal from the FUsignal</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
+<td>generic help</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">ifft</span></code>([Npt])</td>
+<td>Inverse Fourier transform</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">ift</span></code>([Nz,&nbsp;ffts,&nbsp;beta])</td>
+<td>Inverse Fourier Transform - returns the associated TUsignal</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">iftshift</span></code>([Nz])</td>
+<td>apply the inverse fftshift operator to come back in time</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">imshow</span></code>(**kwargs)</td>
+<td>imshow of y matrix</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">info</span></code>()</td>
+<td>Display Information about the FUsignal</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">len</span></code>()</td>
+<td>returm length of x axis</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">load</span></code>(filename)</td>
+<td>load a Bsignal from a Matlab File</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.AFPchannel.loadmes" title="pylayers.antprop.channel.AFPchannel.loadmes"><code class="xref py py-obj docutils literal"><span class="pre">loadmes</span></code></a>(_filename,&nbsp;_filecal[,&nbsp;fcGHz,&nbsp;BW,&nbsp;...])</td>
+<td>Load measurement file</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">max</span></code>()</td>
+<td>maximum of Usignal</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">mean</span></code>()</td>
+<td>mean value of the signal</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">min</span></code>()</td>
+<td>minimum of Usignal</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">newdf</span></code>(df)</td>
+<td>resample the FUsignal using phase and module interpolation</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>(**kwargs)</td>
+<td>plot FBsignal</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plotdB</span></code>([mask,&nbsp;n,&nbsp;phase])</td>
+<td>usage : plotdB()</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plotri</span></code>([nb])</td>
+<td>plot real and imaginary part</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">resample</span></code>(x_new[,&nbsp;kind])</td>
+<td>resample the Usignal with a new x base</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">save</span></code>(filename)</td>
+<td>save Bsignal in Matlab File Format</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">setx</span></code>(start,&nbsp;stop,&nbsp;dx)</td>
+<td>set the x array of the Usignal (y=0)</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">sety</span></code>(fun)</td>
+<td>sety : set y vector</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">show</span></code>(**kwargs)</td>
+<td>imshow visualization of Modulus and Phase</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">stem</span></code>([color])</td>
+<td>stem plot</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">step</span></code>([color])</td>
+<td>plot steps display</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">symH</span></code>([parity])</td>
+<td>enforce Hermitian symetry</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">symHz</span></code>(Nz[,&nbsp;scale])</td>
+<td>Force Hermitian symmetry with zero padding</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">tap</span></code>(**kwargs)</td>
+<td>calculates channel taps</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.AFPchannel.toadp" title="pylayers.antprop.channel.AFPchannel.toadp"><code class="xref py py-obj docutils literal"><span class="pre">toadp</span></code></a>([imax])</td>
+<td>convert afp into adp (frequency-&gt;delay)</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">truncate</span></code>(imin,&nbsp;imax[,&nbsp;axis])</td>
+<td>truncate USignal in range [posmin, posmax]</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">width</span></code>()</td>
+<td>get the extension support of the Usignal</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">window</span></code>([win])</td>
+<td>windowing Usignal</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">zleft</span></code>(xmin)</td>
+<td>add zeros on the left  until xmin</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">zlr</span></code>(xmin,&nbsp;xmax)</td>
+<td>This corresponds to a gating between xmin and xmax</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">zp</span></code>(N)</td>
+<td>zero padding until length N</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">zright</span></code>(xmax)</td>
+<td>add zeros on the right until xmax</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Summary</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.AFPchannel.loadmes" title="pylayers.antprop.channel.AFPchannel.loadmes"><code class="xref py py-obj docutils literal"><span class="pre">loadmes</span></code></a>(_filename,&nbsp;_filecal[,&nbsp;fcGHz,&nbsp;BW,&nbsp;...])</td>
+<td>Load measurement file</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.AFPchannel.toadp" title="pylayers.antprop.channel.AFPchannel.toadp"><code class="xref py py-obj docutils literal"><span class="pre">toadp</span></code></a>([imax])</td>
+<td>convert afp into adp (frequency-&gt;delay)</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Documentation</p>
+<dl class="method">
+<dt id="pylayers.antprop.channel.AFPchannel.loadmes">
+<code class="descname">loadmes</code><span class="sig-paren">(</span><em>_filename</em>, <em>_filecal</em>, <em>fcGHz=32.6</em>, <em>BW=1.6</em>, <em>win='rect'</em>, <em>ang_offset=0.37</em>, <em>ext='txt'</em>, <em>dirmeas='meas/Espoo'</em>, <em>refinement=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.channel.AFPchannel.loadmes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load measurement file</p>
+<p>Measurement files and the associated back to back calibration files 
+are placed in the mes directory of the project.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_filename</strong> : string</p>
+<blockquote>
+<div><p>data matfile name</p>
+</div></blockquote>
+<p><strong>_filecal</strong> : string</p>
+<blockquote>
+<div><p>calibration matfile name</p>
+</div></blockquote>
+<p><strong>fcGHz</strong> : float</p>
+<blockquote>
+<div><p>center frequency</p>
+</div></blockquote>
+<p><strong>BW</strong> : float</p>
+<blockquote>
+<div><p>measurement bandwidth</p>
+</div></blockquote>
+<p><strong>win</strong> : string</p>
+<blockquote>
+<div><p>window type in [&#8216;rect&#8217;,&#8217;hamming&#8217;,&#8217;blackman&#8217;]</p>
+</div></blockquote>
+<p><strong>ang_offset</strong> : float</p>
+<blockquote>
+<div><p>angle in radian</p>
+</div></blockquote>
+<p><strong>ext</strong> : string</p>
+<blockquote>
+<div><p>file extension &#8216;txt&#8217; | &#8216;.mat&#8217;</p>
+</div></blockquote>
+<p class="last"><strong>diremeas</strong> : string</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="../modules/generated/pylayers.util.pyutil.getlong.html#pylayers.util.pyutil.getlong" title="pylayers.util.pyutil.getlong"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.util.pyutil.getlong</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>This function updates : 
++ self.x (frequency GHz)
++ self.y 
++ self.az azimuth radians</p>
+<p>The calibration file _filecal (.mat file) should be added in the data directory
+In practice for Espoo B2B.mat</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.AFPchannel.toadp">
+<code class="descname">toadp</code><span class="sig-paren">(</span><em>imax=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.channel.AFPchannel.toadp" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert afp into adp (frequency-&gt;delay)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team.
+      Last updated on Nov 08, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

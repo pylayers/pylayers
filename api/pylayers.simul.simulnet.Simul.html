@@ -1,0 +1,497 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Simul &mdash; PyLayers</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="author" title="About these documents"
+              href="../about.html"/>
+    <link rel="top" title="PyLayers" href="../index.html"/>
+        <link rel="up" title="Environment Description" href="../modules/pylayers.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Python
+          
+
+          
+            
+            <img src="../_static/pylayers.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#basic-usage">2&nbsp;&nbsp;&nbsp;Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#environment-description">3&nbsp;&nbsp;&nbsp;Environment Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#materials-and-slabs">4&nbsp;&nbsp;&nbsp;Materials and Slabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#description-of-antennas">5&nbsp;&nbsp;&nbsp;Description of Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#coverage-simulation">6&nbsp;&nbsp;&nbsp;Coverage Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#ray-tracing-simulation">7&nbsp;&nbsp;&nbsp;Ray Tracing Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#handling-agent-mobility">8&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#other-simulation-examples">9&nbsp;&nbsp;&nbsp;Other Simulation Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#localization-algorithms">10&nbsp;&nbsp;&nbsp;Localization Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#measurements-tools">11&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#pylayers-tools">12&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#references">13&nbsp;&nbsp;&nbsp;References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html">Environment Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.gis.layout">pylayers.gis.layout Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#antennas-and-propagation">Antennas and Propagation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.antenna">pylayers.antprop.antenna Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.aarray">pylayers.antprop.aarray Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.spharm">pylayers.antprop.spharm Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.antssh">pylayers.antprop.antssh Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.antvsh">pylayers.antprop.antvsh Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.slab">pylayers.antprop.slab Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.signature">pylayers.antprop.signature Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.interactions">pylayers.antprop.interactions Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.rays">pylayers.antprop.rays Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.loss">pylayers.antprop.loss Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.channel">pylayers.antprop.channel Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#id26">pylayers.antprop.loss Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.coverage">pylayers.antprop.coverage Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.coeffModel">pylayers.antprop.coeffModel Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#simulations">Simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.simul.link">pylayers.simul.link Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.simul.exploit">pylayers.simul.exploit Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.simul.exploit_simulnet">pylayers.simul.exploit_simulnet Module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.simul.simulnet">pylayers.simul.simulnet Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#simul-class">Simul class</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../modules/pylayers.html#id40">Classes</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Simul</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#id41">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#pylayers-simul-simultraj-module">pylayers.simul.simultraj Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.exploit.simnet">pylayers.exploit.simnet Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#measurement-data">Measurement Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#instrumentation">Instrumentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#agents-and-bodies-mobility">Agents and Bodies Mobility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#networks">Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#physical-layer">Physical Layer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#signal-processing">Signal Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#utility-classes-and-functions">Utility classes and functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_layout.html">8 Random Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
+      
+          <li><a href="../modules/pylayers.html">Environment Description</a> &raquo;</li>
+      
+    <li>Simul</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api/pylayers.simul.simulnet.Simul.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="simul">
+<h1>Simul<a class="headerlink" href="#simul" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.simul.simulnet.Simul">
+<em class="property">class </em><code class="descclassname">pylayers.simul.simulnet.</code><code class="descname">Simul</code><a class="headerlink" href="#pylayers.simul.simulnet.Simul" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">SimPy.SimulationRT.SimulationRT</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>self.lAg</strong> : list of Agent(Object)</p>
+<blockquote>
+<div><p>list of agents involved in simulation</p>
+</div></blockquote>
+<p><strong>self.L</strong> : Layout</p>
+<blockquote class="last">
+<div><p>Layout used in simulation</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="87%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>config</td>
+<td>(config parser instance)</td>
+</tr>
+<tr class="row-even"><td>sim_opt</td>
+<td>(dictionary of configuration option for simulation)</td>
+</tr>
+<tr class="row-odd"><td>ag_opt</td>
+<td>(dictionary of configuration option for agent)</td>
+</tr>
+<tr class="row-even"><td>lay_opt</td>
+<td>(dictionary of  configuration option for layout)</td>
+</tr>
+<tr class="row-odd"><td>meca_opt</td>
+<td>(dictionary of  configuration option for mecanic)</td>
+</tr>
+<tr class="row-even"><td>net_opt</td>
+<td>(dictionary of  configuration option for network)</td>
+</tr>
+<tr class="row-odd"><td>loc_opt</td>
+<td>(dictionary of  configuration option for localization)</td>
+</tr>
+<tr class="row-even"><td>save_opt</td>
+<td>(dictionary of  configuration option for save)</td>
+</tr>
+<tr class="row-odd"><td>sql_opt</td>
+<td>(dictionary of  configuration option for sql)</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">activate</span></code>(obj,&nbsp;process[,&nbsp;at,&nbsp;delay,&nbsp;prior])</td>
+<td>Application function to activate passive process.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">allEventNotices</span></code>()</td>
+<td>Returns string with eventlist as; t1: processname, processname2 t2: processname4, processname5, .</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">allEventTimes</span></code>()</td>
+<td>Returns list of all times for which events are scheduled.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/pylayers.simul.simulnet.Simul.create.html#pylayers.simul.simulnet.Simul.create" title="pylayers.simul.simulnet.Simul.create"><code class="xref py py-obj docutils literal"><span class="pre">create</span></code></a>()</td>
+<td>create the simulation</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/pylayers.simul.simulnet.Simul.create_EMS.html#pylayers.simul.simulnet.Simul.create_EMS" title="pylayers.simul.simulnet.Simul.create_EMS"><code class="xref py py-obj docutils literal"><span class="pre">create_EMS</span></code></a>()</td>
+<td>create electromagnetic Solver object</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/pylayers.simul.simulnet.Simul.create_agent.html#pylayers.simul.simulnet.Simul.create_agent" title="pylayers.simul.simulnet.Simul.create_agent"><code class="xref py py-obj docutils literal"><span class="pre">create_agent</span></code></a>()</td>
+<td>create simulation&#8217;s Agents</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/pylayers.simul.simulnet.Simul.create_layout.html#pylayers.simul.simulnet.Simul.create_layout" title="pylayers.simul.simulnet.Simul.create_layout"><code class="xref py py-obj docutils literal"><span class="pre">create_layout</span></code></a>()</td>
+<td>create Layout in Simpy the_world thanks to Tk backend</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/pylayers.simul.simulnet.Simul.create_network.html#pylayers.simul.simulnet.Simul.create_network" title="pylayers.simul.simulnet.Simul.create_network"><code class="xref py py-obj docutils literal"><span class="pre">create_network</span></code></a>()</td>
+<td>create the whole network</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/pylayers.simul.simulnet.Simul.create_show.html#pylayers.simul.simulnet.Simul.create_show" title="pylayers.simul.simulnet.Simul.create_show"><code class="xref py py-obj docutils literal"><span class="pre">create_show</span></code></a>()</td>
+<td>create a vizualization</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/pylayers.simul.simulnet.Simul.create_visual.html#pylayers.simul.simulnet.Simul.create_visual" title="pylayers.simul.simulnet.Simul.create_visual"><code class="xref py py-obj docutils literal"><span class="pre">create_visual</span></code></a>()</td>
+<td>create visual Tk process</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">has_events</span></code>()</td>
+<td>Checks if there are events which can be processed.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">initialize</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">now</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">peek</span></code>()</td>
+<td>Returns the time of the next event or infinity, if no more events are scheduled.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">reactivate</span></code>(obj[,&nbsp;at,&nbsp;delay,&nbsp;prior])</td>
+<td>Application function to reactivate a process which is active, suspended or passive.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">rtnow</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">rtset</span></code>([rel_speed])</td>
+<td>Resets the ratio simulation time over clock time(seconds).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/pylayers.simul.simulnet.Simul.runsimul.html#pylayers.simul.simulnet.Simul.runsimul" title="pylayers.simul.simulnet.Simul.runsimul"><code class="xref py py-obj docutils literal"><span class="pre">runsimul</span></code></a>()</td>
+<td>run simulation</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.simulnet.Simul.savepandas" title="pylayers.simul.simulnet.Simul.savepandas"><code class="xref py py-obj docutils literal"><span class="pre">savepandas</span></code></a>()</td>
+<td>save mechanics in pandas hdf5 format</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">simulate</span></code>([until,&nbsp;real_time,&nbsp;rel_speed])</td>
+<td>Simulates until simulation time reaches <code class="docutils literal"><span class="pre">until</span></code>.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">startCollection</span></code>([when,&nbsp;monitors,&nbsp;tallies])</td>
+<td>Starts data collection of all designated Monitor and Tally objects (default = all) at time &#8216;when&#8217;.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">step</span></code>()</td>
+<td>Executes the next uncancelled event in the eventqueue.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">stopSimulation</span></code>()</td>
+<td>Application function to stop simulation run</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Summary</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/pylayers.simul.simulnet.Simul.create.html#pylayers.simul.simulnet.Simul.create" title="pylayers.simul.simulnet.Simul.create"><code class="xref py py-obj docutils literal"><span class="pre">create</span></code></a>()</td>
+<td>create the simulation</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/pylayers.simul.simulnet.Simul.create_EMS.html#pylayers.simul.simulnet.Simul.create_EMS" title="pylayers.simul.simulnet.Simul.create_EMS"><code class="xref py py-obj docutils literal"><span class="pre">create_EMS</span></code></a>()</td>
+<td>create electromagnetic Solver object</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/pylayers.simul.simulnet.Simul.create_agent.html#pylayers.simul.simulnet.Simul.create_agent" title="pylayers.simul.simulnet.Simul.create_agent"><code class="xref py py-obj docutils literal"><span class="pre">create_agent</span></code></a>()</td>
+<td>create simulation&#8217;s Agents</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/pylayers.simul.simulnet.Simul.create_layout.html#pylayers.simul.simulnet.Simul.create_layout" title="pylayers.simul.simulnet.Simul.create_layout"><code class="xref py py-obj docutils literal"><span class="pre">create_layout</span></code></a>()</td>
+<td>create Layout in Simpy the_world thanks to Tk backend</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/pylayers.simul.simulnet.Simul.create_network.html#pylayers.simul.simulnet.Simul.create_network" title="pylayers.simul.simulnet.Simul.create_network"><code class="xref py py-obj docutils literal"><span class="pre">create_network</span></code></a>()</td>
+<td>create the whole network</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/pylayers.simul.simulnet.Simul.create_show.html#pylayers.simul.simulnet.Simul.create_show" title="pylayers.simul.simulnet.Simul.create_show"><code class="xref py py-obj docutils literal"><span class="pre">create_show</span></code></a>()</td>
+<td>create a vizualization</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/pylayers.simul.simulnet.Simul.create_visual.html#pylayers.simul.simulnet.Simul.create_visual" title="pylayers.simul.simulnet.Simul.create_visual"><code class="xref py py-obj docutils literal"><span class="pre">create_visual</span></code></a>()</td>
+<td>create visual Tk process</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/pylayers.simul.simulnet.Simul.runsimul.html#pylayers.simul.simulnet.Simul.runsimul" title="pylayers.simul.simulnet.Simul.runsimul"><code class="xref py py-obj docutils literal"><span class="pre">runsimul</span></code></a>()</td>
+<td>run simulation</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.simulnet.Simul.savepandas" title="pylayers.simul.simulnet.Simul.savepandas"><code class="xref py py-obj docutils literal"><span class="pre">savepandas</span></code></a>()</td>
+<td>save mechanics in pandas hdf5 format</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Documentation</p>
+<dl class="method">
+<dt id="pylayers.simul.simulnet.Simul.create">
+<code class="descname">create</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.simul.simulnet.Simul.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>create the simulation
+This method is called at the end of __init__</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.simulnet.Simul.create_EMS">
+<code class="descname">create_EMS</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.simul.simulnet.Simul.create_EMS" title="Permalink to this definition">¶</a></dt>
+<dd><p>create electromagnetic Solver object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.simulnet.Simul.create_agent">
+<code class="descname">create_agent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.simul.simulnet.Simul.create_agent" title="Permalink to this definition">¶</a></dt>
+<dd><p>create simulation&#8217;s Agents</p>
+<p>..todo:: change lAg list to a dictionnary ( modification in show.py too)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.simulnet.Simul.create_layout">
+<code class="descname">create_layout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.simul.simulnet.Simul.create_layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>create Layout in Simpy the_world thanks to Tk backend</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.simulnet.Simul.create_network">
+<code class="descname">create_network</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.simul.simulnet.Simul.create_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>create the whole network</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.simulnet.Simul.create_show">
+<code class="descname">create_show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.simul.simulnet.Simul.create_show" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a vizualization</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.simulnet.Simul.create_visual">
+<code class="descname">create_visual</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.simul.simulnet.Simul.create_visual" title="Permalink to this definition">¶</a></dt>
+<dd><p>create visual Tk process</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.simulnet.Simul.runsimul">
+<code class="descname">runsimul</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.simul.simulnet.Simul.runsimul" title="Permalink to this definition">¶</a></dt>
+<dd><p>run simulation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.simulnet.Simul.savepandas">
+<code class="descname">savepandas</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.simul.simulnet.Simul.savepandas" title="Permalink to this definition">¶</a></dt>
+<dd><p>save mechanics in pandas hdf5 format</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team.
+      Last updated on Nov 08, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

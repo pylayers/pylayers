@@ -1,0 +1,873 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Ctilde &mdash; PyLayers</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="author" title="About these documents"
+              href="../about.html"/>
+    <link rel="top" title="PyLayers" href="../index.html"/>
+        <link rel="up" title="Environment Description" href="../modules/pylayers.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Python
+          
+
+          
+            
+            <img src="../_static/pylayers.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#basic-usage">2&nbsp;&nbsp;&nbsp;Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#environment-description">3&nbsp;&nbsp;&nbsp;Environment Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#materials-and-slabs">4&nbsp;&nbsp;&nbsp;Materials and Slabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#description-of-antennas">5&nbsp;&nbsp;&nbsp;Description of Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#coverage-simulation">6&nbsp;&nbsp;&nbsp;Coverage Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#ray-tracing-simulation">7&nbsp;&nbsp;&nbsp;Ray Tracing Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#handling-agent-mobility">8&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#other-simulation-examples">9&nbsp;&nbsp;&nbsp;Other Simulation Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#localization-algorithms">10&nbsp;&nbsp;&nbsp;Localization Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#measurements-tools">11&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#pylayers-tools">12&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#references">13&nbsp;&nbsp;&nbsp;References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html">Environment Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.gis.layout">pylayers.gis.layout Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#antennas-and-propagation">Antennas and Propagation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.antenna">pylayers.antprop.antenna Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.aarray">pylayers.antprop.aarray Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.spharm">pylayers.antprop.spharm Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.antssh">pylayers.antprop.antssh Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.antvsh">pylayers.antprop.antvsh Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.slab">pylayers.antprop.slab Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.signature">pylayers.antprop.signature Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.interactions">pylayers.antprop.interactions Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.rays">pylayers.antprop.rays Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.loss">pylayers.antprop.loss Module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.channel">pylayers.antprop.channel Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#tbchannel-class">TBchannel class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#tuchannel-class">TUchannel class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#tudchannel">TUDchannel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#tchannel">Tchannel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#mchannel">Mchannel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#afpchannel">AFPchannel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#adpchannel">ADPchannel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#ctilde">Ctilde</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../modules/pylayers.html#id24">Classes</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.ADPchannel.html">ADPchannel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.AFPchannel.html">AFPchannel</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Ctilde</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.Mchannel.html">Mchannel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.TBchannel.html">TBchannel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.TUDchannel.html">TUDchannel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.TUchannel.html">TUchannel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.Tchannel.html">Tchannel</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/pylayers.html#id25">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#id26">pylayers.antprop.loss Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.coverage">pylayers.antprop.coverage Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.antprop.coeffModel">pylayers.antprop.coeffModel Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#simulations">Simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.simul.link">pylayers.simul.link Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.simul.exploit">pylayers.simul.exploit Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.simul.exploit_simulnet">pylayers.simul.exploit_simulnet Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.simul.simulnet">pylayers.simul.simulnet Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#pylayers-simul-simultraj-module">pylayers.simul.simultraj Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#module-pylayers.exploit.simnet">pylayers.exploit.simnet Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#measurement-data">Measurement Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#instrumentation">Instrumentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#agents-and-bodies-mobility">Agents and Bodies Mobility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#networks">Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#physical-layer">Physical Layer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#signal-processing">Signal Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pylayers.html#utility-classes-and-functions">Utility classes and functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_layout.html">8 Random Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
+      
+          <li><a href="../modules/pylayers.html">Environment Description</a> &raquo;</li>
+      
+    <li>Ctilde</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api/pylayers.antprop.channel.Ctilde.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="ctilde">
+<h1>Ctilde<a class="headerlink" href="#ctilde" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.antprop.channel.Ctilde">
+<em class="property">class </em><code class="descclassname">pylayers.antprop.channel.</code><code class="descname">Ctilde</code><a class="headerlink" href="#pylayers.antprop.channel.Ctilde" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">pylayers.util.project.PyLayers</span></code></p>
+<p>container for the 4 components of the polarimetric ray channel</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="88%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Ctt</td>
+<td>(bsignal.FUsignal)</td>
+</tr>
+<tr class="row-even"><td>Ctp</td>
+<td>(bsignal.FUsignal)</td>
+</tr>
+<tr class="row-odd"><td>Cpt</td>
+<td>(bsignal.FUsignal)</td>
+</tr>
+<tr class="row-even"><td>Cpp</td>
+<td>(bsignal.FUsignal)</td>
+</tr>
+<tr class="row-odd"><td>tauk</td>
+<td>(ndarray delays)</td>
+</tr>
+<tr class="row-even"><td>tang</td>
+<td>(ndarray angles of departure)</td>
+</tr>
+<tr class="row-odd"><td>rang</td>
+<td>(ndarray angles of arrival)</td>
+</tr>
+<tr class="row-even"><td>tangl</td>
+<td>(ndarray angles of departure (local))</td>
+</tr>
+<tr class="row-odd"><td>rangl</td>
+<td>(ndarray angles of arrival (local))</td>
+</tr>
+<tr class="row-even"><td>fGHz</td>
+<td>(np.array) frequency array</td>
+</tr>
+<tr class="row-odd"><td>nfreq</td>
+<td>(int) number of frequency point</td>
+</tr>
+<tr class="row-even"><td>nray</td>
+<td>(int) number of rays</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.mobility" title="pylayers.antprop.channel.Ctilde.mobility"><code class="xref py py-obj docutils literal"><span class="pre">mobility</span></code></a>(v,&nbsp;dt)</td>
+<td>modify channel for uniform mobility</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.doadod" title="pylayers.antprop.channel.Ctilde.doadod"><code class="xref py py-obj docutils literal"><span class="pre">doadod</span></code></a>(**kwargs)</td>
+<td>scatter plot of the DoA-DoD channel structure</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.show" title="pylayers.antprop.channel.Ctilde.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>(**kwargs)</td>
+<td>show the propagation channel</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.energy" title="pylayers.antprop.channel.Ctilde.energy"><code class="xref py py-obj docutils literal"><span class="pre">energy</span></code></a>([mode,&nbsp;Friis,&nbsp;sumray])</td>
+<td>calculates energy on each channel</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.sort" title="pylayers.antprop.channel.Ctilde.sort"><code class="xref py py-obj docutils literal"><span class="pre">sort</span></code></a>([typ])</td>
+<td>sort Ctilde with respect to typ (default tauk)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.prop2tran" title="pylayers.antprop.channel.Ctilde.prop2tran"><code class="xref py py-obj docutils literal"><span class="pre">prop2tran</span></code></a>([a,&nbsp;b,&nbsp;Friis,&nbsp;debug])</td>
+<td>transform propagation channel into transmission channel</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="38%" />
+<col width="63%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>choose</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>load</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Summary</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.Cg2Cl" title="pylayers.antprop.channel.Ctilde.Cg2Cl"><code class="xref py py-obj docutils literal"><span class="pre">Cg2Cl</span></code></a>([Tt,&nbsp;Tr])</td>
+<td>global reference frame to local reference frame</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.check_reciprocity" title="pylayers.antprop.channel.Ctilde.check_reciprocity"><code class="xref py py-obj docutils literal"><span class="pre">check_reciprocity</span></code></a>(C)</td>
+<td>check channel reciprocity</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.cut" title="pylayers.antprop.channel.Ctilde.cut"><code class="xref py py-obj docutils literal"><span class="pre">cut</span></code></a>([threshold_dB])</td>
+<td>cut rays from a energy threshold</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.doadod" title="pylayers.antprop.channel.Ctilde.doadod"><code class="xref py py-obj docutils literal"><span class="pre">doadod</span></code></a>(**kwargs)</td>
+<td>scatter plot of the DoA-DoD channel structure</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.energy" title="pylayers.antprop.channel.Ctilde.energy"><code class="xref py py-obj docutils literal"><span class="pre">energy</span></code></a>([mode,&nbsp;Friis,&nbsp;sumray])</td>
+<td>calculates energy on each channel</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.inforay" title="pylayers.antprop.channel.Ctilde.inforay"><code class="xref py py-obj docutils literal"><span class="pre">inforay</span></code></a>(iray[,&nbsp;ifreq])</td>
+<td>provide information about a specific ray</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.loadh5" title="pylayers.antprop.channel.Ctilde.loadh5"><code class="xref py py-obj docutils literal"><span class="pre">loadh5</span></code></a>(Lfilename,&nbsp;idx[,&nbsp;output])</td>
+<td>load Ctilde object in hdf5 format</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.locbas" title="pylayers.antprop.channel.Ctilde.locbas"><code class="xref py py-obj docutils literal"><span class="pre">locbas</span></code></a>(**kwargs)</td>
+<td>global reference frame to local reference frame</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.los" title="pylayers.antprop.channel.Ctilde.los"><code class="xref py py-obj docutils literal"><span class="pre">los</span></code></a>(**kwargs)</td>
+<td>Line of site channel</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.mobility" title="pylayers.antprop.channel.Ctilde.mobility"><code class="xref py py-obj docutils literal"><span class="pre">mobility</span></code></a>(v,&nbsp;dt)</td>
+<td>modify channel for uniform mobility</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.plotd" title="pylayers.antprop.channel.Ctilde.plotd"><code class="xref py py-obj docutils literal"><span class="pre">plotd</span></code></a>([d])</td>
+<td>plot direction of arrival/departure</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.prop2tran" title="pylayers.antprop.channel.Ctilde.prop2tran"><code class="xref py py-obj docutils literal"><span class="pre">prop2tran</span></code></a>([a,&nbsp;b,&nbsp;Friis,&nbsp;debug])</td>
+<td>transform propagation channel into transmission channel</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.saveh5" title="pylayers.antprop.channel.Ctilde.saveh5"><code class="xref py py-obj docutils literal"><span class="pre">saveh5</span></code></a>(Lfilename,&nbsp;idx,&nbsp;a,&nbsp;b)</td>
+<td>save Ctilde object in hdf5 format</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.show" title="pylayers.antprop.channel.Ctilde.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>(**kwargs)</td>
+<td>show the propagation channel</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.sort" title="pylayers.antprop.channel.Ctilde.sort"><code class="xref py py-obj docutils literal"><span class="pre">sort</span></code></a>([typ])</td>
+<td>sort Ctilde with respect to typ (default tauk)</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Documentation</p>
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.Cg2Cl">
+<code class="descname">Cg2Cl</code><span class="sig-paren">(</span><em>Tt=[]</em>, <em>Tr=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.Cg2Cl" title="Permalink to this definition">¶</a></dt>
+<dd><p>global reference frame to local reference frame</p>
+<p>If Tt and Tr are [] the global channel is  retrieved</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Tt</strong> : Tx rotation matrix 3x3</p>
+<blockquote>
+<div><p>default []</p>
+</div></blockquote>
+<p><strong>Tr</strong> : Rx rotation matrix 3x3</p>
+<blockquote>
+<div><p>default []</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Cl</strong> : Ctilde local</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.check_reciprocity">
+<code class="descname">check_reciprocity</code><span class="sig-paren">(</span><em>C</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.check_reciprocity" title="Permalink to this definition">¶</a></dt>
+<dd><p>check channel reciprocity</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>C</strong> : Ctilde</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This is not properly implemented</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.cut">
+<code class="descname">cut</code><span class="sig-paren">(</span><em>threshold_dB=50</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.cut" title="Permalink to this definition">¶</a></dt>
+<dd><p>cut rays from a energy threshold</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>threshold</strong> : float</p>
+<blockquote class="last">
+<div><p>default 0.99</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.doadod">
+<code class="descname">doadod</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.doadod" title="Permalink to this definition">¶</a></dt>
+<dd><p>scatter plot of the DoA-DoD channel structure
+the energy is color coded over all couples of DoA-DoD</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>phi</strong> : tuple (-180, 180)</p>
+<blockquote>
+<div><p>phi angle</p>
+</div></blockquote>
+<p><strong>normalize</strong> : bool</p>
+<blockquote>
+<div><p>energy normalized</p>
+</div></blockquote>
+<p><strong>reverse</strong> : bool</p>
+<blockquote>
+<div><p>inverse theta and phi representation</p>
+</div></blockquote>
+<p><strong>polar</strong> : bool</p>
+<blockquote>
+<div><p>polar representation</p>
+</div></blockquote>
+<p><strong>cmap</strong> : matplotlib.cmap</p>
+<p><strong>mode</strong> : string</p>
+<blockquote>
+<div><p>&#8216;center&#8217; | &#8216;mean&#8217; | &#8216;in&#8217;</p>
+</div></blockquote>
+<p><strong>s</strong> : float</p>
+<blockquote>
+<div><p>scatter dot size</p>
+</div></blockquote>
+<p><strong>fontsize</strong> : float</p>
+<p><strong>edgecolors</strong> : bool</p>
+<p><strong>colorbar</strong> : bool</p>
+<p><strong>xa :</strong></p>
+<p class="last"><strong>xb :</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.signal.bsignal.energy</span></code></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.channel import *
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.energy">
+<code class="descname">energy</code><span class="sig-paren">(</span><em>mode='mean'</em>, <em>Friis=True</em>, <em>sumray=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.energy" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates energy on each channel</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mode</strong> : string</p>
+<blockquote>
+<div><p>&#8216;mean&#8217;</p>
+</div></blockquote>
+<p><strong>Friis: boolean</strong></p>
+<blockquote>
+<div><p>True</p>
+</div></blockquote>
+<p><strong>sumray: boolean</strong></p>
+<blockquote>
+<div><p>False</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ECtt</strong> : Energy on co channel    tt</p>
+<p><strong>ECpp</strong> : Energy on co channel    pp</p>
+<p><strong>ECtp</strong> : Energy on co channel    tp</p>
+<p class="last"><strong>ECpt</strong> : Energy on co channel    pt</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="../modules/pylayers.signal.bsignal.html#pylayers.signal.bsignal.FUsignal.energy" title="pylayers.signal.bsignal.FUsignal.energy"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.signal.bsignal.FUsignal.energy</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>r x f+</dt>
+<dd>axis 0 : ray
+axis 1 : frequency</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.inforay">
+<code class="descname">inforay</code><span class="sig-paren">(</span><em>iray</em>, <em>ifreq=0</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.inforay" title="Permalink to this definition">¶</a></dt>
+<dd><p>provide information about a specific ray</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.loadh5">
+<code class="descname">loadh5</code><span class="sig-paren">(</span><em>Lfilename</em>, <em>idx</em>, <em>output=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.loadh5" title="Permalink to this definition">¶</a></dt>
+<dd><p>load Ctilde object in hdf5 format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Lfilename</strong> : string</p>
+<blockquote>
+<div><p>Layout filename</p>
+</div></blockquote>
+<p><strong>idx</strong> : int</p>
+<blockquote>
+<div><p>file identifier number</p>
+</div></blockquote>
+<p><strong>output</strong> : bool</p>
+<blockquote>
+<div><p>return an output precised in return</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">if output:</p>
+<p class="last">(Layout filename , Tx position, Rx position)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.locbas">
+<code class="descname">locbas</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.locbas" title="Permalink to this definition">¶</a></dt>
+<dd><p>global reference frame to local reference frame</p>
+<p>If Tt and Tr are [] the global channel is  retrieved</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Ta</strong> : rotation matrix 3x3  side a</p>
+<blockquote>
+<div><p>default []</p>
+</div></blockquote>
+<p><strong>Tb</strong> : rotation matrix 3x3  side b</p>
+<blockquote>
+<div><p>default []</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">This method affects the boolean islocal</p>
+<p>This method update the ray propagation channel in either local or global frame</p>
+<p>self.Ta and self.Tb are updated with input parameters Ta an Tb</p>
+<p><strong>C</strong> : ray propagation channel (2x2xrxf) complex</p>
+<blockquote class="last">
+<div><p>either local or global depends on self.islocal boolean value</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; C = Ctilde()
+&gt;&gt;&gt; Ta = MEulerAngle(np.pi/2,np.pi/2,np.pi/2.)
+&gt;&gt;&gt; Tb = MEulerAngle(np.pi/3,np.pi/3,np.pi/3.)
+&gt;&gt;&gt; C.locbas(Ta=Ta,Tb=Tb)
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.los">
+<code class="descname">los</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.los" title="Permalink to this definition">¶</a></dt>
+<dd><p>Line of site channel</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>d(m)</strong></p>
+<p><strong>fGHz (,Nf)</strong></p>
+<p><strong>tang (1x2)</strong></p>
+<p class="last"><strong>rang (1x2)</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.mobility">
+<code class="descname">mobility</code><span class="sig-paren">(</span><em>v</em>, <em>dt</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.mobility" title="Permalink to this definition">¶</a></dt>
+<dd><p>modify channel for uniform mobility</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>v</strong> : float</p>
+<blockquote>
+<div><p>velocity (m/s)</p>
+</div></blockquote>
+<p><strong>dt</strong> : float</p>
+<blockquote>
+<div><p>delta t (s)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>tau</strong> : modified Ctilde</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Calculate a channel field from Ctilde and v(terminal vitese)
+and dt(time of deplacement)</p>
+<p>dt en s  (observation time between 2 Rx position)
+v en m/s (vitesse de changement de Rx)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.plotd">
+<code class="descname">plotd</code><span class="sig-paren">(</span><em>d='doa'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.plotd" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot direction of arrival/departure</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>d: string</strong></p>
+<blockquote>
+<div><p>&#8216;doa&#8217; | &#8216;dod&#8217;
+display direction of departure | arrival</p>
+</div></blockquote>
+<p><strong>fig</strong> : plt.figure</p>
+<p><strong>ax</strong> : plt.axis</p>
+<p><strong>phi: tuple (-180, 180)</strong></p>
+<blockquote>
+<div><p>phi angle</p>
+</div></blockquote>
+<p><strong>normalize: bool</strong></p>
+<blockquote>
+<div><p>energy normalized</p>
+</div></blockquote>
+<p><strong>reverse</strong> : bool</p>
+<blockquote>
+<div><p>inverse theta and phi represenation</p>
+</div></blockquote>
+<p><strong>polar</strong> : bool</p>
+<blockquote>
+<div><p>polar representation</p>
+</div></blockquote>
+<p><strong>cmap: matplotlib.cmap</strong></p>
+<p><strong>mode: &#8216;center&#8217; | &#8216;mean&#8217; | &#8216;in&#8217;</strong></p>
+<blockquote>
+<div><p>see bsignal.energy</p>
+</div></blockquote>
+<p><strong>s</strong> : float</p>
+<blockquote>
+<div><p>scatter dot size</p>
+</div></blockquote>
+<p><strong>fontsize: float</strong></p>
+<p><strong>edgecolors: bool</strong></p>
+<p><strong>colorbar: bool</strong></p>
+<p class="last"><strong>title</strong> : bool</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.prop2tran">
+<code class="descname">prop2tran</code><span class="sig-paren">(</span><em>a=[]</em>, <em>b=[]</em>, <em>Friis=True</em>, <em>debug=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.prop2tran" title="Permalink to this definition">¶</a></dt>
+<dd><p>transform propagation channel into transmission channel</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : antenna or array a</p>
+<p><strong>b</strong> : antenna or array b</p>
+<p><strong>Ta</strong> : np.array(3x3)</p>
+<blockquote>
+<div><p>unitary matrice for antenna orientation</p>
+</div></blockquote>
+<p><strong>Tb</strong> : np.array(3x3)</p>
+<blockquote>
+<div><p>unitary matrice for antenna orientation</p>
+</div></blockquote>
+<p><strong>Friis</strong> : boolean</p>
+<blockquote>
+<div><p>if True scale with <span class="math">\(-j\frac{\lambda}{f}\)</span></p>
+</div></blockquote>
+<p><strong>debug</strong> : boolean</p>
+<blockquote>
+<div><p>if True the antenna gain for each ray is stored</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>H</strong> : Tchannel(bs.FUsignal)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.saveh5">
+<code class="descname">saveh5</code><span class="sig-paren">(</span><em>Lfilename</em>, <em>idx</em>, <em>a</em>, <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.saveh5" title="Permalink to this definition">¶</a></dt>
+<dd><p>save Ctilde object in hdf5 format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Lfilename</strong> : string</p>
+<blockquote>
+<div><p>Layout filename</p>
+</div></blockquote>
+<p><strong>idx</strong> : int</p>
+<blockquote>
+<div><p>file identifier number</p>
+</div></blockquote>
+<p><strong>a</strong> : np.ndarray</p>
+<blockquote>
+<div><p>postion of point a (transmitter)</p>
+</div></blockquote>
+<p><strong>b</strong> : np.ndarray</p>
+<blockquote class="last">
+<div><p>postion of point b (receiver)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.show">
+<code class="descname">show</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>show the propagation channel</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : &#8216;m&#8217;, &#8216;l20&#8217; , &#8216;r&#8217;</p>
+<p><strong>cmap</strong> : colormap</p>
+<blockquote>
+<div><p>default hot</p>
+</div></blockquote>
+<p><strong>fontsize</strong> : int</p>
+<blockquote class="last">
+<div><p>default 14</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.sort">
+<code class="descname">sort</code><span class="sig-paren">(</span><em>typ='tauk'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>sort Ctilde with respect to typ (default tauk)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : string</p>
+<blockquote class="last">
+<div><dl class="docutils">
+<dt>sort w.r.t</dt>
+<dd><p class="first last">&#8216;tauk&#8217;   : delay (default)
+&#8216;att&#8217;    : theta Tx
+&#8216;atp&#8217;    : phi Tx
+&#8216;art&#8217;    : theta Rx
+&#8216;arp&#8217;    : phi Rx
+&#8216;energy&#8217; : energy</p>
+</dd>
+</dl>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team.
+      Last updated on Nov 08, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
