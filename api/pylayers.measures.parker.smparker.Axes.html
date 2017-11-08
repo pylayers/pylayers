@@ -1,0 +1,857 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Axes &mdash; PyLayers</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="author" title="About these documents"
+              href="../about.html"/>
+    <link rel="top" title="PyLayers" href="../index.html"/>
+        <link rel="up" title="1   Overview" href="../notebook/TOC.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Python
+          
+
+          
+            
+            <img src="../_static/pylayers.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#basic-usage">2&nbsp;&nbsp;&nbsp;Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#environment-description">3&nbsp;&nbsp;&nbsp;Environment Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#materials-and-slabs">4&nbsp;&nbsp;&nbsp;Materials and Slabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#description-of-antennas">5&nbsp;&nbsp;&nbsp;Description of Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#coverage-simulation">6&nbsp;&nbsp;&nbsp;Coverage Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#ray-tracing-simulation">7&nbsp;&nbsp;&nbsp;Ray Tracing Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#handling-agent-mobility">8&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#other-simulation-examples">9&nbsp;&nbsp;&nbsp;Other Simulation Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#localization-algorithms">10&nbsp;&nbsp;&nbsp;Localization Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#measurements-tools">11&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#pylayers-tools">12&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../notebook/TOC.html#references">13&nbsp;&nbsp;&nbsp;References</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#id1">13.1&nbsp;&nbsp;&nbsp;Environment Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.gis.layout">13.2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#antennas-and-propagation">13.3&nbsp;&nbsp;&nbsp;Antennas and Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.antenna">13.4&nbsp;&nbsp;&nbsp;pylayers.antprop.antenna Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.aarray">13.5&nbsp;&nbsp;&nbsp;pylayers.antprop.aarray Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.spharm">13.6&nbsp;&nbsp;&nbsp;pylayers.antprop.spharm Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.antssh">13.7&nbsp;&nbsp;&nbsp;pylayers.antprop.antssh Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.antvsh">13.8&nbsp;&nbsp;&nbsp;pylayers.antprop.antvsh Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.slab">13.9&nbsp;&nbsp;&nbsp;pylayers.antprop.slab Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.signature">13.10&nbsp;&nbsp;&nbsp;pylayers.antprop.signature Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.interactions">13.11&nbsp;&nbsp;&nbsp;pylayers.antprop.interactions Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.rays">13.12&nbsp;&nbsp;&nbsp;pylayers.antprop.rays Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.loss">13.13&nbsp;&nbsp;&nbsp;pylayers.antprop.loss Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.channel">13.14&nbsp;&nbsp;&nbsp;pylayers.antprop.channel Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#id28">13.15&nbsp;&nbsp;&nbsp;pylayers.antprop.loss Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.coverage">13.16&nbsp;&nbsp;&nbsp;pylayers.antprop.coverage Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.coeffModel">13.17&nbsp;&nbsp;&nbsp;pylayers.antprop.coeffModel Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#simulations">13.18&nbsp;&nbsp;&nbsp;Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.simul.link">13.19&nbsp;&nbsp;&nbsp;pylayers.simul.link Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.simul.exploit">13.20&nbsp;&nbsp;&nbsp;pylayers.simul.exploit Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.simul.exploit_simulnet">13.21&nbsp;&nbsp;&nbsp;pylayers.simul.exploit_simulnet Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.simul.simulnet">13.22&nbsp;&nbsp;&nbsp;pylayers.simul.simulnet Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#pylayers-simul-simultraj-module">13.23&nbsp;&nbsp;&nbsp;pylayers.simul.simultraj Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.exploit.simnet">13.24&nbsp;&nbsp;&nbsp;pylayers.exploit.simnet Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#measurement-data">13.25&nbsp;&nbsp;&nbsp;Measurement Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.measures.mesuwb">13.26&nbsp;&nbsp;&nbsp;pylayers.measures.mesuwb Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.measures.mesmimo">13.27&nbsp;&nbsp;&nbsp;pylayers.measures.mesmimo Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.measures.cormoran">13.28&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#instrumentation">13.29&nbsp;&nbsp;&nbsp;Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.measures.vna.E5072A">13.30&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.measures.parker.smparker">13.31&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../notebook/TOC.html#id106">13.31.1&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../notebook/TOC.html#id107">13.31.2&nbsp;&nbsp;&nbsp;Classes</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Axes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.measures.parker.smparker.Profile.html">Profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.measures.parker.smparker.Scanner.html">Scanner</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../notebook/TOC.html#id108">13.31.3&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#agents-and-bodies-mobility">13.32&nbsp;&nbsp;&nbsp;Agents and Bodies Mobility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#networks">13.33&nbsp;&nbsp;&nbsp;Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#physical-layer">13.34&nbsp;&nbsp;&nbsp;Physical Layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#signal-processing">13.35&nbsp;&nbsp;&nbsp;Signal Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#utility-classes-and-functions">13.36&nbsp;&nbsp;&nbsp;Utility classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_layout.html">8 Random Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
+      
+    <li>Axes</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api/pylayers.measures.parker.smparker.Axes.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="axes">
+<h1>Axes<a class="headerlink" href="#axes" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.measures.parker.smparker.Axes">
+<em class="property">class </em><code class="descclassname">pylayers.measures.parker.smparker.</code><code class="descname">Axes</code><span class="sig-paren">(</span><em>_id=1</em>, <em>name='x'</em>, <em>ser='emulated'</em>, <em>scale=1280000</em>, <em>typ='t'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">pylayers.util.project.PyLayers</span></code></p>
+<p>This class allows the control of axes</p>
+<p>svar    : system variables
+dstatus : status bits
+dusrflt : user faults
+ddrvflt : drive faults</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.acceleration" title="pylayers.measures.parker.smparker.Axes.acceleration"><code class="xref py py-obj docutils literal"><span class="pre">acceleration</span></code></a>([value,&nbsp;cmd])</td>
+<td>set/get acceleration</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.add_profile" title="pylayers.measures.parker.smparker.Axes.add_profile"><code class="xref py py-obj docutils literal"><span class="pre">add_profile</span></code></a>(**kwargs)</td>
+<td>add a new profile to lprofile</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.close" title="pylayers.measures.parker.smparker.Axes.close"><code class="xref py py-obj docutils literal"><span class="pre">close</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.com" title="pylayers.measures.parker.smparker.Axes.com"><code class="xref py py-obj docutils literal"><span class="pre">com</span></code></a>([command,&nbsp;verbose])</td>
+<td>send command to serial port</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.del_profile" title="pylayers.measures.parker.smparker.Axes.del_profile"><code class="xref py py-obj docutils literal"><span class="pre">del_profile</span></code></a>([index])</td>
+<td>delete profile</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.fromfile" title="pylayers.measures.parker.smparker.Axes.fromfile"><code class="xref py py-obj docutils literal"><span class="pre">fromfile</span></code></a>(cmdfile[,&nbsp;dirfile])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.getvar" title="pylayers.measures.parker.smparker.Axes.getvar"><code class="xref py py-obj docutils literal"><span class="pre">getvar</span></code></a>([lvar])</td>
+<td>allows get state of variables</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.go" title="pylayers.measures.parker.smparker.Axes.go"><code class="xref py py-obj docutils literal"><span class="pre">go</span></code></a>()</td>
+<td>move axes in translation or rotation</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
+<td>generic help</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.home" title="pylayers.measures.parker.smparker.Axes.home"><code class="xref py py-obj docutils literal"><span class="pre">home</span></code></a>([cmd])</td>
+<td>enables back home for each axe.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.info" title="pylayers.measures.parker.smparker.Axes.info"><code class="xref py py-obj docutils literal"><span class="pre">info</span></code></a>()</td>
+<td>gives informations about system variables of PARKER</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.limits" title="pylayers.measures.parker.smparker.Axes.limits"><code class="xref py py-obj docutils literal"><span class="pre">limits</span></code></a>([cmd])</td>
+<td>give state and set up limits</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.mvpro" title="pylayers.measures.parker.smparker.Axes.mvpro"><code class="xref py py-obj docutils literal"><span class="pre">mvpro</span></code></a>(id_pro)</td>
+<td>move according to specified profile</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.parsinfo" title="pylayers.measures.parker.smparker.Axes.parsinfo"><code class="xref py py-obj docutils literal"><span class="pre">parsinfo</span></code></a>([cmd])</td>
+<td>allows get parsing informations.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.reg" title="pylayers.measures.parker.smparker.Axes.reg"><code class="xref py py-obj docutils literal"><span class="pre">reg</span></code></a>([typ])</td>
+<td>read boolean quantities in registers  : ST, UF, DF</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.reset" title="pylayers.measures.parker.smparker.Axes.reset"><code class="xref py py-obj docutils literal"><span class="pre">reset</span></code></a>()</td>
+<td>reset axis</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.set_profile" title="pylayers.measures.parker.smparker.Axes.set_profile"><code class="xref py py-obj docutils literal"><span class="pre">set_profile</span></code></a>(num)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.show" title="pylayers.measures.parker.smparker.Axes.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.stationnary" title="pylayers.measures.parker.smparker.Axes.stationnary"><code class="xref py py-obj docutils literal"><span class="pre">stationnary</span></code></a>()</td>
+<td>test bit in status ST</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.step" title="pylayers.measures.parker.smparker.Axes.step"><code class="xref py py-obj docutils literal"><span class="pre">step</span></code></a>([value,&nbsp;cmd])</td>
+<td>set/get distance</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.velocity" title="pylayers.measures.parker.smparker.Axes.velocity"><code class="xref py py-obj docutils literal"><span class="pre">velocity</span></code></a>([value,&nbsp;cmd])</td>
+<td>set/get velocity</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes Summary</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.ddrvflt" title="pylayers.measures.parker.smparker.Axes.ddrvflt"><code class="xref py py-obj docutils literal"><span class="pre">ddrvflt</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.dstatus" title="pylayers.measures.parker.smparker.Axes.dstatus"><code class="xref py py-obj docutils literal"><span class="pre">dstatus</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.dusrflt" title="pylayers.measures.parker.smparker.Axes.dusrflt"><code class="xref py py-obj docutils literal"><span class="pre">dusrflt</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.dvar" title="pylayers.measures.parker.smparker.Axes.dvar"><code class="xref py py-obj docutils literal"><span class="pre">dvar</span></code></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Summary</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.acceleration" title="pylayers.measures.parker.smparker.Axes.acceleration"><code class="xref py py-obj docutils literal"><span class="pre">acceleration</span></code></a>([value,&nbsp;cmd])</td>
+<td>set/get acceleration</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.add_profile" title="pylayers.measures.parker.smparker.Axes.add_profile"><code class="xref py py-obj docutils literal"><span class="pre">add_profile</span></code></a>(**kwargs)</td>
+<td>add a new profile to lprofile</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.close" title="pylayers.measures.parker.smparker.Axes.close"><code class="xref py py-obj docutils literal"><span class="pre">close</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.com" title="pylayers.measures.parker.smparker.Axes.com"><code class="xref py py-obj docutils literal"><span class="pre">com</span></code></a>([command,&nbsp;verbose])</td>
+<td>send command to serial port</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.del_profile" title="pylayers.measures.parker.smparker.Axes.del_profile"><code class="xref py py-obj docutils literal"><span class="pre">del_profile</span></code></a>([index])</td>
+<td>delete profile</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.fromfile" title="pylayers.measures.parker.smparker.Axes.fromfile"><code class="xref py py-obj docutils literal"><span class="pre">fromfile</span></code></a>(cmdfile[,&nbsp;dirfile])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.getvar" title="pylayers.measures.parker.smparker.Axes.getvar"><code class="xref py py-obj docutils literal"><span class="pre">getvar</span></code></a>([lvar])</td>
+<td>allows get state of variables</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.go" title="pylayers.measures.parker.smparker.Axes.go"><code class="xref py py-obj docutils literal"><span class="pre">go</span></code></a>()</td>
+<td>move axes in translation or rotation</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.home" title="pylayers.measures.parker.smparker.Axes.home"><code class="xref py py-obj docutils literal"><span class="pre">home</span></code></a>([cmd])</td>
+<td>enables back home for each axe.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.info" title="pylayers.measures.parker.smparker.Axes.info"><code class="xref py py-obj docutils literal"><span class="pre">info</span></code></a>()</td>
+<td>gives informations about system variables of PARKER</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.limits" title="pylayers.measures.parker.smparker.Axes.limits"><code class="xref py py-obj docutils literal"><span class="pre">limits</span></code></a>([cmd])</td>
+<td>give state and set up limits</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.mvpro" title="pylayers.measures.parker.smparker.Axes.mvpro"><code class="xref py py-obj docutils literal"><span class="pre">mvpro</span></code></a>(id_pro)</td>
+<td>move according to specified profile</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.parsinfo" title="pylayers.measures.parker.smparker.Axes.parsinfo"><code class="xref py py-obj docutils literal"><span class="pre">parsinfo</span></code></a>([cmd])</td>
+<td>allows get parsing informations.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.reg" title="pylayers.measures.parker.smparker.Axes.reg"><code class="xref py py-obj docutils literal"><span class="pre">reg</span></code></a>([typ])</td>
+<td>read boolean quantities in registers  : ST, UF, DF</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.reset" title="pylayers.measures.parker.smparker.Axes.reset"><code class="xref py py-obj docutils literal"><span class="pre">reset</span></code></a>()</td>
+<td>reset axis</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.set_profile" title="pylayers.measures.parker.smparker.Axes.set_profile"><code class="xref py py-obj docutils literal"><span class="pre">set_profile</span></code></a>(num)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.show" title="pylayers.measures.parker.smparker.Axes.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.stationnary" title="pylayers.measures.parker.smparker.Axes.stationnary"><code class="xref py py-obj docutils literal"><span class="pre">stationnary</span></code></a>()</td>
+<td>test bit in status ST</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.step" title="pylayers.measures.parker.smparker.Axes.step"><code class="xref py py-obj docutils literal"><span class="pre">step</span></code></a>([value,&nbsp;cmd])</td>
+<td>set/get distance</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Axes.velocity" title="pylayers.measures.parker.smparker.Axes.velocity"><code class="xref py py-obj docutils literal"><span class="pre">velocity</span></code></a>([value,&nbsp;cmd])</td>
+<td>set/get velocity</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes Documentation</p>
+<dl class="attribute">
+<dt id="pylayers.measures.parker.smparker.Axes.ddrvflt">
+<code class="descname">ddrvflt</code><em class="property"> = {1: 'Composite Fault', 2: 'Output stage over curent', 3: 'Supply rail failure', 4: 'Ambient over temperature', 5: 'Drive over temperature', 6: 'Configuration error', 7: 'Motor high voltage rail failure', 8: 'Output fault'}</em><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.ddrvflt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pylayers.measures.parker.smparker.Axes.dstatus">
+<code class="descname">dstatus</code><em class="property"> = {1: 'command processing paused', 2: 'looping', 3: 'wait for trigger', 4: 'running program', 5: 'going home', 6: 'waiting for delay timeout', 7: 'registration in progress', 9: 'motor energised', 11: 'event trigger active until trigger inputs are reset', 12: 'input in LSEL not matching label', 13: '-ve : Fin de course atteint', 14: '+ve Fin de course atteint', 19: 'moving', 20: 'stationnary', 21: 'no registration signal seen in registration window', 22: 'cannot stop within the defined regisration distance'}</em><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.dstatus" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pylayers.measures.parker.smparker.Axes.dusrflt">
+<code class="descname">dusrflt</code><em class="property"> = {1: 'value is out of range', 2: 'incorrect command syntax', 3: 'last label already in use', 4: 'label of this name not defined', 5: 'missing Z pulse when homing', 6: 'homing failed no signal detected', 7: 'home signal too narrow', 8: 'drive de-energised', 9: 'cannot related end statement to a label', 10: 'program memory buffer full', 11: 'no more motion profiles avaible', 12: 'no more sequence labels avaible', 13: 'end of travel limit hit', 14: 'still moving', 15: 'deceleration error', 16: 'transmit buffer overflow', 17: 'user program nesting overflow', 18: 'cannot use an undefined profile', 19: 'drive not ready', 22: 'save error', 23: 'command not supported by this product'}</em><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.dusrflt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pylayers.measures.parker.smparker.Axes.dvar">
+<code class="descname">dvar</code><em class="property"> = {'DF': 'Drive fault status', 'BU': 'Buffer usage', 'RV': 'Revision software', 'PA': 'Position absolute', 'RB': 'Ready/Busy flag', 'PE': 'Position error', 'RM': 'Registration Move', 'PI': 'Position incremental', 'EO': 'Encoder signal output', 'EI': 'Encoder input', 'IP': 'In position flag', 'IT': 'In position time', 'EX': 'Coms response style &amp; echo control', 'IN': 'Inputs', 'CQ': 'Command queuing', 'EP': 'Encoder position', 'ER': 'Feedback encoder resolution', 'MC': 'Motor current', 'ST': 'Status of indexing', 'MV': 'Moving', 'SN': 'Serial number', 'MS': 'Motor standby current', 'MR': 'Motor resolution', 'UF': 'User Program Fault status'}</em><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.dvar" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Methods Documentation</p>
+<dl class="method">
+<dt id="pylayers.measures.parker.smparker.Axes.acceleration">
+<code class="descname">acceleration</code><span class="sig-paren">(</span><em>value=10</em>, <em>cmd='get'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.acceleration" title="Permalink to this definition">¶</a></dt>
+<dd><p>set/get acceleration</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>value</strong> : int</p>
+<p><strong>cmd</strong> : string</p>
+<blockquote class="last">
+<div><p>{set | get}</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.parker import smparker
+&gt;&gt;&gt; A = Axes(1,&#39;x&#39;,typ=&#39;t&#39;,scale=1280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
+&gt;&gt;&gt; A.velocity(value=10)
+&gt;&gt;&gt; A.velocity(cmd=&#39;get&#39;)
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.parker.smparker.Axes.add_profile">
+<code class="descname">add_profile</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.add_profile" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a new profile to lprofile</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>num</strong> : profile number</p>
+<p><strong>aa</strong> : aceleration (rps2)</p>
+<p><strong>ad</strong> : deceleration (rps2)</p>
+<p><strong>dstep</strong> : distance (step)</p>
+<p><strong>v</strong> : vmax (rps)</p>
+<p><strong>vs</strong> : vstart (rps)</p>
+<p class="last"><strong>spr</strong> : steps per round</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.parker.smparker.Axes.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.parker.smparker.Axes.com">
+<code class="descname">com</code><span class="sig-paren">(</span><em>command='R(SN)'</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.com" title="Permalink to this definition">¶</a></dt>
+<dd><p>send command to serial port</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>prefix</strong> : str command prefix (command=&#8217;R(SN)&#8217;)</p>
+<p><strong>arg</strong> :  command argument</p>
+<p class="last"><strong>verbose :</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; # Some suitable commands
+&gt;&gt;&gt; from pylayers.measures.parker import smparker
+&gt;&gt;&gt; A = Axes(1,&#39;x&#39;,typ=&#39;t&#39;,scale=1280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
+&gt;&gt;&gt; st=A.com(&#39;ON&#39;) #Energized motor
+&gt;&gt;&gt; st=A.com(&#39;LIMITS(1,0,0)&#39;) #Disable limit +,limits normally open, mode 0 stop motion and abort prog
+&gt;&gt;&gt; st=A.com(&#39;V15&#39;) # Change velocity to 15
+&gt;&gt;&gt; st=A.com(&#39;AA15&#39;) # Change acceleration to 15
+&gt;&gt;&gt; st=A.com(&#39;AD15&#39;) # Change deceleration to 15
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.parker.smparker.Axes.del_profile">
+<code class="descname">del_profile</code><span class="sig-paren">(</span><em>index=1</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.del_profile" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete profile</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> : int</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; A.del_profile(num_profil)
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.parker.smparker.Axes.fromfile">
+<code class="descname">fromfile</code><span class="sig-paren">(</span><em>cmdfile</em>, <em>dirfile='./DriverFiles'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.fromfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.parker.smparker.Axes.getvar">
+<code class="descname">getvar</code><span class="sig-paren">(</span><em>lvar=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.getvar" title="Permalink to this definition">¶</a></dt>
+<dd><p>allows get state of variables</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>lvar</strong> : list of variables</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.parker import smparker
+&gt;&gt;&gt; A = Axes(1,&#39;x&#39;,typ=&#39;t&#39;,scale=1280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
+&gt;&gt;&gt; A.getvar(&#39;PA&#39;) #Get Position absolute
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.parker.smparker.Axes.go">
+<code class="descname">go</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.go" title="Permalink to this definition">¶</a></dt>
+<dd><p>move axes in translation or rotation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>var</strong> : distance (cm) | degres ()</p>
+<p><strong>vel</strong> : velocity (rps)</p>
+<p class="last"><strong>aa</strong> : acceleration (rps)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.parker import smparker
+&gt;&gt;&gt; A = Axes(1,&#39;x&#39;,typ=&#39;t&#39;,scale=1280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
+&gt;&gt;&gt; R = Axes(3,&#39;ang&#39;,typ=&#39;r&#39;,scale=2111.1111,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
+&gt;&gt;&gt; A.step(value=0.1,cmd=&#39;set&#39;)
+&gt;&gt;&gt; A.go() # moves over 10cm on axis 1
+&gt;&gt;&gt; R.go() # moves over 45 on axis 3
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.parker.smparker.Axes.home">
+<code class="descname">home</code><span class="sig-paren">(</span><em>cmd='set'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.home" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>enables back home for each axe.</dt>
+<dd>for more informations see Parker book page 108.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cmd</strong> : &#8216;set&#8217;|&#8217;go&#8217;</p>
+<p><strong>mode</strong> : int</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>0</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">The indexer positions the motor in the active window of the</span><dd><p class="first last">switch (default setting)</p>
+</dd>
+</dl>
+<p>1 : The motor is positioned to the required edge of the switch + or -
+2 : The indexer is set to seek the nearest drive zero phase</p>
+<blockquote>
+<div><p>position to improve homing repetability</p>
+</div></blockquote>
+</div></blockquote>
+<p><strong>vel</strong> : velocity and direction</p>
+<p><strong>acc</strong> : acceleration (and deceleration)</p>
+<p><strong>edg</strong> : this parameter is used to to select the required edge of the</p>
+<blockquote>
+<div><p>home switch</p>
+</div></blockquote>
+<p><strong>typ</strong> : boolean used to select the type of switch to be used for homing</p>
+<blockquote>
+<div><p>1 : Home switch normally closed
+0 : Home switch normally open (default)</p>
+</div></blockquote>
+<p><strong>armed</strong> : boolean</p>
+<blockquote class="last">
+<div><p>0 : turned OFF
+1 : turned ON</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.parker.smparker.Axes.info">
+<code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>gives informations about system variables of PARKER</p>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.parker import smparker
+&gt;&gt;&gt; A = Axes(1,&#39;x&#39;,typ=&#39;t&#39;,scale=1280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
+&gt;&gt;&gt; st = A.info()
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.parker.smparker.Axes.limits">
+<code class="descname">limits</code><span class="sig-paren">(</span><em>cmd='get'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.limits" title="Permalink to this definition">¶</a></dt>
+<dd><p>give state and set up limits</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cmd</strong> :  &#8216;get&#8217;|&#8217;set&#8217;</p>
+<p><strong>mask</strong> : int</p>
+<blockquote>
+<div><p>0 : Enable limits (default setting)
+1 : Disable limit +
+2 : Disable limit -
+3 : Disable limit + and -</p>
+</div></blockquote>
+<p><strong>typ</strong> : boolean</p>
+<blockquote>
+<div><p>0 : Limits normally closed (default setting)
+1 : Limits normally open</p>
+</div></blockquote>
+<p><strong>mode</strong> : boolean</p>
+<blockquote>
+<div><p>0 : Stop motion and abort the prog when a limit is hit
+1 : Stop motion and continue the prog when a limit is hit</p>
+</div></blockquote>
+<p class="last"><strong>LD</strong> : sets the required deceleration rate after hitting a limit</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.parker.smparker.Axes.mvpro">
+<code class="descname">mvpro</code><span class="sig-paren">(</span><em>id_pro</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.mvpro" title="Permalink to this definition">¶</a></dt>
+<dd><p>move according to specified profile</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>axis</strong></p>
+<p><strong>id_pro</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.parker import smparker
+&gt;&gt;&gt; A = Axes()
+&gt;&gt;&gt; A.mvpro(1)
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.parker.smparker.Axes.parsinfo">
+<code class="descname">parsinfo</code><span class="sig-paren">(</span><em>cmd='HOME'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.parsinfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>allows get parsing informations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cmd</strong> : &#8216;LSEL&#8217; | &#8216;HOME&#8217; | &#8216;LIMITS&#8217;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.parker.smparker.Axes.reg">
+<code class="descname">reg</code><span class="sig-paren">(</span><em>typ='ST'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.reg" title="Permalink to this definition">¶</a></dt>
+<dd><p>read boolean quantities in registers  : ST, UF, DF</p>
+<p>ST : Status  (default)
+UF : User Faults
+DF : Drive Faults</p>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; # To check and parse the axis status
+&gt;&gt;&gt; from pylayers.measures.parker import smparker
+&gt;&gt;&gt; A = Axes(1,&#39;x&#39;,typ=&#39;t&#39;,scale=1280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
+&gt;&gt;&gt; A.reg(&#39;ST&#39;)
+&gt;&gt;&gt; #scans over axis 1 by given status
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.parker.smparker.Axes.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>reset axis</p>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.parker import smparker
+&gt;&gt;&gt; A = Axes(1,&#39;x&#39;,typ=&#39;t&#39;,scale=1280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
+&gt;&gt;&gt; A.reset() #reset axis X
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.parker.smparker.Axes.set_profile">
+<code class="descname">set_profile</code><span class="sig-paren">(</span><em>num</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.set_profile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.parker.smparker.Axes.show">
+<code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.show" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.parker.smparker.Axes.stationnary">
+<code class="descname">stationnary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.stationnary" title="Permalink to this definition">¶</a></dt>
+<dd><p>test bit in status ST</p>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; # To check and parse the axis status
+&gt;&gt;&gt; from pylayers.measures.parker import smparker
+&gt;&gt;&gt; A = Axes(1,&#39;x&#39;,typ=&#39;t&#39;,scale=1280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
+&gt;&gt;&gt; A.reg(&#39;ST&#39;)
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.parker import smparker
+&gt;&gt;&gt; S = smparker.Scanner()
+&gt;&gt;&gt; S.a[1].stationnary()
+&gt;&gt;&gt; #scans over axis 1 by given status
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.parker.smparker.Axes.step">
+<code class="descname">step</code><span class="sig-paren">(</span><em>value=0.1</em>, <em>cmd='get'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>set/get distance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>value</strong> : int</p>
+<p><strong>cmd</strong> : string</p>
+<blockquote class="last">
+<div><p>{set | get}</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.parker import smparker
+&gt;&gt;&gt; S = Scanner()
+&gt;&gt;&gt; S.a[4].step(-0.1,cmd=&#39;set&#39;)
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.parker.smparker.Axes.velocity">
+<code class="descname">velocity</code><span class="sig-paren">(</span><em>value=10</em>, <em>cmd='get'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.parker.smparker.Axes.velocity" title="Permalink to this definition">¶</a></dt>
+<dd><p>set/get velocity</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>value</strong> : int</p>
+<p><strong>cmd</strong> : string</p>
+<blockquote class="last">
+<div><p>{set | get}</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.parker import smparker
+&gt;&gt;&gt; A = Axes(1,&#39;x&#39;,typ=&#39;t&#39;,scale=1280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
+&gt;&gt;&gt; A.velocity(value=10)
+&gt;&gt;&gt; A.velocity(cmd=&#39;get&#39;)
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team.
+      Last updated on Nov 08, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

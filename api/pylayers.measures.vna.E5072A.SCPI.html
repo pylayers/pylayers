@@ -1,0 +1,905 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>SCPI &mdash; PyLayers</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="author" title="About these documents"
+              href="../about.html"/>
+    <link rel="top" title="PyLayers" href="../index.html"/>
+        <link rel="up" title="1   Overview" href="../notebook/TOC.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Python
+          
+
+          
+            
+            <img src="../_static/pylayers.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#basic-usage">2&nbsp;&nbsp;&nbsp;Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#environment-description">3&nbsp;&nbsp;&nbsp;Environment Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#materials-and-slabs">4&nbsp;&nbsp;&nbsp;Materials and Slabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#description-of-antennas">5&nbsp;&nbsp;&nbsp;Description of Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#coverage-simulation">6&nbsp;&nbsp;&nbsp;Coverage Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#ray-tracing-simulation">7&nbsp;&nbsp;&nbsp;Ray Tracing Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#handling-agent-mobility">8&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#other-simulation-examples">9&nbsp;&nbsp;&nbsp;Other Simulation Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#localization-algorithms">10&nbsp;&nbsp;&nbsp;Localization Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#measurements-tools">11&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#pylayers-tools">12&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../notebook/TOC.html#references">13&nbsp;&nbsp;&nbsp;References</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#id1">13.1&nbsp;&nbsp;&nbsp;Environment Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.gis.layout">13.2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#antennas-and-propagation">13.3&nbsp;&nbsp;&nbsp;Antennas and Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.antenna">13.4&nbsp;&nbsp;&nbsp;pylayers.antprop.antenna Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.aarray">13.5&nbsp;&nbsp;&nbsp;pylayers.antprop.aarray Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.spharm">13.6&nbsp;&nbsp;&nbsp;pylayers.antprop.spharm Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.antssh">13.7&nbsp;&nbsp;&nbsp;pylayers.antprop.antssh Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.antvsh">13.8&nbsp;&nbsp;&nbsp;pylayers.antprop.antvsh Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.slab">13.9&nbsp;&nbsp;&nbsp;pylayers.antprop.slab Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.signature">13.10&nbsp;&nbsp;&nbsp;pylayers.antprop.signature Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.interactions">13.11&nbsp;&nbsp;&nbsp;pylayers.antprop.interactions Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.rays">13.12&nbsp;&nbsp;&nbsp;pylayers.antprop.rays Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.loss">13.13&nbsp;&nbsp;&nbsp;pylayers.antprop.loss Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.channel">13.14&nbsp;&nbsp;&nbsp;pylayers.antprop.channel Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#id28">13.15&nbsp;&nbsp;&nbsp;pylayers.antprop.loss Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.coverage">13.16&nbsp;&nbsp;&nbsp;pylayers.antprop.coverage Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.antprop.coeffModel">13.17&nbsp;&nbsp;&nbsp;pylayers.antprop.coeffModel Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#simulations">13.18&nbsp;&nbsp;&nbsp;Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.simul.link">13.19&nbsp;&nbsp;&nbsp;pylayers.simul.link Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.simul.exploit">13.20&nbsp;&nbsp;&nbsp;pylayers.simul.exploit Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.simul.exploit_simulnet">13.21&nbsp;&nbsp;&nbsp;pylayers.simul.exploit_simulnet Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.simul.simulnet">13.22&nbsp;&nbsp;&nbsp;pylayers.simul.simulnet Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#pylayers-simul-simultraj-module">13.23&nbsp;&nbsp;&nbsp;pylayers.simul.simultraj Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.exploit.simnet">13.24&nbsp;&nbsp;&nbsp;pylayers.exploit.simnet Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#measurement-data">13.25&nbsp;&nbsp;&nbsp;Measurement Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.measures.mesuwb">13.26&nbsp;&nbsp;&nbsp;pylayers.measures.mesuwb Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.measures.mesmimo">13.27&nbsp;&nbsp;&nbsp;pylayers.measures.mesmimo Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.measures.cormoran">13.28&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#instrumentation">13.29&nbsp;&nbsp;&nbsp;Instrumentation</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.measures.vna.E5072A">13.30&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../notebook/TOC.html#id104">13.30.1&nbsp;&nbsp;&nbsp;Classes</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">SCPI</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../notebook/TOC.html#id105">13.30.2&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#module-pylayers.measures.parker.smparker">13.31&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#agents-and-bodies-mobility">13.32&nbsp;&nbsp;&nbsp;Agents and Bodies Mobility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#networks">13.33&nbsp;&nbsp;&nbsp;Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#physical-layer">13.34&nbsp;&nbsp;&nbsp;Physical Layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#signal-processing">13.35&nbsp;&nbsp;&nbsp;Signal Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebook/TOC.html#utility-classes-and-functions">13.36&nbsp;&nbsp;&nbsp;Utility classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_layout.html">8 Random Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
+      
+    <li>SCPI</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api/pylayers.measures.vna.E5072A.SCPI.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="scpi">
+<h1>SCPI<a class="headerlink" href="#scpi" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.measures.vna.E5072A.SCPI">
+<em class="property">class </em><code class="descclassname">pylayers.measures.vna.E5072A.</code><code class="descname">SCPI</code><span class="sig-paren">(</span><em>port=5025</em>, <em>timeout=None</em>, <em>verbose=False</em>, <em>Nr=1</em>, <em>Nt=1</em>, <em>emulated=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">pylayers.util.project.PyLayers</span></code></p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.ask" title="pylayers.measures.vna.E5072A.SCPI.ask"><code class="xref py py-obj docutils literal"><span class="pre">ask</span></code></a>(com)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.autoscale" title="pylayers.measures.vna.E5072A.SCPI.autoscale"><code class="xref py py-obj docutils literal"><span class="pre">autoscale</span></code></a>([win,&nbsp;tr])</td>
+<td>autoscale on window win trace tr</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.avrg" title="pylayers.measures.vna.E5072A.SCPI.avrg"><code class="xref py py-obj docutils literal"><span class="pre">avrg</span></code></a>([sens,&nbsp;b,&nbsp;navrg,&nbsp;cmd])</td>
+<td>allows get|set the point averaging</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.calibh5" title="pylayers.measures.vna.E5072A.SCPI.calibh5"><code class="xref py py-obj docutils literal"><span class="pre">calibh5</span></code></a>([Nr,&nbsp;Nt,&nbsp;_filemesh5,&nbsp;_filecalh5,&nbsp;...])</td>
+<td>measure a calibration vector and store in h5 file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.close" title="pylayers.measures.vna.E5072A.SCPI.close"><code class="xref py py-obj docutils literal"><span class="pre">close</span></code></a>()</td>
+<td>close socket</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.freq" title="pylayers.measures.vna.E5072A.SCPI.freq"><code class="xref py py-obj docutils literal"><span class="pre">freq</span></code></a>([sens,&nbsp;fminGHz,&nbsp;fmaxGHz,&nbsp;cmd])</td>
+<td>get | set frequency ramp</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.getIdent" title="pylayers.measures.vna.E5072A.SCPI.getIdent"><code class="xref py py-obj docutils literal"><span class="pre">getIdent</span></code></a>()</td>
+<td>get VNA Identification</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.getchan" title="pylayers.measures.vna.E5072A.SCPI.getchan"><code class="xref py py-obj docutils literal"><span class="pre">getchan</span></code></a>([chan,&nbsp;Nmeas,&nbsp;fminGHz,&nbsp;fmaxGHz])</td>
+<td>get a Tchannel from VNA</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.getdata" title="pylayers.measures.vna.E5072A.SCPI.getdata"><code class="xref py py-obj docutils literal"><span class="pre">getdata</span></code></a>([chan,&nbsp;Nr,&nbsp;Nt,&nbsp;Nmeas,&nbsp;calibration,&nbsp;seed])</td>
+<td>getdata from VNA</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
+<td>generic help</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.ifband" title="pylayers.measures.vna.E5072A.SCPI.ifband"><code class="xref py py-obj docutils literal"><span class="pre">ifband</span></code></a>([sens,&nbsp;ifbHz,&nbsp;cmd])</td>
+<td>allows get|set the IF bandwidth</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.load_calconfig" title="pylayers.measures.vna.E5072A.SCPI.load_calconfig"><code class="xref py py-obj docutils literal"><span class="pre">load_calconfig</span></code></a>([_filename])</td>
+<td>load the whole set of calibration config</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.load_config_vna" title="pylayers.measures.vna.E5072A.SCPI.load_config_vna"><code class="xref py py-obj docutils literal"><span class="pre">load_config_vna</span></code></a>([_filename])</td>
+<td>load a vna config file from an .ini file</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.meastime" title="pylayers.measures.vna.E5072A.SCPI.meastime"><code class="xref py py-obj docutils literal"><span class="pre">meastime</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.parS" title="pylayers.measures.vna.E5072A.SCPI.parS"><code class="xref py py-obj docutils literal"><span class="pre">parS</span></code></a>([param,&nbsp;chan,&nbsp;tr,&nbsp;cmd])</td>
+<td>set|get the measurement S parameter of a selected channel</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.points" title="pylayers.measures.vna.E5072A.SCPI.points"><code class="xref py py-obj docutils literal"><span class="pre">points</span></code></a>([value,&nbsp;cmd,&nbsp;sens,&nbsp;echo])</td>
+<td>&#8216;get&#8217;|&#8217;set&#8217;  number of points</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.power_level" title="pylayers.measures.vna.E5072A.SCPI.power_level"><code class="xref py py-obj docutils literal"><span class="pre">power_level</span></code></a>([chan,&nbsp;cmd,&nbsp;power])</td>
+<td>allows &#8216;get&#8217; | &#8216;set&#8217; the the power level transmitted.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.read" title="pylayers.measures.vna.E5072A.SCPI.read"><code class="xref py py-obj docutils literal"><span class="pre">read</span></code></a>(cmd)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.reset" title="pylayers.measures.vna.E5072A.SCPI.reset"><code class="xref py py-obj docutils literal"><span class="pre">reset</span></code></a>()</td>
+<td>Resets the device to known state (with <a href="#id1"><span class="problematic" id="id2">*</span></a>RST) and clears the error</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.stepped_mode" title="pylayers.measures.vna.E5072A.SCPI.stepped_mode"><code class="xref py py-obj docutils literal"><span class="pre">stepped_mode</span></code></a>([sens,&nbsp;mode])</td>
+<td>activate sweep mode</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.swept_mode" title="pylayers.measures.vna.E5072A.SCPI.swept_mode"><code class="xref py py-obj docutils literal"><span class="pre">swept_mode</span></code></a>([sens])</td>
+<td>activate sweep mode</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.trace" title="pylayers.measures.vna.E5072A.SCPI.trace"><code class="xref py py-obj docutils literal"><span class="pre">trace</span></code></a>([chan,&nbsp;ntrace,&nbsp;cmd])</td>
+<td>allows get|set the  number of traces.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.trigger" title="pylayers.measures.vna.E5072A.SCPI.trigger"><code class="xref py py-obj docutils literal"><span class="pre">trigger</span></code></a>([cmd])</td>
+<td>configure the trigger that control the acquisition of the measurements</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.write" title="pylayers.measures.vna.E5072A.SCPI.write"><code class="xref py py-obj docutils literal"><span class="pre">write</span></code></a>(cmd)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes Summary</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.PORT" title="pylayers.measures.vna.E5072A.SCPI.PORT"><code class="xref py py-obj docutils literal"><span class="pre">PORT</span></code></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Summary</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.ask" title="pylayers.measures.vna.E5072A.SCPI.ask"><code class="xref py py-obj docutils literal"><span class="pre">ask</span></code></a>(com)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.autoscale" title="pylayers.measures.vna.E5072A.SCPI.autoscale"><code class="xref py py-obj docutils literal"><span class="pre">autoscale</span></code></a>([win,&nbsp;tr])</td>
+<td>autoscale on window win trace tr</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.avrg" title="pylayers.measures.vna.E5072A.SCPI.avrg"><code class="xref py py-obj docutils literal"><span class="pre">avrg</span></code></a>([sens,&nbsp;b,&nbsp;navrg,&nbsp;cmd])</td>
+<td>allows get|set the point averaging</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.calibh5" title="pylayers.measures.vna.E5072A.SCPI.calibh5"><code class="xref py py-obj docutils literal"><span class="pre">calibh5</span></code></a>([Nr,&nbsp;Nt,&nbsp;_filemesh5,&nbsp;_filecalh5,&nbsp;...])</td>
+<td>measure a calibration vector and store in h5 file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.close" title="pylayers.measures.vna.E5072A.SCPI.close"><code class="xref py py-obj docutils literal"><span class="pre">close</span></code></a>()</td>
+<td>close socket</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.freq" title="pylayers.measures.vna.E5072A.SCPI.freq"><code class="xref py py-obj docutils literal"><span class="pre">freq</span></code></a>([sens,&nbsp;fminGHz,&nbsp;fmaxGHz,&nbsp;cmd])</td>
+<td>get | set frequency ramp</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.getIdent" title="pylayers.measures.vna.E5072A.SCPI.getIdent"><code class="xref py py-obj docutils literal"><span class="pre">getIdent</span></code></a>()</td>
+<td>get VNA Identification</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.getchan" title="pylayers.measures.vna.E5072A.SCPI.getchan"><code class="xref py py-obj docutils literal"><span class="pre">getchan</span></code></a>([chan,&nbsp;Nmeas,&nbsp;fminGHz,&nbsp;fmaxGHz])</td>
+<td>get a Tchannel from VNA</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.getdata" title="pylayers.measures.vna.E5072A.SCPI.getdata"><code class="xref py py-obj docutils literal"><span class="pre">getdata</span></code></a>([chan,&nbsp;Nr,&nbsp;Nt,&nbsp;Nmeas,&nbsp;calibration,&nbsp;seed])</td>
+<td>getdata from VNA</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.ifband" title="pylayers.measures.vna.E5072A.SCPI.ifband"><code class="xref py py-obj docutils literal"><span class="pre">ifband</span></code></a>([sens,&nbsp;ifbHz,&nbsp;cmd])</td>
+<td>allows get|set the IF bandwidth</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.load_calconfig" title="pylayers.measures.vna.E5072A.SCPI.load_calconfig"><code class="xref py py-obj docutils literal"><span class="pre">load_calconfig</span></code></a>([_filename])</td>
+<td>load the whole set of calibration config</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.load_config_vna" title="pylayers.measures.vna.E5072A.SCPI.load_config_vna"><code class="xref py py-obj docutils literal"><span class="pre">load_config_vna</span></code></a>([_filename])</td>
+<td>load a vna config file from an .ini file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.meastime" title="pylayers.measures.vna.E5072A.SCPI.meastime"><code class="xref py py-obj docutils literal"><span class="pre">meastime</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.parS" title="pylayers.measures.vna.E5072A.SCPI.parS"><code class="xref py py-obj docutils literal"><span class="pre">parS</span></code></a>([param,&nbsp;chan,&nbsp;tr,&nbsp;cmd])</td>
+<td>set|get the measurement S parameter of a selected channel</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.points" title="pylayers.measures.vna.E5072A.SCPI.points"><code class="xref py py-obj docutils literal"><span class="pre">points</span></code></a>([value,&nbsp;cmd,&nbsp;sens,&nbsp;echo])</td>
+<td>&#8216;get&#8217;|&#8217;set&#8217;  number of points</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.power_level" title="pylayers.measures.vna.E5072A.SCPI.power_level"><code class="xref py py-obj docutils literal"><span class="pre">power_level</span></code></a>([chan,&nbsp;cmd,&nbsp;power])</td>
+<td>allows &#8216;get&#8217; | &#8216;set&#8217; the the power level transmitted.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.read" title="pylayers.measures.vna.E5072A.SCPI.read"><code class="xref py py-obj docutils literal"><span class="pre">read</span></code></a>(cmd)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.reset" title="pylayers.measures.vna.E5072A.SCPI.reset"><code class="xref py py-obj docutils literal"><span class="pre">reset</span></code></a>()</td>
+<td>Resets the device to known state (with <a href="#id3"><span class="problematic" id="id4">*</span></a>RST) and clears the error</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.stepped_mode" title="pylayers.measures.vna.E5072A.SCPI.stepped_mode"><code class="xref py py-obj docutils literal"><span class="pre">stepped_mode</span></code></a>([sens,&nbsp;mode])</td>
+<td>activate sweep mode</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.swept_mode" title="pylayers.measures.vna.E5072A.SCPI.swept_mode"><code class="xref py py-obj docutils literal"><span class="pre">swept_mode</span></code></a>([sens])</td>
+<td>activate sweep mode</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.trace" title="pylayers.measures.vna.E5072A.SCPI.trace"><code class="xref py py-obj docutils literal"><span class="pre">trace</span></code></a>([chan,&nbsp;ntrace,&nbsp;cmd])</td>
+<td>allows get|set the  number of traces.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.trigger" title="pylayers.measures.vna.E5072A.SCPI.trigger"><code class="xref py py-obj docutils literal"><span class="pre">trigger</span></code></a>([cmd])</td>
+<td>configure the trigger that control the acquisition of the measurements</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.vna.E5072A.SCPI.write" title="pylayers.measures.vna.E5072A.SCPI.write"><code class="xref py py-obj docutils literal"><span class="pre">write</span></code></a>(cmd)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes Documentation</p>
+<dl class="attribute">
+<dt id="pylayers.measures.vna.E5072A.SCPI.PORT">
+<code class="descname">PORT</code><em class="property"> = 5025</em><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.PORT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Methods Documentation</p>
+<dl class="method">
+<dt id="pylayers.measures.vna.E5072A.SCPI.ask">
+<code class="descname">ask</code><span class="sig-paren">(</span><em>com</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.ask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.vna.E5072A.SCPI.autoscale">
+<code class="descname">autoscale</code><span class="sig-paren">(</span><em>win=1</em>, <em>tr=1</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.autoscale" title="Permalink to this definition">¶</a></dt>
+<dd><p>autoscale on window win trace tr</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>win</strong> : integer</p>
+<p class="last"><strong>tr</strong> : integer</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.vna.E5072A.SCPI.avrg">
+<code class="descname">avrg</code><span class="sig-paren">(</span><em>sens=1</em>, <em>b='OFF'</em>, <em>navrg=20</em>, <em>cmd='getavrg'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.avrg" title="Permalink to this definition">¶</a></dt>
+<dd><p>allows get|set the point averaging</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>b</strong> : boolean (ON/OFF)</p>
+<p><strong>cmd</strong> : getavgr (0 average OFF</p>
+<blockquote>
+<div><blockquote>
+<div><p>1 average ON)</p>
+</div></blockquote>
+<p>setavgr
+getnavgr (preset value = 16)
+setnavgr</p>
+</div></blockquote>
+<p class="last"><strong>navgr</strong> : range of average</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.vna.E5072A import *
+&gt;&gt;&gt; vna = SCPI()
+&gt;&gt;&gt; vna.reset()
+&gt;&gt;&gt; vna.freq(fminGHz=2.8,fmaxGHz=3.2,cmd=&#39;set&#39;)
+&gt;&gt;&gt; vna.avrg()
+&gt;&gt;&gt; vna.avrg(b=&#39;ON&#39;,cmd=&#39;setavrg&#39;)
+&gt;&gt;&gt; vna.avrg()
+&gt;&gt;&gt; vna.avrg(navrg=100,cmd=&#39;setavrg&#39;)
+&gt;&gt;&gt; vna.close()
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.vna.E5072A.SCPI.calibh5">
+<code class="descname">calibh5</code><span class="sig-paren">(</span><em>Nr=4</em>, <em>Nt=8</em>, <em>_filemesh5='measures'</em>, <em>_filecalh5='mcalib'</em>, <em>_filecal='cal_config.ini'</em>, <em>_filevna='vna_config.ini'</em>, <em>typ='full'</em>, <em>gcalm=1</em>, <em>cables=[]</em>, <em>author=''</em>, <em>comment=''</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.calibh5" title="Permalink to this definition">¶</a></dt>
+<dd><p>measure a calibration vector and store in h5 file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Nr</strong> : int</p>
+<p><strong>Nt</strong> : int</p>
+<p><strong>_filemesh5</strong> : string</p>
+<blockquote>
+<div><p>measurement data file prefix</p>
+</div></blockquote>
+<p><strong>_filecalh5</strong> : string</p>
+<blockquote>
+<div><p>multi antenna calibration data file prefix</p>
+</div></blockquote>
+<p><strong>_filecal</strong> : string</p>
+<blockquote>
+<div><p>variable parameters calibration .ini configuration file name</p>
+</div></blockquote>
+<p><strong>_filevna</strong> : string</p>
+<blockquote>
+<div><p>vna .ini configuration file name</p>
+</div></blockquote>
+<p><strong>typ</strong> : string</p>
+<blockquote>
+<div><p>&#8216;full&#8217; | &#8216;single&#8217;</p>
+</div></blockquote>
+<p><strong>gcalm</strong> : int</p>
+<blockquote>
+<div><p>selected calibration group of _filecalh5 (used only if typ==&#8217;single&#8217;)</p>
+</div></blockquote>
+<p><strong>cables</strong> : list of strings</p>
+<p><strong>author</strong></p>
+<p class="last"><strong>comment</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.vna.E5072A.SCPI.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>close socket</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.vna.E5072A.SCPI.freq">
+<code class="descname">freq</code><span class="sig-paren">(</span><em>sens=1</em>, <em>fminGHz=1.8</em>, <em>fmaxGHz=2.2</em>, <em>cmd='get'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.freq" title="Permalink to this definition">¶</a></dt>
+<dd><p>get | set frequency ramp</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sens</strong> : 1</p>
+<p><strong>fminGHz</strong> : frequency start (float)</p>
+<p><strong>fmaxGHz</strong> : frequency stop  (float)</p>
+<p class="last"><strong>cmd</strong> : &#8216;get&#8217; | &#8216;set&#8217;</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.vna.E5072A import *
+&gt;&gt;&gt; vna = SCPI()
+&gt;&gt;&gt; vna.freq(fminGHz=3.8,fmaxGHz=4.2,cmd=&#39;set&#39;)
+&gt;&gt;&gt; vna.close()
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.vna.E5072A.SCPI.getIdent">
+<code class="descname">getIdent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.getIdent" title="Permalink to this definition">¶</a></dt>
+<dd><p>get VNA Identification</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.vna.E5072A.SCPI.getchan">
+<code class="descname">getchan</code><span class="sig-paren">(</span><em>chan=1</em>, <em>Nmeas=10</em>, <em>fminGHz=1.8</em>, <em>fmaxGHz=2.2</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.getchan" title="Permalink to this definition">¶</a></dt>
+<dd><p>get a Tchannel from VNA</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Nmeas</strong> : number of times of measures</p>
+<p><strong>chan</strong> : int</p>
+<blockquote>
+<div><p>channel number</p>
+</div></blockquote>
+<p><strong>fminGHz</strong> : frequency start (float)</p>
+<p class="last"><strong>fmaxGHz</strong> : frequency stop  (float)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.vna.E5072A import *
+&gt;&gt;&gt; import matplotlib.pyplot as plt
+&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; vna = SCPI()
+&gt;&gt;&gt; vna.parS(param=&#39;S21&#39;,cmd=&#39;set&#39;)
+&gt;&gt;&gt; S21 = vna.getdata()
+&gt;&gt;&gt; #plt.plot(np.abs(S21.y)[0])
+&gt;&gt;&gt; vna.close()
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.vna.E5072A.SCPI.getdata">
+<code class="descname">getdata</code><span class="sig-paren">(</span><em>chan=1</em>, <em>Nr=1</em>, <em>Nt=1</em>, <em>Nmeas=10</em>, <em>calibration=False</em>, <em>seed=0</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.getdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>getdata from VNA</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Nmeas</strong> : number of measures</p>
+<p><strong>chan</strong> : int</p>
+<blockquote>
+<div><p>channel number</p>
+</div></blockquote>
+<p><strong>Nr</strong> : Number of receiver (used only when calibration ==True)</p>
+<p><strong>Nt</strong> : Number of transmitter (used only when calibration ==True)</p>
+<p><strong>Nmeas</strong> : Number of measurements</p>
+<p><strong>calibration</strong> : boolean (used only for emulation)</p>
+<blockquote>
+<div><p>if True the measurement correspond to a dataset for calibration purpose</p>
+</div></blockquote>
+<p><strong>seed</strong> : In emulated mode the data are produced from random number. seed is</p>
+<blockquote class="last">
+<div><p>for reproducibility of random experiments.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.vna.E5072A import *
+&gt;&gt;&gt; import matplotlib.pyplot as plt
+&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; vna = SCPI()
+&gt;&gt;&gt; vna.parS(param=&#39;S21&#39;,cmd=&#39;set&#39;)
+&gt;&gt;&gt; S21 = vna.getdata()
+&gt;&gt;&gt; vna.close()
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.vna.E5072A.SCPI.ifband">
+<code class="descname">ifband</code><span class="sig-paren">(</span><em>sens=1</em>, <em>ifbHz=70000</em>, <em>cmd='get'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.ifband" title="Permalink to this definition">¶</a></dt>
+<dd><p>allows get|set the IF bandwidth</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ifbHz</strong> : IF Bandwidth (default</p>
+<p class="last"><strong>cmd</strong> : &#8216;get&#8217;|&#8217;set&#8217;</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.vna.E5072A import *
+&gt;&gt;&gt; vna = SCPI()
+&gt;&gt;&gt; vna.ifband(sens=1,ifbHz=70000,cmd=&#39;set&#39;)
+&gt;&gt;&gt; vna.close()
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.vna.E5072A.SCPI.load_calconfig">
+<code class="descname">load_calconfig</code><span class="sig-paren">(</span><em>_filename='cal_config.ini'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.load_calconfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>load the whole set of calibration config</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.vna.E5072A.SCPI.load_config_vna">
+<code class="descname">load_config_vna</code><span class="sig-paren">(</span><em>_filename='vna_config.ini'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.load_config_vna" title="Permalink to this definition">¶</a></dt>
+<dd><p>load a vna config file from an .ini file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_filename</strong> : string</p>
+<blockquote class="last">
+<div><p>file name extension .ini</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.vna.E5072A.SCPI.meastime">
+<code class="descname">meastime</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.meastime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.vna.E5072A.SCPI.parS">
+<code class="descname">parS</code><span class="sig-paren">(</span><em>param='S21'</em>, <em>chan=1</em>, <em>tr=1</em>, <em>cmd='get'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.parS" title="Permalink to this definition">¶</a></dt>
+<dd><p>set|get the measurement S parameter of a selected channel</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cmd</strong> : &#8216;get&#8217;| &#8216;set&#8217;</p>
+<p><strong>param</strong> : string</p>
+<blockquote>
+<div><p>{&#8216;S11&#8217;,&#8217;S12&#8217;,&#8217;S21&#8217;,&#8217;S22&#8217;}</p>
+</div></blockquote>
+<p><strong>chan</strong> : int</p>
+<blockquote class="last">
+<div><p>default 1</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.vna.E5072A import *
+&gt;&gt;&gt; vna = SCPI()
+&gt;&gt;&gt; vna.parS(param=&#39;S21&#39;,cmd=&#39;set&#39;)
+&gt;&gt;&gt; vna.close()
+</pre></div>
+</div>
+<p>working</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.vna.E5072A.SCPI.points">
+<code class="descname">points</code><span class="sig-paren">(</span><em>value=1601</em>, <em>cmd='get'</em>, <em>sens=1</em>, <em>echo=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.points" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#8216;get&#8217;|&#8217;set&#8217;  number of points</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sens</strong> : int</p>
+<p class="last"><strong>cmd</strong> : &#8216;get&#8217; | &#8216;set&#8217;</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.vna.E5072A import *
+&gt;&gt;&gt; vna = SCPI()
+&gt;&gt;&gt; vna.points(201,cmd=&#39;set&#39;)
+&gt;&gt;&gt; vna.close()
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.vna.E5072A.SCPI.power_level">
+<code class="descname">power_level</code><span class="sig-paren">(</span><em>chan=1</em>, <em>cmd='get'</em>, <em>power=10</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.power_level" title="Permalink to this definition">¶</a></dt>
+<dd><p>allows &#8216;get&#8217; | &#8216;set&#8217; the the power level transmitted.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>chan</strong> : number of the channel</p>
+<p><strong>pow</strong> : int power level transmitted</p>
+<p class="last"><strong>cmd</strong> : &#8216;get&#8217;|&#8217;set&#8217;</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.vna.E5072A import *
+&gt;&gt;&gt; vna = SCPI()
+&gt;&gt;&gt; vna.power_level(cmd=&#39;set&#39;,power=10)
+&gt;&gt;&gt; vna.close()
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.vna.E5072A.SCPI.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>cmd</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.read" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.vna.E5072A.SCPI.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the device to known state (with <a href="#id5"><span class="problematic" id="id6">*</span></a>RST) and clears the error
+log</p>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.vna.E5072A import *
+&gt;&gt;&gt; vna = SCPI()
+&gt;&gt;&gt; vna.close()
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.vna.E5072A.SCPI.stepped_mode">
+<code class="descname">stepped_mode</code><span class="sig-paren">(</span><em>sens=1</em>, <em>mode='STEP'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.stepped_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>activate sweep mode</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sens</strong> : int</p>
+<p><strong>mode</strong> : &#8216;stepped&#8217;</p>
+<p class="last"><strong>STEPped</strong> : source frequency is CONSTANT during measurement of eah displayed point.                   More accurate than ANALog. Dwell time can be set in this mode.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.vna.E5072A.SCPI.swept_mode">
+<code class="descname">swept_mode</code><span class="sig-paren">(</span><em>sens=1</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.swept_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>activate sweep mode</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sens</strong> : int</p>
+<p><strong>ANALog</strong> : source frequency is continuously RAMPING during measurement of each </p>
+<blockquote class="last">
+<div><p>displayed point. Faster than STEPped. Sweep time (not dwell time) can be 
+set in this mode.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.vna.E5072A.SCPI.trace">
+<code class="descname">trace</code><span class="sig-paren">(</span><em>chan=1</em>, <em>ntrace=1</em>, <em>cmd='get'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.trace" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>allows get|set the  number of traces.</dt>
+<dd>traces are a series of measured data points.
+limits of traces : max nbr of win x max nbr of traces per window (24)</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>chan</strong> : int</p>
+<p><strong>ntrace</strong> : 2</p>
+<p class="last"><strong>cmd</strong> : &#8216;get&#8217;|&#8217;set&#8217;</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; #from pylayers.measures.vna.E5072A import *
+&gt;&gt;&gt; #vna = SCPI()
+&gt;&gt;&gt; #vna.trace(chan=1,param=&#39;S21&#39;,ntrace=1,cmd=&#39;set&#39;)
+&gt;&gt;&gt; #vna.close()
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.vna.E5072A.SCPI.trigger">
+<code class="descname">trigger</code><span class="sig-paren">(</span><em>cmd='bus'</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.trigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>configure the trigger that control the acquisition of the measurements</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cmd</strong> : string</p>
+<blockquote class="last">
+<div><p>&#8216;bus&#8217; : actives the trigger via the BUS
+&#8216;go&#8217;   : generates a trigger immediately and executes a measurement, regardless of the setting</p>
+<blockquote>
+<div><p>of the trigger mode.</p>
+</div></blockquote>
+<p>&#8216;test&#8217; : when all of pending operations complete, <a href="#id7"><span class="problematic" id="id8">*</span></a>OPC returns 1.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.measures.vna.E5072A.SCPI.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>cmd</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.measures.vna.E5072A.SCPI.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team.
+      Last updated on Nov 08, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
