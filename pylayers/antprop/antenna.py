@@ -5265,12 +5265,13 @@ class AntPosRot(Antenna):
         Antenna._show3(self,newfig=False,interact=False,T=self.T,po=self.p,**kwargs)
 
     def field(self,p):
-        """ calculate field 
+        """ calculate field at points p 
 
         Parameters
         ----------
 
         p : np.array (N,3)
+            observation point 
 
         """
         rad_to_deg = 180/np.pi
@@ -5280,14 +5281,18 @@ class AntPosRot(Antenna):
             r = p[None,:]-self.p[None,:]
         else:
             r = p-self.p[None,:]
+
+        # distance 
         dist = np.sqrt(np.sum(r*r,axis=-1))[:,None]
+        # unit direction 
         u = r/dist
         th = np.arccos(u[:,2])
         ph = np.arctan2(u[:,1],u[:,0])
         tang = np.vstack((th,ph)).T
         #print("global",tang*rad_to_deg)
-        Rt, tangl = geu.BTB(tang, self.T)
+        tangl,Rt  = geu.BTB(tang, self.T)
         #print("local",tangl*rad_to_deg)
+        pdb.set_trace()
         self.eval(th=tangl[:,0],ph=tangl[:,1],grid=False)
         E = (self.Ft[:,None,:]*self.T[:,2][None,:,None]+self.Fp[:,None,:]*self.T[:,0][None,:,None])
         P = np.exp(-1j*2*np.pi*self.fGHz[None,None,:]*dist[...,None]/0.3)/dist[...,None]

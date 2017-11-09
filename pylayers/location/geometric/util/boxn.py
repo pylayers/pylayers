@@ -21,6 +21,12 @@
 #Bernard UGUEN        : bernard.uguen@univ-rennes1.fr
 #Mohamed LAARAIEDH    : mohamed.laaraiedh@univ-rennes1.fr
 #####################################################################
+"""
+.. curentmodule:: boxn
+
+.. autosummary:
+
+"""
 from pylayers.util.project import *
 import numpy as np
 import os
