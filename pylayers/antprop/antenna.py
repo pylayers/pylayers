@@ -146,7 +146,6 @@ class Pattern(PyLayers):
             if k not in kwargs:
                 kwargs[k]=defaults[k]
 
-
         if 'fGHz' not in kwargs:
             if 'fGHz' not in self.__dict__:
                 self.fGHz = np.array([2.4])
@@ -155,6 +154,7 @@ class Pattern(PyLayers):
                 self.fGHz = kwargs['fGHz']
             else:
                 self.fGHz = np.array([kwargs['fGHz']])
+
         self.nf = len(self.fGHz)
         self.grid = kwargs['grid']
         #
@@ -191,6 +191,7 @@ class Pattern(PyLayers):
             self.theta = kwargs['th']
             self.phi = kwargs['ph']
             self.full_evaluated = False
+
         if self.typ=='azel':
             self.theta=np.linspace(-np.pi,np.pi,360)
             self.phi=np.linspace(-np.pi,np.pi,360)
@@ -3062,6 +3063,8 @@ class Antenna(Pattern):
             display colorbar
         binteract : boolean 
             enable interactive mode
+        bcircle : boolean 
+            draw a circle 
         newfig: boolean
 
 
@@ -3081,6 +3084,7 @@ class Antenna(Pattern):
             sum_index = tuple(np.arange(1,lpshp))
             po = np.mean(self.p,axis=sum_index)
             kwargs['po']=po
+
         x, y, z, k, scalar  = self._computemesh(**kwargs)
 
         if bnewfig:
@@ -3127,7 +3131,8 @@ class Antenna(Pattern):
                          a*np.zeros(len(phi)),
                          np.sin(phi) 
                          ]
-        # draw 3D circle around pattern
+
+        # draw 3D circle around the pattern
         if bcircle:
             xc,yc,zc =circle('xy') # blue
             mlab.plot3d(xc,yc,zc,color=(0,0,1))
@@ -3221,10 +3226,12 @@ class Antenna(Pattern):
                 k = np.where(self.fGHz>=fGHz)[0][0]
             else: 
                 k = 0
+
         if len(self.Ft.shape)==3:
             r = self.sqG[:,:,k]
         else:
             r = self.sqG[:,:,txru,k]
+
         th = self.theta[:,None]
         phi = self.phi[None,:]
 
@@ -5256,13 +5263,32 @@ def show3D(F, theta, phi, k, col=True):
 
 class AntPosRot(Antenna):
     """ Antenna + position + Rotation
+
+    Notes
+    -----
+
+    This class implement an antenna at a position p
+    with an orientation T
+
     """
     def __init__(self,name,p,T):
-        Antenna.__init__(self,name)
+        #super(AntPosRot,self).__init__(self,typ=name)
+        Antenna.__init__(self,typ=name)
         self.p = p 
         self.T = T 
-    def _show3(self,**kwargs):
-        Antenna._show3(self,newfig=False,interact=False,T=self.T,po=self.p,**kwargs)
+
+    def __repr__(self):
+        st = self._filename+'\n\n'
+        st = st +"p:   "+ str(self.p)+'\n\n'
+        st = st +"T:  "+ str(self.T)+'\n'
+        return(st)                        
+
+    def show3(self,**kwargs):
+        self._show3(newfig=False,
+                interact=False,
+                T=self.T,
+                po=self.p,
+                **kwargs)
 
     def field(self,p):
         """ calculate field at points p 
@@ -5274,6 +5300,7 @@ class AntPosRot(Antenna):
             observation point 
 
         """
+
         rad_to_deg = 180/np.pi
         assert p.shape[-1]==3
 
@@ -5289,16 +5316,16 @@ class AntPosRot(Antenna):
         th = np.arccos(u[:,2])
         ph = np.arctan2(u[:,1],u[:,0])
         tang = np.vstack((th,ph)).T
-        #print("global",tang*rad_to_deg)
+        # angles in antenna local frame 
         tangl,Rt  = geu.BTB(tang, self.T)
-        #print("local",tangl*rad_to_deg)
-        pdb.set_trace()
+        # evaluate antenna radiation  
         self.eval(th=tangl[:,0],ph=tangl[:,1],grid=False)
-        E = (self.Ft[:,None,:]*self.T[:,2][None,:,None]+self.Fp[:,None,:]*self.T[:,0][None,:,None])
+        # reconstruct far field
+        E = (self.Ft[:,None,:]*self.T[:,2][None,:,None]
+            +self.Fp[:,None,:]*self.T[:,0][None,:,None])
         P = np.exp(-1j*2*np.pi*self.fGHz[None,None,:]*dist[...,None]/0.3)/dist[...,None]
         EP = E*P
         return(EP)
-        #Rr, rangl = geu.BTB_rx(rang, self.Tr)
 
 def _gain(Ft,Fp):
     """  calculates antenna gain
@@ -5338,6 +5365,7 @@ def _hpbw(G,th,ph):
 
     Parameters
     ----------
+
     Gain : Ftheta
         Nt x Np 
     th : np.array
