@@ -3227,7 +3227,9 @@ class Antenna(Pattern):
             else: 
                 k = 0
 
-        if len(self.Ft.shape)==3:
+        if len(self.Ft.shape)==2:
+            r = self.sqG[:,k]
+        elif len(self.Ft.shape)==3:
             r = self.sqG[:,:,k]
         else:
             r = self.sqG[:,:,txru,k]
@@ -5308,19 +5310,17 @@ class AntPosRot(Antenna):
             r = p[None,:]-self.p[None,:]
         else:
             r = p-self.p[None,:]
-
-        # distance 
+        
         dist = np.sqrt(np.sum(r*r,axis=-1))[:,None]
-        # unit direction 
-        u = r/dist
+        u = r/dist 
         th = np.arccos(u[:,2])
         ph = np.arctan2(u[:,1],u[:,0])
         tang = np.vstack((th,ph)).T
-        # angles in antenna local frame 
-        tangl,Rt  = geu.BTB(tang, self.T)
-        # evaluate antenna radiation  
+        #print("global",tang*rad_to_deg)
+        tangl,Rt = geu.BTB(tang, self.T)
+        #print("local",tangl*rad_to_deg)
         self.eval(th=tangl[:,0],ph=tangl[:,1],grid=False)
-        # reconstruct far field
+
         E = (self.Ft[:,None,:]*self.T[:,2][None,:,None]
             +self.Fp[:,None,:]*self.T[:,0][None,:,None])
         P = np.exp(-1j*2*np.pi*self.fGHz[None,None,:]*dist[...,None]/0.3)/dist[...,None]

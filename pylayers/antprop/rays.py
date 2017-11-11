@@ -2143,7 +2143,7 @@ class Rays(PyLayers, dict):
                 # 
 
                 size2 = si[:, :].size
-                nbray = self[k]['nbrays']
+                nbray = self[k]['nbrays'][0]
 
                 #  ,(i+1)xr
                 # sif = si[:, :].reshape(size2,order='F') # TO BE REMOVE
@@ -2159,10 +2159,7 @@ class Rays(PyLayers, dict):
                 b0 = self[k]['B'][:,:,0,:]
                 # first unitary matrix 1:
                 # dimension i and r are merged
-                try:
-                    b  = self[k]['B'][:,:,1:,:].reshape(3, 3, size2-nbray,order='F')
-                except:
-                    pdb.set_trace()
+                b  = self[k]['B'][:,:,1:,:].reshape(3, 3, size2-nbray,order='F')
 
 
                 ## find used slab

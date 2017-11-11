@@ -1,3 +1,4 @@
+#
 # -*- coding: utf-8 -*-
 #
 from __future__ import print_function
@@ -1425,7 +1426,7 @@ class DLink(Link):
         self.H = H
 
     def eval(self,**kwargs):
-        """ evaluate the link
+        """ link evaluation
 
 
         Parameters
@@ -1456,7 +1457,7 @@ class DLink(Link):
 
 
     
-        Notes    def eval(self,**kwargs):
+        Notes    
         -----
 
         update self.ak and self.tk
@@ -1475,7 +1476,7 @@ class DLink(Link):
 
             >>> from pylayers.simul.link import *
             >>> L=DLink(verbose=False)
-            >>> aktk = L.eval()
+            >>> L.eval()
 
 
         See Also
@@ -1927,6 +1928,8 @@ class DLink(Link):
         laddr : list 
             list of signature addresses 
         cmap : colormap
+        radius : float 
+            radius for layout vizualization 
         labels : boolean
             enabling edge label (useful for signature identification)
         pol : string

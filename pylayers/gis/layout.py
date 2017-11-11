@@ -11023,6 +11023,12 @@ class Layout(pro.PyLayers):
         labels : list
         nodes : boolean
 
+        Examples
+        --------
+
+        >>> L= Layout('Munich.lay',bbuild=False)
+        >>> L.plot(show=True)
+
         """
         defaults = {'show': False,
                     'fig': [],
