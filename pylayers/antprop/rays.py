@@ -2143,7 +2143,12 @@ class Rays(PyLayers, dict):
                 # 
 
                 size2 = si[:, :].size
-                nbray = self[k]['nbrays'][0]
+                nbray = self[k]['nbrays']
+                # TODO
+                # dirty fix
+                # nbray is either an int or an array. why ?
+                if type(nbray)==np.array:
+                    nbray=nbray[0]
 
                 #  ,(i+1)xr
                 # sif = si[:, :].reshape(size2,order='F') # TO BE REMOVE

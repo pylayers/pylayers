@@ -268,8 +268,8 @@ class DLink(Link):
         --------
 
         >>> from pylayers.simul.link import *
-        >>> L = DLink(verbose=False)
-        >>> aktk = L.eval()
+        >>> DL = DLink(L=Layout('DLR.lay'))
+        >>> DL.eval()
 
 
         """
@@ -877,6 +877,7 @@ class DLink(Link):
 
         Parameters
         ----------
+
         force : boolean 
 
         """
@@ -1475,8 +1476,11 @@ class DLink(Link):
             :include-source:
 
             >>> from pylayers.simul.link import *
-            >>> L=DLink(verbose=False)
-            >>> L.eval()
+            >>> DL=DLink(L="defstr.lay")
+            >>> DL.eval()
+            >>> DL.show()
+            >>> DL.plt_cir()
+            >>> plt.show()
 
 
         See Also
@@ -1910,26 +1914,28 @@ class DLink(Link):
         ----------
 
         s   : int
+            size of Tx/Rx circle in points 
         ca  : string
-            color a
+            color of termination a (Tx)
         cb  : string
-            color b
-        alpha : int
+            color of termination b (Rx)
+        alpha : float 
+            transparency 
         axis : boolean 
             display axis boolean (default True)
         figsize : tuple
-            (20,10)
+            figure size if fig not specified default (20,10)
         fontsize : int
-            20
+            default 20
         rays : boolean
-            False
+            activation of rays vizalization (True)  
         bsig : boolean 
-            False    
+            activation of signature vizualization (False)
         laddr : list 
             list of signature addresses 
         cmap : colormap
         radius : float 
-            radius for layout vizualization 
+            radius in meters for layout vizualization 
         labels : boolean
             enabling edge label (useful for signature identification)
         pol : string
@@ -2020,7 +2026,7 @@ class DLink(Link):
         #
         # Plot Rays
         #
-        if kwargs['rays']:
+        if kwargs['rays'] and self.R.nray>0:
             #ECtt,ECpp,ECtp,ECpt = self.C.energy()
             #if kwargs['pol']=='tt':
             #    val = ECtt

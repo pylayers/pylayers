@@ -497,11 +497,13 @@ class Layout(pro.PyLayers):
                     st = st + 'degree ' + \
                         str(k) + ' : ' + str(self.degree[k]) + "\n"
                 else:
-                    st = st + 'number of node point of degree ' + \
+                    st = st + 'number of node points of degree ' + \
                         str(k) + ' : ' + str(len(self.degree[k])) + "\n"
         st = st + "\n"
-        st = st + "xrange :" + str(self.ax[0:2]) + "\n"
-        st = st + "yrange :" + str(self.ax[2:]) + "\n"
+        st = st + "xrange : " + str(self.ax[0:2]) + "\n"
+        st = st + "yrange : " + str(self.ax[2:]) + "\n"
+        st = st + "center : " + str(self.pg[0]) + "  " + str(self.pg[1])+ "\n"
+        st = st + "radius : " + str(self.radius) + "\n"
         # st = st + "\nUseful dictionnaries" + "\n----------------\n"
         # if hasattr(self,'dca'):
         #     st = st + "dca {cycle : []} cycle with an airwall" +"\n"
@@ -539,10 +541,10 @@ class Layout(pro.PyLayers):
         # st = st + "\nUseful tip" + "\n----------------\n"
         # st = st + "Point p in Gs => p_coord:\n"
         # #st = st + "p -> u = self.iupnt[-p] -> p_coord = self.pt[:,u]\n\n"
-        st = st + "Segment s in Gs => s_ab coordinates \n"
-        st = st + "s2pc : segment to point coordinates (sparse) [p1,p2] = L.s2pc.toarray().reshape(2,2).T \n"
-        st = st + \
-            "s -> u = self.tgs[s] -> v = self.tahe[:,u] -> s_ab = self.pt[:,v]\n\n"
+        #st = st + "Segment s in Gs => s_ab coordinates \n"
+        #st = st + "s2pc : segment to point coordinates (sparse) [p1,p2] = L.s2pc.toarray().reshape(2,2).T \n"
+        #st = st + \
+        #    "s -> u = self.tgs[s] -> v = self.tahe[:,u] -> s_ab = self.pt[:,v]\n\n"
         return(st)
 
 
@@ -1146,6 +1148,9 @@ class Layout(pro.PyLayers):
             print('pt in np.array  : Done')
 
         self.pg = np.sum(self.pt, axis=1) / np.shape(self.pt)[1]
+        ptc = self.pt-self.pg[:,None]
+        dptc = np.sqrt(np.sum(ptc*ptc,axis=0))
+        self.radius  = dptc.max()
         self.pg = np.hstack((self.pg, 0.))
 
         # ntail = map(lambda x: nx.neighbors(self.Gs, x)[0], useg)
