@@ -1030,6 +1030,7 @@ class Layout(pro.PyLayers):
         # matrix segment-segment 
         # usage 
         # self.sgsg[seg1,seg2] => return common point
+
         mno = max(self.Gs.nodes())
         self.sgsg = sparse.lil_matrix((mno+1,mno+1),dtype='int')
 
