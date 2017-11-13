@@ -683,11 +683,13 @@
                     <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s1">&#39;degree &#39;</span> <span class="o">+</span> \
                         <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s1">&#39;number of node point of degree &#39;</span> <span class="o">+</span> \
+                    <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s1">&#39;number of node points of degree &#39;</span> <span class="o">+</span> \
                         <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;xrange :&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;yrange :&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;xrange : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;yrange : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;center : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;radius : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="c1"># st = st + &quot;\nUseful dictionnaries&quot; + &quot;\n----------------\n&quot;</span>
         <span class="c1"># if hasattr(self,&#39;dca&#39;):</span>
         <span class="c1">#     st = st + &quot;dca {cycle : []} cycle with an airwall&quot; +&quot;\n&quot;</span>
@@ -725,10 +727,10 @@
         <span class="c1"># st = st + &quot;\nUseful tip&quot; + &quot;\n----------------\n&quot;</span>
         <span class="c1"># st = st + &quot;Point p in Gs =&gt; p_coord:\n&quot;</span>
         <span class="c1"># #st = st + &quot;p -&gt; u = self.iupnt[-p] -&gt; p_coord = self.pt[:,u]\n\n&quot;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;Segment s in Gs =&gt; s_ab coordinates </span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;s2pc : segment to point coordinates (sparse) [p1,p2] = L.s2pc.toarray().reshape(2,2).T </span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> \
-            <span class="s2">&quot;s -&gt; u = self.tgs[s] -&gt; v = self.tahe[:,u] -&gt; s_ab = self.pt[:,v]</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="c1">#st = st + &quot;Segment s in Gs =&gt; s_ab coordinates \n&quot;</span>
+        <span class="c1">#st = st + &quot;s2pc : segment to point coordinates (sparse) [p1,p2] = L.s2pc.toarray().reshape(2,2).T \n&quot;</span>
+        <span class="c1">#st = st + \</span>
+        <span class="c1">#    &quot;s -&gt; u = self.tgs[s] -&gt; v = self.tahe[:,u] -&gt; s_ab = self.pt[:,v]\n\n&quot;</span>
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
 
 
@@ -1332,6 +1334,9 @@
             <span class="k">print</span><span class="p">(</span><span class="s1">&#39;pt in np.array  : Done&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">pg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pt</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">ptc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pt</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pg</span><span class="p">[:,</span><span class="bp">None</span><span class="p">]</span>
+        <span class="n">dptc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ptc</span><span class="o">*</span><span class="n">ptc</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span>  <span class="o">=</span> <span class="n">dptc</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">pg</span><span class="p">,</span> <span class="mf">0.</span><span class="p">))</span>
 
         <span class="c1"># ntail = map(lambda x: nx.neighbors(self.Gs, x)[0], useg)</span>
@@ -11831,7 +11836,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 11, 2017.
+      Last updated on Nov 13, 2017.
 
     </p>
   </div>

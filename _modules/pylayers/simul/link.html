@@ -184,7 +184,8 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pylayers.simul.link</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span></span><span class="c1">#</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="c1">#</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
 <span class="sd">r&quot;&quot;&quot;</span>
@@ -453,8 +454,8 @@
 <span class="sd">        --------</span>
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.simul.link import *</span>
-<span class="sd">        &gt;&gt;&gt; L = DLink(verbose=False)</span>
-<span class="sd">        &gt;&gt;&gt; aktk = L.eval()</span>
+<span class="sd">        &gt;&gt;&gt; DL = DLink(L=Layout(&#39;DLR.lay&#39;))</span>
+<span class="sd">        &gt;&gt;&gt; DL.eval()</span>
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1062,6 +1063,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        force : boolean </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1611,7 +1613,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="n">H</span></div>
 
 <div class="viewcode-block" id="DLink.eval"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; evaluate the link</span>
+        <span class="sd">&quot;&quot;&quot; link evaluation</span>
 
 
 <span class="sd">        Parameters</span>
@@ -1642,7 +1644,7 @@
 
 
 <span class="sd">    </span>
-<span class="sd">        Notes    def eval(self,**kwargs):</span>
+<span class="sd">        Notes    </span>
 <span class="sd">        -----</span>
 
 <span class="sd">        update self.ak and self.tk</span>
@@ -1660,8 +1662,11 @@
 <span class="sd">            :include-source:</span>
 
 <span class="sd">            &gt;&gt;&gt; from pylayers.simul.link import *</span>
-<span class="sd">            &gt;&gt;&gt; L=DLink(verbose=False)</span>
-<span class="sd">            &gt;&gt;&gt; aktk = L.eval()</span>
+<span class="sd">            &gt;&gt;&gt; DL=DLink(L=&quot;defstr.lay&quot;)</span>
+<span class="sd">            &gt;&gt;&gt; DL.eval()</span>
+<span class="sd">            &gt;&gt;&gt; DL.show()</span>
+<span class="sd">            &gt;&gt;&gt; DL.plt_cir()</span>
+<span class="sd">            &gt;&gt;&gt; plt.show()</span>
 
 
 <span class="sd">        See Also</span>
@@ -2095,24 +2100,28 @@
 <span class="sd">        ----------</span>
 
 <span class="sd">        s   : int</span>
+<span class="sd">            size of Tx/Rx circle in points </span>
 <span class="sd">        ca  : string</span>
-<span class="sd">            color a</span>
+<span class="sd">            color of termination a (Tx)</span>
 <span class="sd">        cb  : string</span>
-<span class="sd">            color b</span>
-<span class="sd">        alpha : int</span>
+<span class="sd">            color of termination b (Rx)</span>
+<span class="sd">        alpha : float </span>
+<span class="sd">            transparency </span>
 <span class="sd">        axis : boolean </span>
 <span class="sd">            display axis boolean (default True)</span>
 <span class="sd">        figsize : tuple</span>
-<span class="sd">            (20,10)</span>
+<span class="sd">            figure size if fig not specified default (20,10)</span>
 <span class="sd">        fontsize : int</span>
-<span class="sd">            20</span>
+<span class="sd">            default 20</span>
 <span class="sd">        rays : boolean</span>
-<span class="sd">            False</span>
+<span class="sd">            activation of rays vizalization (True)  </span>
 <span class="sd">        bsig : boolean </span>
-<span class="sd">            False    </span>
+<span class="sd">            activation of signature vizualization (False)</span>
 <span class="sd">        laddr : list </span>
 <span class="sd">            list of signature addresses </span>
 <span class="sd">        cmap : colormap</span>
+<span class="sd">        radius : float </span>
+<span class="sd">            radius in meters for layout vizualization </span>
 <span class="sd">        labels : boolean</span>
 <span class="sd">            enabling edge label (useful for signature identification)</span>
 <span class="sd">        pol : string</span>
@@ -2203,7 +2212,7 @@
         <span class="c1">#</span>
         <span class="c1"># Plot Rays</span>
         <span class="c1">#</span>
-        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;rays&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;rays&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">nray</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
             <span class="c1">#ECtt,ECpp,ECtp,ECpt = self.C.energy()</span>
             <span class="c1">#if kwargs[&#39;pol&#39;]==&#39;tt&#39;:</span>
             <span class="c1">#    val = ECtt</span>
@@ -2755,7 +2764,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 11, 2017.
+      Last updated on Nov 13, 2017.
 
     </p>
   </div>

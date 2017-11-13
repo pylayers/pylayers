@@ -1,3 +1,6 @@
 from pylayers.simul.link import *
-L=DLink(verbose=False)
-aktk = L.eval()
+DL=DLink(L="defstr.lay")
+DL.eval()
+DL.show()
+DL.plt_cir()
+plt.show()

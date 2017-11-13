@@ -2330,6 +2330,11 @@
 
                 <span class="n">size2</span> <span class="o">=</span> <span class="n">si</span><span class="p">[:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">size</span>
                 <span class="n">nbray</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;nbrays&#39;</span><span class="p">]</span>
+                <span class="c1"># TODO</span>
+                <span class="c1"># dirty fix</span>
+                <span class="c1"># nbray is either an int or an array. why ?</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">nbray</span><span class="p">)</span><span class="o">==</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+                    <span class="n">nbray</span><span class="o">=</span><span class="n">nbray</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
                 <span class="c1">#  ,(i+1)xr</span>
                 <span class="c1"># sif = si[:, :].reshape(size2,order=&#39;F&#39;) # TO BE REMOVE</span>
@@ -2345,10 +2350,7 @@
                 <span class="n">b0</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;B&#39;</span><span class="p">][:,:,</span><span class="mi">0</span><span class="p">,:]</span>
                 <span class="c1"># first unitary matrix 1:</span>
                 <span class="c1"># dimension i and r are merged</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">b</span>  <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;B&#39;</span><span class="p">][:,:,</span><span class="mi">1</span><span class="p">:,:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">size2</span><span class="o">-</span><span class="n">nbray</span><span class="p">,</span><span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
-                <span class="k">except</span><span class="p">:</span>
-                    <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+                <span class="n">b</span>  <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;B&#39;</span><span class="p">][:,:,</span><span class="mi">1</span><span class="p">:,:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">size2</span><span class="o">-</span><span class="n">nbray</span><span class="p">,</span><span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
 
 
                 <span class="c1">## find used slab</span>
@@ -3529,7 +3531,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 11, 2017.
+      Last updated on Nov 13, 2017.
 
     </p>
   </div>

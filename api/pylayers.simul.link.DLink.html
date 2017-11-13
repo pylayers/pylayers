@@ -143,7 +143,13 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.cormoran">31&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">34&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">35&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">36&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">37&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">38&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">39&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id134">40&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -235,7 +241,7 @@
 <td>check existence of previous simulations run with the same parameters.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.eval" title="pylayers.simul.link.DLink.eval"><code class="xref py py-obj docutils literal"><span class="pre">eval</span></code></a>(**kwargs)</td>
-<td>evaluate the link</td>
+<td>link evaluation</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.evalH" title="pylayers.simul.link.DLink.evalH"><code class="xref py py-obj docutils literal"><span class="pre">evalH</span></code></a>(**kwargs)</td>
 <td>evaluate channel transfer function</td>
@@ -373,7 +379,7 @@
 <td>check existence of previous simulations run with the same parameters.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.eval" title="pylayers.simul.link.DLink.eval"><code class="xref py py-obj docutils literal"><span class="pre">eval</span></code></a>(**kwargs)</td>
-<td>evaluate the link</td>
+<td>link evaluation</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.evalH" title="pylayers.simul.link.DLink.evalH"><code class="xref py py-obj docutils literal"><span class="pre">evalH</span></code></a>(**kwargs)</td>
 <td>evaluate channel transfer function</td>
@@ -642,7 +648,7 @@ if the array is emtpy, value doesn&#8217;t exist</p>
 <dl class="method">
 <dt id="pylayers.simul.link.DLink.eval">
 <code class="descname">eval</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/simul/link.html#DLink.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink.eval" title="Permalink to this definition">¶</a></dt>
-<dd><p>evaluate the link</p>
+<dd><p>link evaluation</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -686,20 +692,9 @@ If -1 : neither ceil nor floor reflection (2D case)</p>
 <div><p>if True used the (2015 new) vectorized approach to determine 2drays</p>
 </div></blockquote>
 <p><strong>progressbar: str</strong></p>
-<blockquote>
+<blockquote class="last">
 <div><p>None: no progress bar
 python : progress bar in ipython</p>
-</div></blockquote>
-<p><strong>Notes    def eval(self,**kwargs):</strong></p>
-<p><strong>&#8212;&#8211;</strong></p>
-<p><strong>update self.ak and self.tk</strong></p>
-<p><strong>self.ak</strong> : ndarray</p>
-<blockquote>
-<div><p>alpha_k</p>
-</div></blockquote>
-<p><strong>self.tk</strong> : ndarray</p>
-<blockquote class="last">
-<div><p>tau_k</p>
 </div></blockquote>
 </td>
 </tr>
@@ -709,13 +704,27 @@ python : progress bar in ipython</p>
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="references.html#module-pylayers.antprop.signature" title="pylayers.antprop.signature"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.signature</span></code></a>, <a class="reference internal" href="references.html#module-pylayers.antprop.rays" title="pylayers.antprop.rays"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.rays</span></code></a></p>
 </div>
+<p class="rubric">Notes</p>
+<p>update self.ak and self.tk</p>
+<dl class="docutils">
+<dt>self.ak</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">ndarray</span><dd>alpha_k</dd>
+<dt>self.tk</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">ndarray</span><dd>tau_k</dd>
+</dl>
 <p class="rubric">Examples</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.simul.link import *
-&gt;&gt;&gt; L=DLink(verbose=False)
-&gt;&gt;&gt; aktk = L.eval()
+&gt;&gt;&gt; DL=DLink(L=&quot;defstr.lay&quot;)
+&gt;&gt;&gt; DL.eval()
+&gt;&gt;&gt; DL.show()
+&gt;&gt;&gt; DL.plt_cir()
+&gt;&gt;&gt; plt.show()
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../api/pylayers-simul-link-DLink-1.py">Source code</a>)</p>
+<p>(<a class="reference external" href="../api/pylayers-simul-link-DLink-1.py">Source code</a>, <a class="reference external" href="../api/pylayers-simul-link-DLink-1.png">png</a>, <a class="reference external" href="../api/pylayers-simul-link-DLink-1.hires.png">hires.png</a>, <a class="reference external" href="../api/pylayers-simul-link-DLink-1.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/pylayers-simul-link-DLink-1.png" src="../_images/pylayers-simul-link-DLink-1.png" />
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -1052,40 +1061,50 @@ return &#8216;s&#8217; if array has been stacked into the array of group key</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>s</strong> : int</p>
+<blockquote>
+<div><p>size of Tx/Rx circle in points</p>
+</div></blockquote>
 <p><strong>ca</strong> : string</p>
 <blockquote>
-<div><p>color a</p>
+<div><p>color of termination a (Tx)</p>
 </div></blockquote>
 <p><strong>cb</strong> : string</p>
 <blockquote>
-<div><p>color b</p>
+<div><p>color of termination b (Rx)</p>
 </div></blockquote>
-<p><strong>alpha</strong> : int</p>
+<p><strong>alpha</strong> : float</p>
+<blockquote>
+<div><p>transparency</p>
+</div></blockquote>
 <p><strong>axis</strong> : boolean</p>
 <blockquote>
 <div><p>display axis boolean (default True)</p>
 </div></blockquote>
 <p><strong>figsize</strong> : tuple</p>
 <blockquote>
-<div><p>(20,10)</p>
+<div><p>figure size if fig not specified default (20,10)</p>
 </div></blockquote>
 <p><strong>fontsize</strong> : int</p>
 <blockquote>
-<div><p>20</p>
+<div><p>default 20</p>
 </div></blockquote>
 <p><strong>rays</strong> : boolean</p>
 <blockquote>
-<div><p>False</p>
+<div><p>activation of rays vizalization (True)</p>
 </div></blockquote>
 <p><strong>bsig</strong> : boolean</p>
 <blockquote>
-<div><p>False</p>
+<div><p>activation of signature vizualization (False)</p>
 </div></blockquote>
 <p><strong>laddr</strong> : list</p>
 <blockquote>
 <div><p>list of signature addresses</p>
 </div></blockquote>
 <p><strong>cmap</strong> : colormap</p>
+<p><strong>radius</strong> : float</p>
+<blockquote>
+<div><p>radius in meters for layout vizualization</p>
+</div></blockquote>
 <p><strong>labels</strong> : boolean</p>
 <blockquote>
 <div><p>enabling edge label (useful for signature identification)</p>
@@ -1161,7 +1180,7 @@ return &#8216;s&#8217; if array has been stacked into the array of group key</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 08, 2017.
+      Last updated on Nov 13, 2017.
 
     </p>
   </div>
