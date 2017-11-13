@@ -1402,10 +1402,6 @@ class Rays(PyLayers, dict):
         L : Layout
 
 
-        Notes
-        -----
-
-       
 
         """
 

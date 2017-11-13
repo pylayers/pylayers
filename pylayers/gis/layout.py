@@ -3858,7 +3858,7 @@ class Layout(pro.PyLayers):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('DLR.ini')
+        >>> L = Layout('DLR.lay')
         >>> p1 = np.array([0,0,1])
         >>> p2 = np.array([10,3,2])
         >>> data = L.angleonlink3(p1,p2)
@@ -4009,7 +4009,7 @@ class Layout(pro.PyLayers):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('DLR.ini')
+        >>> L = Layout('DLR.lay')
         >>> p1 = np.array([0,0])
         >>> p2 = np.array([10,3])
         >>> alpha = L.angleonlink(p1,p2)
@@ -4134,14 +4134,11 @@ class Layout(pro.PyLayers):
         --------
 
         #>>> from pylayers.gis.layout import *
-        #>>> L = Layout('DLR.ini','matDB.ini','slabDB.ini')
+        #>>> L = Layout('DLR.lay','matDB.ini','slabDB.ini')
         #>>> p1 = np.array([0,0])
         #>>> p2 = np.array([10,3])
         #>>> L.angleonlinkold(p1,p2)
         #(array([59, 62, 65]), array([ 1.27933953,  0.29145679,  0.29145679]))
-
-        Notes
-        -----
 
 
         """
@@ -4233,7 +4230,7 @@ class Layout(pro.PyLayers):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('DLR.ini')
+        >>> L = Layout('DLR.lay')
         >>> idx = np.array([1,2,3,17])
         >>> v1 = L.seguv(idx)
         >>> idx = np.array([1])
@@ -9403,7 +9400,7 @@ class Layout(pro.PyLayers):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('DLR.ini')
+        >>> L = Layout('DLR.lay')
         >>> walls = L.thwall(0,0)
 
         """
@@ -10424,7 +10421,7 @@ class Layout(pro.PyLayers):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('DLR.ini')
+        >>> L = Layout('DLR.lay')
         >>> pg = L.geomfile()
 
         """

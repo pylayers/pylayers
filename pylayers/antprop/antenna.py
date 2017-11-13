@@ -1570,8 +1570,6 @@ class Pattern(PyLayers):
         + self.ehpbw : np.array (,Nf) dtyp:float 
             equivalent half power beamwidth (radians)
 
-        Notes
-        -----
 
         .. math:: G(\\theta,\\phi) = |F_{\\theta}|^2 + |F_{\\phi}|^2
 

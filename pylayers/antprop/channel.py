@@ -116,9 +116,11 @@ class AFPchannel(bs.FUsignal):
         The calibration file _filecal (.mat file) should be added in the data directory
         In practice for Espoo B2B.mat
 
-        SEE ALSO 
+        See Also 
         --------
+
         pylayers.util.pyutil.getlong 
+
 
         """
         self._filename = _filename
