@@ -4044,7 +4044,7 @@
 <span class="sd">        --------</span>
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.gis.layout import *</span>
-<span class="sd">        &gt;&gt;&gt; L = Layout(&#39;DLR.ini&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; L = Layout(&#39;DLR.lay&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; p1 = np.array([0,0,1])</span>
 <span class="sd">        &gt;&gt;&gt; p2 = np.array([10,3,2])</span>
 <span class="sd">        &gt;&gt;&gt; data = L.angleonlink3(p1,p2)</span>
@@ -4195,7 +4195,7 @@
 <span class="sd">        --------</span>
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.gis.layout import *</span>
-<span class="sd">        &gt;&gt;&gt; L = Layout(&#39;DLR.ini&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; L = Layout(&#39;DLR.lay&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; p1 = np.array([0,0])</span>
 <span class="sd">        &gt;&gt;&gt; p2 = np.array([10,3])</span>
 <span class="sd">        &gt;&gt;&gt; alpha = L.angleonlink(p1,p2)</span>
@@ -4320,14 +4320,11 @@
 <span class="sd">        --------</span>
 
 <span class="sd">        #&gt;&gt;&gt; from pylayers.gis.layout import *</span>
-<span class="sd">        #&gt;&gt;&gt; L = Layout(&#39;DLR.ini&#39;,&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)</span>
+<span class="sd">        #&gt;&gt;&gt; L = Layout(&#39;DLR.lay&#39;,&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)</span>
 <span class="sd">        #&gt;&gt;&gt; p1 = np.array([0,0])</span>
 <span class="sd">        #&gt;&gt;&gt; p2 = np.array([10,3])</span>
 <span class="sd">        #&gt;&gt;&gt; L.angleonlinkold(p1,p2)</span>
 <span class="sd">        #(array([59, 62, 65]), array([ 1.27933953,  0.29145679,  0.29145679]))</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -4419,7 +4416,7 @@
 <span class="sd">        --------</span>
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.gis.layout import *</span>
-<span class="sd">        &gt;&gt;&gt; L = Layout(&#39;DLR.ini&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; L = Layout(&#39;DLR.lay&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; idx = np.array([1,2,3,17])</span>
 <span class="sd">        &gt;&gt;&gt; v1 = L.seguv(idx)</span>
 <span class="sd">        &gt;&gt;&gt; idx = np.array([1])</span>
@@ -9589,7 +9586,7 @@
 <span class="sd">        --------</span>
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.gis.layout import *</span>
-<span class="sd">        &gt;&gt;&gt; L = Layout(&#39;DLR.ini&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; L = Layout(&#39;DLR.lay&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; walls = L.thwall(0,0)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -10610,7 +10607,7 @@
 <span class="sd">        --------</span>
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.gis.layout import *</span>
-<span class="sd">        &gt;&gt;&gt; L = Layout(&#39;DLR.ini&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; L = Layout(&#39;DLR.lay&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; pg = L.geomfile()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
