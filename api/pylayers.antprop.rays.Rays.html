@@ -215,32 +215,80 @@ done through the <strong>locbas</strong> method</p>
 <p>Once the local basis have been calculated the different
 interactions along rays can be informed via the <strong>fillinter</strong>
 method.</p>
-<p>Once the interaction are informed the field along rays can
+<p>Once the interactions are informed the field along rays can
 be evaluated via the <strong>eval</strong> method</p>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="44%" />
-<col width="56%" />
+<col width="24%" />
+<col width="76%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>rays   :</td>
-<td>&nbsp;</td>
+<tr class="row-odd"><td>pTx</td>
+<td>(np.array) transmitter (3,)</td>
 </tr>
-<tr class="row-even"><td>nbrays :</td>
-<td>&nbsp;</td>
+<tr class="row-even"><td>pRx</td>
+<td>(np.array) receiver (3,)</td>
 </tr>
-<tr class="row-odd"><td>rayidx :</td>
-<td>&nbsp;</td>
+<tr class="row-odd"><td>B</td>
+<td>(IntB)</td>
 </tr>
-<tr class="row-even"><td>sig    :</td>
-<td>&nbsp;</td>
+<tr class="row-even"><td>B0</td>
+<td>(IntB)</td>
 </tr>
-<tr class="row-odd"><td>pt     :</td>
-<td>&nbsp;</td>
+<tr class="row-odd"><td>I</td>
+<td>(Interactions)</td>
 </tr>
-<tr class="row-even"><td>alpha  :</td>
-<td>&nbsp;</td>
+<tr class="row-even"><td>I.T</td>
+<td>(IntT)</td>
+</tr>
+<tr class="row-odd"><td>I.T.A</td>
+<td>(np.array) (f,iT,3,3)</td>
+</tr>
+<tr class="row-even"><td>I.R</td>
+<td>(IntR)</td>
+</tr>
+<tr class="row-odd"><td>I.R.A</td>
+<td>(np.array) (f,iR,3,3)</td>
+</tr>
+<tr class="row-even"><td>I.D</td>
+<td>(IntD)</td>
+</tr>
+<tr class="row-odd"><td>I.D.A</td>
+<td>(np.array) (f,iD,3,3)</td>
+</tr>
+<tr class="row-even"><td>Lfilename</td>
+<td>(string) Layout name</td>
+</tr>
+<tr class="row-odd"><td>delays</td>
+<td>(np.array) ray delays</td>
+</tr>
+<tr class="row-even"><td>dis</td>
+<td>(np.array) ray distance = delays*0.3</td>
+</tr>
+<tr class="row-odd"><td>nray</td>
+<td>(int) number of rays</td>
+</tr>
+<tr class="row-even"><td>evaluated</td>
+<td>(boolean) are rays evaluated ?</td>
+</tr>
+<tr class="row-odd"><td>is3d</td>
+<td>(boolean) are rays 2d or 3d rays ?</td>
+</tr>
+<tr class="row-even"><td>isbased</td>
+<td>(boolean) locbas has been applied ?</td>
+</tr>
+<tr class="row-odd"><td>filles</td>
+<td>(boolean) filled  has been applied ?</td>
+</tr>
+<tr class="row-even"><td>los</td>
+<td>(boolean) Line of sight boolean</td>
+</tr>
+<tr class="row-odd"><td>fGHz</td>
+<td>(np.array) frequency points for evaluation</td>
+</tr>
+<tr class="row-even"><td>origin_sig_name</td>
+<td>(string) signature file which produces the rays</td>
 </tr>
 </tbody>
 </table>
@@ -582,6 +630,14 @@ be evaluated via the <strong>eval</strong> method</p>
 <dt id="pylayers.antprop.rays.Rays.loadh5">
 <code class="descname">loadh5</code><span class="sig-paren">(</span><em>filename=[]</em>, <em>idx=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.loadh5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.loadh5" title="Permalink to this definition">¶</a></dt>
 <dd><p>load rays hdf5 format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>idx</strong> : int</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">

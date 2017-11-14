@@ -232,13 +232,45 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-
-<span class="sd">    rays   :</span>
-<span class="sd">    nbrays :</span>
-<span class="sd">    rayidx :</span>
-<span class="sd">    sig    :</span>
-<span class="sd">    pt     :</span>
-<span class="sd">    alpha  :</span>
+<span class="sd">    </span>
+<span class="sd">    pTx  : np.array</span>
+<span class="sd">        transmitter (3,)</span>
+<span class="sd">    pRx  : np.array</span>
+<span class="sd">        receiver (3,)</span>
+<span class="sd">    B    : IntB</span>
+<span class="sd">    B0   : IntB</span>
+<span class="sd">    I    : Interactions</span>
+<span class="sd">    I.T  : IntT</span>
+<span class="sd">    I.T.A : np.array</span>
+<span class="sd">        (f,iT,3,3)</span>
+<span class="sd">    I.R  : IntR</span>
+<span class="sd">    I.R.A : np.array</span>
+<span class="sd">        (f,iR,3,3)</span>
+<span class="sd">    I.D  : IntD</span>
+<span class="sd">    I.D.A : np.array</span>
+<span class="sd">        (f,iD,3,3)</span>
+<span class="sd">    Lfilename : string </span>
+<span class="sd">        Layout name </span>
+<span class="sd">    delays : np.array</span>
+<span class="sd">        ray delays</span>
+<span class="sd">    dis : np.array</span>
+<span class="sd">        ray distance = delays*0.3</span>
+<span class="sd">    nray : int </span>
+<span class="sd">        number of rays </span>
+<span class="sd">    evaluated : boolean </span>
+<span class="sd">        are rays evaluated ?</span>
+<span class="sd">    is3d : boolean </span>
+<span class="sd">        are rays 2d or 3d rays ?</span>
+<span class="sd">    isbased : boolean </span>
+<span class="sd">        locbas has been applied ? </span>
+<span class="sd">    filles : boolean </span>
+<span class="sd">        filled  has been applied ? </span>
+<span class="sd">    los : boolean </span>
+<span class="sd">        Line of sight boolean</span>
+<span class="sd">    fGHz : np.array</span>
+<span class="sd">        frequency points for evaluation</span>
+<span class="sd">    origin_sig_name : string </span>
+<span class="sd">        signature file which produces the rays</span>
 
 
 <span class="sd">    Methods</span>
@@ -280,8 +312,9 @@
 <span class="sd">    interactions along rays can be informed via the **fillinter**</span>
 <span class="sd">    method.</span>
 
-<span class="sd">    Once the interaction are informed the field along rays can</span>
+<span class="sd">    Once the interactions are informed the field along rays can</span>
 <span class="sd">    be evaluated via the **eval** method</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pTx</span><span class="p">,</span> <span class="n">pRx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; object constructor</span>
@@ -407,8 +440,8 @@
             <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Rays: issue when writting h5py file&#39;</span><span class="p">)</span></div>
-
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Rays: issue when writting h5py file&#39;</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Rays.loadh5"><a class="viewcode-back" href="../../../api/pylayers.antprop.rays.Rays.html#pylayers.antprop.rays.Rays.loadh5">[docs]</a>    <span class="k">def</span> <span class="nf">loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="o">=</span><span class="p">[],</span><span class="n">idx</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
@@ -417,6 +450,8 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
+<span class="sd">        idx : int </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">filename</span> <span class="o">==</span> <span class="p">[]:</span>
             <span class="n">filenameh5</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="o">+</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;.h5&#39;</span>
@@ -424,12 +459,12 @@
             <span class="n">filenameh5</span> <span class="o">=</span> <span class="n">filename</span>
 
         <span class="n">filename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIRR3D&#39;</span><span class="p">])</span>
-
+        <span class="k">print</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 
         <span class="c1"># try/except to avoid loosing the h5 file if</span>
         <span class="c1"># read/write error</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="nb">eval</span><span class="p">(</span><span class="n">k</span><span class="p">):{}})</span>
                 <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="n">f</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -445,11 +480,13 @@
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Rays: issue when reading h5py file&#39;</span><span class="p">)</span>
 
         <span class="c1"># fill if save was filled</span>
-
-        <span class="c1"># temporary solution in order to avoir</span>
+        <span class="c1"># temporary solution in order to avoid</span>
         <span class="c1"># creating save for Interactions classes</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filled</span><span class="p">:</span>
-            <span class="n">Lname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.ini&#39;</span>
+            <span class="c1">#Lname = self.Lfilename</span>
+            <span class="n">Lname</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;.lay&#39;</span>
+            <span class="c1">#Lname = self.filename.split(&#39;_&#39;)[0] + &#39;.lay&#39;</span>
             <span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="n">Lname</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
 
@@ -576,7 +613,7 @@
             <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;L&#39;</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span> 
-                <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Lfilename</span><span class="p">,</span><span class="n">bbuild</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Lfilename</span><span class="p">,</span><span class="n">bbuild</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
                 <span class="k">except</span><span class="p">:</span>
