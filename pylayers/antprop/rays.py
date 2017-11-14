@@ -1403,8 +1403,6 @@ class Rays(PyLayers, dict):
         # R.nray2D = self.nray2D
         # R.nray2D = self.nray2D
 
-        import ipdb
-        ipdb.set_trace()
         for k in self:
             lr = self[k]['sig'].shape[1]
 

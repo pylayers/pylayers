@@ -17,6 +17,8 @@ L=Layout('defstr.lay',bbuild=1)
 #L=Layout('TC2_METIS.ini',bbuild=1)
 #L=Layout('W2PTIN.ini',build=False)
 # set the link
+
+print('DL has removed airwalls') 
 DL=DLink(L=L,fGHz=fGHz,outdoor=False,applywav=True)
 DL.L.indoor=True
 #DL.L.indoor=False
@@ -37,6 +39,7 @@ DL.eval(verbose=True,force=True,bt=False,cutoff=4,threshold=0.1,ra_vectorized=Tr
 toc = time.time()
 print(toc-tic)
 
+print('DL2 still has airwalls') 
 L=Layout('defstr.lay',bbuild=1)
 DL2=DLink(L=L,fGHz=fGHz,outdoor=False,applywav=True)
 DL2.L.indoor=True
