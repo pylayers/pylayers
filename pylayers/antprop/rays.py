@@ -46,13 +46,47 @@ class Rays(PyLayers, dict):
 
     Attributes
     ----------
-
-    rays   :
-    nbrays :
-    rayidx :
-    sig    :
-    pt     :
-    alpha  :
+    
+    pTx  : np.array
+        transmitter (3,)
+    pRx  : np.array
+        receiver (3,)
+    B    : IntB
+    B0   : IntB
+    I    : Interactions
+    I.I  : np.array
+        (f,nI,3,3)
+    I.T  : IntT
+    I.T.A : np.array
+        (f,iT,3,3)
+    I.R  : IntR
+    I.R.A : np.array
+        (f,iR,3,3)
+    I.D  : IntD
+    I.D.A : np.array
+        (f,iD,3,3)
+    Lfilename : string 
+        Layout name 
+    delays : np.array
+        ray delays
+    dis : np.array
+        ray distance = delays*0.3
+    nray : int 
+        number of rays 
+    evaluated : boolean 
+        are rays evaluated ?
+    is3d : boolean 
+        are rays 2d or 3d rays ?
+    isbased : boolean 
+        locbas has been applied ? 
+    filles : boolean 
+        filled  has been applied ? 
+    los : boolean 
+        Line of sight boolean
+    fGHz : np.array
+        frequency points for evaluation
+    origin_sig_name : string 
+        signature file which produces the rays
 
 
     Methods
@@ -94,8 +128,9 @@ class Rays(PyLayers, dict):
     interactions along rays can be informed via the **fillinter**
     method.
 
-    Once the interaction are informed the field along rays can
+    Once the interactions are informed the field along rays can
     be evaluated via the **eval** method
+
     """
     def __init__(self, pTx, pRx):
         """ object constructor
@@ -222,7 +257,7 @@ class Rays(PyLayers, dict):
         except:
             f.close()
             raise NameError('Rays: issue when writting h5py file')
-
+        print(filenameh5)
 
 
     def loadh5(self,filename=[],idx=0):
@@ -231,6 +266,8 @@ class Rays(PyLayers, dict):
         Parameters
         ----------
 
+        idx : int 
+
         """
         if filename == []:
             filenameh5 = self.filename+'_'+str(idx)+'.h5'
@@ -238,12 +275,12 @@ class Rays(PyLayers, dict):
             filenameh5 = filename
 
         filename=pyu.getlong(filenameh5,pstruc['DIRR3D'])
-
+        print(filename)
 
         # try/except to avoid loosing the h5 file if
         # read/write error
         try:
-            f=h5py.File(filename,'r')
+            f = h5py.File(filename,'r')
             for k in f.keys():
                 self.update({eval(k):{}})
                 for kk in f[k].keys():
@@ -259,11 +296,13 @@ class Rays(PyLayers, dict):
             raise NameError('Rays: issue when reading h5py file')
 
         # fill if save was filled
-
-        # temporary solution in order to avoir
+        # temporary solution in order to avoid
         # creating save for Interactions classes
+
         if self.filled:
-            Lname = self.filename.split('_')[0] + '.ini'
+            #Lname = self.Lfilename
+            Lname = '_'.join(self.filename.split('_')[0:-1]) + '.lay'
+            #Lname = self.filename.split('_')[0] + '.lay'
             L=Layout(Lname)
             self.fillinter(L)
 
@@ -390,7 +429,7 @@ class Rays(PyLayers, dict):
             if kwargs.has_key('L'):
                 self.L=kwargs['L']
             else: 
-                self.L=Layout(self.Lfilename,bbuild=True)
+                self.L = Layout(self.Lfilename,bbuild=True)
                 try:
                     self.L.dumpr()
                 except:
@@ -3011,14 +3050,15 @@ class Rays(PyLayers, dict):
         else:
             print('Rays have not been evaluated yet')
 
-    def signature(self, ni ,nr):
+    def signature(self, u , typ='full'):
         """ extract ray signature
 
         Parameters
         ----------
 
-        ni : int
-        nr : int
+        u : tuple orr int 
+            if tuple addr 
+            if int index
 
         Returns
         -------
@@ -3033,7 +3073,14 @@ class Rays(PyLayers, dict):
         r[nint]['sig']
 
         """
-        sig = self[ni]['sig'][:,:,nr]
+        if type(u)==tuple:
+            addr = u 
+        else:
+            addr = self.ir2a(u) 
+        if typ=='full':
+            sig = self[addr[0]]['sig'][:,:,addr[1]]
+        else:
+            pass
         return(sig)
 
     def show3d(self,

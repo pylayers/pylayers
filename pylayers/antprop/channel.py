@@ -108,6 +108,7 @@ class AFPchannel(bs.FUsignal):
 
         Notes 
         -----
+
         This function updates : 
         + self.x (frequency GHz)
         + self.y 
@@ -336,7 +337,8 @@ class ADPchannel(bs.TUsignal):
 
         Notes
         -----
-        This can be uesd to compare a measured PADP with a Ray tracing PADP 
+        This can be used to compare a measured PADP with a Ray tracing PADP 
+
 
         """
         #import ipdb
