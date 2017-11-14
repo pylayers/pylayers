@@ -1364,6 +1364,17 @@ class Rays(PyLayers, dict):
         r3d.filename = L._filename.split('.')[0] + '_' + str(r3d.nray)
         return(r3d)
 
+
+    def remove_aw(self,L):
+        """
+        """
+        law = L.name['_AIR']+L.name['AIR']
+        for k in self:
+            self[k]['sig']
+        import ipdb
+        ipdb.set_trace()
+
+
     def length(self,typ=2):
         """ calculate length of rays
 
