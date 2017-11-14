@@ -1668,16 +1668,13 @@ class DLink(Link):
 
 
             R = self.r2d.to3D(self.L,H=ceilheight, N=kwargs['ra_number_mirror_cf'])
-
-            # if kwargs['rm_aw']:
-            #     R2 = R.remove_aw(self.L)
+            if kwargs['rm_aw']:
+                R = R.remove_aw(self.L)
                 # R.locbas(self.L)
                 # R2.locbas(self.L)
-            # return R,R2
             
             R.locbas(self.L)
             
-
             R.fillinter(self.L)
 
             # C = Ctilde()

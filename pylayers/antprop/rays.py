@@ -114,6 +114,7 @@ class Rays(PyLayers, dict):
         self.pRx = pRx
         self.nray = 0
         self.nray2D = 0
+        self.raypt = 0
         self.los = False  
         self.is3D = False
         self.isbased = False
@@ -1310,42 +1311,12 @@ class Rays(PyLayers, dict):
         #
         val =0
 
-
-        idx = np.array(())
-        if self.los:
-            idxts = 1
-            nbrayt = 1
-        else:
-            idxts = 0
-            nbrayt = 0
-
-
-
         for k in r3d.keys():
             nrayk = np.shape(r3d[k]['sig'])[2]
             r3d[k]['nbrays'] = nrayk
             r3d[k]['rayidx'] = np.arange(nrayk)+val
             r3d.nray = r3d.nray + nrayk
             val=r3d[k]['rayidx'][-1]+1
-
-            idxts = idxts + idx.size
-            ityp = r3d[k]['sig'][0][1:-1]
-            idx = idxts + np.arange(ityp.size).reshape(np.shape(ityp),order='F')
-            r3d[k]['rays'] = idx
-
-
-            _ray2nbi = np.ones((nrayk),dtype=int)
-
-
-            try:
-                r3d._ray2nbi=np.hstack((r3d._ray2nbi,_ray2nbi))
-            except:
-                r3d._ray2nbi=_ray2nbi
-
-           
-            r3d._ray2nbi[r3d[k]['rayidx']]  = k
-            nbrayt = nbrayt + nrayk
-
 
             # 3 : x,y,z
             # i : interaction index
@@ -1432,16 +1403,15 @@ class Rays(PyLayers, dict):
         # R.nray2D = self.nray2D
         # R.nray2D = self.nray2D
 
-
+        import ipdb
+        ipdb.set_trace()
         for k in self:
             lr = self[k]['sig'].shape[1]
 
             inter = self.get_rays_slabs(L,k)
 
             for ur,r in enumerate(inter.T):
-                # if self[k]['rayidx'][ur] == 2:
-                #     import ipdb
-                #     ipdb.set_trace()
+
                 not_air_mask  = ~((r =='_AIR') | (r == 'AIR' ))
                 nb_air = sum(~not_air_mask)
                 if nb_air != 0 :
@@ -1490,9 +1460,7 @@ class Rays(PyLayers, dict):
                     vsi = self[k]['vsi'][...,ur][...,None]
                     dis = np.array([self[k]['dis'][ur]])
 
-                if new_bi == 2:
-                    import ipdb
-                    ipdb.set_trace()
+               
                 if R.has_key(new_bi):
 
                     # R[new_bi]['sig2d'].append(self[k]['sig2d'][ur])
@@ -1511,7 +1479,8 @@ class Rays(PyLayers, dict):
                     R[new_bi]['si'] = si
                     R[new_bi]['vsi'] = vsi
                     R[new_bi]['dis'] = dis
-
+        if R.has_key(0):
+            R.los=True
 
 
         return R
@@ -1852,48 +1821,37 @@ class Rays(PyLayers, dict):
                 # is done after the potential diffraction 
                 # computation
 
+                ## index creation
+                ##################
+                # create index for retrieving interactions
 
-                # The following was made twice. Moved in self.to3d
+                # integer offset : total size idx
 
-                # ## index creation
-                # ##################
-                # # create index for retrieving interactions
+                idxts = idxts + idx.size
 
-                # # integer offset : total size idx
+                idx = idxts + np.arange(ityp.size).reshape(np.shape(ityp),order='F')
 
+                nbray = np.shape(idx)[1]
 
-                # import ipdb
-                # ipdb.set_trace()
-                # idxts = idxts + idx.size
+                self[k]['rays'] = idx
+                self[k]['nbrays'] = nbray
+                self[k]['rayidx'] = nbrayt + np.arange(nbray)
 
-                # idx = idxts + np.arange(ityp.size).reshape(np.shape(ityp),order='F')
+                # create a numpy array to relate the ray index to its corresponding
+                # number of interactions
 
-                # nbray = np.shape(idx)[1]
-
-                # self[k]['rays'] = idx
-                # self[k]['nbrays'] = nbray
-                # self[k]['rayidx'] = nbrayt + np.arange(nbray)
-
-                # # create a numpy array to relate the ray index to its corresponding
-                # # number of interactions
-
-                # _ray2nbi = np.ones((nbray),dtype=int)
+                _ray2nbi = np.ones((nbray),dtype=int)
 
 
-                # try:
-                #     self._ray2nbi=np.hstack((self._ray2nbi,_ray2nbi))
-                # except:
-                #     self._ray2nbi=_ray2nbi
+                try:
+                    self._ray2nbi=np.hstack((self._ray2nbi,_ray2nbi))
+                except:
+                    self._ray2nbi=_ray2nbi
 
                
-                # self._ray2nbi[self[k]['rayidx']]  = k
-                # nbrayt = nbrayt + nbray
-
-
-
-
-
-
+                self._ray2nbi[self[k]['rayidx']]  = k
+                nbrayt = nbrayt + nbray
+                self.raypt = self.raypt + self[k]['nbrays']
 
                 #################################
                 # Start diffraction specific case
@@ -2096,7 +2054,6 @@ class Rays(PyLayers, dict):
 
             # if los exists
             else :
-
                 self[k]['nstrwall'] = np.array(())
                 self[k]['norm'] = np.array(())
                 si = np.sqrt(np.sum((self[0]['pt'][:,0]-self[0]['pt'][:,1])**2,axis=0))
@@ -2129,6 +2086,7 @@ class Rays(PyLayers, dict):
                 self[k]['rays'] = np.array(([[0]]))
                 self[k]['nbrays'] = 1
                 self[k]['rayidx'] = ze
+                self.raypt = 1
                 self._ray2nbi = ze
         self._luw = np.unique(luw).tolist()
         self.isbased=True
@@ -2152,7 +2110,8 @@ class Rays(PyLayers, dict):
         """
 
         # reinitialized ray pointer if not in append mode
-
+        if not append:
+            self.raypt = 0
 
         # stacked interactions
         I = Interactions(slab=L.sl)
