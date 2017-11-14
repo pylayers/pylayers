@@ -75,7 +75,7 @@ class Rays(PyLayers, dict):
         number of rays 
     evaluated : boolean 
         are rays evaluated ?
-    is3d : boolean 
+    is3D : boolean 
         are rays 2d or 3d rays ?
     isbased : boolean 
         locbas has been applied ? 
@@ -88,25 +88,6 @@ class Rays(PyLayers, dict):
     origin_sig_name : string 
         signature file which produces the rays
 
-
-    Methods
-    -------
-
-    to3D(H=3,N=1)
-        for k in self:   # for all interaction group k
-        for k in self:   # for all interaction group k
-    locbas(L)
-    fillinter(L)
-    eval
-    show(L)
-    mirror(H=3,N=1)
-    ray
-    typ
-    info
-    to3D
-    signature(L)
-    show3d(ray,bdis,bbas,bstruc,col,id,linewidth)
-    show3()
 
     Notes
     -----
@@ -182,7 +163,15 @@ class Rays(PyLayers, dict):
         else:
             s = self.__class__.__name__ + '2D\n' + '----------'+'\n'
             nray2D = len(self)
-
+        
+        if self.los:
+            s = "LOS "
+        if self.isbased:
+            s = s + "based "
+        if self.filled:
+            s = s + "filled "
+        
+        s = s + '\n'
         s = s + 'N2Drays : '+ str(nray2D) + '\n'
         if hasattr(self,'nb_origin_sig'):
             s = s + 'from '+ str(self.nb_origin_sig) + ' signatures\n'
@@ -530,7 +519,7 @@ class Rays(PyLayers, dict):
 
 
     def extract(self,nr,L):
-        """ Extract a single ray
+        """ rays extraction on criteria 
 
         Parameters
         ----------
@@ -540,15 +529,16 @@ class Rays(PyLayers, dict):
 
         """
 
-
         r = Rays(self.pTx,self.pRx)
         r.is3D = self.is3D
         
         r.nray2D = 1
         r.nb_origin_sig = 1
         
-        ni = self._ray2nbi[nr]
-        ur = np.where(self[ni]['rayidx']==nr)[0][0]
+        #ni = self._ray2nbi[nr]
+        #ur = np.where(self[ni]['rayidx']==nr)[0][0]
+        
+        ni,ur = self.ir2a(nr)
 
         if 'D' in self.typ(nr):
             diff=True
