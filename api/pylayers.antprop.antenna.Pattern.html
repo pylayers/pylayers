@@ -359,6 +359,47 @@ values are append at the end of sqG.</p>
 <code class="descname">gain</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Pattern.gain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Pattern.gain" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates antenna gain</p>
 <p class="rubric">Notes</p>
+<p>This function updates the following attributes</p>
+<ul>
+<li><dl class="first docutils">
+<dt>self.G</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">np.array(Nt,Np,Nf) dtype:float</span><dd><dl class="first last docutils">
+<dt>linear gain </dt>
+<dd><p class="first last">or np.array(Nr,Nf)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>self.sqG</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">np.array(Nt,Np,Nf) dtype:float </span><dd><dl class="first last docutils">
+<dt>linear sqare root of gain </dt>
+<dd><p class="first last">or np.array(Nr,Nf)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>self.efficiency</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">np.array (,Nf) dtype:float </span><dd><p class="first last">efficiency</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>self.hpster</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">np.array (,Nf) dtype:float</span><dd><p class="first last">half power solid angle :  1 ~ 4pi steradian</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>self.ehpbw</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">np.array (,Nf) dtyp:float </span><dd><p class="first last">equivalent half power beamwidth (radians)</p>
+</dd>
+</dl>
+</li>
+</ul>
 <div class="math">
 \[G(\theta,\phi) = |F_{\theta}|^2 + |F_{\phi}|^2\]</div>
 </dd></dl>
@@ -435,7 +476,7 @@ values are append at the end of sqG.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 11, 2017.
+      Last updated on Nov 14, 2017.
 
     </p>
   </div>

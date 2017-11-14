@@ -3197,14 +3197,15 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Rays have not been evaluated yet&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Rays.signature"><a class="viewcode-back" href="../../../api/pylayers.antprop.rays.Rays.html#pylayers.antprop.rays.Rays.signature">[docs]</a>    <span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ni</span> <span class="p">,</span><span class="n">nr</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.signature"><a class="viewcode-back" href="../../../api/pylayers.antprop.rays.Rays.html#pylayers.antprop.rays.Rays.signature">[docs]</a>    <span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span> <span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; extract ray signature</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        ni : int</span>
-<span class="sd">        nr : int</span>
+<span class="sd">        u : tuple orr int </span>
+<span class="sd">            if tuple addr </span>
+<span class="sd">            if int index</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -3219,7 +3220,14 @@
 <span class="sd">        r[nint][&#39;sig&#39;]</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">sig</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">ni</span><span class="p">][</span><span class="s1">&#39;sig&#39;</span><span class="p">][:,:,</span><span class="n">nr</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">==</span><span class="nb">tuple</span><span class="p">:</span>
+            <span class="n">addr</span> <span class="o">=</span> <span class="n">u</span> 
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">addr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ir2a</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> 
+        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;full&#39;</span><span class="p">:</span>
+            <span class="n">sig</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">addr</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;sig&#39;</span><span class="p">][:,:,</span><span class="n">addr</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span>
         <span class="k">return</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Rays.show3d"><a class="viewcode-back" href="../../../api/pylayers.antprop.rays.Rays.html#pylayers.antprop.rays.Rays.show3d">[docs]</a>    <span class="k">def</span> <span class="nf">show3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
@@ -3527,7 +3535,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 13, 2017.
+      Last updated on Nov 14, 2017.
 
     </p>
   </div>

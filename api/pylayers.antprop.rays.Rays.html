@@ -388,7 +388,7 @@ be evaluated via the <strong>eval</strong> method</p>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.show3d" title="pylayers.antprop.rays.Rays.show3d"><code class="xref py py-obj docutils literal"><span class="pre">show3d</span></code></a>(ray[,&nbsp;bdis,&nbsp;bbas,&nbsp;bstruc,&nbsp;col,&nbsp;id,&nbsp;...])</td>
 <td>plot a set of 3D rays</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.signature" title="pylayers.antprop.rays.Rays.signature"><code class="xref py py-obj docutils literal"><span class="pre">signature</span></code></a>(ni,&nbsp;nr)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.signature" title="pylayers.antprop.rays.Rays.signature"><code class="xref py py-obj docutils literal"><span class="pre">signature</span></code></a>(u[,&nbsp;typ])</td>
 <td>extract ray signature</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.simplify" title="pylayers.antprop.rays.Rays.simplify"><code class="xref py py-obj docutils literal"><span class="pre">simplify</span></code></a>()</td>
@@ -953,14 +953,17 @@ use raysfromnstr instead</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.rays.Rays.signature">
-<code class="descname">signature</code><span class="sig-paren">(</span><em>ni</em>, <em>nr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.signature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.signature" title="Permalink to this definition">¶</a></dt>
+<code class="descname">signature</code><span class="sig-paren">(</span><em>u</em>, <em>typ='full'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.signature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.signature" title="Permalink to this definition">¶</a></dt>
 <dd><p>extract ray signature</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ni</strong> : int</p>
-<p><strong>nr</strong> : int</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>u</strong> : tuple orr int</p>
+<blockquote>
+<div><p>if tuple addr 
+if int index</p>
+</div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>sig</strong> : ndarray</p>
@@ -1086,7 +1089,7 @@ False: get information in R.I</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 13, 2017.
+      Last updated on Nov 14, 2017.
 
     </p>
   </div>
