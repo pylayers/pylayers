@@ -25,6 +25,8 @@ DL.L.build()
 #DL.cb=14
 DL.ca= 2
 DL.cb= 5
+DL.a = DL.a+0.8
+DL.b = DL.b+0.8
 #DL.b = np.array([761.5,1113,1.2])
 DL.Aa=Antenna(typ='Omni')
 DL.Ab=Antenna(typ='Omni')
