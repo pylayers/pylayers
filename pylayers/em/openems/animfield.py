@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+
 plt.rcParams['animation.ffmpeg_path']='/usr/bin/ffmpeg'
 
 from vtk.util.numpy_support import vtk_to_numpy

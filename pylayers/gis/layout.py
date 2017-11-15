@@ -497,11 +497,13 @@ class Layout(pro.PyLayers):
                     st = st + 'degree ' + \
                         str(k) + ' : ' + str(self.degree[k]) + "\n"
                 else:
-                    st = st + 'number of node point of degree ' + \
+                    st = st + 'number of node points of degree ' + \
                         str(k) + ' : ' + str(len(self.degree[k])) + "\n"
         st = st + "\n"
-        st = st + "xrange :" + str(self.ax[0:2]) + "\n"
-        st = st + "yrange :" + str(self.ax[2:]) + "\n"
+        st = st + "xrange : " + str(self.ax[0:2]) + "\n"
+        st = st + "yrange : " + str(self.ax[2:]) + "\n"
+        st = st + "center : " + str(self.pg[0]) + "  " + str(self.pg[1])+ "\n"
+        st = st + "radius : " + str(self.radius) + "\n"
         # st = st + "\nUseful dictionnaries" + "\n----------------\n"
         # if hasattr(self,'dca'):
         #     st = st + "dca {cycle : []} cycle with an airwall" +"\n"
@@ -539,10 +541,10 @@ class Layout(pro.PyLayers):
         # st = st + "\nUseful tip" + "\n----------------\n"
         # st = st + "Point p in Gs => p_coord:\n"
         # #st = st + "p -> u = self.iupnt[-p] -> p_coord = self.pt[:,u]\n\n"
-        st = st + "Segment s in Gs => s_ab coordinates \n"
-        st = st + "s2pc : segment to point coordinates (sparse) [p1,p2] = L.s2pc.toarray().reshape(2,2).T \n"
-        st = st + \
-            "s -> u = self.tgs[s] -> v = self.tahe[:,u] -> s_ab = self.pt[:,v]\n\n"
+        #st = st + "Segment s in Gs => s_ab coordinates \n"
+        #st = st + "s2pc : segment to point coordinates (sparse) [p1,p2] = L.s2pc.toarray().reshape(2,2).T \n"
+        #st = st + \
+        #    "s -> u = self.tgs[s] -> v = self.tahe[:,u] -> s_ab = self.pt[:,v]\n\n"
         return(st)
 
 
@@ -1028,6 +1030,7 @@ class Layout(pro.PyLayers):
         # matrix segment-segment 
         # usage 
         # self.sgsg[seg1,seg2] => return common point
+
         mno = max(self.Gs.nodes())
         self.sgsg = sparse.lil_matrix((mno+1,mno+1),dtype='int')
 
@@ -1146,6 +1149,9 @@ class Layout(pro.PyLayers):
             print('pt in np.array  : Done')
 
         self.pg = np.sum(self.pt, axis=1) / np.shape(self.pt)[1]
+        ptc = self.pt-self.pg[:,None]
+        dptc = np.sqrt(np.sum(ptc*ptc,axis=0))
+        self.radius  = dptc.max()
         self.pg = np.hstack((self.pg, 0.))
 
         # ntail = map(lambda x: nx.neighbors(self.Gs, x)[0], useg)
@@ -3852,7 +3858,7 @@ class Layout(pro.PyLayers):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('DLR.ini')
+        >>> L = Layout('DLR.lay')
         >>> p1 = np.array([0,0,1])
         >>> p2 = np.array([10,3,2])
         >>> data = L.angleonlink3(p1,p2)
@@ -4003,7 +4009,7 @@ class Layout(pro.PyLayers):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('DLR.ini')
+        >>> L = Layout('DLR.lay')
         >>> p1 = np.array([0,0])
         >>> p2 = np.array([10,3])
         >>> alpha = L.angleonlink(p1,p2)
@@ -4128,14 +4134,11 @@ class Layout(pro.PyLayers):
         --------
 
         #>>> from pylayers.gis.layout import *
-        #>>> L = Layout('DLR.ini','matDB.ini','slabDB.ini')
+        #>>> L = Layout('DLR.lay','matDB.ini','slabDB.ini')
         #>>> p1 = np.array([0,0])
         #>>> p2 = np.array([10,3])
         #>>> L.angleonlinkold(p1,p2)
         #(array([59, 62, 65]), array([ 1.27933953,  0.29145679,  0.29145679]))
-
-        Notes
-        -----
 
 
         """
@@ -4227,7 +4230,7 @@ class Layout(pro.PyLayers):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('DLR.ini')
+        >>> L = Layout('DLR.lay')
         >>> idx = np.array([1,2,3,17])
         >>> v1 = L.seguv(idx)
         >>> idx = np.array([1])
@@ -9397,7 +9400,7 @@ class Layout(pro.PyLayers):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('DLR.ini')
+        >>> L = Layout('DLR.lay')
         >>> walls = L.thwall(0,0)
 
         """
@@ -10418,7 +10421,7 @@ class Layout(pro.PyLayers):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('DLR.ini')
+        >>> L = Layout('DLR.lay')
         >>> pg = L.geomfile()
 
         """
@@ -11022,6 +11025,12 @@ class Layout(pro.PyLayers):
         ax 
         labels : list
         nodes : boolean
+
+        Examples
+        --------
+
+        >>> L= Layout('Munich.lay',bbuild=False)
+        >>> L.plot(show=True)
 
         """
         defaults = {'show': False,

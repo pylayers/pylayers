@@ -1,5 +1,7 @@
 #!/bin/bash 
+#
+# The basename variable is restored at the end 
 export TMPVAR=$BASENAME
 export BASENAME=$PYLAYERS/data
-nosetests -x --debug-log test.log --with-id -s pylayers
+nosetests -v -d -x --debug-log test.log --with-id -s pylayers
 export BASENAME=$TMPVAR
