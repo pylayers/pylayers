@@ -1583,16 +1583,20 @@ class DLink(Link):
         else :
             ## 1 is the default signature determination algorithm
             if kwargs['alg']==1:
+                self.nD = kwargs['nD']
+                self.nT = kwargs['nT']
+                self.nR = kwargs['nR']
+                self.bt = kwargs['bt']
                 
-                Si.run(cutoff = kwargs['cutoff'],
+                Si.run(cutoff = self.cutoff,
                         diffraction = kwargs['diffraction'],
-                        threshold = kwargs['threshold'],
-                        delay_excess_max_ns = kwargs['delay_excess_max_ns'],
-                        nD = kwargs['nD'],
-                        nR = kwargs['nR'],
-                        nT = kwargs['nT'],
+                        threshold = self.threshold,
+                        delay_excess_max_ns = self.delay_excess_max_ns,
+                        nD = self.nD,
+                        nR = self.nR,
+                        nT = self.nT,
                         progress = kwargs['si_progress'],
-                        bt = kwargs['bt'])
+                        bt = self.bt)
 
                 if self.verbose:
                     print("default algorithm")

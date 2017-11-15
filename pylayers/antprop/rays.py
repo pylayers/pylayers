@@ -1,4 +1,4 @@
-#!/usr/bin/python
+
 # -*- coding: latin1 -*-
 from __future__ import print_function
 """
@@ -1430,6 +1430,39 @@ class Rays(PyLayers, dict):
 
         L : Layout
 
+        Notes
+        -----
+
+        This method adds for each group of interactions the following members 
+
+        norm : np.array
+            3 x i x r  (interaction vector)  
+        nstrwall : np.array
+            nstr of interactions 
+        vsi : np.array
+            3 x (i+1) x r 
+        aod : np.array 
+            2 x r 
+        aoa : np.array
+            2 x r 
+        BoO : np.array
+            3 x 3 x r
+        Bi  : np.array
+            3 x 3 x r
+        Bo  : np.array
+            3 x 3 x r
+        BiN : np.array
+            3 x 3 x r
+        scpr : np.array
+            i x r 
+        theta : np.array 
+            i x r 
+        rays  : int 
+        nbrays  : int 
+        rayidx : np.array
+        diffslabs :  list 
+        diffvect :  np.array
+            (phi0,phi,beta,NN) 
 
 
         """
@@ -2006,10 +2039,14 @@ class Rays(PyLayers, dict):
             If True append new rays to existing structure
 
 
-        Returns
+        Notes
         -------
 
-        Update self.I , self.B , self.I0
+        This method adds the following members 
+        
+        I : Interactions 
+        B : IntB
+        B0 : IntB
 
         """
 
