@@ -1429,6 +1429,8 @@ class Rays(PyLayers, dict):
                     u = 0
                     si_aw = 0
 
+                    # import ipdb
+                    # ipdb.set_trace()
 
                     for uold,b in enumerate(not_air_mask[1:]):
                         if b:
@@ -1445,8 +1447,8 @@ class Rays(PyLayers, dict):
                     si = si[...,None]
                     vsi = vsi[...,None]
                     dis = np.array([np.sum(si)])
-                    
                     assert np.allclose(dis,np.sum(si_old))
+
 
 
                 else:
@@ -1477,10 +1479,11 @@ class Rays(PyLayers, dict):
                     R[new_bi]['si'] = si
                     R[new_bi]['vsi'] = vsi
                     R[new_bi]['dis'] = dis
+
         if R.has_key(0):
             R.los=True
-
-
+        X = [[R[k]['rayidx'][u] for u in range(len(R[k]['rayidx']))] for k in R]
+        R._rayidx_aw = sum(X,[])
         return R
 
     def length(self,typ=2):
