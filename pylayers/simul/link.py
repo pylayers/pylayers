@@ -40,7 +40,7 @@ from pylayers.antprop.rays import Rays
 from pylayers.antprop.channel import Ctilde, Tchannel , AFPchannel
 from pylayers.antprop.statModel import getchannel
 import tqdm
-
+import copy
 
 import h5py
 import pdb
@@ -1882,6 +1882,7 @@ class DLink(Link):
         self.dpdp = np.sum(self.dpadp,axis=0)
         self.dpap = np.sum(self.dpadp,axis=1)
         #return(afp)
+
 
 
 
