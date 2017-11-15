@@ -5301,12 +5301,12 @@ def mirror3b(tp, aplane, pplane):
     return tp
 
 def mirror3c(tp, aplane, pplane):
-    """ compute recursively the image of p wrt the list of facet 
+    """ compute recursively the image of p wrt the list of facets 
     
     Parameters
     ----------
 
-    tp     : MDA 
+    tp : MDA 
         Collection of images points from screen in 3D space from set of points  
         (3 x Nf x Npt x Nc)
         Ns : number of screen 
@@ -5314,8 +5314,8 @@ def mirror3c(tp, aplane, pplane):
         (s x f x p x c ) 
     aplane : numpy.ndarray
         MDarray of (c)ollection of ()vector (f)aces n 3D ((s)pace 
-        (3xNfacesx2xNc)
-        (sxfxvxc) 
+        (3 x Nfaces x 2 x Nc)
+        (s x f x v x c) 
     pplane : numpy.ndarray
         array of points (3xNplanexNsig)
 

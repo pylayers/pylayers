@@ -1006,6 +1006,8 @@ class Rays(PyLayers, dict):
                 pte = np.hstack((Tx, pte, Rx))
             else:
                  pte = np.hstack((Tx, Rx))
+
+            # extension 
             for l in d:                     # for each vertical pattern (C,F,CF,FC,....)
                 #print k,l,d[l]
                 Nint = len(d[l])            # number of additional interaction

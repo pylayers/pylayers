@@ -2279,7 +2279,7 @@ class Layout(pro.PyLayers):
             # if not already done
             if iseg not in segdone:
                 # get all the iso from the segment key
-                iso = self.Gs.node[iseg]['iso'] 
+                iso = copy.copy(self.Gs.node[iseg]['iso'])
                 # append key to iso  
                 iso.append(iseg)
                 # stack all the intervals in increasing order 
