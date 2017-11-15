@@ -535,7 +535,7 @@ class Rays(PyLayers, dict):
         return lr
 
 
-    def extract2(self,lnr,L):
+    def extract(self,lnr,L):
         """ Extract a group of rays
 
         Parameters
@@ -546,6 +546,9 @@ class Rays(PyLayers, dict):
 
         """
 
+
+        if not isinstance(lnr,list):
+            lnr=[lnr]
 
         r = Rays(self.pTx,self.pRx)
         r.is3D = self.is3D
@@ -584,7 +587,7 @@ class Rays(PyLayers, dict):
                                 cray[k]=tab[...,uD][...,np.newaxis]
                             else:
                                 if len(uD)>0 :
-                                    cray[k]=tab[uD]
+                                    cray[k]=[tab[uD]]
                                 else:
                                     cray[k]=[]
                         
@@ -597,8 +600,7 @@ class Rays(PyLayers, dict):
 
 
             if r.has_key(ni):
-                import ipdb
-                ipdb.set_trace()
+
                 # R[ni]['sig2d'].append(self[k]['sig2d'][ur])
 
 
@@ -606,9 +608,15 @@ class Rays(PyLayers, dict):
                 r[ni]['nbrays'] += 1
                 r[ni]['B'] = np.concatenate((r[ni]['B'],cray['B']),axis=3)
                 if diff:
-                    r[ni]['diffidx'] = 0
-                    r[ni]['diffvect'] = 0
-                    r[ni]['diffslabs'] = 0
+                    if r[ni].has_key('diffidx'):
+                        r[ni]['diffidx'] = np.concatenate((r[ni]['diffidx'],cray['diffidx']))
+                        r[ni]['diffvect'] = np.concatenate((r[ni]['diffvect'],cray['diffvect']),axis=1)
+                        r[ni]['diffslabs'].append(cray['diffslabs'])
+                        
+                    else:
+                        r[ni]['diffidx'] = cray['diffidx']
+                        r[ni]['diffvect'] = cray['diffvect']
+                        r[ni]['diffslabs'] = cray['diffslabs']
                 r[ni]['pt'] = np.concatenate((r[ni]['pt'],cray['pt']),axis=2)
                 r[ni]['rayidx'] = np.concatenate((r[ni]['rayidx'],cray['rayidx']),axis=0)
                 r[ni]['Bo0'] = np.concatenate((r[ni]['Bo0'],cray['Bo0']),axis=2)
@@ -634,7 +642,7 @@ class Rays(PyLayers, dict):
         r.fillinter(L)
         return(r)
 
-    def extract(self,nr,L):
+    def extract_old(self,nr,L):
         """ Extract a single ray
 
         Parameters
