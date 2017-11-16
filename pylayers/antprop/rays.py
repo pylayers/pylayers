@@ -541,7 +541,7 @@ class Rays(PyLayers, dict):
         u = np.argsort(self.dis)
 
 
-    def rayfromtyp_order(self,typ=['R','T','D'],order = [1,2]):
+    def rayfromtyp_order(self,nD=1,nR=1,nT=1):
         """
             Return rays from a given type (R|T|D) to a given order
             ( number of interaction)
@@ -549,11 +549,12 @@ class Rays(PyLayers, dict):
             Parameters
             ----------
 
-                typ : list | str
-                    R|T|D
-                order :list | int
-                    number of interactions
-
+                nD = int
+                    requested number of Diffraction
+                nR = int
+                    requested number of Reflection
+                nT = int
+                    requested number of Transmission
             Returns
             -------
 
@@ -564,29 +565,19 @@ class Rays(PyLayers, dict):
 
         """
 
-        if not isinstance(typ,list):
-            typ = list(typ)
-        if not isinstance(order,list):
-            order = [order]
+
         lr=[]
         for r in xrange(self.nray):
             li = self.ray2ityp(r)
-            nR = li.count('R')
-            nT = li.count('T')
-            nD = li.count('D')
-            if 'R' in typ:
-                if nR in order:
-                    lr.append(r)
-            if 'T' in typ:
-                if nT in order:
-                    lr.append(r)
-            if 'D' in typ:
-                if nD in order:
-                    lr.append(r)
+            nRli = li.count('R')
+            nTli = li.count('T')
+            nDli = li.count('D')
+            if (nR == nRli) and (nT==nTli) and (nD==nDli):
+                lr.append(r)
         return lr
 
 
-    def extract_typ_order(self,L,typ=['R','T','D'],order=[1]):
+    def extract_typ_order(self,L,nD=0,nR=1,nT=1):
         """ Extract group of rays from a certain type (R|T|D) 
             at a order ( <=> given number of interaction)
 
@@ -594,10 +585,12 @@ class Rays(PyLayers, dict):
             ----------
 
         L  : Layout
-        typ : list | str
-            R|T|D
-        order :list | int
-            number of interactions
+        nD = int
+            requested number of Diffraction
+        nR = int
+            requested number of Reflection
+        nT = int
+            requested number of Transmission
 
         Returns
         -------
@@ -609,7 +602,7 @@ class Rays(PyLayers, dict):
 
         """
 
-        lr = self.rayfromtyp_order(typ=typ,order=order)
+        lr = self.rayfromtyp_order(nD=nD,nR=nR,nT=nT)
         return self.extract(lr,L)
 
 
@@ -703,7 +696,7 @@ class Rays(PyLayers, dict):
                 r[ni]['aod'] = np.concatenate((r[ni]['aod'],cray['aod']),axis=1)
                 r[ni]['si'] = np.concatenate((r[ni]['si'],cray['si']),axis=1)
                 r[ni]['sig'] = np.concatenate((r[ni]['sig'],cray['sig']),axis=2)
-                r[ni]['sig2d'] = np.concatenate((r[ni]['sig2d'],cray['sig2d']),axis=2)
+                # r[ni]['sig2d'] = np.concatenate((r[ni]['sig2d'],cray['sig2d']),axis=2)
                 r[ni]['aoa'] = np.concatenate((r[ni]['aoa'],cray['aoa']),axis=1)
                 r[ni]['vsi'] = np.concatenate((r[ni]['vsi'],cray['vsi']),axis=2)
                 r[ni]['theta'] = np.concatenate((r[ni]['theta'],cray['theta']),axis=1)
