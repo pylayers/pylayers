@@ -149,11 +149,12 @@ class Rays(PyLayers, dict):
         s = ''
         ni = 0
         nl = 0
-        
+        lgi = self.keys()
+        lgi.sort()
         if self.is3D:
             s = self.__class__.__name__ + '3D\n' + '----------'+'\n'
-
-            for k in self:
+            
+            for k in lgi:
                 r = self[k]['rayidx']
                 nr = len(r)
                 s = s + str(k)+' / '+str(nr)+ ' : '+str(r)+'\n'
@@ -165,7 +166,7 @@ class Rays(PyLayers, dict):
             nray2D = len(self)
         
         if self.los:
-            s = "LOS "
+            s = s + "LOS "
         if self.isbased:
             s = s + "based "
         if self.filled:
@@ -181,7 +182,7 @@ class Rays(PyLayers, dict):
 
         if not self.is3D:
             ray_cpt = 0  
-            for k in self:
+            for k in lgi:
                 #sk = np.shape(self[k]['sig'])[2]
                 s = s + str(k) + ':\n'
                 sig = self[k]['sig'][0,:]
@@ -1508,8 +1509,10 @@ class Rays(PyLayers, dict):
 
         # list of used wedges
         luw=[]
-
-        for k in self:
+        
+        lgi = self.keys()
+        lgi.sort()
+        for k in lgi:
             #
             # k is the number of interactions in the block
             #
@@ -2027,8 +2030,8 @@ class Rays(PyLayers, dict):
                 self[k]['B'] = np.dstack((E,E))
                 ze = np.array([0])
                 self[k]['rays'] = np.array(([[0]]))
-                #self[k]['nbrays'] = 1
-                #self[k]['rayidx'] = ze
+                self[k]['nbrays'] = 1
+                self[k]['rayidx'] = ze
                 self.raypt = 1
                 self._ray2nbi = ze
         self._luw = np.unique(luw).tolist()
