@@ -2823,29 +2823,29 @@ class Rays(PyLayers, dict):
     ##                # Divergence factor D
     ###                 not yet implementented
     ############################################
-                    if i == 0:
-                        pdb.set_trace()
-                        D0 = 1./si0[:,1]
-                        rho1 = si0[:,1]*alpha[:,i]
-                        rho2 = si0[:,1]*alpha[:,i]*gamma[:,i]
-                        D =np.sqrt(
-                         ( (rho1 ) / (rho1 + sout[:,i]) )
-                         *( (rho2) / (rho2 + sout[:,i])))
-                        D=D*D0
-                        rho1=rho1+(sout[:,i]*alpha[:,i])
-                        rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
-
-   ##                     gerer le loss
-                        if np.isnan(D).any():
-                            p=np.nonzero(np.isnan(D))[0]
-                            D[p]=1./sout[p,1]
-                    else :
-                        D=np.sqrt(
-                         ( (rho1 ) / (rho1 + sout[:,i]) )
-                         *( (rho2) / (rho2 + sout[:,i])))
-
-                        rho1=rho1+(sout[:,i]*alpha[:,i])
-                        rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
+#                    if i == 0:
+#                        pdb.set_trace()
+#                        D0 = 1./si0[:,1]
+#                        rho1 = si0[:,1]*alpha[:,i]
+#                        rho2 = si0[:,1]*alpha[:,i]*gamma[:,i]
+#                        D =np.sqrt(
+#                         ( (rho1 ) / (rho1 + sout[:,i]) )
+#                         *( (rho2) / (rho2 + sout[:,i])))
+#                        D=D*D0
+#                        rho1=rho1+(sout[:,i]*alpha[:,i])
+#                        rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
+#
+#   ##                     gerer le loss
+#                        if np.isnan(D).any():
+#                            p=np.nonzero(np.isnan(D))[0]
+#                            D[p]=1./sout[p,1]
+#                    else :
+#                        D=np.sqrt(
+#                         ( (rho1 ) / (rho1 + sout[:,i]) )
+#                         *( (rho2) / (rho2 + sout[:,i])))
+#
+#                        rho1=rho1+(sout[:,i]*alpha[:,i])
+#                        rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
     ############################################
 
                     #  A0  (X dot Y)
@@ -2892,7 +2892,6 @@ class Rays(PyLayers, dict):
                 #
                 if bfacdiv:
                     Ct[:,ir, :, :] = Ct[:, ir, :, :]*1./(self[l]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
-                    pdb.set_trace()
                 else:
                     Ct[:,ir, :, :] = Ct[:, ir, :, :]*1./(self[l]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
                 self.delays[ir] = self[l]['dis']/0.3

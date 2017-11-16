@@ -2071,8 +2071,9 @@ class DLink(Link):
             # limitation of the vizualization zone around the center of the link 
             #
             pm = (self.a+self.b)/2.
-            ax.set_xlim(pm[0]-kwargs['radius'],pm[0]+kwargs['radius'])
-            ax.set_ylim(pm[1]-kwargs['radius'],pm[1]+kwargs['radius'])
+            R  = np.minimum(kwargs['radius'],1.5*self.L.radius)
+            ax.set_xlim(pm[0]-R,pm[0]+R)
+            ax.set_ylim(pm[1]-R,pm[1]+R)
 
             for ir  in lr:
                 if kwargs['dB']:
@@ -2098,6 +2099,7 @@ class DLink(Link):
                                fig=fig,ax=ax,
                                layout=False,
                                points=False)
+
             if kwargs['col']=='cmap':
                 sm = plt.cm.ScalarMappable(cmap=kwargs['cmap'], norm=plt.Normalize(vmin=vmin, vmax=vmax))
                 sm._A = []
@@ -2105,6 +2107,7 @@ class DLink(Link):
         #
         # Plot signature
         #
+
         if kwargs['bsig']:
             for addr in kwargs['laddr']: 
                 seq = self.Si[addr[0]][2*addr[1]:2*addr[1]+2,:]

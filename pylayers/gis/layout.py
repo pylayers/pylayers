@@ -3773,7 +3773,7 @@ class Layout(pro.PyLayers):
 
         return ptlist, seglist
 
-    def get_points(self, ax):
+    def get_points(self, ax , tol = 0.05):
         """ get points list and segments list in a polygonal zone
 
         Parameters
@@ -3791,17 +3791,17 @@ class Layout(pro.PyLayers):
         Notes
         -----
 
-        This methods returns all the 
+        This methods returns all the point inside a zone or a polygon 
 
         """
 
         if type(ax) == geu.Polygon:
             N = len(ax.vnodes)/2
             eax  = ax.exterior.xy
-            xmin = np.min(eax[0])
-            xmax = np.max(eax[0])
-            ymin = np.min(eax[1])
-            ymax = np.max(eax[1])
+            xmin = np.min(eax[0])-tol
+            xmax = np.max(eax[0])+tol
+            ymin = np.min(eax[1])-tol
+            ymax = np.max(eax[1])+tol
         else:
             xmin = ax[0]
             xmax = ax[1]
@@ -6120,6 +6120,7 @@ class Layout(pro.PyLayers):
         # get_points(p) : get points from polygon
         # this is for limiting the search region for large Layout 
         #
+
         [ p.setvnodes_new(self.get_points(p),self) for p in lTP ]
 
         if verbose:

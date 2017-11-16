@@ -11,7 +11,7 @@ Nf = 400
 fGHz = np.linspace(fcGHz-WMHz*0.5e-3,fcGHz+WMHz*0.5e-3,Nf)
 #fGHz = np.array([fcGHz])
 # set the layout
-L=Layout('defstr.lay',bbuild=1)
+L=Layout('CEA2.lay',bbuild=1)
 #L=Layout('defstr.lay',bdiffraction=True)
 #L=Layout('defstr.lay',bbuild=True)
 #L=Layout('TC2_METIS.lay',bbuild=1)
