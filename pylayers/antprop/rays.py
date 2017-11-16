@@ -893,6 +893,9 @@ class Rays(PyLayers, dict):
 
         """
 
+        if H==-1:
+            rmoutceilR=False
+
         tx = self.pTx
         rx = self.pRx
 
@@ -1303,7 +1306,6 @@ class Rays(PyLayers, dict):
 
                 
                 if r3d.has_key(k+Nint):
-            
                     r3d[k+Nint]['pt']  = np.dstack((r3d[k+Nint]['pt'], ptees))
                     r3d[k+Nint]['sig'] = np.dstack((r3d[k+Nint]['sig'], siges))
                     r3d[k+Nint]['sig2d'].append(sigsave)
@@ -1343,6 +1345,7 @@ class Rays(PyLayers, dict):
         val =0
 
         for k in r3d.keys():
+            
             nrayk = np.shape(r3d[k]['sig'])[2]
             r3d[k]['nbrays'] = nrayk
             r3d[k]['rayidx'] = np.arange(nrayk)+val
@@ -1402,7 +1405,7 @@ class Rays(PyLayers, dict):
         ----------
 
         typ : int
-            1 : length of all segments
+            men1 : length of all segments
             2 : accumulated length
         """
         dk = {}
@@ -1510,6 +1513,7 @@ class Rays(PyLayers, dict):
             #
             # k is the number of interactions in the block
             #
+            #print(k,self[11]['rayidx'])
             if k != 0:
 
                 # structure number (segment or point)
@@ -1778,7 +1782,7 @@ class Rays(PyLayers, dict):
 
                 # create a numpy array to relate the ray index to its corresponding
                 # number of interactions
-
+                #pdb.set_trace()
                 _ray2nbi = np.ones((nbray),dtype=int)
 
 
@@ -2023,8 +2027,8 @@ class Rays(PyLayers, dict):
                 self[k]['B'] = np.dstack((E,E))
                 ze = np.array([0])
                 self[k]['rays'] = np.array(([[0]]))
-                self[k]['nbrays'] = 1
-                self[k]['rayidx'] = ze
+                #self[k]['nbrays'] = 1
+                #self[k]['rayidx'] = ze
                 self.raypt = 1
                 self._ray2nbi = ze
         self._luw = np.unique(luw).tolist()
