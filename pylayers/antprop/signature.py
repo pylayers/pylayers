@@ -775,8 +775,6 @@ class Signatures(PyLayers,dict):
         filenameh5
         hrpname
 
-        Notes
-        -----
         """
 
 

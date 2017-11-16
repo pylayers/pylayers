@@ -2,120 +2,6 @@
 """
 .. currentmodule:: pylayers.util.geomutil
 
-=================================================
-Geometry Module (:mod:`pylayers.util.geomutil`)
-================================================
-
-Geomview Class
-==============
-
-.. autoclass:: Geomview
-    :members:
-
-Geomlist Class
-==============
-
-.. autoclass:: Geomview
-    :members:
-
-GeomVect Class
-==============
-
-.. autoclass:: GeomVect
-    :members:
-
-Geomoff Class
-=============
-
-.. autoclass:: Geomoff
-    :members:
-
-Plot_Shapely Class
-==================
-
-.. autoclass:: Plot_Shaplely
-    :members:
-
-LineString Class
-==================
-
-.. autoclass:: LineString
-    :members:
-
-PolyGon Class
-=============
-
-.. autoclass:: Polygon
-    :members:
-
-
-Utility Functions
-=================
-
-.. autosummary::
-    :toctree: generated/
-
-     angular
-     vecang
-     SignedArea
-     Centroid
-     Lr2n
-     isBetween
-     pvec
-     pvecn
-     onb
-     vec_sph
-     ellipse
-     normalize
-     ptonseg
-     dptseg
-     linet
-     ccw
-     are_points_inside_cone
-     intersect_cone_seg
-     intersect_halfline_seg
-     intersect3
-     intersect
-     is_aligned3
-     is_aligned4
-     isleft
-     isleftorequal
-     affine
-     cylmap
-     MRot3
-     MATP
-     MEulerAngle
-     SphericalBasis
-     angledir
-     Bthph
-     BTB
-
-     plot_coords
-     plot_bounds
-     plot_line
-     v_color
-
-     plotPolygon
-     shrinkPolygon
-     shrinkPolygon2
-     simplifyPolygon
-     wall_delta
-     plot_coords2
-     plot_bounds2
-     plot_line2
-     plot_coords3
-     plot_bounds3
-     plot_line3
-     valid_wedge
-     sector
-     dist
-     line_intersection
-     linepoly_intersection
-     mirror
-     distseg
-     dmin3d
-
-
 
 """
 import shapely.geometry as sh
@@ -5415,12 +5301,12 @@ def mirror3b(tp, aplane, pplane):
     return tp
 
 def mirror3c(tp, aplane, pplane):
-    """ compute recursively the image of p wrt the list of facet 
+    """ compute recursively the image of p wrt the list of facets 
     
     Parameters
     ----------
 
-    tp     : MDA 
+    tp : MDA 
         Collection of images points from screen in 3D space from set of points  
         (3 x Nf x Npt x Nc)
         Ns : number of screen 
@@ -5428,8 +5314,8 @@ def mirror3c(tp, aplane, pplane):
         (s x f x p x c ) 
     aplane : numpy.ndarray
         MDarray of (c)ollection of ()vector (f)aces n 3D ((s)pace 
-        (3xNfacesx2xNc)
-        (sxfxvxc) 
+        (3 x Nfaces x 2 x Nc)
+        (s x f x v x c) 
     pplane : numpy.ndarray
         array of points (3xNplanexNsig)
 

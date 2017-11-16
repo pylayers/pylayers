@@ -125,5 +125,3 @@ for ii,i in enumerate(RMSE):
     lv.append(d0)
 c = CDF(lv, 'fig')
 c.show()
-
-

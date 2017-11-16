@@ -108,6 +108,7 @@ class AFPchannel(bs.FUsignal):
 
         Notes 
         -----
+
         This function updates : 
         + self.x (frequency GHz)
         + self.y 
@@ -116,9 +117,11 @@ class AFPchannel(bs.FUsignal):
         The calibration file _filecal (.mat file) should be added in the data directory
         In practice for Espoo B2B.mat
 
-        SEE ALSO 
+        See Also 
         --------
+
         pylayers.util.pyutil.getlong 
+
 
         """
         self._filename = _filename
@@ -334,7 +337,8 @@ class ADPchannel(bs.TUsignal):
 
         Notes
         -----
-        This can be uesd to compare a measured PADP with a Ray tracing PADP 
+        This can be used to compare a measured PADP with a Ray tracing PADP 
+
 
         """
         #import ipdb
