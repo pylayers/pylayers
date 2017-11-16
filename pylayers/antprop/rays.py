@@ -140,37 +140,40 @@ class Rays(PyLayers, dict):
 
 
     #     for ni in r:
-    #         if self.haskey(ni):
-    #             self[ni]['pt'] = np.concatenate((self[ni]['pt'],r['pt']),axis=2)
-    #             self[ni]['sig'] = np.concatenate((self[ni]['sig'],r['sig']),axis=2)
+    #         if self.has_key(ni):
+    #             import ipdb
+    #             ipdb.set_trace()
+    #             self[ni]['pt'] = np.concatenate((self[ni]['pt'],r[ni]['pt']),axis=2)
+    #             self[ni]['sig'] = np.concatenate((self[ni]['sig'],r[ni]['sig']),axis=2)
     #             if self.is3D:
-    #                 self[ni]['si'] = np.concatenate((self[ni]['si'],r['si']),axis=1)
-    #                 self[ni]['sig2d'] = np.concatenate((self[ni]['sig2d'],r['sig2d']),axis=2)
-    #                 self[ni]['rayidx'] = np.concatenate((self[ni]['rayidx'],r['rayidx']),axis=0)
-    #                 self[ni]['dis'] = np.concatenate((self[ni]['dis'],r['dis']),axis=0)
-    #                 self[ni]['vsi'] = np.concatenate((self[ni]['vsi'],r['vsi']),axis=2)
+    #                 self[ni]['si'] = np.concatenate((self[ni]['si'],r[ni]['si']),axis=1)
+    #                 self[ni]['rayidx'] = np.concatenate((self[ni]['rayidx'],r[ni]['rayidx']),axis=0)
+    #                 self[ni]['dis'] = np.concatenate((self[ni]['dis'],r[ni]['dis']),axis=0)
+    #                 self[ni]['vsi'] = np.concatenate((self[ni]['vsi'],r[ni]['vsi']),axis=1)
     #                 self[ni]['nbrays'] += 1
     #             if self.isbased:
-    #                 self[ni]['BiN'] = np.concatenate((self[ni]['BiN'],r['BiN']),axis=2)
-    #                 self[ni]['B'] = np.concatenate((self[ni]['B'],r['B']),axis=3)
-    #                 if r[ni].haskey('diffidx'):
+    #                 if ni != 0:
+    #                     self[ni]['BiN'] = np.concatenate((self[ni]['BiN'],r[ni]['BiN']),axis=2)
+    #                     self[ni]['Bi'] = np.concatenate((self[ni]['Bi'],r[ni]['Bi']),axis=3)
+    #                     self[ni]['Bo'] = np.concatenate((self[ni]['Bo'],r[ni]['Bo']),axis=3)
+    #                     self[ni]['Bo0'] = np.concatenate((self[ni]['Bo0'],r[ni]['Bo0']),axis=2)
+    #                     self[ni]['scpr'] = np.concatenate((self[ni]['scpr'],r[ni]['scpr']),axis=1)
+    #                     self[ni]['norm'] = np.concatenate((self[ni]['norm'],r[ni]['norm']),axis=2)
+
+    #                 if r[ni].has_key('diffidx'):
     #                     if self[ni].has_key('diffidx'):
-    #                         self[ni]['diffidx'] = np.concatenate((self[ni]['diffidx'],r['diffidx']))
-    #                         self[ni]['diffvect'] = np.concatenate((self[ni]['diffvect'],r['diffvect']),axis=1)
-    #                         self[ni]['diffslabs'].append(r['diffslabs'])
+    #                         self[ni]['diffidx'] = np.concatenate((self[ni]['diffidx'],r[ni]['diffidx']))
+    #                         self[ni]['diffvect'] = np.concatenate((self[ni]['diffvect'],r[ni]['diffvect']),axis=1)
+    #                         self[ni]['diffslabs'].append(r[ni]['diffslabs'])
                             
     #                     else:
     #                         self[ni]['diffidx'] = r['diffidx']
     #                         self[ni]['diffvect'] = r['diffvect']
     #                         self[ni]['diffslabs'] = r['diffslabs']
-    #                 self[ni]['Bo0'] = np.concatenate((self[ni]['Bo0'],r['Bo0']),axis=2)
-    #                 self[ni]['Bo'] = np.concatenate((self[ni]['Bo'],r['Bo']),axis=3)
-    #                 self[ni]['scpr'] = np.concatenate((self[ni]['scpr'],r['scpr']),axis=1)
-    #                 self[ni]['Bi'] = np.concatenate((self[ni]['Bi'],r['Bi']),axis=3)
-    #                 self[ni]['aod'] = np.concatenate((self[ni]['aod'],r['aod']),axis=1)
-    #                 self[ni]['aoa'] = np.concatenate((self[ni]['aoa'],r['aoa']),axis=1)
-    #                 self[ni]['theta'] = np.concatenate((self[ni]['theta'],r['theta']),axis=1)
-    #                 self[ni]['norm'] = np.concatenate((self[ni]['norm'],r['norm']),axis=2)
+    #                 self[ni]['B'] = np.concatenate((self[ni]['B'],r[ni]['B']),axis=3)
+    #                 self[ni]['aod'] = np.concatenate((self[ni]['aod'],r[ni]['aod']),axis=1)
+    #                 self[ni]['aoa'] = np.concatenate((self[ni]['aoa'],r[ni]['aoa']),axis=1)
+    #                 self[ni]['theta'] = np.concatenate((self[ni]['theta'],r[ni]['theta']),axis=1)
 
     #         else:
     #             self[ni]=r[ni]
@@ -567,12 +570,16 @@ class Rays(PyLayers, dict):
 
 
         lr=[]
-        for r in xrange(self.nray):
+        for ur,r in enumerate(xrange(self.nray)):
             li = self.ray2ityp(r)
             nRli = li.count('R')
             nTli = li.count('T')
             nDli = li.count('D')
+
+
             if (nR == nRli) and (nT==nTli) and (nD==nDli):
+                lr.append(r)
+            if (self.los) and (nT == 1) and ur ==0:
                 lr.append(r)
         return lr
 
@@ -590,7 +597,7 @@ class Rays(PyLayers, dict):
         nR = int
             requested number of Reflection
         nT = int
-            requested number of Transmission
+            requested number of Transmissionp
 
         Returns
         -------
@@ -1493,7 +1500,6 @@ class Rays(PyLayers, dict):
                             siges = np.delete(siges,uc[1][uout],axis=2)
                             sigsave = np.delete(sigsave,uc[1][uout],axis=2)
 
-                
                 if r3d.has_key(k+Nint):
             
                     r3d[k+Nint]['pt']  = np.dstack((r3d[k+Nint]['pt'], ptees))
@@ -1647,6 +1653,7 @@ class Rays(PyLayers, dict):
                     vsi_old = self[k]['vsi'][...,ur]
 
                     sig = self[k]['sig'][:,not_air_mask,ur][...,None]
+                    # sig2d = self[k]['sig2d'][0][...,ur]
                     pt = self[k]['pt'][:,not_air_mask,ur][...,None]
 
                     u = 0
@@ -1679,11 +1686,11 @@ class Rays(PyLayers, dict):
                     new_bi = k
                     pt = self[k]['pt'][...,ur][...,None]
                     sig = self[k]['sig'][...,ur][...,None]
+                    # sig2d = self[k]['sig2d'][0][...,ur]
                     si = self[k]['si'][:,ur][:,None]
                     vsi = self[k]['vsi'][...,ur][...,None]
                     dis = np.array([self[k]['dis'][ur]])
 
-               
                 if R.has_key(new_bi):
 
                     # R[new_bi]['sig2d'].append(self[k]['sig2d'][ur])
@@ -1695,7 +1702,7 @@ class Rays(PyLayers, dict):
                     R[new_bi]['dis'] = np.concatenate((R[new_bi]['dis'],dis),axis=0)
                 else:
                     R[new_bi] = {}
-                    # R[new_bi]['sig2d'] = [self[k]['sig2d'][ur]]
+                    # R[new_bi]['sig2d'] = [self[k]['sig2d'][0][...,ur]]
                     R[new_bi]['pt'] = pt
                     R[new_bi]['sig'] = sig
                     R[new_bi]['rayidx'] = np.array([self[k]['rayidx'][ur]])
