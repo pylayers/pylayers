@@ -145,6 +145,55 @@ class Rays(PyLayers, dict):
         return Nray
 
 
+    # def __add__(self,r):
+
+    #     if self.is3D:
+    #         if not r.is3D:
+    #             raise AttributeError('r is not 3d while self is 3d')
+    #     if self.isbased:
+    #         if not r.isbased:
+    #             raise AttributeError('r is not based while self is based')
+
+
+    #     for ni in r:
+    #         if self.haskey(ni):
+    #             self[ni]['pt'] = np.concatenate((self[ni]['pt'],r['pt']),axis=2)
+    #             self[ni]['sig'] = np.concatenate((self[ni]['sig'],r['sig']),axis=2)
+    #             if self.is3D:
+    #                 self[ni]['si'] = np.concatenate((self[ni]['si'],r['si']),axis=1)
+    #                 self[ni]['sig2d'] = np.concatenate((self[ni]['sig2d'],r['sig2d']),axis=2)
+    #                 self[ni]['rayidx'] = np.concatenate((self[ni]['rayidx'],r['rayidx']),axis=0)
+    #                 self[ni]['dis'] = np.concatenate((self[ni]['dis'],r['dis']),axis=0)
+    #                 self[ni]['vsi'] = np.concatenate((self[ni]['vsi'],r['vsi']),axis=2)
+    #                 self[ni]['nbrays'] += 1
+    #             if self.isbased:
+    #                 self[ni]['BiN'] = np.concatenate((self[ni]['BiN'],r['BiN']),axis=2)
+    #                 self[ni]['B'] = np.concatenate((self[ni]['B'],r['B']),axis=3)
+    #                 if r[ni].haskey('diffidx'):
+    #                     if self[ni].has_key('diffidx'):
+    #                         self[ni]['diffidx'] = np.concatenate((self[ni]['diffidx'],r['diffidx']))
+    #                         self[ni]['diffvect'] = np.concatenate((self[ni]['diffvect'],r['diffvect']),axis=1)
+    #                         self[ni]['diffslabs'].append(r['diffslabs'])
+                            
+    #                     else:
+    #                         self[ni]['diffidx'] = r['diffidx']
+    #                         self[ni]['diffvect'] = r['diffvect']
+    #                         self[ni]['diffslabs'] = r['diffslabs']
+    #                 self[ni]['Bo0'] = np.concatenate((self[ni]['Bo0'],r['Bo0']),axis=2)
+    #                 self[ni]['Bo'] = np.concatenate((self[ni]['Bo'],r['Bo']),axis=3)
+    #                 self[ni]['scpr'] = np.concatenate((self[ni]['scpr'],r['scpr']),axis=1)
+    #                 self[ni]['Bi'] = np.concatenate((self[ni]['Bi'],r['Bi']),axis=3)
+    #                 self[ni]['aod'] = np.concatenate((self[ni]['aod'],r['aod']),axis=1)
+    #                 self[ni]['aoa'] = np.concatenate((self[ni]['aoa'],r['aoa']),axis=1)
+    #                 self[ni]['theta'] = np.concatenate((self[ni]['theta'],r['theta']),axis=1)
+    #                 self[ni]['norm'] = np.concatenate((self[ni]['norm'],r['norm']),axis=2)
+
+    #         else:
+    #             self[ni]=r[ni]
+
+
+
+
     def __repr__(self):
         s = ''
         ni = 0
@@ -200,6 +249,8 @@ class Rays(PyLayers, dict):
         
 
         return(s)
+
+
 
 
     def saveh5(self,idx=0):
@@ -519,7 +570,7 @@ class Rays(PyLayers, dict):
         u = np.argsort(self.dis)
 
 
-    def rayfromtyp_order(self,typ=['R','T','D'],order = [1,2]):
+    def rayfromtyp_order(self,nD=1,nR=1,nT=1):
         """
             Return rays from a given type (R|T|D) to a given order
             ( number of interaction)
@@ -527,11 +578,12 @@ class Rays(PyLayers, dict):
             Parameters
             ----------
 
-                typ : list | str
-                    R|T|D
-                order :list | int
-                    number of interactions
-
+                nD = int
+                    requested number of Diffraction
+                nR = int
+                    requested number of Reflection
+                nT = int
+                    requested number of Transmission
             Returns
             -------
 
@@ -542,26 +594,45 @@ class Rays(PyLayers, dict):
 
         """
 
-        if not isinstance(typ,list):
-            typ = list(typ)
-        if not isinstance(order,list):
-            order = [order]
+
         lr=[]
         for r in xrange(self.nray):
             li = self.ray2ityp(r)
-            nR = li.count('R')
-            nT = li.count('T')
-            nD = li.count('D')
-            if 'R' in typ:
-                if nR in order:
-                    lr.append(r)
-            if 'T' in typ:
-                if nT in order:
-                    lr.append(r)
-            if 'D' in typ:
-                if nD in order:
-                    lr.append(r)
+            nRli = li.count('R')
+            nTli = li.count('T')
+            nDli = li.count('D')
+            if (nR == nRli) and (nT==nTli) and (nD==nDli):
+                lr.append(r)
         return lr
+
+
+    def extract_typ_order(self,L,nD=0,nR=1,nT=1):
+        """ Extract group of rays from a certain type (R|T|D) 
+            at a order ( <=> given number of interaction)
+
+        Parameters
+            ----------
+
+        L  : Layout
+        nD = int
+            requested number of Diffraction
+        nR = int
+            requested number of Reflection
+        nT = int
+            requested number of Transmission
+
+        Returns
+        -------
+
+        R : Rays object
+            New Rays object containing rays matching 
+            the typ/order conditions 
+
+
+        """
+
+        lr = self.rayfromtyp_order(nD=nD,nR=nR,nT=nT)
+        return self.extract(lr,L)
 
 
     def extract(self,lnr,L):
@@ -581,7 +652,6 @@ class Rays(PyLayers, dict):
 
         r = Rays(self.pTx,self.pRx)
         r.is3D = self.is3D
-        
 
         for unr,nr in enumerate(lnr):
             #r.nray2D = 
@@ -655,6 +725,7 @@ class Rays(PyLayers, dict):
                 r[ni]['aod'] = np.concatenate((r[ni]['aod'],cray['aod']),axis=1)
                 r[ni]['si'] = np.concatenate((r[ni]['si'],cray['si']),axis=1)
                 r[ni]['sig'] = np.concatenate((r[ni]['sig'],cray['sig']),axis=2)
+                # r[ni]['sig2d'] = np.concatenate((r[ni]['sig2d'],cray['sig2d']),axis=2)
                 r[ni]['aoa'] = np.concatenate((r[ni]['aoa'],cray['aoa']),axis=1)
                 r[ni]['vsi'] = np.concatenate((r[ni]['vsi'],cray['vsi']),axis=2)
                 r[ni]['theta'] = np.concatenate((r[ni]['theta'],cray['theta']),axis=1)
