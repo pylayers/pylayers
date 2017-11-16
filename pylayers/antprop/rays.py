@@ -149,11 +149,12 @@ class Rays(PyLayers, dict):
         s = ''
         ni = 0
         nl = 0
-        
+        lgi = self.keys()
+        lgi.sort()
         if self.is3D:
             s = self.__class__.__name__ + '3D\n' + '----------'+'\n'
-
-            for k in self:
+            
+            for k in lgi:
                 r = self[k]['rayidx']
                 nr = len(r)
                 s = s + str(k)+' / '+str(nr)+ ' : '+str(r)+'\n'
@@ -165,7 +166,7 @@ class Rays(PyLayers, dict):
             nray2D = len(self)
         
         if self.los:
-            s = "LOS "
+            s = s + "LOS "
         if self.isbased:
             s = s + "based "
         if self.filled:
@@ -181,7 +182,7 @@ class Rays(PyLayers, dict):
 
         if not self.is3D:
             ray_cpt = 0  
-            for k in self:
+            for k in lgi:
                 #sk = np.shape(self[k]['sig'])[2]
                 s = s + str(k) + ':\n'
                 sig = self[k]['sig'][0,:]
@@ -893,6 +894,9 @@ class Rays(PyLayers, dict):
 
         """
 
+        if H==-1:
+            rmoutceilR=False
+
         tx = self.pTx
         rx = self.pRx
 
@@ -1006,6 +1010,8 @@ class Rays(PyLayers, dict):
                 pte = np.hstack((Tx, pte, Rx))
             else:
                  pte = np.hstack((Tx, Rx))
+
+            # extension 
             for l in d:                     # for each vertical pattern (C,F,CF,FC,....)
                 #print k,l,d[l]
                 Nint = len(d[l])            # number of additional interaction
@@ -1301,7 +1307,6 @@ class Rays(PyLayers, dict):
 
                 
                 if r3d.has_key(k+Nint):
-            
                     r3d[k+Nint]['pt']  = np.dstack((r3d[k+Nint]['pt'], ptees))
                     r3d[k+Nint]['sig'] = np.dstack((r3d[k+Nint]['sig'], siges))
                     r3d[k+Nint]['sig2d'].append(sigsave)
@@ -1341,6 +1346,7 @@ class Rays(PyLayers, dict):
         val =0
 
         for k in r3d.keys():
+            
             nrayk = np.shape(r3d[k]['sig'])[2]
             r3d[k]['nbrays'] = nrayk
             r3d[k]['rayidx'] = np.arange(nrayk)+val
@@ -1522,7 +1528,7 @@ class Rays(PyLayers, dict):
         ----------
 
         typ : int
-            1 : length of all segments
+            men1 : length of all segments
             2 : accumulated length
         """
         dk = {}
@@ -1625,11 +1631,14 @@ class Rays(PyLayers, dict):
 
         # list of used wedges
         luw=[]
-
-        for k in self:
+        
+        lgi = self.keys()
+        lgi.sort()
+        for k in lgi:
             #
             # k is the number of interactions in the block
             #
+            #print(k,self[11]['rayidx'])
             if k != 0:
 
                 # structure number (segment or point)
@@ -1898,7 +1907,7 @@ class Rays(PyLayers, dict):
 
                 # create a numpy array to relate the ray index to its corresponding
                 # number of interactions
-
+                #pdb.set_trace()
                 _ray2nbi = np.ones((nbray),dtype=int)
 
 
