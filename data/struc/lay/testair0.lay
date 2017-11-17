@@ -1,0 +1,58 @@
+[info]
+format = cart
+version = 1.4
+type = indoor
+
+[points]
+-1 = (0.0, 0.0)
+-6 = (0.0, 5.0)
+-5 = (5.0, 5.0)
+-4 = (10.0, 5.0)
+-3 = (10.0, 0.0)
+-2 = (5.0, 0.0)
+
+[segments]
+6 = {'name': 'WALL', 'connect': [-6, -5], 'z': (0.0, 3.0)}
+7 = {'name': 'WALL', 'connect': [-6, -1], 'z': (0.0, 3.0)}
+8 = {'name': 'WALL', 'connect': [-4, -3], 'z': (0.0, 3.0)}
+9 = {'name': 'WALL', 'connect': [-5, -4], 'z': (0.0, 3.0)}
+10 = {'name': 'WALL', 'connect': [-1, -2], 'z': (0.0, 3.0)}
+11 = {'name': 'WALL', 'connect': [-3, -2], 'z': (0.0, 3.0)}
+
+[faces]
+1 = {'z': [3, 3], 'vnodes': [-2, 10, -1, 7, -6, 6, -5, 4, -7, 1, 2, 3, -8, 5], 'name': ['FLOOR', 'CEIL'], 'poly': (5.0,0.0)
+	(0.0,0.0)
+	(0.0,5.0)
+	(5.0,5.0)
+	(5.0,4.0)
+	(5.0,3.0)
+	(5.0,0.0)
+	}
+2 = {'z': [3, 3], 'vnodes': [-3, 11, -2, 5, -8, 1, 2, 3, -7, 4, -5, 9, -4, 8], 'name': ['FLOOR', 'CEIL'], 'poly': (10.0,0.0)
+	(5.0,0.0)
+	(5.0,3.0)
+	(5.0,4.0)
+	(5.0,5.0)
+	(10.0,5.0)
+	(10.0,0.0)
+	}
+
+[files]
+furniture = 
+
+[slabs]
+WALL = {'color': 'grey20', 'linewidth': 3, 'lthick': [0.05], 'lmatname': ['BRICK']}
+_AIR = {'color': 'white', 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['AIR']}
+AIR = {'color': 'white', 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['AIR']}
+CEIL = {'color': 'grey20', 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
+FLOOR = {'color': 'grey40', 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
+
+[materials]
+AIR= {'mur': (1+0j), 'epr': (1+0j), 'roughness': 0.0, 'sigma': 0}
+BRICK = {'mur': (1+0j), 'epr': (4.09999990463+0j), 'roughness': 0.0, 'sigma': 0.300000011921}
+REINFORCED_CONCRETE = {'sigma': 3.0, 'roughness': 0.0, 'epr': (8.69999980927+0j), 'mur': (1+0j)}
+
+[indoor]
+zceil = 3
+zfloor = 3
+

@@ -44,10 +44,10 @@ BiN_0 = DL0.R[1]['BiN'][:,:,0]
 #print ("\n")
 #print("with air wall")
 ## Avec mur d'air 
-Bo0_1 = DL1.R[2]['Bo0'][:,:,0]
-Bi_1 = DL1.R[2]['Bi'][:,:,:,0]
-Bo_1 = DL1.R[2]['Bo'][:,:,:,0]
-BiN_1 = DL1.R[2]['BiN'][:,:,0]
+Bo0_1 = DL1.R[1]['Bo0'][:,:,0]
+Bi_1 = DL1.R[1]['Bi'][:,:,:,0]
+Bo_1 = DL1.R[1]['Bo'][:,:,:,0]
+BiN_1 = DL1.R[1]['BiN'][:,:,0]
 #print "Bo0"
 #print Bo0
 #print DL1.R[2]['B'][:,:,0,0]
@@ -93,7 +93,7 @@ A2 = DL0.R[1]['B'][:,:,1,0]
 R0  = DL0.R.I.I[0,1,:,:]
 res0 = np.dot(A2,np.dot(R0,A1))
 #pdb.set_trace()
-#assert np.allclose(N0,M0)
+assert np.allclose(N0,M0)
 assert np.allclose(N1,M3)
 B1 = DL1.R[2]['B'][:,:,0,0]
 B2 = DL1.R[2]['B'][:,:,1,0]
