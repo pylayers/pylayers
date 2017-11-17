@@ -7,8 +7,10 @@ import sys
 import string
 if sys.version_info.major==2:
     import cPickle
+    import ConfigParser as configparser
 else:
     import _pickle as cPickle
+    import configparser
 import doctest
 #import objxml
 import pdb
@@ -18,10 +20,8 @@ import scipy as sp
 from scipy.interpolate import interp1d
 import matplotlib.pylab as plt
 import struct as stru
-import ConfigParser
 import pylayers.util.pyutil as pyu
 import pylayers.util.plotutil as plu
-from pylayers.util.easygui import *
 from pylayers.util.project import *
 
 """
@@ -1059,7 +1059,7 @@ class MatDB(PyLayers,dict):
 
         """
         fileini = pyu.getlong(_fileini, pstruc['DIRMAT'])
-        materials = ConfigParser.ConfigParser()
+        materials = configparser.ConfigParser()
         materials.read(fileini)
         for k,matname in enumerate(materials.sections()):
             M = Mat(name=matname)
@@ -1084,7 +1084,7 @@ class MatDB(PyLayers,dict):
         """
         fileini = pyu.getlong(_fileini, pstruc['DIRMAT'])
         fd = open(fileini, "w")
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         #
         # config names
         #
@@ -1953,7 +1953,7 @@ class SlabDB(dict):
 
         """
         fileini = pyu.getlong(_fileini, pstruc['DIRMAT'])
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         config.read(fileini)
 
         if hasattr(self,'mat'):
@@ -1987,7 +1987,7 @@ class SlabDB(dict):
 
         fileini = pyu.getlong(_fileini, pstruc['DIRSLAB'])
         fd = open(fileini, "w")
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         #
         # config names
         #
