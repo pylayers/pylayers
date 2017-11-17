@@ -2967,7 +2967,7 @@ class Signatures(PyLayers,dict):
         return dM
 
 
-class Signature(object):
+class Signature(PyLayers,object):
     """ class Signature
 
     Attributes

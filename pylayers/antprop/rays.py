@@ -849,6 +849,7 @@ class Rays(PyLayers, dict):
                     'points':True,
                     'labels':False
                    }
+
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
@@ -888,8 +889,8 @@ class Rays(PyLayers, dict):
                 # list of rays 
                 lray = range(len(self[i]['pt'][0, 0, :]))
 
-                if self.filled :
-                    ax.set_title('rays index :'+ str(self[i]['rayidx']))
+                #if self.filled :
+                #    ax.set_title('rays index :'+ str(self[i]['rayidx']))
 
                 for j in lray:
 
@@ -921,8 +922,8 @@ class Rays(PyLayers, dict):
                                 linewidth = widthray)
 
                     ax.axis('off')
-                    if self.filled :
-                        ax.set_title('rays index :'+ str(self[i]['rayidx'][lray]))
+                    #if self.filled :
+                    #    ax.set_title('rays index :'+ str(self[i]['rayidx'][lray]))
         else:
             rlist = kwargs['rlist']
             # 3D ray 
@@ -952,8 +953,8 @@ class Rays(PyLayers, dict):
 
                 for i in rlist:
                     lray = range(len(self[i]['pt'][0, 0, :]))
-                    if self.filled :
-                        ax.set_title('rays index :'+ str(self[i]['rayidx']))
+                    #if self.filled :
+                    #    ax.set_title('rays index :'+ str(self[i]['rayidx']))
                     for j in lray:
                         ray = np.hstack((self.pTx[0:2].reshape((2, 1)),
                                          np.hstack((self[i]['pt'][0:2, :, j],
@@ -965,8 +966,8 @@ class Rays(PyLayers, dict):
                                 linewidth=kwargs['widthray'])
                         ax.axis('off')
 
-                        if self.filled :
-                            ax.set_title('rays index :'+ str(self[i]['rayidx'][lray]))
+                        #if self.filled :
+                        #    ax.set_title('rays index :'+ str(self[i]['rayidx'][lray]))
 
 
 

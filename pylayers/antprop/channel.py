@@ -1,6 +1,6 @@
 # -*t coding:Utf-8 -*-
 """
-.. currentmodeul:: pylayters.antprop.channel 
+.. currentmodule:: pylayers.antprop.channel 
 
 .. autosummary::
     :members:
