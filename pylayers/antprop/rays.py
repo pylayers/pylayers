@@ -39,7 +39,7 @@ from pylayers.gis.layout import Layout
 import pylayers.signal.bsignal as bs
 import shapely.geometry as shg
 import h5py
-
+import operator
 
 class Rays(PyLayers, dict):
     """ Class hendling a set of rays
@@ -129,57 +129,58 @@ class Rays(PyLayers, dict):
         return Nray
 
 
-    def __add__(self,r):
+    # def __add__(self,r):
 
-        if (not r.is3D) and (not r.isbased) and (not self.is3D) and (not self.isbased) :
-            raise AttributeError('both Ray structures must be 3D and based to be added')
+    #     if (not r.is3D) and (not r.isbased) and (not self.is3D) and (not self.isbased) :
+    #         raise AttributeError('both Ray structures must be 3D and based to be added')
 
 
-        for ni in r:
-            if self.has_key(ni):
-                import ipdb
-                ipdb.set_trace()
-                # check if som rays already exists
-                lur = np.array([])
-                for ur in range(self[ni]['pt'].shape[2]):
-                    udifferent = np.where(np.all(np.all(r[ni]['pt'][...,ur][...,None]!=self[ni]['pt'],axis=0),axis=0))[0]
-                    lur = np.hstack((lur,udifferent ))
-                    import ipdb
-                    ipdb.set_trace()
+    #     for ni in r:
+    #         if self.has_key(ni):
+    #             import ipdb
+    #             ipdb.set_trace()
+    #             # check if som rays already exists
+    #             # if so, don't add them
+    #             lur = np.array([])
+    #             for ur in range(self[ni]['pt'].shape[2]):
+    #                 udifferent = np.where(np.all(np.all(r[ni]['pt'][...,ur][...,None]!=self[ni]['pt'],axis=0),axis=0))[0]
+    #                 lur = np.hstack((lur,udifferent ))
+    #                 import ipdb
+    #                 ipdb.set_trace()
 
-                self[ni]['pt'] = np.concatenate((self[ni]['pt'],r[ni]['pt']),axis=2)
-                self[ni]['sig'] = np.concatenate((self[ni]['sig'],r[ni]['sig']),axis=2)
-                self[ni]['si'] = np.concatenate((self[ni]['si'],r[ni]['si']),axis=1)
-                self[ni]['rayidx'] = np.concatenate((self[ni]['rayidx'],r[ni]['rayidx']),axis=0)
-                self[ni]['dis'] = np.concatenate((self[ni]['dis'],r[ni]['dis']),axis=0)
-                self[ni]['vsi'] = np.concatenate((self[ni]['vsi'],r[ni]['vsi']),axis=1)
-                self[ni]['nbrays'] += 1
-                if ni != 0:
-                    self[ni]['BiN'] = np.concatenate((self[ni]['BiN'],r[ni]['BiN']),axis=2)
-                    self[ni]['Bi'] = np.concatenate((self[ni]['Bi'],r[ni]['Bi']),axis=3)
-                    self[ni]['Bo'] = np.concatenate((self[ni]['Bo'],r[ni]['Bo']),axis=3)
-                    self[ni]['Bo0'] = np.concatenate((self[ni]['Bo0'],r[ni]['Bo0']),axis=2)
-                    self[ni]['scpr'] = np.concatenate((self[ni]['scpr'],r[ni]['scpr']),axis=1)
-                    self[ni]['norm'] = np.concatenate((self[ni]['norm'],r[ni]['norm']),axis=2)
+    #             self[ni]['pt'] = np.concatenate((self[ni]['pt'],r[ni]['pt']),axis=2)
+    #             self[ni]['sig'] = np.concatenate((self[ni]['sig'],r[ni]['sig']),axis=2)
+    #             self[ni]['si'] = np.concatenate((self[ni]['si'],r[ni]['si']),axis=1)
+    #             self[ni]['rayidx'] = np.concatenate((self[ni]['rayidx'],r[ni]['rayidx']),axis=0)
+    #             self[ni]['dis'] = np.concatenate((self[ni]['dis'],r[ni]['dis']),axis=0)
+    #             self[ni]['vsi'] = np.concatenate((self[ni]['vsi'],r[ni]['vsi']),axis=1)
+    #             self[ni]['nbrays'] += 1
+    #             if ni != 0:
+    #                 self[ni]['BiN'] = np.concatenate((self[ni]['BiN'],r[ni]['BiN']),axis=2)
+    #                 self[ni]['Bi'] = np.concatenate((self[ni]['Bi'],r[ni]['Bi']),axis=3)
+    #                 self[ni]['Bo'] = np.concatenate((self[ni]['Bo'],r[ni]['Bo']),axis=3)
+    #                 self[ni]['Bo0'] = np.concatenate((self[ni]['Bo0'],r[ni]['Bo0']),axis=2)
+    #                 self[ni]['scpr'] = np.concatenate((self[ni]['scpr'],r[ni]['scpr']),axis=1)
+    #                 self[ni]['norm'] = np.concatenate((self[ni]['norm'],r[ni]['norm']),axis=2)
 
-                self[ni]['B'] = np.concatenate((self[ni]['B'],r[ni]['B']),axis=3)
-                self[ni]['aod'] = np.concatenate((self[ni]['aod'],r[ni]['aod']),axis=1)
-                self[ni]['aoa'] = np.concatenate((self[ni]['aoa'],r[ni]['aoa']),axis=1)
-                self[ni]['theta'] = np.concatenate((self[ni]['theta'],r[ni]['theta']),axis=1)
+    #             self[ni]['B'] = np.concatenate((self[ni]['B'],r[ni]['B']),axis=3)
+    #             self[ni]['aod'] = np.concatenate((self[ni]['aod'],r[ni]['aod']),axis=1)
+    #             self[ni]['aoa'] = np.concatenate((self[ni]['aoa'],r[ni]['aoa']),axis=1)
+    #             self[ni]['theta'] = np.concatenate((self[ni]['theta'],r[ni]['theta']),axis=1)
 
-                if r[ni].has_key('diffidx'):
-                    if self[ni].has_key('diffidx'):
-                        self[ni]['diffidx'] = np.concatenate((self[ni]['diffidx'],r[ni]['diffidx']))
-                        self[ni]['diffvect'] = np.concatenate((self[ni]['diffvect'],r[ni]['diffvect']),axis=1)
-                        self[ni]['diffslabs'].append(r[ni]['diffslabs'])
+    #             if r[ni].has_key('diffidx'):
+    #                 if self[ni].has_key('diffidx'):
+    #                     self[ni]['diffidx'] = np.concatenate((self[ni]['diffidx'],r[ni]['diffidx']))
+    #                     self[ni]['diffvect'] = np.concatenate((self[ni]['diffvect'],r[ni]['diffvect']),axis=1)
+    #                     self[ni]['diffslabs'].append(r[ni]['diffslabs'])
                         
-                    else:
-                        self[ni]['diffidx'] = r['diffidx']
-                        self[ni]['diffvect'] = r['diffvect']
-                        self[ni]['diffslabs'] = r['diffslabs']
+    #                 else:
+    #                     self[ni]['diffidx'] = r['diffidx']
+    #                     self[ni]['diffvect'] = r['diffvect']
+    #                     self[ni]['diffslabs'] = r['diffslabs']
 
-            else:
-                self[ni]=r[ni]
+    #         else:
+    #             self[ni]=r[ni]
 
 
 
@@ -549,20 +550,29 @@ class Rays(PyLayers, dict):
         u = np.argsort(self.dis)
 
 
-    def rayfromtyp_order(self,nD=1,nR=1,nT=1):
+    def rayfromtyp_order(self,nD=[1],nR=[1],nT=[1],llo='&&'):
         """
             Return rays from a given type (R|T|D) to a given order
             ( number of interaction)
 
+            list logic operator : llo ['op0op1'] 
+
+            nD <op0> nR <op1> nT
+
+
             Parameters
             ----------
 
-                nD = int
+                nD = list|int
                     requested number of Diffraction
-                nR = int
+                nR = list|int
                     requested number of Reflection
-                nT = int
+                nT = list|int
                     requested number of Transmission
+                llo = list logic operator [op0,op1]
+                    nD <op0> nR <op1> nT
+
+
             Returns
             -------
 
@@ -573,6 +583,19 @@ class Rays(PyLayers, dict):
 
         """
 
+        if not isinstance(nD,list):
+            nD=[nD]
+        if not isinstance(nR,list):
+            nR=[nR]
+        if not isinstance(nT,list):
+            nT=[nT]
+
+        op = {'and':operator.and_,
+              'or':operator.or_,
+              '&':operator.and_,
+              '|':operator.or_,
+              }
+
 
         lr=[]
         for ur,r in enumerate(xrange(self.nray)):
@@ -582,27 +605,40 @@ class Rays(PyLayers, dict):
             nDli = li.count('D')
 
 
-            if (nR == nRli) and (nT==nTli) and (nD==nDli):
+
+            cD = (nDli in nD)
+            cR = (nRli in nR)
+            cT = (nTli in nT)
+
+            # if (nDli in nD) and (nRli in nR) and (nTli in nT) :
+            if op[llo[1].lower()]( op[llo[0].lower()](cD,cR) , cT):
                 lr.append(r)
-            if (self.los) and (nT == 1) and ur ==0:
+            elif (self.los) and (1 in nT ) and (0 in nD) and (0 in nR) and (ur == 0):
                 lr.append(r)
         return lr
 
 
-    def extract_typ_order(self,L,nD=0,nR=1,nT=1):
+    def extract_typ_order(self,L,nD=[1],nR=[1],nT=[1],llo='&&'):
         """ Extract group of rays from a certain type (R|T|D) 
             at a order ( <=> given number of interaction)
+
+            list logic operator : llo [op0,op1]
+
+            nD <op0> nR <op1> nT
+
 
         Parameters
             ----------
 
         L  : Layout
-        nD = int
+        nD = list|int
             requested number of Diffraction
-        nR = int
+        nR = list|int
             requested number of Reflection
-        nT = int
-            requested number of Transmissionp
+        nT = list|int
+            requested number of Transmission
+        llo = list logic operator [op0,op1]
+            nD <op0> nR <op1> nT
 
         Returns
         -------
@@ -614,7 +650,7 @@ class Rays(PyLayers, dict):
 
         """
 
-        lr = self.rayfromtyp_order(nD=nD,nR=nR,nT=nT)
+        lr = self.rayfromtyp_order(nD=nD,nR=nR,nT=nT,llo=llo)
         return self.extract(lr,L)
 
 
@@ -643,10 +679,19 @@ class Rays(PyLayers, dict):
             ni = self.ray2nbi(nr)
             ur = np.where(self[ni]['rayidx']==nr)[0][0]
 
+
+
+
+            if ni == 0:
+                los = True
+            else:
+                los = False
+
             if 'D' in self.typ(nr):
                 diff=True
             else:
                 diff=False
+
 
             if self[ni].has_key('diffvect'):
                 # check if the ray has diffraction interaction
@@ -658,11 +703,23 @@ class Rays(PyLayers, dict):
             diffkey = ['diffvect','diffidx','diffslabs']
 
             cray = {}
+
+
             for k in self[ni].keys():
-                if k not in ['nbrays','rayidx','dis','nstrwall','nstrswall']:
+
+                if ni ==0 : 
+
+                    cray = self[ni]
+                    break
+
+                elif k not in ['nbrays','rayidx','dis','nstrwall','nstrswall']:
                     tab  = self[ni][k]
                     if type(tab)==np.ndarray and k not in diffkey:
-                            cray[k] = tab[...,ur][...,np.newaxis]
+                            try:
+                                cray[k] = tab[...,ur][...,np.newaxis]
+                            except:
+                                import ipdb
+                                ipdb.set_trace()
                     if diff : 
                         if k in diffkey :
                             if k != 'diffslabs':
@@ -685,10 +742,12 @@ class Rays(PyLayers, dict):
 
                 # R[ni]['sig2d'].append(self[k]['sig2d'][ur])
 
+                if not los :
+                    r[ni]['BiN'] = np.concatenate((r[ni]['BiN'],cray['BiN']),axis=2)
+                    r[ni]['Bo'] = np.concatenate((r[ni]['Bo'],cray['Bo']),axis=3)
+                    r[ni]['Bi'] = np.concatenate((r[ni]['Bi'],cray['Bi']),axis=3)
 
-                r[ni]['BiN'] = np.concatenate((r[ni]['BiN'],cray['BiN']),axis=2)
-                r[ni]['nbrays'] += 1
-                r[ni]['B'] = np.concatenate((r[ni]['B'],cray['B']),axis=3)
+                
                 if diff:
                     if r[ni].has_key('diffidx'):
                         r[ni]['diffidx'] = np.concatenate((r[ni]['diffidx'],cray['diffidx']))
@@ -699,12 +758,15 @@ class Rays(PyLayers, dict):
                         r[ni]['diffidx'] = cray['diffidx']
                         r[ni]['diffvect'] = cray['diffvect']
                         r[ni]['diffslabs'] = cray['diffslabs']
+
+                r[ni]['nbrays'] += 1
+                r[ni]['B'] = np.concatenate((r[ni]['B'],cray['B']),axis=3)
+
                 r[ni]['pt'] = np.concatenate((r[ni]['pt'],cray['pt']),axis=2)
                 r[ni]['rayidx'] = np.concatenate((r[ni]['rayidx'],cray['rayidx']),axis=0)
                 r[ni]['Bo0'] = np.concatenate((r[ni]['Bo0'],cray['Bo0']),axis=2)
-                r[ni]['Bo'] = np.concatenate((r[ni]['Bo'],cray['Bo']),axis=3)
+                
                 r[ni]['scpr'] = np.concatenate((r[ni]['scpr'],cray['scpr']),axis=1)
-                r[ni]['Bi'] = np.concatenate((r[ni]['Bi'],cray['Bi']),axis=3)
                 r[ni]['aod'] = np.concatenate((r[ni]['aod'],cray['aod']),axis=1)
                 r[ni]['si'] = np.concatenate((r[ni]['si'],cray['si']),axis=1)
                 r[ni]['sig'] = np.concatenate((r[ni]['sig'],cray['sig']),axis=2)
