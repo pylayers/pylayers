@@ -574,7 +574,7 @@ class SCPI(PyLayers):
             for k in  range(Nmeas):
                 buff = ''
 
-                while len(buff) <> (self.Nf*16+8):
+                while len(buff) != (self.Nf*16+8):
                     buff = self.read(com)
 
                 S = np.frombuffer(buff[8:self.Nf*16+8], dtype='>f8')

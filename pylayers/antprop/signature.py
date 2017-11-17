@@ -775,8 +775,6 @@ class Signatures(PyLayers,dict):
         filenameh5
         hrpname
 
-        Notes
-        -----
         """
 
 
@@ -2969,7 +2967,7 @@ class Signatures(PyLayers,dict):
         return dM
 
 
-class Signature(object):
+class Signature(PyLayers,object):
     """ class Signature
 
     Attributes

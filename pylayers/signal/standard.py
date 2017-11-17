@@ -1,46 +1,8 @@
 """
-
-Band Class
-===========
+.. currentmodule:: pylayers.signal.standard
 
 .. autosummary::
-    :toctree: generated/
-
-    Band.__init__
-    Band.channelize
-
-Channel Class
-=============
-
-.. autosummary::
-    :toctree: generated/
-
-     Channel.__init__
-     Channel.__repr__
-     Channel.overlap
-     Channel.capacity
-
-
-Wstandard Class
-===============
-
-.. autosummary::
-    :toctree: generated/
-
-     Wstandard.__init__
-     Wstandard.__repr__
-     Wstandard.ls
-     Wstandard.bandplan
-
-AP Class
-========
-
-.. autosummary::
-    :toctree: generated/
-
-     AP.__init__
-     AP.__repr__
-     AP.load
+    :members:
 
 """
 import numpy as np
@@ -50,7 +12,7 @@ import pylayers.util.pyutil as pyu
 import pylayers.antprop.antenna as ant
 from pylayers.util.project import *
 
-class Band(dict):
+class Band(PyLayers,dict):
     """ A Band is a structured portion of the spectrum
 
     A band is subdivided into channels
@@ -118,7 +80,7 @@ class Band(dict):
         self['bmhz'] = eval(band['bmhz'])
         self.channelize()
 
-class Channel(dict):
+class Channel(PyLayers,dict):
     """ a radio channel abstraction
     """
     def __init__(self,fcghz,bmhz,gmhz=0):
@@ -201,14 +163,15 @@ class Channel(dict):
          C : Channel capacity in Mbit/s (M=1e6)
 
         """
+
         C = self.bmhz*np.log(1+10**(SNRdB/10.))/np.log(2)
+
         return(C)
 
-class Wstandard(dict):
+class Wstandard(PyLayers,dict):
     """ Wireless standard class
 
     The various available standard are described in a wstd.json file
-    It could be a mongodb database
 
     """
     def __init__(self,stdname='',_filejson='wstd.json'):
@@ -263,7 +226,7 @@ class Wstandard(dict):
         fp.close()
         std = stds[stdname]
         for k in std:
-            if k<> "channels":
+            if k!= "channels":
                 try:
                     self[k] = eval(std[k])
                 except:
@@ -302,7 +265,7 @@ class Wstandard(dict):
             print k + ' , ',
 
     def power(self, band, info ='max', unit='mw'):
-        """ Return  for a given channel
+        """ Returns power information for a given channel
 
         Parameters
         ----------
@@ -320,8 +283,10 @@ class Wstandard(dict):
 
         Returns
         -------
+
         Pmaxmw
-            power iformations for given bandnb/fghz/
+            power informations for given bandnb/fghz/
+
         """
 
         fp = open(pyu.getlong('wstd.json',pstruc['DIRSIMUL']))

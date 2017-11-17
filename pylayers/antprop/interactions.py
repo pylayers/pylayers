@@ -769,7 +769,7 @@ class IntT(Inter):
         if len(self.data) != 0:
             mapp = []
             for m in self.dusl.keys():
-                # used theta of the given slab
+                # ut : used theta of the given slab
                 ut = self.data[self.dusl[m], 0]
                 if ut.size != 0:
                     #if m not in self.slab:
@@ -777,8 +777,14 @@ class IntT(Inter):
                     # get alpha and gamma for divergence factor
                     if len(self.slab[m]['lmat']) > 1:
                         print('Warning : IntR class implemented for mat with only 1 layer ')
+                    #
+                    #  1/sqrt(epsr)
+                    #
                     a = 1./np.sqrt(np.array(([self.slab[m]['lmat'][0]['epr']])) \
                                * np.ones(len(ut), dtype=complex))
+                    #
+                    #  (1-sin(theta)^2)  / ( 1 - (1/sqrt(epr)) sin(theta)^2 )
+                    #
                     g = (1.-np.sin(ut)**2)/(1.-a*np.sin(ut)**2)
                     try:
                         alpha = np.concatenate((alpha, a), axis=0)

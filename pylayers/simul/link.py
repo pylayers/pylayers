@@ -1,3 +1,4 @@
+#
 # -*- coding: utf-8 -*-
 #
 from __future__ import print_function
@@ -267,8 +268,8 @@ class DLink(Link):
         --------
 
         >>> from pylayers.simul.link import *
-        >>> L = DLink(verbose=False)
-        >>> aktk = L.eval()
+        >>> DL = DLink(L=Layout('DLR.lay'))
+        >>> DL.eval()
 
 
         """
@@ -876,6 +877,7 @@ class DLink(Link):
 
         Parameters
         ----------
+
         force : boolean 
 
         """
@@ -1425,7 +1427,7 @@ class DLink(Link):
         self.H = H
 
     def eval(self,**kwargs):
-        """ evaluate the link
+        """ link evaluation
 
 
         Parameters
@@ -1456,7 +1458,7 @@ class DLink(Link):
 
 
     
-        Notes    def eval(self,**kwargs):
+        Notes    
         -----
 
         update self.ak and self.tk
@@ -1474,8 +1476,11 @@ class DLink(Link):
             :include-source:
 
             >>> from pylayers.simul.link import *
-            >>> L=DLink(verbose=False)
-            >>> aktk = L.eval()
+            >>> DL=DLink(L="defstr.lay")
+            >>> DL.eval()
+            >>> DL.show()
+            >>> DL.plt_cir()
+            >>> plt.show()
 
 
         See Also
@@ -1579,16 +1584,20 @@ class DLink(Link):
         else :
             ## 1 is the default signature determination algorithm
             if kwargs['alg']==1:
+                self.nD = kwargs['nD']
+                self.nT = kwargs['nT']
+                self.nR = kwargs['nR']
+                self.bt = kwargs['bt']
                 
-                Si.run(cutoff = kwargs['cutoff'],
+                Si.run(cutoff = self.cutoff,
                         diffraction = kwargs['diffraction'],
-                        threshold = kwargs['threshold'],
-                        delay_excess_max_ns = kwargs['delay_excess_max_ns'],
-                        nD = kwargs['nD'],
-                        nR = kwargs['nR'],
-                        nT = kwargs['nT'],
+                        threshold = self.threshold,
+                        delay_excess_max_ns = self.delay_excess_max_ns,
+                        nD = self.nD,
+                        nR = self.nR,
+                        nT = self.nT,
                         progress = kwargs['si_progress'],
-                        bt = kwargs['bt'])
+                        bt = self.bt)
 
                 if self.verbose:
                     print("default algorithm")
@@ -1670,8 +1679,6 @@ class DLink(Link):
             R = self.r2d.to3D(self.L,H=ceilheight, N=kwargs['ra_number_mirror_cf'])
             if kwargs['rm_aw']:
                 R = R.remove_aw(self.L)
-                # R.locbas(self.L)
-                # R2.locbas(self.L)
             
             R.locbas(self.L)
             
@@ -1914,24 +1921,28 @@ class DLink(Link):
         ----------
 
         s   : int
+            size of Tx/Rx circle in points 
         ca  : string
-            color a
+            color of termination a (Tx)
         cb  : string
-            color b
-        alpha : int
+            color of termination b (Rx)
+        alpha : float 
+            transparency 
         axis : boolean 
             display axis boolean (default True)
         figsize : tuple
-            (20,10)
+            figure size if fig not specified default (20,10)
         fontsize : int
-            20
+            default 20
         rays : boolean
-            False
+            activation of rays vizalization (True)  
         bsig : boolean 
-            False    
+            activation of signature vizualization (False)
         laddr : list 
             list of signature addresses 
         cmap : colormap
+        radius : float 
+            radius in meters for layout vizualization 
         labels : boolean
             enabling edge label (useful for signature identification)
         pol : string
@@ -2022,7 +2033,7 @@ class DLink(Link):
         #
         # Plot Rays
         #
-        if kwargs['rays']:
+        if kwargs['rays'] and self.R.nray>0:
             #ECtt,ECpp,ECtp,ECpt = self.C.energy()
             #if kwargs['pol']=='tt':
             #    val = ECtt
@@ -2060,8 +2071,9 @@ class DLink(Link):
             # limitation of the vizualization zone around the center of the link 
             #
             pm = (self.a+self.b)/2.
-            ax.set_xlim(pm[0]-kwargs['radius'],pm[0]+kwargs['radius'])
-            ax.set_ylim(pm[1]-kwargs['radius'],pm[1]+kwargs['radius'])
+            R  = np.minimum(kwargs['radius'],1.5*self.L.radius)
+            ax.set_xlim(pm[0]-R,pm[0]+R)
+            ax.set_ylim(pm[1]-R,pm[1]+R)
 
             for ir  in lr:
                 if kwargs['dB']:
@@ -2087,6 +2099,7 @@ class DLink(Link):
                                fig=fig,ax=ax,
                                layout=False,
                                points=False)
+
             if kwargs['col']=='cmap':
                 sm = plt.cm.ScalarMappable(cmap=kwargs['cmap'], norm=plt.Normalize(vmin=vmin, vmax=vmax))
                 sm._A = []
@@ -2094,6 +2107,7 @@ class DLink(Link):
         #
         # Plot signature
         #
+
         if kwargs['bsig']:
             for addr in kwargs['laddr']: 
                 seq = self.Si[addr[0]][2*addr[1]:2*addr[1]+2,:]

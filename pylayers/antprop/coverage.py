@@ -169,7 +169,7 @@ class Coverage(PyLayers):
             st= st+ 'noisefactor (dB) : '+ str(self.noisefactordb) + '\n\n'
             st = st + '--- Grid ----'+'\n'
             st= st+ 'mode : ' + str(self.mode) + '\n'
-            if self.mode<>'file':
+            if self.mode!='file':
                 st= st+ 'nx : ' + str(self.nx) + '\n'
                 st= st+ 'ny : ' + str(self.ny) + '\n'
             if self.mode=='zone':
@@ -202,7 +202,7 @@ class Coverage(PyLayers):
                 mi=np.min(self.L.Gs.pos.values(),axis=0)+0.01
                 ma=np.max(self.L.Gs.pos.values(),axis=0)-0.01
             if mode=="zone":
-                assert boundary<>[]
+                assert boundary!=[]
                 mi = np.array([boundary[0],boundary[1]])
                 ma = np.array([boundary[2],boundary[3]])
 
@@ -810,7 +810,7 @@ class Coverage(PyLayers):
             ax = fig.add_subplot(111)
 
         if kwargs['typ']=='pr':
-            if kwargs['a']<>-1:
+            if kwargs['a']!=-1:
                 if kwargs['pol']=='p':
                     U = self.CmWp[kwargs['f'],:,kwargs['a']]
                 if kwargs['pol']=='o':
@@ -824,7 +824,7 @@ class Coverage(PyLayers):
                 U = 10*np.log10(U)
 
         D = np.sqrt(np.sum((self.pa-self.pg)*(self.pa-self.pg),axis=0))
-        if kwargs['a']<>-1:
+        if kwargs['a']!=-1:
             D = D.reshape(self.ng,self.na)
             ax.semilogx(D[:,kwargs['a']],U,'.',color=kwargs['col'],label=kwargs['label'])
         else:
@@ -932,7 +932,7 @@ class Coverage(PyLayers):
                 if polar=='o':    
                     bestsv =  self.bestsvo[f,:,ka]
                 m = np.ma.masked_where(bestsv == 0,bestsv)
-                if self.mode<>'file':
+                if self.mode!='file':
                     W = m.reshape(self.nx,self.ny).T
                     ax.imshow(W, extent=(l,r,b,t),
                             origin='lower',
@@ -1046,7 +1046,7 @@ class Coverage(PyLayers):
             clb = fig.colorbar(img,cax)
             clb.set_label(legcb)
             if best:
-                if self.mode<>'file':
+                if self.mode!='file':
                     if polar=='o':
                         ax.contour(np.sum(self.bestsvo,axis=2)[f,:].reshape(self.nx,self.ny).T,extent=(l,r,b,t),linestyles='dotted')
                     if polar=='p':

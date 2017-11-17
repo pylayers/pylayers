@@ -1,4 +1,4 @@
-#!/usr/bin/python
+
 # -*- coding: latin1 -*-
 from __future__ import print_function
 """
@@ -46,33 +46,48 @@ class Rays(PyLayers, dict):
 
     Attributes
     ----------
+    
+    pTx  : np.array
+        transmitter (3,)
+    pRx  : np.array
+        receiver (3,)
+    B    : IntB
+    B0   : IntB
+    I    : Interactions
+    I.I  : np.array
+        (f,nI,3,3)
+    I.T  : IntT
+    I.T.A : np.array
+        (f,iT,3,3)
+    I.R  : IntR
+    I.R.A : np.array
+        (f,iR,3,3)
+    I.D  : IntD
+    I.D.A : np.array
+        (f,iD,3,3)
+    Lfilename : string 
+        Layout name 
+    delays : np.array
+        ray delays
+    dis : np.array
+        ray distance = delays*0.3
+    nray : int 
+        number of rays 
+    evaluated : boolean 
+        are rays evaluated ?
+    is3D : boolean 
+        are rays 2d or 3d rays ?
+    isbased : boolean 
+        locbas has been applied ? 
+    filles : boolean 
+        filled  has been applied ? 
+    los : boolean 
+        Line of sight boolean
+    fGHz : np.array
+        frequency points for evaluation
+    origin_sig_name : string 
+        signature file which produces the rays
 
-    rays   :
-    nbrays :
-    rayidx :
-    sig    :
-    pt     :
-    alpha  :
-
-
-    Methods
-    -------
-
-    to3D(H=3,N=1)
-        for k in self:   # for all interaction group k
-        for k in self:   # for all interaction group k
-    locbas(L)
-    fillinter(L)
-    eval
-    show(L)
-    mirror(H=3,N=1)
-    ray
-    typ
-    info
-    to3D
-    signature(L)
-    show3d(ray,bdis,bbas,bstruc,col,id,linewidth)
-    show3()
 
     Notes
     -----
@@ -94,8 +109,9 @@ class Rays(PyLayers, dict):
     interactions along rays can be informed via the **fillinter**
     method.
 
-    Once the interaction are informed the field along rays can
+    Once the interactions are informed the field along rays can
     be evaluated via the **eval** method
+
     """
     def __init__(self, pTx, pRx):
         """ object constructor
@@ -191,11 +207,12 @@ class Rays(PyLayers, dict):
         s = ''
         ni = 0
         nl = 0
-        
+        lgi = self.keys()
+        lgi.sort()
         if self.is3D:
             s = self.__class__.__name__ + '3D\n' + '----------'+'\n'
-
-            for k in self:
+            
+            for k in lgi:
                 r = self[k]['rayidx']
                 nr = len(r)
                 s = s + str(k)+' / '+str(nr)+ ' : '+str(r)+'\n'
@@ -205,7 +222,15 @@ class Rays(PyLayers, dict):
         else:
             s = self.__class__.__name__ + '2D\n' + '----------'+'\n'
             nray2D = len(self)
-
+        
+        if self.los:
+            s = s + "LOS "
+        if self.isbased:
+            s = s + "based "
+        if self.filled:
+            s = s + "filled "
+        
+        s = s + '\n'
         s = s + 'N2Drays : '+ str(nray2D) + '\n'
         if hasattr(self,'nb_origin_sig'):
             s = s + 'from '+ str(self.nb_origin_sig) + ' signatures\n'
@@ -215,7 +240,7 @@ class Rays(PyLayers, dict):
 
         if not self.is3D:
             ray_cpt = 0  
-            for k in self:
+            for k in lgi:
                 #sk = np.shape(self[k]['sig'])[2]
                 s = s + str(k) + ':\n'
                 sig = self[k]['sig'][0,:]
@@ -282,7 +307,7 @@ class Rays(PyLayers, dict):
         except:
             f.close()
             raise NameError('Rays: issue when writting h5py file')
-
+        print(filenameh5)
 
 
     def loadh5(self,filename=[],idx=0):
@@ -291,6 +316,8 @@ class Rays(PyLayers, dict):
         Parameters
         ----------
 
+        idx : int 
+
         """
         if filename == []:
             filenameh5 = self.filename+'_'+str(idx)+'.h5'
@@ -298,12 +325,12 @@ class Rays(PyLayers, dict):
             filenameh5 = filename
 
         filename=pyu.getlong(filenameh5,pstruc['DIRR3D'])
-
+        print(filename)
 
         # try/except to avoid loosing the h5 file if
         # read/write error
         try:
-            f=h5py.File(filename,'r')
+            f = h5py.File(filename,'r')
             for k in f.keys():
                 self.update({eval(k):{}})
                 for kk in f[k].keys():
@@ -319,11 +346,13 @@ class Rays(PyLayers, dict):
             raise NameError('Rays: issue when reading h5py file')
 
         # fill if save was filled
-
-        # temporary solution in order to avoir
+        # temporary solution in order to avoid
         # creating save for Interactions classes
+
         if self.filled:
-            Lname = self.filename.split('_')[0] + '.ini'
+            #Lname = self.Lfilename
+            Lname = '_'.join(self.filename.split('_')[0:-1]) + '.lay'
+            #Lname = self.filename.split('_')[0] + '.lay'
             L=Layout(Lname)
             self.fillinter(L)
 
@@ -450,7 +479,7 @@ class Rays(PyLayers, dict):
             if kwargs.has_key('L'):
                 self.L=kwargs['L']
             else: 
-                self.L=Layout(self.Lfilename,bbuild=True)
+                self.L = Layout(self.Lfilename,bbuild=True)
                 try:
                     self.L.dumpr()
                 except:
@@ -798,15 +827,16 @@ class Rays(PyLayers, dict):
 
         """
 
-
         r = Rays(self.pTx,self.pRx)
         r.is3D = self.is3D
         
         r.nray2D = 1
         r.nb_origin_sig = 1
         
-        ni = self._ray2nbi[nr]
-        ur = np.where(self[ni]['rayidx']==nr)[0][0]
+        #ni = self._ray2nbi[nr]
+        #ur = np.where(self[ni]['rayidx']==nr)[0][0]
+        
+        ni,ur = self.ir2a(nr)
 
         if 'D' in self.typ(nr):
             diff=True
@@ -893,6 +923,7 @@ class Rays(PyLayers, dict):
                     'points':True,
                     'labels':False
                    }
+
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
@@ -932,8 +963,8 @@ class Rays(PyLayers, dict):
                 # list of rays 
                 lray = range(len(self[i]['pt'][0, 0, :]))
 
-                if self.filled :
-                    ax.set_title('rays index :'+ str(self[i]['rayidx']))
+                #if self.filled :
+                #    ax.set_title('rays index :'+ str(self[i]['rayidx']))
 
                 for j in lray:
 
@@ -965,8 +996,8 @@ class Rays(PyLayers, dict):
                                 linewidth = widthray)
 
                     ax.axis('off')
-                    if self.filled :
-                        ax.set_title('rays index :'+ str(self[i]['rayidx'][lray]))
+                    #if self.filled :
+                    #    ax.set_title('rays index :'+ str(self[i]['rayidx'][lray]))
         else:
             rlist = kwargs['rlist']
             # 3D ray 
@@ -996,8 +1027,8 @@ class Rays(PyLayers, dict):
 
                 for i in rlist:
                     lray = range(len(self[i]['pt'][0, 0, :]))
-                    if self.filled :
-                        ax.set_title('rays index :'+ str(self[i]['rayidx']))
+                    #if self.filled :
+                    #    ax.set_title('rays index :'+ str(self[i]['rayidx']))
                     for j in lray:
                         ray = np.hstack((self.pTx[0:2].reshape((2, 1)),
                                          np.hstack((self[i]['pt'][0:2, :, j],
@@ -1009,8 +1040,8 @@ class Rays(PyLayers, dict):
                                 linewidth=kwargs['widthray'])
                         ax.axis('off')
 
-                        if self.filled :
-                            ax.set_title('rays index :'+ str(self[i]['rayidx'][lray]))
+                        #if self.filled :
+                        #    ax.set_title('rays index :'+ str(self[i]['rayidx'][lray]))
 
 
 
@@ -1161,6 +1192,9 @@ class Rays(PyLayers, dict):
 
         """
 
+        if H==-1:
+            rmoutceilR=False
+
         tx = self.pTx
         rx = self.pRx
 
@@ -1274,6 +1308,8 @@ class Rays(PyLayers, dict):
                 pte = np.hstack((Tx, pte, Rx))
             else:
                  pte = np.hstack((Tx, Rx))
+
+            # extension 
             for l in d:                     # for each vertical pattern (C,F,CF,FC,....)
                 #print k,l,d[l]
                 Nint = len(d[l])            # number of additional interaction
@@ -1568,7 +1604,6 @@ class Rays(PyLayers, dict):
                             sigsave = np.delete(sigsave,uc[1][uout],axis=2)
 
                 if r3d.has_key(k+Nint):
-            
                     r3d[k+Nint]['pt']  = np.dstack((r3d[k+Nint]['pt'], ptees))
                     r3d[k+Nint]['sig'] = np.dstack((r3d[k+Nint]['sig'], siges))
                     r3d[k+Nint]['sig2d'].append(sigsave)
@@ -1608,6 +1643,7 @@ class Rays(PyLayers, dict):
         val =0
 
         for k in r3d.keys():
+            
             nrayk = np.shape(r3d[k]['sig'])[2]
             r3d[k]['nbrays'] = nrayk
             r3d[k]['rayidx'] = np.arange(nrayk)+val
@@ -1790,7 +1826,7 @@ class Rays(PyLayers, dict):
         ----------
 
         typ : int
-            1 : length of all segments
+            men1 : length of all segments
             2 : accumulated length
         """
         dk = {}
@@ -1820,11 +1856,40 @@ class Rays(PyLayers, dict):
 
         L : Layout
 
-
         Notes
         -----
 
-       
+        This method adds for each group of interactions the following members 
+
+        norm : np.array
+            3 x i x r  (interaction vector)  
+        nstrwall : np.array
+            nstr of interactions 
+        vsi : np.array
+            3 x (i+1) x r 
+        aod : np.array 
+            2 x r 
+        aoa : np.array
+            2 x r 
+        BoO : np.array
+            3 x 3 x r
+        Bi  : np.array
+            3 x 3 x r
+        Bo  : np.array
+            3 x 3 x r
+        BiN : np.array
+            3 x 3 x r
+        scpr : np.array
+            i x r 
+        theta : np.array 
+            i x r 
+        rays  : int 
+        nbrays  : int 
+        rayidx : np.array
+        diffslabs :  list 
+        diffvect :  np.array
+            (phi0,phi,beta,NN) 
+
 
         """
 
@@ -1864,11 +1929,14 @@ class Rays(PyLayers, dict):
 
         # list of used wedges
         luw=[]
-
-        for k in self:
+        
+        lgi = self.keys()
+        lgi.sort()
+        for k in lgi:
             #
             # k is the number of interactions in the block
             #
+            #print(k,self[11]['rayidx'])
             if k != 0:
 
                 # structure number (segment or point)
@@ -2137,7 +2205,7 @@ class Rays(PyLayers, dict):
 
                 # create a numpy array to relate the ray index to its corresponding
                 # number of interactions
-
+                #pdb.set_trace()
                 _ray2nbi = np.ones((nbray),dtype=int)
 
 
@@ -2400,10 +2468,14 @@ class Rays(PyLayers, dict):
             If True append new rays to existing structure
 
 
-        Returns
+        Notes
         -------
 
-        Update self.I , self.B , self.I0
+        This method adds the following members 
+        
+        I : Interactions 
+        B : IntB
+        B0 : IntB
 
         """
 
@@ -2563,6 +2635,11 @@ class Rays(PyLayers, dict):
 
                 size2 = si[:, :].size
                 nbray = self[k]['nbrays']
+                # TODO
+                # dirty fix
+                # nbray is either an int or an array. why ?
+                if type(nbray)==np.array:
+                    nbray=nbray[0]
 
                 #  ,(i+1)xr
                 # sif = si[:, :].reshape(size2,order='F') # TO BE REMOVE
@@ -2578,10 +2655,7 @@ class Rays(PyLayers, dict):
                 b0 = self[k]['B'][:,:,0,:]
                 # first unitary matrix 1:
                 # dimension i and r are merged
-                try:
-                    b  = self[k]['B'][:,:,1:,:].reshape(3, 3, size2-nbray,order='F')
-                except:
-                    pdb.set_trace()
+                b  = self[k]['B'][:,:,1:,:].reshape(3, 3, size2-nbray,order='F')
 
 
                 ## find used slab
@@ -2719,7 +2793,7 @@ class Rays(PyLayers, dict):
 
         self.filled = True
 
-    def eval(self,fGHz=np.array([2.4]),ib=[]):
+    def eval(self,fGHz=np.array([2.4]),bfacdiv=False,ib=[]):
         """  field evaluation of rays  
 
         Parameters
@@ -2800,13 +2874,13 @@ class Rays(PyLayers, dict):
                 # get the first unitary matrix B0l
                 B0l = B0[:,ir,:, :]
                 # get alpha
-                # alpha = self.I.alpha[rrl].reshape(r, l,order='F')
+                alpha = self.I.alpha[rrl].reshape(r, l,order='F')
                 # # get gamma
-                # gamma = self.I.gamma[rrl].reshape(r, l,order='F')
+                gamma = self.I.gamma[rrl].reshape(r, l,order='F')
                 # # get si0
-                # si0 = self.I.si0[rrl].reshape(r, l,order='F')
+                si0 = self.I.si0[rrl].reshape(r, l,order='F')
                 # # get sout
-                # sout = self.I.sout[rrl].reshape(r, l,order='F')
+                sout = self.I.sout[rrl].reshape(r, l,order='F')
 
                 try:
                     del Z
@@ -2824,28 +2898,29 @@ class Rays(PyLayers, dict):
     ##                # Divergence factor D
     ###                 not yet implementented
     ############################################
-    #                if i == 0:
-    #                    D0=1./si0[:,1]
-    #                    rho1=si0[:,1]*alpha[:,i]
-    #                    rho2=si0[:,1]*alpha[:,i]*gamma[:,i]
-    #                    D=np.sqrt(
-    #                     ( (rho1 ) / (rho1 + sout[:,i]) )
-    #                     *( (rho2) / (rho2 + sout[:,i])))
-    #                    D=D*D0
-    #                    rho1=rho1+(sout[:,i]*alpha[:,i])
-    #                    rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
-
-    ##                     gerer le loss
-    #                    if np.isnan(D).any():
-    #                        p=np.nonzero(np.isnan(D))[0]
-    #                        D[p]=1./sout[p,1]
-    #                else :
-    #                    D=np.sqrt(
-    #                     ( (rho1 ) / (rho1 + sout[:,i]) )
-    #                     *( (rho2) / (rho2 + sout[:,i])))
-
-    #                    rho1=rho1+(sout[:,i]*alpha[:,i])
-    #                    rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
+#                    if i == 0:
+#                        pdb.set_trace()
+#                        D0 = 1./si0[:,1]
+#                        rho1 = si0[:,1]*alpha[:,i]
+#                        rho2 = si0[:,1]*alpha[:,i]*gamma[:,i]
+#                        D =np.sqrt(
+#                         ( (rho1 ) / (rho1 + sout[:,i]) )
+#                         *( (rho2) / (rho2 + sout[:,i])))
+#                        D=D*D0
+#                        rho1=rho1+(sout[:,i]*alpha[:,i])
+#                        rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
+#
+#   ##                     gerer le loss
+#                        if np.isnan(D).any():
+#                            p=np.nonzero(np.isnan(D))[0]
+#                            D[p]=1./sout[p,1]
+#                    else :
+#                        D=np.sqrt(
+#                         ( (rho1 ) / (rho1 + sout[:,i]) )
+#                         *( (rho2) / (rho2 + sout[:,i])))
+#
+#                        rho1=rho1+(sout[:,i]*alpha[:,i])
+#                        rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
     ############################################
 
                     #  A0  (X dot Y)
@@ -2889,15 +2964,11 @@ class Rays(PyLayers, dict):
 
                 Ct[:,ir, :, :] = Z[:, :, :, :]
 
-                # delay computation:
-                # sum the distance from antenna to first interaction si0
-                # and the sum of all outgoing segments
-                #self[l]['dis'] = self.I.si0[self[l]['rays'][0,:]] \
-                #        + np.sum(self.I.sout[self[l]['rays']], axis=0)
-                # attenuation due to distance
-                # will be removed once the divergence factor will be implemented
                 #
-                Ct[:,ir, :, :] = Ct[:, ir, :, :]*1./(self[l]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
+                if bfacdiv:
+                    Ct[:,ir, :, :] = Ct[:, ir, :, :]*1./(self[l]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
+                else:
+                    Ct[:,ir, :, :] = Ct[:, ir, :, :]*1./(self[l]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
                 self.delays[ir] = self[l]['dis']/0.3
                 self.dis[ir] = self[l]['dis']
         #
@@ -3461,14 +3532,15 @@ class Rays(PyLayers, dict):
         else:
             print('Rays have not been evaluated yet')
 
-    def signature(self, ni ,nr):
+    def signature(self, u , typ='full'):
         """ extract ray signature
 
         Parameters
         ----------
 
-        ni : int
-        nr : int
+        u : tuple orr int 
+            if tuple addr 
+            if int index
 
         Returns
         -------
@@ -3483,7 +3555,14 @@ class Rays(PyLayers, dict):
         r[nint]['sig']
 
         """
-        sig = self[ni]['sig'][:,:,nr]
+        if type(u)==tuple:
+            addr = u 
+        else:
+            addr = self.ir2a(u) 
+        if typ=='full':
+            sig = self[addr[0]]['sig'][:,:,addr[1]]
+        else:
+            pass
         return(sig)
 
     def show3d(self,

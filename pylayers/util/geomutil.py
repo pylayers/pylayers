@@ -2,122 +2,9 @@
 """
 .. currentmodule:: pylayers.util.geomutil
 
-=================================================
-Geometry Module (:mod:`pylayers.util.geomutil`)
-================================================
-
-Geomview Class
-==============
-
-.. autoclass:: Geomview
-    :members:
-
-Geomlist Class
-==============
-
-.. autoclass:: Geomview
-    :members:
-
-GeomVect Class
-==============
-
-.. autoclass:: GeomVect
-    :members:
-
-Geomoff Class
-=============
-
-.. autoclass:: Geomoff
-    :members:
-
-Plot_Shapely Class
-==================
-
-.. autoclass:: Plot_Shaplely
-    :members:
-
-LineString Class
-==================
-
-.. autoclass:: LineString
-    :members:
-
-PolyGon Class
-=============
-
-.. autoclass:: Polygon
-    :members:
-
-
-Utility Functions
-=================
-
-.. autosummary::
-    :toctree: generated/
-
-     angular
-     vecang
-     SignedArea
-     Centroid
-     Lr2n
-     isBetween
-     pvec
-     pvecn
-     onb
-     vec_sph
-     ellipse
-     normalize
-     ptonseg
-     dptseg
-     linet
-     ccw
-     are_points_inside_cone
-     intersect_cone_seg
-     intersect_halfline_seg
-     intersect3
-     intersect
-     is_aligned3
-     is_aligned4
-     isleft
-     isleftorequal
-     affine
-     cylmap
-     MRot3
-     MATP
-     MEulerAngle
-     SphericalBasis
-     angledir
-     Bthph
-     BTB
-
-     plot_coords
-     plot_bounds
-     plot_line
-     v_color
-
-     plotPolygon
-     shrinkPolygon
-     shrinkPolygon2
-     simplifyPolygon
-     wall_delta
-     plot_coords2
-     plot_bounds2
-     plot_line2
-     plot_coords3
-     plot_bounds3
-     plot_line3
-     valid_wedge
-     sector
-     dist
-     line_intersection
-     linepoly_intersection
-     mirror
-     distseg
-     dmin3d
-
-
 
 """
+from __future__ import print_function
 import shapely.geometry as sh
 import scipy.linalg as la
 import pdb
@@ -178,7 +65,7 @@ def ispoint(tpts, pt, tol=0.05):
         pylayers.util.geomutil.Polygon.setvnodes
 
         """
-        # print"ispoint : pt ", pt
+        # print("ispoint : pt ", pt)
         pts = tpts[0]
         ke =  tpts[1]
         
@@ -607,8 +494,8 @@ class Polygon(pro.PyLayers, shg.Polygon):
         # if rs1[0]==rs0[0]:
         #    rs1=rs1[::-1]
 
-        # print rs0
-        # print rs1
+        # print(rs0)
+        # print(rs1)
         # assert(rs0[0]==rs1[-1])
         # assert(rs0[-1]==rs1[0])
         # vnodes = np.hstack((rs0,rs1[1:-1]))
@@ -710,12 +597,14 @@ class Polygon(pro.PyLayers, shg.Polygon):
 
     
     def setvnodes_new(self,tpts,L):
-        """ update vnodes member from Layout
+        """ update vnodes members from Layout
 
         Parameters
         ----------
 
-        tpts : list of points 
+        tpts : tuple 
+           tpts[0] : points coordinates 
+           tpts[1] : points index
         L : pylayers.layout.Layout
 
         See Also
@@ -732,13 +621,15 @@ class Polygon(pro.PyLayers, shg.Polygon):
         """
         # get coordinates of the exterior of the polygon 
         x, y = self.exterior.xy
-        # npts = map(lambda x :
-        #            L.ispoint(np.array(x),tol=0.01),zip(x[0:-1],y[0:-1]))
         #
         # npts : list of points which are in the layout (with tolerance 1cm) 
         #        0 means not in the layout 
         #
-        npts = [ispoint(tpts,np.array(xx), tol=0.01) for xx in zip(x[0:-1], y[0:-1])]
+        # TODO : Sometimes polygon points are not exactly correspondong to nodes of Layout (Why ? ) 
+        #        This is the reason of the applied tolerance of 5cm 
+        #
+        npts = [ispoint(tpts,np.array(xx), tol=0.05) for xx in zip(x[0:-1], y[0:-1])]
+
         assert (0 not in npts), pdb.set_trace()
         # seg list of tuple [(n1,n2),(n2,n3),....(,)]
         seg = zip(npts, np.roll(npts, -1))
@@ -877,7 +768,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
             # calculate Loss
             Lo, Lp = sl.loss0(fGHz)
             Abs = 10**(-Lo[0] / 10.)
-            # print slname,Abs
+            # print(slname,Abs)
             n1 = npt[0]
             n2 = npt[1]
             p1 = L.Gs.pos[n1]
@@ -892,7 +783,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
                     sssl = L.sl[ssname]
                     Loss, Lpss = sssl.loss0(fGHz)
                     Absss = 10**(-Loss[0] / 10.)
-                    # print ssname,Absss
+                    # print(ssname,Absss)
                     val = Lseg * (ss[1] - ss[0])
                     SS = SS + val
                     S1.append(val)
@@ -1457,8 +1348,8 @@ class Polygon(pro.PyLayers, shg.Polygon):
 
         npt = self.vnodes[ipt]
         nseg = self.vnodes[iseg]
-        # print "npt : ",npt
-        # print "nseg : ",nseg
+        # print("npt : ",nptr)
+        # print("nseg : ",nseg)
 
         assert np.all(npt < 0), "something wrong with points"
         assert np.all(nseg > 0), "something wrong with segments"
@@ -1514,15 +1405,15 @@ class Polygon(pro.PyLayers, shg.Polygon):
         udiffdoor = np.intersect1d(uzero, udeg2)
         udiff = np.hstack((uconvex, udiffdoor)).astype(
             'int')  # diffracting point
-        # print "vnodes",self.vnodes
-        # print "tcc : ",tcc
-        # print "uzero : ",uzero
-        # print "udiffdoor : ",udiffdoor
-        # print "udiff",udiff
-        # print "udeg2",udeg2
-        # print "npt",npt
+        # print("vnodes",self.vnodes
+        # print("tcc : ",tcc
+        # print("uzero : ",uzero
+        # print("udiffdoor : ",udiffdoor
+        # print("udiff",udiff
+        # print("udeg2",udeg2
+        # print("npt",npt
         # if udiff!=[]:
-        #    print "diff : ",npt[udiff]
+        #    print("diff : ",npt[udiff]
         # if udeg2!=[]:
         #    print "deg2 : ",npt[udeg2]
         # if uzero!=[]:
@@ -3416,8 +3307,8 @@ def are_points_inside_cone1(points,apex,v,radius=np.inf):
 
     tk = [ c for c in combinations(range(Nvec),2) ] 
     bcw = np.empty((len(tk),Npoints),dtype=bool)
-    #print "w : ",w 
-    #print "v :",v
+    #print("w : ",w) 
+    #print("v :",v)
     w_vec = w[bhs,:][brad,:] 
     for k, (k1,k2) in enumerate(tk):
         if Ndim>2:
@@ -3605,15 +3496,15 @@ def intersect_cone_seg_old(line0,line1,seg,bvis=False,bbool=False):
             bii = bx0i and bx1i #
             
             if bbool:
-                print "baa ",baa
-                print "bab ",bab
-                print "bai ",bai
-                print "bba ",bba
-                print "bbb ",bbb
-                print "bbi ",bbi
-                print "bia ",bia
-                print "bib ",bib
-                print "bii ",bii
+                print("baa ",baa)
+                print("bab ",bab)
+                print("bai ",bai)
+                print("bba ",bba)
+                print("bbb ",bbb)
+                print("bbi ",bbi)
+                print("bia ",bia)
+                print("bib ",bib)
+                print("bii ",bii)
             if baa or bbb:  # above and above or below and below ->segment is out 
                 tahe = []
                 bdp0i = False
@@ -3655,8 +3546,8 @@ def intersect_cone_seg_old(line0,line1,seg,bvis=False,bbool=False):
                 # seg0 is in  
                 bdp1i = not bdp1o
                 if bbool:
-                    print "bdp0i :",bdp0i
-                    print "bdp1i :",bdp1i
+                    print("bdp0i :",bdp0i)
+                    print("bdp1i :",bdp1i)
                 
                 if bai or bbi :
                     #print "bai or bbi"
@@ -5415,12 +5306,12 @@ def mirror3b(tp, aplane, pplane):
     return tp
 
 def mirror3c(tp, aplane, pplane):
-    """ compute recursively the image of p wrt the list of facet 
+    """ compute recursively the image of p wrt the list of facets 
     
     Parameters
     ----------
 
-    tp     : MDA 
+    tp : MDA 
         Collection of images points from screen in 3D space from set of points  
         (3 x Nf x Npt x Nc)
         Ns : number of screen 
@@ -5428,8 +5319,8 @@ def mirror3c(tp, aplane, pplane):
         (s x f x p x c ) 
     aplane : numpy.ndarray
         MDarray of (c)ollection of ()vector (f)aces n 3D ((s)pace 
-        (3xNfacesx2xNc)
-        (sxfxvxc) 
+        (3 x Nfaces x 2 x Nc)
+        (s x f x v x c) 
     pplane : numpy.ndarray
         array of points (3xNplanexNsig)
 
