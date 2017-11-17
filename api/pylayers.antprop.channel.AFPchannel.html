@@ -34,6 +34,9 @@
   
         <link rel="author" title="About these documents"
               href="../about.html"/>
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="PyLayers" href="../index.html"/>
         <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
 
@@ -149,12 +152,13 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">35&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">36&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">37&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">38&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">39&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id134">40&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -329,7 +333,7 @@
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">load</span></code>(filename)</td>
 <td>load a Bsignal from a Matlab File</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.AFPchannel.loadmes" title="pylayers.antprop.channel.AFPchannel.loadmes"><code class="xref py py-obj docutils literal"><span class="pre">loadmes</span></code></a>(_filename,&nbsp;_filecal[,&nbsp;fcGHz,&nbsp;BW,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.AFPchannel.loadmes" title="pylayers.antprop.channel.AFPchannel.loadmes"><code class="xref py py-obj docutils literal"><span class="pre">loadmes</span></code></a>(_filename,&nbsp;_filecal[,&nbsp;fcGHz,&nbsp;BW,&nbsp;…])</td>
 <td>Load measurement file</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">max</span></code>()</td>
@@ -416,7 +420,7 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.AFPchannel.loadmes" title="pylayers.antprop.channel.AFPchannel.loadmes"><code class="xref py py-obj docutils literal"><span class="pre">loadmes</span></code></a>(_filename,&nbsp;_filecal[,&nbsp;fcGHz,&nbsp;BW,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.AFPchannel.loadmes" title="pylayers.antprop.channel.AFPchannel.loadmes"><code class="xref py py-obj docutils literal"><span class="pre">loadmes</span></code></a>(_filename,&nbsp;_filecal[,&nbsp;fcGHz,&nbsp;BW,&nbsp;…])</td>
 <td>Load measurement file</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.AFPchannel.toadp" title="pylayers.antprop.channel.AFPchannel.toadp"><code class="xref py py-obj docutils literal"><span class="pre">toadp</span></code></a>([imax])</td>
@@ -453,7 +457,7 @@ are placed in the mes directory of the project.</p>
 </div></blockquote>
 <p><strong>win</strong> : string</p>
 <blockquote>
-<div><p>window type in [&#8216;rect&#8217;,&#8217;hamming&#8217;,&#8217;blackman&#8217;]</p>
+<div><p>window type in [‘rect’,’hamming’,’blackman’]</p>
 </div></blockquote>
 <p><strong>ang_offset</strong> : float</p>
 <blockquote>
@@ -461,7 +465,7 @@ are placed in the mes directory of the project.</p>
 </div></blockquote>
 <p><strong>ext</strong> : string</p>
 <blockquote>
-<div><p>file extension &#8216;txt&#8217; | &#8216;.mat&#8217;</p>
+<div><p>file extension ‘txt’ | ‘.mat’</p>
 </div></blockquote>
 <p class="last"><strong>diremeas</strong> : string</p>
 </td>
@@ -502,7 +506,7 @@ In practice for Espoo B2B.mat</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 14, 2017.
+      Last updated on Nov 17, 2017.
 
     </p>
   </div>
@@ -533,7 +537,7 @@ In practice for Espoo B2B.mat</p>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

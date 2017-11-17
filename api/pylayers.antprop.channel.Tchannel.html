@@ -34,6 +34,9 @@
   
         <link rel="author" title="About these documents"
               href="../about.html"/>
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="PyLayers" href="../index.html"/>
         <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
 
@@ -147,12 +150,13 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">35&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">36&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">37&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">38&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">39&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id134">40&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -222,7 +226,7 @@ Warning : This is a frequency domain channel deriving from bs.FUsignal</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td>ray transfer functions  (nray,nfreq)</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>dod  :</td>
 <td>direction of depature (rad) [theta_t,phi_t]  nray x 2</td>
@@ -243,31 +247,31 @@ Warning : This is a frequency domain channel deriving from bs.FUsignal</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td>imshow()</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>apply(W)</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>applywavB(Wgam)</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>applywavC(Wgam)</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>chantap(fcGHz,WGHz,Ntap)</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>doddoa()</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>wavefig(w,Nray)</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>rayfig(w,Nray)</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>rssi(ufreq)</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 </tr>
 </tbody>
 </table>
@@ -411,7 +415,7 @@ Warning : This is a frequency domain channel deriving from bs.FUsignal</p>
 <li>If the frequency band of the waveform exceeds the one of the</li>
 </ul>
 <p>transmission channel, a warning is sent.
-+ W is a FUsignal whose shape doesn&#8217;t need to be homogeneous with FUChannel H</p>
++ W is a FUsignal whose shape doesn’t need to be homogeneous with FUChannel H</p>
 </div></blockquote>
 </dd></dl>
 
@@ -553,7 +557,7 @@ w is apply on the overall CIR</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filecal</strong> : string</p>
 <blockquote>
-<div><p>calibration file name  &#8220;calibration.mat&#8221;</p>
+<div><p>calibration file name  “calibration.mat”</p>
 </div></blockquote>
 <p><strong>conjugate</strong> : boolean</p>
 <blockquote class="last">
@@ -646,7 +650,7 @@ the energy is colorcoded over all couples of DoA-DoD</p>
 <div><p>polar representation</p>
 </div></blockquote>
 <p><strong>cmap: matplotlib.cmap</strong></p>
-<p><strong>mode: &#8216;center&#8217; | &#8216;mean&#8217; | &#8216;in&#8217;</strong></p>
+<p><strong>mode: ‘center’ | ‘mean’ | ‘in’</strong></p>
 <blockquote>
 <div><p>see bsignal.energy</p>
 </div></blockquote>
@@ -760,7 +764,7 @@ the energy is colorcoded over all couples of DoA-DoD</p>
 <li>Initialize a FUsignal with the new frequency base</li>
 <li>build  matrix tau * f  (Nray x Nf)</li>
 <li>buildl matrix E= exp(-2 j pi f tau)</li>
-<li>resampling of FUDsignal according to f &#8211;&gt; S</li>
+<li>resampling of FUDsignal according to f –&gt; S</li>
 <li>apply the element wise product E .* S</li>
 <li>add all rays</li>
 </ol>
@@ -976,11 +980,11 @@ the energy is colorcoded over all couples of DoA-DoD</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>d: &#8216;doa&#8217; | &#8216;dod&#8217;</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>d: ‘doa’ | ‘dod’</strong></p>
 <blockquote>
 <div><p>display direction of departure | arrival</p>
 </div></blockquote>
-<p><strong>typ</strong> : &#8216;ns&#8217; | &#8216;m&#8217;</p>
+<p><strong>typ</strong> : ‘ns’ | ‘m’</p>
 <blockquote>
 <div><p>display delays in nano seconds ( ns) or meter (m)</p>
 </div></blockquote>
@@ -988,7 +992,7 @@ the energy is colorcoded over all couples of DoA-DoD</p>
 <p><strong>ax</strong> : plt.axis</p>
 <p><strong>a</strong> : str</p>
 <blockquote>
-<div><p>angle &#8216;theta&#8217; | &#8216;phi&#8217;</p>
+<div><p>angle ‘theta’ | ‘phi’</p>
 </div></blockquote>
 <p><strong>normalize: bool</strong></p>
 <blockquote>
@@ -1003,7 +1007,7 @@ the energy is colorcoded over all couples of DoA-DoD</p>
 <div><p>polar representation</p>
 </div></blockquote>
 <p><strong>cmap: matplotlib.cmap</strong></p>
-<p><strong>mode: &#8216;center&#8217; | &#8216;mean&#8217; | &#8216;in&#8217;</strong></p>
+<p><strong>mode: ‘center’ | ‘mean’ | ‘in’</strong></p>
 <blockquote>
 <div><p>see bsignal.energy</p>
 </div></blockquote>
@@ -1015,7 +1019,7 @@ the energy is colorcoded over all couples of DoA-DoD</p>
 <p><strong>edgecolors: bool</strong></p>
 <p><strong>colorbar: bool</strong></p>
 <p><strong>titel</strong> : bool</p>
-<p><strong>&#8216;clipval&#8217;: float</strong></p>
+<p><strong>‘clipval’: float</strong></p>
 <blockquote class="last">
 <div><p>remove values below clipval in dB</p>
 </div></blockquote>
@@ -1033,7 +1037,7 @@ the energy is colorcoded over all couples of DoA-DoD</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>d: &#8216;doa&#8217; | &#8216;dod&#8217;</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>d: ‘doa’ | ‘dod’</strong></p>
 <blockquote>
 <div><p>display direction of departure | arrival</p>
 </div></blockquote>
@@ -1056,7 +1060,7 @@ the energy is colorcoded over all couples of DoA-DoD</p>
 <div><p>polar representation</p>
 </div></blockquote>
 <p><strong>cmap: matplotlib.cmap</strong></p>
-<p><strong>mode: &#8216;center&#8217; | &#8216;mean&#8217; | &#8216;in&#8217;</strong></p>
+<p><strong>mode: ‘center’ | ‘mean’ | ‘in’</strong></p>
 <blockquote>
 <div><p>see bsignal.energy</p>
 </div></blockquote>
@@ -1210,9 +1214,9 @@ the energy is colorcoded over all couples of DoA-DoD</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : string</p>
 <blockquote class="last">
 <div><dl class="docutils">
-<dt>which parameter to sort &#8216;</dt>
-<dd><p class="first last">&#8216;tau&#8217; : (default)
-&#8216;energy&#8217;</p>
+<dt>which parameter to sort ‘</dt>
+<dd><p class="first last">‘tau’ : (default)
+‘energy’</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -1294,8 +1298,8 @@ the channel is sampled along a distance of half a wavelength</p>
 <div><p>Number of zeros for zero padding</p>
 </div></blockquote>
 <dl class="docutils">
-<dt>ffts</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">nt</span><dd><p class="first last">fftshift indicator (default 0 )</p>
+<dt>ffts <span class="classifier-delimiter">:</span> <span class="classifier">nt</span></dt>
+<dd><p class="first last">fftshift indicator (default 0 )</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -1355,7 +1359,7 @@ the channel is sampled along a distance of half a wavelength</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 14, 2017.
+      Last updated on Nov 17, 2017.
 
     </p>
   </div>
@@ -1386,7 +1390,7 @@ the channel is sampled along a distance of half a wavelength</p>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

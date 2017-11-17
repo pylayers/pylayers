@@ -34,6 +34,9 @@
   
         <link rel="author" title="About these documents"
               href="../../about.html"/>
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
     <link rel="top" title="PyLayers" href="../../index.html"/>
         <link rel="up" title="1   Overview" href="../TOC.html"/>
         <link rel="next" title="Handling time and frequency domain signals : Bsignal Class" href="../3-PHY/Bsignal.html"/>
@@ -183,12 +186,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.device">35&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.DF">36&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.waveform">37&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.agent">38&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.ban.body">39&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id134">40&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -251,10 +255,10 @@ import os.path as op
 </div>
 <div class="section" id="introduction">
 <h2>??Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>The European project called &#8220;METIS&#8221; has defined twelve test cases (TCs)
+<p>The European project called “METIS” has defined twelve test cases (TCs)
 to cover the practical applications of 5G system and simulation needs
-for the coming 5G system. For this reason, they have made available &#8220;Ray
-tracing data&#8221; from their
+for the coming 5G system. For this reason, they have made available “Ray
+tracing data” from their
 <a class="reference external" href="https://www.metis2020.com/documents/simulations/">website</a>. The
 provided data is used here to perform simulation with PyLayers The
 following code displays all available data.</p>
@@ -644,11 +648,11 @@ illustrated in the following two and three-dimensional figures.</p>
 <img alt="alt text" src="notebook/2-AP/../Data_TC1/METIS_TC1_3D.png" />
 <p class="caption"><span class="caption-text">alt text</span></p>
 </div>
-<p>The above figures available from METIS&#8217; deliverable [D6.1]
+<p>The above figures available from METIS’ deliverable [D6.1]
 (<a class="reference external" href="https://www.metis2020.com/wp-content/uploads/deliverables/METIS_D6.1_v1.pdf">https://www.metis2020.com/wp-content/uploads/deliverables/METIS_D6.1_v1.pdf</a>)
 show the initial room size of 20 m x 10 m, however it was later scaled
 to 25 m x 12.5 m. The room size of 25 m x 12.5 m was used to obtained
-the ray tracing data available from METIS&#8217; website.</p>
+the ray tracing data available from METIS’ website.</p>
 <p>The respective heights and materials of these objects are given in the
 following table.</p>
 <div class="code highlight-none"><div class="highlight"><pre><span></span>from tabulate import tabulate
@@ -676,7 +680,7 @@ tablets and smartphones, in either a sitting or standing position. A
 coverage base station working at frequencies below 6 GHz will be located
 in the center of the office whereas other access points could be
 deployed to give further capacity to the system. Using available ray
-tracing data from Metis&#8217; website we represent the actual scenario in the
+tracing data from Metis’ website we represent the actual scenario in the
 next figure. The coordinates of the APs are as follows: AP1 (2.5, 2.5,
 2.85), AP2 (2.5, 10, 2.85), AP3 (22.5, 10, 2.85), AP4 (22.5, 2.5, 2.85),
 AP5 (12.5, 6.25, 2.85). This scenario is assumed to be isolated from
@@ -820,7 +824,7 @@ data based) of PyLayers.</p>
 -----------------------------
 </pre></div>
 </div>
-<p>The materials &#8220;CONCRETE_TC1_METIS&#8221; and &#8220;WOOD_TC1_METIS&#8221; are not
+<p>The materials “CONCRETE_TC1_METIS” and “WOOD_TC1_METIS” are not
 included in the data base, therefore the two materials are added in the
 next cell.</p>
 <div class="code highlight-none"><div class="highlight"><pre><span></span>S.mat.add(name=&#39;CONCRETE_TC1_METIS&#39;,cval=6.14-1j*0.3,typ=&#39;reim&#39;,fGHz=60)
@@ -907,12 +911,12 @@ table.</p>
 <img alt="../../_images/MetisRayTracing60GHzforTC1_37_0.png" src="../../_images/MetisRayTracing60GHzforTC1_37_0.png" />
 <p>The above figures show the amplitude of the reflection (R) and
 transmission (T) coefficients as a function of the frequency.</p>
-<p>It can be seen that for the &#8220;concrete material&#8221; both transmission
+<p>It can be seen that for the “concrete material” both transmission
 coefficients (perpendicular and parallel) have an amplitude which is
 roughly equivalent to the penetration loss given in the above table
 (71.5 dB). And the same observation is obtained with the wood where the
 given penetration loss is 8.6 dB.</p>
-<p>Regarding the reflection coefficients for the &#8220;wood material&#8221;, it is
+<p>Regarding the reflection coefficients for the “wood material”, it is
 observed that both amplitudes have a slight decrease from -17.13 dB to
 -18,85 dB within the specified frequency band. Finally, the reflection
 coefficients for the concrete material have a constant amplitude of -9
@@ -1307,7 +1311,7 @@ the polar plane.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 14, 2017.
+      Last updated on Nov 17, 2017.
 
     </p>
   </div>
@@ -1338,7 +1342,7 @@ the polar plane.</p>
       <script type="text/javascript" src="../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

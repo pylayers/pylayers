@@ -1,0 +1,6 @@
+<map id="inheritance867f30e1b0" name="inheritance867f30e1b0">
+<area shape="rect" id="node1" href="pylayers.signal.standard.AP.html#pylayers.signal.standard.AP" target="_top" title="Access Point" alt="" coords="15,153,87,179"/>
+<area shape="rect" id="node2" href="pylayers.signal.standard.Band.html#pylayers.signal.standard.Band" target="_top" title="A Band is a structured portion of the spectrum" alt="" coords="15,104,87,129"/>
+<area shape="rect" id="node3" href="pylayers.signal.standard.Channel.html#pylayers.signal.standard.Channel" target="_top" title="a radio channel abstraction" alt="" coords="13,55,88,80"/>
+<area shape="rect" id="node4" href="pylayers.signal.standard.Wstandard.html#pylayers.signal.standard.Wstandard" target="_top" title="Wireless standard class" alt="" coords="5,5,96,31"/>
+</map>

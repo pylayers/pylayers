@@ -1,619 +1,731 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pylayers.signal.standard &mdash; PyLayers</title>
+  
+
+  
+  
+
+  
+
+  
+  
     
-    <title>pylayers.signal.standard &mdash; PyLayers</title>
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="author" title="About these documents"
+              href="../../../about.html"/>
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="PyLayers" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
     
-    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../../index.html" />
-    <link rel="up" title="Module code" href="../../index.html" /> 
-  </head>
-  <body>
-<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
-    PyLayers
-<!--
-<a href="../../../index.html"><img src="../../../_static/logo.png" height="200" border="0"
-    alt="pylayers"/></a>
--->
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Python
+          
+
+          
+            
+            <img src="../../../_static/pylayers.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
 </div>
 
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
-        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
-        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+          
+        </div>
 
-          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
-      </ul>
-    </div>
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebook/index.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html">8 Random Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.gis.selectl">3&nbsp;&nbsp;&nbsp;pylayers.gis.selectl Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.gis.srtm">4&nbsp;&nbsp;&nbsp;pylayers.gis.srtm Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.gis.osmparser">5&nbsp;&nbsp;&nbsp;pylayers.gis.osmparser Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.gis.ezone">6&nbsp;&nbsp;&nbsp;pylayers.gis.ezone Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.antprop.antenna">7&nbsp;&nbsp;&nbsp;pylayers.antprop.antenna Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.antprop.aarray">8&nbsp;&nbsp;&nbsp;pylayers.antprop.aarray Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.antprop.spharm">9&nbsp;&nbsp;&nbsp;pylayers.antprop.spharm Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.antprop.antssh">10&nbsp;&nbsp;&nbsp;pylayers.antprop.antssh Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.antprop.antvsh">11&nbsp;&nbsp;&nbsp;pylayers.antprop.antvsh Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.antprop.slab">12&nbsp;&nbsp;&nbsp;pylayers.antprop.slab Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.antprop.signature">13&nbsp;&nbsp;&nbsp;pylayers.antprop.signature Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.antprop.interactions">14&nbsp;&nbsp;&nbsp;pylayers.antprop.interactions Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.antprop.diffraction">15&nbsp;&nbsp;&nbsp;pylayers.antprop.diffraction Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.antprop.diffRT">16&nbsp;&nbsp;&nbsp;pylayers.antprop.diffRT Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.antprop.rays">17&nbsp;&nbsp;&nbsp;pylayers.antprop.rays Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.antprop.loss">18&nbsp;&nbsp;&nbsp;pylayers.antprop.loss Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.antprop.channel">19&nbsp;&nbsp;&nbsp;pylayers.antprop.channel Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id39">20&nbsp;&nbsp;&nbsp;pylayers.antprop.loss Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.antprop.coverage">21&nbsp;&nbsp;&nbsp;pylayers.antprop.coverage Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.antprop.coeffModel">22&nbsp;&nbsp;&nbsp;pylayers.antprop.coeffModel Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.simul.link">23&nbsp;&nbsp;&nbsp;pylayers.simul.link Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.simul.exploit">24&nbsp;&nbsp;&nbsp;pylayers.simul.exploit Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.simul.exploit_simulnet">25&nbsp;&nbsp;&nbsp;pylayers.simul.exploit_simulnet Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.simul.simulnet">26&nbsp;&nbsp;&nbsp;pylayers.simul.simulnet Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.simul.simultraj">27&nbsp;&nbsp;&nbsp;pylayers.simul.simultraj Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.exploit.simnet">28&nbsp;&nbsp;&nbsp;pylayers.exploit.simnet Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.measures.mesuwb">29&nbsp;&nbsp;&nbsp;pylayers.measures.mesuwb Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.measures.mesmimo">30&nbsp;&nbsp;&nbsp;pylayers.measures.mesmimo Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.measures.cormoran">31&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+</ul>
 
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+            
+          
         </div>
       </div>
+    </nav>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>pylayers.signal.standard</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <h1>Source code for pylayers.signal.standard</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="sd">Band Class</span>
-<span class="sd">===========</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    Band.__init__</span>
-<span class="sd">    Band.channelize</span>
-
-<span class="sd">Channel Class</span>
-<span class="sd">=============</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">     Channel.__init__</span>
-<span class="sd">     Channel.__repr__</span>
-<span class="sd">     Channel.overlap</span>
-<span class="sd">     Channel.capacity</span>
-
-
-<span class="sd">Wstandard Class</span>
-<span class="sd">===============</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">     Wstandard.__init__</span>
-<span class="sd">     Wstandard.__repr__</span>
-<span class="sd">     Wstandard.ls</span>
-<span class="sd">     Wstandard.bandplan</span>
-
-<span class="sd">AP Class</span>
-<span class="sd">========</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">     AP.__init__</span>
-<span class="sd">     AP.__repr__</span>
-<span class="sd">     AP.load</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">ConfigParser</span>
-<span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
-<span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
-
-<span class="k">class</span> <span class="nc">Band</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; A Band is a structured portion of the spectrum</span>
-
-<span class="sd">    A band is subdivided into channels</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Band.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.standard.Band.__init__.html#pylayers.signal.standard.Band.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">&#39;zone&#39;</span>  <span class="p">:</span> <span class="s">&#39;Europe&#39;</span><span class="p">,</span>
-        <span class="s">&#39;name&#39;</span>  <span class="p">:</span> <span class="s">&#39;ISM24&#39;</span><span class="p">,</span>
-        <span class="s">&#39;fstart&#39;</span>  <span class="p">:</span> <span class="mf">2.412</span><span class="p">,</span>
-        <span class="s">&#39;fstop&#39;</span>  <span class="p">:</span> <span class="mf">2.472</span><span class="p">,</span>
-        <span class="s">&#39;fstep&#39;</span> <span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-        <span class="s">&#39;bmhz&#39;</span> <span class="p">:</span> <span class="mi">20</span> <span class="p">}</span>
-
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-                <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;zone&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;zone&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;fstart&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fstart&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;fstop&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fstop&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;fstep&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fstep&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;bmhz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;bmhz&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">channelize</span><span class="p">()</span>
-</div>
-<div class="viewcode-block" id="Band.channelize"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.standard.Band.channelize.html#pylayers.signal.standard.Band.channelize">[docs]</a>    <span class="k">def</span> <span class="nf">channelize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">chan</span><span class="o">=</span><span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fcghz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;fstart&#39;</span><span class="p">],</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;fstop&#39;</span><span class="p">],</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;fstep&#39;</span><span class="p">]</span><span class="o">/</span><span class="mf">1000.</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">fc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fcghz</span><span class="p">):</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">fc</span><span class="o">&gt;=</span><span class="mi">4</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">fc</span><span class="o">&lt;</span><span class="mi">5</span><span class="p">):</span>
-                <span class="n">channum</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">((</span><span class="n">fc</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="mi">200</span><span class="p">))</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">fc</span><span class="o">&gt;=</span><span class="mi">5</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">fc</span><span class="o">&lt;</span><span class="mi">6</span><span class="p">):</span>
-                <span class="n">channum</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">((</span><span class="n">fc</span><span class="o">-</span><span class="mi">5</span><span class="p">)</span><span class="o">*</span><span class="mi">200</span><span class="p">))</span>
-            <span class="k">if</span> <span class="n">fc</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">:</span>
-                <span class="n">channum</span> <span class="o">=</span> <span class="n">k</span><span class="o">+</span><span class="mi">1</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">chan</span><span class="p">[</span><span class="n">channum</span><span class="p">]</span> <span class="o">=</span> <span class="n">Channel</span><span class="p">(</span><span class="n">fc</span><span class="p">,</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;bmhz&#39;</span><span class="p">])</span>
-</div>
-    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lchan</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; select a dictionnary of channel from a list of channels</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">dchan</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">chan</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lchan</span><span class="p">):</span>
-           <span class="n">dchan</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">chan</span><span class="p">]</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">dchan</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">bandname</span><span class="p">,</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;spectrum.ini&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; load spectrum</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fileini</span> <span class="o">=</span> <span class="n">_fileini</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
-        <span class="n">fp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_fileini</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRSIMUL&#39;</span><span class="p">]))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">readfp</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
-        <span class="n">band</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">bandname</span><span class="p">))</span>
-
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bandname</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;zone&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">band</span><span class="p">[</span><span class="s">&#39;zone&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;fstart&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">band</span><span class="p">[</span><span class="s">&#39;fstart&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;fstop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">band</span><span class="p">[</span><span class="s">&#39;fstop&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;fstep&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">band</span><span class="p">[</span><span class="s">&#39;fstep&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;bmhz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">band</span><span class="p">[</span><span class="s">&#39;bmhz&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">channelize</span><span class="p">()</span>
-
-<span class="k">class</span> <span class="nc">Channel</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; a radio channel abstraction</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Channel.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.standard.Channel.__init__.html#pylayers.signal.standard.Channel.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fcghz</span><span class="p">,</span><span class="n">bmhz</span><span class="p">,</span><span class="n">gmhz</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-
-<span class="sd">        fcghz : float</span>
-<span class="sd">            center frequency</span>
-<span class="sd">        bmhz : float</span>
-<span class="sd">            effective bandwith</span>
-<span class="sd">        gmhz : float</span>
-<span class="sd">            guard frequency (inter channel gap)</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;fcGHz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fcghz</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;BMHz&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">bmhz</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;GMHz&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">gmhz</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fghz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">fcghz</span><span class="o">-</span><span class="p">(</span><span class="n">bmhz</span><span class="o">+</span><span class="n">gmhz</span><span class="p">)</span><span class="o">/</span><span class="mf">2000.</span><span class="p">,</span><span class="n">fcghz</span><span class="o">+</span><span class="p">(</span><span class="n">bmhz</span><span class="o">+</span><span class="n">gmhz</span><span class="p">)</span><span class="o">/</span><span class="mf">2000.</span><span class="p">])</span>
-</div>
-<div class="viewcode-block" id="Channel.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.standard.Channel.__repr__.html#pylayers.signal.standard.Channel.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; representation</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;fcGHz&#39;</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; : [&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fghz</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fghz</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;]</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
-</div>
-    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">chan</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; add two adjascent channels</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fghz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="n">chan</span><span class="o">.</span><span class="n">fghz</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="bp">self</span><span class="p">[</span><span class="s">&#39;fcGHz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fghz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="bp">self</span><span class="p">[</span><span class="s">&#39;BMHz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;BMHZ&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">chan</span><span class="p">[</span><span class="s">&#39;BMHz&#39;</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fghz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">chan</span><span class="o">.</span><span class="n">fghz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fghz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="n">chan</span><span class="o">.</span><span class="n">fghz</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
-            <span class="bp">self</span><span class="p">[</span><span class="s">&#39;fcGHz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fghz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="bp">self</span><span class="p">[</span><span class="s">&#39;BMHz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;BMHZ&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">chan</span><span class="p">[</span><span class="s">&#39;BMHz&#39;</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fghz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">chan</span><span class="o">.</span><span class="n">fghz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">pass</span>
-        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-
-<div class="viewcode-block" id="Channel.overlap"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.standard.Channel.overlap.html#pylayers.signal.standard.Channel.overlap">[docs]</a>    <span class="k">def</span> <span class="nf">overlap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">C</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; tests wether 2 channels overlap</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-
-<span class="sd">        C : Channel</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-
-<span class="sd">        ov : int</span>
-<span class="sd">            1 if overlaping channel</span>
-<span class="sd">            0 otherwise</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-
-<span class="sd">        To be used later for optimization purpose</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="p">(</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span><span class="n">C</span><span class="o">.</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">C</span><span class="o">.</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-           <span class="o">|</span> <span class="p">(</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;</span><span class="n">C</span><span class="o">.</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">C</span><span class="o">.</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]))):</span>
-            <span class="k">return</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Channel.capacity"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.standard.Channel.capacity.html#pylayers.signal.standard.Channel.capacity">[docs]</a>    <span class="k">def</span> <span class="nf">capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">SNRdB</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; calculates channel capacity</span>
-
-<span class="sd">         Parameters</span>
-<span class="sd">         ----------</span>
-
-<span class="sd">         SNRdB : SNR in dB</span>
-
-<span class="sd">         Returns</span>
-<span class="sd">         -------</span>
-
-<span class="sd">         C : Channel capacity in Mbit/s (M=1e6)</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">C</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmhz</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">SNRdB</span><span class="o">/</span><span class="mf">10.</span><span class="p">))</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
-</div>
-<span class="k">class</span> <span class="nc">Wstandard</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Wireless standard class</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Wstandard.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.standard.Wstandard.__init__.html#pylayers.signal.standard.Wstandard.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">stdname</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span><span class="n">_filejson</span><span class="o">=</span><span class="s">&#39;wstd.json&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-
-<span class="sd">        name : string</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        ---------</span>
-
-<span class="sd">        &gt;&gt;&gt; from pylayers.signal.standard import *</span>
-<span class="sd">        &gt;&gt;&gt; Wifiag =Wstandard(&#39;ieee80211ah&#39;)</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">stdname</span>
-        <span class="k">if</span> <span class="n">stdname</span> <span class="o">!=</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">stdname</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Wstandard.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.standard.Wstandard.__repr__.html#pylayers.signal.standard.Wstandard.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;-------------------------</span><span class="se">\n</span><span class="s">&#39;</span>
-            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chan</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-                <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">+</span><span class="s">&#39; :  &#39;</span><span class="o">+</span>  <span class="bp">self</span><span class="o">.</span><span class="n">chan</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s">&#39;No standard loaded. </span><span class="se">\</span>
-<span class="s">                   check available standards with ls() method&#39;</span>
-
-        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
-
-</div>
-    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">stdname</span><span class="p">,</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;wstd.json&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; load a standard from file</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-
-<span class="sd">        stdname : string</span>
-<span class="sd">            standard name</span>
-<span class="sd">        _fileini : string</span>
-<span class="sd">            file containing the description of available standards</span>
-
-
-
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">fp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;wstd.json&#39;</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRSIMUL&#39;</span><span class="p">]))</span>
-        <span class="n">stds</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
-        <span class="n">fp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="n">std</span> <span class="o">=</span> <span class="n">stds</span><span class="p">[</span><span class="n">stdname</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">std</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">k</span><span class="o">&lt;&gt;</span> <span class="s">&quot;channels&quot;</span><span class="p">:</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">std</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
-                <span class="k">except</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">chan</span> <span class="o">=</span> <span class="n">std</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">chan</span><span class="p">:</span>
-                    <span class="n">bandname</span> <span class="o">=</span> <span class="n">k</span>
-                    <span class="n">fstart</span><span class="o">=</span><span class="n">chan</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;fstart&#39;</span><span class="p">]</span>
-                    <span class="n">fstop</span> <span class="o">=</span><span class="n">chan</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;fstop&#39;</span><span class="p">]</span>
-                    <span class="n">smhz</span> <span class="o">=</span><span class="n">chan</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;smhz&#39;</span><span class="p">]</span>
-                    <span class="n">bmhz</span> <span class="o">=</span> <span class="n">chan</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;bmhz&#39;</span><span class="p">]</span>
-                    <span class="n">gmhz</span> <span class="o">=</span> <span class="n">chan</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;gmhz&#39;</span><span class="p">]</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">bandplan</span><span class="p">(</span><span class="n">fstart</span><span class="o">=</span><span class="n">fstart</span><span class="p">,</span><span class="n">fstop</span><span class="o">=</span><span class="n">fstop</span><span class="p">,</span><span class="n">smhz</span><span class="o">=</span><span class="n">smhz</span><span class="p">,</span><span class="n">bmhz</span><span class="o">=</span><span class="n">bmhz</span><span class="p">,</span><span class="n">gmhz</span><span class="o">=</span><span class="n">gmhz</span><span class="p">)</span>
-
-<div class="viewcode-block" id="Wstandard.ls"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.standard.Wstandard.ls.html#pylayers.signal.standard.Wstandard.ls">[docs]</a>    <span class="k">def</span> <span class="nf">ls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; list all available standards</span>
-<span class="sd">        </span>
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        </span>
-<span class="sd">        .. plot::</span>
-<span class="sd">            :include-source:</span>
-<span class="sd">        </span>
-<span class="sd">            &gt;&gt;&gt; from pylayers.signal.standard import *</span>
-<span class="sd">            &gt;&gt;&gt; W =Wstandard(&#39;ieee80211ah&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; W.ls()</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">fp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;wstd.json&#39;</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRSIMUL&#39;</span><span class="p">]))</span>
-        <span class="n">stds</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
-        <span class="n">fp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">stds</span><span class="p">:</span>
-            <span class="k">print</span> <span class="n">k</span> <span class="o">+</span> <span class="s">&#39; , &#39;</span><span class="p">,</span>
-</div>
-    <span class="k">def</span> <span class="nf">power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">band</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span><span class="s">&#39;max&#39;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s">&#39;mw&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return inunition for a given channel</span>
-<span class="sd">        </span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        </span>
-<span class="sd">        band : int /float/string </span>
-<span class="sd">            &#39;bandnb&#39; : band number </span>
-<span class="sd">            &#39;fghz&#39; : frequency </span>
-<span class="sd">            &#39;bandname&#39; : band name</span>
-
-<span class="sd">        info : string (&#39;max&#39;|&#39;min&#39;|&#39;step&#39;)</span>
-<span class="sd">            requested information about power </span>
-
-<span class="sd">        unit : string (&#39;mw&#39;|db)</span>
-<span class="sd">            miliwatt or db</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        Pmaxmw</span>
-<span class="sd">            power iformations for given bandnb/fghz/</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">fp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;wstd.json&#39;</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRSIMUL&#39;</span><span class="p">]))</span>
-        <span class="n">stds</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
-        <span class="n">fp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="n">std</span> <span class="o">=</span> <span class="n">stds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="n">info</span> <span class="o">==</span> <span class="s">&#39;max&#39;</span><span class="p">:</span>
-            <span class="n">ii</span> <span class="o">=</span> <span class="s">&#39;pmaxmw&#39;</span>
-        <span class="k">if</span> <span class="n">info</span> <span class="o">==</span> <span class="s">&#39;min&#39;</span><span class="p">:</span>
-            <span class="n">ii</span> <span class="o">=</span> <span class="s">&#39;pminmw&#39;</span>
-        <span class="k">if</span> <span class="n">info</span> <span class="o">==</span> <span class="s">&#39;step&#39;</span><span class="p">:</span>
-            <span class="n">ii</span> <span class="o">=</span> <span class="s">&#39;pstepmw&#39;</span>
-
-        <span class="c"># band is a band number</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">band</span><span class="p">,</span><span class="nb">int</span><span class="p">):</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">fc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chan</span><span class="p">[</span><span class="n">band</span><span class="p">][</span><span class="s">&#39;fcGHz&#39;</span><span class="p">]</span>
-            <span class="k">except</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">bandeError</span><span class="p">(</span><span class="s">&#39;incorrect channel number&#39;</span><span class="p">)</span>
-        <span class="c"># band is a frequency</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">band</span><span class="p">,</span><span class="nb">float</span><span class="p">):</span>
-            <span class="n">fc</span> <span class="o">=</span> <span class="n">band</span>
-        <span class="c"># band is a band name</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">band</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">f0</span> <span class="o">=</span> <span class="n">std</span><span class="p">[</span><span class="s">&#39;channels&#39;</span><span class="p">][</span><span class="n">band</span><span class="p">][</span><span class="s">&#39;fstart&#39;</span><span class="p">]</span>
-                <span class="n">f1</span> <span class="o">=</span> <span class="n">std</span><span class="p">[</span><span class="s">&#39;channels&#39;</span><span class="p">][</span><span class="n">band</span><span class="p">][</span><span class="s">&#39;fstop&#39;</span><span class="p">]</span>
-                <span class="n">bmhz</span> <span class="o">=</span> <span class="n">std</span><span class="p">[</span><span class="s">&#39;channels&#39;</span><span class="p">][</span><span class="n">band</span><span class="p">][</span><span class="s">&#39;bmhz&#39;</span><span class="p">]</span>
-                <span class="n">gmhz</span> <span class="o">=</span> <span class="n">std</span><span class="p">[</span><span class="s">&#39;channels&#39;</span><span class="p">][</span><span class="n">band</span><span class="p">][</span><span class="s">&#39;gmhz&#39;</span><span class="p">]</span>
-                <span class="n">f0g</span> <span class="o">=</span> <span class="n">f0</span> <span class="o">-</span> <span class="p">(</span><span class="n">bmhz</span><span class="o">+</span><span class="n">gmhz</span><span class="p">)</span><span class="o">/</span><span class="mf">2000.</span>
-                <span class="n">f1g</span> <span class="o">=</span> <span class="n">f0</span> <span class="o">+</span> <span class="p">(</span><span class="n">bmhz</span><span class="o">+</span><span class="n">gmhz</span><span class="p">)</span><span class="o">/</span><span class="mf">2000.</span>
-                <span class="n">fc</span> <span class="o">=</span> <span class="p">(</span><span class="n">f1g</span><span class="o">+</span><span class="n">f0g</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span>
-            <span class="k">except</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;Incorrect band name&#39;</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">std</span><span class="p">[</span><span class="s">&#39;channels&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">f0</span> <span class="o">=</span> <span class="n">std</span><span class="p">[</span><span class="s">&#39;channels&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;fstart&#39;</span><span class="p">]</span>
-            <span class="n">f1</span> <span class="o">=</span> <span class="n">std</span><span class="p">[</span><span class="s">&#39;channels&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;fstop&#39;</span><span class="p">]</span>
-            <span class="n">bmhz</span> <span class="o">=</span> <span class="n">std</span><span class="p">[</span><span class="s">&#39;channels&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;bmhz&#39;</span><span class="p">]</span>
-            <span class="n">gmhz</span> <span class="o">=</span> <span class="n">std</span><span class="p">[</span><span class="s">&#39;channels&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;gmhz&#39;</span><span class="p">]</span>
-            <span class="n">f0g</span> <span class="o">=</span> <span class="n">f0</span> <span class="o">-</span> <span class="p">(</span><span class="n">bmhz</span><span class="o">+</span><span class="n">gmhz</span><span class="p">)</span><span class="o">/</span><span class="mf">2000.</span>
-            <span class="n">f1g</span> <span class="o">=</span> <span class="n">f1</span> <span class="o">+</span> <span class="p">(</span><span class="n">bmhz</span><span class="o">+</span><span class="n">gmhz</span><span class="p">)</span><span class="o">/</span><span class="mf">2000.</span>
-            <span class="n">bb</span> <span class="o">=</span> <span class="n">fc</span> <span class="o">&gt;=</span> <span class="n">f0g</span> <span class="ow">and</span> <span class="n">fc</span> <span class="o">&lt;=</span> <span class="n">f1g</span>
-            <span class="k">if</span> <span class="n">bb</span><span class="p">:</span>
-                <span class="n">power</span> <span class="o">=</span> <span class="n">stds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s">&#39;channels&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="n">ii</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;db&#39;</span><span class="p">:</span>
-                    <span class="n">power</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">power</span><span class="p">)</span>
-                <span class="k">return</span> <span class="n">power</span>
-        <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Requested information not in standard&#39;</span><span class="p">)</span>
-
-<div class="viewcode-block" id="Wstandard.bandplan"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.standard.Wstandard.bandplan.html#pylayers.signal.standard.Wstandard.bandplan">[docs]</a>    <span class="k">def</span> <span class="nf">bandplan</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fstart</span><span class="p">,</span><span class="n">fstop</span><span class="p">,</span><span class="n">smhz</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">bmhz</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">gmhz</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; construct the different channels of the standard</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-
-<span class="sd">        fstart : start frequency GHz</span>
-<span class="sd">        fstop : stop frequency GHz</span>
-<span class="sd">        smhz : step between adjacscent channels</span>
-<span class="sd">        bmhz : useful channel bandwidth</span>
-<span class="sd">        gmhz : gap between channels</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;chan&#39;</span><span class="p">)):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">chan</span><span class="o">=</span><span class="p">{}</span>
-        <span class="n">Nchannel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">((</span><span class="n">fstop</span><span class="o">-</span><span class="n">fstart</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">smhz</span><span class="o">/</span><span class="mf">1000.</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
-        <span class="n">fcghz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">fstart</span><span class="p">,</span><span class="n">fstop</span><span class="p">,</span><span class="n">Nchannel</span><span class="p">,</span><span class="n">endpoint</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">fc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fcghz</span><span class="p">):</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">fc</span><span class="o">&gt;=</span><span class="mi">4</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">fc</span><span class="o">&lt;</span><span class="mi">5</span><span class="p">):</span>
-                <span class="n">channum</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">((</span><span class="n">fc</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="mi">200</span><span class="p">))</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">fc</span><span class="o">&gt;=</span><span class="mi">5</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">fc</span><span class="o">&lt;</span><span class="mi">6</span><span class="p">):</span>
-                <span class="n">channum</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">((</span><span class="n">fc</span><span class="o">-</span><span class="mi">5</span><span class="p">)</span><span class="o">*</span><span class="mi">200</span><span class="p">))</span>
-            <span class="k">if</span> <span class="n">fc</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">:</span>
-                <span class="n">channum</span> <span class="o">=</span> <span class="n">k</span><span class="o">+</span><span class="mi">1</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">chan</span><span class="p">[</span><span class="n">channum</span><span class="p">]</span> <span class="o">=</span> <span class="n">Channel</span><span class="p">(</span><span class="n">fc</span><span class="p">,</span><span class="n">bmhz</span><span class="p">,</span><span class="n">gmhz</span><span class="p">)</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fcghz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">fcghz</span><span class="p">,</span><span class="n">fcghz</span><span class="p">))</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fcghz</span><span class="o">=</span><span class="n">fcghz</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">fcghz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fcghz</span><span class="p">)</span>
-
-</div>
-<span class="k">class</span> <span class="nc">AP</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Access Point</span>
-
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
-
-<span class="sd">    pos : np.array(,3)</span>
-<span class="sd">        AP position in 3D</span>
-<span class="sd">    wstd : Wireless standard</span>
-<span class="sd">    PtdBm : Transmit Power</span>
-<span class="sd">    channels : list of used channels</span>
-<span class="sd">    snsdBm : float</span>
-<span class="sd">        receiver sensitivity</span>
-<span class="sd">    nant : int</span>
-<span class="sd">        number of antennas</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="AP.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.standard.AP.__init__.html#pylayers.signal.standard.AP.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-
-<span class="sd">        &gt;&gt;&gt; import pylayers.signal.standard as std</span>
-<span class="sd">        &gt;&gt;&gt; AP1 = AP()</span>
-<span class="sd">        &gt;&gt;&gt; AP1.load()</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#39;p&#39;</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.2</span><span class="p">]),</span>
-            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;default&#39;</span><span class="p">,</span>
-            <span class="s">&#39;wstd&#39;</span><span class="p">:</span> <span class="s">&#39;ieee80211b&#39;</span><span class="p">,</span>
-            <span class="s">&#39;chan&#39;</span><span class="p">:[</span><span class="mi">11</span><span class="p">],</span>
-            <span class="s">&#39;PtdBm&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
-            <span class="s">&#39;sensdBm&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">94</span><span class="p">,</span>
-            <span class="s">&#39;nant&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
-        <span class="p">}</span>
-
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-                <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;p&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;p&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;PtdBm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;PtdBm&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;chan&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;chan&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;sensdBm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;sensdBm&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;nant&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;nant&#39;</span><span class="p">]</span>
-
-        <span class="n">standard</span> <span class="o">=</span> <span class="n">Wstandard</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;wstd&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="n">standard</span>
-</div>
-<div class="viewcode-block" id="AP.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.standard.AP.__repr__.html#pylayers.signal.standard.AP.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; specific representation</span>
-
-<span class="sd">            It respects keys of the dictionnary</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="s">&#39;name : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;p : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;p&#39;</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;PtdBm : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;PtdBm&#39;</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;chanels  : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;chan&#39;</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;   &#39;</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;chan&#39;</span><span class="p">]:</span>
-           <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">chan</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;sensdBm : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;sensdBm&#39;</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;nant : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;nant&#39;</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
-
-</div>
-<div class="viewcode-block" id="AP.load"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.standard.AP.load.html#pylayers.signal.standard.AP.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;defAP.json&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; loading an access point from file</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-
-<span class="sd">        _fileini : string</span>
-<span class="sd">            access point description ini file</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fileini</span> <span class="o">=</span> <span class="n">_fileini</span>
-        <span class="n">fileini</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_fileini</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRSIMUL&#39;</span><span class="p">])</span>
-        <span class="n">fp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileini</span><span class="p">,</span><span class="s">&quot;r&quot;</span><span class="p">)</span>
-        <span class="n">ap</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="n">dap</span> <span class="o">=</span> <span class="n">ap</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;p&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">dap</span><span class="p">[</span><span class="s">&#39;pos&#39;</span><span class="p">])</span>
-        <span class="n">wstd</span> <span class="o">=</span> <span class="n">dap</span><span class="p">[</span><span class="s">&#39;wstd&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;PtdBm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dap</span><span class="p">[</span><span class="s">&#39;ptdbm&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;channels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">dap</span><span class="p">[</span><span class="s">&#39;chan&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;sensdBm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dap</span><span class="p">[</span><span class="s">&#39;snsdbm&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;nant&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dap</span><span class="p">[</span><span class="s">&#39;nant&#39;</span><span class="p">]</span>
-
-        <span class="n">standard</span> <span class="o">=</span> <span class="n">Wstandard</span><span class="p">(</span><span class="n">wstd</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="n">standard</span>
-        <span class="n">fp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+<span></span>&quot;&quot;&quot;
+.. currentmodule:: pylayers.signal.standard
+
+.. autosummary::
+    :members:
+
+&quot;&quot;&quot;
+import numpy as np
+import json
+import ConfigParser
+import pylayers.util.pyutil as pyu
+import pylayers.antprop.antenna as ant
+from pylayers.util.project import *
+
+<div class="viewcode-block" id="Band"><a class="viewcode-back" href="../../../api/pylayers.signal.standard.Band.html#pylayers.signal.standard.Band">[docs]</a>class Band(dict):
+    &quot;&quot;&quot; A Band is a structured portion of the spectrum
+
+    A band is subdivided into channels
+
+    &quot;&quot;&quot;
+    def __init__(self,**kwargs):
+        &quot;&quot;&quot;
+        &quot;&quot;&quot;
+        defaults = {
+        &#39;zone&#39;  : &#39;Europe&#39;,
+        &#39;name&#39;  : &#39;ISM24&#39;,
+        &#39;fstart&#39;  : 2.412,
+        &#39;fstop&#39;  : 2.472,
+        &#39;fstep&#39; : 5,
+        &#39;bmhz&#39; : 20 }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+        self[&#39;zone&#39;]  = kwargs[&#39;zone&#39;]
+        self[&#39;name&#39;]  = kwargs[&#39;name&#39;]
+        self[&#39;fstart&#39;]  = kwargs[&#39;fstart&#39;]
+        self[&#39;fstop&#39;]  = kwargs[&#39;fstop&#39;]
+        self[&#39;fstep&#39;] = kwargs[&#39;fstep&#39;]
+        self[&#39;bmhz&#39;] = kwargs[&#39;bmhz&#39;]
+        self.channelize()
+
+<div class="viewcode-block" id="Band.channelize"><a class="viewcode-back" href="../../../api/pylayers.signal.standard.Band.html#pylayers.signal.standard.Band.channelize">[docs]</a>    def channelize(self):
+        &quot;&quot;&quot;
+        &quot;&quot;&quot;
+        self.chan={}
+        self.fcghz = np.arange(self[&#39;fstart&#39;],self[&#39;fstop&#39;],self[&#39;fstep&#39;]/1000.)
+        for k,fc in enumerate(self.fcghz):
+            if (fc&gt;=4) &amp; (fc&lt;5):
+                channum = int(np.round((fc-4)*200))
+            if (fc&gt;=5) &amp; (fc&lt;6):
+                channum = int(np.round((fc-5)*200))
+            if fc&lt;4:
+                channum = k+1
+            self.chan[channum] = Channel(fc,self[&#39;bmhz&#39;])</div>
+
+<div class="viewcode-block" id="Band.select"><a class="viewcode-back" href="../../../api/pylayers.signal.standard.Band.html#pylayers.signal.standard.Band.select">[docs]</a>    def select(self,lchan):
+        &quot;&quot;&quot; select a dictionnary of channel from a list of channels
+        &quot;&quot;&quot;
+        dchan = {}
+        for k,chan in enumerate(lchan):
+           dchan[k] = self[chan]
+        return(dchan)</div>
+
+<div class="viewcode-block" id="Band.load"><a class="viewcode-back" href="../../../api/pylayers.signal.standard.Band.html#pylayers.signal.standard.Band.load">[docs]</a>    def load(self,bandname,_fileini=&#39;spectrum.ini&#39;):
+        &quot;&quot;&quot; load spectrum
+        &quot;&quot;&quot;
+        self._fileini = _fileini
+        self.config = ConfigParser.ConfigParser()
+        fp = open(pyu.getlong(_fileini,pstruc[&#39;DIRSIMUL&#39;]))
+        self.config.readfp(fp)
+        band = dict(self.config.items(bandname))
+
+        self[&#39;name&#39;] = bandname
+        self[&#39;zone&#39;] = band[&#39;zone&#39;]
+        self[&#39;fstart&#39;] = eval(band[&#39;fstart&#39;])
+        self[&#39;fstop&#39;] = eval(band[&#39;fstop&#39;])
+        self[&#39;fstep&#39;] = eval(band[&#39;fstep&#39;])
+        self[&#39;bmhz&#39;] = eval(band[&#39;bmhz&#39;])
+        self.channelize()</div></div>
+
+<div class="viewcode-block" id="Channel"><a class="viewcode-back" href="../../../api/pylayers.signal.standard.Channel.html#pylayers.signal.standard.Channel">[docs]</a>class Channel(dict):
+    &quot;&quot;&quot; a radio channel abstraction
+    &quot;&quot;&quot;
+    def __init__(self,fcghz,bmhz,gmhz=0):
+        &quot;&quot;&quot;
+        Parameters
+        ----------
+
+        fcghz : float
+            center frequency
+        bmhz : float
+            effective bandwith
+        gmhz : float
+            guard frequency (inter channel gap)
+
+        &quot;&quot;&quot;
+        self[&#39;fcGHz&#39;] = fcghz
+        self[&#39;BMHz&#39;]  = bmhz
+        self[&#39;GMHz&#39;]  = gmhz
+        self.fghz = np.array([fcghz-(bmhz+gmhz)/2000.,fcghz+(bmhz+gmhz)/2000.])
+
+    def __repr__(self):
+        &quot;&quot;&quot; representation
+        &quot;&quot;&quot;
+        st = str(self[&#39;fcGHz&#39;])+&#39; : [&#39;+str(self.fghz[0])+&#39;,&#39;+str(self.fghz[1])+&#39;]\n&#39;
+        return(st)
+
+    def __add__(self,chan):
+        &quot;&quot;&quot; add two adjascent channels
+        &quot;&quot;&quot;
+        if (self.fghz[1]==chan.fghz[0]):
+            self[&#39;fcGHz&#39;] = self.fghz[1]
+            self[&#39;BMHz&#39;] = self[&#39;BMHZ&#39;]+chan[&#39;BMHz&#39;]
+            self.fghz[1]=chan.fghz[1]
+        elif (self.fghz[0]==chan.fghz[1]):
+            self[&#39;fcGHz&#39;] = self.fghz[0]
+            self[&#39;BMHz&#39;] = self[&#39;BMHZ&#39;]+chan[&#39;BMHz&#39;]
+            self.fghz[0]=chan.fghz[0]
+        else:
+            pass
+        return(self)
+
+<div class="viewcode-block" id="Channel.overlap"><a class="viewcode-back" href="../../../api/pylayers.signal.standard.Channel.html#pylayers.signal.standard.Channel.overlap">[docs]</a>    def overlap(self,C):
+        &quot;&quot;&quot; tests wether 2 channels overlap
+
+        Parameters
+        ----------
+
+        C : Channel
+
+        Returns
+        -------
+
+        ov : int
+            1 if overlaping channel
+            0 otherwise
+
+        Notes
+        -----
+
+        To be used later for optimization purpose
+
+        &quot;&quot;&quot;
+        if ( ( (self.f[1]&gt;C.f[0]) &amp; (self.f[1] &lt; C.f[1]))
+           | ( (self.f[0]&lt;C.f[1]) &amp; (self.f[0] &gt; C.f[0]))):
+            return(1)
+        else:
+            return(0)</div>
+
+<div class="viewcode-block" id="Channel.capacity"><a class="viewcode-back" href="../../../api/pylayers.signal.standard.Channel.html#pylayers.signal.standard.Channel.capacity">[docs]</a>    def capacity(self,SNRdB):
+        &quot;&quot;&quot; calculates channel capacity
+
+         Parameters
+         ----------
+
+         SNRdB : SNR in dB
+
+         Returns
+         -------
+
+         C : Channel capacity in Mbit/s (M=1e6)
+
+        &quot;&quot;&quot;
+        C = self.bmhz*np.log(1+10**(SNRdB/10.))/np.log(2)
+        return(C)</div></div>
+
+<div class="viewcode-block" id="Wstandard"><a class="viewcode-back" href="../../../api/pylayers.signal.standard.Wstandard.html#pylayers.signal.standard.Wstandard">[docs]</a>class Wstandard(dict):
+    &quot;&quot;&quot; Wireless standard class
+
+    The various available standard are described in a wstd.json file
+    It could be a mongodb database
+
+    &quot;&quot;&quot;
+    def __init__(self,stdname=&#39;&#39;,_filejson=&#39;wstd.json&#39;):
+        &quot;&quot;&quot;
+        Parameters
+        ----------
+
+        name : string
+
+        Examples
+        ---------
+
+        &gt;&gt;&gt; from pylayers.signal.standard import *
+        &gt;&gt;&gt; Wifiag =Wstandard(&#39;ieee80211ah&#39;)
+
+        &quot;&quot;&quot;
+        self.name = stdname
+        if stdname != &#39;&#39;:
+            self.load(stdname)
+
+    def __repr__(self):
+        try:
+            st = self.name+&#39;\n&#39;
+            st = st+&#39;-------------------------\n&#39;
+            for k in np.sort(self.chan.keys()):
+                st = st + str(k) +&#39; :  &#39;+  self.chan[k].__repr__()
+        except:
+            st = &#39;No standard loaded \n&#39;
+            st =  st+&#39;Check available standards with ls() method \n&#39;
+
+        return(st)
+
+
+<div class="viewcode-block" id="Wstandard.load"><a class="viewcode-back" href="../../../api/pylayers.signal.standard.Wstandard.html#pylayers.signal.standard.Wstandard.load">[docs]</a>    def load(self,stdname,_fileini=&#39;wstd.json&#39;):
+        &quot;&quot;&quot; load a standard from file
+
+        Parameters
+        ----------
+
+        stdname : string
+            standard name
+        _fileini : string
+            file containing the description of available standards
+
+
+
+        &quot;&quot;&quot;
+
+        filename=pyu.getlong(_fileini,pstruc[&#39;DIRSIMUL&#39;])
+        fp = open(filename)
+        stds = json.load(fp)
+        fp.close()
+        std = stds[stdname]
+        for k in std:
+            if k!= &quot;channels&quot;:
+                try:
+                    self[k] = eval(std[k])
+                except:
+                    self[k] = std[k]
+            else:
+                chan = std[k]
+                for k in chan:
+                    bandname = k
+                    fstart=chan[k][&#39;fstart&#39;]
+                    fstop =chan[k][&#39;fstop&#39;]
+                    smhz =chan[k][&#39;smhz&#39;]
+                    bmhz = chan[k][&#39;bmhz&#39;]
+                    gmhz = chan[k][&#39;gmhz&#39;]
+                    if self.name==&#39;generic&#39;:
+                        self.bandplan(fstart=fstart,fstop=fstop,smhz=smhz,bmhz=bmhz,gmhz=gmhz,chan=False)
+                    else:
+                        self.bandplan(fstart=fstart,fstop=fstop,smhz=smhz,bmhz=bmhz,gmhz=gmhz)</div>
+
+<div class="viewcode-block" id="Wstandard.ls"><a class="viewcode-back" href="../../../api/pylayers.signal.standard.Wstandard.html#pylayers.signal.standard.Wstandard.ls">[docs]</a>    def ls(self):
+        &quot;&quot;&quot; list all available standards
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            &gt;&gt;&gt; from pylayers.signal.standard import *
+            &gt;&gt;&gt; W =Wstandard(&#39;ieee80211ah&#39;)
+            &gt;&gt;&gt; W.ls()
+        &quot;&quot;&quot;
+        fp = open(pyu.getlong(&#39;wstd.json&#39;,pstruc[&#39;DIRSIMUL&#39;]))
+        stds = json.load(fp)
+        fp.close()
+        for k in stds:
+            print k + &#39; , &#39;,</div>
+
+<div class="viewcode-block" id="Wstandard.power"><a class="viewcode-back" href="../../../api/pylayers.signal.standard.Wstandard.html#pylayers.signal.standard.Wstandard.power">[docs]</a>    def power(self, band, info =&#39;max&#39;, unit=&#39;mw&#39;):
+        &quot;&quot;&quot; Return  for a given channel
+
+        Parameters
+        ----------
+
+        band : int /float/string
+            &#39;bandnb&#39; : band number
+            &#39;fghz&#39; : frequency
+            &#39;bandname&#39; : band name
+
+        info : string (&#39;max&#39;|&#39;min&#39;|&#39;step&#39;)
+            requested information about power
+
+        unit : string (&#39;mw&#39;|db)
+            miliwatt or db
+
+        Returns
+        -------
+        Pmaxmw
+            power iformations for given bandnb/fghz/
+        &quot;&quot;&quot;
+
+        fp = open(pyu.getlong(&#39;wstd.json&#39;,pstruc[&#39;DIRSIMUL&#39;]))
+        stds = json.load(fp)
+        fp.close()
+        std = stds[self.name]
+
+        if info == &#39;max&#39;:
+            ii = &#39;pmaxmw&#39;
+        if info == &#39;min&#39;:
+            ii = &#39;pminmw&#39;
+        if info == &#39;step&#39;:
+            ii = &#39;pstepmw&#39;
+
+        # band is a band number
+        if isinstance(band,int):
+            try:
+                fc = self.chan[band][&#39;fcGHz&#39;]
+            except:
+                raise bandeError(&#39;incorrect channel number&#39;)
+        # band is a frequency
+        elif isinstance(band,float):
+            fc = band
+        # band is a band name
+        elif isinstance(band,str):
+            try:
+                f0 = std[&#39;channels&#39;][band][&#39;fstart&#39;]
+                f1 = std[&#39;channels&#39;][band][&#39;fstop&#39;]
+                bmhz = std[&#39;channels&#39;][band][&#39;bmhz&#39;]
+                gmhz = std[&#39;channels&#39;][band][&#39;gmhz&#39;]
+                f0g = f0 - (bmhz+gmhz)/2000.
+                f1g = f0 + (bmhz+gmhz)/2000.
+                fc = (f1g+f0g)/2.
+            except:
+                raise TypeError(&#39;Incorrect band name&#39;)
+
+        for k in std[&#39;channels&#39;].keys():
+            f0 = std[&#39;channels&#39;][k][&#39;fstart&#39;]
+            f1 = std[&#39;channels&#39;][k][&#39;fstop&#39;]
+            bmhz = std[&#39;channels&#39;][k][&#39;bmhz&#39;]
+            gmhz = std[&#39;channels&#39;][k][&#39;gmhz&#39;]
+            f0g = f0 - (bmhz+gmhz)/2000.
+            f1g = f1 + (bmhz+gmhz)/2000.
+            bb = fc &gt;= f0g and fc &lt;= f1g
+            if bb:
+                power = stds[self.name][&#39;channels&#39;][k][ii]
+                if unit.lower() == &#39;db&#39;:
+                    power = 10*np.log10(power)
+                return power
+        raise NameError(&#39;Requested information not in standard&#39;)</div>
+
+<div class="viewcode-block" id="Wstandard.bandplan"><a class="viewcode-back" href="../../../api/pylayers.signal.standard.Wstandard.html#pylayers.signal.standard.Wstandard.bandplan">[docs]</a>    def bandplan(self,fstart,fstop,smhz=5,bmhz=20,gmhz=2,chan=True):
+        &quot;&quot;&quot; construct the different channels of the standard
+
+        Parameters
+        ----------
+
+        fstart : start frequency GHz
+        fstop : stop frequency GHz
+        smhz : step between adjacscent channels
+        bmhz : useful channel bandwidth
+        gmhz : gap between channels
+
+        &quot;&quot;&quot;
+        if not(hasattr(self,&#39;chan&#39;)):
+            self.chan={}
+        Nchannel = np.round((fstop-fstart)/(smhz/1000.)).astype(int)+1
+        fcghz = np.linspace(fstart,fstop,Nchannel,endpoint=True)
+        if chan:
+            for k,fc in enumerate(fcghz):
+                if (fc&gt;=4) &amp; (fc&lt;5):
+                    channum = int(np.round((fc-4)*200))
+                if (fc&gt;=5) &amp; (fc&lt;6):
+                    channum = int(np.round((fc-5)*200))
+                if fc&lt;4:
+                    channum = k+1
+                self.chan[channum] = Channel(fc,bmhz,gmhz)
+        else:
+            for k,fc in enumerate(fcghz):
+                self.chan[k]=Channel(fc,fcghz[1]-fcghz[0],0)
+        try:
+            self.fcghz=np.hstack((self.fcghz,fcghz))
+        except:
+            self.fcghz=fcghz
+
+        self.fcghz=np.sort(self.fcghz)</div></div>
+
+<div class="viewcode-block" id="AP"><a class="viewcode-back" href="../../../api/pylayers.signal.standard.AP.html#pylayers.signal.standard.AP">[docs]</a>class AP(dict):
+    &quot;&quot;&quot; Access Point
+
+    Attributes
+    ----------
+
+    pos : np.array(,3)
+        AP position in 3D
+    wstd : Wireless standard
+    PtdBm : Transmit Power
+    channels : list of used channels
+    snsdBm : float
+        receiver sensitivity
+    nant : int
+        number of antennas
+
+    &quot;&quot;&quot;
+
+    def __init__(self,**kwargs):
+        &quot;&quot;&quot;
+
+        Examples
+        --------
+
+        &gt;&gt;&gt; import pylayers.signal.standard as std
+        &gt;&gt;&gt; AP1 = AP()
+        &gt;&gt;&gt; AP1.load()
+
+        &quot;&quot;&quot;
+        defaults = { &#39;p&#39; : np.array([0,0,1.2]),
+            &#39;name&#39;: &#39;default&#39;,
+            &#39;wstd&#39;: &#39;ieee80211b&#39;,
+            &#39;chan&#39;:[11],
+            &#39;PtdBm&#39;:0,
+            &#39;sensdBm&#39;: -94,
+            &#39;nant&#39;:1,
+            &#39;ant&#39;:&#39;Omni&#39;,
+            &#39;on&#39;:True
+        }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+        self[&#39;name&#39;] = kwargs[&#39;name&#39;]
+        self[&#39;p&#39;] = kwargs[&#39;p&#39;]
+        self[&#39;PtdBm&#39;] = kwargs[&#39;PtdBm&#39;]
+        self[&#39;chan&#39;] = kwargs[&#39;chan&#39;]
+        self[&#39;sensdBm&#39;] = kwargs[&#39;sensdBm&#39;]
+        self[&#39;nant&#39;] = kwargs[&#39;nant&#39;]
+        self[&#39;on&#39;] = kwargs[&#39;on&#39;]
+        self[&#39;ant&#39;] = kwargs[&#39;ant&#39;]
+        self[&#39;phideg&#39;] = kwargs[&#39;phideg&#39;]
+
+        standard = Wstandard(kwargs[&#39;wstd&#39;])
+        self.s = standard
+        self.A = ant.Antenna(self[&#39;ant&#39;])
+
+    def __repr__(self):
+        &quot;&quot;&quot; specific representation
+
+            It respects keys of the dictionnary
+        &quot;&quot;&quot;
+        st = &#39;name : &#39;+str(self[&#39;name&#39;])+&#39;\n&#39;
+        st = st + &#39;p : &#39;+str(self[&#39;p&#39;])+&#39;\n&#39;
+        st = st+ &#39;PtdBm : &#39;+str(self[&#39;PtdBm&#39;])+&#39;\n&#39;
+        st = st+ &#39;channels  : &#39;+str(self[&#39;chan&#39;])+&#39;   &#39;
+        for k in self[&#39;chan&#39;]:
+           st = st + self.s.chan[k].__repr__()
+        st = st+ &#39;sensdBm : &#39;+str(self[&#39;sensdBm&#39;])+&#39;\n&#39;
+        st = st+ &#39;ant : &#39;+str(self[&#39;ant&#39;])+&#39;\n&#39;
+        st = st+ &#39;phi (deg) : &#39;+str(self[&#39;phideg&#39;])+&#39;\n&#39;
+        st = st+ &#39;nant : &#39;+str(self[&#39;nant&#39;])+&#39;\n&#39;
+        st = st+ &#39;On : &#39;+str(self[&#39;on&#39;])+&#39;\n&#39;
+        return(st)
+
+
+<div class="viewcode-block" id="AP.load"><a class="viewcode-back" href="../../../api/pylayers.signal.standard.AP.html#pylayers.signal.standard.AP.load">[docs]</a>    def load(self,name,_fileini=&#39;defAP.json&#39;):
+        &quot;&quot;&quot; loading an access point from file
+
+        Parameters
+        ----------
+
+        _fileini : string
+            access point description ini file
+
+        &quot;&quot;&quot;
+
+        self._fileini = _fileini
+        fileini = pyu.getlong(_fileini,pstruc[&#39;DIRSIMUL&#39;])
+        fp = open(fileini,&quot;r&quot;)
+        ap = json.load(fp)
+
+        self[&#39;name&#39;] = name
+        dap = ap[name]
+        self[&#39;p&#39;] = eval(dap[&#39;pos&#39;])
+        wstd = dap[&#39;wstd&#39;]
+        self[&#39;PtdBm&#39;] = dap[&#39;ptdbm&#39;]
+        self[&#39;channels&#39;] = eval(dap[&#39;chan&#39;])
+        self[&#39;sensdBm&#39;] = dap[&#39;snsdbm&#39;]
+        self[&#39;nant&#39;] = dap[&#39;nant&#39;]
+
+        standard = Wstandard(wstd)
+        self.s = standard
+        fp.close()</div></div>
 </pre></div>
 
+           </div>
           </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team.
+      Last updated on Nov 17, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
-        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
-        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
-          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
-      </ul>
-    </div>
+    </section>
 
-    <div class="footer">
-        &copy; Copyright 2014, PyLayers developer team.
-      Last updated on juin 07, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
-    </div>
-<script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34943220-1']);
-  _gaq.push(['_setDomainName', 'pylayers.github.io']);
-  _gaq.push(['_setAllowLinker', true]);
-  _gaq.push(['_trackPageview']);
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })(); 
-</script> 
- 
-  </body>
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
 </html>

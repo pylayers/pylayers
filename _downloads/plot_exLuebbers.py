@@ -35,7 +35,7 @@ DL.Ab=Antenna(typ='Omni')
 # Link evaluation 
 #
 
-DL.eval(force=1,cutoff=4,threshold=0.1,diffraction=1,nD=2)
+DL.eval(force=1,cutoff=3,threshold=0.1,diffraction=1,nD=2)
 
 fig = plt.figure()
 ax1 = fig.add_subplot(121)

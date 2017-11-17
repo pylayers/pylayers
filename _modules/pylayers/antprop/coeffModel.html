@@ -34,6 +34,9 @@
   
         <link rel="author" title="About these documents"
               href="../../../about.html"/>
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
     <link rel="top" title="PyLayers" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
@@ -133,12 +136,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.device">35&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.DF">36&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">37&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">38&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">39&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id134">40&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -184,310 +188,310 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pylayers.antprop.coeffModel</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">.. currentmodule:: pylayers.antprop.coeffModel</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :members:</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
-<span class="kn">import</span> <span class="nn">doctest</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">glob</span>
-<span class="kn">import</span> <span class="nn">doctest</span>
-<span class="kn">import</span> <span class="nn">pdb</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
-<span class="kn">import</span> <span class="nn">scipy.special</span> <span class="kn">as</span> <span class="nn">special</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">zeros</span>
-
-
-<div class="viewcode-block" id="relative_error"><a class="viewcode-back" href="../../../api/pylayers.antprop.coeffModel.relative_error.html#pylayers.antprop.coeffModel.relative_error">[docs]</a><span class="k">def</span> <span class="nf">relative_error</span><span class="p">(</span><span class="n">Eth_original</span><span class="p">,</span> <span class="n">Eph_original</span><span class="p">,</span><span class="n">Eth_model</span><span class="p">,</span> <span class="n">Eph_model</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">dsf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">kf</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; calculate relative error between original and model</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-
-<span class="sd">    Eth_original : np.array</span>
-<span class="sd">    Eph_original : np.array</span>
-<span class="sd">    Eth_model    : np.array</span>
-<span class="sd">    Eph_model    : np.array</span>
-<span class="sd">    theta : np.array</span>
-<span class="sd">    phi : np.phi</span>
-<span class="sd">    dsf : int</span>
-<span class="sd">        down sampling factor</span>
-<span class="sd">    kf : int</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">st</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span>
-    <span class="c1">#</span>
-    <span class="c1"># Construct difference between reference and reconstructed</span>
-    <span class="c1">#</span>
-    <span class="k">if</span> <span class="n">kf</span><span class="o">!=-</span><span class="mi">1</span><span class="p">:</span>
-        <span class="n">dTh</span> <span class="o">=</span> <span class="p">(</span><span class="n">Eth_model</span><span class="p">[</span><span class="n">kf</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">Eth_original</span><span class="p">[</span><span class="n">kf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">])</span>
-        <span class="n">dPh</span> <span class="o">=</span> <span class="p">(</span><span class="n">Eph_model</span><span class="p">[</span><span class="n">kf</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">Eph_original</span><span class="p">[</span><span class="n">kf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">])</span>
-        <span class="c1">#</span>
-        <span class="c1"># squaring  + Jacobian</span>
-        <span class="c1">#</span>
-        <span class="n">dTh2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">dTh</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">dTh</span><span class="p">))</span> <span class="o">*</span> <span class="n">st</span>
-        <span class="n">dPh2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">dPh</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">dPh</span><span class="p">))</span> <span class="o">*</span> <span class="n">st</span>
-
-        <span class="n">vTh2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">Eth_original</span><span class="p">[</span><span class="n">kf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">]</span> \
-             <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">Eth_original</span><span class="p">[</span><span class="n">kf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">]))</span> <span class="o">*</span> <span class="n">st</span>
-        <span class="n">vPh2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">Eph_original</span><span class="p">[</span><span class="n">kf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">]</span> \
-             <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">Eph_original</span><span class="p">[</span><span class="n">kf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">]))</span> <span class="o">*</span> <span class="n">st</span>
-
-        <span class="n">mvTh2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">vTh2</span><span class="p">)</span>
-        <span class="n">mvPh2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">vPh2</span><span class="p">)</span>
-
-        <span class="n">errTh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dTh2</span><span class="p">)</span>
-        <span class="n">errPh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dPh2</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">dTh</span> <span class="o">=</span> <span class="p">(</span><span class="n">Eth_model</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">Eth_original</span><span class="p">[:,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">])</span>
-        <span class="n">dPh</span> <span class="o">=</span> <span class="p">(</span><span class="n">Eph_model</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">Eph_original</span><span class="p">[:,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">])</span>
-        <span class="c1">#</span>
-        <span class="c1"># squaring  + Jacobian</span>
-        <span class="c1">#</span>
-        <span class="n">dTh2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">dTh</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">dTh</span><span class="p">))</span> <span class="o">*</span> <span class="n">st</span>
-        <span class="n">dPh2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">dPh</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">dPh</span><span class="p">))</span> <span class="o">*</span> <span class="n">st</span>
-
-        <span class="n">vTh2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">Eth_original</span><span class="p">[:,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">]</span> \
-             <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">Eth_original</span><span class="p">[:,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">]))</span> <span class="o">*</span> <span class="n">st</span>
-        <span class="n">vPh2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">Eph_original</span><span class="p">[:,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">]</span> \
-             <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">Eph_original</span><span class="p">[:,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">]))</span> <span class="o">*</span> <span class="n">st</span>
-
-        <span class="n">mvTh2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">vTh2</span><span class="p">)</span>
-        <span class="n">mvPh2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">vPh2</span><span class="p">)</span>
-
-        <span class="n">errTh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dTh2</span><span class="p">)</span>
-        <span class="n">errPh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dPh2</span><span class="p">)</span>
-
-    <span class="n">errelTh</span> <span class="o">=</span> <span class="p">(</span><span class="n">errTh</span> <span class="o">/</span> <span class="n">mvTh2</span><span class="p">)</span>
-    <span class="n">errelPh</span> <span class="o">=</span> <span class="p">(</span><span class="n">errPh</span> <span class="o">/</span> <span class="n">mvPh2</span><span class="p">)</span>
-    <span class="n">errel</span> <span class="o">=</span><span class="p">(</span> <span class="p">(</span><span class="n">errTh</span> <span class="o">+</span> <span class="n">errPh</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">mvTh2</span> <span class="o">+</span> <span class="n">mvPh2</span><span class="p">))</span>
-
-    <span class="k">return</span><span class="p">(</span><span class="n">errelTh</span><span class="p">,</span> <span class="n">errelPh</span><span class="p">,</span> <span class="n">errel</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="RepAzimuth1"><a class="viewcode-back" href="../../../api/pylayers.antprop.coeffModel.RepAzimuth1.html#pylayers.antprop.coeffModel.RepAzimuth1">[docs]</a><span class="k">def</span> <span class="nf">RepAzimuth1</span> <span class="p">(</span><span class="n">Ec</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">th</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">typ</span> <span class="o">=</span> <span class="s1">&#39;Gain&#39;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;  response in azimuth</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    Ec</span>
-<span class="sd">    theta :</span>
-<span class="sd">    phi :</span>
-<span class="sd">    th :</span>
-<span class="sd">    typ : string</span>
-<span class="sd">        &#39;Gain&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">pos_th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">theta</span> <span class="o">==</span> <span class="n">th</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">start</span> <span class="o">=</span> <span class="n">pos_th</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
-    <span class="n">stop</span> <span class="o">=</span>  <span class="n">start</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;Gain&#39;</span><span class="p">:</span>
-        <span class="n">V</span>   <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">Ec</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">]</span><span class="o">*</span>
-                       <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">Ec</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">])</span> <span class="o">+</span>
-                       <span class="n">Ec</span><span class="p">[</span><span class="mi">1</span><span class="p">,:,</span><span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">Ec</span><span class="p">[</span><span class="mi">1</span><span class="p">,:,</span><span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">])</span> <span class="o">+</span>
-                       <span class="n">Ec</span><span class="p">[</span><span class="mi">2</span><span class="p">,:,</span><span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">Ec</span><span class="p">[</span><span class="mi">2</span><span class="p">,:,</span><span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">])))</span>
-    <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;Ex&#39;</span><span class="p">:</span>
-        <span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Ec</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">])</span>
-    <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;Ey&#39;</span><span class="p">:</span>
-        <span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Ec</span><span class="p">[</span><span class="mi">1</span><span class="p">,:,</span><span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">])</span>
-    <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;Ez&#39;</span><span class="p">:</span>
-        <span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Ec</span><span class="p">[</span><span class="mi">2</span><span class="p">,:,</span><span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">])</span>
-
-    <span class="n">VdB</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
-    <span class="n">VdBmin</span> <span class="o">=</span> <span class="o">-</span><span class="mi">40</span>
-    <span class="n">VdB</span> <span class="o">=</span> <span class="n">VdB</span> <span class="o">-</span> <span class="n">VdBmin</span>
-    <span class="n">V</span> <span class="o">=</span> <span class="n">VdB</span>
-    <span class="c1">#plt.polar(phi,V)</span>
-    <span class="c1">#plt.title(&#39;theta = &#39;+str(th)) </span>
-    <span class="k">return</span> <span class="n">V</span></div>
-
-<div class="viewcode-block" id="mode_energy"><a class="viewcode-back" href="../../../api/pylayers.antprop.coeffModel.mode_energy.html#pylayers.antprop.coeffModel.mode_energy">[docs]</a><span class="k">def</span> <span class="nf">mode_energy</span><span class="p">(</span><span class="n">C</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">L</span> <span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">ifreq</span> <span class="o">=</span> <span class="mi">46</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; calculates mode energy</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-
-<span class="sd">    C :</span>
-<span class="sd">    M :</span>
-<span class="sd">    L : int</span>
-<span class="sd">    ifreq : int</span>
-
-<span class="sd">    shape C = (dim = 3,Ncoef = (1+L)**2)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">Em</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">Lc</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
-    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-        <span class="n">im</span> <span class="o">=</span> <span class="n">m</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">L</span><span class="o">+</span><span class="mi">3</span><span class="o">-</span><span class="n">m</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
-        <span class="n">bind</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">L</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">im</span><span class="o">-</span><span class="n">L</span><span class="o">-</span><span class="mi">1</span>
-        <span class="k">if</span> <span class="n">ifreq</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">em</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">C</span><span class="p">[:,</span><span class="n">ifreq</span><span class="p">,</span><span class="n">im</span><span class="p">:</span><span class="n">im</span><span class="o">+</span><span class="n">L</span><span class="o">-</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">em</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">C</span><span class="p">[:,</span><span class="n">ifreq</span><span class="p">,</span><span class="n">im</span><span class="p">:</span><span class="n">im</span><span class="o">+</span><span class="n">L</span><span class="o">-</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">C</span><span class="p">[:,</span><span class="n">ifreq</span><span class="p">,</span><span class="n">bind</span><span class="p">:</span><span class="n">bind</span> <span class="o">+</span> <span class="n">L</span><span class="o">-</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-            <span class="n">Et</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">C</span><span class="p">[:,</span><span class="n">ifreq</span><span class="p">,:])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-
-        <span class="n">Em</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">em</span><span class="p">)</span>
-    <span class="k">return</span>  <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Em</span><span class="p">)</span><span class="o">/</span><span class="n">Et</span></div>
-
-<div class="viewcode-block" id="mode_energy2"><a class="viewcode-back" href="../../../api/pylayers.antprop.coeffModel.mode_energy2.html#pylayers.antprop.coeffModel.mode_energy2">[docs]</a><span class="k">def</span> <span class="nf">mode_energy2</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">m</span><span class="p">,</span> <span class="n">ifreq</span><span class="o">=</span><span class="mi">46</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span> <span class="mi">20</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; calculates mode energy (version 2)</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-
-<span class="sd">    A :</span>
-<span class="sd">    m :</span>
-<span class="sd">    ifreq</span>
-<span class="sd">    L  :</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">cx</span> <span class="o">=</span> <span class="n">lmreshape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s2</span><span class="p">)</span>
-    <span class="n">cy</span> <span class="o">=</span> <span class="n">lmreshape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cy</span><span class="o">.</span><span class="n">s2</span><span class="p">)</span>
-    <span class="n">cz</span> <span class="o">=</span> <span class="n">lmreshape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cz</span><span class="o">.</span><span class="n">s2</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">ifreq</span> <span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-        <span class="n">em</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cx</span><span class="p">[</span><span class="n">ifreq</span><span class="p">,:,</span><span class="n">L</span><span class="o">+</span><span class="n">m</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cy</span><span class="p">[</span><span class="n">ifreq</span><span class="p">,:,</span><span class="n">L</span><span class="o">+</span><span class="n">m</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cz</span><span class="p">[</span><span class="n">ifreq</span><span class="p">,:,</span><span class="n">L</span><span class="o">+</span><span class="n">m</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">Et</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cx</span><span class="p">[</span><span class="n">ifreq</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cy</span><span class="p">[</span><span class="n">ifreq</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cz</span><span class="p">[</span><span class="n">ifreq</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">em</span><span class="o">/</span><span class="n">Et</span></div>
-
-<div class="viewcode-block" id="level_energy"><a class="viewcode-back" href="../../../api/pylayers.antprop.coeffModel.level_energy.html#pylayers.antprop.coeffModel.level_energy">[docs]</a><span class="k">def</span> <span class="nf">level_energy</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">l</span><span class="p">,</span> <span class="n">ifreq</span> <span class="o">=</span> <span class="mi">46</span><span class="p">,</span><span class="n">L</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; calculates energy of the level l</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-
-<span class="sd">    A : Antenna</span>
-<span class="sd">    l : int</span>
-<span class="sd">        level</span>
-<span class="sd">    ifreq</span>
-<span class="sd">    L</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">cx</span> <span class="o">=</span> <span class="n">lmreshape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s2</span><span class="p">)</span>
-    <span class="n">cy</span> <span class="o">=</span> <span class="n">lmreshape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cy</span><span class="o">.</span><span class="n">s2</span><span class="p">)</span>
-    <span class="n">cz</span> <span class="o">=</span> <span class="n">lmreshape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cz</span><span class="o">.</span><span class="n">s2</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">ifreq</span> <span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-        <span class="n">el</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cx</span><span class="p">[</span><span class="n">ifreq</span><span class="p">,</span><span class="n">l</span><span class="p">,:])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cy</span><span class="p">[</span><span class="n">ifreq</span><span class="p">,</span><span class="n">l</span><span class="p">,:])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cz</span><span class="p">[</span><span class="n">ifreq</span><span class="p">,</span><span class="n">l</span><span class="p">,:])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">Et</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cx</span><span class="p">[</span><span class="n">ifreq</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cy</span><span class="p">[</span><span class="n">ifreq</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cz</span><span class="p">[</span><span class="n">ifreq</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">el</span><span class="o">/</span><span class="n">Et</span></div>
-
-<div class="viewcode-block" id="modeMax"><a class="viewcode-back" href="../../../api/pylayers.antprop.coeffModel.modeMax.html#pylayers.antprop.coeffModel.modeMax">[docs]</a><span class="k">def</span> <span class="nf">modeMax</span><span class="p">(</span><span class="n">coeff</span><span class="p">,</span><span class="n">L</span><span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">ifreq</span>  <span class="o">=</span> <span class="mi">46</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; calculates maximal mode</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-
-
-<span class="sd">    coeff : </span>
-<span class="sd">    L  : int</span>
-<span class="sd">        maximum level</span>
-<span class="sd">    ifreq : int</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">Em_dB</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">mode_energy</span><span class="p">(</span><span class="n">C</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">,</span><span class="n">M</span> <span class="o">=</span> <span class="n">L</span><span class="p">))</span>
-
-    <span class="n">max_mode</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Em_dB</span> <span class="o">&lt;-</span><span class="mi">20</span> <span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span>
-    <span class="k">return</span> <span class="n">max_mode</span></div>
-
-<div class="viewcode-block" id="lmreshape"><a class="viewcode-back" href="../../../api/pylayers.antprop.coeffModel.lmreshape.html#pylayers.antprop.coeffModel.lmreshape">[docs]</a><span class="k">def</span> <span class="nf">lmreshape</span><span class="p">(</span><span class="n">coeff</span><span class="p">,</span><span class="n">L</span><span class="o">=</span> <span class="mi">20</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; level and mode reshaping</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-
-<span class="sd">    coeff</span>
-<span class="sd">    L : int</span>
-<span class="sd">        maximum level</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">sh</span> <span class="o">=</span> <span class="n">coeff</span><span class="o">.</span><span class="n">shape</span>
-
-    <span class="n">coeff_lm</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">,</span> <span class="mi">1</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">L</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="nb">complex</span> <span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">):</span>
-        <span class="n">im</span> <span class="o">=</span> <span class="n">m</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">L</span><span class="o">+</span><span class="mi">3</span><span class="o">-</span><span class="n">m</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
-        <span class="n">coeff_lm</span><span class="p">[:,</span><span class="n">m</span><span class="p">:</span><span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">L</span><span class="o">+</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">[:,</span><span class="n">im</span><span class="p">:</span><span class="n">im</span> <span class="o">+</span><span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="o">-</span><span class="n">m</span><span class="p">]</span>
-
-    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">L</span><span class="p">):</span>
-        <span class="n">im</span> <span class="o">=</span> <span class="n">m</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">L</span><span class="o">+</span><span class="mi">3</span><span class="o">-</span><span class="n">m</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
-        <span class="n">bind</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">L</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">im</span><span class="o">-</span><span class="n">L</span><span class="o">-</span><span class="mi">1</span>
-        <span class="n">coeff_lm</span><span class="p">[:,</span><span class="n">m</span><span class="p">:</span><span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">L</span><span class="o">-</span><span class="n">m</span><span class="p">]</span><span class="o">=</span> <span class="n">coeff</span><span class="p">[:,</span><span class="n">bind</span><span class="p">:</span> <span class="n">bind</span> <span class="o">+</span> <span class="n">L</span><span class="o">-</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
-
-    <span class="k">return</span> <span class="n">coeff_lm</span></div>
-
-<div class="viewcode-block" id="sshModel"><a class="viewcode-back" href="../../../api/pylayers.antprop.coeffModel.sshModel.html#pylayers.antprop.coeffModel.sshModel">[docs]</a><span class="k">def</span> <span class="nf">sshModel</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">,</span> <span class="n">L</span> <span class="o">=</span> <span class="mi">20</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; calculates sshModel</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-
-<span class="sd">    c : ssh coeff</span>
-<span class="sd">        free space antenna coeff</span>
-<span class="sd">    d : float</span>
-<span class="sd">        distance (meters)</span>
-<span class="sd">    L : int</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-
-<span class="sd">    cm : ssh coeff</span>
-<span class="sd">        perturbed antenna coeff</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-
-    <span class="n">Lc</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
-    <span class="n">sh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-    <span class="n">cm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="n">sh</span> <span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="nb">complex</span><span class="p">)</span>
-    <span class="n">m0</span> <span class="o">=</span>  <span class="n">modeMax</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">ifreq</span>  <span class="o">=</span> <span class="mi">46</span><span class="p">)</span>
-    <span class="n">im0</span> <span class="o">=</span> <span class="n">m0</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">L</span><span class="o">+</span><span class="mi">3</span><span class="o">-</span><span class="n">m0</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
-    <span class="n">M</span> <span class="o">=</span> <span class="n">m0</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.06</span><span class="o">*</span><span class="n">d</span><span class="p">)</span> <span class="o">+</span> <span class="mi">4</span>
-    <span class="n">a0</span> <span class="o">=</span> <span class="mf">0.002</span><span class="o">*</span><span class="n">d</span><span class="o">+</span><span class="mf">0.55</span>
-    <span class="n">am</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.002</span><span class="o">*</span><span class="n">d</span> <span class="o">+</span> <span class="mf">1.55</span>
-    <span class="n">alpha</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.006</span><span class="o">*</span><span class="n">d</span><span class="o">+</span><span class="mf">1.22</span>
-
-    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">m0</span><span class="p">):</span>
-
-        <span class="n">im</span> <span class="o">=</span> <span class="n">m</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">L</span><span class="o">+</span><span class="mi">3</span><span class="o">-</span><span class="n">m</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
-        <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">dephm</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="n">cm</span><span class="p">[:,:,</span><span class="n">im</span><span class="p">:</span> <span class="n">im</span><span class="o">+</span><span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="o">-</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">a0</span><span class="o">*</span><span class="n">c</span><span class="p">[:,:,</span><span class="n">im</span><span class="p">:</span> <span class="n">im</span><span class="o">+</span><span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="o">-</span><span class="n">m</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">dephm</span> <span class="o">=</span> <span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="n">m0</span><span class="p">)</span><span class="o">*</span><span class="n">alpha</span>
-            <span class="n">cm</span><span class="p">[:,:,</span><span class="n">im</span><span class="p">:</span> <span class="n">im</span><span class="o">+</span><span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="o">-</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">a0</span><span class="o">*</span><span class="n">c</span><span class="p">[:,:,</span><span class="n">im</span><span class="p">:</span> <span class="n">im</span><span class="o">+</span><span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="o">-</span><span class="n">m</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1j</span><span class="o">*</span><span class="n">dephm</span><span class="p">)</span>
-            <span class="n">bind</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">L</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">im</span><span class="o">-</span><span class="n">L</span><span class="o">-</span><span class="mi">1</span>
-            <span class="n">cm</span><span class="p">[:,:,</span><span class="n">bind</span><span class="p">:</span> <span class="n">bind</span> <span class="o">+</span> <span class="n">L</span><span class="o">-</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="n">m</span><span class="p">)</span><span class="o">*</span><span class="n">cm</span><span class="p">[:,:,</span><span class="n">im</span><span class="p">:</span> <span class="n">im</span><span class="o">+</span><span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="o">-</span><span class="n">m</span><span class="p">]</span>
-
-
-    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m0</span><span class="p">,</span><span class="n">M</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-
-        <span class="n">dephm</span> <span class="o">=</span> <span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="n">m0</span><span class="p">)</span><span class="o">*</span><span class="n">alpha</span>
-        <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="n">m0</span><span class="p">:</span>
-
-            <span class="n">im</span> <span class="o">=</span> <span class="n">m</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">L</span><span class="o">+</span><span class="mi">3</span><span class="o">-</span><span class="n">m</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
-            <span class="n">cm</span><span class="p">[:,:,</span><span class="n">im</span><span class="p">:</span> <span class="n">im</span><span class="o">+</span><span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="o">-</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">am</span><span class="o">/</span><span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="n">m0</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">c</span><span class="p">[:,:,</span><span class="n">im0</span> <span class="p">:</span> <span class="n">im0</span><span class="o">+</span><span class="n">L</span><span class="o">-</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1j</span><span class="o">*</span><span class="n">dephm</span><span class="p">)</span>
-            <span class="n">bind</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">L</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">im</span> <span class="o">-</span><span class="n">L</span><span class="o">-</span><span class="mi">1</span>
-            <span class="n">cm</span><span class="p">[:,:,</span><span class="n">bind</span><span class="p">:</span> <span class="n">bind</span> <span class="o">+</span> <span class="n">L</span><span class="o">-</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span>  <span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="n">m</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">cm</span><span class="p">[:,:,</span><span class="n">im</span><span class="p">:</span> <span class="n">im</span><span class="o">+</span><span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="o">-</span><span class="n">m</span><span class="p">])</span>
-
-        <span class="k">else</span><span class="p">:</span>
-
-            <span class="n">im</span> <span class="o">=</span> <span class="n">m</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">L</span><span class="o">+</span><span class="mi">3</span><span class="o">-</span><span class="n">m</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
-            <span class="n">cm</span><span class="p">[:,:,</span><span class="n">im</span><span class="p">:</span> <span class="n">im</span><span class="o">+</span><span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="o">-</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">am</span><span class="o">/</span><span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="n">m0</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">c</span><span class="p">[:,:,</span><span class="n">im0</span> <span class="p">:</span> <span class="n">im0</span><span class="o">+</span><span class="n">L</span><span class="o">-</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1j</span><span class="o">*</span><span class="n">dephm</span><span class="p">)</span>
-            <span class="n">bind</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">L</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">im</span> <span class="o">-</span><span class="n">L</span><span class="o">-</span><span class="mi">1</span>
-            <span class="n">cm</span><span class="p">[:,:,</span><span class="n">bind</span><span class="p">:</span> <span class="n">bind</span> <span class="o">+</span> <span class="n">L</span><span class="o">-</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span>  <span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="n">m</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">cm</span><span class="p">[:,:,</span><span class="n">im</span><span class="p">:</span> <span class="n">im</span><span class="o">+</span><span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="o">-</span><span class="n">m</span><span class="p">])</span>
-
-    <span class="n">cm</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">cm</span></div>
-
-<span class="k">if</span> <span class="p">(</span><span class="n">__name__</span><span class="o">==</span><span class="s2">&quot;__main__&quot;</span><span class="p">):</span>
-    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+<span></span>&quot;&quot;&quot;
+.. currentmodule:: pylayers.antprop.coeffModel
+
+.. autosummary::
+    :members:
+
+&quot;&quot;&quot;
+from __future__ import print_function
+import doctest
+import os
+import glob
+import doctest
+import pdb
+import numpy as np
+import scipy as sp
+import scipy.special as special
+import matplotlib.pylab as plt
+from numpy import zeros
+
+
+<div class="viewcode-block" id="relative_error"><a class="viewcode-back" href="../../../api/pylayers.antprop.coeffModel.relative_error.html#pylayers.antprop.coeffModel.relative_error">[docs]</a>def relative_error(Eth_original, Eph_original,Eth_model, Eph_model,theta, phi, dsf=1,kf=-1):
+    &quot;&quot;&quot; calculate relative error between original and model
+
+    Parameters
+    ----------
+
+    Eth_original : np.array
+    Eph_original : np.array
+    Eth_model    : np.array
+    Eph_model    : np.array
+    theta : np.array
+    phi : np.phi
+    dsf : int
+        down sampling factor
+    kf : int
+
+    &quot;&quot;&quot;
+
+    st = np.sin(theta).reshape((len(theta), 1))
+    #
+    # Construct difference between reference and reconstructed
+    #
+    if kf!=-1:
+        dTh = (Eth_model[kf, :, :] - Eth_original[kf, ::dsf, ::dsf])
+        dPh = (Eph_model[kf, :, :] - Eph_original[kf, ::dsf, ::dsf])
+        #
+        # squaring  + Jacobian
+        #
+        dTh2 = np.real(dTh * np.conj(dTh)) * st
+        dPh2 = np.real(dPh * np.conj(dPh)) * st
+
+        vTh2 = np.real(Eth_original[kf, ::dsf, ::dsf] \
+             * np.conj(Eth_original[kf, ::dsf, ::dsf])) * st
+        vPh2 = np.real(Eph_original[kf, ::dsf, ::dsf] \
+             * np.conj(Eph_original[kf, ::dsf, ::dsf])) * st
+
+        mvTh2 = np.sum(vTh2)
+        mvPh2 = np.sum(vPh2)
+
+        errTh = np.sum(dTh2)
+        errPh = np.sum(dPh2)
+    else:
+        dTh = (Eth_model[:, :, :] - Eth_original[:, ::dsf, ::dsf])
+        dPh = (Eph_model[:, :, :] - Eph_original[:, ::dsf, ::dsf])
+        #
+        # squaring  + Jacobian
+        #
+        dTh2 = np.real(dTh * np.conj(dTh)) * st
+        dPh2 = np.real(dPh * np.conj(dPh)) * st
+
+        vTh2 = np.real(Eth_original[:, ::dsf, ::dsf] \
+             * np.conj(Eth_original[:, ::dsf, ::dsf])) * st
+        vPh2 = np.real(Eph_original[:, ::dsf, ::dsf] \
+             * np.conj(Eph_original[:, ::dsf, ::dsf])) * st
+
+        mvTh2 = np.sum(vTh2)
+        mvPh2 = np.sum(vPh2)
+
+        errTh = np.sum(dTh2)
+        errPh = np.sum(dPh2)
+
+    errelTh = (errTh / mvTh2)
+    errelPh = (errPh / mvPh2)
+    errel =( (errTh + errPh) / (mvTh2 + mvPh2))
+
+    return(errelTh, errelPh, errel)</div>
+
+<div class="viewcode-block" id="RepAzimuth1"><a class="viewcode-back" href="../../../api/pylayers.antprop.coeffModel.RepAzimuth1.html#pylayers.antprop.coeffModel.RepAzimuth1">[docs]</a>def RepAzimuth1 (Ec, theta, phi, th= np.pi/2,typ = &#39;Gain&#39;):
+    &quot;&quot;&quot;  response in azimuth
+
+    Parameters
+    ----------
+    Ec
+    theta :
+    phi :
+    th :
+    typ : string
+        &#39;Gain&#39;
+    &quot;&quot;&quot;
+
+    pos_th = np.where(theta == th)[0][0]
+    start = pos_th*len(phi)
+    stop =  start + len(phi)
+    if typ==&#39;Gain&#39;:
+        V   =  np.sqrt(np.real(Ec[0,:,start:stop]*
+                       np.conj(Ec[0,:,start:stop]) +
+                       Ec[1,:,start:stop]*np.conj(Ec[1,:,start:stop]) +
+                       Ec[2,:,start:stop]*np.conj(Ec[2,:,start:stop])))
+    if typ==&#39;Ex&#39;:
+        V = np.abs(Ec[0,:,start:stop])
+    if typ==&#39;Ey&#39;:
+        V = np.abs(Ec[1,:,start:stop])
+    if typ==&#39;Ez&#39;:
+        V = np.abs(Ec[2,:,start:stop])
+
+    VdB = 20*np.log10(V)
+    VdBmin = -40
+    VdB = VdB - VdBmin
+    V = VdB
+    #plt.polar(phi,V)
+    #plt.title(&#39;theta = &#39;+str(th)) 
+    return V</div>
+
+<div class="viewcode-block" id="mode_energy"><a class="viewcode-back" href="../../../api/pylayers.antprop.coeffModel.mode_energy.html#pylayers.antprop.coeffModel.mode_energy">[docs]</a>def mode_energy(C,M,L =20, ifreq = 46):
+    &quot;&quot;&quot; calculates mode energy
+
+    Parameters
+    ----------
+
+    C :
+    M :
+    L : int
+    ifreq : int
+
+    shape C = (dim = 3,Ncoef = (1+L)**2)
+    &quot;&quot;&quot;
+    Em = []
+    Lc = (1+L)**2
+    for m in range(M+1):
+        im = m*(2*L+3-m)/2
+        bind = (1+L)*(L+2)/2 + im-L-1
+        if ifreq &gt; 0:
+            if m == 0:
+                em  = np.sum(np.abs(C[:,ifreq,im:im+L-m+1])**2)
+            else:
+                em  = np.sum(np.abs(C[:,ifreq,im:im+L-m+1])**2) + np.sum(np.abs(C[:,ifreq,bind:bind + L-m+1])**2)
+            Et = np.sum(np.abs(C[:,ifreq,:])**2)
+
+        Em.append(em)
+    return  np.array(Em)/Et</div>
+
+<div class="viewcode-block" id="mode_energy2"><a class="viewcode-back" href="../../../api/pylayers.antprop.coeffModel.mode_energy2.html#pylayers.antprop.coeffModel.mode_energy2">[docs]</a>def mode_energy2(A,m, ifreq=46, L= 20):
+    &quot;&quot;&quot; calculates mode energy (version 2)
+
+    Parameters
+    ----------
+
+    A :
+    m :
+    ifreq
+    L  :
+
+    &quot;&quot;&quot;
+
+    cx = lmreshape(A.S.Cx.s2)
+    cy = lmreshape(A.S.Cy.s2)
+    cz = lmreshape(A.S.Cz.s2)
+
+    if ifreq &gt;0:
+        em = np.sum(np.abs(cx[ifreq,:,L+m])**2+np.abs(cy[ifreq,:,L+m])**2+np.abs(cz[ifreq,:,L+m])**2)
+        Et = np.sum(np.abs(cx[ifreq])**2+np.abs(cy[ifreq])**2+np.abs(cz[ifreq])**2)
+    return em/Et</div>
+
+<div class="viewcode-block" id="level_energy"><a class="viewcode-back" href="../../../api/pylayers.antprop.coeffModel.level_energy.html#pylayers.antprop.coeffModel.level_energy">[docs]</a>def level_energy(A,l, ifreq = 46,L=20):
+    &quot;&quot;&quot; calculates energy of the level l
+
+    Parameters
+    ----------
+
+    A : Antenna
+    l : int
+        level
+    ifreq
+    L
+    &quot;&quot;&quot;
+    cx = lmreshape(A.S.Cx.s2)
+    cy = lmreshape(A.S.Cy.s2)
+    cz = lmreshape(A.S.Cz.s2)
+    if ifreq &gt;0:
+        el = np.sum(np.abs(cx[ifreq,l,:])**2+np.abs(cy[ifreq,l,:])**2+np.abs(cz[ifreq,l,:])**2)
+        Et = np.sum(np.abs(cx[ifreq])**2+np.abs(cy[ifreq])**2+np.abs(cz[ifreq])**2)
+    return el/Et</div>
+
+<div class="viewcode-block" id="modeMax"><a class="viewcode-back" href="../../../api/pylayers.antprop.coeffModel.modeMax.html#pylayers.antprop.coeffModel.modeMax">[docs]</a>def modeMax(coeff,L= 20, ifreq  = 46):
+    &quot;&quot;&quot; calculates maximal mode
+
+    Parameters
+    ----------
+
+
+    coeff : 
+    L  : int
+        maximum level
+    ifreq : int
+
+    &quot;&quot;&quot;
+
+    Em_dB = 20*np.log10(mode_energy(C = coeff,M = L))
+
+    max_mode = np.where(Em_dB &lt;-20 )[0][0]-1
+    return max_mode</div>
+
+<div class="viewcode-block" id="lmreshape"><a class="viewcode-back" href="../../../api/pylayers.antprop.coeffModel.lmreshape.html#pylayers.antprop.coeffModel.lmreshape">[docs]</a>def lmreshape(coeff,L= 20):
+    &quot;&quot;&quot; level and mode reshaping
+
+    Parameters
+    ----------
+
+    coeff
+    L : int
+        maximum level
+    &quot;&quot;&quot;
+
+    sh = coeff.shape
+
+    coeff_lm = zeros(shape = (sh[0],1+L, 1+2*L), dtype = complex )
+
+    for m in range(0,1+L):
+        im = m*(2*L+3-m)/2
+        coeff_lm[:,m:L+1,L+m] = coeff[:,im:im +L+1-m]
+
+    for m in range(1,L):
+        im = m*(2*L+3-m)/2
+        bind = (1+L)*(L+2)/2 + im-L-1
+        coeff_lm[:,m:L+1,L-m]= coeff[:,bind: bind + L-m+1]
+
+    return coeff_lm</div>
+
+<div class="viewcode-block" id="sshModel"><a class="viewcode-back" href="../../../api/pylayers.antprop.coeffModel.sshModel.html#pylayers.antprop.coeffModel.sshModel">[docs]</a>def sshModel(c,d, L = 20):
+    &quot;&quot;&quot; calculates sshModel
+
+    Parameters
+    ----------
+
+    c : ssh coeff
+        free space antenna coeff
+    d : float
+        distance (meters)
+    L : int
+
+    Returns
+    -------
+
+    cm : ssh coeff
+        perturbed antenna coeff
+
+    &quot;&quot;&quot;
+
+
+    Lc = (1+L)**2
+    sh = np.shape(c)
+    cm = np.zeros(shape = sh , dtype = complex)
+    m0 =  modeMax(c, L= 20, ifreq  = 46)
+    im0 = m0*(2*L+3-m0)/2
+    M = m0 + int(0.06*d) + 4
+    a0 = 0.002*d+0.55
+    am = -0.002*d + 1.55
+    alpha = -0.006*d+1.22
+
+    for m in range(0,m0):
+
+        im = m*(2*L+3-m)/2
+        if m == 0:
+            dephm = 0
+            cm[:,:,im: im+L+1-m] = a0*c[:,:,im: im+L+1-m]
+        else:
+            dephm = (m-m0)*alpha
+            cm[:,:,im: im+L+1-m] = a0*c[:,:,im: im+L+1-m]*np.exp(1j*dephm)
+            bind = (1+L)*(L+2)/2 + im-L-1
+            cm[:,:,bind: bind + L-m+1] = ((-1)**m)*cm[:,:,im: im+L+1-m]
+
+
+    for m in range(m0,M+1):
+
+        dephm = (m-m0)*alpha
+        if m == m0:
+
+            im = m*(2*L+3-m)/2
+            cm[:,:,im: im+L+1-m] = (am/(m-m0+1))*c[:,:,im0 : im0+L-m+1]*np.exp(1j*dephm)
+            bind = (1+L)*(L+2)/2 + im -L-1
+            cm[:,:,bind: bind + L-m+1] =  ((-1)**m)*(cm[:,:,im: im+L+1-m])
+
+        else:
+
+            im = m*(2*L+3-m)/2
+            cm[:,:,im: im+L+1-m] = (am/(m-m0+1))*c[:,:,im0 : im0+L-m+1]*np.exp(1j*dephm)
+            bind = (1+L)*(L+2)/2 + im -L-1
+            cm[:,:,bind: bind + L-m+1] =  ((-1)**m)*(cm[:,:,im: im+L+1-m])
+
+    cm[0:2] = c[0:2]
+    return cm</div>
+
+if (__name__==&quot;__main__&quot;):
+    doctest.testmod()
 
 
 </pre></div>
@@ -502,7 +506,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 14, 2017.
+      Last updated on Nov 17, 2017.
 
     </p>
   </div>
@@ -533,7 +537,7 @@
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

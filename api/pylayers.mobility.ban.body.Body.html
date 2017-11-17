@@ -34,6 +34,9 @@
   
         <link rel="author" title="About these documents"
               href="../about.html"/>
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="PyLayers" href="../index.html"/>
         <link rel="up" title="1   pylayers.util.project Module" href="references.html"/>
         <link rel="next" title="Cylinder" href="pylayers.mobility.ban.body.Cylinder.html"/> 
@@ -134,25 +137,26 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">35&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">36&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">37&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">38&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">39&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="references.html#body-class">39.1&nbsp;&nbsp;&nbsp;Body Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="references.html#cylinder-class">39.2&nbsp;&nbsp;&nbsp;Cylinder Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="references.html#id131">39.3&nbsp;&nbsp;&nbsp;Functions</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="references.html#id132">39.4&nbsp;&nbsp;&nbsp;Classes</a><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="references.html#body-class">40.1&nbsp;&nbsp;&nbsp;Body Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#cylinder-class">40.2&nbsp;&nbsp;&nbsp;Cylinder Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#id133">40.3&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="references.html#id134">40.4&nbsp;&nbsp;&nbsp;Classes</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Body</a><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.mobility.ban.body.Cylinder.html">Cylinder</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="references.html#id133">39.5&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#id135">40.5&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id134">40&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -480,7 +484,7 @@ self.vmocap : averaged speed along trajectory</p>
 </div></blockquote>
 <p><strong>planes</strong> : list</p>
 <blockquote>
-<div><p>list of planes to be displayed [&#8216;xz&#8217;,&#8217;xy&#8217;,&#8217;yz&#8217;]</p>
+<div><p>list of planes to be displayed [‘xz’,’xy’,’yz’]</p>
 </div></blockquote>
 <p><strong>dev</strong> : bool</p>
 <blockquote>
@@ -491,7 +495,7 @@ self.vmocap : averaged speed along trajectory</p>
 <div><p>show devices ids</p>
 </div></blockquote>
 <p><strong>See Also</strong></p>
-<p><strong>&#8212;&#8212;&#8211;</strong></p>
+<p><strong>——–</strong></p>
 <p class="last"><strong>http://en.wikipedia.org/wiki/Chronophotography</strong></p>
 </td>
 </tr>
@@ -758,7 +762,7 @@ or if topos==True a representation of the current topos.</p>
 </ul>
 <p>Node number = Node name
 + section [cylinder]
-CylinderId = {&#8216;t&#8217;:tail node number, &#8216;h&#8217;:head node number , &#8216;r&#8217;: cylinder&#8217; radius}
+CylinderId = {‘t’:tail node number, ‘h’:head node number , ‘r’: cylinder’ radius}
 + section [wearable]
 + section [mocap]</p>
 </dd></dl>
@@ -783,7 +787,7 @@ CylinderId = {&#8216;t&#8217;:tail node number, &#8216;h&#8217;:head node number
 <blockquote>
 <div><p>unit of c3d file</p>
 </div></blockquote>
-<p><strong>rot</strong> : list [&#8216;x&#8217;,&#8217;y&#8217;,&#8217;z&#8217;]</p>
+<p><strong>rot</strong> : list [‘x’,’y’,’z’]</p>
 <blockquote class="last">
 <div><p>swap axes of the c3d file</p>
 </div></blockquote>
@@ -809,7 +813,7 @@ CylinderId = {&#8216;t&#8217;:tail node number, &#8216;h&#8217;:head node number
 <p><strong>dcs</strong> : False</p>
 <p><strong>struc</strong> : True</p>
 <p><strong>traj</strong> : []</p>
-<p class="last"><strong>filestruc:&#8217;DLR.off&#8217;</strong></p>
+<p class="last"><strong>filestruc:’DLR.off’</strong></p>
 </td>
 </tr>
 </tbody>
@@ -859,10 +863,10 @@ self.A2 : accelerations between radio nodes</p>
 <dd><p>calculate position and velocity</p>
 <blockquote>
 <div><dl class="docutils">
-<dt>traj</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">Tajectory DataFrame</span><dd>nx3</dd>
-<dt>t</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">float</span><dd>trajectory time for evaluation of topos</dd>
+<dt>traj <span class="classifier-delimiter">:</span> <span class="classifier">Tajectory DataFrame</span></dt>
+<dd>nx3</dd>
+<dt>t <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>trajectory time for evaluation of topos</dd>
 </dl>
 </div></blockquote>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1076,7 +1080,7 @@ trajectory time-scale.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frameiId</strong> : int</p>
 <p><strong>plane</strong> : string</p>
 <blockquote>
-<div><p>&#8216;yz&#8217; | &#8216;xz&#8217; | &#8216;xy&#8217;</p>
+<div><p>‘yz’ | ‘xz’ | ‘xy’</p>
 </div></blockquote>
 <p><strong>widthfactor</strong> : int</p>
 <p><strong>topos</strong> : boolean</p>
@@ -1140,7 +1144,7 @@ trajectory time-scale.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 08, 2017.
+      Last updated on Nov 17, 2017.
 
     </p>
   </div>
@@ -1171,7 +1175,7 @@ trajectory time-scale.</p>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

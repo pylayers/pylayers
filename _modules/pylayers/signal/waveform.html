@@ -34,6 +34,9 @@
   
         <link rel="author" title="About these documents"
               href="../../../about.html"/>
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
     <link rel="top" title="PyLayers" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
@@ -133,12 +136,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.device">35&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.DF">36&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">37&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">38&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">39&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id134">40&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -184,420 +188,420 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pylayers.signal.waveform</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding:Utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">doctest</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">pdb</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
-<span class="kn">import</span> <span class="nn">scipy.io</span> <span class="kn">as</span> <span class="nn">io</span>
-<span class="kn">import</span> <span class="nn">scipy.signal</span> <span class="kn">as</span> <span class="nn">si</span>
-<span class="kn">import</span> <span class="nn">scipy.linalg</span> <span class="kn">as</span> <span class="nn">la</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">as</span> <span class="nn">bs</span>
-<span class="kn">from</span> <span class="nn">pylayers.measures</span> <span class="kn">import</span> <span class="n">mesuwb</span>
-
-<div class="viewcode-block" id="Waveform"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform">[docs]</a><span class="k">class</span> <span class="nc">Waveform</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
-
-<span class="sd">    st  : time domain</span>
-<span class="sd">    sf  : frequency domain</span>
-<span class="sd">    sfg : frequency domain integrated</span>
-
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-
-<span class="sd">    eval</span>
-<span class="sd">    showpsd</span>
-<span class="sd">    ip_generic</span>
-<span class="sd">    fromfile</span>
-<span class="sd">    fromfile2</span>
-<span class="sd">    read</span>
-<span class="sd">    gui</span>
-<span class="sd">    show</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-
-<span class="sd">        &#39;typ&#39; : string</span>
-<span class="sd">            &#39;generic&#39;,</span>
-<span class="sd">         &#39;WGHz&#39;: float</span>
-<span class="sd">            0.499</span>
-<span class="sd">         &#39;fcGHz&#39;: float</span>
-<span class="sd">            4.493</span>
-<span class="sd">         &#39;fsGHz&#39;: float</span>
-<span class="sd">            100,</span>
-<span class="sd">         &#39;threshdB&#39;:</span>
-<span class="sd">              3,</span>
-<span class="sd">         &#39;twns&#39;: float</span>
-<span class="sd">            30</span>
-
-<span class="sd">        typ  :  &#39;generic&#39;,&#39;W1compensate&#39;,&#39;W1offset&#39;</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;typ&#39;</span><span class="p">:</span><span class="s1">&#39;generic&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;fGHz&#39;</span><span class="p">:[],</span>
-                <span class="s1">&#39;WGHz&#39;</span><span class="p">:</span> <span class="mf">0.499</span><span class="p">,</span>
-                <span class="s1">&#39;fcGHz&#39;</span><span class="p">:</span> <span class="mf">4.493</span><span class="p">,</span>
-                <span class="s1">&#39;feGHz&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
-                <span class="s1">&#39;threshdB&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-                <span class="s1">&#39;twns&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">}</span>
-
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
-
-<div class="viewcode-block" id="Waveform.eval"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">u&quot;&quot;&quot; evaluate waveform</span>
-
-<span class="sd">        The :math:`\lambda/4*\pi` factor which is necessary to get the proper budget</span>
-<span class="sd">        link ( from the Friis formula) is introduced in this function.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;typ&#39;</span><span class="p">]</span>  <span class="o">==</span> <span class="s1">&#39;generic&#39;</span><span class="p">:</span>
-            <span class="p">[</span><span class="n">st</span><span class="p">,</span><span class="n">sf</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ip_generic</span><span class="p">()</span>
-        <span class="c1">#elif self[&#39;typ&#39;]  == &#39;mbofdm&#39;:</span>
-        <span class="c1">#    [st,sf]=self.mbofdm()</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;typ&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;W1compensate&#39;</span><span class="p">:</span>
-            <span class="p">[</span><span class="n">st</span><span class="p">,</span><span class="n">sf</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fromfile</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;typ&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;W1offset&#39;</span><span class="p">:</span>
-            <span class="p">[</span><span class="n">st</span><span class="p">,</span><span class="n">sf</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fromfile2</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;typ&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;blackmann&#39;</span><span class="p">:</span>
-            <span class="n">sf</span> <span class="o">=</span> <span class="n">FUsignal</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">fGHz</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">blackman</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)))</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">sf</span><span class="o">.</span><span class="n">ift</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;typ&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;hamming&#39;</span><span class="p">:</span>
-            <span class="n">sf</span> <span class="o">=</span> <span class="n">FUsignal</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">fGHz</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)))</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">sf</span><span class="o">.</span><span class="n">ift</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;typ&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;hamming&#39;</span><span class="p">:</span>
-            <span class="n">sf</span> <span class="o">=</span> <span class="n">FUsignal</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">fGHz</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hamming</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)))</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">sf</span><span class="o">.</span><span class="n">ift</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s1">&#39;waveform typ not recognized, check your config </span><span class="se">\</span>
-<span class="s1">                             file&#39;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">st</span>       <span class="o">=</span> <span class="n">st</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sf</span>       <span class="o">=</span> <span class="n">sf</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span>     <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sf</span><span class="o">.</span><span class="n">x</span>
-
-        <span class="n">ygamma</span>        <span class="o">=</span> <span class="o">-</span><span class="mi">1j</span><span class="o">*</span><span class="mf">0.3</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gamm</span>     <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">ygamma</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sfg</span>      <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sf</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamm</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sfgh</span>     <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sfg</span><span class="o">.</span><span class="n">symH</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stgh</span>     <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sfgh</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="Waveform.info"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;  display information about waveform</span>
-
-<span class="sd">        Results</span>
-<span class="sd">        -------</span>
-
-<span class="sd">        &gt;&gt;&gt; from pylayers.signal.waveform import *</span>
-<span class="sd">        &gt;&gt;&gt; w = Waveform(typ=&#39;generic&#39;,WGHz=0.499,fcGHz=4.49,feGHz=100,threshdB=3,twns=30)</span>
-<span class="sd">        &gt;&gt;&gt; w.show()</span>
-<span class="sd">        &gt;&gt;&gt; plt.show()</span>
-
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;typ&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;generic&#39;</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="k">print</span><span class="p">(</span><span class="n">k</span> <span class="p">,</span> <span class="s2">&quot; : &quot;</span><span class="p">,</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;typ:&quot;</span><span class="p">,</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;typ&#39;</span><span class="p">])</span></div>
-
-
-<div class="viewcode-block" id="Waveform.showpsd"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform.showpsd">[docs]</a>    <span class="k">def</span> <span class="nf">showpsd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Tpns</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; show psd</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-
-<span class="sd">        Tpns : float</span>
-<span class="sd">    </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
-        <span class="n">psd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">st</span><span class="o">.</span><span class="n">psd</span><span class="p">(</span><span class="n">Tpns</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Tp = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Tpns</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; ns&#39;</span><span class="p">)</span>
-        <span class="n">psd</span><span class="o">.</span><span class="n">plotdB</span><span class="p">(</span><span class="n">mask</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="Waveform.ip_generic"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform.ip_generic">[docs]</a>    <span class="k">def</span> <span class="nf">ip_generic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;   Create an energy normalized Gaussian impulse (Usignal)</span>
-
-<span class="sd">        ip_generic(self,parameters)</span>
-
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">Tw</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;twns&#39;</span><span class="p">]</span>
-        <span class="n">fcGHz</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;fcGHz&#39;</span><span class="p">]</span>
-        <span class="n">WGHz</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;WGHz&#39;</span><span class="p">]</span>
-        <span class="n">thresh</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;threshdB&#39;</span><span class="p">]</span>
-        <span class="n">feGHz</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;feGHz&#39;</span><span class="p">]</span>
-        <span class="n">te</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">feGHz</span>
-
-        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;te&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">te</span>
-        <span class="n">Np</span>     <span class="o">=</span> <span class="n">feGHz</span><span class="o">*</span><span class="n">Tw</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;Np&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">Np</span>
-        <span class="c1">#x      = np.linspace(-0.5*Tw+te/2,0.5*Tw+te/2,Np,endpoint=False)</span>
-        <span class="c1">#x     = arange(-Tw,Tw,te)</span>
-        <span class="n">w</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">()</span>
-        <span class="n">w</span><span class="o">.</span><span class="n">EnImpulse</span><span class="p">(</span><span class="n">fcGHz</span><span class="o">=</span><span class="n">fcGHz</span><span class="p">,</span><span class="n">WGHz</span><span class="o">=</span><span class="n">WGHz</span><span class="p">,</span><span class="n">threshdB</span><span class="o">=</span><span class="n">thresh</span><span class="p">,</span><span class="n">feGHz</span><span class="o">=</span><span class="n">feGHz</span><span class="p">)</span>
-        <span class="c1">#W = w.ft()</span>
-        <span class="n">W</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">ft</span><span class="p">()</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">W</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="Waveform.ref156"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform.ref156">[docs]</a>    <span class="k">def</span> <span class="nf">ref156</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; reference pulse of IEEE 802.15.6 UWB standard</span>
-<span class="sd">        </span>
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">Tw</span>     <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;twns&#39;</span><span class="p">]</span>
-        <span class="n">fc</span>     <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;fcGHz&#39;</span><span class="p">]</span>
-        <span class="n">WGHz</span>   <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;WGHz&#39;</span><span class="p">]</span>
-        <span class="n">thresh</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;threshdB&#39;</span><span class="p">]</span>
-        <span class="n">fe</span>     <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;feGHz&#39;</span><span class="p">]</span>
-        <span class="n">te</span>     <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">fe</span>
-        <span class="n">beta</span> <span class="o">=</span> <span class="mf">0.5</span>
-        <span class="n">Tns</span>  <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="mf">0.4992</span>
-        <span class="n">x</span>    <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">Tw</span><span class="o">+</span><span class="n">te</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.5</span><span class="o">*</span><span class="n">Tw</span><span class="o">+</span><span class="n">te</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">Np</span><span class="p">,</span><span class="n">endpoint</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-        <span class="n">z</span>    <span class="o">=</span> <span class="n">x</span><span class="o">/</span><span class="n">T</span>
-        <span class="n">t1</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">beta</span><span class="p">)</span><span class="o">*</span><span class="n">z</span><span class="p">)</span>
-        <span class="n">t2</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">beta</span><span class="p">)</span><span class="o">*</span><span class="n">z</span><span class="p">)</span>
-        <span class="n">t3</span>  <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">z</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">beta</span><span class="o">*</span><span class="n">z</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">y</span>   <span class="o">=</span> <span class="p">(</span><span class="n">t1</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="n">beta</span><span class="o">*</span><span class="n">z</span><span class="o">*</span><span class="n">t2</span><span class="p">)</span><span class="o">/</span><span class="n">t3</span></div>
-
-
-<div class="viewcode-block" id="Waveform.fromfile"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform.fromfile">[docs]</a>    <span class="k">def</span> <span class="nf">fromfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get the measurement waveform from WHERE1 measurement campaign</span>
-
-<span class="sd">        This function is not yet generic</span>
-
-<span class="sd">        &gt;&gt;&gt; from pylayers.signal.waveform import *</span>
-<span class="sd">        &gt;&gt;&gt; wav = Waveform(typ=&#39;W1compensate&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; wav.show()</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">M</span> <span class="o">=</span> <span class="n">mesuwb</span><span class="o">.</span><span class="n">UWBMeasure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">h</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">w</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">()</span>
-
-        <span class="n">ts</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">RAW_DATA</span><span class="o">.</span><span class="n">timetx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">tns</span> <span class="o">=</span> <span class="n">ts</span><span class="o">*</span><span class="mf">1e9</span>
-        <span class="n">te</span> <span class="o">=</span> <span class="n">tns</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">tns</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-        <span class="n">y</span>  <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">RAW_DATA</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-        <span class="c1"># find peak position  u is the index of the peak</span>
-        <span class="c1"># yap :after peak</span>
-        <span class="c1"># ybp : before peak</span>
-        <span class="c1"># yzp : zero padding</span>
-        <span class="n">maxy</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-        <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">y</span> <span class="o">==</span><span class="n">maxy</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">yap</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">:]</span>
-        <span class="n">ybp</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">u</span><span class="p">]</span>
-
-        <span class="n">yzp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">yap</span><span class="p">)</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">ybp</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-
-        <span class="n">tnsp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">tns</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">tns</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">+</span><span class="mf">0.5</span><span class="o">*</span><span class="n">te</span><span class="p">,</span><span class="n">te</span><span class="p">)</span>
-        <span class="n">tnsm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">tns</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">tns</span><span class="p">[</span><span class="n">u</span><span class="p">]),</span><span class="mi">0</span><span class="p">,</span><span class="n">te</span><span class="p">)</span>
-
-        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">yzp</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">ybp</span><span class="p">,</span><span class="n">yap</span><span class="p">))))</span>
-        <span class="n">tns</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">tnsm</span><span class="p">,</span><span class="n">tnsp</span><span class="p">))</span>
-
-        <span class="c1">#</span>
-        <span class="c1"># Warning (check if 1/sqrt(30) is not applied elsewhere</span>
-        <span class="c1">#</span>
-        <span class="n">w</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">tns</span>
-        <span class="n">w</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
-
-        <span class="c1">#  w : TUsignal</span>
-        <span class="c1">#  W : FUsignal (Hermitian redundancy removed)</span>
-
-        <span class="n">W</span>   <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">ftshift</span><span class="p">()</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">W</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="Waveform.fromfile2"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform.fromfile2">[docs]</a>    <span class="k">def</span> <span class="nf">fromfile2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        get the measurement waveform from WHERE1 measurement campaign</span>
-
-<span class="sd">        This function is not yet generic</span>
-
-<span class="sd">        &gt;&gt;&gt; from pylayers.signal.waveform import *</span>
-<span class="sd">        &gt;&gt;&gt; wav = Waveform(typ=&#39;W1offset&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; wav.show()</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">M</span> <span class="o">=</span> <span class="n">mesuwb</span><span class="o">.</span><span class="n">UWBMeasure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">w</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">()</span>
-
-        <span class="n">ts</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">RAW_DATA</span><span class="o">.</span><span class="n">timetx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">tns</span> <span class="o">=</span> <span class="n">ts</span><span class="o">*</span><span class="mf">1e9</span>
-        <span class="n">te</span> <span class="o">=</span> <span class="n">tns</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">tns</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-        <span class="n">y</span>  <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">RAW_DATA</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-        <span class="c1"># find peak position  u is the index of the peak</span>
-        <span class="c1"># yap :after peak</span>
-        <span class="c1"># ybp : before peak</span>
-        <span class="c1"># yzp : zero padding</span>
-<span class="c1">#        maxy = max(y)</span>
-<span class="c1">#        u = np.where(y ==maxy)[0][0]</span>
-<span class="c1">#        yap = y[u:]</span>
-<span class="c1">#        ybp = y[0:u]</span>
-
-        <span class="n">yzp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="c1">#        tnsp = np.arange(0,tns[-1]-tns[u]+0.5*te,te)</span>
-<span class="c1">#        tnsm = np.arange(-(tns[-1]-tns[u]),0,te)</span>
-        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
-        <span class="n">tnsm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">tns</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="o">-</span><span class="n">te</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">yzp</span><span class="p">,</span><span class="n">y</span><span class="p">))</span>
-        <span class="n">tns</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">tnsm</span><span class="p">,</span><span class="n">tns</span><span class="p">))</span>
-
-        <span class="c1">#</span>
-        <span class="c1"># Warning (check if 1/sqrt(30) is not applied elsewhere</span>
-        <span class="c1">#</span>
-        <span class="n">w</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">tns</span>
-        <span class="n">w</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">30</span><span class="p">)))[</span><span class="bp">None</span><span class="p">,:]</span>
-
-        <span class="c1">#  w : TUsignal</span>
-        <span class="c1">#  W : FUsignal (Hermitian redundancy removed)</span>
-        <span class="n">W</span>   <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">ftshift</span><span class="p">()</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">W</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="Waveform.read"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">config</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-
-<span class="sd">        config : ConfigParser object</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        w      : waveform</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">par</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s2">&quot;waveform&quot;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">par</span><span class="p">)):</span>
-            <span class="n">key</span> <span class="o">=</span> <span class="n">par</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">val</span> <span class="o">=</span> <span class="n">par</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;WGHz&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;fcGHz&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;feGHz&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;threshdB&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;twns&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;typ&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="Waveform.bandwidth"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform.bandwidth">[docs]</a>    <span class="k">def</span> <span class="nf">bandwidth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">th_ratio</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span><span class="n">Npt</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Determine effective bandwidth of the waveform. </span>
-<span class="sd">        </span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-
-<span class="sd">        th_ratio : float</span>
-<span class="sd">            threshold ratio </span>
-<span class="sd">            threshold = max(abs())/th_ratio</span>
-<span class="sd">        Npt : Number of points </span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">u</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sf</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">&gt;</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sf</span><span class="o">.</span><span class="n">y</span><span class="p">))</span><span class="o">/</span><span class="n">th_ratio</span><span class="p">)</span>
-        <span class="c1">#fGHz = self.sf.x[u[1]]</span>
-        <span class="n">fGHz_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sf</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">fGHz_stop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sf</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">fGHz_start</span><span class="p">,</span><span class="n">fGHz_stop</span><span class="p">,</span><span class="n">Npt</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">fGHz</span></div>
-
-<div class="viewcode-block" id="Waveform.gui"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform.gui">[docs]</a>    <span class="k">def</span> <span class="nf">gui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the Waveform parameter</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;typ&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;generic&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-            <span class="n">show</span><span class="p">()</span>
-            <span class="n">wavegui</span> <span class="o">=</span> <span class="n">multenterbox</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;Waveform Parameter&#39;</span><span class="p">,</span>
-            <span class="p">(</span><span class="s1">&#39;Tw (ns) integer value&#39;</span><span class="p">,</span>
-             <span class="s1">&#39;fc (GHz)&#39;</span><span class="p">,</span>
-             <span class="s1">&#39;W (GHz)&#39;</span><span class="p">,</span>
-             <span class="s1">&#39;thresh (dB)&#39;</span><span class="p">,</span>
-             <span class="s1">&#39;fe (GHz) integer value&#39;</span><span class="p">),</span>
-            <span class="p">(</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;twns&#39;</span><span class="p">]</span> <span class="p">,</span>
-            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;fcGHz&#39;</span><span class="p">]</span> <span class="p">,</span>
-            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;WGHz&#39;</span><span class="p">]</span> <span class="p">,</span>
-            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;threshdB&#39;</span><span class="p">],</span>
-            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;feGHz&#39;</span><span class="p">]</span>
-            <span class="p">))</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;Twns&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">wavegui</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;fcGHz&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">wavegui</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;WGHz&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">wavegui</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;threshdB&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">wavegui</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;feGHz&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">wavegui</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
-
-            <span class="p">[</span><span class="n">st</span><span class="p">,</span><span class="n">sf</span><span class="p">]</span>       <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ip_generic</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">st</span>       <span class="o">=</span> <span class="n">st</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sf</span>       <span class="o">=</span> <span class="n">sf</span>
-            <span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-            <span class="n">show</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="Waveform.show"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[]):</span>
-        <span class="sd">&quot;&quot;&quot; show waveform in time and frequency domain</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-
-<span class="sd">        fig : figure</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># title construction</span>
-        <span class="k">if</span> <span class="n">fig</span> <span class="o">==</span><span class="p">[]:</span>
-            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-        <span class="n">title</span> <span class="o">=</span><span class="s1">&#39;&#39;</span>
-        <span class="k">for</span> <span class="n">pk</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">val</span>   <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">pk</span><span class="p">]</span>
-            <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="o">+</span> <span class="n">pk</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span>
-            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">!=</span> <span class="s1">&#39;str&#39;</span><span class="p">:</span>
-                <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span>
-        <span class="c1">#plt.title(title)</span>
-        <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">st</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">st</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;time (ns)&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;level in linear scale&#39;</span><span class="p">)</span>
-        <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sf</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sf</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]))</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;frequency (GHz)&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;level in linear scale&#39;</span><span class="p">)</span>
-        <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">title</span><span class="p">)</span></div></div>
-
-
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
-    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+<span></span># -*- coding:Utf-8 -*-
+import doctest
+import os
+import logging
+import pdb
+import sys
+import numpy as np
+import scipy as sp
+import scipy.io as io
+import scipy.signal as si
+import scipy.linalg as la
+import matplotlib.pylab as plt
+import pylayers.signal.bsignal as bs
+from pylayers.measures import mesuwb
+
+<div class="viewcode-block" id="Waveform"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform">[docs]</a>class Waveform(dict):
+    &quot;&quot;&quot;
+
+    Attributes
+    ----------
+
+    st  : time domain
+    sf  : frequency domain
+    sfg : frequency domain integrated
+
+    Methods
+    -------
+
+    eval
+    showpsd
+    ip_generic
+    fromfile
+    fromfile2
+    read
+    gui
+    show
+
+    &quot;&quot;&quot;
+    def __init__(self,**kwargs):
+        &quot;&quot;&quot;
+
+        Parameters
+        ----------
+
+        &#39;typ&#39; : string
+            &#39;generic&#39;,
+         &#39;WGHz&#39;: float
+            0.499
+         &#39;fcGHz&#39;: float
+            4.493
+         &#39;fsGHz&#39;: float
+            100,
+         &#39;threshdB&#39;:
+              3,
+         &#39;twns&#39;: float
+            30
+
+        typ  :  &#39;generic&#39;,&#39;W1compensate&#39;,&#39;W1offset&#39;
+
+        &quot;&quot;&quot;
+        defaults = {&#39;typ&#39;:&#39;generic&#39;,
+                &#39;fGHz&#39;:[],
+                &#39;WGHz&#39;: 0.499,
+                &#39;fcGHz&#39;: 4.493,
+                &#39;feGHz&#39;: 100,
+                &#39;threshdB&#39;: 3,
+                &#39;twns&#39;: 30}
+
+        for key, value in defaults.items():
+            if key not in kwargs:
+                self[key] = value
+            else:
+                self[key] = kwargs[key]
+        self.eval()
+
+<div class="viewcode-block" id="Waveform.eval"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform.eval">[docs]</a>    def eval(self):
+        u&quot;&quot;&quot; evaluate waveform
+
+        The :math:`\lambda/4*\pi` factor which is necessary to get the proper budget
+        link ( from the Friis formula) is introduced in this function.
+
+        &quot;&quot;&quot;
+
+        if self[&#39;typ&#39;]  == &#39;generic&#39;:
+            [st,sf]=self.ip_generic()
+        #elif self[&#39;typ&#39;]  == &#39;mbofdm&#39;:
+        #    [st,sf]=self.mbofdm()
+        elif self[&#39;typ&#39;] == &#39;W1compensate&#39;:
+            [st,sf]=self.fromfile()
+        elif self[&#39;typ&#39;] == &#39;W1offset&#39;:
+            [st,sf]=self.fromfile2()
+        elif self[&#39;typ&#39;] == &#39;blackmann&#39;:
+            sf = FUsignal(x=fGHz,y=np.blackman(len(fGHz)))
+            st = sf.ift()
+        elif self[&#39;typ&#39;] == &#39;hamming&#39;:
+            sf = FUsignal(x=fGHz,y=np.ones(len(fGHz)))
+            st = sf.ift()
+        elif self[&#39;typ&#39;] == &#39;hamming&#39;:
+            sf = FUsignal(x=fGHz,y=np.hamming(len(fGHz)))
+            st = sf.ift()
+        else:
+            logging.critical(&#39;waveform typ not recognized, check your config \
+                             file&#39;)
+
+        self.st       = st
+        self.sf       = sf
+        self.fGHz     = self.sf.x
+
+        ygamma        = -1j*0.3/(4*np.pi*self.fGHz)
+        self.gamm     = bs.FUsignal(x=self.fGHz,y=ygamma)
+        self.sfg      = self.sf*self.gamm
+        self.sfgh     = self.sfg.symH(0)
+        self.stgh     = self.sfgh.ifft(1)</div>
+
+<div class="viewcode-block" id="Waveform.info"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform.info">[docs]</a>    def info(self):
+        &quot;&quot;&quot;  display information about waveform
+
+        Results
+        -------
+
+        &gt;&gt;&gt; from pylayers.signal.waveform import *
+        &gt;&gt;&gt; w = Waveform(typ=&#39;generic&#39;,WGHz=0.499,fcGHz=4.49,feGHz=100,threshdB=3,twns=30)
+        &gt;&gt;&gt; w.show()
+        &gt;&gt;&gt; plt.show()
+
+
+        &quot;&quot;&quot;
+        if self[&#39;typ&#39;]==&#39;generic&#39;:
+            for k in self.keys():
+                print(k , &quot; : &quot;,self[k])
+        else:
+            print(&quot;typ:&quot;,self[&#39;typ&#39;])</div>
+
+
+<div class="viewcode-block" id="Waveform.showpsd"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform.showpsd">[docs]</a>    def showpsd(self,Tpns=1000):
+        &quot;&quot;&quot; show psd
+
+        Parameters
+        ----------
+
+        Tpns : float
+    
+        &quot;&quot;&quot;
+        plt.subplot(211)
+        self.st.plot()
+        plt.subplot(212)
+        psd = self.st.psd(Tpns,50)
+        plt.title(&#39;Tp = &#39;+str(Tpns)+&#39; ns&#39;)
+        psd.plotdB(mask=True)</div>
+
+<div class="viewcode-block" id="Waveform.ip_generic"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform.ip_generic">[docs]</a>    def ip_generic(self):
+        &quot;&quot;&quot;   Create an energy normalized Gaussian impulse (Usignal)
+
+        ip_generic(self,parameters)
+
+
+        &quot;&quot;&quot;
+        Tw = self[&#39;twns&#39;]
+        fcGHz = self[&#39;fcGHz&#39;]
+        WGHz = self[&#39;WGHz&#39;]
+        thresh = self[&#39;threshdB&#39;]
+        feGHz = self[&#39;feGHz&#39;]
+        te = 1.0/feGHz
+
+        self[&#39;te&#39;] = te
+        Np     = feGHz*Tw
+        self[&#39;Np&#39;]=Np
+        #x      = np.linspace(-0.5*Tw+te/2,0.5*Tw+te/2,Np,endpoint=False)
+        #x     = arange(-Tw,Tw,te)
+        w = bs.TUsignal()
+        w.EnImpulse(fcGHz=fcGHz,WGHz=WGHz,threshdB=thresh,feGHz=feGHz)
+        #W = w.ft()
+        W = w.ft()
+        return (w,W)</div>
+
+<div class="viewcode-block" id="Waveform.ref156"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform.ref156">[docs]</a>    def ref156(self):
+        &quot;&quot;&quot; reference pulse of IEEE 802.15.6 UWB standard
+        
+        Notes
+        -----
+
+
+        &quot;&quot;&quot;
+        Tw     = self[&#39;twns&#39;]
+        fc     = self[&#39;fcGHz&#39;]
+        WGHz   = self[&#39;WGHz&#39;]
+        thresh = self[&#39;threshdB&#39;]
+        fe     = self[&#39;feGHz&#39;]
+        te     = 1./fe
+        beta = 0.5
+        Tns  = 1./0.4992
+        x    =  np.linspace(-0.5*Tw+te/2,0.5*Tw+te/2,Np,endpoint=False)
+        z    = x/T
+        t1  = np.sin(np.pi*(1-beta)*z)
+        t2  = np.cos(np.pi*(1+beta)*z)
+        t3  = (np.pi*z)*(1-(4*beta*z)**2)
+        y   = (t1+4*beta*z*t2)/t3</div>
+
+
+<div class="viewcode-block" id="Waveform.fromfile"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform.fromfile">[docs]</a>    def fromfile(self):
+        &quot;&quot;&quot; get the measurement waveform from WHERE1 measurement campaign
+
+        This function is not yet generic
+
+        &gt;&gt;&gt; from pylayers.signal.waveform import *
+        &gt;&gt;&gt; wav = Waveform(typ=&#39;W1compensate&#39;)
+        &gt;&gt;&gt; wav.show()
+
+        &quot;&quot;&quot;
+
+        M = mesuwb.UWBMeasure(1,h=1)
+        w = bs.TUsignal()
+
+        ts = M.RAW_DATA.timetx[0]
+        tns = ts*1e9
+        te = tns[1]-tns[0]
+
+        y  = M.RAW_DATA.tx[0]
+
+        # find peak position  u is the index of the peak
+        # yap :after peak
+        # ybp : before peak
+        # yzp : zero padding
+        maxy = max(y)
+        u = np.where(y ==maxy)[0][0]
+        yap = y[u:]
+        ybp = y[0:u]
+
+        yzp = np.zeros(len(yap)-len(ybp)-1)
+
+        tnsp = np.arange(0,tns[-1]-tns[u]+0.5*te,te)
+        tnsm = np.arange(-(tns[-1]-tns[u]),0,te)
+
+        y = np.hstack((yzp,np.hstack((ybp,yap))))
+        tns = np.hstack((tnsm,tnsp))
+
+        #
+        # Warning (check if 1/sqrt(30) is not applied elsewhere
+        #
+        w.x = tns
+        w.y = y*(1/np.sqrt(30))
+
+        #  w : TUsignal
+        #  W : FUsignal (Hermitian redundancy removed)
+
+        W   = w.ftshift()
+        return (w,W)</div>
+
+<div class="viewcode-block" id="Waveform.fromfile2"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform.fromfile2">[docs]</a>    def fromfile2(self):
+        &quot;&quot;&quot;
+        get the measurement waveform from WHERE1 measurement campaign
+
+        This function is not yet generic
+
+        &gt;&gt;&gt; from pylayers.signal.waveform import *
+        &gt;&gt;&gt; wav = Waveform(typ=&#39;W1offset&#39;)
+        &gt;&gt;&gt; wav.show()
+
+        &quot;&quot;&quot;
+        M = mesuwb.UWBMeasure(1,1)
+        w = bs.TUsignal()
+
+        ts = M.RAW_DATA.timetx[0]
+        tns = ts*1e9
+        te = tns[1]-tns[0]
+
+        y  = M.RAW_DATA.tx[0]
+
+        # find peak position  u is the index of the peak
+        # yap :after peak
+        # ybp : before peak
+        # yzp : zero padding
+#        maxy = max(y)
+#        u = np.where(y ==maxy)[0][0]
+#        yap = y[u:]
+#        ybp = y[0:u]
+
+        yzp = np.zeros(len(y)-1)
+
+#        tnsp = np.arange(0,tns[-1]-tns[u]+0.5*te,te)
+#        tnsm = np.arange(-(tns[-1]-tns[u]),0,te)
+        N = len(ts)-1
+        tnsm = np.linspace(-tns[-1],-te,N)
+        y = np.hstack((yzp,y))
+        tns = np.hstack((tnsm,tns))
+
+        #
+        # Warning (check if 1/sqrt(30) is not applied elsewhere
+        #
+        w.x = tns
+        w.y = (y*(1/np.sqrt(30)))[None,:]
+
+        #  w : TUsignal
+        #  W : FUsignal (Hermitian redundancy removed)
+        W   = w.ftshift()
+        return (w,W)</div>
+
+
+<div class="viewcode-block" id="Waveform.read"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform.read">[docs]</a>    def read(self,config):
+        &quot;&quot;&quot;
+        Parameters
+        ----------
+
+        config : ConfigParser object
+
+        Returns
+        -------
+        w      : waveform
+
+        &quot;&quot;&quot;
+
+        par = config.items(&quot;waveform&quot;)
+        for k in range(len(par)):
+            key = par[k][0]
+            val = par[k][1]
+            if key == &quot;WGHz&quot;:
+                self[key] = float(val)
+            if key == &quot;fcGHz&quot;:
+                self[key] = float(val)
+            if key == &quot;feGHz&quot;:
+                self[key] = float(val)
+            if key == &quot;threshdB&quot;:
+                self[key] = float(val)
+            if key == &quot;twns&quot;:
+                self[key] = float(val)
+            if key == &quot;typ&quot;:
+                self[key] = val
+
+        self.eval()</div>
+
+<div class="viewcode-block" id="Waveform.bandwidth"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform.bandwidth">[docs]</a>    def bandwidth(self,th_ratio=10000,Npt=100):
+        &quot;&quot;&quot; Determine effective bandwidth of the waveform. 
+        
+        Parameters
+        ----------
+
+        th_ratio : float
+            threshold ratio 
+            threshold = max(abs())/th_ratio
+        Npt : Number of points 
+
+        &quot;&quot;&quot;
+        u=np.where(np.abs(self.sf.y)&gt;np.max(np.abs(self.sf.y))/th_ratio)
+        #fGHz = self.sf.x[u[1]]
+        fGHz_start = self.sf.x[u[1]][0]
+        fGHz_stop = self.sf.x[u[1]][-1]
+        fGHz = np.linspace(fGHz_start,fGHz_stop,Npt)
+        return fGHz</div>
+
+<div class="viewcode-block" id="Waveform.gui"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform.gui">[docs]</a>    def gui(self):
+        &quot;&quot;&quot;
+        Get the Waveform parameter
+        &quot;&quot;&quot;
+        if self[&#39;typ&#39;] == &#39;generic&#39;:
+            self.st.plot()
+            show()
+            wavegui = multenterbox(&#39;&#39;,&#39;Waveform Parameter&#39;,
+            (&#39;Tw (ns) integer value&#39;,
+             &#39;fc (GHz)&#39;,
+             &#39;W (GHz)&#39;,
+             &#39;thresh (dB)&#39;,
+             &#39;fe (GHz) integer value&#39;),
+            ( self[&#39;twns&#39;] ,
+            self[&#39;fcGHz&#39;] ,
+            self[&#39;WGHz&#39;] ,
+            self[&#39;threshdB&#39;],
+            self[&#39;feGHz&#39;]
+            ))
+
+            self.parameters[&#39;Twns&#39;]    = eval(wavegui[0])
+            self.parameters[&#39;fcGHz&#39;]    = eval(wavegui[1])
+            self.parameters[&#39;WGHz&#39;]  = eval(wavegui[2])
+            self.parameters[&#39;threshdB&#39;] = eval(wavegui[3])
+            self.parameters[&#39;feGHz&#39;]    = eval(wavegui[4])
+
+            [st,sf]       = self.ip_generic()
+            self.st       = st
+            self.sf       = sf
+            st.plot()
+            show()</div>
+
+<div class="viewcode-block" id="Waveform.show"><a class="viewcode-back" href="../../../api/pylayers.signal.waveform.Waveform.html#pylayers.signal.waveform.Waveform.show">[docs]</a>    def show(self,fig=[]):
+        &quot;&quot;&quot; show waveform in time and frequency domain
+
+        Parameters
+        ----------
+
+        fig : figure
+
+        &quot;&quot;&quot;
+        # title construction
+        if fig ==[]:
+            fig = plt.figure()
+        title =&#39;&#39;
+        for pk in self.keys():
+            val   = self[pk]
+            title = title + pk + &#39;: &#39;
+            if type(val) != &#39;str&#39;:
+                title = title + str(val) + &#39; &#39;
+        #plt.title(title)
+        ax1 = fig.add_subplot(2,1,1)
+        ax1.plot(self.st.x,self.st.y[0,:])
+        plt.xlabel(&#39;time (ns)&#39;)
+        plt.ylabel(&#39;level in linear scale&#39;)
+        ax2 = fig.add_subplot(2,1,2)
+        ax2.plot(self.sf.x,abs(self.sf.y[0,:]))
+        plt.xlabel(&#39;frequency (GHz)&#39;)
+        plt.ylabel(&#39;level in linear scale&#39;)
+        fig.suptitle(title)</div></div>
+
+
+if __name__ == &quot;__main__&quot;:
+    plt.ion()
+    doctest.testmod()
 </pre></div>
 
            </div>
@@ -610,7 +614,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 14, 2017.
+      Last updated on Nov 17, 2017.
 
     </p>
   </div>
@@ -641,7 +645,7 @@
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

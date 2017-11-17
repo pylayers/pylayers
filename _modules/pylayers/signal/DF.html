@@ -34,6 +34,9 @@
   
         <link rel="author" title="About these documents"
               href="../../../about.html"/>
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
     <link rel="top" title="PyLayers" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
@@ -133,12 +136,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.device">35&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.DF">36&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">37&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">38&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">39&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id134">40&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -184,493 +188,493 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pylayers.signal.DF</h1><div class="highlight"><pre>
-<span></span><span class="ch">#!/usr/bin/python</span>
-<span class="c1">#-*- coding:Utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span></span>#!/usr/bin/python
+#-*- coding:Utf-8 -*-
+&quot;&quot;&quot;
 
-<span class="sd">DF Class</span>
-<span class="sd">========</span>
+DF Class
+========
 
-<span class="sd">This class implements a LTI digital filter</span>
+This class implements a LTI digital filter
 
-<span class="sd">.. currentmodule:: pylayers.signal.DF</span>
+.. currentmodule:: pylayers.signal.DF
 
-<span class="sd">.. autoclass:: DF</span>
-<span class="sd">    :members:</span>
+.. autoclass:: DF
+    :members:
 
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">io</span>
-<span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">pylayers.signal.bsignal</span>  <span class="kn">as</span> <span class="nn">bs</span>
-<span class="kn">import</span> <span class="nn">scipy.signal</span> <span class="kn">as</span> <span class="nn">si</span>
-<span class="kn">import</span> <span class="nn">sympy</span> <span class="kn">as</span> <span class="nn">sy</span>
-<span class="kn">import</span> <span class="nn">numpy.fft</span> <span class="kn">as</span> <span class="nn">fft</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+&quot;&quot;&quot;
+import numpy as np
+from scipy import io
+from pylayers.util.project import *
+import pylayers.signal.bsignal  as bs
+import scipy.signal as si
+import sympy as sy
+import numpy.fft as fft
+import matplotlib.pyplot as plt
 
-<div class="viewcode-block" id="DF"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF">[docs]</a><span class="k">class</span> <span class="nc">DF</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Digital Filter Class</span>
+<div class="viewcode-block" id="DF"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF">[docs]</a>class DF(PyLayers):
+    &quot;&quot;&quot; Digital Filter Class
 
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
+    Attributes
+    ----------
 
-<span class="sd">    a : array </span>
-<span class="sd">        transfer function coefficients denominator </span>
-<span class="sd">    b : array</span>
-<span class="sd">        transfer function coefficients numerator </span>
-<span class="sd">    p : array dtype=complex</span>
-<span class="sd">        transfer function poles </span>
-<span class="sd">    z : array dtype=complex</span>
-<span class="sd">        transfer function zeros </span>
+    a : array 
+        transfer function coefficients denominator 
+    b : array
+        transfer function coefficients numerator 
+    p : array dtype=complex
+        transfer function poles 
+    z : array dtype=complex
+        transfer function zeros 
 
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
+    Methods
+    -------
 
-<span class="sd">    filter : filter a signal</span>
-<span class="sd">    freqz  : Display transfer function</span>
-<span class="sd">    ellip_bp : elliptic bandpath filter</span>
-<span class="sd">    remez : FIR design</span>
+    filter : filter a signal
+    freqz  : Display transfer function
+    ellip_bp : elliptic bandpath filter
+    remez : FIR design
 
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">]),</span><span class="n">a</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">])):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
-        <span class="c1">#self.z = np.poly1d(self.b).r</span>
-        <span class="c1">#self.p = np.poly1d(self.a).r</span>
-        <span class="c1">#assert(np.abs(self.b-np.poly1d(self.z,r=True).c).all()&lt;1e-16)</span>
-        <span class="c1">#assert(np.abs(self.a-np.poly1d(self.p,r=True).c).all()&lt;1e-16)</span>
+    &quot;&quot;&quot;
+    def __init__(self,b=np.array([1]),a=np.array([1])):
+        self.b = b
+        self.a = a
+        #self.z = np.poly1d(self.b).r
+        #self.p = np.poly1d(self.a).r
+        #assert(np.abs(self.b-np.poly1d(self.z,r=True).c).all()&lt;1e-16)
+        #assert(np.abs(self.a-np.poly1d(self.p,r=True).c).all()&lt;1e-16)
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_a</span><span class="p">)</span>
+    @property
+    def a(self):
+        return(self._a)
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">b</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_b</span><span class="p">)</span>
+    @property
+    def b(self):
+        return(self._b)
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">z</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_z</span><span class="p">)</span>
+    @property
+    def z(self):
+        return(self._z)
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">p</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_p</span><span class="p">)</span>
+    @property
+    def p(self):
+        return(self._p)
 
-    <span class="nd">@a.setter</span>
-    <span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_a</span> <span class="o">=</span> <span class="n">a</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">r</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fir</span><span class="o">=</span><span class="bp">True</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fir</span><span class="o">=</span><span class="bp">False</span>
+    @a.setter
+    def a(self,a):
+        self._a = a
+        self._p = np.poly1d(a).r
+        if len(a)==1:
+            self.fir=True
+        else:
+            self.fir=False
 
-    <span class="nd">@b.setter</span>
-    <span class="k">def</span> <span class="nf">b</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_b</span> <span class="o">=</span> <span class="n">b</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">r</span>
+    @b.setter
+    def b(self,b):
+        self._b = b
+        self._z = np.poly1d(b).r
 
-    <span class="nd">@z.setter</span>
-    <span class="k">def</span> <span class="nf">z</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">z</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_z</span> <span class="o">=</span> <span class="n">z</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="n">z</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">c</span>
+    @z.setter
+    def z(self,z):
+        self._z = z
+        self._b = np.poly1d(z,r=True).c
 
-    <span class="nd">@p.setter</span>
-    <span class="k">def</span> <span class="nf">p</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_p</span> <span class="o">=</span> <span class="n">p</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">c</span>
+    @p.setter
+    def p(self,p):
+        self._p = p
+        self._a = np.poly1d(p,r=True).c
 
-<div class="viewcode-block" id="DF.update"><a class="viewcode-back" href="../../../api/pylayers.signal.DF.DF.html#pylayers.signal.DF.DF.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">c</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">c</span></div>
+<div class="viewcode-block" id="DF.update"><a class="viewcode-back" href="../../../api/pylayers.signal.DF.DF.html#pylayers.signal.DF.DF.update">[docs]</a>    def update(self):
+        self.a =  np.poly1d(self.p,r=True).c
+        self.b =  np.poly1d(self.z,r=True).c</div>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s1">&#39;b : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s1">&#39;a : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s1">&#39;z : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s1">&#39;p : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">df</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        extract and stack  poles and zeros</span>
+    def __repr__(self):
+        st = &#39;&#39;
+        st = st + &#39;b : &#39;+str(self.b)+&#39;\n&#39;
+        st = st + &#39;a : &#39;+str(self.a)+&#39;\n&#39;
+        st = st + &#39;z : &#39;+str(self.z)+&#39;\n&#39;
+        st = st + &#39;p : &#39;+str(self.p)+&#39;\n&#39;
+        return(st)
+    def __mul__(self,df):
+        &quot;&quot;&quot;
+        extract and stack  poles and zeros
 
-<span class="sd">        TODO : handling simplification</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        TODO : handling simplification
+        &quot;&quot;&quot;
 
-        <span class="n">b1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
-        <span class="n">a1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>
-        <span class="n">b2</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">b</span>
-        <span class="n">a2</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">a</span>
+        b1 = self.b
+        a1 = self.a
+        b2 = df.b
+        a2 = df.a
 
-        <span class="n">pb1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="n">b1</span><span class="p">)</span>
-        <span class="n">pa1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="n">a1</span><span class="p">)</span>
-        <span class="n">pb2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="n">b2</span><span class="p">)</span>
-        <span class="n">pa2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="n">a2</span><span class="p">)</span>
+        pb1 = np.poly1d(b1)
+        pa1 = np.poly1d(a1)
+        pb2 = np.poly1d(b2)
+        pa2 = np.poly1d(a2)
 
-        <span class="n">rpb1</span> <span class="o">=</span> <span class="n">pb1</span><span class="o">.</span><span class="n">r</span>
-        <span class="n">rpb2</span> <span class="o">=</span> <span class="n">pb2</span><span class="o">.</span><span class="n">r</span>
-        <span class="n">rpa1</span> <span class="o">=</span> <span class="n">pa1</span><span class="o">.</span><span class="n">r</span>
-        <span class="n">rpa2</span> <span class="o">=</span> <span class="n">pa2</span><span class="o">.</span><span class="n">r</span>
+        rpb1 = pb1.r
+        rpb2 = pb2.r
+        rpa1 = pa1.r
+        rpa2 = pa2.r
 
-        <span class="n">F</span>   <span class="o">=</span> <span class="n">DF</span><span class="p">()</span>
-        <span class="n">F</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">rpa1</span><span class="p">,</span><span class="n">rpa2</span><span class="p">))</span>
-        <span class="n">F</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">rpb1</span><span class="p">,</span><span class="n">rpb2</span><span class="p">))</span>
+        F   = DF()
+        F.p = np.hstack((rpa1,rpa2))
+        F.z = np.hstack((rpb1,rpb2))
         
-        <span class="n">F</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span>
+        F.simplify()
 
-        <span class="k">return</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
-
-
-<div class="viewcode-block" id="DF.simplify"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.simplify">[docs]</a>    <span class="k">def</span> <span class="nf">simplify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; simplify transfer function </span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        tol : float </span>
-<span class="sd">            tolerance for simplification </span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">ip</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">iz</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">l</span><span class="p">,</span><span class="n">z</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">):</span>
-                <span class="n">md</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">((</span><span class="n">p</span><span class="o">-</span><span class="n">z</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">z</span><span class="p">))</span>
-                <span class="k">if</span> <span class="n">md</span><span class="o">&lt;</span><span class="n">tol</span><span class="p">:</span>
-                    <span class="n">ip</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
-                    <span class="n">iz</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span><span class="n">ip</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">,</span><span class="n">iz</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="DF.flipc"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.flipc">[docs]</a>    <span class="k">def</span> <span class="nf">flipc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; flip coefficient </span>
-<span class="sd">        </span>
-<span class="sd">        This is equivalent to the transformation </span>
-
-<span class="sd">        z -&gt; 1/z</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">F</span> <span class="o">=</span> <span class="n">DF</span><span class="p">()</span>
-        <span class="n">F</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">F</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">F</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">F</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="DF.match"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.match">[docs]</a>    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot; return a match filter</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
+        return(F)
 
 
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
+<div class="viewcode-block" id="DF.simplify"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.simplify">[docs]</a>    def simplify(self,tol=1e-16):
+        &quot;&quot;&quot; simplify transfer function 
 
-<span class="sd">        if $$H(z)=\\frac{1+b_1z^1+...+b_Nz^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$</span>
-<span class="sd">        </span>
-<span class="sd">        it returns </span>
+        Parameters
+        ----------
+        tol : float 
+            tolerance for simplification 
 
-<span class="sd">        $$H_m(z)=\\frac{b_N+b_{N-1}z^1+...+z^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$</span>
-<span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        &quot;&quot;&quot;
+        ip = []
+        iz = []
+        for k,p in enumerate(self.p):
+            for l,z in enumerate(self.z):
+                md = np.real((p-z)*np.conj(p-z))
+                if md&lt;tol:
+                    ip.append(k)
+                    iz.append(l)
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fir</span><span class="p">:</span>
-            <span class="n">MF</span> <span class="o">=</span> <span class="n">DF</span><span class="p">()</span>
-            <span class="n">MF</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-            <span class="n">MF</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>
-            <span class="n">MF</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="n">MF</span><span class="o">.</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">r</span>
-            <span class="n">MF</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="n">MF</span><span class="o">.</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">r</span>
-            <span class="k">return</span><span class="p">(</span><span class="n">MF</span><span class="p">)</span></div>
+        self.p = np.delete(self.p,ip)
+        self.z = np.delete(self.z,iz)</div>
 
-<div class="viewcode-block" id="DF.filter"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">causal</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; filter s</span>
+<div class="viewcode-block" id="DF.flipc"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.flipc">[docs]</a>    def flipc(self):
+        &quot;&quot;&quot; flip coefficient 
+        
+        This is equivalent to the transformation 
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
+        z -&gt; 1/z
 
-<span class="sd">        s : np.array |TUsignal</span>
-<span class="sd">            input signal</span>
+        &quot;&quot;&quot;
+        F = DF()
+        F.a = self.a[::-1]
+        F.b = self.b[::-1]
+        F.update()
+        return(F)</div>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
+<div class="viewcode-block" id="DF.match"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.match">[docs]</a>    def match(self):
+        r&quot;&quot;&quot; return a match filter
 
-<span class="sd">        y : np.array | TUsignal</span>
-<span class="sd">            output signal</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        </span>
-<span class="sd">        .. plot::</span>
-<span class="sd">            :include-source:</span>
-<span class="sd">            </span>
-<span class="sd">            &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">            &gt;&gt;&gt; df = DF(b=np.array([1,1],a=np.array([1,-1]))</span>
-<span class="sd">            &gt;&gt;&gt; N = 100 </span>
-<span class="sd">            &gt;&gt;&gt; s = np.zeros(N)</span>
-<span class="sd">            &gt;&gt;&gt; s[0] = 1</span>
-<span class="sd">            &gt;&gt;&gt; y = df.filter(s)</span>
-<span class="sd">            &gt;&gt;&gt; plt.stem(np.arange(N),x)</span>
-<span class="sd">            &gt;&gt;&gt; plt.stem(np.arange(N),y)</span>
-<span class="sd">            &gt;&gt;&gt; plt.show()</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="ow">is</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">:</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">y</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">s</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">causal</span><span class="p">:</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">y</span>  <span class="o">=</span> <span class="n">si</span><span class="o">.</span><span class="n">lfilter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">causal</span><span class="p">:</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="ow">is</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">:</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">y</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="DF.factorize"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.factorize">[docs]</a>    <span class="k">def</span> <span class="nf">factorize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; factorize the filter into a minimal phase and maximal phase</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-
-<span class="sd">        (Fmin,Fmax) : tuple of filter</span>
-<span class="sd">            Fmin : minimal phase filter</span>
-<span class="sd">            Fmax : maximal phase filter</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fir</span><span class="p">:</span>
-            <span class="c1"># selectionne les zeros interne et externe</span>
-            <span class="n">internal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">external</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">zi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="n">internal</span><span class="p">]</span>
-            <span class="n">ze</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="n">external</span><span class="p">]</span>
-
-            <span class="n">Fmin</span> <span class="o">=</span> <span class="n">DF</span><span class="p">()</span>
-            <span class="n">Fmin</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">zi</span>
-
-            <span class="n">Fmax</span> <span class="o">=</span> <span class="n">DF</span><span class="p">()</span>
-            <span class="n">Fmax</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">ze</span>
-
-            <span class="k">return</span><span class="p">(</span><span class="n">Fmin</span><span class="p">,</span><span class="n">Fmax</span><span class="p">)</span></div>
+        Returns
+        -------
 
 
+        Notes
+        -----
 
-<div class="viewcode-block" id="DF.wnxcorr"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.wnxcorr">[docs]</a>    <span class="k">def</span> <span class="nf">wnxcorr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; filtered noise output autocorrelation</span>
+        if $$H(z)=\\frac{1+b_1z^1+...+b_Nz^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$
+        
+        it returns 
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ---------</span>
+        $$H_m(z)=\\frac{b_N+b_{N-1}z^1+...+z^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$
+        
+        &quot;&quot;&quot;
 
-<span class="sd">        var : float</span>
-<span class="sd">            input noise variance (default = 1)</span>
+        if self.fir:
+            MF = DF()
+            MF.b = np.conj(self.b[::-1])
+            MF.a = self.a
+            MF.z = np.poly1d(MF.b).r
+            MF.p = np.poly1d(MF.a).r
+            return(MF)</div>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DF.filter"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.filter">[docs]</a>    def filter(self,s,causal=True):
+        &quot;&quot;&quot; filter s
 
-        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;var&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">}</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-                <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">defaults</span><span class="p">[</span><span class="s1">&#39;var&#39;</span><span class="p">]</span>
+        Parameters
+        ----------
 
-        <span class="n">HH</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">symH</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">H2</span> <span class="o">=</span> <span class="n">HH</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">HH</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
-        <span class="n">N</span>  <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">H2</span><span class="p">)</span>
-        <span class="n">tap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-        <span class="n">Rn</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">Usignal</span><span class="p">(</span><span class="n">tap</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">H2</span><span class="p">)))</span><span class="o">*</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;var&#39;</span><span class="p">]</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">Rn</span><span class="p">)</span></div>
+        s : np.array |TUsignal
+            input signal
+
+        Returns
+        -------
+
+        y : np.array | TUsignal
+            output signal
+
+        Examples
+        --------
+        
+        .. plot::
+            :include-source:
+            
+            &gt;&gt;&gt; import matplotlib.pyplot as plt
+            &gt;&gt;&gt; df = DF(b=np.array([1,1],a=np.array([1,-1]))
+            &gt;&gt;&gt; N = 100 
+            &gt;&gt;&gt; s = np.zeros(N)
+            &gt;&gt;&gt; s[0] = 1
+            &gt;&gt;&gt; y = df.filter(s)
+            &gt;&gt;&gt; plt.stem(np.arange(N),x)
+            &gt;&gt;&gt; plt.stem(np.arange(N),y)
+            &gt;&gt;&gt; plt.show()
+
+        &quot;&quot;&quot;
+        if type(s) is bs.TUsignal:
+            x = s.y
+        else:
+            x = s
+
+        if not causal:
+            x = x[::-1]
+        y  = si.lfilter(self.b,self.a,x)
+        if not causal:
+            y = y[::-1]
+        if type(s) is bs.TUsignal:
+            y = bs.TUsignal(x=s.x,y=y)
+        return(y)</div>
+
+<div class="viewcode-block" id="DF.factorize"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.factorize">[docs]</a>    def factorize(self):
+        &quot;&quot;&quot; factorize the filter into a minimal phase and maximal phase
+
+        Returns
+        -------
+
+        (Fmin,Fmax) : tuple of filter
+            Fmin : minimal phase filter
+            Fmax : maximal phase filter
+        &quot;&quot;&quot;
+
+        if self.fir:
+            # selectionne les zeros interne et externe
+            internal = np.where(abs(self.z)&lt;1)[0]
+            external = np.where(abs(self.z)&gt;=1)[0]
+            zi = self.z[internal]
+            ze = self.z[external]
+
+            Fmin = DF()
+            Fmin.z = zi
+
+            Fmax = DF()
+            Fmax.z = ze
+
+            return(Fmin,Fmax)</div>
 
 
-<div class="viewcode-block" id="DF.freqz"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.freqz">[docs]</a>    <span class="k">def</span> <span class="nf">freqz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; freqz :  evaluation of filter transfer function</span>
 
-<span class="sd">        The function evaluates an FUsignal</span>
+<div class="viewcode-block" id="DF.wnxcorr"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.wnxcorr">[docs]</a>    def wnxcorr(self,**kwargs):
+        &quot;&quot;&quot; filtered noise output autocorrelation
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
+        Parameters
+        ---------
 
-<span class="sd">        display : boolean</span>
-<span class="sd">            True</span>
-<span class="sd">        fsGHz : float</span>
-<span class="sd">            if set to 0 (relative frequency)</span>
+        var : float
+            input noise variance (default = 1)
 
-<span class="sd">        &quot;&quot;&quot;</span>
+        &quot;&quot;&quot;
 
-        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;display&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;fsGHz&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-                <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        defaults = {&#39;var&#39;:1}
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[&#39;var&#39;]
 
-        <span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">h</span><span class="p">)</span>    <span class="o">=</span> <span class="n">si</span><span class="o">.</span><span class="n">freqz</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+        HH = self.H.symH(0)
+        H2 = HH.y*np.conj(HH.y)
+        N  = len(H2)
+        tap = np.linspace(-N/2,N/2,N)
+        Rn = bs.Usignal(tap,np.real(fft.ifft(H2)))*kwargs[&#39;var&#39;]
+        return(Rn)</div>
 
-        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fsGHz&#39;</span><span class="p">]</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
-            <span class="n">fNGHz</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fsGHz&#39;</span><span class="p">]</span><span class="o">/</span><span class="mf">2.</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">H</span>   <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">fNGHz</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">h</span><span class="p">)</span>
-            <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;Frequency (GHz)&#39;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">H</span>   <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">w</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">h</span><span class="p">)</span>
-            <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;Relative frequency&#39;</span>
+
+<div class="viewcode-block" id="DF.freqz"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.freqz">[docs]</a>    def freqz(self,**kwargs):
+        &quot;&quot;&quot; freqz :  evaluation of filter transfer function
+
+        The function evaluates an FUsignal
+
+        Parameters
+        ----------
+
+        display : boolean
+            True
+        fsGHz : float
+            if set to 0 (relative frequency)
+
+        &quot;&quot;&quot;
+
+        defaults = {&#39;display&#39;:True,
+                    &#39;fsGHz&#39;:0}
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+        (w,h)    = si.freqz(self.b,self.a)
+
+        if kwargs[&#39;fsGHz&#39;]!=0:
+            fNGHz = kwargs[&#39;fsGHz&#39;]/2.
+            self.H   = bs.FUsignal(w*fNGHz/np.pi,h)
+            xlabel = &#39;Frequency (GHz)&#39;
+        else:
+            self.H   = bs.FUsignal(w/np.pi,h)
+            xlabel = &#39;Relative frequency&#39;
 
         
-        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;display&#39;</span><span class="p">]:</span>
-            <span class="k">if</span> <span class="s1">&#39;fig&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-                <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">fig</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">]</span>
-            <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;l20&#39;</span><span class="p">],</span><span class="n">xlabels</span><span class="o">=</span><span class="p">[</span><span class="n">xlabel</span><span class="p">],</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-            <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">],</span><span class="n">xlabels</span><span class="o">=</span><span class="p">[</span><span class="n">xlabel</span><span class="p">],</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span></div>
+        if kwargs[&#39;display&#39;]:
+            if &#39;fig&#39; not in kwargs:
+                fig = plt.figure()
+            else:
+                fig = kwargs[&#39;fig&#39;]
+            ax1 = fig.add_subplot(211)
+            self.H.plot(typ=[&#39;l20&#39;],xlabels=[xlabel],fig=fig,ax=ax1)
+            plt.grid()
+            ax2 = fig.add_subplot(212)
+            self.H.plot(typ=[&#39;d&#39;],xlabels=[xlabel],fig=fig,ax=ax2)
+            plt.grid()</div>
 
-        <span class="c1">#show()</span>
-<div class="viewcode-block" id="DF.butter"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.butter">[docs]</a>    <span class="k">def</span> <span class="nf">butter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">w</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;low&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Butterwoth digital filter design</span>
+        #show()
+<div class="viewcode-block" id="DF.butter"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.butter">[docs]</a>    def butter(self,order=5,w=0.25,typ=&#39;low&#39;):
+        &quot;&quot;&quot; Butterwoth digital filter design
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
+        Parameters
+        ----------
 
-<span class="sd">        order : int</span>
-<span class="sd">            filter order</span>
-<span class="sd">        w : array_like</span>
-<span class="sd">            a scalar or length-2 sequence (relative frequency 0&lt;1  fN &lt;=&gt; 1)</span>
-<span class="sd">        typ : string</span>
-<span class="sd">            &#39;lowpass&#39; | &#39;highpass&#39; | &#39;bandpass&#39; | &#39;bandstop&#39;</span>
+        order : int
+            filter order
+        w : array_like
+            a scalar or length-2 sequence (relative frequency 0&lt;1  fN &lt;=&gt; 1)
+        typ : string
+            &#39;lowpass&#39; | &#39;highpass&#39; | &#39;bandpass&#39; | &#39;bandstop&#39;
 
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
+        Examples
+        --------
 
-<span class="sd">         &gt;&gt;&gt; from pylayers.signal.DF import *</span>
-<span class="sd">         &gt;&gt;&gt; flt = DF()</span>
-<span class="sd">         &gt;&gt;&gt; flt.butter(order=3,w=0.25,typ=&#39;low&#39;)</span>
-<span class="sd">         &gt;&gt;&gt; flt.freqz()</span>
+         &gt;&gt;&gt; from pylayers.signal.DF import *
+         &gt;&gt;&gt; flt = DF()
+         &gt;&gt;&gt; flt.butter(order=3,w=0.25,typ=&#39;low&#39;)
+         &gt;&gt;&gt; flt.freqz()
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="n">order</span>
-        <span class="n">b</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">si</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="n">order</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">typ</span><span class="p">,</span><span class="n">analog</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">b</span>  <span class="o">=</span> <span class="n">b</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">a</span>  <span class="o">=</span> <span class="n">a</span></div>
+        &quot;&quot;&quot;
+        self.order = order
+        b,a = si.butter(order,w,typ,analog=False)
+        self.b  = b
+        self.a  = a</div>
 
-<div class="viewcode-block" id="DF.ellip_bp"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.ellip_bp">[docs]</a>    <span class="k">def</span> <span class="nf">ellip_bp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">wp</span><span class="p">,</span><span class="n">ws</span><span class="p">,</span><span class="n">gpass</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">gstop</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Elliptic Bandpath filter</span>
+<div class="viewcode-block" id="DF.ellip_bp"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.ellip_bp">[docs]</a>    def ellip_bp(self,wp,ws,gpass=0.5,gstop=20):
+        &quot;&quot;&quot; Elliptic Bandpath filter
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
+        Parameters
+        ----------
 
-<span class="sd">        wp :</span>
-<span class="sd">        ws :</span>
-<span class="sd">        gpass</span>
-<span class="sd">        gstop :</span>
+        wp :
+        ws :
+        gpass
+        gstop :
 
-<span class="sd">        See Also</span>
-<span class="sd">        --------</span>
+        See Also
+        --------
 
-<span class="sd">        iirdesign</span>
+        iirdesign
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">a</span><span class="p">)</span>   <span class="o">=</span> <span class="n">si</span><span class="o">.</span><span class="n">iirdesign</span><span class="p">(</span><span class="n">wp</span><span class="p">,</span><span class="n">ws</span><span class="p">,</span><span class="n">gpass</span><span class="p">,</span><span class="n">gstop</span><span class="p">,</span><span class="n">analog</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">ftype</span><span class="o">=</span><span class="s1">&#39;ellip&#39;</span><span class="p">,</span><span class="n">output</span><span class="o">=</span><span class="s1">&#39;ba&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">b</span>  <span class="o">=</span> <span class="n">b</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">a</span>  <span class="o">=</span> <span class="n">a</span></div>
+        &quot;&quot;&quot;
+        (b,a)   = si.iirdesign(wp,ws,gpass,gstop,analog=0,ftype=&#39;ellip&#39;,output=&#39;ba&#39;)
+        self.b  = b
+        self.a  = a</div>
 
-<div class="viewcode-block" id="DF.remez"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.remez">[docs]</a>    <span class="k">def</span> <span class="nf">remez</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">numtaps</span><span class="o">=</span><span class="mi">401</span><span class="p">,</span><span class="n">bands</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.11</span><span class="p">,</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.21</span><span class="p">,</span><span class="mf">0.5</span><span class="p">),</span><span class="n">desired</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0001</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.0001</span><span class="p">)):</span>
-        <span class="sd">&quot;&quot;&quot; FIR design Remez algorithm</span>
+<div class="viewcode-block" id="DF.remez"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.remez">[docs]</a>    def remez(self,numtaps=401,bands=(0,0.1,0.11,0.2,0.21,0.5),desired=(0.0001,1,0.0001)):
+        &quot;&quot;&quot; FIR design Remez algorithm
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
+        Parameters
+        ----------
 
-<span class="sd">        numtaps : int</span>
-<span class="sd">        bands  : tuple of N floats</span>
-<span class="sd">        desired : tuple of N/2 floats</span>
+        numtaps : int
+        bands  : tuple of N floats
+        desired : tuple of N/2 floats
 
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
+        Examples
+        --------
 
-<span class="sd">        flt.remez(numtaps=401,bands=(0,0.1,0.11,0.2,0.21,0.5),desired=(0.0001,1,0.0001)):</span>
+        flt.remez(numtaps=401,bands=(0,0.1,0.11,0.2,0.21,0.5),desired=(0.0001,1,0.0001)):
 
-<span class="sd">        numtaps = 401</span>
-<span class="sd">        bands   = (0,0.1,0.11,0.2,0.21,0.5)</span>
-<span class="sd">        desired = (0.0001,1,0.0001))</span>
+        numtaps = 401
+        bands   = (0,0.1,0.11,0.2,0.21,0.5)
+        desired = (0.0001,1,0.0001))
 
-<span class="sd">        flt.remez( numtaps , bands , desired)</span>
+        flt.remez( numtaps , bands , desired)
 
-<span class="sd">        &quot;&quot;&quot;</span>
+        &quot;&quot;&quot;
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">remez</span><span class="p">(</span><span class="n">numtaps</span><span class="p">,</span> <span class="n">bands</span><span class="p">,</span> <span class="n">desired</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">Hz</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;bandpass&#39;</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">grid_density</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span></div>
+        self.a = array([1])
+        self.b = remez(numtaps, bands, desired, weight=None, Hz=1, type=&#39;bandpass&#39;, maxiter=25, grid_density=16)</div>
 
-<div class="viewcode-block" id="DF.zplane"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.zplane">[docs]</a>    <span class="k">def</span> <span class="nf">zplane</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Display filter in the complex plane</span>
+<div class="viewcode-block" id="DF.zplane"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.zplane">[docs]</a>    def zplane(self,title=&#39;&#39;,fontsize=18):
+        &quot;&quot;&quot; Display filter in the complex plane
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
+        Parameters
+        ----------
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">rb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span>
-        <span class="n">ra</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span>
+        &quot;&quot;&quot;
+        rb = self.z
+        ra = self.p
 
-        <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">+</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">t</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">),</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">ra</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">ra</span><span class="p">),</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">rb</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">rb</span><span class="p">),</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
-        <span class="n">M1</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10000</span>
-        <span class="n">M2</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10000</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ra</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-            <span class="n">M1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">ra</span><span class="p">)),</span>
-                    <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">ra</span><span class="p">)),</span>
-                   <span class="p">])</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rb</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-            <span class="n">M2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">rb</span><span class="p">)),</span>
-                         <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">rb</span><span class="p">)),</span>
-                   <span class="p">])</span>
-        <span class="n">M</span> <span class="o">=</span> <span class="mf">1.6</span><span class="o">*</span><span class="nb">max</span><span class="p">(</span><span class="mf">1.2</span><span class="p">,</span><span class="n">M1</span><span class="p">,</span><span class="n">M2</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="o">-</span><span class="n">M</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="o">-</span><span class="mf">0.7</span><span class="o">*</span><span class="n">M</span><span class="p">,</span><span class="mf">0.7</span><span class="o">*</span><span class="n">M</span><span class="p">])</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+        t = np.arange(0,2*np.pi+0.1,0.1)
+        plt.plot(np.cos(t),np.sin(t),&#39;k&#39;)
+        plt.plot(np.real(ra),np.imag(ra),&#39;o&#39;,color=&#39;r&#39;)
+        plt.plot(np.real(rb),np.imag(rb),&#39;o&#39;,color=&#39;g&#39;)
+        M1 = -10000
+        M2 = -10000
+        if len(ra)&gt;0:
+            M1 = np.max([np.abs(np.real(ra)),
+                    np.abs(np.imag(ra)),
+                   ])
+        if len(rb)&gt;0:
+            M2 = np.max([np.abs(np.real(rb)),
+                         np.abs(np.imag(rb)),
+                   ])
+        M = 1.6*max(1.2,M1,M2)
+        plt.axis([-M,M,-0.7*M,0.7*M])
+        plt.title(title,fontsize=fontsize)
+        plt.show()</div>
 
-<div class="viewcode-block" id="DF.ir"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.ir">[docs]</a>    <span class="k">def</span> <span class="nf">ir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">show</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; returns impulse response</span>
+<div class="viewcode-block" id="DF.ir"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.ir">[docs]</a>    def ir(self,N=100,show=False):
+        &quot;&quot;&quot; returns impulse response
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
+        Returns
+        -------
 
-<span class="sd">        ir : np.array</span>
-<span class="sd">            impulse response</span>
+        ir : np.array
+            impulse response
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">ip</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-        <span class="n">ip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">ir</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">),</span><span class="n">ir</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-        <span class="n">ir</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ir</span><span class="p">))</span> <span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">ir</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span></div></div>
+        &quot;&quot;&quot;
+        ip    = np.zeros(N)
+        ip[0] = 1
+        ir    = self.filter(ip)
+        if show:
+            plt.stem(np.arange(N),ir)
+            plt.show()
+        ir = bs.TUsignal(x=np.arange(len(ir)) , y = ir)
+        return(ir)</div></div>
 
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-<span class="c1">#    fe  = 10</span>
-<span class="c1">#    fN  = fe/2.0</span>
-<span class="c1">#    wt  = 0.01</span>
-<span class="c1">#    ws = np.array([3.168,3.696])/fN</span>
-<span class="c1">#    wp = [ws[0]+wt,ws[1]-wt]</span>
-<span class="c1">#    flt = DF()</span>
-<span class="c1">#    gpass = 0.5</span>
-<span class="c1">#    gstop = 40</span>
-<span class="c1">#    flt.ellip_bp(wp,ws,gpass,gstop)</span>
-<span class="c1">#    flt.zplane()</span>
-<span class="c1">#    flt.freqz()</span>
-<span class="c1">#    x = np.random.randn(1000)</span>
-<span class="c1">#    y = flt.filter(x)</span>
-<span class="c1">#    fo = DF()</span>
-<span class="c1">#    y2 = fo.filter(x)</span>
-<span class="c1">#</span>
-    <span class="n">f1</span> <span class="o">=</span> <span class="n">DF</span><span class="p">()</span>
-    <span class="n">f1</span><span class="o">.</span><span class="n">b</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
-    <span class="n">f1</span><span class="o">.</span><span class="n">a</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mf">0.77</span><span class="p">])</span>
+if __name__ == &quot;__main__&quot;:
+#    fe  = 10
+#    fN  = fe/2.0
+#    wt  = 0.01
+#    ws = np.array([3.168,3.696])/fN
+#    wp = [ws[0]+wt,ws[1]-wt]
+#    flt = DF()
+#    gpass = 0.5
+#    gstop = 40
+#    flt.ellip_bp(wp,ws,gpass,gstop)
+#    flt.zplane()
+#    flt.freqz()
+#    x = np.random.randn(1000)
+#    y = flt.filter(x)
+#    fo = DF()
+#    y2 = fo.filter(x)
+#
+    f1 = DF()
+    f1.b=np.array([1,0])
+    f1.a=np.array([1,-0.77])
 
-    <span class="n">ir1</span> <span class="o">=</span> <span class="n">f1</span><span class="o">.</span><span class="n">ir</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">show</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    ir1 = f1.ir(N=100,show=True)
 
 </pre></div>
 
@@ -684,7 +688,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 14, 2017.
+      Last updated on Nov 17, 2017.
 
     </p>
   </div>
@@ -715,7 +719,7 @@
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

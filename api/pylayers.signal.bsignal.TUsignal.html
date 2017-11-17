@@ -34,6 +34,9 @@
   
         <link rel="author" title="About these documents"
               href="../about.html"/>
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="PyLayers" href="../index.html"/>
         <link rel="up" title="1   pylayers.util.project Module" href="references.html"/>
         <link rel="next" title="Usignal" href="pylayers.signal.bsignal.Usignal.html"/>
@@ -160,6 +163,13 @@
 <li class="toctree-l2"><a class="reference internal" href="references.html#id117">34.11&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -595,7 +605,7 @@ history.</p>
 <p><strong>Interpretation of the correlation levels</strong></p>
 <p>We assume that s1 is the self signal and s2 is the correlating signal</p>
 <p>s1 = a1 * sn(t-tau)   where sn is normalized in energy
-s2 = a2 * sn(t)             &#8221;   &#8221;   &#8221;   &#8221;  &#8220;</p>
+s2 = a2 * sn(t)             ”   ”   ”   ”  “</p>
 <p>the maximum of correlation appears at time tau and its value is</p>
 <blockquote>
 <div>max (s1.correlate(s2,True)) = a1*a2</div></blockquote>
@@ -664,12 +674,12 @@ This calculus is then a minorant of the received energy.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mode</strong> : string</p>
 <blockquote>
-<div><p>&#8216;unilateral&#8217; | &#8216;bilateral&#8217;</p>
+<div><p>‘unilateral’ | ‘bilateral’</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>FHsignal</strong> : if mode == &#8216;bilateral&#8217;</p>
-<p class="last"><strong>FUsignal</strong> : if mode == &#8216;unilateral&#8217;</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>FHsignal</strong> : if mode == ‘bilateral’</p>
+<p class="last"><strong>FUsignal</strong> : if mode == ‘unilateral’</p>
 </td>
 </tr>
 </tbody>
@@ -848,7 +858,7 @@ multiple of the time step dx.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 08, 2017.
+      Last updated on Nov 17, 2017.
 
     </p>
   </div>
@@ -879,7 +889,7 @@ multiple of the time step dx.</p>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

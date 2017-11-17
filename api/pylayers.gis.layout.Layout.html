@@ -34,6 +34,9 @@
   
         <link rel="author" title="About these documents"
               href="../about.html"/>
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="PyLayers" href="../index.html"/>
         <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
 
@@ -143,12 +146,13 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">35&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">36&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">37&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">38&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">39&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id134">40&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -245,18 +249,18 @@ upnt : array of point index</p>
 s2pu : segment to point index
 sgsg</p>
 <p>sl</p>
-<p>typ  : &#8216;indoor&#8217; | &#8216;outdoor&#8217;
-coordinates : &#8216;cart&#8217;,&#8217;lonlat&#8217;
+<p>typ  : ‘indoor’ | ‘outdoor’
+coordinates : ‘cart’,’lonlat’
 version
 _filename 
 _hash</p>
 <dl class="docutils">
-<dt>_shseg</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">keys / segment index </span><dd>values / shapely LineString</dd>
-<dt>dca</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">keys / Gt node </span><dd>values / list of air wall</dd>
-<dt>degree</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">keys / point degree</span><dd>values / array of index</dd>
+<dt>_shseg <span class="classifier-delimiter">:</span> <span class="classifier">keys / segment index </span></dt>
+<dd>values / shapely LineString</dd>
+<dt>dca <span class="classifier-delimiter">:</span> <span class="classifier">keys / Gt node </span></dt>
+<dd>values / list of air wall</dd>
+<dt>degree <span class="classifier-delimiter">:</span> <span class="classifier">keys / point degree</span></dt>
+<dd>values / array of index</dd>
 </dl>
 <p>display : dictionnary for controling various visualization
 dsseg :</p>
@@ -313,7 +317,7 @@ zmin</p>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.add_fnod" title="pylayers.gis.layout.Layout.add_fnod"><code class="xref py py-obj docutils literal"><span class="pre">add_fnod</span></code></a>([p])</td>
 <td>add free node  p</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.add_furniture" title="pylayers.gis.layout.Layout.add_furniture"><code class="xref py py-obj docutils literal"><span class="pre">add_furniture</span></code></a>([name,&nbsp;matname,&nbsp;origin,&nbsp;zmin,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.add_furniture" title="pylayers.gis.layout.Layout.add_furniture"><code class="xref py py-obj docutils literal"><span class="pre">add_furniture</span></code></a>([name,&nbsp;matname,&nbsp;origin,&nbsp;zmin,&nbsp;…])</td>
 <td>add piece of furniture</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.add_furniture_file" title="pylayers.gis.layout.Layout.add_furniture_file"><code class="xref py py-obj docutils literal"><span class="pre">add_furniture_file</span></code></a>(_filefur[,&nbsp;typ])</td>
@@ -328,7 +332,7 @@ zmin</p>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.add_pons" title="pylayers.gis.layout.Layout.add_pons"><code class="xref py py-obj docutils literal"><span class="pre">add_pons</span></code></a>(ns[,&nbsp;alpha])</td>
 <td>add point on segment</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.add_segment" title="pylayers.gis.layout.Layout.add_segment"><code class="xref py py-obj docutils literal"><span class="pre">add_segment</span></code></a>(n1,&nbsp;n2[,&nbsp;num,&nbsp;maxnum,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.add_segment" title="pylayers.gis.layout.Layout.add_segment"><code class="xref py py-obj docutils literal"><span class="pre">add_segment</span></code></a>(n1,&nbsp;n2[,&nbsp;num,&nbsp;maxnum,&nbsp;…])</td>
 <td>add segment between node n1 and node n2</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.angleonlink" title="pylayers.gis.layout.Layout.angleonlink"><code class="xref py py-obj docutils literal"><span class="pre">angleonlink</span></code></a>([p1,&nbsp;p2])</td>
@@ -353,7 +357,7 @@ zmin</p>
 <td>build the graph of rooms Gr</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.buildGt" title="pylayers.gis.layout.Layout.buildGt"><code class="xref py py-obj docutils literal"><span class="pre">buildGt</span></code></a>([check,&nbsp;difftol,&nbsp;verbose,&nbsp;tqdmpos])</td>
-<td>build graph of convex cycle</td>
+<td>build graph of convex cycles</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.buildGt_old" title="pylayers.gis.layout.Layout.buildGt_old"><code class="xref py py-obj docutils literal"><span class="pre">buildGt_old</span></code></a>([check])</td>
 <td>DEPRECATED</td>
@@ -397,449 +401,71 @@ zmin</p>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.diag" title="pylayers.gis.layout.Layout.diag"><code class="xref py py-obj docutils literal"><span class="pre">diag</span></code></a>(p1,&nbsp;p2,&nbsp;l,&nbsp;al1,&nbsp;al2[,&nbsp;quadsel])</td>
 <td>return edge list from a diagonal zone</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.displaygui" title="pylayers.gis.layout.Layout.displaygui"><code class="xref py py-obj docutils literal"><span class="pre">displaygui</span></code></a>()</td>
-<td>open a GUI for displaying configuration</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.dumpr" title="pylayers.gis.layout.Layout.dumpr"><code class="xref py py-obj docutils literal"><span class="pre">dumpr</span></code></a>([graphs])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.dumpr" title="pylayers.gis.layout.Layout.dumpr"><code class="xref py py-obj docutils literal"><span class="pre">dumpr</span></code></a>([graphs])</td>
 <td>read of given graphs</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.dumpw" title="pylayers.gis.layout.Layout.dumpw"><code class="xref py py-obj docutils literal"><span class="pre">dumpw</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.dumpw" title="pylayers.gis.layout.Layout.dumpw"><code class="xref py py-obj docutils literal"><span class="pre">dumpw</span></code></a>()</td>
 <td>write a dump of given Graph</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.ed2nd" title="pylayers.gis.layout.Layout.ed2nd"><code class="xref py py-obj docutils literal"><span class="pre">ed2nd</span></code></a>(edlist)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.ed2nd" title="pylayers.gis.layout.Layout.ed2nd"><code class="xref py py-obj docutils literal"><span class="pre">ed2nd</span></code></a>(edlist)</td>
 <td>convert edgelist to nodelist</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.edit_point" title="pylayers.gis.layout.Layout.edit_point"><code class="xref py py-obj docutils literal"><span class="pre">edit_point</span></code></a>(np)</td>
-<td>edit point</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.edit_seg" title="pylayers.gis.layout.Layout.edit_seg"><code class="xref py py-obj docutils literal"><span class="pre">edit_seg</span></code></a>(e1[,&nbsp;data])</td>
 <td>edit segment</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.edit_segment" title="pylayers.gis.layout.Layout.edit_segment"><code class="xref py py-obj docutils literal"><span class="pre">edit_segment</span></code></a>(e1[,&nbsp;gui,&nbsp;outdata])</td>
-<td>edit segment WITH EasyGUI</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.editor" title="pylayers.gis.layout.Layout.editor"><code class="xref py py-obj docutils literal"><span class="pre">editor</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.editor" title="pylayers.gis.layout.Layout.editor"><code class="xref py py-obj docutils literal"><span class="pre">editor</span></code></a>()</td>
 <td>invoke interactive layout graphical editor</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.editorTk" title="pylayers.gis.layout.Layout.editorTk"><code class="xref py py-obj docutils literal"><span class="pre">editorTk</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.editorTk" title="pylayers.gis.layout.Layout.editorTk"><code class="xref py py-obj docutils literal"><span class="pre">editorTk</span></code></a>()</td>
 <td>invoke interactive layout graphical editor</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.exportosm" title="pylayers.gis.layout.Layout.exportosm"><code class="xref py py-obj docutils literal"><span class="pre">exportosm</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.exportosm" title="pylayers.gis.layout.Layout.exportosm"><code class="xref py py-obj docutils literal"><span class="pre">exportosm</span></code></a>()</td>
 <td>export layout in osm file format</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.extrseg" title="pylayers.gis.layout.Layout.extrseg"><code class="xref py py-obj docutils literal"><span class="pre">extrseg</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.extrseg" title="pylayers.gis.layout.Layout.extrseg"><code class="xref py py-obj docutils literal"><span class="pre">extrseg</span></code></a>()</td>
 <td>calculate extremum of segments</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.facet3D" title="pylayers.gis.layout.Layout.facet3D"><code class="xref py py-obj docutils literal"><span class="pre">facet3D</span></code></a>(e[,&nbsp;subseg])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.facet3D" title="pylayers.gis.layout.Layout.facet3D"><code class="xref py py-obj docutils literal"><span class="pre">facet3D</span></code></a>(e[,&nbsp;subseg])</td>
 <td>calculate 3D facet from segment</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.facets3D" title="pylayers.gis.layout.Layout.facets3D"><code class="xref py py-obj docutils literal"><span class="pre">facets3D</span></code></a>(edlist,name)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.facets3D" title="pylayers.gis.layout.Layout.facets3D"><code class="xref py py-obj docutils literal"><span class="pre">facets3D</span></code></a>(edlist,name)</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.filterGi" title="pylayers.gis.layout.Layout.filterGi"><code class="xref py py-obj docutils literal"><span class="pre">filterGi</span></code></a>([situ])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.filterGi" title="pylayers.gis.layout.Layout.filterGi"><code class="xref py py-obj docutils literal"><span class="pre">filterGi</span></code></a>([situ])</td>
 <td>filter Gi to manage indoor/outdoor situations</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.find_edgelist" title="pylayers.gis.layout.Layout.find_edgelist"><code class="xref py py-obj docutils literal"><span class="pre">find_edgelist</span></code></a>(edgelist,nodelist)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.find_edgelist" title="pylayers.gis.layout.Layout.find_edgelist"><code class="xref py py-obj docutils literal"><span class="pre">find_edgelist</span></code></a>(edgelist,nodelist)</td>
 <td>edgelist : input edgelist</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.g2npy" title="pylayers.gis.layout.Layout.g2npy"><code class="xref py py-obj docutils literal"><span class="pre">g2npy</span></code></a>([verbose])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.g2npy" title="pylayers.gis.layout.Layout.g2npy"><code class="xref py py-obj docutils literal"><span class="pre">g2npy</span></code></a>([verbose])</td>
 <td>conversion from graphs to numpy arrays</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.geomfile" title="pylayers.gis.layout.Layout.geomfile"><code class="xref py py-obj docutils literal"><span class="pre">geomfile</span></code></a>([centered])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.geomfile" title="pylayers.gis.layout.Layout.geomfile"><code class="xref py py-obj docutils literal"><span class="pre">geomfile</span></code></a>([centered])</td>
 <td>create a .off geomview file</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.get_Sg_pos" title="pylayers.gis.layout.Layout.get_Sg_pos"><code class="xref py py-obj docutils literal"><span class="pre">get_Sg_pos</span></code></a>(sigarr)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.get_Sg_pos" title="pylayers.gis.layout.Layout.get_Sg_pos"><code class="xref py py-obj docutils literal"><span class="pre">get_Sg_pos</span></code></a>(sigarr)</td>
 <td>return position of the signatures</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.get_diffslab" title="pylayers.gis.layout.Layout.get_diffslab"><code class="xref py py-obj docutils literal"><span class="pre">get_diffslab</span></code></a>(npt,&nbsp;lz)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.get_diffslab" title="pylayers.gis.layout.Layout.get_diffslab"><code class="xref py py-obj docutils literal"><span class="pre">get_diffslab</span></code></a>(npt,&nbsp;lz)</td>
 <td>get the 2 slabs associated to a diffraction point</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.get_paths" title="pylayers.gis.layout.Layout.get_paths"><code class="xref py py-obj docutils literal"><span class="pre">get_paths</span></code></a>(nd_in,&nbsp;nd_fin)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.get_paths" title="pylayers.gis.layout.Layout.get_paths"><code class="xref py py-obj docutils literal"><span class="pre">get_paths</span></code></a>(nd_in,&nbsp;nd_fin)</td>
 <td>returns the possible paths of graph Gs between two nodes.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.get_points" title="pylayers.gis.layout.Layout.get_points"><code class="xref py py-obj docutils literal"><span class="pre">get_points</span></code></a>(ax)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.get_points" title="pylayers.gis.layout.Layout.get_points"><code class="xref py py-obj docutils literal"><span class="pre">get_points</span></code></a>(ax[,&nbsp;tol])</td>
 <td>get points list and segments list in a polygonal zone</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.get_zone" title="pylayers.gis.layout.Layout.get_zone"><code class="xref py py-obj docutils literal"><span class="pre">get_zone</span></code></a>(ax)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.get_zone" title="pylayers.gis.layout.Layout.get_zone"><code class="xref py py-obj docutils literal"><span class="pre">get_zone</span></code></a>(ax)</td>
 <td>get point list and segment list in a rectangular zone</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.getangles" title="pylayers.gis.layout.Layout.getangles"><code class="xref py py-obj docutils literal"><span class="pre">getangles</span></code></a>(poly[,&nbsp;unit,&nbsp;inside])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.getangles" title="pylayers.gis.layout.Layout.getangles"><code class="xref py py-obj docutils literal"><span class="pre">getangles</span></code></a>(poly[,&nbsp;unit,&nbsp;inside])</td>
 <td>find angles of a polygon</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.have_subseg" title="pylayers.gis.layout.Layout.have_subseg"><code class="xref py py-obj docutils literal"><span class="pre">have_subseg</span></code></a>(e1)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.have_subseg" title="pylayers.gis.layout.Layout.have_subseg"><code class="xref py py-obj docutils literal"><span class="pre">have_subseg</span></code></a>(e1)</td>
 <td>check if edge e1 have subseg</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
 <td>generic help</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.importosm" title="pylayers.gis.layout.Layout.importosm"><code class="xref py py-obj docutils literal"><span class="pre">importosm</span></code></a>(**kwargs)</td>
-<td>import layout from osm file or osmapi</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.importres" title="pylayers.gis.layout.Layout.importres"><code class="xref py py-obj docutils literal"><span class="pre">importres</span></code></a>(_fileres,&nbsp;**kwargs)</td>
-<td>import res format</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.importshp" title="pylayers.gis.layout.Layout.importshp"><code class="xref py py-obj docutils literal"><span class="pre">importshp</span></code></a>(**kwargs)</td>
-<td>import layout from shape file</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.info" title="pylayers.gis.layout.Layout.info"><code class="xref py py-obj docutils literal"><span class="pre">info</span></code></a>()</td>
-<td>gives information about the Layout</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.info_segment" title="pylayers.gis.layout.Layout.info_segment"><code class="xref py py-obj docutils literal"><span class="pre">info_segment</span></code></a>(s1)</td>
-<td>information about segment</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.intercy" title="pylayers.gis.layout.Layout.intercy"><code class="xref py py-obj docutils literal"><span class="pre">intercy</span></code></a>(ncy[,&nbsp;typ])</td>
-<td>return the list of interactions seen from a cycle</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.ispoint" title="pylayers.gis.layout.Layout.ispoint"><code class="xref py py-obj docutils literal"><span class="pre">ispoint</span></code></a>(pt[,&nbsp;tol])</td>
-<td>check if pt is a point of the Layout</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.isseg" title="pylayers.gis.layout.Layout.isseg"><code class="xref py py-obj docutils literal"><span class="pre">isseg</span></code></a>(ta,&nbsp;he)</td>
-<td>test if ta&lt;-&gt;he is a segment</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.layerongrid" title="pylayers.gis.layout.Layout.layerongrid"><code class="xref py py-obj docutils literal"><span class="pre">layerongrid</span></code></a>(grid,&nbsp;Tx)</td>
-<td>grid Nx,Ny,2</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.layeronlink" title="pylayers.gis.layout.Layout.layeronlink"><code class="xref py py-obj docutils literal"><span class="pre">layeronlink</span></code></a>(p1,&nbsp;p2)</td>
-<td>layeronlink(self,p1,p2) return seglist between p1 and p2</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.load" title="pylayers.gis.layout.Layout.load"><code class="xref py py-obj docutils literal"><span class="pre">load</span></code></a>()</td>
-<td>load a layout  from a .lay file</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.load_modif" title="pylayers.gis.layout.Layout.load_modif"><code class="xref py py-obj docutils literal"><span class="pre">load_modif</span></code></a>(_filename[,&nbsp;build,&nbsp;cartesian,&nbsp;dist_m])</td>
-<td>load a Layout in different formats</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.loadfur" title="pylayers.gis.layout.Layout.loadfur"><code class="xref py py-obj docutils literal"><span class="pre">loadfur</span></code></a>(_filefur)</td>
-<td>loadfur load a furniture file</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.ls" title="pylayers.gis.layout.Layout.ls"><code class="xref py py-obj docutils literal"><span class="pre">ls</span></code></a>([typ])</td>
-<td>list the available file in dirstruc</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.mask" title="pylayers.gis.layout.Layout.mask"><code class="xref py py-obj docutils literal"><span class="pre">mask</span></code></a>()</td>
-<td>returns the polygonal mask of the building</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.nd2seg" title="pylayers.gis.layout.Layout.nd2seg"><code class="xref py py-obj docutils literal"><span class="pre">nd2seg</span></code></a>(ndlist)</td>
-<td>convert node list to edge list</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.numseg" title="pylayers.gis.layout.Layout.numseg"><code class="xref py py-obj docutils literal"><span class="pre">numseg</span></code></a>(ta,&nbsp;he[,&nbsp;first])</td>
-<td>get segment number from 2 points index</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.off_overlay" title="pylayers.gis.layout.Layout.off_overlay"><code class="xref py py-obj docutils literal"><span class="pre">off_overlay</span></code></a>([dx,&nbsp;dy])</td>
-<td>offset overlay image</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.offset_index" title="pylayers.gis.layout.Layout.offset_index"><code class="xref py py-obj docutils literal"><span class="pre">offset_index</span></code></a>([offp,&nbsp;offs])</td>
-<td>offset points and segment index</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.onseg" title="pylayers.gis.layout.Layout.onseg"><code class="xref py py-obj docutils literal"><span class="pre">onseg</span></code></a>(pt[,&nbsp;tol])</td>
-<td>segment number from point (deprecated)</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.outputGi" title="pylayers.gis.layout.Layout.outputGi"><code class="xref py py-obj docutils literal"><span class="pre">outputGi</span></code></a>([verbose,&nbsp;tqdmpos])</td>
-<td>filter output of Gi edges</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.outputGi_mp" title="pylayers.gis.layout.Layout.outputGi_mp"><code class="xref py py-obj docutils literal"><span class="pre">outputGi_mp</span></code></a>()</td>
-<td>filter output of Gi edges</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.outputGi_new" title="pylayers.gis.layout.Layout.outputGi_new"><code class="xref py py-obj docutils literal"><span class="pre">outputGi_new</span></code></a>([verbose,&nbsp;tqdmpos])</td>
-<td>filter output of Gi edges</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.plot" title="pylayers.gis.layout.Layout.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>(**kwargs)</td>
-<td>plot the layout with shapely polygons</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.plot_segments" title="pylayers.gis.layout.Layout.plot_segments"><code class="xref py py-obj docutils literal"><span class="pre">plot_segments</span></code></a>(lns,&nbsp;**kwargs)</td>
-<td>&#8220;</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.pltlines" title="pylayers.gis.layout.Layout.pltlines"><code class="xref py py-obj docutils literal"><span class="pre">pltlines</span></code></a>(lines[,&nbsp;fig,&nbsp;ax,&nbsp;color,&nbsp;alpha])</td>
-<td>plot a line with a specified color and transparency</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.pltpoly" title="pylayers.gis.layout.Layout.pltpoly"><code class="xref py py-obj docutils literal"><span class="pre">pltpoly</span></code></a>(poly[,&nbsp;fig,&nbsp;ax,&nbsp;color,&nbsp;alpha])</td>
-<td>plot a polygon with a specified color and transparency</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.pltvnodes" title="pylayers.gis.layout.Layout.pltvnodes"><code class="xref py py-obj docutils literal"><span class="pre">pltvnodes</span></code></a>(vn[,&nbsp;fig,&nbsp;ax])</td>
-<td>plot vnodes</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.point_touches_seg" title="pylayers.gis.layout.Layout.point_touches_seg"><code class="xref py py-obj docutils literal"><span class="pre">point_touches_seg</span></code></a>(pt[,&nbsp;lseg,&nbsp;segtol,&nbsp;tahetol])</td>
-<td>determine if a point is touching a segment</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.polysh2geu" title="pylayers.gis.layout.Layout.polysh2geu"><code class="xref py py-obj docutils literal"><span class="pre">polysh2geu</span></code></a>(poly)</td>
-<td>transform sh.Polygon into geu.Polygon</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.pt2cy" title="pylayers.gis.layout.Layout.pt2cy"><code class="xref py py-obj docutils literal"><span class="pre">pt2cy</span></code></a>([pt])</td>
-<td>point to cycle</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.pt2ro" title="pylayers.gis.layout.Layout.pt2ro"><code class="xref py py-obj docutils literal"><span class="pre">pt2ro</span></code></a>([pt])</td>
-<td>point to room</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.ptGs2cy" title="pylayers.gis.layout.Layout.ptGs2cy"><code class="xref py py-obj docutils literal"><span class="pre">ptGs2cy</span></code></a>([n])</td>
-<td>Gs node to cycle</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.ptin" title="pylayers.gis.layout.Layout.ptin"><code class="xref py py-obj docutils literal"><span class="pre">ptin</span></code></a>([pt])</td>
-<td>check if a point is in the Layout</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.randTxRx" title="pylayers.gis.layout.Layout.randTxRx"><code class="xref py py-obj docutils literal"><span class="pre">randTxRx</span></code></a>()</td>
-<td>returns random coordinates for Tx and Rx.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.room2nodes" title="pylayers.gis.layout.Layout.room2nodes"><code class="xref py py-obj docutils literal"><span class="pre">room2nodes</span></code></a>(room)</td>
-<td>returns the nodes of a room</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.room2segments" title="pylayers.gis.layout.Layout.room2segments"><code class="xref py py-obj docutils literal"><span class="pre">room2segments</span></code></a>(room)</td>
-<td>returns the segments of a room</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.rotate" title="pylayers.gis.layout.Layout.rotate"><code class="xref py py-obj docutils literal"><span class="pre">rotate</span></code></a>([angle])</td>
-<td>rotate the layout</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.save" title="pylayers.gis.layout.Layout.save"><code class="xref py py-obj docutils literal"><span class="pre">save</span></code></a>()</td>
-<td>save Layout structure in a .lay file</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.scl_overlay" title="pylayers.gis.layout.Layout.scl_overlay"><code class="xref py py-obj docutils literal"><span class="pre">scl_overlay</span></code></a>([ax,&nbsp;ay])</td>
-<td>scale overlay image</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.seg2pts" title="pylayers.gis.layout.Layout.seg2pts"><code class="xref py py-obj docutils literal"><span class="pre">seg2pts</span></code></a>(aseg)</td>
-<td>convert segments array from Gs numerotation</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.seg2ro" title="pylayers.gis.layout.Layout.seg2ro"><code class="xref py py-obj docutils literal"><span class="pre">seg2ro</span></code></a>(seg)</td>
-<td>return room number of a point</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.seg_intersection" title="pylayers.gis.layout.Layout.seg_intersection"><code class="xref py py-obj docutils literal"><span class="pre">seg_intersection</span></code></a>(**kwargs)</td>
-<td>determine if a segment intersects any other segment of the layout</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.seginframe" title="pylayers.gis.layout.Layout.seginframe"><code class="xref py py-obj docutils literal"><span class="pre">seginframe</span></code></a>(p1,&nbsp;p2)</td>
-<td>return the seg list of a given zone defined by two points</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.seginframe2" title="pylayers.gis.layout.Layout.seginframe2"><code class="xref py py-obj docutils literal"><span class="pre">seginframe2</span></code></a>(p1,&nbsp;p2)</td>
-<td>returns the seg list of a given zone defined by two points</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.seginline" title="pylayers.gis.layout.Layout.seginline"><code class="xref py py-obj docutils literal"><span class="pre">seginline</span></code></a>(p1,&nbsp;p2)</td>
-<td>returns the intersection between a given line and all segments</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.segpt" title="pylayers.gis.layout.Layout.segpt"><code class="xref py py-obj docutils literal"><span class="pre">segpt</span></code></a>([ptlist])</td>
-<td>return the seg list of a sequence of point number</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.seguv" title="pylayers.gis.layout.Layout.seguv"><code class="xref py py-obj docutils literal"><span class="pre">seguv</span></code></a>(iseg)</td>
-<td>returns unitary vector along segments</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.show" title="pylayers.gis.layout.Layout.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>(**kwargs)</td>
-<td>show layout</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.show3" title="pylayers.gis.layout.Layout.show3"><code class="xref py py-obj docutils literal"><span class="pre">show3</span></code></a>([bdis,&nbsp;centered])</td>
-<td>geomview display of the indoor structure</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.showG" title="pylayers.gis.layout.Layout.showG"><code class="xref py py-obj docutils literal"><span class="pre">showG</span></code></a>([graph])</td>
-<td>show the different graphs</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.showGs" title="pylayers.gis.layout.Layout.showGs"><code class="xref py py-obj docutils literal"><span class="pre">showGs</span></code></a>(**kwargs)</td>
-<td>show structure graph Gs</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.showSig" title="pylayers.gis.layout.Layout.showSig"><code class="xref py py-obj docutils literal"><span class="pre">showSig</span></code></a>(sigarr[,&nbsp;Tx,&nbsp;Rx,&nbsp;fig,&nbsp;ax])</td>
-<td>Show signature</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.show_layer" title="pylayers.gis.layout.Layout.show_layer"><code class="xref py py-obj docutils literal"><span class="pre">show_layer</span></code></a>(name[,&nbsp;edlist,&nbsp;alpha,&nbsp;width,&nbsp;...])</td>
-<td>show layer</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.show_nodes" title="pylayers.gis.layout.Layout.show_nodes"><code class="xref py py-obj docutils literal"><span class="pre">show_nodes</span></code></a>([ndlist,&nbsp;size,&nbsp;color,&nbsp;dlabels,&nbsp;...])</td>
-<td>show nodes</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.show_seg1" title="pylayers.gis.layout.Layout.show_seg1"><code class="xref py py-obj docutils literal"><span class="pre">show_seg1</span></code></a>([edlist,&nbsp;alpha,&nbsp;width,&nbsp;size,&nbsp;...])</td>
-<td>show segment</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.show_segment" title="pylayers.gis.layout.Layout.show_segment"><code class="xref py py-obj docutils literal"><span class="pre">show_segment</span></code></a>(**kwargs)</td>
-<td>show segment</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.signature" title="pylayers.gis.layout.Layout.signature"><code class="xref py py-obj docutils literal"><span class="pre">signature</span></code></a>(iTx,&nbsp;iRx)</td>
-<td>Determine signature between node iTx and node iRx</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.subseg" title="pylayers.gis.layout.Layout.subseg"><code class="xref py py-obj docutils literal"><span class="pre">subseg</span></code></a>()</td>
-<td>establishes the association : name &lt;-&gt;  edgelist</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.thwall" title="pylayers.gis.layout.Layout.thwall"><code class="xref py py-obj docutils literal"><span class="pre">thwall</span></code></a>(offx,&nbsp;offy)</td>
-<td>Create a list of wall tuples (Transit.world format )</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.translate" title="pylayers.gis.layout.Layout.translate"><code class="xref py py-obj docutils literal"><span class="pre">translate</span></code></a>(vec)</td>
-<td>translate layout</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.updateshseg" title="pylayers.gis.layout.Layout.updateshseg"><code class="xref py py-obj docutils literal"><span class="pre">updateshseg</span></code></a>()</td>
-<td>update shapely segment</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.visi_papb" title="pylayers.gis.layout.Layout.visi_papb"><code class="xref py py-obj docutils literal"><span class="pre">visi_papb</span></code></a>(pa,&nbsp;pb[,&nbsp;edgelist,&nbsp;dtype])</td>
-<td>visi_papb : determine if pa and pb are in visibility for the structure graph</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.visilist" title="pylayers.gis.layout.Layout.visilist"><code class="xref py py-obj docutils literal"><span class="pre">visilist</span></code></a>(p)</td>
-<td>returns the list of nodes which are visible from point p</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.waypointGw" title="pylayers.gis.layout.Layout.waypointGw"><code class="xref py py-obj docutils literal"><span class="pre">waypointGw</span></code></a>(nroom1,&nbsp;nroom2)</td>
-<td>get the waypoint between room1 and room2</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.wedge" title="pylayers.gis.layout.Layout.wedge"><code class="xref py py-obj docutils literal"><span class="pre">wedge</span></code></a>(lpnt)</td>
-<td>calculate wedge angle of a point</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.wedge2" title="pylayers.gis.layout.Layout.wedge2"><code class="xref py py-obj docutils literal"><span class="pre">wedge2</span></code></a>(apnt)</td>
-<td>calculate wedge angle of a point</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods Summary</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.add_fnod" title="pylayers.gis.layout.Layout.add_fnod"><code class="xref py py-obj docutils literal"><span class="pre">add_fnod</span></code></a>([p])</td>
-<td>add free node  p</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.add_furniture" title="pylayers.gis.layout.Layout.add_furniture"><code class="xref py py-obj docutils literal"><span class="pre">add_furniture</span></code></a>([name,&nbsp;matname,&nbsp;origin,&nbsp;zmin,&nbsp;...])</td>
-<td>add piece of furniture</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.add_furniture_file" title="pylayers.gis.layout.Layout.add_furniture_file"><code class="xref py py-obj docutils literal"><span class="pre">add_furniture_file</span></code></a>(_filefur[,&nbsp;typ])</td>
-<td>add pieces of furniture from .ini files</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.add_nfpe" title="pylayers.gis.layout.Layout.add_nfpe"><code class="xref py py-obj docutils literal"><span class="pre">add_nfpe</span></code></a>(np0,&nbsp;s1,&nbsp;s2)</td>
-<td>Add node on s1 from projection of np0 along s2</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.add_pnod" title="pylayers.gis.layout.Layout.add_pnod"><code class="xref py py-obj docutils literal"><span class="pre">add_pnod</span></code></a>(p,&nbsp;e1,&nbsp;e2)</td>
-<td>Project point p on segment e1 along segment e2</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.add_pons" title="pylayers.gis.layout.Layout.add_pons"><code class="xref py py-obj docutils literal"><span class="pre">add_pons</span></code></a>(ns[,&nbsp;alpha])</td>
-<td>add point on segment</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.add_segment" title="pylayers.gis.layout.Layout.add_segment"><code class="xref py py-obj docutils literal"><span class="pre">add_segment</span></code></a>(n1,&nbsp;n2[,&nbsp;num,&nbsp;maxnum,&nbsp;...])</td>
-<td>add segment between node n1 and node n2</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.angleonlink" title="pylayers.gis.layout.Layout.angleonlink"><code class="xref py py-obj docutils literal"><span class="pre">angleonlink</span></code></a>([p1,&nbsp;p2])</td>
-<td>angleonlink(self,p1,p2) return (seglist,angle) between p1 and p2</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.angleonlink3" title="pylayers.gis.layout.Layout.angleonlink3"><code class="xref py py-obj docutils literal"><span class="pre">angleonlink3</span></code></a>([p1,&nbsp;p2])</td>
-<td>angleonlink(self,p1,p2) return (seglist,angle) between p1 and p2</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.angleonlinkold" title="pylayers.gis.layout.Layout.angleonlinkold"><code class="xref py py-obj docutils literal"><span class="pre">angleonlinkold</span></code></a>([p1,&nbsp;p2])</td>
-<td>angleonlink(self,p1,p2) returns seglist between p1 and p2</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.boundary" title="pylayers.gis.layout.Layout.boundary"><code class="xref py py-obj docutils literal"><span class="pre">boundary</span></code></a>([percx,&nbsp;percy,&nbsp;xlim,&nbsp;force])</td>
-<td>add a blank boundary around layout</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.build" title="pylayers.gis.layout.Layout.build"><code class="xref py py-obj docutils literal"><span class="pre">build</span></code></a>([graph,&nbsp;verbose,&nbsp;difftol,&nbsp;multi])</td>
-<td>build graphs</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.buildGi" title="pylayers.gis.layout.Layout.buildGi"><code class="xref py py-obj docutils literal"><span class="pre">buildGi</span></code></a>([verbose,&nbsp;tqdmpos])</td>
-<td>build graph of interactions</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.buildGr" title="pylayers.gis.layout.Layout.buildGr"><code class="xref py py-obj docutils literal"><span class="pre">buildGr</span></code></a>()</td>
-<td>build the graph of rooms Gr</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.buildGt" title="pylayers.gis.layout.Layout.buildGt"><code class="xref py py-obj docutils literal"><span class="pre">buildGt</span></code></a>([check,&nbsp;difftol,&nbsp;verbose,&nbsp;tqdmpos])</td>
-<td>build graph of convex cycle</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.buildGt_old" title="pylayers.gis.layout.Layout.buildGt_old"><code class="xref py py-obj docutils literal"><span class="pre">buildGt_old</span></code></a>([check])</td>
-<td>DEPRECATED</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.buildGv" title="pylayers.gis.layout.Layout.buildGv"><code class="xref py py-obj docutils literal"><span class="pre">buildGv</span></code></a>([show,&nbsp;verbose,&nbsp;tqdmpos])</td>
-<td>build visibility graph</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.buildGw" title="pylayers.gis.layout.Layout.buildGw"><code class="xref py py-obj docutils literal"><span class="pre">buildGw</span></code></a>()</td>
-<td>build Graph of waypaths</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.check" title="pylayers.gis.layout.Layout.check"><code class="xref py py-obj docutils literal"><span class="pre">check</span></code></a>([level])</td>
-<td>Check Layout consistency</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.check2" title="pylayers.gis.layout.Layout.check2"><code class="xref py py-obj docutils literal"><span class="pre">check2</span></code></a>()</td>
-<td>Layout checking</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.check_Gi" title="pylayers.gis.layout.Layout.check_Gi"><code class="xref py py-obj docutils literal"><span class="pre">check_Gi</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.cleanup" title="pylayers.gis.layout.Layout.cleanup"><code class="xref py py-obj docutils literal"><span class="pre">cleanup</span></code></a>()</td>
-<td>cleanup the Layout</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.clip" title="pylayers.gis.layout.Layout.clip"><code class="xref py py-obj docutils literal"><span class="pre">clip</span></code></a>(xmin,&nbsp;xmax,&nbsp;ymin,&nbsp;ymax)</td>
-<td>return the list of edges which cross or belong to the clipping zone</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.closest_edge" title="pylayers.gis.layout.Layout.closest_edge"><code class="xref py py-obj docutils literal"><span class="pre">closest_edge</span></code></a>(p,&nbsp;AAS)</td>
-<td>not implemented</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.cy2pt" title="pylayers.gis.layout.Layout.cy2pt"><code class="xref py py-obj docutils literal"><span class="pre">cy2pt</span></code></a>([cy,&nbsp;h])</td>
-<td>return a point into a given cycle</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.cycleinline" title="pylayers.gis.layout.Layout.cycleinline"><code class="xref py py-obj docutils literal"><span class="pre">cycleinline</span></code></a>(c1,&nbsp;c2)</td>
-<td>returns the intersection between a given line and all segments</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.del_points" title="pylayers.gis.layout.Layout.del_points"><code class="xref py py-obj docutils literal"><span class="pre">del_points</span></code></a>(lp)</td>
-<td>delete points in list lp</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.del_segment" title="pylayers.gis.layout.Layout.del_segment"><code class="xref py py-obj docutils literal"><span class="pre">del_segment</span></code></a>(le[,&nbsp;verbose,&nbsp;g2npy])</td>
-<td>delete segment e</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.diag" title="pylayers.gis.layout.Layout.diag"><code class="xref py py-obj docutils literal"><span class="pre">diag</span></code></a>(p1,&nbsp;p2,&nbsp;l,&nbsp;al1,&nbsp;al2[,&nbsp;quadsel])</td>
-<td>return edge list from a diagonal zone</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.displaygui" title="pylayers.gis.layout.Layout.displaygui"><code class="xref py py-obj docutils literal"><span class="pre">displaygui</span></code></a>()</td>
-<td>open a GUI for displaying configuration</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.dumpr" title="pylayers.gis.layout.Layout.dumpr"><code class="xref py py-obj docutils literal"><span class="pre">dumpr</span></code></a>([graphs])</td>
-<td>read of given graphs</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.dumpw" title="pylayers.gis.layout.Layout.dumpw"><code class="xref py py-obj docutils literal"><span class="pre">dumpw</span></code></a>()</td>
-<td>write a dump of given Graph</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.ed2nd" title="pylayers.gis.layout.Layout.ed2nd"><code class="xref py py-obj docutils literal"><span class="pre">ed2nd</span></code></a>(edlist)</td>
-<td>convert edgelist to nodelist</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.edit_point" title="pylayers.gis.layout.Layout.edit_point"><code class="xref py py-obj docutils literal"><span class="pre">edit_point</span></code></a>(np)</td>
-<td>edit point</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.edit_seg" title="pylayers.gis.layout.Layout.edit_seg"><code class="xref py py-obj docutils literal"><span class="pre">edit_seg</span></code></a>(e1[,&nbsp;data])</td>
-<td>edit segment</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.edit_segment" title="pylayers.gis.layout.Layout.edit_segment"><code class="xref py py-obj docutils literal"><span class="pre">edit_segment</span></code></a>(e1[,&nbsp;gui,&nbsp;outdata])</td>
-<td>edit segment WITH EasyGUI</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.editor" title="pylayers.gis.layout.Layout.editor"><code class="xref py py-obj docutils literal"><span class="pre">editor</span></code></a>()</td>
-<td>invoke interactive layout graphical editor</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.editorTk" title="pylayers.gis.layout.Layout.editorTk"><code class="xref py py-obj docutils literal"><span class="pre">editorTk</span></code></a>()</td>
-<td>invoke interactive layout graphical editor</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.exportosm" title="pylayers.gis.layout.Layout.exportosm"><code class="xref py py-obj docutils literal"><span class="pre">exportosm</span></code></a>()</td>
-<td>export layout in osm file format</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.extrseg" title="pylayers.gis.layout.Layout.extrseg"><code class="xref py py-obj docutils literal"><span class="pre">extrseg</span></code></a>()</td>
-<td>calculate extremum of segments</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.facet3D" title="pylayers.gis.layout.Layout.facet3D"><code class="xref py py-obj docutils literal"><span class="pre">facet3D</span></code></a>(e[,&nbsp;subseg])</td>
-<td>calculate 3D facet from segment</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.facets3D" title="pylayers.gis.layout.Layout.facets3D"><code class="xref py py-obj docutils literal"><span class="pre">facets3D</span></code></a>(edlist,name)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.filterGi" title="pylayers.gis.layout.Layout.filterGi"><code class="xref py py-obj docutils literal"><span class="pre">filterGi</span></code></a>([situ])</td>
-<td>filter Gi to manage indoor/outdoor situations</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.find_edgelist" title="pylayers.gis.layout.Layout.find_edgelist"><code class="xref py py-obj docutils literal"><span class="pre">find_edgelist</span></code></a>(edgelist,nodelist)</td>
-<td>edgelist : input edgelist</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.g2npy" title="pylayers.gis.layout.Layout.g2npy"><code class="xref py py-obj docutils literal"><span class="pre">g2npy</span></code></a>([verbose])</td>
-<td>conversion from graphs to numpy arrays</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.geomfile" title="pylayers.gis.layout.Layout.geomfile"><code class="xref py py-obj docutils literal"><span class="pre">geomfile</span></code></a>([centered])</td>
-<td>create a .off geomview file</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.get_Sg_pos" title="pylayers.gis.layout.Layout.get_Sg_pos"><code class="xref py py-obj docutils literal"><span class="pre">get_Sg_pos</span></code></a>(sigarr)</td>
-<td>return position of the signatures</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.get_diffslab" title="pylayers.gis.layout.Layout.get_diffslab"><code class="xref py py-obj docutils literal"><span class="pre">get_diffslab</span></code></a>(npt,&nbsp;lz)</td>
-<td>get the 2 slabs associated to a diffraction point</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.get_paths" title="pylayers.gis.layout.Layout.get_paths"><code class="xref py py-obj docutils literal"><span class="pre">get_paths</span></code></a>(nd_in,&nbsp;nd_fin)</td>
-<td>returns the possible paths of graph Gs between two nodes.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.get_points" title="pylayers.gis.layout.Layout.get_points"><code class="xref py py-obj docutils literal"><span class="pre">get_points</span></code></a>(ax)</td>
-<td>get points list and segments list in a polygonal zone</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.get_zone" title="pylayers.gis.layout.Layout.get_zone"><code class="xref py py-obj docutils literal"><span class="pre">get_zone</span></code></a>(ax)</td>
-<td>get point list and segment list in a rectangular zone</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.getangles" title="pylayers.gis.layout.Layout.getangles"><code class="xref py py-obj docutils literal"><span class="pre">getangles</span></code></a>(poly[,&nbsp;unit,&nbsp;inside])</td>
-<td>find angles of a polygon</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.have_subseg" title="pylayers.gis.layout.Layout.have_subseg"><code class="xref py py-obj docutils literal"><span class="pre">have_subseg</span></code></a>(e1)</td>
-<td>check if edge e1 have subseg</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.importosm" title="pylayers.gis.layout.Layout.importosm"><code class="xref py py-obj docutils literal"><span class="pre">importosm</span></code></a>(**kwargs)</td>
 <td>import layout from osm file or osmapi</td>
@@ -914,7 +540,7 @@ zmin</p>
 <td>plot the layout with shapely polygons</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.plot_segments" title="pylayers.gis.layout.Layout.plot_segments"><code class="xref py py-obj docutils literal"><span class="pre">plot_segments</span></code></a>(lns,&nbsp;**kwargs)</td>
-<td>&#8220;</td>
+<td>”</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.pltlines" title="pylayers.gis.layout.Layout.pltlines"><code class="xref py py-obj docutils literal"><span class="pre">pltlines</span></code></a>(lines[,&nbsp;fig,&nbsp;ax,&nbsp;color,&nbsp;alpha])</td>
 <td>plot a line with a specified color and transparency</td>
@@ -1000,13 +626,382 @@ zmin</p>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.showSig" title="pylayers.gis.layout.Layout.showSig"><code class="xref py py-obj docutils literal"><span class="pre">showSig</span></code></a>(sigarr[,&nbsp;Tx,&nbsp;Rx,&nbsp;fig,&nbsp;ax])</td>
 <td>Show signature</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.show_layer" title="pylayers.gis.layout.Layout.show_layer"><code class="xref py py-obj docutils literal"><span class="pre">show_layer</span></code></a>(name[,&nbsp;edlist,&nbsp;alpha,&nbsp;width,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.show_layer" title="pylayers.gis.layout.Layout.show_layer"><code class="xref py py-obj docutils literal"><span class="pre">show_layer</span></code></a>(name[,&nbsp;edlist,&nbsp;alpha,&nbsp;width,&nbsp;…])</td>
 <td>show layer</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.show_nodes" title="pylayers.gis.layout.Layout.show_nodes"><code class="xref py py-obj docutils literal"><span class="pre">show_nodes</span></code></a>([ndlist,&nbsp;size,&nbsp;color,&nbsp;dlabels,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.show_nodes" title="pylayers.gis.layout.Layout.show_nodes"><code class="xref py py-obj docutils literal"><span class="pre">show_nodes</span></code></a>([ndlist,&nbsp;size,&nbsp;color,&nbsp;dlabels,&nbsp;…])</td>
 <td>show nodes</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.show_seg1" title="pylayers.gis.layout.Layout.show_seg1"><code class="xref py py-obj docutils literal"><span class="pre">show_seg1</span></code></a>([edlist,&nbsp;alpha,&nbsp;width,&nbsp;size,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.show_seg1" title="pylayers.gis.layout.Layout.show_seg1"><code class="xref py py-obj docutils literal"><span class="pre">show_seg1</span></code></a>([edlist,&nbsp;alpha,&nbsp;width,&nbsp;size,&nbsp;…])</td>
+<td>show segment</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.show_segment" title="pylayers.gis.layout.Layout.show_segment"><code class="xref py py-obj docutils literal"><span class="pre">show_segment</span></code></a>(**kwargs)</td>
+<td>show segment</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.signature" title="pylayers.gis.layout.Layout.signature"><code class="xref py py-obj docutils literal"><span class="pre">signature</span></code></a>(iTx,&nbsp;iRx)</td>
+<td>Determine signature between node iTx and node iRx</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.subseg" title="pylayers.gis.layout.Layout.subseg"><code class="xref py py-obj docutils literal"><span class="pre">subseg</span></code></a>()</td>
+<td>establishes the association : name &lt;-&gt;  edgelist</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.thwall" title="pylayers.gis.layout.Layout.thwall"><code class="xref py py-obj docutils literal"><span class="pre">thwall</span></code></a>(offx,&nbsp;offy)</td>
+<td>Create a list of wall tuples (Transit.world format )</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.translate" title="pylayers.gis.layout.Layout.translate"><code class="xref py py-obj docutils literal"><span class="pre">translate</span></code></a>(vec)</td>
+<td>translate layout</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.updateshseg" title="pylayers.gis.layout.Layout.updateshseg"><code class="xref py py-obj docutils literal"><span class="pre">updateshseg</span></code></a>()</td>
+<td>update shapely segment</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.visi_papb" title="pylayers.gis.layout.Layout.visi_papb"><code class="xref py py-obj docutils literal"><span class="pre">visi_papb</span></code></a>(pa,&nbsp;pb[,&nbsp;edgelist,&nbsp;dtype])</td>
+<td>visi_papb : determine if pa and pb are in visibility for the structure graph</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.visilist" title="pylayers.gis.layout.Layout.visilist"><code class="xref py py-obj docutils literal"><span class="pre">visilist</span></code></a>(p)</td>
+<td>returns the list of nodes which are visible from point p</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.waypointGw" title="pylayers.gis.layout.Layout.waypointGw"><code class="xref py py-obj docutils literal"><span class="pre">waypointGw</span></code></a>(nroom1,&nbsp;nroom2)</td>
+<td>get the waypoint between room1 and room2</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.wedge" title="pylayers.gis.layout.Layout.wedge"><code class="xref py py-obj docutils literal"><span class="pre">wedge</span></code></a>(lpnt)</td>
+<td>calculate wedge angle of a point</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.wedge2" title="pylayers.gis.layout.Layout.wedge2"><code class="xref py py-obj docutils literal"><span class="pre">wedge2</span></code></a>(apnt)</td>
+<td>calculate wedge angle of a point</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Summary</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.add_fnod" title="pylayers.gis.layout.Layout.add_fnod"><code class="xref py py-obj docutils literal"><span class="pre">add_fnod</span></code></a>([p])</td>
+<td>add free node  p</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.add_furniture" title="pylayers.gis.layout.Layout.add_furniture"><code class="xref py py-obj docutils literal"><span class="pre">add_furniture</span></code></a>([name,&nbsp;matname,&nbsp;origin,&nbsp;zmin,&nbsp;…])</td>
+<td>add piece of furniture</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.add_furniture_file" title="pylayers.gis.layout.Layout.add_furniture_file"><code class="xref py py-obj docutils literal"><span class="pre">add_furniture_file</span></code></a>(_filefur[,&nbsp;typ])</td>
+<td>add pieces of furniture from .ini files</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.add_nfpe" title="pylayers.gis.layout.Layout.add_nfpe"><code class="xref py py-obj docutils literal"><span class="pre">add_nfpe</span></code></a>(np0,&nbsp;s1,&nbsp;s2)</td>
+<td>Add node on s1 from projection of np0 along s2</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.add_pnod" title="pylayers.gis.layout.Layout.add_pnod"><code class="xref py py-obj docutils literal"><span class="pre">add_pnod</span></code></a>(p,&nbsp;e1,&nbsp;e2)</td>
+<td>Project point p on segment e1 along segment e2</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.add_pons" title="pylayers.gis.layout.Layout.add_pons"><code class="xref py py-obj docutils literal"><span class="pre">add_pons</span></code></a>(ns[,&nbsp;alpha])</td>
+<td>add point on segment</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.add_segment" title="pylayers.gis.layout.Layout.add_segment"><code class="xref py py-obj docutils literal"><span class="pre">add_segment</span></code></a>(n1,&nbsp;n2[,&nbsp;num,&nbsp;maxnum,&nbsp;…])</td>
+<td>add segment between node n1 and node n2</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.angleonlink" title="pylayers.gis.layout.Layout.angleonlink"><code class="xref py py-obj docutils literal"><span class="pre">angleonlink</span></code></a>([p1,&nbsp;p2])</td>
+<td>angleonlink(self,p1,p2) return (seglist,angle) between p1 and p2</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.angleonlink3" title="pylayers.gis.layout.Layout.angleonlink3"><code class="xref py py-obj docutils literal"><span class="pre">angleonlink3</span></code></a>([p1,&nbsp;p2])</td>
+<td>angleonlink(self,p1,p2) return (seglist,angle) between p1 and p2</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.angleonlinkold" title="pylayers.gis.layout.Layout.angleonlinkold"><code class="xref py py-obj docutils literal"><span class="pre">angleonlinkold</span></code></a>([p1,&nbsp;p2])</td>
+<td>angleonlink(self,p1,p2) returns seglist between p1 and p2</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.boundary" title="pylayers.gis.layout.Layout.boundary"><code class="xref py py-obj docutils literal"><span class="pre">boundary</span></code></a>([percx,&nbsp;percy,&nbsp;xlim,&nbsp;force])</td>
+<td>add a blank boundary around layout</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.build" title="pylayers.gis.layout.Layout.build"><code class="xref py py-obj docutils literal"><span class="pre">build</span></code></a>([graph,&nbsp;verbose,&nbsp;difftol,&nbsp;multi])</td>
+<td>build graphs</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.buildGi" title="pylayers.gis.layout.Layout.buildGi"><code class="xref py py-obj docutils literal"><span class="pre">buildGi</span></code></a>([verbose,&nbsp;tqdmpos])</td>
+<td>build graph of interactions</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.buildGr" title="pylayers.gis.layout.Layout.buildGr"><code class="xref py py-obj docutils literal"><span class="pre">buildGr</span></code></a>()</td>
+<td>build the graph of rooms Gr</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.buildGt" title="pylayers.gis.layout.Layout.buildGt"><code class="xref py py-obj docutils literal"><span class="pre">buildGt</span></code></a>([check,&nbsp;difftol,&nbsp;verbose,&nbsp;tqdmpos])</td>
+<td>build graph of convex cycles</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.buildGt_old" title="pylayers.gis.layout.Layout.buildGt_old"><code class="xref py py-obj docutils literal"><span class="pre">buildGt_old</span></code></a>([check])</td>
+<td>DEPRECATED</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.buildGv" title="pylayers.gis.layout.Layout.buildGv"><code class="xref py py-obj docutils literal"><span class="pre">buildGv</span></code></a>([show,&nbsp;verbose,&nbsp;tqdmpos])</td>
+<td>build visibility graph</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.buildGw" title="pylayers.gis.layout.Layout.buildGw"><code class="xref py py-obj docutils literal"><span class="pre">buildGw</span></code></a>()</td>
+<td>build Graph of waypaths</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.check" title="pylayers.gis.layout.Layout.check"><code class="xref py py-obj docutils literal"><span class="pre">check</span></code></a>([level])</td>
+<td>Check Layout consistency</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.check2" title="pylayers.gis.layout.Layout.check2"><code class="xref py py-obj docutils literal"><span class="pre">check2</span></code></a>()</td>
+<td>Layout checking</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.check_Gi" title="pylayers.gis.layout.Layout.check_Gi"><code class="xref py py-obj docutils literal"><span class="pre">check_Gi</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.cleanup" title="pylayers.gis.layout.Layout.cleanup"><code class="xref py py-obj docutils literal"><span class="pre">cleanup</span></code></a>()</td>
+<td>cleanup the Layout</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.clip" title="pylayers.gis.layout.Layout.clip"><code class="xref py py-obj docutils literal"><span class="pre">clip</span></code></a>(xmin,&nbsp;xmax,&nbsp;ymin,&nbsp;ymax)</td>
+<td>return the list of edges which cross or belong to the clipping zone</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.closest_edge" title="pylayers.gis.layout.Layout.closest_edge"><code class="xref py py-obj docutils literal"><span class="pre">closest_edge</span></code></a>(p,&nbsp;AAS)</td>
+<td>not implemented</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.cy2pt" title="pylayers.gis.layout.Layout.cy2pt"><code class="xref py py-obj docutils literal"><span class="pre">cy2pt</span></code></a>([cy,&nbsp;h])</td>
+<td>return a point into a given cycle</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.cycleinline" title="pylayers.gis.layout.Layout.cycleinline"><code class="xref py py-obj docutils literal"><span class="pre">cycleinline</span></code></a>(c1,&nbsp;c2)</td>
+<td>returns the intersection between a given line and all segments</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.del_points" title="pylayers.gis.layout.Layout.del_points"><code class="xref py py-obj docutils literal"><span class="pre">del_points</span></code></a>(lp)</td>
+<td>delete points in list lp</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.del_segment" title="pylayers.gis.layout.Layout.del_segment"><code class="xref py py-obj docutils literal"><span class="pre">del_segment</span></code></a>(le[,&nbsp;verbose,&nbsp;g2npy])</td>
+<td>delete segment e</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.diag" title="pylayers.gis.layout.Layout.diag"><code class="xref py py-obj docutils literal"><span class="pre">diag</span></code></a>(p1,&nbsp;p2,&nbsp;l,&nbsp;al1,&nbsp;al2[,&nbsp;quadsel])</td>
+<td>return edge list from a diagonal zone</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Layout.displaygui</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.dumpr" title="pylayers.gis.layout.Layout.dumpr"><code class="xref py py-obj docutils literal"><span class="pre">dumpr</span></code></a>([graphs])</td>
+<td>read of given graphs</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.dumpw" title="pylayers.gis.layout.Layout.dumpw"><code class="xref py py-obj docutils literal"><span class="pre">dumpw</span></code></a>()</td>
+<td>write a dump of given Graph</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.ed2nd" title="pylayers.gis.layout.Layout.ed2nd"><code class="xref py py-obj docutils literal"><span class="pre">ed2nd</span></code></a>(edlist)</td>
+<td>convert edgelist to nodelist</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Layout.edit_point</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.edit_seg" title="pylayers.gis.layout.Layout.edit_seg"><code class="xref py py-obj docutils literal"><span class="pre">edit_seg</span></code></a>(e1[,&nbsp;data])</td>
+<td>edit segment</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Layout.edit_segment</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.editor" title="pylayers.gis.layout.Layout.editor"><code class="xref py py-obj docutils literal"><span class="pre">editor</span></code></a>()</td>
+<td>invoke interactive layout graphical editor</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.editorTk" title="pylayers.gis.layout.Layout.editorTk"><code class="xref py py-obj docutils literal"><span class="pre">editorTk</span></code></a>()</td>
+<td>invoke interactive layout graphical editor</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.exportosm" title="pylayers.gis.layout.Layout.exportosm"><code class="xref py py-obj docutils literal"><span class="pre">exportosm</span></code></a>()</td>
+<td>export layout in osm file format</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.extrseg" title="pylayers.gis.layout.Layout.extrseg"><code class="xref py py-obj docutils literal"><span class="pre">extrseg</span></code></a>()</td>
+<td>calculate extremum of segments</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.facet3D" title="pylayers.gis.layout.Layout.facet3D"><code class="xref py py-obj docutils literal"><span class="pre">facet3D</span></code></a>(e[,&nbsp;subseg])</td>
+<td>calculate 3D facet from segment</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.facets3D" title="pylayers.gis.layout.Layout.facets3D"><code class="xref py py-obj docutils literal"><span class="pre">facets3D</span></code></a>(edlist,name)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.filterGi" title="pylayers.gis.layout.Layout.filterGi"><code class="xref py py-obj docutils literal"><span class="pre">filterGi</span></code></a>([situ])</td>
+<td>filter Gi to manage indoor/outdoor situations</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.find_edgelist" title="pylayers.gis.layout.Layout.find_edgelist"><code class="xref py py-obj docutils literal"><span class="pre">find_edgelist</span></code></a>(edgelist,nodelist)</td>
+<td>edgelist : input edgelist</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.g2npy" title="pylayers.gis.layout.Layout.g2npy"><code class="xref py py-obj docutils literal"><span class="pre">g2npy</span></code></a>([verbose])</td>
+<td>conversion from graphs to numpy arrays</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.geomfile" title="pylayers.gis.layout.Layout.geomfile"><code class="xref py py-obj docutils literal"><span class="pre">geomfile</span></code></a>([centered])</td>
+<td>create a .off geomview file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.get_Sg_pos" title="pylayers.gis.layout.Layout.get_Sg_pos"><code class="xref py py-obj docutils literal"><span class="pre">get_Sg_pos</span></code></a>(sigarr)</td>
+<td>return position of the signatures</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.get_diffslab" title="pylayers.gis.layout.Layout.get_diffslab"><code class="xref py py-obj docutils literal"><span class="pre">get_diffslab</span></code></a>(npt,&nbsp;lz)</td>
+<td>get the 2 slabs associated to a diffraction point</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.get_paths" title="pylayers.gis.layout.Layout.get_paths"><code class="xref py py-obj docutils literal"><span class="pre">get_paths</span></code></a>(nd_in,&nbsp;nd_fin)</td>
+<td>returns the possible paths of graph Gs between two nodes.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.get_points" title="pylayers.gis.layout.Layout.get_points"><code class="xref py py-obj docutils literal"><span class="pre">get_points</span></code></a>(ax[,&nbsp;tol])</td>
+<td>get points list and segments list in a polygonal zone</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.get_zone" title="pylayers.gis.layout.Layout.get_zone"><code class="xref py py-obj docutils literal"><span class="pre">get_zone</span></code></a>(ax)</td>
+<td>get point list and segment list in a rectangular zone</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.getangles" title="pylayers.gis.layout.Layout.getangles"><code class="xref py py-obj docutils literal"><span class="pre">getangles</span></code></a>(poly[,&nbsp;unit,&nbsp;inside])</td>
+<td>find angles of a polygon</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.have_subseg" title="pylayers.gis.layout.Layout.have_subseg"><code class="xref py py-obj docutils literal"><span class="pre">have_subseg</span></code></a>(e1)</td>
+<td>check if edge e1 have subseg</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.importosm" title="pylayers.gis.layout.Layout.importosm"><code class="xref py py-obj docutils literal"><span class="pre">importosm</span></code></a>(**kwargs)</td>
+<td>import layout from osm file or osmapi</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.importres" title="pylayers.gis.layout.Layout.importres"><code class="xref py py-obj docutils literal"><span class="pre">importres</span></code></a>(_fileres,&nbsp;**kwargs)</td>
+<td>import res format</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.importshp" title="pylayers.gis.layout.Layout.importshp"><code class="xref py py-obj docutils literal"><span class="pre">importshp</span></code></a>(**kwargs)</td>
+<td>import layout from shape file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.info" title="pylayers.gis.layout.Layout.info"><code class="xref py py-obj docutils literal"><span class="pre">info</span></code></a>()</td>
+<td>gives information about the Layout</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.info_segment" title="pylayers.gis.layout.Layout.info_segment"><code class="xref py py-obj docutils literal"><span class="pre">info_segment</span></code></a>(s1)</td>
+<td>information about segment</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.intercy" title="pylayers.gis.layout.Layout.intercy"><code class="xref py py-obj docutils literal"><span class="pre">intercy</span></code></a>(ncy[,&nbsp;typ])</td>
+<td>return the list of interactions seen from a cycle</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.ispoint" title="pylayers.gis.layout.Layout.ispoint"><code class="xref py py-obj docutils literal"><span class="pre">ispoint</span></code></a>(pt[,&nbsp;tol])</td>
+<td>check if pt is a point of the Layout</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.isseg" title="pylayers.gis.layout.Layout.isseg"><code class="xref py py-obj docutils literal"><span class="pre">isseg</span></code></a>(ta,&nbsp;he)</td>
+<td>test if ta&lt;-&gt;he is a segment</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.layerongrid" title="pylayers.gis.layout.Layout.layerongrid"><code class="xref py py-obj docutils literal"><span class="pre">layerongrid</span></code></a>(grid,&nbsp;Tx)</td>
+<td>grid Nx,Ny,2</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.layeronlink" title="pylayers.gis.layout.Layout.layeronlink"><code class="xref py py-obj docutils literal"><span class="pre">layeronlink</span></code></a>(p1,&nbsp;p2)</td>
+<td>layeronlink(self,p1,p2) return seglist between p1 and p2</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.load" title="pylayers.gis.layout.Layout.load"><code class="xref py py-obj docutils literal"><span class="pre">load</span></code></a>()</td>
+<td>load a layout  from a .lay file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.load_modif" title="pylayers.gis.layout.Layout.load_modif"><code class="xref py py-obj docutils literal"><span class="pre">load_modif</span></code></a>(_filename[,&nbsp;build,&nbsp;cartesian,&nbsp;dist_m])</td>
+<td>load a Layout in different formats</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.loadfur" title="pylayers.gis.layout.Layout.loadfur"><code class="xref py py-obj docutils literal"><span class="pre">loadfur</span></code></a>(_filefur)</td>
+<td>loadfur load a furniture file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.ls" title="pylayers.gis.layout.Layout.ls"><code class="xref py py-obj docutils literal"><span class="pre">ls</span></code></a>([typ])</td>
+<td>list the available file in dirstruc</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.mask" title="pylayers.gis.layout.Layout.mask"><code class="xref py py-obj docutils literal"><span class="pre">mask</span></code></a>()</td>
+<td>returns the polygonal mask of the building</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.nd2seg" title="pylayers.gis.layout.Layout.nd2seg"><code class="xref py py-obj docutils literal"><span class="pre">nd2seg</span></code></a>(ndlist)</td>
+<td>convert node list to edge list</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.numseg" title="pylayers.gis.layout.Layout.numseg"><code class="xref py py-obj docutils literal"><span class="pre">numseg</span></code></a>(ta,&nbsp;he[,&nbsp;first])</td>
+<td>get segment number from 2 points index</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.off_overlay" title="pylayers.gis.layout.Layout.off_overlay"><code class="xref py py-obj docutils literal"><span class="pre">off_overlay</span></code></a>([dx,&nbsp;dy])</td>
+<td>offset overlay image</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.offset_index" title="pylayers.gis.layout.Layout.offset_index"><code class="xref py py-obj docutils literal"><span class="pre">offset_index</span></code></a>([offp,&nbsp;offs])</td>
+<td>offset points and segment index</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.onseg" title="pylayers.gis.layout.Layout.onseg"><code class="xref py py-obj docutils literal"><span class="pre">onseg</span></code></a>(pt[,&nbsp;tol])</td>
+<td>segment number from point (deprecated)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.outputGi" title="pylayers.gis.layout.Layout.outputGi"><code class="xref py py-obj docutils literal"><span class="pre">outputGi</span></code></a>([verbose,&nbsp;tqdmpos])</td>
+<td>filter output of Gi edges</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.outputGi_mp" title="pylayers.gis.layout.Layout.outputGi_mp"><code class="xref py py-obj docutils literal"><span class="pre">outputGi_mp</span></code></a>()</td>
+<td>filter output of Gi edges</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.outputGi_new" title="pylayers.gis.layout.Layout.outputGi_new"><code class="xref py py-obj docutils literal"><span class="pre">outputGi_new</span></code></a>([verbose,&nbsp;tqdmpos])</td>
+<td>filter output of Gi edges</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.plot" title="pylayers.gis.layout.Layout.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>(**kwargs)</td>
+<td>plot the layout with shapely polygons</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.plot_segments" title="pylayers.gis.layout.Layout.plot_segments"><code class="xref py py-obj docutils literal"><span class="pre">plot_segments</span></code></a>(lns,&nbsp;**kwargs)</td>
+<td>”</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.pltlines" title="pylayers.gis.layout.Layout.pltlines"><code class="xref py py-obj docutils literal"><span class="pre">pltlines</span></code></a>(lines[,&nbsp;fig,&nbsp;ax,&nbsp;color,&nbsp;alpha])</td>
+<td>plot a line with a specified color and transparency</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.pltpoly" title="pylayers.gis.layout.Layout.pltpoly"><code class="xref py py-obj docutils literal"><span class="pre">pltpoly</span></code></a>(poly[,&nbsp;fig,&nbsp;ax,&nbsp;color,&nbsp;alpha])</td>
+<td>plot a polygon with a specified color and transparency</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.pltvnodes" title="pylayers.gis.layout.Layout.pltvnodes"><code class="xref py py-obj docutils literal"><span class="pre">pltvnodes</span></code></a>(vn[,&nbsp;fig,&nbsp;ax])</td>
+<td>plot vnodes</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.point_touches_seg" title="pylayers.gis.layout.Layout.point_touches_seg"><code class="xref py py-obj docutils literal"><span class="pre">point_touches_seg</span></code></a>(pt[,&nbsp;lseg,&nbsp;segtol,&nbsp;tahetol])</td>
+<td>determine if a point is touching a segment</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.polysh2geu" title="pylayers.gis.layout.Layout.polysh2geu"><code class="xref py py-obj docutils literal"><span class="pre">polysh2geu</span></code></a>(poly)</td>
+<td>transform sh.Polygon into geu.Polygon</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.pt2cy" title="pylayers.gis.layout.Layout.pt2cy"><code class="xref py py-obj docutils literal"><span class="pre">pt2cy</span></code></a>([pt])</td>
+<td>point to cycle</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.pt2ro" title="pylayers.gis.layout.Layout.pt2ro"><code class="xref py py-obj docutils literal"><span class="pre">pt2ro</span></code></a>([pt])</td>
+<td>point to room</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.ptGs2cy" title="pylayers.gis.layout.Layout.ptGs2cy"><code class="xref py py-obj docutils literal"><span class="pre">ptGs2cy</span></code></a>([n])</td>
+<td>Gs node to cycle</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.ptin" title="pylayers.gis.layout.Layout.ptin"><code class="xref py py-obj docutils literal"><span class="pre">ptin</span></code></a>([pt])</td>
+<td>check if a point is in the Layout</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.randTxRx" title="pylayers.gis.layout.Layout.randTxRx"><code class="xref py py-obj docutils literal"><span class="pre">randTxRx</span></code></a>()</td>
+<td>returns random coordinates for Tx and Rx.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.room2nodes" title="pylayers.gis.layout.Layout.room2nodes"><code class="xref py py-obj docutils literal"><span class="pre">room2nodes</span></code></a>(room)</td>
+<td>returns the nodes of a room</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.room2segments" title="pylayers.gis.layout.Layout.room2segments"><code class="xref py py-obj docutils literal"><span class="pre">room2segments</span></code></a>(room)</td>
+<td>returns the segments of a room</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.rotate" title="pylayers.gis.layout.Layout.rotate"><code class="xref py py-obj docutils literal"><span class="pre">rotate</span></code></a>([angle])</td>
+<td>rotate the layout</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.save" title="pylayers.gis.layout.Layout.save"><code class="xref py py-obj docutils literal"><span class="pre">save</span></code></a>()</td>
+<td>save Layout structure in a .lay file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.scl_overlay" title="pylayers.gis.layout.Layout.scl_overlay"><code class="xref py py-obj docutils literal"><span class="pre">scl_overlay</span></code></a>([ax,&nbsp;ay])</td>
+<td>scale overlay image</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.seg2pts" title="pylayers.gis.layout.Layout.seg2pts"><code class="xref py py-obj docutils literal"><span class="pre">seg2pts</span></code></a>(aseg)</td>
+<td>convert segments array from Gs numerotation</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.seg2ro" title="pylayers.gis.layout.Layout.seg2ro"><code class="xref py py-obj docutils literal"><span class="pre">seg2ro</span></code></a>(seg)</td>
+<td>return room number of a point</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.seg_intersection" title="pylayers.gis.layout.Layout.seg_intersection"><code class="xref py py-obj docutils literal"><span class="pre">seg_intersection</span></code></a>(**kwargs)</td>
+<td>determine if a segment intersects any other segment of the layout</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.seginframe" title="pylayers.gis.layout.Layout.seginframe"><code class="xref py py-obj docutils literal"><span class="pre">seginframe</span></code></a>(p1,&nbsp;p2)</td>
+<td>return the seg list of a given zone defined by two points</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.seginframe2" title="pylayers.gis.layout.Layout.seginframe2"><code class="xref py py-obj docutils literal"><span class="pre">seginframe2</span></code></a>(p1,&nbsp;p2)</td>
+<td>returns the seg list of a given zone defined by two points</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.seginline" title="pylayers.gis.layout.Layout.seginline"><code class="xref py py-obj docutils literal"><span class="pre">seginline</span></code></a>(p1,&nbsp;p2)</td>
+<td>returns the intersection between a given line and all segments</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.segpt" title="pylayers.gis.layout.Layout.segpt"><code class="xref py py-obj docutils literal"><span class="pre">segpt</span></code></a>([ptlist])</td>
+<td>return the seg list of a sequence of point number</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.seguv" title="pylayers.gis.layout.Layout.seguv"><code class="xref py py-obj docutils literal"><span class="pre">seguv</span></code></a>(iseg)</td>
+<td>returns unitary vector along segments</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.show" title="pylayers.gis.layout.Layout.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>(**kwargs)</td>
+<td>show layout</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.show3" title="pylayers.gis.layout.Layout.show3"><code class="xref py py-obj docutils literal"><span class="pre">show3</span></code></a>([bdis,&nbsp;centered])</td>
+<td>geomview display of the indoor structure</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.showG" title="pylayers.gis.layout.Layout.showG"><code class="xref py py-obj docutils literal"><span class="pre">showG</span></code></a>([graph])</td>
+<td>show the different graphs</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.showGs" title="pylayers.gis.layout.Layout.showGs"><code class="xref py py-obj docutils literal"><span class="pre">showGs</span></code></a>(**kwargs)</td>
+<td>show structure graph Gs</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.showSig" title="pylayers.gis.layout.Layout.showSig"><code class="xref py py-obj docutils literal"><span class="pre">showSig</span></code></a>(sigarr[,&nbsp;Tx,&nbsp;Rx,&nbsp;fig,&nbsp;ax])</td>
+<td>Show signature</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.show_layer" title="pylayers.gis.layout.Layout.show_layer"><code class="xref py py-obj docutils literal"><span class="pre">show_layer</span></code></a>(name[,&nbsp;edlist,&nbsp;alpha,&nbsp;width,&nbsp;…])</td>
+<td>show layer</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.show_nodes" title="pylayers.gis.layout.Layout.show_nodes"><code class="xref py py-obj docutils literal"><span class="pre">show_nodes</span></code></a>([ndlist,&nbsp;size,&nbsp;color,&nbsp;dlabels,&nbsp;…])</td>
+<td>show nodes</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.show_seg1" title="pylayers.gis.layout.Layout.show_seg1"><code class="xref py py-obj docutils literal"><span class="pre">show_seg1</span></code></a>([edlist,&nbsp;alpha,&nbsp;width,&nbsp;size,&nbsp;…])</td>
 <td>show segment</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.show_segment" title="pylayers.gis.layout.Layout.show_segment"><code class="xref py py-obj docutils literal"><span class="pre">show_segment</span></code></a>(**kwargs)</td>
@@ -1069,11 +1064,11 @@ zmin</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
 <blockquote>
-<div><p>default = &#8216;R1_C&#8217;</p>
+<div><p>default = ‘R1_C’</p>
 </div></blockquote>
 <p><strong>matname</strong> : string</p>
 <blockquote>
-<div><p>default = &#8216;PARTITION&#8217;</p>
+<div><p>default = ‘PARTITION’</p>
 </div></blockquote>
 <p><strong>origin</strong> : tuple of floats</p>
 <p><strong>height</strong> : float</p>
@@ -1143,11 +1138,11 @@ zmin</p>
 <div><p>point</p>
 </div></blockquote>
 <dl class="docutils">
-<dt>e1</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd><p class="first last">edge number 1</p>
+<dt>e1 <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">edge number 1</p>
 </dd>
-<dt>e2</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd><p class="first last">edge number 2</p>
+<dt>e2 <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">edge number 2</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -1200,7 +1195,7 @@ create 2 segments with same properties</p>
 <p><strong>maxnum</strong> : maximum number (-1 default not given)</p>
 <p><strong>name</strong> : string</p>
 <blockquote>
-<div><p>layer name &#8216;PARTITION&#8217;</p>
+<div><p>layer name ‘PARTITION’</p>
 </div></blockquote>
 <p><strong>z</strong> : tuple of 2 floats</p>
 <blockquote>
@@ -1241,9 +1236,9 @@ iso : list of isosegment</p>
 <p><strong>p2</strong> : np.array (2 x Np) or (2,)</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">data[&#8216;i&#8217;]</p>
-<p><strong>data[&#8216;s&#8217;]</strong> : list of segment number</p>
-<p class="last"><strong>data[&#8216;a&#8217;]</strong> : angle (in radians) between segment and LOS axis</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">data[‘i’]</p>
+<p><strong>data[‘s’]</strong> : list of segment number</p>
+<p class="last"><strong>data[‘a’]</strong> : angle (in radians) between segment and LOS axis</p>
 </td>
 </tr>
 </tbody>
@@ -1260,7 +1255,7 @@ iso : list of isosegment</p>
 <dt>#array([(0, 141, 1.2793395519256592), (0, 62, 0.29145678877830505),</dt>
 <dd><blockquote class="first">
 <div>(0, 65, 0.29145678877830505)],</div></blockquote>
-<p class="last">dtype=[(&#8216;i&#8217;, &#8216;&lt;i8&#8217;), (&#8216;s&#8217;, &#8216;&lt;i8&#8217;), (&#8216;a&#8217;, &#8216;&lt;f4&#8217;)])</p>
+<p class="last">dtype=[(‘i’, ‘&lt;i8’), (‘s’, ‘&lt;i8’), (‘a’, ‘&lt;f4’)])</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1279,9 +1274,9 @@ iso : list of isosegment</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>data</strong> : structured array x N</p>
 <blockquote class="last">
-<div><p>&#8216;i&#8217; : index 
-&#8216;s&#8217; : slab 
-&#8216;a&#8217; : angle (in radians)</p>
+<div><p>‘i’ : index 
+‘s’ : slab 
+‘a’ : angle (in radians)</p>
 </div></blockquote>
 </td>
 </tr>
@@ -1303,7 +1298,7 @@ iso : list of isosegment</p>
 <dt>#array([(0, 141, 1.2793395519256592), (0, 62, 0.29145678877830505),</dt>
 <dd><blockquote class="first">
 <div>(0, 65, 0.29145678877830505)],</div></blockquote>
-<p class="last">dtype=[(&#8216;i&#8217;, &#8216;&lt;i8&#8217;), (&#8216;s&#8217;, &#8216;&lt;i8&#8217;), (&#8216;a&#8217;, &#8216;&lt;f4&#8217;)])</p>
+<p class="last">dtype=[(‘i’, ‘&lt;i8’), (‘s’, ‘&lt;i8’), (‘a’, ‘&lt;f4’)])</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1337,7 +1332,7 @@ iso : list of isosegment</p>
 </table>
 <p class="rubric">Examples</p>
 <p>#&gt;&gt;&gt; from pylayers.gis.layout import *
-#&gt;&gt;&gt; L = Layout(&#8216;DLR.lay&#8217;,&#8217;matDB.ini&#8217;,&#8217;slabDB.ini&#8217;)
+#&gt;&gt;&gt; L = Layout(‘DLR.lay’,’matDB.ini’,’slabDB.ini’)
 #&gt;&gt;&gt; p1 = np.array([0,0])
 #&gt;&gt;&gt; p2 = np.array([10,3])
 #&gt;&gt;&gt; L.angleonlinkold(p1,p2)
@@ -1385,11 +1380,11 @@ iso : list of isosegment</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>graph</strong> : string composed of</p>
 <blockquote>
-<div><p>&#8216;t&#8217; : Gt
-&#8216;v&#8217; : Gv
-&#8216;i&#8217; : Gi
-&#8216;r&#8217; : Gr
-&#8216;w&#8221; : Gw</p>
+<div><p>‘t’ : Gt
+‘v’ : Gv
+‘i’ : Gi
+‘r’ : Gr
+‘w” : Gw</p>
 </div></blockquote>
 <p><strong>verbose</strong> : boolean</p>
 <p><strong>difftol</strong> : diffraction tolerance</p>
@@ -1435,7 +1430,7 @@ segments</p>
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.buildGt">
 <code class="descname">buildGt</code><span class="sig-paren">(</span><em>check=True</em>, <em>difftol=0.01</em>, <em>verbose=False</em>, <em>tqdmpos=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.buildGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.buildGt" title="Permalink to this definition">¶</a></dt>
-<dd><p>build graph of convex cycle</p>
+<dd><p>build graph of convex cycles</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1744,23 +1739,17 @@ build graph of convex cycles</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pylayers.gis.layout.Layout.displaygui">
-<code class="descname">displaygui</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.displaygui"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.displaygui" title="Permalink to this definition">¶</a></dt>
-<dd><p>open a GUI for displaying configuration</p>
-</dd></dl>
-
-<dl class="method">
 <dt id="pylayers.gis.layout.Layout.dumpr">
 <code class="descname">dumpr</code><span class="sig-paren">(</span><em>graphs='stvirw'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.dumpr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.dumpr" title="Permalink to this definition">¶</a></dt>
 <dd><p>read of given graphs</p>
 <p class="rubric">Notes</p>
 <dl class="docutils">
-<dt>graph</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">string</span><dd>&#8216;s&#8217; : Gv
-&#8216;t&#8217; : Gt
-&#8216;r&#8217; : Gr
-&#8216;v&#8217; : Gv
-&#8216;i&#8217; : Gi</dd>
+<dt>graph <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>‘s’ : Gv
+‘t’ : Gt
+‘r’ : Gr
+‘v’ : Gv
+‘i’ : Gi</dd>
 </dl>
 <p>.gpickle files are store under the struc directory of the project
 specified by the $BASENAME environment variable</p>
@@ -1771,11 +1760,11 @@ specified by the $BASENAME environment variable</p>
 <code class="descname">dumpw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.dumpw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.dumpw" title="Permalink to this definition">¶</a></dt>
 <dd><p>write a dump of given Graph</p>
 <p class="rubric">Notes</p>
-<p>&#8216;t&#8217; : Gt
-&#8216;r&#8217; : Gr
-&#8216;s&#8217; : Gs
-&#8216;v&#8217; : Gv
-&#8216;i&#8217; : Gi</p>
+<p>‘t’ : Gt
+‘r’ : Gr
+‘s’ : Gs
+‘v’ : Gv
+‘i’ : Gi</p>
 </dd></dl>
 
 <dl class="method">
@@ -1795,24 +1784,6 @@ specified by the $BASENAME environment variable</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ndlist</strong> : ndarray</p>
 <blockquote class="last">
 <div><p>node list</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.gis.layout.Layout.edit_point">
-<code class="descname">edit_point</code><span class="sig-paren">(</span><em>np</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.edit_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.edit_point" title="Permalink to this definition">¶</a></dt>
-<dd><p>edit point</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>np</strong> : integer</p>
-<blockquote class="last">
-<div><p>point number</p>
 </div></blockquote>
 </td>
 </tr>
@@ -1858,43 +1829,6 @@ added :</p>
 <li>ss_name : list of string</li>
 <li>ss_z : list of subsegment e.q. [(min height (meters),max height (meters))]</li>
 <li>ss_offset : list of offset in [0,1]</li>
-</ul>
-</div></blockquote>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.gis.layout.Layout.edit_segment">
-<code class="descname">edit_segment</code><span class="sig-paren">(</span><em>e1</em>, <em>gui=True</em>, <em>outdata={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.edit_segment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.edit_segment" title="Permalink to this definition">¶</a></dt>
-<dd><p>edit segment WITH EasyGUI</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>e1</strong> : integer</p>
-<blockquote>
-<div><p>edge number</p>
-</div></blockquote>
-<p class="last"><strong>gui</strong> : boolean</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<dl class="docutils">
-<dt>A segment has the following properties :</dt>
-<dd><ul class="first last simple">
-<li>name  : string</li>
-<li>z  :  tuple</li>
-<li>transition : boolean (default FALSE)</li>
-</ul>
-</dd>
-</dl>
-<p>If a segment has subsegments attached the following properties are
-added :</p>
-<blockquote>
-<div><ul class="simple">
-<li>ss_name : string</li>
-<li>ss_z : subsegment [(min height (meters),max height (meters))]</li>
 </ul>
 </div></blockquote>
 </dd></dl>
@@ -1977,10 +1911,10 @@ o : toggle overlay</div></blockquote>
 <code class="descname">facet3D</code><span class="sig-paren">(</span><em>e</em>, <em>subseg=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.facet3D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.facet3D" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculate 3D facet from segment</p>
 <dl class="docutils">
-<dt>s</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>segment number</dd>
-<dt>subseg</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span><dd>default False</dd>
+<dt>s <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>segment number</dd>
+<dt>subseg <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
+<dd>default False</dd>
 </dl>
 </dd></dl>
 
@@ -2096,7 +2030,7 @@ nodelist : input nodelist</p>
 <li>a list of slab tuples.  the length of this list == length of lz</li>
 </ul>
 <p>[[443, 529], [444, 530]]</p>
-<p class="last">[[&#8216;WALL&#8217;, &#8216;WALL&#8217;], [&#8216;AIR&#8217;, &#8216;AIR&#8217;]]</p>
+<p class="last">[[‘WALL’, ‘WALL’], [‘AIR’, ‘AIR’]]</p>
 </td>
 </tr>
 </tbody>
@@ -2136,7 +2070,7 @@ nodelist : input nodelist</p>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.get_points">
-<code class="descname">get_points</code><span class="sig-paren">(</span><em>ax</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.get_points"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.get_points" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_points</code><span class="sig-paren">(</span><em>ax</em>, <em>tol=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.get_points"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.get_points" title="Permalink to this definition">¶</a></dt>
 <dd><p>get points list and segments list in a polygonal zone</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2158,7 +2092,7 @@ nodelist : input nodelist</p>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>This methods returns all the</p>
+<p>This methods returns all the point inside a zone or a polygon</p>
 </dd></dl>
 
 <dl class="method">
@@ -2193,17 +2127,17 @@ nodelist : input nodelist</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>poly</strong> : geu.Polygon or sh.Polygon</p>
 <p><strong>unit</strong> : str</p>
 <blockquote>
-<div><p>&#8216;deg&#8217; : degree values
-&#8216;rad&#8217; : radian values</p>
+<div><p>‘deg’ : degree values
+‘rad’ : radian values</p>
 </div></blockquote>
 <p><strong>inside</strong> : boolean</p>
 <blockquote>
 <div><dl class="docutils">
-<dt>True</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">compute the inside angles of the cycle.</span><dd><p class="first last">(a.k.a. the interior of the polygon)</p>
+<dt>True <span class="classifier-delimiter">:</span> <span class="classifier">compute the inside angles of the cycle.</span></dt>
+<dd><p class="first last">(a.k.a. the interior of the polygon)</p>
 </dd>
-<dt>False</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">compute the outside angles of the cycle.</span><dd><p class="first last">(a.k.a. the exterior of the polygon)</p>
+<dt>False <span class="classifier-delimiter">:</span> <span class="classifier">compute the outside angles of the cycle.</span></dt>
+<dd><p class="first last">(a.k.a. the exterior of the polygon)</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -2344,8 +2278,8 @@ col8 : ground height</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ncy</strong> : cycle number( Project -&gt; save project)</p>
 <p><strong>typ</strong> : string</p>
 <blockquote class="last">
-<div><p>if &#8216;source&#8217; connect source cycle
-if &#8216;target&#8217; connect target cycle</p>
+<div><p>if ‘source’ connect source cycle
+if ‘target’ connect target cycle</p>
 </div></blockquote>
 </td>
 </tr>
@@ -2489,7 +2423,7 @@ p2 : (1 x 2 )</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : string optional</p>
 <blockquote>
-<div><p>{&#8216;ini&#8217;|&#8217;osm&#8217;|&#8217;wrl&#8217;}</p>
+<div><p>{‘ini’|’osm’|’wrl’}</p>
 </div></blockquote>
 </td>
 </tr>
@@ -2645,7 +2579,7 @@ else returns a np.array of iso segments</p>
 <p class="last"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.util.cone.Cone.from2seg</span></code>, <code class="xref py py-obj docutils literal"><span class="pre">pylayers.util.cone.Cone.belong_seg</span></code></p>
 </div>
 <p class="rubric">Notes</p>
-<p>Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,...}) in a signature.
+<p>Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,…}) in a signature.
 This function checks whether this sequence is feasible or not
 , whatever the type of nstr0 and nstr1.
 The feasible outputs from nstr0 to nstr1 are stored in an output field of
@@ -2669,7 +2603,7 @@ edge (nstr0,nstr1)</p>
 <p class="last"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.util.cone.Cone.from2seg</span></code>, <code class="xref py py-obj docutils literal"><span class="pre">pylayers.util.cone.Cone.belong_seg</span></code></p>
 </div>
 <p class="rubric">Notes</p>
-<p>Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,...}) in a signature.
+<p>Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,…}) in a signature.
 This function checks whether this sequence is feasible or not
 , whatever the type of nstr0 and nstr1.
 The feasible outputs from nstr0 to nstr1 are stored in an output field of
@@ -2695,7 +2629,7 @@ purpose</p>
 <p class="last"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.util.cone.Cone.from2seg</span></code>, <code class="xref py py-obj docutils literal"><span class="pre">pylayers.util.cone.Cone.belong_seg</span></code></p>
 </div>
 <p class="rubric">Notes</p>
-<p>Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,...}) in a signature.
+<p>Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,…}) in a signature.
 This function checks whether this sequence is feasible or not
 , whatever the type of nstr0 and nstr1.
 The feasible outputs from nstr0 to nstr1 are stored in an output field of
@@ -2720,7 +2654,7 @@ nodes : boolean</p>
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.plot_segments">
 <code class="descname">plot_segments</code><span class="sig-paren">(</span><em>lns</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.plot_segments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.plot_segments" title="Permalink to this definition">¶</a></dt>
-<dd><p>&#8220;</p>
+<dd><p>“</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -3266,7 +3200,7 @@ array([ 1,  3,  7,  8, 14, 15, 16, 17, 18, 20, 21, 23, 24, 26, 27, 29, 30,
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>graph</strong> : char</p>
 <blockquote>
-<div><p>&#8216;t&#8217; : Gt &#8216;r&#8217; : Gr &#8216;s&#8217; : Gs &#8216;v&#8217; : Gv  &#8216;i&#8217; : Gi</p>
+<div><p>‘t’ : Gt ‘r’ : Gr ‘s’ : Gs ‘v’ : Gv  ‘i’ : Gi</p>
 </div></blockquote>
 <p><strong>fig</strong> : matplotlib figure</p>
 <blockquote>
@@ -3304,7 +3238,7 @@ array([ 1,  3,  7,  8, 14, 15, 16, 17, 18, 20, 21, 23, 24, 26, 27, 29, 30,
 <blockquote>
 <div><p>display graph labels (False)
 if list precise label of which cycle to display
-(e.g. [&#8216;t&#8217;])</p>
+(e.g. [‘t’])</p>
 </div></blockquote>
 <p><strong>alphan</strong> : float</p>
 <blockquote>
@@ -3352,7 +3286,7 @@ if list precise label of which cycle to display
 </div></blockquote>
 <p><strong>mode</strong> : string</p>
 <blockquote>
-<div><p>&#8216;cycle&#8217; | &#8216;none&#8217; | &#8216;room&#8217;</p>
+<div><p>‘cycle’ | ‘none’ | ‘room’</p>
 </div></blockquote>
 <p><strong>alphacy</strong> : string</p>
 <blockquote>
@@ -3360,12 +3294,12 @@ if list precise label of which cycle to display
 </div></blockquote>
 <p><strong>colorcy :</strong></p>
 <blockquote>
-<div><p>&#8216;#abcdef&#8217;</p>
+<div><p>‘#abcdef’</p>
 </div></blockquote>
 <p><strong>linter</strong> : list</p>
 <blockquote>
 <div><p>list of interaction for Gi
-[&#8216;RR&#8217;,&#8217;TT&#8217;,&#8217;RT&#8217;,&#8217;TR&#8217;,&#8217;RD&#8217;,&#8217;DR&#8217;,&#8217;TD&#8217;,&#8217;DT&#8217;,&#8217;DD&#8217;]</p>
+[‘RR’,’TT’,’RT’,’TR’,’RD’,’DR’,’TD’,’DT’,’DD’]</p>
 </div></blockquote>
 <p><strong>show0</strong> : boolean</p>
 <blockquote>
@@ -3395,35 +3329,35 @@ if list precise label of which cycle to display
 <blockquote>
 <div><p>False</p>
 </div></blockquote>
-<p><strong>defaults = {&#8216;show&#8217;: False,</strong></p>
+<p><strong>defaults = {‘show’: False,</strong></p>
 <blockquote class="last">
-<div><p>&#8216;fig&#8217;: [],
-&#8216;ax&#8217;: [],
-&#8216;nodes&#8217;: False,
-&#8216;edges&#8217;: True,
-&#8216;sllist&#8217;:[],
-&#8216;airwalls&#8217;: False,
-&#8216;subseg&#8217;: False,
-&#8216;slab&#8217;: True,
-&#8216;labels&#8217;: False,
-&#8216;alphan&#8217;: 1.0,
-&#8216;alphae&#8217;: 1.0,
-&#8216;width&#8217;: 2,
-&#8216;node_color&#8217;:&#8217;w&#8217;,
-&#8216;edge_color&#8217;:&#8217;k&#8217;,
-&#8216;node_size&#8217;:20,
-&#8216;font_size&#8217;:15,
-&#8216;nodelist&#8217;: [],
-&#8216;edgelist&#8217;: [],
-&#8216;figsize&#8217;: (5,5),
-&#8216;mode&#8217;:&#8217;nocycle&#8217;,
-&#8216;alphacy&#8217;:0.8,
-&#8216;colorcy&#8217;:&#8217;abcdef&#8217;,
-&#8216;linter&#8217; : [&#8216;RR&#8217;,&#8217;TT&#8217;,&#8217;RT&#8217;,&#8217;TR&#8217;,&#8217;RD&#8217;,&#8217;DR&#8217;,&#8217;TD&#8217;,&#8217;DT&#8217;,&#8217;DD&#8217;],
-&#8216;show0&#8217;:False,
-&#8216;axis&#8217;:False,
-&#8216;overlay&#8217;:False,
-&#8216;diffraction&#8217;:False
+<div><p>‘fig’: [],
+‘ax’: [],
+‘nodes’: False,
+‘edges’: True,
+‘sllist’:[],
+‘airwalls’: False,
+‘subseg’: False,
+‘slab’: True,
+‘labels’: False,
+‘alphan’: 1.0,
+‘alphae’: 1.0,
+‘width’: 2,
+‘node_color’:’w’,
+‘edge_color’:’k’,
+‘node_size’:20,
+‘font_size’:15,
+‘nodelist’: [],
+‘edgelist’: [],
+‘figsize’: (5,5),
+‘mode’:’nocycle’,
+‘alphacy’:0.8,
+‘colorcy’:’abcdef’,
+‘linter’ : [‘RR’,’TT’,’RT’,’TR’,’RD’,’DR’,’TD’,’DT’,’DD’],
+‘show0’:False,
+‘axis’:False,
+‘overlay’:False,
+‘diffraction’:False
 }</p>
 </div></blockquote>
 </td>
@@ -3556,7 +3490,7 @@ if list precise label of which cycle to display
 </div></blockquote>
 <p><strong>color</strong> : string</p>
 <blockquote>
-<div><p>default black&#8217;</p>
+<div><p>default black’</p>
 </div></blockquote>
 <p><strong>dnodes :</strong></p>
 <blockquote>
@@ -3590,7 +3524,7 @@ if list precise label of which cycle to display
 <blockquote>
 <div><p>default 10</p>
 </div></blockquote>
-<p><strong>color</strong> :  &#8216;b&#8217;</p>
+<p><strong>color</strong> :  ‘b’</p>
 <p><strong>dlabels</strong> : Boolean</p>
 <blockquote>
 <div><p>False</p>
@@ -3652,7 +3586,7 @@ if list precise label of which cycle to display
 </div></blockquote>
 <p><strong>color</strong> : string</p>
 <blockquote>
-<div><p>default &#8216;black&#8217;</p>
+<div><p>default ‘black’</p>
 </div></blockquote>
 <p><strong>dnodes</strong> : boolean</p>
 <blockquote>
@@ -3907,7 +3841,7 @@ Occultation 8  situations
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 13, 2017.
+      Last updated on Nov 17, 2017.
 
     </p>
   </div>
@@ -3938,7 +3872,7 @@ Occultation 8  situations
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

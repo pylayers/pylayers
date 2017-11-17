@@ -34,6 +34,9 @@
   
         <link rel="author" title="About these documents"
               href="../about.html"/>
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="PyLayers" href="../index.html"/>
         <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
 
@@ -149,12 +152,13 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">35&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">36&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">37&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">38&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">39&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id134">40&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -287,10 +291,10 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td>choose</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>load</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 </tr>
 </tbody>
 </table>
@@ -437,7 +441,7 @@ the energy is color coded over all couples of DoA-DoD</p>
 <p><strong>cmap</strong> : matplotlib.cmap</p>
 <p><strong>mode</strong> : string</p>
 <blockquote>
-<div><p>&#8216;center&#8217; | &#8216;mean&#8217; | &#8216;in&#8217;</p>
+<div><p>‘center’ | ‘mean’ | ‘in’</p>
 </div></blockquote>
 <p><strong>s</strong> : float</p>
 <blockquote>
@@ -472,7 +476,7 @@ the energy is color coded over all couples of DoA-DoD</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mode</strong> : string</p>
 <blockquote>
-<div><p>&#8216;mean&#8217;</p>
+<div><p>‘mean’</p>
 </div></blockquote>
 <p><strong>Friis: boolean</strong></p>
 <blockquote>
@@ -637,7 +641,7 @@ v en m/s (vitesse de changement de Rx)</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>d: string</strong></p>
 <blockquote>
-<div><p>&#8216;doa&#8217; | &#8216;dod&#8217;
+<div><p>‘doa’ | ‘dod’
 display direction of departure | arrival</p>
 </div></blockquote>
 <p><strong>fig</strong> : plt.figure</p>
@@ -659,7 +663,7 @@ display direction of departure | arrival</p>
 <div><p>polar representation</p>
 </div></blockquote>
 <p><strong>cmap: matplotlib.cmap</strong></p>
-<p><strong>mode: &#8216;center&#8217; | &#8216;mean&#8217; | &#8216;in&#8217;</strong></p>
+<p><strong>mode: ‘center’ | ‘mean’ | ‘in’</strong></p>
 <blockquote>
 <div><p>see bsignal.energy</p>
 </div></blockquote>
@@ -750,7 +754,7 @@ display direction of departure | arrival</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : &#8216;m&#8217;, &#8216;l20&#8217; , &#8216;r&#8217;</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : ‘m’, ‘l20’ , ‘r’</p>
 <p><strong>cmap</strong> : colormap</p>
 <blockquote>
 <div><p>default hot</p>
@@ -777,12 +781,12 @@ display direction of departure | arrival</p>
 <blockquote class="last">
 <div><dl class="docutils">
 <dt>sort w.r.t</dt>
-<dd><p class="first last">&#8216;tauk&#8217;   : delay (default)
-&#8216;att&#8217;    : theta Tx
-&#8216;atp&#8217;    : phi Tx
-&#8216;art&#8217;    : theta Rx
-&#8216;arp&#8217;    : phi Rx
-&#8216;energy&#8217; : energy</p>
+<dd><p class="first last">‘tauk’   : delay (default)
+‘att’    : theta Tx
+‘atp’    : phi Tx
+‘art’    : theta Rx
+‘arp’    : phi Rx
+‘energy’ : energy</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -807,7 +811,7 @@ display direction of departure | arrival</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 14, 2017.
+      Last updated on Nov 17, 2017.
 
     </p>
   </div>
@@ -838,7 +842,7 @@ display direction of departure | arrival</p>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

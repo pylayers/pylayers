@@ -34,6 +34,9 @@
   
         <link rel="author" title="About these documents"
               href="../about.html"/>
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="PyLayers" href="../index.html"/>
         <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
 
@@ -141,7 +144,14 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.cormoran">31&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">34&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -269,7 +279,7 @@
 <td>create electromagnetic Solver object</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.simulnet.Simul.create_agent" title="pylayers.simul.simulnet.Simul.create_agent"><code class="xref py py-obj docutils literal"><span class="pre">create_agent</span></code></a>()</td>
-<td>create simulation&#8217;s Agents</td>
+<td>create simulation’s Agents</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.simulnet.Simul.create_layout" title="pylayers.simul.simulnet.Simul.create_layout"><code class="xref py py-obj docutils literal"><span class="pre">create_layout</span></code></a>()</td>
 <td>create Layout in Simpy the_world thanks to Tk backend</td>
@@ -314,7 +324,7 @@
 <td>Simulates until simulation time reaches <code class="docutils literal"><span class="pre">until</span></code>.</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">startCollection</span></code>([when,&nbsp;monitors,&nbsp;tallies])</td>
-<td>Starts data collection of all designated Monitor and Tally objects (default = all) at time &#8216;when&#8217;.</td>
+<td>Starts data collection of all designated Monitor and Tally objects (default = all) at time ‘when’.</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">step</span></code>()</td>
 <td>Executes the next uncancelled event in the eventqueue.</td>
@@ -338,7 +348,7 @@
 <td>create electromagnetic Solver object</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.simulnet.Simul.create_agent" title="pylayers.simul.simulnet.Simul.create_agent"><code class="xref py py-obj docutils literal"><span class="pre">create_agent</span></code></a>()</td>
-<td>create simulation&#8217;s Agents</td>
+<td>create simulation’s Agents</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.simulnet.Simul.create_layout" title="pylayers.simul.simulnet.Simul.create_layout"><code class="xref py py-obj docutils literal"><span class="pre">create_layout</span></code></a>()</td>
 <td>create Layout in Simpy the_world thanks to Tk backend</td>
@@ -377,7 +387,7 @@ This method is called at the end of __init__</p>
 <dl class="method">
 <dt id="pylayers.simul.simulnet.Simul.create_agent">
 <code class="descname">create_agent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/simul/simulnet.html#Simul.create_agent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.simulnet.Simul.create_agent" title="Permalink to this definition">¶</a></dt>
-<dd><p>create simulation&#8217;s Agents</p>
+<dd><p>create simulation’s Agents</p>
 <p>..todo:: change lAg list to a dictionnary ( modification in show.py too)</p>
 </dd></dl>
 
@@ -432,7 +442,7 @@ This method is called at the end of __init__</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 08, 2017.
+      Last updated on Nov 17, 2017.
 
     </p>
   </div>
@@ -463,7 +473,7 @@ This method is called at the end of __init__</p>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

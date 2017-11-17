@@ -34,6 +34,9 @@
   
         <link rel="author" title="About these documents"
               href="../../../about.html"/>
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
     <link rel="top" title="PyLayers" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
@@ -133,12 +136,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.device">35&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.DF">36&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">37&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">38&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">39&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id134">40&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -184,332 +188,332 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pylayers.mobility.agent</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">.. automodule::</span>
-<span class="sd">    :members:</span>
+<span></span>&quot;&quot;&quot;
+.. automodule::
+    :members:
 
-<span class="sd">Agent Class</span>
-<span class="sd">==================</span>
+Agent Class
+==================
 
-<span class="sd">.. autoclass:: Agent</span>
-<span class="sd">    :members:</span>
+.. autoclass:: Agent
+    :members:
 
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">SimPy.SimulationRT</span> <span class="kn">import</span> <span class="n">Simulation</span>
-<span class="c1">#from simpy.simulation import *</span>
-<span class="kn">from</span> <span class="nn">pylayers.mobility.transit.Person</span> <span class="kn">import</span> <span class="n">Person</span>
-<span class="kn">from</span> <span class="nn">pylayers.mobility.transit.World</span> <span class="kn">import</span> <span class="n">world</span>
-<span class="kn">from</span> <span class="nn">pylayers.mobility.transit.SteeringBehavior</span> <span class="kn">import</span> <span class="n">Seek</span><span class="p">,</span> <span class="n">Separation</span><span class="p">,</span> <span class="n">Containment</span><span class="p">,</span> <span class="n">InterpenetrationConstraint</span><span class="p">,</span> <span class="n">queue_steering_mind</span>
-
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">ConfigParser</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
-<span class="kn">from</span> <span class="nn">pylayers.network.network</span> <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span> <span class="n">Network</span>
-<span class="kn">from</span> <span class="nn">pylayers.network.communication</span> <span class="kn">import</span> <span class="n">Gcom</span><span class="p">,</span> <span class="n">TX</span><span class="p">,</span> <span class="n">RX</span>
-<span class="kn">from</span> <span class="nn">pylayers.location.localization</span> <span class="kn">import</span> <span class="n">Localization</span><span class="p">,</span> <span class="n">PLocalization</span>
-<span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
-<span class="kn">from</span> <span class="nn">pylayers.util.utilnet</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="c1">#from pylayers.util.pymysqldb import Database</span>
-<span class="kn">import</span> <span class="nn">pdb</span>
-<span class="sd">&quot;&quot;&quot;&quot;</span>
-
-<span class="sd">.. currentmodule:: pylayers.mobility.agent</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="Agent"><a class="viewcode-back" href="../../../api/references.html#pylayers.mobility.agent.Agent">[docs]</a><span class="k">class</span> <span class="nc">Agent</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;   Class Agent</span>
-
-<span class="sd">    Members</span>
-<span class="sd">    -------</span>
-
-<span class="sd">    args</span>
-<span class="sd">    ID</span>
-<span class="sd">    name</span>
-<span class="sd">    typ</span>
-<span class="sd">    net</span>
-<span class="sd">    epwr</span>
-<span class="sd">    gcom</span>
-<span class="sd">    sim</span>
-<span class="sd">    wstd</span>
-<span class="sd">    sens</span>
-<span class="sd">    dcond</span>
-<span class="sd">    meca : transit.Person</span>
-<span class="sd">    net : pylayers.network.Network</span>
-<span class="sd">    sim :</span>
-<span class="sd">    PN :</span>
-<span class="sd">    rxt</span>
-<span class="sd">    rxr</span>
+&quot;&quot;&quot;
+from SimPy.SimulationRT import Simulation
+#from simpy.simulation import *
+from pylayers.mobility.transit.Person import Person
+from pylayers.mobility.transit.World import world
+from pylayers.mobility.transit.SteeringBehavior import Seek, Separation, Containment, InterpenetrationConstraint, queue_steering_mind
 
 
+import numpy as np
+import networkx as nx
+import time
+import ConfigParser
+import pandas as pd
+import pylayers.util.pyutil as pyu
+from pylayers.network.network import Node, Network
+from pylayers.network.communication import Gcom, TX, RX
+from pylayers.location.localization import Localization, PLocalization
+from pylayers.gis.layout import Layout
+from pylayers.util.utilnet import *
+#from pylayers.util.pymysqldb import Database
+import pdb
+&quot;&quot;&quot;&quot;
 
-<span class="sd">    &quot;&quot;&quot;</span>
+.. currentmodule:: pylayers.mobility.agent
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Mobile Agent Init</span>
+.. autosummary::
+    :toctree: generated/
 
-<span class="sd">           Parameters</span>
-<span class="sd">           ----------</span>
+&quot;&quot;&quot;
 
-<span class="sd">           &#39;ID&#39;: string</span>
-<span class="sd">                agent ID</span>
-<span class="sd">           &#39;name&#39;: string</span>
-<span class="sd">                Agent name</span>
-<span class="sd">           &#39;typ&#39;: string</span>
-<span class="sd">                agent typ . &#39;ag&#39; for moving agent, &#39;ap&#39; for static acces point</span>
-<span class="sd">           &#39;pos&#39; : np.array([])</span>
-<span class="sd">                numpy array containing the initial position of the agent</span>
-<span class="sd">           &#39;roomId&#39;: int</span>
-<span class="sd">                Room number where the agent is initialized (Layout.Gr)</span>
-<span class="sd">           &#39;meca_updt&#39;: float</span>
-<span class="sd">                update time interval for the mechanical process</span>
-<span class="sd">           &#39;loc&#39;: bool</span>
-<span class="sd">                enable/disable localization process of the agent</span>
-<span class="sd">           &#39;loc_updt&#39;: float</span>
-<span class="sd">                update time interval for localization process</span>
-<span class="sd">           &#39;L&#39;: pylayers.gis.Layout()</span>
-<span class="sd">           &#39;net&#39;:pylayers.network.Network(),</span>
-<span class="sd">           &#39;wstd&#39;: list of string</span>
-<span class="sd">                list of used radio access techology of the agent</span>
-<span class="sd">           &#39;world&#39;: transit.world()</span>
-<span class="sd">                Soon deprecated</span>
-<span class="sd">           &#39;save&#39;: list of string</span>
-<span class="sd">                list of save method ( soon deprecated)</span>
-<span class="sd">           &#39;sim&#39;:Simpy.SimulationRT.Simulation(),</span>
-<span class="sd">           &#39;epwr&#39;: dictionnary</span>
-<span class="sd">                dictionnary of emmited power of transsmitter{&#39;wstd#&#39;:epwr value}</span>
-<span class="sd">           &#39;sens&#39;: dictionnary</span>
-<span class="sd">                dictionnary of sensitivity of reveicer {&#39;wstd#&#39;:sens value}</span>
-<span class="sd">           &#39;dcond&#39;: dictionnary</span>
-<span class="sd">                Not used yet</span>
-<span class="sd">           &#39;gcom&#39;:pylayers.communication.Gcom()</span>
-<span class="sd">                Communication graph</span>
-<span class="sd">           &#39;comm_mod&#39;: string</span>
-<span class="sd">                Communication between nodes mode:</span>
-<span class="sd">                &#39;autonomous&#39;: all TOAs are refreshed regulary</span>
-<span class="sd">                &#39;synchro&#39; : only visilbe TOAs are refreshed</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ID&#39;</span><span class="p">:</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;johndoe&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;typ&#39;</span><span class="p">:</span> <span class="s1">&#39;ag&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;pdshow&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-                    <span class="s1">&#39;pos&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span>
-                    <span class="s1">&#39;roomId&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
-                    <span class="s1">&#39;froom&#39;</span><span class="p">:</span> <span class="p">[],</span>
-                    <span class="s1">&#39;wait&#39;</span><span class="p">:</span> <span class="p">[],</span>
-                    <span class="s1">&#39;seed&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                    <span class="s1">&#39;cdest&#39;</span><span class="p">:</span> <span class="s1">&#39;random&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;meca_updt&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
-                    <span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-                    <span class="s1">&#39;loc_updt&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
-                    <span class="s1">&#39;loc_method&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;geo&#39;</span><span class="p">],</span>
-                    <span class="s1">&#39;L&#39;</span><span class="p">:</span> <span class="n">Layout</span><span class="p">(),</span>
-                    <span class="s1">&#39;network&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;net&#39;</span><span class="p">:</span> <span class="n">Network</span><span class="p">(),</span>
-                    <span class="s1">&#39;wstd&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;rat1&#39;</span><span class="p">],</span>
-                    <span class="s1">&#39;world&#39;</span><span class="p">:</span> <span class="n">world</span><span class="p">(),</span>
-                    <span class="s1">&#39;save&#39;</span><span class="p">:</span> <span class="p">[],</span>
-                    <span class="s1">&#39;sim&#39;</span><span class="p">:</span> <span class="n">Simulation</span><span class="p">(),</span>
-                    <span class="s1">&#39;epwr&#39;</span><span class="p">:</span> <span class="p">{},</span>
-                    <span class="s1">&#39;sens&#39;</span><span class="p">:</span> <span class="p">{},</span>
-                    <span class="s1">&#39;dcond&#39;</span><span class="p">:</span> <span class="p">{},</span>
-                    <span class="s1">&#39;gcom&#39;</span><span class="p">:</span> <span class="n">Gcom</span><span class="p">(),</span>
-                    <span class="s1">&#39;comm_mode&#39;</span><span class="p">:</span> <span class="s1">&#39;autonomous&#39;</span><span class="p">}</span>
+<div class="viewcode-block" id="Agent"><a class="viewcode-back" href="../../../api/references.html#pylayers.mobility.agent.Agent">[docs]</a>class Agent(object):
+    &quot;&quot;&quot;   Class Agent
 
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-                <span class="n">args</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+    Members
+    -------
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ID</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;ID&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;typ&#39;</span><span class="p">]</span>
-        <span class="c1"># Create Network</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">net</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;net&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">epwr</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;epwr&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gcom</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;gcom&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sim</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;sim&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wstd</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;wstd&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;epwr&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="p">{}:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">epwr</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wstd</span><span class="p">}</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">epwr</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;epwr&#39;</span><span class="p">]</span>
+    args
+    ID
+    name
+    typ
+    net
+    epwr
+    gcom
+    sim
+    wstd
+    sens
+    dcond
+    meca : transit.Person
+    net : pylayers.network.Network
+    sim :
+    PN :
+    rxt
+    rxr
 
-        <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;sens&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="p">{}:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sens</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="o">-</span><span class="mi">180</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wstd</span><span class="p">}</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sens</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;sens&#39;</span><span class="p">]</span>
 
-        <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dcond</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;dcond&#39;</span><span class="p">]</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="k">pass</span>
 
-        <span class="c1"># check if node id already given</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ID</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span>
-                <span class="s1">&#39;another agent has the ID: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ID</span> <span class="o">+</span> <span class="s1">&#39; .Please use an other ID&#39;</span><span class="p">)</span>
+    &quot;&quot;&quot;
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s1">&#39;ag&#39;</span><span class="p">:</span>
-            <span class="c1"># mechanical init</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">meca</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
-                               <span class="n">color</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">],</span>
-                               <span class="n">pdshow</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;pdshow&#39;</span><span class="p">],</span>
-                               <span class="n">roomId</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;roomId&#39;</span><span class="p">],</span>
-                               <span class="n">L</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;L&#39;</span><span class="p">],</span>
-                               <span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span>
-                               <span class="n">interval</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;meca_updt&#39;</span><span class="p">],</span>
-                               <span class="n">wld</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;world&#39;</span><span class="p">],</span>
-                               <span class="n">sim</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;sim&#39;</span><span class="p">],</span>
-                               <span class="n">seed</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;seed&#39;</span><span class="p">],</span>
-                               <span class="n">moving</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                               <span class="n">froom</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;froom&#39;</span><span class="p">],</span>
-                               <span class="n">wait</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;wait&#39;</span><span class="p">],</span>
-                               <span class="n">cdest</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;cdest&#39;</span><span class="p">],</span>
-                               <span class="n">save</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;save&#39;</span><span class="p">]</span>
-                               <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">meca</span><span class="o">.</span><span class="n">behaviors</span> <span class="o">=</span> <span class="p">[</span><span class="n">Seek</span><span class="p">(),</span> <span class="n">Containment</span><span class="p">(),</span>
-                                   <span class="n">Separation</span><span class="p">(),</span> <span class="n">InterpenetrationConstraint</span><span class="p">()]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">meca</span><span class="o">.</span><span class="n">steering_mind</span> <span class="o">=</span> <span class="n">queue_steering_mind</span>
-            <span class="c1"># Network init</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">conv_vecarr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meca</span><span class="o">.</span><span class="n">position</span><span class="p">),</span>
-                             <span class="n">t</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="n">wstd</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;wstd&#39;</span><span class="p">],</span>
-                             <span class="n">epwr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">epwr</span><span class="p">,</span> <span class="n">sens</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sens</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+    def __init__(self, **args):
+        &quot;&quot;&quot; Mobile Agent Init
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meca</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">meca</span><span class="o">.</span><span class="n">move</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">PN</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s1">&#39;PN&#39;</span><span class="p">]</span>
+           Parameters
+           ----------
 
-            <span class="c1"># Communication init</span>
+           &#39;ID&#39;: string
+                agent ID
+           &#39;name&#39;: string
+                Agent name
+           &#39;typ&#39;: string
+                agent typ . &#39;ag&#39; for moving agent, &#39;ap&#39; for static acces point
+           &#39;pos&#39; : np.array([])
+                numpy array containing the initial position of the agent
+           &#39;roomId&#39;: int
+                Room number where the agent is initialized (Layout.Gr)
+           &#39;meca_updt&#39;: float
+                update time interval for the mechanical process
+           &#39;loc&#39;: bool
+                enable/disable localization process of the agent
+           &#39;loc_updt&#39;: float
+                update time interval for localization process
+           &#39;L&#39;: pylayers.gis.Layout()
+           &#39;net&#39;:pylayers.network.Network(),
+           &#39;wstd&#39;: list of string
+                list of used radio access techology of the agent
+           &#39;world&#39;: transit.world()
+                Soon deprecated
+           &#39;save&#39;: list of string
+                list of save method ( soon deprecated)
+           &#39;sim&#39;:Simpy.SimulationRT.Simulation(),
+           &#39;epwr&#39;: dictionnary
+                dictionnary of emmited power of transsmitter{&#39;wstd#&#39;:epwr value}
+           &#39;sens&#39;: dictionnary
+                dictionnary of sensitivity of reveicer {&#39;wstd#&#39;:sens value}
+           &#39;dcond&#39;: dictionnary
+                Not used yet
+           &#39;gcom&#39;:pylayers.communication.Gcom()
+                Communication graph
+           &#39;comm_mod&#39;: string
+                Communication between nodes mode:
+                &#39;autonomous&#39;: all TOAs are refreshed regulary
+                &#39;synchro&#39; : only visilbe TOAs are refreshed
+        &quot;&quot;&quot;
+        defaults = {&#39;ID&#39;: &#39;0&#39;,
+                    &#39;name&#39;: &#39;johndoe&#39;,
+                    &#39;typ&#39;: &#39;ag&#39;,
+                    &#39;color&#39;: &#39;k&#39;,
+                    &#39;pdshow&#39;: False,
+                    &#39;pos&#39;: np.array([]),
+                    &#39;roomId&#39;: -1,
+                    &#39;froom&#39;: [],
+                    &#39;wait&#39;: [],
+                    &#39;seed&#39;: 0,
+                    &#39;cdest&#39;: &#39;random&#39;,
+                    &#39;meca_updt&#39;: 0.1,
+                    &#39;loc&#39;: False,
+                    &#39;loc_updt&#39;: 0.5,
+                    &#39;loc_method&#39;: [&#39;geo&#39;],
+                    &#39;L&#39;: Layout(),
+                    &#39;network&#39;: True,
+                    &#39;net&#39;: Network(),
+                    &#39;wstd&#39;: [&#39;rat1&#39;],
+                    &#39;world&#39;: world(),
+                    &#39;save&#39;: [],
+                    &#39;sim&#39;: Simulation(),
+                    &#39;epwr&#39;: {},
+                    &#39;sens&#39;: {},
+                    &#39;dcond&#39;: {},
+                    &#39;gcom&#39;: Gcom(),
+                    &#39;comm_mode&#39;: &#39;autonomous&#39;}
 
-            <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;comm_mode&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;synchro&#39;</span> <span class="ow">and</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;network&#39;</span><span class="p">]:</span>
-                <span class="c1"># The TOA requests are made every refreshTOA time ( can be modified in agent.ini)</span>
-                <span class="c1"># This Mode will be deprecated in future version</span>
+        for key, value in defaults.items():
+            if key not in args:
+                args[key] = value
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">rxr</span> <span class="o">=</span> <span class="n">RX</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span>
-                              <span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
-                              <span class="n">dcond</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dcond</span><span class="p">,</span>
-                              <span class="n">gcom</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcom</span><span class="p">,</span>
-                              <span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span>
+        self.args = args
+        self.ID = args[&#39;ID&#39;]
+        self.name = args[&#39;name&#39;]
+        self.typ = args[&#39;typ&#39;]
+        # Create Network
+        self.net = args[&#39;net&#39;]
+        self.epwr = args[&#39;epwr&#39;]
+        self.gcom = args[&#39;gcom&#39;]
+        self.sim = args[&#39;sim&#39;]
+        self.wstd = args[&#39;wstd&#39;]
+        if args[&#39;epwr&#39;] == {}:
+            self.epwr = {x: 0 for x in self.wstd}
+        else:
+            self.epwr = args[&#39;epwr&#39;]
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">rxt</span> <span class="o">=</span> <span class="n">RX</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span>
-                              <span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
-                              <span class="n">dcond</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dcond</span><span class="p">,</span>
-                              <span class="n">gcom</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcom</span><span class="p">,</span>
-                              <span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span>
+        if args[&#39;sens&#39;] == {}:
+            self.sens = {x: -180 for x in self.wstd}
+        else:
+            self.sens = args[&#39;sens&#39;]
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rxr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rxr</span><span class="o">.</span><span class="n">refresh_RSS</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rxt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rxt</span><span class="o">.</span><span class="n">refresh_TOA</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span>
+        try:
+            self.dcond = args[&#39;dcond&#39;]
+        except:
+            pass
 
-            <span class="k">elif</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;comm_mode&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;autonomous&#39;</span> <span class="ow">and</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;network&#39;</span><span class="p">]:</span>
-                <span class="c1"># The requests are made by node only when they are in</span>
-                <span class="c1"># visibility of pairs.</span>
+        # check if node id already given
+        if self.ID in self.net.nodes():
+            raise NameError(
+                &#39;another agent has the ID: &#39; + self.ID + &#39; .Please use an other ID&#39;)
 
-                <span class="c1"># self.rxr only manage a refresh RSS process</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">rxr</span> <span class="o">=</span> <span class="n">RX</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span> <span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
-                              <span class="n">gcom</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcom</span><span class="p">,</span> <span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span>
-                <span class="c1"># self.tx manage all requests to other nodes</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">TX</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span> <span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
-                             <span class="n">gcom</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcom</span><span class="p">,</span> <span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span>
-                <span class="c1"># self.tx replies to  requests from self.tx</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="n">RX</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span> <span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
-                             <span class="n">gcom</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcom</span><span class="p">,</span> <span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span>
+        if self.typ == &#39;ag&#39;:
+            # mechanical init
+            self.meca = Person(ID=self.ID,
+                               color=args[&#39;color&#39;],
+                               pdshow=args[&#39;pdshow&#39;],
+                               roomId=args[&#39;roomId&#39;],
+                               L=args[&#39;L&#39;],
+                               net=self.net,
+                               interval=args[&#39;meca_updt&#39;],
+                               wld=args[&#39;world&#39;],
+                               sim=args[&#39;sim&#39;],
+                               seed=args[&#39;seed&#39;],
+                               moving=True,
+                               froom=args[&#39;froom&#39;],
+                               wait=args[&#39;wait&#39;],
+                               cdest=args[&#39;cdest&#39;],
+                               save=args[&#39;save&#39;]
+                               )
+            self.meca.behaviors = [Seek(), Containment(),
+                                   Separation(), InterpenetrationConstraint()]
+            self.meca.steering_mind = queue_steering_mind
+            # Network init
+            self.node = Node(ID=self.ID,name=self.name, p=conv_vecarr(self.meca.position),
+                             t=self.sim.now(), wstd=args[&#39;wstd&#39;],
+                             epwr=self.epwr, sens=self.sens, typ=self.typ)
+            self.net.add_nodes_from(self.node.nodes(data=True))
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rxr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rxr</span><span class="o">.</span><span class="n">refresh_RSS</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">request</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">wait_request</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span>
+            self.sim.activate(self.meca, self.meca.move(), 0.0)
+            self.PN = self.net.node[self.ID][&#39;PN&#39;]
 
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s1">&#39;ap&#39;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;roomId&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">],</span>
-                                 <span class="n">t</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="n">wstd</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;wstd&#39;</span><span class="p">],</span>
-                                 <span class="n">epwr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">epwr</span><span class="p">,</span> <span class="n">sens</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sens</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">pp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;L&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;roomId&#39;</span><span class="p">]])</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span>
-                    <span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">pp</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="n">wstd</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;wstd&#39;</span><span class="p">],</span>
-                    <span class="n">epwr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">epwr</span><span class="p">,</span> <span class="n">sens</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sens</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sim</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;sim&#39;</span><span class="p">]</span>
+            # Communication init
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">PN</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s1">&#39;PN&#39;</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s1">&#39;pe&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s1">&#39;p&#39;</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;comm_mode&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;autonomous&#39;</span> <span class="ow">and</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;network&#39;</span><span class="p">]:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="n">RX</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span> <span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
-                             <span class="n">gcom</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcom</span><span class="p">,</span> <span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">wait_request</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span>
+            if args[&#39;comm_mode&#39;] == &#39;synchro&#39; and args[&#39;network&#39;]:
+                # The TOA requests are made every refreshTOA time ( can be modified in agent.ini)
+                # This Mode will be deprecated in future version
 
-            <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">posdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-                <span class="p">{</span><span class="s1">&#39;t&#39;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                                       <span class="s1">&#39;vx&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">]),</span> <span class="s1">&#39;vy&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">]),</span>
-                                       <span class="s1">&#39;ax&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">]),</span> <span class="s1">&#39;ay&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">]),</span>
-                 <span class="p">},</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;vx&#39;</span><span class="p">,</span> <span class="s1">&#39;vy&#39;</span><span class="p">,</span> <span class="s1">&#39;ax&#39;</span><span class="p">,</span> <span class="s1">&#39;ay&#39;</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">]))</span>
+                self.rxr = RX(net=self.net,
+                              ID=self.ID,
+                              dcond=self.dcond,
+                              gcom=self.gcom,
+                              sim=self.sim)
 
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span>
-                <span class="s1">&#39;wrong agent typ, it must be either agent (ag) or acces point (ap) &#39;</span><span class="p">)</span>
+                self.rxt = RX(net=self.net,
+                              ID=self.ID,
+                              dcond=self.dcond,
+                              gcom=self.gcom,
+                              sim=self.sim)
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s1">&#39;ap&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">MoA</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">MoA</span> <span class="o">=</span> <span class="mi">0</span>
+                self.sim.activate(self.rxr, self.rxr.refresh_RSS(), 0.0)
+                self.sim.activate(self.rxt, self.rxt.refresh_TOA(), 0.0)
 
-        <span class="k">if</span> <span class="s1">&#39;mysql&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;save&#39;</span><span class="p">]:</span>
-            <span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
-            <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s1">&#39;simulnet.ini&#39;</span><span class="p">,</span> <span class="s1">&#39;ini&#39;</span><span class="p">))</span>
-            <span class="n">sql_opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Mysql&#39;</span><span class="p">))</span>
-            <span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">(</span><span class="n">sql_opt</span><span class="p">[</span><span class="s1">&#39;host&#39;</span><span class="p">],</span> <span class="n">sql_opt</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">],</span>
-                          <span class="n">sql_opt</span><span class="p">[</span><span class="s1">&#39;passwd&#39;</span><span class="p">],</span> <span class="n">sql_opt</span><span class="p">[</span><span class="s1">&#39;dbname&#39;</span><span class="p">])</span>
-            <span class="n">db</span><span class="o">.</span><span class="n">writenode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MoA</span><span class="p">)</span>
+            elif args[&#39;comm_mode&#39;] == &#39;autonomous&#39; and args[&#39;network&#39;]:
+                # The requests are made by node only when they are in
+                # visibility of pairs.
 
-        <span class="k">if</span> <span class="s1">&#39;txt&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;save&#39;</span><span class="p">]:</span>
-            <span class="n">pyu</span><span class="o">.</span><span class="n">writenode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">!=</span> <span class="s1">&#39;ap&#39;</span> <span class="ow">and</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;loc&#39;</span><span class="p">]:</span>
+                # self.rxr only manage a refresh RSS process
+                self.rxr = RX(net=self.net, ID=self.ID,
+                              gcom=self.gcom, sim=self.sim)
+                # self.tx manage all requests to other nodes
+                self.tx = TX(net=self.net, ID=self.ID,
+                             gcom=self.gcom, sim=self.sim)
+                # self.tx replies to  requests from self.tx
+                self.rx = RX(net=self.net, ID=self.ID,
+                             gcom=self.gcom, sim=self.sim)
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">loc</span> <span class="o">=</span> <span class="n">Localization</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span> <span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
-                                    <span class="n">method</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;loc_method&#39;</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Ploc</span> <span class="o">=</span> <span class="n">PLocalization</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="p">,</span>
-                                      <span class="n">loc_updt_time</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;loc_updt&#39;</span><span class="p">],</span>
-                                      <span class="n">tx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">,</span>
-                                      <span class="n">sim</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;sim&#39;</span><span class="p">])</span>
+                self.sim.activate(self.rxr, self.rxr.refresh_RSS(), 0.0)
+                self.sim.activate(self.tx, self.tx.request(), 0.0)
+                self.sim.activate(self.rx, self.rx.wait_request(), 0.0)
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ploc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ploc</span><span class="o">.</span><span class="n">run</span><span class="p">(),</span> <span class="mf">1.5</span><span class="p">)</span>
+        elif self.typ == &#39;ap&#39;:
+            if args[&#39;roomId&#39;] == -1:
+                self.node = Node(ID=self.ID, p=self.args[&#39;pos&#39;],
+                                 t=self.sim.now(), wstd=args[&#39;wstd&#39;],
+                                 epwr=self.epwr, sens=self.sens, typ=self.typ)
+            else:
+                pp = np.array(args[&#39;L&#39;].Gr.pos[self.args[&#39;roomId&#39;]])
+                self.node = Node(
+                    ID=self.ID, p=pp, t=self.sim.now(), wstd=args[&#39;wstd&#39;],
+                    epwr=self.epwr, sens=self.sens, typ=self.typ)
+            self.net.add_nodes_from(self.node.nodes(data=True))
+            self.sim = args[&#39;sim&#39;]
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;General Agent info </span><span class="se">\n</span><span class="s1">********************</span><span class="se">\n</span><span class="s1">&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;name : &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;ID: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ID</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;typ: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span>
+            self.PN = self.net.node[self.ID][&#39;PN&#39;]
+            self.PN.node[self.ID][&#39;pe&#39;] = self.net.node[self.ID][&#39;p&#39;]
+            if args[&#39;comm_mode&#39;] == &#39;autonomous&#39; and args[&#39;network&#39;]:
+                self.rx = RX(net=self.net, ID=self.ID,
+                             gcom=self.gcom, sim=self.sim)
+                self.sim.activate(self.rx, self.rx.wait_request(), 0.0)
 
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1"> More Agent information about:&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">+ Mecanichal =&gt; self.meca&#39;</span>
+            p = self.args[&#39;pos&#39;]
+            self.posdf = pd.DataFrame(
+                {&#39;t&#39;: pd.Timestamp(0), &#39;x&#39;: p[0], &#39;y&#39;: p[1], &#39;z&#39;: p[2],
+                                       &#39;vx&#39;: np.array([0.0]), &#39;vy&#39;: np.array([0.0]),
+                                       &#39;ax&#39;: np.array([0.0]), &#39;ay&#39;: np.array([0.0]),
+                 }, columns=[&#39;t&#39;, &#39;x&#39;, &#39;y&#39;, &#39;z&#39;, &#39;vx&#39;, &#39;vy&#39;, &#39;ax&#39;, &#39;ay&#39;], index=np.array([0]))
 
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">+ Network =&gt; self.net&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">+ Personnal Network =&gt; self.PN&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">+ Localization =&gt; self.loc</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+        else:
+            raise NameError(
+                &#39;wrong agent typ, it must be either agent (ag) or acces point (ap) &#39;)
 
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;No network simulated&#39;</span>
+        if self.typ == &#39;ap&#39;:
+            self.MoA = 1
+        else:
+            self.MoA = 0
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">!=</span> <span class="s1">&#39;ap&#39;</span><span class="p">:</span>
-            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">meca</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
-            <span class="k">except</span><span class="p">:</span>
-                <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;no localization simulated&#39;</span>
+        if &#39;mysql&#39; in args[&#39;save&#39;]:
+            config = ConfigParser.ConfigParser()
+            config.read(pyu.getlong(&#39;simulnet.ini&#39;, &#39;ini&#39;))
+            sql_opt = dict(config.items(&#39;Mysql&#39;))
+            db = Database(sql_opt[&#39;host&#39;], sql_opt[&#39;user&#39;],
+                          sql_opt[&#39;passwd&#39;], sql_opt[&#39;dbname&#39;])
+            db.writenode(self.ID, self.name, self.MoA)
 
-        <span class="k">return</span> <span class="n">s</span></div>
+        if &#39;txt&#39; in args[&#39;save&#39;]:
+            pyu.writenode(self)
+        if self.typ != &#39;ap&#39; and args[&#39;loc&#39;]:
+
+            self.loc = Localization(net=self.net, ID=self.ID,
+                                    method=args[&#39;loc_method&#39;])
+            self.Ploc = PLocalization(loc=self.loc,
+                                      loc_updt_time=args[&#39;loc_updt&#39;],
+                                      tx=self.tx,
+                                      sim=args[&#39;sim&#39;])
+
+            self.sim.activate(self.Ploc, self.Ploc.run(), 1.5)
+
+    def __repr__(self):
+        s = &#39;General Agent info \n********************\n&#39;
+        s = s + &#39;name : &#39; + self.name + &#39;\n&#39;
+        s = s + &#39;ID: &#39; + self.ID + &#39;\n&#39;
+        s = s + &#39;typ: &#39; + self.typ
+
+        s = s + &#39;\n\n More Agent information about:&#39;
+        s = s + &#39;\n+ Mecanichal =&gt; self.meca&#39;
+
+        s = s + &#39;\n+ Network =&gt; self.net&#39;
+        s = s + &#39;\n+ Personnal Network =&gt; self.PN&#39;
+        s = s + &#39;\n+ Localization =&gt; self.loc\n\n&#39;
+
+        try:
+            s = s + self.PN.__repr__() + &#39;\n\n&#39;
+        except:
+            s = s + &#39;No network simulated&#39;
+
+        if self.typ != &#39;ap&#39;:
+            s = s + self.meca.__repr__() + &#39;\n\n&#39;
+            try:
+                s = s + self.loc.__repr__() + &#39;\n\n&#39;
+            except:
+                s = s + &#39;no localization simulated&#39;
+
+        return s</div>
 </pre></div>
 
            </div>
@@ -522,7 +526,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 14, 2017.
+      Last updated on Nov 17, 2017.
 
     </p>
   </div>
@@ -553,7 +557,7 @@
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

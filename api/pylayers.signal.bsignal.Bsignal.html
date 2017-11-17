@@ -34,6 +34,9 @@
   
         <link rel="author" title="About these documents"
               href="../about.html"/>
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="PyLayers" href="../index.html"/>
         <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
 
@@ -158,6 +161,13 @@
 <li class="toctree-l2"><a class="reference internal" href="references.html#id117">34.11&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -358,18 +368,18 @@
 <blockquote>
 <div><p>selected output axis from y default [0,1]
 typ : string
-&#8216;m&#8217;   : modulus
-&#8216;v&#8217;   : value
-&#8216;l10&#8217; : dB (10 log10)
-&#8216;l20&#8217; : dB (20 log10)
-&#8216;d&#8217;   : phase degrees
-&#8216;r&#8217;   : phase radians
-&#8216;du&#8217;  : phase degrees unwrap
-&#8216;ru&#8217;  : phase radians unwrap
-&#8216;gdn&#8217; : group delay (ns)
-&#8216;gdm&#8217; : group distance (m)
-&#8216;re&#8217;  : real part
-&#8216;im&#8217;  : imaginary part</p>
+‘m’   : modulus
+‘v’   : value
+‘l10’ : dB (10 log10)
+‘l20’ : dB (20 log10)
+‘d’   : phase degrees
+‘r’   : phase radians
+‘du’  : phase degrees unwrap
+‘ru’  : phase radians unwrap
+‘gdn’ : group delay (ns)
+‘gdm’ : group distance (m)
+‘re’  : real part
+‘im’  : imaginary part</p>
 </div></blockquote>
 <p><strong>sel</strong> : list of ndarray()</p>
 <blockquote>
@@ -527,7 +537,7 @@ else y is smashed</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>interpolation</strong> : string</p>
 <blockquote>
-<div><p>&#8216;none&#8217;|&#8217;nearest&#8217;|&#8217;bilinear&#8217;</p>
+<div><p>‘none’|’nearest’|’bilinear’</p>
 </div></blockquote>
 <p><strong>cmap</strong> : colormap</p>
 <blockquote>
@@ -535,15 +545,15 @@ else y is smashed</p>
 </div></blockquote>
 <p><strong>aspect</strong> : string</p>
 <blockquote>
-<div><p>&#8216;auto&#8217; (default) ,&#8217;equal&#8217;,&#8217;scalar&#8217;</p>
+<div><p>‘auto’ (default) ,’equal’,’scalar’</p>
 </div></blockquote>
 <p><strong>function</strong> : string</p>
 <blockquote>
-<div><p>{&#8216;imshow&#8217;|&#8217;pcolormesh&#8217;}</p>
+<div><p>{‘imshow’|’pcolormesh’}</p>
 </div></blockquote>
 <p><strong>typ</strong> : string</p>
 <blockquote>
-<div><p>&#8216;l20&#8217;,&#8217;l10&#8217;</p>
+<div><p>‘l20’,’l10’</p>
 </div></blockquote>
 <p><strong>vmin</strong> : min value</p>
 <p><strong>vmax</strong> : max value</p>
@@ -617,17 +627,17 @@ else y is smashed</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>iy</strong> : index of the waveform to plot (-1 = all)</p>
 <p><strong>col</strong> : string</p>
 <blockquote>
-<div><p>default  &#8216;black&#8217;</p>
+<div><p>default  ‘black’</p>
 </div></blockquote>
 <p><strong>vline</strong> : ndarray</p>
 <p><strong>hline</strong> : ndarray</p>
 <p><strong>unit1</strong> : string</p>
 <blockquote>
-<div><p>default &#8216;V&#8217;</p>
+<div><p>default ‘V’</p>
 </div></blockquote>
 <p><strong>unit2</strong> : string</p>
 <blockquote>
-<div><p>default &#8216;V&#8217;</p>
+<div><p>default ‘V’</p>
 </div></blockquote>
 <p><strong>xmin</strong> : float</p>
 <p><strong>xmax</strong> : float</p>
@@ -749,7 +759,7 @@ else y is smashed</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>color</strong> : string</p>
 <blockquote class="last">
-<div><p>default &#8216;b-&#8216;</p>
+<div><p>default ‘b-‘</p>
 </div></blockquote>
 </td>
 </tr>
@@ -780,7 +790,7 @@ else y is smashed</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>color</strong> : string</p>
 <blockquote class="last">
-<div><p>default &#8216;b-&#8216;</p>
+<div><p>default ‘b-‘</p>
 </div></blockquote>
 </td>
 </tr>
@@ -803,7 +813,7 @@ else y is smashed</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 08, 2017.
+      Last updated on Nov 17, 2017.
 
     </p>
   </div>
@@ -834,7 +844,7 @@ else y is smashed</p>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

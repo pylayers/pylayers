@@ -34,6 +34,9 @@
   
         <link rel="author" title="About these documents"
               href="../about.html"/>
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="PyLayers" href="../index.html"/>
         <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
 
@@ -142,12 +145,13 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">35&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">36&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">37&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">38&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">39&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id134">40&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -275,7 +279,7 @@ be evaluated via the <strong>eval</strong> method</p>
 <tr class="row-odd"><td>evaluated</td>
 <td>(boolean) are rays evaluated ?</td>
 </tr>
-<tr class="row-even"><td>is3d</td>
+<tr class="row-even"><td>is3D</td>
 <td>(boolean) are rays 2d or 3d rays ?</td>
 </tr>
 <tr class="row-odd"><td>isbased</td>
@@ -317,74 +321,86 @@ be evaluated via the <strong>eval</strong> method</p>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.dump" title="pylayers.antprop.rays.Rays.dump"><code class="xref py py-obj docutils literal"><span class="pre">dump</span></code></a>(ir,&nbsp;L[,&nbsp;ifGHz,&nbsp;filename])</td>
 <td>dump the full information of a ray in a file</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.eval" title="pylayers.antprop.rays.Rays.eval"><code class="xref py py-obj docutils literal"><span class="pre">eval</span></code></a>([fGHz,&nbsp;ib])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.eval" title="pylayers.antprop.rays.Rays.eval"><code class="xref py py-obj docutils literal"><span class="pre">eval</span></code></a>([fGHz,&nbsp;bfacdiv,&nbsp;ib])</td>
 <td>field evaluation of rays</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.extract" title="pylayers.antprop.rays.Rays.extract"><code class="xref py py-obj docutils literal"><span class="pre">extract</span></code></a>(nr,&nbsp;L)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.extract" title="pylayers.antprop.rays.Rays.extract"><code class="xref py py-obj docutils literal"><span class="pre">extract</span></code></a>(lnr,&nbsp;L)</td>
+<td>Extract a group of rays</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">extract_old</span></code>(nr,&nbsp;L)</td>
 <td>Extract a single ray</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">extract_typ_order</span></code>(L[,&nbsp;nD,&nbsp;nR,&nbsp;nT])</td>
+<td>Extract group of rays from a certain type (R|T|D)</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.fillinter" title="pylayers.antprop.rays.Rays.fillinter"><code class="xref py py-obj docutils literal"><span class="pre">fillinter</span></code></a>(L[,&nbsp;append])</td>
 <td>fill ray interactions</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">fromkeys</span></code>(...)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">fromkeys</span></code>(…)</td>
 <td>v defaults to None.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get</span></code>((k[,d])&nbsp;-&gt;&nbsp;D[k]&nbsp;if&nbsp;k&nbsp;in&nbsp;D,&nbsp;...)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get</span></code>((k[,d])&nbsp;-&gt;&nbsp;D[k]&nbsp;if&nbsp;k&nbsp;in&nbsp;D,&nbsp;…)</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">has_key</span></code>((k)&nbsp;-&gt;&nbsp;True&nbsp;if&nbsp;D&nbsp;has&nbsp;a&nbsp;key&nbsp;k,&nbsp;else&nbsp;False)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get_rays_slabs</span></code>(L,&nbsp;ir)</td>
+<td>return the slabs for a given interaction index</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">has_key</span></code>((k)&nbsp;-&gt;&nbsp;True&nbsp;if&nbsp;D&nbsp;has&nbsp;a&nbsp;key&nbsp;k,&nbsp;else&nbsp;False)</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
 <td>generic help</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.info" title="pylayers.antprop.rays.Rays.info"><code class="xref py py-obj docutils literal"><span class="pre">info</span></code></a>(ir[,&nbsp;ifGHz,&nbsp;bB,&nbsp;matrix])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.info" title="pylayers.antprop.rays.Rays.info"><code class="xref py py-obj docutils literal"><span class="pre">info</span></code></a>(ir[,&nbsp;ifGHz,&nbsp;bB,&nbsp;matrix])</td>
 <td>provides information for a given ray r</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.ir2a" title="pylayers.antprop.rays.Rays.ir2a"><code class="xref py py-obj docutils literal"><span class="pre">ir2a</span></code></a>(ir)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.ir2a" title="pylayers.antprop.rays.Rays.ir2a"><code class="xref py py-obj docutils literal"><span class="pre">ir2a</span></code></a>(ir)</td>
 <td>index ray 2 address ray</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">items</span></code>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D&#8217;s&nbsp;(key,&nbsp;value)&nbsp;pairs,&nbsp;...)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">items</span></code>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D’s&nbsp;(key,&nbsp;value)&nbsp;pairs,&nbsp;…)</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">iteritems</span></code>(()&nbsp;-&gt;&nbsp;an&nbsp;iterator&nbsp;over&nbsp;the&nbsp;(key,&nbsp;...)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">iteritems</span></code>(()&nbsp;-&gt;&nbsp;an&nbsp;iterator&nbsp;over&nbsp;the&nbsp;(key,&nbsp;…)</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">iterkeys</span></code>(()&nbsp;-&gt;&nbsp;an&nbsp;iterator&nbsp;over&nbsp;the&nbsp;keys&nbsp;of&nbsp;D)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">iterkeys</span></code>(()&nbsp;-&gt;&nbsp;an&nbsp;iterator&nbsp;over&nbsp;the&nbsp;keys&nbsp;of&nbsp;D)</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">itervalues</span></code>(...)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">itervalues</span></code>(…)</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">keys</span></code>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D&#8217;s&nbsp;keys)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">keys</span></code>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D’s&nbsp;keys)</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.length" title="pylayers.antprop.rays.Rays.length"><code class="xref py py-obj docutils literal"><span class="pre">length</span></code></a>([typ])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.length" title="pylayers.antprop.rays.Rays.length"><code class="xref py py-obj docutils literal"><span class="pre">length</span></code></a>([typ])</td>
 <td>calculate length of rays</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.loadh5" title="pylayers.antprop.rays.Rays.loadh5"><code class="xref py py-obj docutils literal"><span class="pre">loadh5</span></code></a>([filename,&nbsp;idx])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.loadh5" title="pylayers.antprop.rays.Rays.loadh5"><code class="xref py py-obj docutils literal"><span class="pre">loadh5</span></code></a>([filename,&nbsp;idx])</td>
 <td>load rays hdf5 format</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.locbas" title="pylayers.antprop.rays.Rays.locbas"><code class="xref py py-obj docutils literal"><span class="pre">locbas</span></code></a>(L)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.locbas" title="pylayers.antprop.rays.Rays.locbas"><code class="xref py py-obj docutils literal"><span class="pre">locbas</span></code></a>(L)</td>
 <td>calculate ray local bas</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.mirror" title="pylayers.antprop.rays.Rays.mirror"><code class="xref py py-obj docutils literal"><span class="pre">mirror</span></code></a>([H,&nbsp;N,&nbsp;za,&nbsp;zb])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.mirror" title="pylayers.antprop.rays.Rays.mirror"><code class="xref py py-obj docutils literal"><span class="pre">mirror</span></code></a>([H,&nbsp;N,&nbsp;za,&nbsp;zb])</td>
 <td>mirror a ray termination</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">pop</span></code>((k[,d])&nbsp;-&gt;&nbsp;v,&nbsp;...)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">pop</span></code>((k[,d])&nbsp;-&gt;&nbsp;v,&nbsp;…)</td>
 <td>If key is not found, d is returned if given, otherwise KeyError is raised</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">popitem</span></code>(()&nbsp;-&gt;&nbsp;(k,&nbsp;v),&nbsp;...)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">popitem</span></code>(()&nbsp;-&gt;&nbsp;(k,&nbsp;v),&nbsp;…)</td>
 <td>2-tuple; but raise KeyError if D is empty.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.ray" title="pylayers.antprop.rays.Rays.ray"><code class="xref py py-obj docutils literal"><span class="pre">ray</span></code></a>(r)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.ray" title="pylayers.antprop.rays.Rays.ray"><code class="xref py py-obj docutils literal"><span class="pre">ray</span></code></a>(r)</td>
 <td>returns the index of interactions of r</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.ray2iidx" title="pylayers.antprop.rays.Rays.ray2iidx"><code class="xref py py-obj docutils literal"><span class="pre">ray2iidx</span></code></a>(ir)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.ray2iidx" title="pylayers.antprop.rays.Rays.ray2iidx"><code class="xref py py-obj docutils literal"><span class="pre">ray2iidx</span></code></a>(ir)</td>
 <td>Get interactions index of a given ray</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.ray2inter" title="pylayers.antprop.rays.Rays.ray2inter"><code class="xref py py-obj docutils literal"><span class="pre">ray2inter</span></code></a>(ir,&nbsp;L,&nbsp;Si)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.ray2inter" title="pylayers.antprop.rays.Rays.ray2inter"><code class="xref py py-obj docutils literal"><span class="pre">ray2inter</span></code></a>(ir,&nbsp;L,&nbsp;Si)</td>
 <td>get interaction list (Gi style) from a ray</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">ray2ityp</span></code>(r)</td>
+<td>return interaction type for a given ray</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.ray2nbi" title="pylayers.antprop.rays.Rays.ray2nbi"><code class="xref py py-obj docutils literal"><span class="pre">ray2nbi</span></code></a>(r)</td>
 <td>Get interaction block/number of interactions of a given ray</td>
@@ -407,22 +423,28 @@ be evaluated via the <strong>eval</strong> method</p>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.rayfromseg" title="pylayers.antprop.rays.Rays.rayfromseg"><code class="xref py py-obj docutils literal"><span class="pre">rayfromseg</span></code></a>(ls)</td>
 <td>DEPRECATED</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.reciprocal" title="pylayers.antprop.rays.Rays.reciprocal"><code class="xref py py-obj docutils literal"><span class="pre">reciprocal</span></code></a>()</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">rayfromtyp_order</span></code>([nD,&nbsp;nR,&nbsp;nT])</td>
+<td>Return rays from a given type (R|T|D) to a given order</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.reciprocal" title="pylayers.antprop.rays.Rays.reciprocal"><code class="xref py py-obj docutils literal"><span class="pre">reciprocal</span></code></a>()</td>
 <td>switch tx and rx</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">remove_aw</span></code>(L)</td>
+<td>remove AIR interactions</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.saveh5" title="pylayers.antprop.rays.Rays.saveh5"><code class="xref py py-obj docutils literal"><span class="pre">saveh5</span></code></a>([idx])</td>
 <td>save rays in hdf5 format</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">setdefault</span></code>((k[,d])&nbsp;-&gt;&nbsp;D.get(k,d),&nbsp;...)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">setdefault</span></code>((k[,d])&nbsp;-&gt;&nbsp;D.get(k,d),&nbsp;…)</td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.show" title="pylayers.antprop.rays.Rays.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>(**kwargs)</td>
 <td>plot 2D rays within the simulated environment</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.show3" title="pylayers.antprop.rays.Rays.show3"><code class="xref py py-obj docutils literal"><span class="pre">show3</span></code></a>([L,&nbsp;bdis,&nbsp;bstruc,&nbsp;bbasi,&nbsp;bbaso,&nbsp;id,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.show3" title="pylayers.antprop.rays.Rays.show3"><code class="xref py py-obj docutils literal"><span class="pre">show3</span></code></a>([L,&nbsp;bdis,&nbsp;bstruc,&nbsp;bbasi,&nbsp;bbaso,&nbsp;id,&nbsp;…])</td>
 <td>plot 3D rays within the simulated environment</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.show3d" title="pylayers.antprop.rays.Rays.show3d"><code class="xref py py-obj docutils literal"><span class="pre">show3d</span></code></a>(ray[,&nbsp;bdis,&nbsp;bbas,&nbsp;bstruc,&nbsp;col,&nbsp;id,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.show3d" title="pylayers.antprop.rays.Rays.show3d"><code class="xref py py-obj docutils literal"><span class="pre">show3d</span></code></a>(ray[,&nbsp;bdis,&nbsp;bbas,&nbsp;bstruc,&nbsp;col,&nbsp;id,&nbsp;…])</td>
 <td>plot a set of 3D rays</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.signature" title="pylayers.antprop.rays.Rays.signature"><code class="xref py py-obj docutils literal"><span class="pre">signature</span></code></a>(u[,&nbsp;typ])</td>
@@ -443,19 +465,19 @@ be evaluated via the <strong>eval</strong> method</p>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.typ" title="pylayers.antprop.rays.Rays.typ"><code class="xref py py-obj docutils literal"><span class="pre">typ</span></code></a>(ir[,&nbsp;fromR])</td>
 <td>returns interactions list type of a given ray</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code>(([E,&nbsp;...)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code>(([E,&nbsp;…)</td>
 <td>If E present and has a .keys() method, does:     for k in E: D[k] = E[k]</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">values</span></code>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D&#8217;s&nbsp;values)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">values</span></code>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D’s&nbsp;values)</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">viewitems</span></code>(...)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">viewitems</span></code>(…)</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">viewkeys</span></code>(...)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">viewkeys</span></code>(…)</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">viewvalues</span></code>(...)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">viewvalues</span></code>(…)</td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.vis" title="pylayers.antprop.rays.Rays.vis"><code class="xref py py-obj docutils literal"><span class="pre">vis</span></code></a>(ir,&nbsp;L)</td>
@@ -479,11 +501,11 @@ be evaluated via the <strong>eval</strong> method</p>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.dump" title="pylayers.antprop.rays.Rays.dump"><code class="xref py py-obj docutils literal"><span class="pre">dump</span></code></a>(ir,&nbsp;L[,&nbsp;ifGHz,&nbsp;filename])</td>
 <td>dump the full information of a ray in a file</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.eval" title="pylayers.antprop.rays.Rays.eval"><code class="xref py py-obj docutils literal"><span class="pre">eval</span></code></a>([fGHz,&nbsp;ib])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.eval" title="pylayers.antprop.rays.Rays.eval"><code class="xref py py-obj docutils literal"><span class="pre">eval</span></code></a>([fGHz,&nbsp;bfacdiv,&nbsp;ib])</td>
 <td>field evaluation of rays</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.extract" title="pylayers.antprop.rays.Rays.extract"><code class="xref py py-obj docutils literal"><span class="pre">extract</span></code></a>(nr,&nbsp;L)</td>
-<td>Extract a single ray</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.extract" title="pylayers.antprop.rays.Rays.extract"><code class="xref py py-obj docutils literal"><span class="pre">extract</span></code></a>(lnr,&nbsp;L)</td>
+<td>Extract a group of rays</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.fillinter" title="pylayers.antprop.rays.Rays.fillinter"><code class="xref py py-obj docutils literal"><span class="pre">fillinter</span></code></a>(L[,&nbsp;append])</td>
 <td>fill ray interactions</td>
@@ -545,10 +567,10 @@ be evaluated via the <strong>eval</strong> method</p>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.show" title="pylayers.antprop.rays.Rays.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>(**kwargs)</td>
 <td>plot 2D rays within the simulated environment</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.show3" title="pylayers.antprop.rays.Rays.show3"><code class="xref py py-obj docutils literal"><span class="pre">show3</span></code></a>([L,&nbsp;bdis,&nbsp;bstruc,&nbsp;bbasi,&nbsp;bbaso,&nbsp;id,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.show3" title="pylayers.antprop.rays.Rays.show3"><code class="xref py py-obj docutils literal"><span class="pre">show3</span></code></a>([L,&nbsp;bdis,&nbsp;bstruc,&nbsp;bbasi,&nbsp;bbaso,&nbsp;id,&nbsp;…])</td>
 <td>plot 3D rays within the simulated environment</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.show3d" title="pylayers.antprop.rays.Rays.show3d"><code class="xref py py-obj docutils literal"><span class="pre">show3d</span></code></a>(ray[,&nbsp;bdis,&nbsp;bbas,&nbsp;bstruc,&nbsp;col,&nbsp;id,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.show3d" title="pylayers.antprop.rays.Rays.show3d"><code class="xref py py-obj docutils literal"><span class="pre">show3d</span></code></a>(ray[,&nbsp;bdis,&nbsp;bbas,&nbsp;bstruc,&nbsp;col,&nbsp;id,&nbsp;…])</td>
 <td>plot a set of 3D rays</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.rays.Rays.signature" title="pylayers.antprop.rays.Rays.signature"><code class="xref py py-obj docutils literal"><span class="pre">signature</span></code></a>(u[,&nbsp;typ])</td>
@@ -621,7 +643,7 @@ be evaluated via the <strong>eval</strong> method</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.rays.Rays.eval">
-<code class="descname">eval</code><span class="sig-paren">(</span><em>fGHz=array([ 2.4])</em>, <em>ib=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.eval" title="Permalink to this definition">¶</a></dt>
+<code class="descname">eval</code><span class="sig-paren">(</span><em>fGHz=array([ 2.4])</em>, <em>bfacdiv=False</em>, <em>ib=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.eval" title="Permalink to this definition">¶</a></dt>
 <dd><p>field evaluation of rays</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -640,13 +662,13 @@ be evaluated via the <strong>eval</strong> method</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.rays.Rays.extract">
-<code class="descname">extract</code><span class="sig-paren">(</span><em>nr</em>, <em>L</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.extract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.extract" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extract a single ray</p>
+<code class="descname">extract</code><span class="sig-paren">(</span><em>lnr</em>, <em>L</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.extract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.extract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract a group of rays</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>nr</strong> : ray index</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lnr</strong> : list of rays indexes</p>
 <p class="last"><strong>L</strong> : Layout</p>
 </td>
 </tr>
@@ -664,16 +686,18 @@ be evaluated via the <strong>eval</strong> method</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : Layout</p>
 <p><strong>append</strong> : Boolean</p>
-<blockquote>
+<blockquote class="last">
 <div><p>If True append new rays to existing structure</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Update self.I , self.B , self.I0</p>
-</td>
-</tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<p>This method adds the following members</p>
+<p>I : Interactions 
+B : IntB
+B0 : IntB</p>
 </dd></dl>
 
 <dl class="method">
@@ -732,7 +756,7 @@ be evaluated via the <strong>eval</strong> method</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : int</p>
 <blockquote class="last">
-<div><p>1 : length of all segments
+<div><p>men1 : length of all segments
 2 : accumulated length</p>
 </div></blockquote>
 </td>
@@ -767,6 +791,39 @@ be evaluated via the <strong>eval</strong> method</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<p>This method adds for each group of interactions the following members</p>
+<dl class="docutils">
+<dt>norm <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd>3 x i x r  (interaction vector)</dd>
+<dt>nstrwall <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd>nstr of interactions</dd>
+<dt>vsi <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd>3 x (i+1) x r</dd>
+<dt>aod <span class="classifier-delimiter">:</span> <span class="classifier">np.array </span></dt>
+<dd>2 x r</dd>
+<dt>aoa <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd>2 x r</dd>
+<dt>BoO <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd>3 x 3 x r</dd>
+<dt>Bi <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd>3 x 3 x r</dd>
+<dt>Bo <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd>3 x 3 x r</dd>
+<dt>BiN <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd>3 x 3 x r</dd>
+<dt>scpr <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd>i x r</dd>
+<dt>theta <span class="classifier-delimiter">:</span> <span class="classifier">np.array </span></dt>
+<dd>i x r</dd>
+</dl>
+<p>rays  : int 
+nbrays  : int 
+rayidx : np.array
+diffslabs :  list 
+diffvect :  np.array</p>
+<blockquote>
+<div>(phi0,phi,beta,NN)</div></blockquote>
 </dd></dl>
 
 <dl class="method">
@@ -1002,7 +1059,7 @@ use raysfromnstr instead</p>
 <p><strong>graph</strong> : string t</p>
 <blockquote>
 <div><p>type of graph to be displayed
-&#8216;s&#8217;,&#8217;r&#8217;,&#8217;t&#8217;,..</p>
+‘s’,’r’,’t’,..</p>
 </div></blockquote>
 <p><strong>fig</strong> : figure</p>
 <p><strong>ax</strong> : axis</p>
@@ -1017,7 +1074,7 @@ use raysfromnstr instead</p>
 </div></blockquote>
 <p><strong>colray</strong> : string</p>
 <blockquote>
-<div><p>&#8216;black&#8217;</p>
+<div><p>‘black’</p>
 </div></blockquote>
 <p><strong>ms</strong> : int</p>
 <blockquote>
@@ -1144,7 +1201,7 @@ if int index</p>
 </table>
 <p class="rubric">Notes</p>
 <p>Signature of a ray is store as a member</p>
-<p>r[nint][&#8216;sig&#8217;]</p>
+<p>r[nint][‘sig’]</p>
 </dd></dl>
 
 <dl class="method">
@@ -1260,7 +1317,7 @@ False: get information in R.I</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 14, 2017.
+      Last updated on Nov 17, 2017.
 
     </p>
   </div>
@@ -1291,7 +1348,7 @@ False: get information in R.I</p>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

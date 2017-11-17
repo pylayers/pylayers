@@ -34,6 +34,9 @@
   
         <link rel="author" title="About these documents"
               href="../about.html"/>
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="PyLayers" href="../index.html"/>
         <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
 
@@ -141,7 +144,14 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.cormoran">31&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">34&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -195,19 +205,19 @@
 <em class="property">class </em><code class="descclassname">pylayers.gis.selectl.</code><code class="descname">SelectL</code><span class="sig-paren">(</span><em>L</em>, <em>fig</em>, <em>ax</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/selectl.html#SelectL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.selectl.SelectL" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Associates a Layout and a figure</p>
-<p>&#8216;l&#8217;  : select activelayer
-&#8216;i&#8217;  : back to init state
-&#8216;e&#8217;  : edit segment
-&#8216;CTLR + t&#8217;  : translate  structure
-&#8216;h&#8217;  : add subsegment
-&#8216;d&#8217;  : delete subsegment
-&#8216;r&#8217;  : refresh
-&#8216;o&#8217;  : toggle overlay
-&#8216;m&#8217;  : toggle mode (point or segment)
-&#8216;z&#8217;  : change display parameters
-&#8216;q&#8217;  : quit interactive mode
-&#8216;x&#8217;  : save .str2 file
-&#8216;w&#8217;  : display all layers</p>
+<p>‘l’  : select activelayer
+‘i’  : back to init state
+‘e’  : edit segment
+‘CTLR + t’  : translate  structure
+‘h’  : add subsegment
+‘d’  : delete subsegment
+‘r’  : refresh
+‘o’  : toggle overlay
+‘m’  : toggle mode (point or segment)
+‘z’  : change display parameters
+‘q’  : quit interactive mode
+‘x’  : save .str2 file
+‘w’  : display all layers</p>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -239,7 +249,7 @@
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.selectl.SelectL.plotselptseg" title="pylayers.gis.selectl.SelectL.plotselptseg"><code class="xref py py-obj docutils literal"><span class="pre">plotselptseg</span></code></a>(pt[,&nbsp;color,&nbsp;ms,&nbsp;marker])</td>
 <td>plot selected point or segments</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.selectl.SelectL.show" title="pylayers.gis.selectl.SelectL.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>(fig,&nbsp;ax[,&nbsp;clear,&nbsp;dnodes,&nbsp;dedges,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.selectl.SelectL.show" title="pylayers.gis.selectl.SelectL.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>(fig,&nbsp;ax[,&nbsp;clear,&nbsp;dnodes,&nbsp;dedges,&nbsp;…])</td>
 <td>show layout</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.selectl.SelectL.update_state" title="pylayers.gis.selectl.SelectL.update_state"><code class="xref py py-obj docutils literal"><span class="pre">update_state</span></code></a>()</td>
@@ -278,7 +288,7 @@
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.selectl.SelectL.plotselptseg" title="pylayers.gis.selectl.SelectL.plotselptseg"><code class="xref py py-obj docutils literal"><span class="pre">plotselptseg</span></code></a>(pt[,&nbsp;color,&nbsp;ms,&nbsp;marker])</td>
 <td>plot selected point or segments</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.selectl.SelectL.show" title="pylayers.gis.selectl.SelectL.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>(fig,&nbsp;ax[,&nbsp;clear,&nbsp;dnodes,&nbsp;dedges,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.selectl.SelectL.show" title="pylayers.gis.selectl.SelectL.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>(fig,&nbsp;ax[,&nbsp;clear,&nbsp;dnodes,&nbsp;dedges,&nbsp;…])</td>
 <td>show layout</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.selectl.SelectL.update_state" title="pylayers.gis.selectl.SelectL.update_state"><code class="xref py py-obj docutils literal"><span class="pre">update_state</span></code></a>()</td>
@@ -349,30 +359,30 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>&#8216;l&#8217;</strong> : select activelayer</p>
-<p><strong>&#8216;i&#8217;</strong> : back to init state</p>
-<p><strong>&#8216;j&#8217;</strong> : vertical and horizontal scaling</p>
-<p><strong>&#8216;e&#8217;</strong> : edit segment</p>
-<p><strong>&#8216;b&#8217;</strong> : edit segment keyboard</p>
-<p><strong>&#8216;CTRL + t&#8217;</strong> : translate  structure</p>
-<p><strong>&#8216;h&#8217;</strong> : add subsegment</p>
-<p><strong>&#8216;d |Del&#8217;</strong> : delete subsegment</p>
-<p><strong>&#8216;r |F5&#8217;</strong> : refresh</p>
-<p><strong>&#8216;o&#8217;</strong> : toggle overlay (&lt;&gt; CP mode)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>‘l’</strong> : select activelayer</p>
+<p><strong>‘i’</strong> : back to init state</p>
+<p><strong>‘j’</strong> : vertical and horizontal scaling</p>
+<p><strong>‘e’</strong> : edit segment</p>
+<p><strong>‘b’</strong> : edit segment keyboard</p>
+<p><strong>‘CTRL + t’</strong> : translate  structure</p>
+<p><strong>‘h’</strong> : add subsegment</p>
+<p><strong>‘d |Del’</strong> : delete subsegment</p>
+<p><strong>‘r |F5’</strong> : refresh</p>
+<p><strong>‘o’</strong> : toggle overlay (&lt;&gt; CP mode)</p>
 <blockquote>
 <div><p>set origin (CP mode)</p>
 </div></blockquote>
-<p><strong>&#8216;m&#8217;</strong> : toggle mode (point or segment)</p>
-<p><strong>&#8216;n&#8217;</strong> : toggle node label display</p>
-<p><strong>&#8216;z&#8217;</strong> : change display parameters</p>
-<p><strong>&#8216;CTRL+q&#8217;</strong> : quit</p>
-<p><strong>&#8216;x |CTRL+s&#8217;</strong> : save .str2 and .ini file</p>
-<p><strong>&#8216;w&#8217;</strong> : display all layers</p>
-<p><strong>&#8216;v&#8217;</strong> : flip layout w.r.t y axis</p>
-<p><strong>&#8216;f&#8217;</strong> : toggle points nodes display</p>
-<p><strong>&#8216;g&#8217;</strong> : toggle segments nodes display</p>
-<p><strong>&#8216;=&#8217;</strong> : increment layer</p>
-<p class="last"><strong>&#8216;$&#8217;</strong> : decrement layer</p>
+<p><strong>‘m’</strong> : toggle mode (point or segment)</p>
+<p><strong>‘n’</strong> : toggle node label display</p>
+<p><strong>‘z’</strong> : change display parameters</p>
+<p><strong>‘CTRL+q’</strong> : quit</p>
+<p><strong>‘x |CTRL+s’</strong> : save .str2 and .ini file</p>
+<p><strong>‘w’</strong> : display all layers</p>
+<p><strong>‘v’</strong> : flip layout w.r.t y axis</p>
+<p><strong>‘f’</strong> : toggle points nodes display</p>
+<p><strong>‘g’</strong> : toggle segments nodes display</p>
+<p><strong>‘=’</strong> : increment layer</p>
+<p class="last"><strong>‘$’</strong> : decrement layer</p>
 </td>
 </tr>
 </tbody>
@@ -438,7 +448,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 08, 2017.
+      Last updated on Nov 17, 2017.
 
     </p>
   </div>
@@ -469,7 +479,7 @@
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

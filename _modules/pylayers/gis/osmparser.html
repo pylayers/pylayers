@@ -34,6 +34,9 @@
   
         <link rel="author" title="About these documents"
               href="../../../about.html"/>
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
     <link rel="top" title="PyLayers" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
@@ -133,12 +136,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.device">35&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.DF">36&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">37&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">38&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">39&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id134">40&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -184,965 +188,965 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pylayers.gis.osmparser</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Module OSMParser</span>
+<span></span># -*- coding: utf-8 -*-
+&quot;&quot;&quot;
+Module OSMParser
 
-<span class="sd">.. currentmodule:: pylayers.gis.osmparser</span>
+.. currentmodule:: pylayers.gis.osmparser
 
-<span class="sd">.. autosummary::</span>
+.. autosummary::
 
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">osmapi</span> <span class="kn">import</span> <span class="n">OsmApi</span>
-<span class="kn">import</span> <span class="nn">geocoder</span> <span class="kn">as</span> <span class="nn">geo</span>
-<span class="kn">import</span> <span class="nn">urllib</span>
-<span class="kn">import</span> <span class="nn">urllib2</span> <span class="kn">as</span> <span class="nn">url</span>
-<span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
-<span class="kn">import</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">as</span> <span class="nn">geu</span>
-<span class="kn">from</span> <span class="nn">mpl_toolkits.basemap</span> <span class="kn">import</span> <span class="n">Basemap</span>
-<span class="kn">from</span> <span class="nn">matplotlib.collections</span> <span class="kn">import</span> <span class="n">PolyCollection</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="c1"># imposm is required for handling osm files</span>
-<span class="c1"># the installation of imposm is not straightforward</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">imposm.parser</span> <span class="kn">import</span> <span class="n">OSMParser</span>
-<span class="k">except</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s2">&quot;Warning : imposm seems not to be installed&quot;</span>
-<span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pdb</span>
+&quot;&quot;&quot;
+from osmapi import OsmApi
+import geocoder as geo
+import urllib
+import urllib2 as url
+from pylayers.util.project import *
+import pylayers.util.pyutil as pyu
+import pylayers.util.geomutil as geu
+from mpl_toolkits.basemap import Basemap
+from matplotlib.collections import PolyCollection
+import matplotlib.pyplot as plt
+# imposm is required for handling osm files
+# the installation of imposm is not straightforward
+try:
+    from imposm.parser import OSMParser
+except:
+    print &quot;Warning : imposm seems not to be installed&quot;
+import networkx as nx
+import numpy as np
+import pdb
 
-<span class="c1"># classes that handle the OSM data file format.</span>
-<div class="viewcode-block" id="Way"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Way.html#pylayers.gis.osmparser.Way">[docs]</a><span class="k">class</span> <span class="nc">Way</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;  </span>
+# classes that handle the OSM data file format.
+<div class="viewcode-block" id="Way"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Way.html#pylayers.gis.osmparser.Way">[docs]</a>class Way(object):
+    &quot;&quot;&quot;  
 
-<span class="sd">    A Way is a polyline or a Polygon (if closed)</span>
+    A Way is a polyline or a Polygon (if closed)
 
-<span class="sd">    typ : 0 Polygon</span>
-<span class="sd">          1 LineString</span>
+    typ : 0 Polygon
+          1 LineString
 
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">refs</span><span class="p">,</span><span class="n">tags</span><span class="p">,</span><span class="n">coords</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; object constructor</span>
+    &quot;&quot;&quot;
+    def __init__(self,refs,tags,coords):
+        &quot;&quot;&quot; object constructor
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
+        Parameters
+        ----------
 
-<span class="sd">        refs  :</span>
-<span class="sd">        tags  :</span>
-<span class="sd">        coords :</span>
-<span class="sd">        nodes_sign : int </span>
-<span class="sd">            if data comes from osm nodes are &gt;0 in ways sequence </span>
-<span class="sd">            if data comes from josm editor nodes are &lt;0 ways sequence</span>
+        refs  :
+        tags  :
+        coords :
+        nodes_sign : int 
+            if data comes from osm nodes are &gt;0 in ways sequence 
+            if data comes from josm editor nodes are &lt;0 ways sequence
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">refs</span>  <span class="o">=</span> <span class="n">refs</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
-        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">refs</span><span class="p">)</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">valid</span> <span class="o">=</span> <span class="bp">True</span>
-        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">nid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">refs</span><span class="p">):</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">coords</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="n">nid</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">coords</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="n">nid</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">except</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">valid</span><span class="o">=</span><span class="bp">False</span>
-                <span class="k">break</span>
-        <span class="c1"># closed way or open way</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid</span><span class="p">:</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">N</span><span class="o">&gt;=</span><span class="mi">4</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">refs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="n">refs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">shp</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">shp</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">LineString</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">=</span> <span class="mi">1</span>
+        &quot;&quot;&quot;
+        self.refs  = refs
+        self.tags = tags
+        N = len(refs)
+        p = np.zeros((2, N))
+        self.valid = True
+        for k, nid in enumerate(refs):
+            try:
+                p[0, k] = coords.xy[nid][0]
+                p[1, k] = coords.xy[nid][1]
+            except:
+                self.valid=False
+                break
+        # closed way or open way
+        if self.valid:
+            if (N&gt;=4) &amp; (refs[0]==refs[-1]):
+                self.shp = geu.Polygon(p)
+                self.typ = 0
+            else:
+                self.shp = geu.LineString(p)
+                self.typ = 1
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">refs</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+    def __repr__(self):
+        st = &#39;&#39;
+        st = st + str(self.tags) + &#39;:&#39; + str(self.refs)
+        return(st)
 
-<div class="viewcode-block" id="Way.show"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Way.html#pylayers.gis.osmparser.Way.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[]):</span>
-        <span class="sd">&quot;&quot;&quot; show way</span>
+<div class="viewcode-block" id="Way.show"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Way.html#pylayers.gis.osmparser.Way.show">[docs]</a>    def show(self,fig=[],ax=[]):
+        &quot;&quot;&quot; show way
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
+        Parameters
+        ----------
 
-<span class="sd">        fig : matplotlib figure</span>
-<span class="sd">        ax  : axes</span>
+        fig : matplotlib figure
+        ax  : axes
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span></div></div>
+        &quot;&quot;&quot;
+        fig,ax = self.shp.plot(fig=fig,ax=ax)
+        return(fig,ax)</div></div>
 
-<div class="viewcode-block" id="Coords"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Coords.html#pylayers.gis.osmparser.Coords">[docs]</a><span class="k">class</span> <span class="nc">Coords</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Coords describes a set of points in OSM </span>
+<div class="viewcode-block" id="Coords"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Coords.html#pylayers.gis.osmparser.Coords">[docs]</a>class Coords(object):
+    &quot;&quot;&quot; Coords describes a set of points in OSM 
 
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
+    Attributes
+    ----------
 
-<span class="sd">    xy :</span>
-<span class="sd">    latlon :</span>
-<span class="sd">    cpt :</span>
-<span class="sd">    minlon :</span>
-<span class="sd">    maxlon :</span>
-<span class="sd">    minlat :</span>
-<span class="sd">    maxlat :</span>
-<span class="sd">    boundary : np.array</span>
-<span class="sd">        (minlon,minlat,maxlon,maxlat) </span>
+    xy :
+    latlon :
+    cpt :
+    minlon :
+    maxlon :
+    minlat :
+    maxlat :
+    boundary : np.array
+        (minlon,minlat,maxlon,maxlat) 
 
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
+    Notes
+    -----
 
 
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">cpt</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">latlon</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">xy</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">minlon</span> <span class="o">=</span> <span class="mi">1000</span>
-    <span class="n">maxlon</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1000</span>
-    <span class="n">minlat</span> <span class="o">=</span> <span class="mi">1000</span>
-    <span class="n">maxlat</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1000</span>
+    &quot;&quot;&quot;
+    cpt = 0
+    latlon = {}
+    xy = {}
+    minlon = 1000
+    maxlon = -1000
+    minlat = 1000
+    maxlat = -1000
     
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">idx</span><span class="o">=</span><span class="p">[],</span><span class="n">latlon</span><span class="o">=</span><span class="p">[]):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">latlon</span><span class="o">!=</span><span class="p">[]:</span>
-            <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">ix</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">idx</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">latlon</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">latlon</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">latlon</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+    def __init__(self,idx=[],latlon=[]):
+        &quot;&quot;&quot;
+        &quot;&quot;&quot;
+        if latlon!=[]:
+            for k,ix in enumerate(idx):
+                self.latlon[k]=np.array(latlon[k][0],latlon[k][1])
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">xy</span><span class="p">:</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">+</span> <span class="s1">&#39;:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="n">k</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s1">&#39;Ncoords = &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xy</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+    def __repr__(self):
+        st = &#39;&#39;
+        for k in self.xy:
+            st = st + str(k)+ &#39;:&#39; + str(self.xy[k])+&#39;\n&#39;
+        st = st+ &#39;Ncoords = &#39;+ str(len(self.xy))+&#39;\n&#39;
 
-        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+        return(st)
     
-<div class="viewcode-block" id="Coords.filter"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Coords.html#pylayers.gis.osmparser.Coords.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lexcluded</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">ix</span> <span class="ow">in</span> <span class="n">lexcluded</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">latlon</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ix</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">xy</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ix</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cpt</span><span class="o">-=</span><span class="mi">1</span></div>
+<div class="viewcode-block" id="Coords.filter"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Coords.html#pylayers.gis.osmparser.Coords.filter">[docs]</a>    def filter(self,lexcluded):
+        for ix in lexcluded:
+            self.latlon.pop(-np.abs(ix))
+            self.xy.pop(-np.abs(ix))
+            self.cpt-=1</div>
 
-<div class="viewcode-block" id="Coords.clean"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Coords.html#pylayers.gis.osmparser.Coords.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; reset coordinates</span>
+<div class="viewcode-block" id="Coords.clean"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Coords.html#pylayers.gis.osmparser.Coords.clean">[docs]</a>    def clean(self):
+        &quot;&quot;&quot; reset coordinates
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cpt</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">latlon</span><span class="o">=</span><span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">xy</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">minlon</span> <span class="o">=</span><span class="mi">1000</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">maxlon</span> <span class="o">=-</span><span class="mi">1000</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">minlat</span> <span class="o">=</span><span class="mi">1000</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">maxlat</span> <span class="o">=-</span><span class="mi">1000</span></div>
+        &quot;&quot;&quot;
+        self.cpt = 0
+        self.latlon={}
+        self.xy = {}
+        self.minlon =1000
+        self.maxlon =-1000
+        self.minlat =1000
+        self.maxlat =-1000</div>
 
-<div class="viewcode-block" id="Coords.coords"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Coords.html#pylayers.gis.osmparser.Coords.coords">[docs]</a>    <span class="k">def</span> <span class="nf">coords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coords</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; calculates extrema of coords</span>
+<div class="viewcode-block" id="Coords.coords"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Coords.html#pylayers.gis.osmparser.Coords.coords">[docs]</a>    def coords(self, coords):
+        &quot;&quot;&quot; calculates extrema of coords
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
+        Parameters
+        ----------
 
-<span class="sd">        coords</span>
+        coords
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># callback method for coords</span>
-        <span class="k">for</span> <span class="n">osmid</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span> <span class="ow">in</span> <span class="n">coords</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">latlon</span><span class="p">[</span><span class="n">osmid</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">])</span>
-            <span class="c1"># find extrema</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">minlon</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">minlon</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">maxlon</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">maxlon</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">minlat</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">minlat</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">maxlat</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">maxlat</span><span class="p">)</span>
+        &quot;&quot;&quot;
+        # callback method for coords
+        for osmid, lon, lat in coords:
+            self.latlon[osmid] = np.array([lon, lat])
+            # find extrema
+            self.minlon = min(lon,self.minlon)
+            self.maxlon = max(lon,self.maxlon)
+            self.minlat = min(lat,self.minlat)
+            self.maxlat = max(lat,self.maxlat)
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">cpt</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">minlon</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">minlat</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">maxlon</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">maxlat</span><span class="p">])</span></div>
+            self.cpt += 1
+        self.boundary=np.array([self.minlon,self.minlat,self.maxlon,self.maxlat])</div>
 
-<div class="viewcode-block" id="Coords.cartesian"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Coords.html#pylayers.gis.osmparser.Coords.cartesian">[docs]</a>    <span class="k">def</span> <span class="nf">cartesian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cart</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">delta</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; convert Latitude/Longitude in cartesian</span>
+<div class="viewcode-block" id="Coords.cartesian"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Coords.html#pylayers.gis.osmparser.Coords.cartesian">[docs]</a>    def cartesian(self,cart=False,delta=0):
+        &quot;&quot;&quot; convert Latitude/Longitude in cartesian
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        cart : Boolean </span>
-<span class="sd">            conversion to cartesian </span>
-<span class="sd">        delta : offset </span>
-<span class="sd">            default 0 : in this case the origin corresponds to the lower left point</span>
-<span class="sd"> </span>
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
+        Parameters
+        ----------
+        cart : Boolean 
+            conversion to cartesian 
+        delta : offset 
+            default 0 : in this case the origin corresponds to the lower left point
+ 
+        Notes
+        -----
 
-<span class="sd">        This method converts latlon coordinates into cartesian x,y coordinates in</span>
-<span class="sd">        Cassini projection relatively to specified latlon boundary </span>
-<span class="sd">        The basemap objet for back and forth coordinates conversion is returned.</span>
+        This method converts latlon coordinates into cartesian x,y coordinates in
+        Cassini projection relatively to specified latlon boundary 
+        The basemap objet for back and forth coordinates conversion is returned.
 
-<span class="sd">        The transformation is centered on the mean of latitude and longitude. </span>
-<span class="sd">        The cartesian origin (0,0) correspond to the lower left corner (lonmin,latmin) </span>
+        The transformation is centered on the mean of latitude and longitude. 
+        The cartesian origin (0,0) correspond to the lower left corner (lonmin,latmin) 
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
+        Returns
+        -------
 
-<span class="sd">        m : Basemap converter</span>
-
-
-
-<span class="sd">        Warning</span>
-<span class="sd">        -------</span>
-
-<span class="sd">        If boundary is modified cartesian coordinates change.</span>
+        m : Basemap converter
 
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">bd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span>
-        <span class="n">lon_0</span> <span class="o">=</span> <span class="p">(</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">bd</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="mf">2.</span>
-        <span class="n">lat_0</span> <span class="o">=</span> <span class="p">(</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">bd</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span><span class="o">/</span><span class="mf">2.</span>
 
-        <span class="n">m</span> <span class="o">=</span> <span class="n">Basemap</span><span class="p">(</span><span class="n">llcrnrlon</span><span class="o">=</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">delta</span><span class="p">,</span> <span class="n">llcrnrlat</span><span class="o">=</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">delta</span><span class="p">,</span>
-                    <span class="n">urcrnrlon</span><span class="o">=</span><span class="n">bd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">delta</span><span class="p">,</span> <span class="n">urcrnrlat</span><span class="o">=</span><span class="n">bd</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="n">delta</span><span class="p">,</span>
-                <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;cass&#39;</span><span class="p">,</span> <span class="n">lon_0</span><span class="o">=</span><span class="n">lon_0</span><span class="p">,</span> <span class="n">lat_0</span><span class="o">=</span><span class="n">lat_0</span><span class="p">)</span>
+        Warning
+        -------
 
-        <span class="k">for</span> <span class="n">kid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">latlon</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">cart</span><span class="p">:</span>
-                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">m</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latlon</span><span class="p">[</span><span class="n">kid</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">latlon</span><span class="p">[</span><span class="n">kid</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latlon</span><span class="p">[</span><span class="n">kid</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">latlon</span><span class="p">[</span><span class="n">kid</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="n">kid</span><span class="p">]</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">])</span>
-
-        <span class="k">return</span><span class="p">(</span><span class="n">m</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="Coords.from_nodes"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Coords.html#pylayers.gis.osmparser.Coords.from_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">from_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">nodes</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; read coordinates from nodes </span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-
-<span class="sd">        nodes : Nodes </span>
+        If boundary is modified cartesian coordinates change.
 
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">osmid</span> <span class="ow">in</span> <span class="n">nodes</span><span class="o">.</span><span class="n">node</span><span class="p">:</span>
-            <span class="n">lon</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">osmid</span><span class="p">][</span><span class="s1">&#39;lonlat&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">lat</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">osmid</span><span class="p">][</span><span class="s1">&#39;lonlat&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">latlon</span><span class="p">[</span><span class="n">osmid</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lon</span><span class="p">,</span><span class="n">lat</span><span class="p">])</span>
-            <span class="c1"># find extrema</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">minlon</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">minlon</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">maxlon</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">maxlon</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">minlat</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">minlat</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">maxlat</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">maxlat</span><span class="p">)</span>
+        &quot;&quot;&quot;
+        bd = self.boundary
+        lon_0 = (bd[0]+bd[2])/2.
+        lat_0 = (bd[1]+bd[3])/2.
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">cpt</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">minlon</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">minlat</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">maxlon</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">maxlat</span><span class="p">])</span></div></div>
+        m = Basemap(llcrnrlon=bd[0]-delta, llcrnrlat=bd[1]-delta,
+                    urcrnrlon=bd[2]+delta, urcrnrlat=bd[3]+delta,
+                resolution=&#39;i&#39;, projection=&#39;cass&#39;, lon_0=lon_0, lat_0=lat_0)
+
+        for kid in self.latlon:
+            if cart:
+                x, y = m(self.latlon[kid][0], self.latlon[kid][1])
+            else:
+                x, y = (self.latlon[kid][0], self.latlon[kid][1])
+
+            self.xy[kid]  = np.array([x,y])
+
+        return(m)</div>
+
+<div class="viewcode-block" id="Coords.from_nodes"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Coords.html#pylayers.gis.osmparser.Coords.from_nodes">[docs]</a>    def from_nodes(self,nodes):
+        &quot;&quot;&quot; read coordinates from nodes 
+
+        Parameters
+        ----------
+
+        nodes : Nodes 
+
+
+        &quot;&quot;&quot;
+        for osmid in nodes.node:
+            lon = nodes.node[osmid][&#39;lonlat&#39;][0]
+            lat = nodes.node[osmid][&#39;lonlat&#39;][1]
+            self.latlon[osmid] = np.array([lon,lat])
+            # find extrema
+            self.minlon = min(lon,self.minlon)
+            self.maxlon = max(lon,self.maxlon)
+            self.minlat = min(lat,self.minlat)
+            self.maxlat = max(lat,self.maxlat)
+
+            self.cpt += 1
+        self.boundary=np.array([self.minlon,self.minlat,self.maxlon,self.maxlat])</div></div>
         
 
 
-<div class="viewcode-block" id="Nodes"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Nodes.html#pylayers.gis.osmparser.Nodes">[docs]</a><span class="k">class</span> <span class="nc">Nodes</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Nodes"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Nodes.html#pylayers.gis.osmparser.Nodes">[docs]</a>class Nodes(object):
+    &quot;&quot;&quot;
 
-<span class="sd">    osm Nodes container</span>
+    osm Nodes container
 
-<span class="sd">    &quot;&quot;&quot;</span>
+    &quot;&quot;&quot;
 
-    <span class="n">node</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">cpt</span> <span class="o">=</span> <span class="mi">0</span>
+    node = {}
+    cpt = 0
 
-<div class="viewcode-block" id="Nodes.nodes"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Nodes.html#pylayers.gis.osmparser.Nodes.nodes">[docs]</a>    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">nodes</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;  parse tagged nodes</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">osmid</span><span class="p">,</span><span class="n">tags</span><span class="p">,</span><span class="n">coords</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">osmid</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">osmid</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tags</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">osmid</span><span class="p">][</span><span class="s1">&#39;lonlat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">coords</span>
-            <span class="n">lon</span> <span class="o">=</span> <span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">lat</span> <span class="o">=</span> <span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cpt</span> <span class="o">+=</span> <span class="mi">1</span></div>
+<div class="viewcode-block" id="Nodes.nodes"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Nodes.html#pylayers.gis.osmparser.Nodes.nodes">[docs]</a>    def nodes(self,nodes):
+        &quot;&quot;&quot;  parse tagged nodes
+        &quot;&quot;&quot;
+        for osmid,tags,coords in nodes:
+            self.node[osmid] = {}
+            self.node[osmid][&#39;tags&#39;] = tags
+            self.node[osmid][&#39;lonlat&#39;] = coords
+            lon = coords[0]
+            lat = coords[1]
+            self.cpt += 1</div>
     
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-        <span class="k">for</span> <span class="n">kid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">:</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">kid</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">kid</span><span class="p">][</span><span class="s1">&#39;lonlat&#39;</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+    def __repr__(self):
+        st = &#39;&#39;
+        for kid in self.node:
+            st = st+str(kid) + &#39; : &#39; + str(self.node[kid][&#39;lonlat&#39;])+&#39;\n&#39;
+        return(st)
 
-<div class="viewcode-block" id="Nodes.clean"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Nodes.html#pylayers.gis.osmparser.Nodes.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cpt</span> <span class="o">=</span> <span class="mi">0</span></div>
+<div class="viewcode-block" id="Nodes.clean"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Nodes.html#pylayers.gis.osmparser.Nodes.clean">[docs]</a>    def clean(self):
+        self.node= {}
+        self.cpt = 0</div>
 
-<div class="viewcode-block" id="Nodes.readmap"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Nodes.html#pylayers.gis.osmparser.Nodes.readmap">[docs]</a>    <span class="k">def</span> <span class="nf">readmap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">osmmap</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; read nodes from a map </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">osmmap</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;node&#39;</span><span class="p">:</span>
-                <span class="n">osmid</span> <span class="o">=</span> <span class="o">-</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
-                <span class="n">lon</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span>
-                <span class="n">lat</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="s1">&#39;lat&#39;</span><span class="p">]</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">osmid</span><span class="p">]</span><span class="o">=</span><span class="p">{}</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">osmid</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="s1">&#39;tag&#39;</span><span class="p">]</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">osmid</span><span class="p">][</span><span class="s1">&#39;lonlat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">lon</span><span class="p">,</span><span class="n">lat</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">cpt</span> <span class="o">+=</span> <span class="mi">1</span></div></div>
+<div class="viewcode-block" id="Nodes.readmap"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Nodes.html#pylayers.gis.osmparser.Nodes.readmap">[docs]</a>    def readmap(self,osmmap):
+        &quot;&quot;&quot; read nodes from a map 
+        &quot;&quot;&quot;
+        for item in osmmap:
+            if item[&#39;type&#39;]==&#39;node&#39;:
+                osmid = -item[&#39;data&#39;][&#39;id&#39;]
+                lon = item[&#39;data&#39;][&#39;lon&#39;]
+                lat = item[&#39;data&#39;][&#39;lat&#39;]
+                self.node[osmid]={}
+                self.node[osmid][&#39;tags&#39;] = item[&#39;data&#39;][&#39;tag&#39;]
+                self.node[osmid][&#39;lonlat&#39;] = (lon,lat)
+                self.cpt += 1</div></div>
 
-<div class="viewcode-block" id="Ways"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways">[docs]</a><span class="k">class</span> <span class="nc">Ways</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Ways"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways">[docs]</a>class Ways(object):
+    &quot;&quot;&quot;
 
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
+    Attributes
+    ----------
 
-<span class="sd">    w : dict</span>
-<span class="sd">    way : dict</span>
-<span class="sd">    cpt : int</span>
-<span class="sd">        way counter </span>
+    w : dict
+    way : dict
+    cpt : int
+        way counter 
 
 
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
+    Methods
+    -------
 
-<span class="sd">    ways</span>
-<span class="sd">    eval</span>
-<span class="sd">    show</span>
+    ways
+    eval
+    show
 
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">w</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">way</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">cpt</span> <span class="o">=</span> <span class="mi">0</span>
+    &quot;&quot;&quot;
+    w = {}
+    way = {}
+    cpt = 0
 
-<div class="viewcode-block" id="Ways.ways"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.ways">[docs]</a>    <span class="k">def</span> <span class="nf">ways</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ways</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; general callback function</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">osmid</span><span class="p">,</span> <span class="n">tags</span><span class="p">,</span> <span class="n">refs</span> <span class="ow">in</span> <span class="n">ways</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">osmid</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">refs</span><span class="p">,</span><span class="n">tags</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cpt</span> <span class="o">+=</span> <span class="mi">1</span></div>
+<div class="viewcode-block" id="Ways.ways"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.ways">[docs]</a>    def ways(self, ways):
+        &quot;&quot;&quot; general callback function
+        &quot;&quot;&quot;
+        for osmid, tags, refs in ways:
+            self.w[osmid] = [refs,tags]
+            self.cpt += 1</div>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-        <span class="k">for</span> <span class="n">kid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">:</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">kid</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-        <span class="k">return</span> <span class="n">st</span> 
+    def __repr__(self):
+        st = &#39;&#39;
+        for kid in self.w:
+            st = st + str(self.w[kid])+&#39;\n&#39;
+        return st 
 
-<div class="viewcode-block" id="Ways.clean"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; clean ways </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">way</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cpt</span> <span class="o">=</span> <span class="mi">0</span></div>
+<div class="viewcode-block" id="Ways.clean"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.clean">[docs]</a>    def clean(self):
+        &quot;&quot;&quot; clean ways 
+        &quot;&quot;&quot;
+        self.w = {}
+        self.way = {}
+        self.cpt = 0</div>
 
-<div class="viewcode-block" id="Ways.building"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.building">[docs]</a>    <span class="k">def</span> <span class="nf">building</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ways</span> <span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">8.5</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; building callback function</span>
+<div class="viewcode-block" id="Ways.building"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.building">[docs]</a>    def building(self, ways , height=8.5):
+        &quot;&quot;&quot; building callback function
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
+        Parameters
+        ----------
 
-<span class="sd">        ways : Ways</span>
-<span class="sd">        height : float </span>
+        ways : Ways
+        height : float 
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">osmid</span><span class="p">,</span> <span class="n">tags</span><span class="p">,</span> <span class="n">refs</span> <span class="ow">in</span> <span class="n">ways</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s1">&#39;building&#39;</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
-                <span class="k">if</span> <span class="s1">&#39;height&#39;</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
-                    <span class="n">tags</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;height&#39;</span><span class="p">:</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]}</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">tags</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="n">height</span><span class="p">}</span>
+        &quot;&quot;&quot;
+        for osmid, tags, refs in ways:
+            if &#39;building&#39; in tags:
+                if &#39;height&#39; in tags:
+                    tags = {&#39;height&#39;:tags[&#39;height&#39;]}
+                else:
+                    tags = {&#39;height&#39;: height}
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">osmid</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">refs</span><span class="p">,</span><span class="n">tags</span><span class="p">]</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">cpt</span> <span class="o">+=</span> <span class="mi">1</span></div>
+                self.w[osmid] = [refs,tags]
+                self.cpt += 1</div>
 
-<div class="viewcode-block" id="Ways.eval"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">coords</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; convert into a Way object</span>
+<div class="viewcode-block" id="Ways.eval"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.eval">[docs]</a>    def eval(self,coords):
+        &quot;&quot;&quot; convert into a Way object
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
+        Parameters
+        ----------
 
-<span class="sd">        coords : osm coordinates</span>
+        coords : osm coordinates
 
-<span class="sd">        &quot;&quot;&quot;</span>
+        &quot;&quot;&quot;
 
-        <span class="k">for</span> <span class="n">osmid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">:</span>
-            <span class="n">refs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">osmid</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">tags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">osmid</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">away</span> <span class="o">=</span>  <span class="n">Way</span><span class="p">(</span><span class="n">refs</span><span class="p">,</span><span class="n">tags</span><span class="p">,</span><span class="n">coords</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">away</span><span class="o">.</span><span class="n">valid</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">osmid</span><span class="p">]</span> <span class="o">=</span> <span class="n">away</span></div>
+        for osmid in self.w:
+            refs = self.w[osmid][0]
+            tags = self.w[osmid][1]
+            away =  Way(refs,tags,coords)
+            if away.valid:
+                self.way[osmid] = away</div>
 
-<div class="viewcode-block" id="Ways.show"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; show all way</span>
+<div class="viewcode-block" id="Ways.show"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.show">[docs]</a>    def show(self,typ=2,**kwargs):
+        &quot;&quot;&quot; show all way
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
+        Parameters
+        ----------
 
-<span class="sd">        fig : figure</span>
-<span class="sd">        ax  : axe</span>
-<span class="sd">        typ : 0|1|2 (default)</span>
-<span class="sd">                0 : display only way of typ 0  (Polygon)</span>
-<span class="sd">                1 : display only way of typ 1  (Linestring)</span>
-<span class="sd">                2 : display all way (default)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="s1">&#39;fig&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">fig</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">]</span>
+        fig : figure
+        ax  : axe
+        typ : 0|1|2 (default)
+                0 : display only way of typ 0  (Polygon)
+                1 : display only way of typ 1  (Linestring)
+                2 : display all way (default)
+        &quot;&quot;&quot;
+        if &#39;fig&#39; not in kwargs:
+            fig = plt.figure(**kwargs)
+        else:
+            fig = kwargs[&#39;fig&#39;]
 
-        <span class="k">if</span> <span class="s1">&#39;ax&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">]</span>
+        if &#39;ax&#39; not in kwargs:
+            ax = fig.gca()
+        else:
+            ax = kwargs[&#39;ax&#39;]
 
-        <span class="n">lpoly</span>  <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">lonmin</span> <span class="o">=</span> <span class="mi">360</span>
-        <span class="n">lonmax</span> <span class="o">=</span> <span class="o">-</span><span class="mi">360</span>
-        <span class="n">latmin</span> <span class="o">=</span> <span class="mi">360</span>
-        <span class="n">latmax</span> <span class="o">=</span> <span class="o">-</span><span class="mi">360</span>
-        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">way</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">way</span><span class="o">.</span><span class="n">typ</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
-                    <span class="n">p</span> <span class="o">=</span><span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">shp</span>
-            <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">way</span><span class="o">.</span><span class="n">typ</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-                    <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">shp</span>
-            <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
-                <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">shp</span>
+        lpoly  = []
+        lonmin = 360
+        lonmax = -360
+        latmin = 360
+        latmax = -360
+        for b in self.way:
+            if typ==0:
+                if self.way.typ==0:
+                    p =ways.way[b].shp
+            if typ==1:
+                if self.way.typ==1:
+                    p = self.way[b].shp
+            if typ==2:
+                p = self.way[b].shp
 
-            <span class="n">lpoly</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+            lpoly.append(p)
 
-        <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
-        <span class="n">city</span> <span class="o">=</span> <span class="n">PolyCollection</span><span class="p">(</span><span class="n">lpoly</span><span class="p">,</span><span class="n">closed</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        pdb.set_trace()
+        city = PolyCollection(lpoly,closed=False)
 
-        <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">((</span><span class="n">lonmin</span><span class="p">,</span><span class="n">lonmax</span><span class="p">,</span><span class="n">latmin</span><span class="p">,</span><span class="n">latmax</span><span class="p">))</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">city</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">autoscale_view</span><span class="p">()</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;scaled&#39;</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span></div>
+        ax.axis((lonmin,lonmax,latmin,latmax))
+        ax.add_collection(city)
+        ax.autoscale_view()
+        plt.axis(&#39;scaled&#39;)
+        return(fig,ax)</div>
 
-<div class="viewcode-block" id="Ways.tomaska"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.tomaska">[docs]</a>    <span class="k">def</span> <span class="nf">tomaska</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">lonlat</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; convert to masked array</span>
+<div class="viewcode-block" id="Ways.tomaska"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.tomaska">[docs]</a>    def tomaska(self,m,lonlat=True):
+        &quot;&quot;&quot; convert to masked array
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
+        Parameters
+        ----------
 
-<span class="sd">        m : Basemap object</span>
-<span class="sd">            for converting to and from map projection coordinates</span>
-<span class="sd">        lonlat : boolean</span>
-<span class="sd">            returns in WGS84 format if True</span>
+        m : Basemap object
+            for converting to and from map projection coordinates
+        lonlat : boolean
+            returns in WGS84 format if True
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
+        Returns
+        -------
 
-<span class="sd">        ptma : masked array</span>
+        ptma : masked array
 
-<span class="sd">        &quot;&quot;&quot;</span>
+        &quot;&quot;&quot;
 
-        <span class="n">tpt</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">2</span><span class="p">,))</span>
-        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">2</span><span class="p">,))</span>
-        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">way</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">b</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">way</span><span class="p">):</span>
-            <span class="c1"># retrieve PolyGon or LineString</span>
-            <span class="c1"># progress bar</span>
-            <span class="k">if</span> <span class="n">k</span><span class="o">%</span><span class="mi">1000</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
-                <span class="k">print</span> <span class="n">k</span><span class="p">,</span><span class="n">N</span>
-            <span class="n">shp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">shp</span>
-            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">shp</span><span class="p">)</span><span class="o">==</span><span class="n">geu</span><span class="o">.</span><span class="n">Polygon</span><span class="p">:</span>
-                <span class="n">pa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">shp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">()</span>
-                <span class="n">Np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">pa</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-                <span class="k">for</span> <span class="n">ip</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Np</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-                    <span class="n">tpt</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">tpt</span><span class="p">,</span><span class="n">pa</span><span class="p">[:,</span><span class="n">ip</span><span class="o">%</span><span class="n">Np</span><span class="p">]))</span>
-                    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">mask</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]])))</span>
-                <span class="n">tpt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">tpt</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]])))</span>
-                <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">mask</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]])))</span>
+        tpt  = np.empty((2,))
+        mask = np.ones((2,))
+        N = len(self.way.keys())
+        for k,b in enumerate(self.way):
+            # retrieve PolyGon or LineString
+            # progress bar
+            if k%1000==0:
+                print k,N
+            shp = self.way[b].shp
+            if type(shp)==geu.Polygon:
+                pa = self.way[b].shp.ndarray()
+                Np = np.shape(pa)[1]
+                for ip in range(Np+1):
+                    tpt  = np.vstack((tpt,pa[:,ip%Np]))
+                    mask = np.vstack((mask,np.array([[0,0]])))
+                tpt = np.vstack((tpt,np.array([[0,0]])))
+                mask = np.vstack((mask,np.array([[1,1]])))
 
-        <span class="k">if</span> <span class="n">lonlat</span><span class="p">:</span>
-            <span class="p">(</span><span class="n">lon</span><span class="p">,</span><span class="n">lat</span><span class="p">)</span> <span class="o">=</span> <span class="n">m</span><span class="p">(</span><span class="n">tpt</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">tpt</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="n">inverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-            <span class="n">tpt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">lon</span><span class="p">,</span><span class="n">lat</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+        if lonlat:
+            (lon,lat) = m(tpt[:,0],tpt[:,1],inverse=True)
+            tpt = np.vstack([lon,lat]).T
 
-        <span class="c1">#vertices = np.ma.masked_array(tpt, mask)</span>
-        <span class="c1">#return(vertices)</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">tpt</span><span class="p">,</span><span class="n">mask</span><span class="p">)</span></div>
+        #vertices = np.ma.masked_array(tpt, mask)
+        #return(vertices)
+        return(tpt,mask)</div>
 
-<div class="viewcode-block" id="Ways.showold"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.showold">[docs]</a>    <span class="k">def</span> <span class="nf">showold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[]):</span>
-        <span class="sd">&quot;&quot;&quot; show ways</span>
+<div class="viewcode-block" id="Ways.showold"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.showold">[docs]</a>    def showold(self,fig=[],ax=[]):
+        &quot;&quot;&quot; show ways
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
+        Parameters
+        ----------
 
-<span class="sd">        fig</span>
-<span class="sd">        ax</span>
+        fig
+        ax
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">fig</span><span class="o">==</span><span class="p">[]:</span>
-            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">ax</span><span class="o">==</span><span class="p">[]:</span>
-            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+        &quot;&quot;&quot;
+        if fig==[]:
+            fig = plt.figure()
+        elif ax==[]:
+            ax = fig.gca()
 
-        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">way</span><span class="p">:</span>
-            <span class="n">tags</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">tags</span>
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;building&#39;</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="s1">&#39;buildingpart&#39;</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">):</span>
-                <span class="k">print</span> <span class="s2">&quot;buildingpart found&quot;</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">poly</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">shp</span>
-                    <span class="k">if</span> <span class="s1">&#39;building:roof:colour&#39;</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
-                        <span class="n">col</span> <span class="o">=</span> <span class="s1">&#39;#&#39;</span><span class="o">+</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;building:roof:colour&#39;</span><span class="p">]</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">col</span> <span class="o">=</span> <span class="s1">&#39;#abcdef&#39;</span>
-                    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">col</span><span class="p">)</span>
-                <span class="k">except</span><span class="p">:</span>
-                    <span class="k">print</span> <span class="s2">&quot;building: &quot;</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="s2">&quot; is not a polygon&quot;</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;scaled&#39;</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span></div>
+        for b in self.way:
+            tags  = self.way[b].tags
+            if (&#39;building&#39; in tags) | (&#39;buildingpart&#39; in tags):
+                print &quot;buildingpart found&quot;
+                try:
+                    poly  = self.way[b].shp
+                    if &#39;building:roof:colour&#39; in tags:
+                        col = &#39;#&#39;+tags[&#39;building:roof:colour&#39;]
+                    else:
+                        col = &#39;#abcdef&#39;
+                    fig, ax = poly.plot(fig=fig, ax=ax,color=col)
+                except:
+                    print &quot;building: &quot;,b,&quot; is not a polygon&quot;
+        plt.axis(&#39;scaled&#39;)
+        return(fig,ax)</div>
 
-<div class="viewcode-block" id="Ways.readmap"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.readmap">[docs]</a>    <span class="k">def</span> <span class="nf">readmap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">osmmap</span><span class="p">,</span><span class="n">coords</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;building&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; read ways from a map </span>
-<span class="sd">        </span>
-<span class="sd">        osmmap : OSM Map in json from OsmAPI</span>
-<span class="sd">        coords : coords object previously parsed</span>
-<span class="sd">        typ  : string </span>
-<span class="sd">            outdoor or indoor</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">osmmap</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;way&#39;</span><span class="p">:</span>
-                <span class="n">way</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-                <span class="n">osmid</span> <span class="o">=</span> <span class="n">way</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
-                <span class="n">refs</span>  <span class="o">=</span> <span class="n">way</span><span class="p">[</span><span class="s1">&#39;nd&#39;</span><span class="p">]</span>
-                <span class="n">refs_neg</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">refs</span><span class="p">]</span>
-                <span class="n">tags</span>  <span class="o">=</span> <span class="n">way</span><span class="p">[</span><span class="s1">&#39;tag&#39;</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">typ</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">osmid</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">refs_neg</span><span class="p">,</span><span class="n">tags</span><span class="p">]</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">cpt</span> <span class="o">+=</span> <span class="mi">1</span>
+<div class="viewcode-block" id="Ways.readmap"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.readmap">[docs]</a>    def readmap(self,osmmap,coords,typ=&#39;building&#39;):
+        &quot;&quot;&quot; read ways from a map 
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span>
-        <span class="k">pass</span></div></div>
+        osmmap : OSM Map in json from OsmAPI
+        coords : coords object previously parsed
+        typ  : string 
+            outdoor or indoor
+        &quot;&quot;&quot;
+        for item in osmmap:
+            if item[&#39;type&#39;]==&#39;way&#39;:
+                way = item[&#39;data&#39;]
+                osmid = way[&#39;id&#39;]
+                refs  = way[&#39;nd&#39;]
+                refs_neg = [-x for x in refs]
+                tags  = way[&#39;tag&#39;]
+                if typ in tags:
+                    self.w[osmid] = [refs_neg,tags]
+                    self.cpt += 1
+        
+        self.eval(coords)
+        pass</div></div>
 
-<div class="viewcode-block" id="Relations"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Relations.html#pylayers.gis.osmparser.Relations">[docs]</a><span class="k">class</span> <span class="nc">Relations</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="n">relation</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">cpt</span> <span class="o">=</span> <span class="mi">0</span>
-<div class="viewcode-block" id="Relations.relations"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Relations.html#pylayers.gis.osmparser.Relations.relations">[docs]</a>    <span class="k">def</span> <span class="nf">relations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rels</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">osmid</span><span class="p">,</span><span class="n">tags</span><span class="p">,</span><span class="n">member</span> <span class="ow">in</span> <span class="n">rels</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">relation</span><span class="p">[</span><span class="n">osmid</span><span class="p">]</span><span class="o">=</span><span class="p">{}</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">relation</span><span class="p">[</span><span class="n">osmid</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">tags</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">relation</span><span class="p">[</span><span class="n">osmid</span><span class="p">][</span><span class="s1">&#39;members&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">member</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">cpt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpt</span><span class="o">+</span><span class="mi">1</span></div>
-<div class="viewcode-block" id="Relations.clean"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Relations.html#pylayers.gis.osmparser.Relations.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">relation</span><span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cpt</span> <span class="o">=</span> <span class="mi">0</span></div></div>
+<div class="viewcode-block" id="Relations"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Relations.html#pylayers.gis.osmparser.Relations">[docs]</a>class Relations(object):
+    relation = {}
+    cpt = 0
+<div class="viewcode-block" id="Relations.relations"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Relations.html#pylayers.gis.osmparser.Relations.relations">[docs]</a>    def relations(self,rels):
+        for osmid,tags,member in rels:
+                self.relation[osmid]={}
+                self.relation[osmid][&#39;tags&#39;]=tags
+                self.relation[osmid][&#39;members&#39;]=member
+                self.cpt = self.cpt+1</div>
+<div class="viewcode-block" id="Relations.clean"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Relations.html#pylayers.gis.osmparser.Relations.clean">[docs]</a>    def clean(self):
+        self.relation= {}
+        self.cpt = 0</div></div>
 
-<div class="viewcode-block" id="FloorPlan"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.FloorPlan.html#pylayers.gis.osmparser.FloorPlan">[docs]</a><span class="k">class</span> <span class="nc">FloorPlan</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; FloorPlan class derived from nx.DigGraph</span>
+<div class="viewcode-block" id="FloorPlan"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.FloorPlan.html#pylayers.gis.osmparser.FloorPlan">[docs]</a>class FloorPlan(nx.DiGraph):
+    &quot;&quot;&quot; FloorPlan class derived from nx.DigGraph
 
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
+    Methods
+    -------
 
-<span class="sd">    build : recursive construction of floor plan </span>
-<span class="sd">    show : show the floor plan </span>
+    build : recursive construction of floor plan 
+    show : show the floor plan 
 
-<span class="sd">    &quot;&quot;&quot;</span>
+    &quot;&quot;&quot;
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rootid</span><span class="p">,</span><span class="n">coords</span><span class="p">,</span><span class="n">nodes</span><span class="p">,</span><span class="n">ways</span><span class="p">,</span><span class="n">relations</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; object constructor</span>
+    def __init__(self,rootid,coords,nodes,ways,relations):
+        &quot;&quot;&quot; object constructor
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
+        Parameters
+        ----------
 
-<span class="sd">        rootid</span>
-<span class="sd">        coords</span>
-<span class="sd">        nodes</span>
-<span class="sd">        ways</span>
-<span class="sd">        relations</span>
+        rootid
+        coords
+        nodes
+        ways
+        relations
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rootid</span><span class="o">=</span><span class="n">rootid</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">coords</span> <span class="o">=</span> <span class="n">coords</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="n">nodes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ways</span> <span class="o">=</span> <span class="n">ways</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">relations</span> <span class="o">=</span> <span class="n">relations</span>
+        &quot;&quot;&quot;
+        nx.DiGraph.__init__(self)
+        self.rootid=rootid
+        self.coords = coords
+        self.nodes = nodes
+        self.ways = ways
+        self.relations = relations
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    def __repr__(self):
 
-        <span class="n">st</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rootid</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-        <span class="n">levels</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">rootid</span><span class="p">)</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s1">&#39;---&#39;</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">levels</span><span class="p">:</span>
-            <span class="n">nw</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">l</span><span class="p">))</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nw</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
-
-
-
-<div class="viewcode-block" id="FloorPlan.build"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.FloorPlan.html#pylayers.gis.osmparser.FloorPlan.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="p">,</span><span class="n">eid</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Notes : recursive construction</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-
-<span class="sd">        typ : string</span>
-<span class="sd">            &#39;relation&#39; | &#39;way&#39; | &#39;node&#39;</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;relation&#39;</span><span class="p">:</span>
-            <span class="n">tags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relations</span><span class="o">.</span><span class="n">relation</span><span class="p">[</span><span class="n">eid</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span>
-            <span class="n">members</span>  <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">relations</span><span class="o">.</span><span class="n">relation</span><span class="p">[</span><span class="n">eid</span><span class="p">][</span><span class="s1">&#39;members&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;way&#39;</span><span class="p">:</span>
-            <span class="n">tags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">eid</span><span class="p">]</span><span class="o">.</span><span class="n">tags</span>
-            <span class="n">members</span>  <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">eid</span><span class="p">]</span><span class="o">.</span><span class="n">refs</span>
-        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;node&#39;</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">tags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">eid</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span>
-            <span class="k">except</span><span class="p">:</span>
-                <span class="n">tags</span> <span class="o">=</span> <span class="bp">None</span>
-            <span class="n">members</span> <span class="o">=</span> <span class="bp">None</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">eid</span><span class="p">,</span><span class="n">tags</span><span class="o">=</span><span class="n">tags</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="n">typ</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">members</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">members</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;relation&#39;</span><span class="p">:</span>
-                    <span class="n">eidn</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="n">typn</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;way&#39;</span><span class="p">:</span>
-                    <span class="n">eidn</span> <span class="o">=</span> <span class="n">m</span>
-                    <span class="n">typn</span> <span class="o">=</span> <span class="s1">&#39;node&#39;</span>
-
-                <span class="bp">self</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">eid</span><span class="p">,</span><span class="n">eidn</span><span class="p">)</span>
-                <span class="c1">#self = self.build(typ=typn,eid=eidn)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="n">typn</span><span class="p">,</span><span class="n">eid</span><span class="o">=</span><span class="n">eidn</span><span class="p">)</span></div>
+        st = str(self.rootid)+&#39;\n&#39;
+        levels = nx.neighbors(self,self.rootid)
+        st = st + &#39;---&#39;+&#39;\n&#39;
+        for l in levels:
+            nw = len(nx.neighbors(self,l))
+            st = st + str(l)+&#39; : &#39;+ str(nw) + &#39;\n&#39;
+        return(st)
 
 
-<div class="viewcode-block" id="FloorPlan.show"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.FloorPlan.html#pylayers.gis.osmparser.FloorPlan.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">nid</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[]):</span>
-        <span class="sd">&quot;&quot;&quot; show the floorplan</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
+<div class="viewcode-block" id="FloorPlan.build"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.FloorPlan.html#pylayers.gis.osmparser.FloorPlan.build">[docs]</a>    def build(self,typ,eid):
+        &quot;&quot;&quot; Notes : recursive construction
 
-<span class="sd">        nid : int </span>
-<span class="sd">        fig : plt.figure </span>
-<span class="sd">        ax  : plt.ax</span>
+        Parameters
+        ----------
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">fig</span><span class="o">==</span><span class="p">[]:</span>
-            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">ax</span><span class="o">==</span><span class="p">[]:</span>
-            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+        typ : string
+            &#39;relation&#39; | &#39;way&#39; | &#39;node&#39;
 
-        <span class="k">if</span> <span class="n">nid</span> <span class="o">==</span><span class="bp">None</span><span class="p">:</span>
-            <span class="n">nid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rootid</span>
-        <span class="n">nb</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">nid</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">nb</span><span class="p">:</span>
-            <span class="c1">#print k,self.node[k][&#39;type&#39;],self.node[k][&#39;tags&#39;]</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;way&#39;</span><span class="p">:</span>
-                <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span></div></div>
-<span class="c1">#</span>
-<span class="c1">#  Functions</span>
-<span class="c1">#     osmparse</span>
-<span class="c1">#     getbdg</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<div class="viewcode-block" id="getosm"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.getosm.html#pylayers.gis.osmparser.getosm">[docs]</a><span class="k">def</span> <span class="nf">getosm</span><span class="p">(</span><span class="n">address</span><span class="o">=</span><span class="s1">&#39;Rennes&#39;</span><span class="p">,</span><span class="n">latlon</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">dist_m</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span><span class="n">cart</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; get osm region from osmapi</span>
+        &quot;&quot;&quot;
+        if typ==&#39;relation&#39;:
+            tags = self.relations.relation[eid][&#39;tags&#39;]
+            members  =  self.relations.relation[eid][&#39;members&#39;]
+        if typ==&#39;way&#39;:
+            tags = self.ways.way[eid].tags
+            members  =  self.ways.way[eid].refs
+        if typ==&#39;node&#39;:
+            try:
+                tags = self.nodes.node[eid][&#39;tags&#39;]
+            except:
+                tags = None
+            members = None
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
+        self.add_node(eid,tags=tags,type=typ)
+        if members is not None:
+            for m in members:
+                if typ==&#39;relation&#39;:
+                    eidn = m[0]
+                    typn = m[1]
+                if typ==&#39;way&#39;:
+                    eidn = m
+                    typn = &#39;node&#39;
 
-<span class="sd">    address : string </span>
-<span class="sd">    latlon : tuple or 0 </span>
-<span class="sd">    dist_m : float </span>
-<span class="sd">    cart : boolean </span>
+                self.add_edge(eid,eidn)
+                #self = self.build(typ=typn,eid=eidn)
+                self.build(typ=typn,eid=eidn)</div>
 
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
 
-<span class="sd">    if latlon tuple is precised it has priority over the string </span>
+<div class="viewcode-block" id="FloorPlan.show"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.FloorPlan.html#pylayers.gis.osmparser.FloorPlan.show">[docs]</a>    def show(self,nid=None,fig=[],ax=[]):
+        &quot;&quot;&quot; show the floorplan
 
-<span class="sd">    &quot;&quot;&quot;</span>
+        Parameters
+        ----------
 
-    <span class="n">level_height</span> <span class="o">=</span> <span class="mf">3.45</span>
-    <span class="n">rad_to_deg</span> <span class="o">=</span> <span class="p">(</span><span class="mi">180</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-    <span class="n">deg_to_rad</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">)</span>
+        nid : int 
+        fig : plt.figure 
+        ax  : plt.ax
 
-    <span class="k">if</span> <span class="n">latlon</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
-        <span class="n">place</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">google</span><span class="p">(</span><span class="n">address</span><span class="p">)</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">lat</span><span class="p">,</span><span class="n">lon</span> <span class="o">=</span> <span class="n">place</span><span class="o">.</span><span class="n">latlng</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="k">print</span> <span class="n">place</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">lat</span> <span class="o">=</span> <span class="n">latlon</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">lon</span> <span class="o">=</span> <span class="n">latlon</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        &quot;&quot;&quot;
+        if fig==[]:
+            fig = plt.figure()
+        elif ax==[]:
+            ax = fig.gca()
 
-    <span class="n">r_earth</span> <span class="o">=</span> <span class="mf">6370e3</span>
-    <span class="n">alpha</span> <span class="o">=</span> <span class="p">(</span><span class="n">dist_m</span><span class="o">/</span><span class="n">r_earth</span><span class="p">)</span><span class="o">*</span><span class="n">rad_to_deg</span>
-    <span class="n">Osm</span> <span class="o">=</span> <span class="n">OsmApi</span><span class="p">()</span>
+        if nid ==None:
+            nid = self.rootid
+        nb = nx.neighbors(self,nid)
+        for k in nb:
+            #print k,self.node[k][&#39;type&#39;],self.node[k][&#39;tags&#39;]
+            if self.node[k][&#39;type&#39;]==&#39;way&#39;:
+                fig,ax = self.ways.way[k].show(fig=fig,ax=ax)
+            else:
+                fig,ax = self.show(k,fig=fig,ax=ax)
+        return fig,ax</div></div>
+#
+#  Functions
+#     osmparse
+#     getbdg
+#
+#
+<div class="viewcode-block" id="getosm"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.getosm.html#pylayers.gis.osmparser.getosm">[docs]</a>def getosm(address=&#39;Rennes&#39;,latlon=0,dist_m=400,cart=False):
+    &quot;&quot;&quot; get osm region from osmapi
 
-    <span class="c1">#</span>
-    <span class="c1"># Get Map around the specified coordinates </span>
-    <span class="c1">#</span>
+    Parameters
+    ----------
 
-    <span class="n">osmmap</span>  <span class="o">=</span> <span class="n">Osm</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">lon</span><span class="o">-</span><span class="n">alpha</span><span class="p">,</span><span class="n">lat</span><span class="o">-</span><span class="n">alpha</span><span class="p">,</span><span class="n">lon</span><span class="o">+</span><span class="n">alpha</span><span class="p">,</span><span class="n">lat</span><span class="o">+</span><span class="n">alpha</span><span class="p">)</span>
+    address : string 
+    latlon : tuple or 0 
+    dist_m : float 
+    cart : boolean 
 
-    <span class="c1">#print(osmmap)</span>
+    Notes
+    -----
+
+    if latlon tuple is precised it has priority over the string 
+
+    &quot;&quot;&quot;
+
+    level_height = 3.45
+    rad_to_deg = (180/np.pi)
+    deg_to_rad = (np.pi/180)
+
+    if latlon==0:
+        place = geo.google(address)
+        try:
+            lat,lon = place.latlng
+        except:
+            print place
+    else:
+        lat = latlon[0]
+        lon = latlon[1]
+
+    r_earth = 6370e3
+    alpha = (dist_m/r_earth)*rad_to_deg
+    Osm = OsmApi()
+
+    #
+    # Get Map around the specified coordinates 
+    #
+
+    osmmap  = Osm.Map(lon-alpha,lat-alpha,lon+alpha,lat+alpha)
+
+    #print(osmmap)
     
-    <span class="n">nodes</span> <span class="o">=</span> <span class="n">Nodes</span><span class="p">()</span>
-    <span class="n">nodes</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
-    <span class="n">nodes</span><span class="o">.</span><span class="n">readmap</span><span class="p">(</span><span class="n">osmmap</span><span class="p">)</span>
+    nodes = Nodes()
+    nodes.clean()
+    nodes.readmap(osmmap)
    
-    <span class="n">coords</span> <span class="o">=</span> <span class="n">Coords</span><span class="p">()</span>
-    <span class="n">coords</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
-    <span class="n">coords</span><span class="o">.</span><span class="n">from_nodes</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
+    coords = Coords()
+    coords.clean()
+    coords.from_nodes(nodes)
 
-    <span class="n">m</span> <span class="o">=</span> <span class="n">coords</span><span class="o">.</span><span class="n">cartesian</span><span class="p">(</span><span class="n">cart</span><span class="o">=</span><span class="n">cart</span><span class="p">)</span>
+    m = coords.cartesian(cart=cart)
 
-    <span class="n">ways</span> <span class="o">=</span> <span class="n">Ways</span><span class="p">()</span>
-    <span class="n">ways</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
-    <span class="n">ways</span><span class="o">.</span><span class="n">readmap</span><span class="p">(</span><span class="n">osmmap</span><span class="p">,</span><span class="n">coords</span><span class="p">)</span>
+    ways = Ways()
+    ways.clean()
+    ways.readmap(osmmap,coords)
     
-    <span class="c1"># list of nodes involved in buildings</span>
-    <span class="n">lnodes_id</span><span class="o">=</span><span class="p">[]</span>
-    <span class="k">for</span> <span class="n">iw</span> <span class="ow">in</span> <span class="n">ways</span><span class="o">.</span><span class="n">w</span><span class="p">:</span>
-        <span class="n">lnodes_id</span><span class="o">+=</span><span class="n">ways</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">iw</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-    <span class="c1"># list of all nodes of coords</span>
-    <span class="n">lnodes_id</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">lnodes_id</span><span class="p">))</span>
-    <span class="n">lnodes_full</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coords</span><span class="o">.</span><span class="n">latlon</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
-    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">lnodes_full</span><span class="p">,</span><span class="n">lnodes_id</span><span class="p">,</span><span class="n">invert</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="c1"># nodes not involved in buildings</span>
-    <span class="n">lexcluded</span> <span class="o">=</span> <span class="n">lnodes_full</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
-    <span class="n">coords</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">lexcluded</span><span class="p">)</span>
-    <span class="n">dpoly</span><span class="o">=</span><span class="p">{}</span>
-    <span class="k">for</span> <span class="n">iw</span> <span class="ow">in</span> <span class="n">ways</span><span class="o">.</span><span class="n">w</span><span class="p">:</span>
-        <span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">iw</span><span class="p">]</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="c1"># material </span>
-        <span class="k">if</span> <span class="n">ways</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">iw</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;material&#39;</span><span class="p">):</span>
-            <span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">iw</span><span class="p">]</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">ways</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">iw</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;material&#39;</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="n">ways</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">iw</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;building:material&#39;</span><span class="p">):</span>
-            <span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">iw</span><span class="p">]</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">ways</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">iw</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;building:material&#39;</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">iw</span><span class="p">]</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;WALL&#39;</span>
-        <span class="c1"># height </span>
-        <span class="k">if</span> <span class="n">ways</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">iw</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;height&#39;</span><span class="p">):</span>
-            <span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">iw</span><span class="p">]</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">eval</span><span class="p">(</span><span class="n">ways</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">iw</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;height&#39;</span><span class="p">]))</span>
-        <span class="k">elif</span> <span class="n">ways</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">iw</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;building:height&#39;</span><span class="p">):</span>
-            <span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">iw</span><span class="p">]</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">eval</span><span class="p">(</span><span class="n">ways</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">iw</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;building:height&#39;</span><span class="p">]))</span>
-        <span class="k">elif</span> <span class="n">ways</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">iw</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;building:levels&#39;</span><span class="p">):</span>
-            <span class="n">nb_levels</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">ways</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">iw</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;building:levels&#39;</span><span class="p">])</span>
-            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">nb_levels</span><span class="p">)</span><span class="o">!=</span><span class="nb">int</span><span class="p">:</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">nb_levels</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">nb_levels</span><span class="p">)</span>
-                <span class="k">except</span><span class="p">:</span>
-                    <span class="n">nb_levels</span><span class="o">=</span><span class="mi">2</span>
-            <span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">iw</span><span class="p">]</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">nb_levels</span><span class="o">*</span><span class="n">level_height</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">ways</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">iw</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;levels&#39;</span><span class="p">):</span>
-            <span class="n">nb_levels</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">ways</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">iw</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;levels&#39;</span><span class="p">])</span>
-            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">nb_levels</span><span class="p">)</span><span class="o">!=</span><span class="nb">int</span><span class="p">:</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">nb_levels</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">nb_levels</span><span class="p">)</span>
-                <span class="k">except</span><span class="p">:</span>
-                    <span class="n">nb_levels</span><span class="o">=</span><span class="mi">2</span>
-            <span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">iw</span><span class="p">]</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">nb_levels</span><span class="o">*</span><span class="n">level_height</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">iw</span><span class="p">]</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">12</span><span class="p">)</span>
+    # list of nodes involved in buildings
+    lnodes_id=[]
+    for iw in ways.w:
+        lnodes_id+=ways.w[iw][0]
+    # list of all nodes of coords
+    lnodes_id   = np.unique(np.array(lnodes_id))
+    lnodes_full = np.unique(np.array(coords.latlon.keys()))
+    mask = np.in1d(lnodes_full,lnodes_id,invert=True)
+    # nodes not involved in buildings
+    lexcluded = lnodes_full[mask]
+    coords.filter(lexcluded)
+    dpoly={}
+    for iw in ways.w:
+        ways.way[iw].tags = {}
+        # material 
+        if ways.w[iw][1].has_key(&#39;material&#39;):
+            ways.way[iw].tags[&#39;name&#39;]=ways.w[iw][1][&#39;material&#39;]
+        elif ways.w[iw][1].has_key(&#39;building:material&#39;):
+            ways.way[iw].tags[&#39;name&#39;]=ways.w[iw][1][&#39;building:material&#39;]
+        else:
+            ways.way[iw].tags[&#39;name&#39;]=&#39;WALL&#39;
+        # height 
+        if ways.w[iw][1].has_key(&#39;height&#39;):
+            ways.way[iw].tags[&#39;z&#39;]=(0,eval(ways.w[iw][1][&#39;height&#39;]))
+        elif ways.w[iw][1].has_key(&#39;building:height&#39;):
+            ways.way[iw].tags[&#39;z&#39;]=(0,eval(ways.w[iw][1][&#39;building:height&#39;]))
+        elif ways.w[iw][1].has_key(&#39;building:levels&#39;):
+            nb_levels = eval(ways.w[iw][1][&#39;building:levels&#39;])
+            if type(nb_levels)!=int:
+                try:
+                    nb_levels=max(nb_levels)
+                except:
+                    nb_levels=2
+            ways.way[iw].tags[&#39;z&#39;]=(0,nb_levels*level_height)
+        elif ways.w[iw][1].has_key(&#39;levels&#39;):
+            nb_levels = eval(ways.w[iw][1][&#39;levels&#39;])
+            if type(nb_levels)!=int:
+                try:
+                    nb_levels=max(nb_levels)
+                except:
+                    nb_levels=2
+            ways.way[iw].tags[&#39;z&#39;]=(0,nb_levels*level_height)
+        else:
+            ways.way[iw].tags[&#39;z&#39;]=(0,12)
                           
-        <span class="n">ptpoly</span><span class="o">=</span><span class="p">[</span><span class="n">coords</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ways</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">iw</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
-        <span class="n">dpoly</span><span class="p">[</span><span class="n">iw</span><span class="p">]</span><span class="o">=</span><span class="n">geu</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">ptpoly</span><span class="p">,</span><span class="n">vnodes</span><span class="o">=</span><span class="n">ways</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">iw</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">dpoly</span><span class="p">[</span><span class="n">iw</span><span class="p">]</span><span class="o">.</span><span class="n">coorddeter</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">coords</span><span class="p">,</span><span class="n">nodes</span><span class="p">,</span><span class="n">ways</span><span class="p">,</span><span class="n">dpoly</span><span class="p">,</span><span class="n">m</span></div>
+        ptpoly=[coords.xy[x] for x in ways.w[iw][0]]
+        dpoly[iw]=geu.Polygon(ptpoly,vnodes=ways.w[iw][0])
+        dpoly[iw].coorddeter()
+    return coords,nodes,ways,dpoly,m</div>
 
 
-<div class="viewcode-block" id="osmparse"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.osmparse.html#pylayers.gis.osmparser.osmparse">[docs]</a><span class="k">def</span> <span class="nf">osmparse</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;indoor&#39;</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">w</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">cart</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; parse osm files</span>
+<div class="viewcode-block" id="osmparse"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.osmparse.html#pylayers.gis.osmparser.osmparse">[docs]</a>def osmparse(_filename,typ=&#39;indoor&#39;,verbose=False,c=True,n=True,w=True,r=True,cart=False):
+    &quot;&quot;&quot; parse osm files
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
+    Parameters
+    ----------
 
-<span class="sd">    typ : string</span>
-<span class="sd">        indoor | outdoor </span>
-<span class="sd">    verbose : boolean</span>
-<span class="sd">        default : False</span>
-<span class="sd">    c : boolean</span>
-<span class="sd">        read coords</span>
-<span class="sd">    n : boolean</span>
-<span class="sd">        read nodes</span>
-<span class="sd">    w : boolean</span>
-<span class="sd">        read  ways</span>
-<span class="sd">    r : booleanif c:</span>
-<span class="sd">        coords = Coords()</span>
-<span class="sd">        coords.clean()</span>
-<span class="sd">        read relations</span>
+    typ : string
+        indoor | outdoor 
+    verbose : boolean
+        default : False
+    c : boolean
+        read coords
+    n : boolean
+        read nodes
+    w : boolean
+        read  ways
+    r : booleanif c:
+        coords = Coords()
+        coords.clean()
+        read relations
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
+    Returns
+    -------
 
-<span class="sd">    coords : Coords</span>
-<span class="sd">    nodes  : Nodes</span>
-<span class="sd">    ways   : Ways</span>
-<span class="sd">    relations : Relations</span>
+    coords : Coords
+    nodes  : Nodes
+    ways   : Ways
+    relations : Relations
 
-<span class="sd">    &quot;&quot;&quot;</span>
+    &quot;&quot;&quot;
 
-    <span class="k">if</span> <span class="p">((</span><span class="s1">&#39;/&#39;</span> <span class="ow">in</span> <span class="n">_filename</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="s1">&#39;//&#39;</span> <span class="ow">in</span> <span class="n">_filename</span><span class="p">)):</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">_filename</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;gis&#39;</span><span class="p">,</span><span class="s1">&#39;osm&#39;</span><span class="p">))</span>
-    <span class="c1">#</span>
-    <span class="c1"># Read coords and create basemap converter</span>
-    <span class="c1">#</span>
-    <span class="k">if</span> <span class="n">c</span><span class="p">:</span>
-        <span class="n">coords</span> <span class="o">=</span> <span class="n">Coords</span><span class="p">()</span>
-        <span class="n">coords</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
-        <span class="n">coords_parser</span> <span class="o">=</span> <span class="n">OSMParser</span><span class="p">(</span><span class="n">concurrency</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">coords_callback</span><span class="o">=</span><span class="n">coords</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s2">&quot;parsing coords&quot;</span>
+    if ((&#39;/&#39; in _filename) or (&#39;//&#39; in _filename)):
+        filename = _filename
+    else:
+        filename = pyu.getlong(_filename,os.path.join(&#39;gis&#39;,&#39;osm&#39;))
+    #
+    # Read coords and create basemap converter
+    #
+    if c:
+        coords = Coords()
+        coords.clean()
+        coords_parser = OSMParser(concurrency=4, coords_callback=coords.coords)
+        if verbose:
+            print &quot;parsing coords&quot;
 
-        <span class="n">coords_parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        coords_parser.parse(filename)
 
-        <span class="n">m</span> <span class="o">=</span> <span class="n">coords</span><span class="o">.</span><span class="n">cartesian</span><span class="p">(</span><span class="n">cart</span><span class="o">=</span><span class="n">cart</span><span class="p">)</span>
+        m = coords.cartesian(cart=cart)
 
-        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">coords</span><span class="o">.</span><span class="n">cpt</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">coords</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="c1">#</span>
-    <span class="c1"># Read nodes</span>
-    <span class="c1">#</span>
-    <span class="k">if</span> <span class="n">n</span><span class="p">:</span>
-        <span class="n">nodes</span> <span class="o">=</span> <span class="n">Nodes</span><span class="p">()</span>
-        <span class="n">nodes</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
-        <span class="n">nodes_parser</span> <span class="o">=</span> <span class="n">OSMParser</span><span class="p">(</span><span class="n">concurrency</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">nodes_callback</span><span class="o">=</span><span class="n">nodes</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+        if verbose:
+            print str(coords.cpt)
+    else:
+        coords = None
+    #
+    # Read nodes
+    #
+    if n:
+        nodes = Nodes()
+        nodes.clean()
+        nodes_parser = OSMParser(concurrency=4, nodes_callback=nodes.nodes)
 
-        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s2">&quot;parsing nodes&quot;</span>
+        if verbose:
+            print &quot;parsing nodes&quot;
 
-        <span class="n">nodes_parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        nodes_parser.parse(filename)
 
-        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">nodes</span><span class="o">.</span><span class="n">cpt</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">nodes</span> <span class="o">=</span> <span class="bp">None</span>
+        if verbose:
+            print str(nodes.cpt)
+    else:
+        nodes = None
 
-    <span class="c1">#</span>
-    <span class="c1"># Read ways</span>
-    <span class="c1">#</span>
-    <span class="k">if</span> <span class="n">w</span><span class="p">:</span>
-        <span class="n">ways</span> <span class="o">=</span> <span class="n">Ways</span><span class="p">()</span>
-        <span class="n">ways</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;outdoor&#39;</span><span class="p">:</span>
-            <span class="n">ways_parser</span> <span class="o">=</span> <span class="n">OSMParser</span><span class="p">(</span><span class="n">concurrency</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">ways_callback</span><span class="o">=</span><span class="n">ways</span><span class="o">.</span><span class="n">building</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;indoor&#39;</span><span class="p">:</span>
-            <span class="n">ways_parser</span> <span class="o">=</span> <span class="n">OSMParser</span><span class="p">(</span><span class="n">concurrency</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">ways_callback</span><span class="o">=</span><span class="n">ways</span><span class="o">.</span><span class="n">ways</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s2">&quot;parsing ways&quot;</span>
-        <span class="n">ways_parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    #
+    # Read ways
+    #
+    if w:
+        ways = Ways()
+        ways.clean()
+        if typ==&#39;outdoor&#39;:
+            ways_parser = OSMParser(concurrency=4, ways_callback=ways.building)
+        if typ==&#39;indoor&#39;:
+            ways_parser = OSMParser(concurrency=4, ways_callback=ways.ways)
+        if verbose:
+            print &quot;parsing ways&quot;
+        ways_parser.parse(filename)
 
-        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">ways</span><span class="o">.</span><span class="n">cpt</span><span class="p">)</span>
+        if verbose:
+            print str(ways.cpt)
 
-        <span class="c1"># convert lat,lon in cartesian</span>
-        <span class="n">ways</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">ways</span> <span class="o">=</span> <span class="bp">None</span>
+        # convert lat,lon in cartesian
+        ways.eval(coords)
+    else:
+        ways = None
 
-    <span class="c1">#</span>
-    <span class="c1"># Read relations</span>
-    <span class="c1">#</span>
-    <span class="k">if</span> <span class="n">r</span><span class="p">:</span>
-        <span class="n">relations</span> <span class="o">=</span> <span class="n">Relations</span><span class="p">()</span>
-        <span class="n">relations</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
-        <span class="n">relations_parser</span> <span class="o">=</span> <span class="n">OSMParser</span><span class="p">(</span><span class="n">concurrency</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">relations_callback</span><span class="o">=</span><span class="n">relations</span><span class="o">.</span><span class="n">relations</span><span class="p">)</span>
+    #
+    # Read relations
+    #
+    if r:
+        relations = Relations()
+        relations.clean()
+        relations_parser = OSMParser(concurrency=4,relations_callback=relations.relations)
 
-        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s2">&quot;parsing relations&quot;</span>
-        <span class="n">relations_parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        if verbose:
+            print &quot;parsing relations&quot;
+        relations_parser.parse(filename)
 
-        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">relations</span><span class="o">.</span><span class="n">cpt</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">relations</span> <span class="o">=</span> <span class="bp">None</span>
+        if verbose:
+            print str(relations.cpt)
+    else:
+        relations = None
 
-    <span class="k">return</span> <span class="n">coords</span><span class="p">,</span><span class="n">nodes</span><span class="p">,</span><span class="n">ways</span><span class="p">,</span><span class="n">relations</span><span class="p">,</span><span class="n">m</span></div>
-
-
-<div class="viewcode-block" id="extract"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.extract.html#pylayers.gis.osmparser.extract">[docs]</a><span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="n">alat</span><span class="p">,</span><span class="n">alon</span><span class="p">,</span><span class="n">fileosm</span><span class="p">,</span><span class="n">fileout</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; extraction of an osm sub region using osmconvert</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-
-<span class="sd">    alat : array of latitude (1xn)</span>
-<span class="sd">    alon : array of longitude (1xn)</span>
-<span class="sd">    fileosm : source osm file</span>
-<span class="sd">    filout  : output osm file</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-
-<span class="sd">    m : Basemap oject for coordinates conversion</span>
+    return coords,nodes,ways,relations,m</div>
 
 
+<div class="viewcode-block" id="extract"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.extract.html#pylayers.gis.osmparser.extract">[docs]</a>def extract(alat,alon,fileosm,fileout):
+    &quot;&quot;&quot; extraction of an osm sub region using osmconvert
 
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
+    Parameters
+    ----------
 
-<span class="sd">    This function takes two (1xn) arrays of latitude an longitude values</span>
-<span class="sd">    Calculates extrema of those values.</span>
-<span class="sd">    Invokes osmconvert script on a source fileosm and extract the</span>
-<span class="sd">    corresponding zone in the fileout file.</span>
+    alat : array of latitude (1xn)
+    alon : array of longitude (1xn)
+    fileosm : source osm file
+    filout  : output osm file
 
-<span class="sd">    The functions returns a basemap object for coordinates conversion on this</span>
-<span class="sd">    file.</span>
+    Returns
+    -------
+
+    m : Basemap oject for coordinates conversion
 
 
 
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">latmax</span> <span class="o">=</span> <span class="n">alat</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-    <span class="n">latmin</span> <span class="o">=</span> <span class="n">alat</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
-    <span class="n">lonmax</span> <span class="o">=</span> <span class="n">alon</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-    <span class="n">lonmin</span> <span class="o">=</span> <span class="n">alon</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
-    <span class="n">lon_0</span><span class="o">=</span><span class="p">(</span><span class="n">lonmax</span><span class="o">+</span><span class="n">lonmin</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
-    <span class="n">lat_0</span><span class="o">=</span><span class="p">(</span><span class="n">latmax</span><span class="o">+</span><span class="n">latmin</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+    Notes
+    -----
 
-    <span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;osmconvert -b=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">lonmin</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;,&#39;</span>\
-            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">latmin</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;,&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">lonmax</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;,&#39;</span>\
-            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">latmax</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">fileosm</span> <span class="o">+</span><span class="s1">&#39; &gt; &#39;</span><span class="o">+</span> <span class="n">fileout</span><span class="o">+</span><span class="s1">&#39;.osm&#39;</span>
-    <span class="k">print</span> <span class="n">command</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+    This function takes two (1xn) arrays of latitude an longitude values
+    Calculates extrema of those values.
+    Invokes osmconvert script on a source fileosm and extract the
+    corresponding zone in the fileout file.
 
-    <span class="n">m</span> <span class="o">=</span> <span class="n">Basemap</span><span class="p">(</span><span class="n">llcrnrlon</span><span class="o">=</span><span class="n">lonmin</span><span class="p">,</span><span class="n">llcrnrlat</span><span class="o">=</span><span class="n">latmin</span><span class="p">,</span><span class="n">urcrnrlon</span><span class="o">=</span><span class="n">lonmax</span><span class="p">,</span><span class="n">urcrnrlat</span><span class="o">=</span><span class="n">latmax</span><span class="p">,</span>
-            <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;i&#39;</span><span class="p">,</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;cass&#39;</span><span class="p">,</span><span class="n">lon_0</span><span class="o">=</span><span class="n">lon_0</span><span class="p">,</span><span class="n">lat_0</span><span class="o">=</span><span class="n">lat_0</span><span class="p">)</span>
+    The functions returns a basemap object for coordinates conversion on this
+    file.
 
-    <span class="k">return</span><span class="p">(</span><span class="n">m</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="getbdg"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.getbdg.html#pylayers.gis.osmparser.getbdg">[docs]</a><span class="k">def</span> <span class="nf">getbdg</span><span class="p">(</span><span class="n">fileosm</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; get building from osm file</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
+    &quot;&quot;&quot;
+    latmax = alat.max()
+    latmin = alat.min()
+    lonmax = alon.max()
+    lonmin = alon.min()
+    lon_0=(lonmax+lonmin)/2
+    lat_0=(latmax+latmin)/2
 
-<span class="sd">    fileosm : string</span>
+    command = &#39;osmconvert -b=&#39;+str(lonmin)+&#39;,&#39;\
+            + str(latmin)+&#39;,&#39;+str(lonmax)+&#39;,&#39;\
+            + str(latmax)+&#39; &#39;+fileosm +&#39; &gt; &#39;+ fileout+&#39;.osm&#39;
+    print command
+    os.system(command)
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
+    m = Basemap(llcrnrlon=lonmin,llcrnrlat=latmin,urcrnrlon=lonmax,urcrnrlat=latmax,
+            resolution=&#39;i&#39;,projection=&#39;cass&#39;,lon_0=lon_0,lat_0=lat_0)
 
-<span class="sd">    zone : list of Polygon</span>
+    return(m)</div>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="getbdg"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.getbdg.html#pylayers.gis.osmparser.getbdg">[docs]</a>def getbdg(fileosm,verbose=False):
+    &quot;&quot;&quot; get building from osm file
 
-    <span class="n">coords</span><span class="p">,</span><span class="n">nodes</span><span class="p">,</span><span class="n">ways</span><span class="p">,</span><span class="n">relation</span><span class="p">,</span><span class="n">m</span> <span class="o">=</span> <span class="n">osmparse</span><span class="p">(</span><span class="n">fileosm</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;outdoor&#39;</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-    <span class="n">zone</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">:</span>
-        <span class="n">zone</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">w</span><span class="p">]</span><span class="o">.</span><span class="n">shp</span><span class="p">)</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">zone</span><span class="p">)</span></div>
+    Parameters
+    ----------
 
-<div class="viewcode-block" id="buildingsparse"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.buildingsparse.html#pylayers.gis.osmparser.buildingsparse">[docs]</a><span class="k">def</span> <span class="nf">buildingsparse</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; parse buildings</span>
+    fileosm : string
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
+    Returns
+    -------
 
-<span class="sd">    filename : string</span>
+    zone : list of Polygon
 
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">coords</span><span class="p">,</span><span class="n">nodes</span><span class="p">,</span><span class="n">ways</span><span class="p">,</span><span class="n">relations</span><span class="p">,</span><span class="n">m</span> <span class="o">=</span> <span class="n">osmparse</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">bid</span> <span class="ow">in</span> <span class="n">relations</span><span class="o">.</span><span class="n">relation</span><span class="p">:</span>
-        <span class="n">tags</span> <span class="o">=</span> <span class="n">relations</span><span class="o">.</span><span class="n">relation</span><span class="p">[</span><span class="n">bid</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">tags</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;outdoor&#39;</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s2">&quot;Constructing Indoor building &quot;</span><span class="p">,</span> <span class="n">bid</span>
-            <span class="n">bdg</span> <span class="o">=</span> <span class="n">FloorPlan</span><span class="p">(</span><span class="n">bid</span><span class="p">,</span><span class="n">coords</span><span class="p">,</span><span class="n">nodes</span><span class="p">,</span><span class="n">ways</span><span class="p">,</span><span class="n">relations</span><span class="p">)</span>
-            <span class="n">bdg</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;relation&#39;</span><span class="p">,</span><span class="n">eid</span><span class="o">=</span><span class="n">bid</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">bdg</span><span class="p">,</span><span class="n">m</span></div>
+    &quot;&quot;&quot;
+
+    coords,nodes,ways,relation,m = osmparse(fileosm,typ=&#39;outdoor&#39;,verbose=verbose)
+    zone = []
+    for w in ways.way:
+        zone.append(ways.way[w].shp)
+    return(zone)</div>
+
+<div class="viewcode-block" id="buildingsparse"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.buildingsparse.html#pylayers.gis.osmparser.buildingsparse">[docs]</a>def buildingsparse(filename):
+    &quot;&quot;&quot; parse buildings
+
+    Parameters
+    ----------
+
+    filename : string
+
+    &quot;&quot;&quot;
+    coords,nodes,ways,relations,m = osmparse(filename)
+    for bid in relations.relation:
+        tags = relations.relation[bid][&#39;tags&#39;]
+        if tags[&#39;type&#39;]==&#39;outdoor&#39;:
+            print &quot;Constructing Indoor building &quot;, bid
+            bdg = FloorPlan(bid,coords,nodes,ways,relations)
+            bdg.build(typ=&#39;relation&#39;,eid=bid)
+    return bdg,m</div>
 
 </pre></div>
 
@@ -1156,7 +1160,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 14, 2017.
+      Last updated on Nov 17, 2017.
 
     </p>
   </div>
@@ -1187,7 +1191,7 @@
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

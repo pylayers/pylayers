@@ -34,6 +34,9 @@
   
         <link rel="author" title="About these documents"
               href="../about.html"/>
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="PyLayers" href="../index.html"/>
         <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
 
@@ -144,12 +147,13 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">35&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">36&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">37&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">38&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">39&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id134">40&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -235,7 +239,7 @@
 <td>check an array key has already been stored in h5py file</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.check_grpname" title="pylayers.simul.link.DLink.check_grpname"><code class="xref py py-obj docutils literal"><span class="pre">check_grpname</span></code></a>(key,&nbsp;grpname)</td>
-<td>Check if the key&#8217;s data with a given groupname</td>
+<td>Check if the key’s data with a given groupname</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.checkh5" title="pylayers.simul.link.DLink.checkh5"><code class="xref py py-obj docutils literal"><span class="pre">checkh5</span></code></a>()</td>
 <td>check existence of previous simulations run with the same parameters.</td>
@@ -373,7 +377,7 @@
 <td>check an array key has already been stored in h5py file</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.check_grpname" title="pylayers.simul.link.DLink.check_grpname"><code class="xref py py-obj docutils literal"><span class="pre">check_grpname</span></code></a>(key,&nbsp;grpname)</td>
-<td>Check if the key&#8217;s data with a given groupname</td>
+<td>Check if the key’s data with a given groupname</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.checkh5" title="pylayers.simul.link.DLink.checkh5"><code class="xref py py-obj docutils literal"><span class="pre">checkh5</span></code></a>()</td>
 <td>check existence of previous simulations run with the same parameters.</td>
@@ -545,7 +549,7 @@
 <p><strong>az</strong> : azimuth angle (radian)</p>
 <p><strong>tilt</strong> : tilt angle (-pi/2&lt;tilt&lt;pi/2)</p>
 <p><strong>polar</strong> : string</p>
-<p><strong>win</strong> : string &#8216;rect&#8217; | &#8216;hamming&#8217;</p>
+<p><strong>win</strong> : string ‘rect’ | ‘hamming’</p>
 <p><strong>_filemeas</strong> : string</p>
 <p><strong>_filecal</strong> : string</p>
 <p><strong>ang_offset :</strong></p>
@@ -555,7 +559,7 @@
 </div></blockquote>
 <p><strong>ext</strong> : string</p>
 <blockquote>
-<div><p>&#8216;txt&#8217; | &#8216;mat&#8217;</p>
+<div><p>‘txt’ | ‘mat’</p>
 </div></blockquote>
 <p><strong>dirmeas</strong> : string</p>
 <blockquote class="last">
@@ -588,7 +592,7 @@ otherwise the variable az is used.</p>
 </div></blockquote>
 <p><strong>tol</strong> : np.float64</p>
 <blockquote>
-<div><p>tolerance (in meter for key == &#8216;p_map&#8217;)</p>
+<div><p>tolerance (in meter for key == ‘p_map’)</p>
 </div></blockquote>
 </td>
 </tr>
@@ -596,7 +600,7 @@ otherwise the variable az is used.</p>
 <p><strong>ua</strong> : np.ndarray</p>
 <blockquote class="last">
 <div><p>the indice in the array of the file[key] group
-if the array is emtpy, value doesn&#8217;t exist</p>
+if the array is emtpy, value doesn’t exist</p>
 </div></blockquote>
 </td>
 </tr>
@@ -608,7 +612,7 @@ if the array is emtpy, value doesn&#8217;t exist</p>
 <dt id="pylayers.simul.link.DLink.check_grpname">
 <code class="descname">check_grpname</code><span class="sig-paren">(</span><em>key</em>, <em>grpname</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/simul/link.html#DLink.check_grpname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink.check_grpname" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
-<dt>Check if the key&#8217;s data with a given groupname</dt>
+<dt>Check if the key’s data with a given groupname</dt>
 <dd>already exists in the h5py file</dd>
 </dl>
 <table class="docutils field-list" frame="void" rules="none">
@@ -659,9 +663,9 @@ if the array is emtpy, value doesn&#8217;t exist</p>
 </div></blockquote>
 <p><strong>force</strong> : list</p>
 <blockquote>
-<div><p>Force the computation ([&#8216;sig&#8217;,&#8217;ray2&#8217;,&#8217;ray,&#8217;Ct&#8217;,&#8217;H&#8217;]) AND save (replace previous computations)</p>
+<div><p>Force the computation ([‘sig’,’ray2’,’ray,’Ct’,’H’]) AND save (replace previous computations)</p>
 </div></blockquote>
-<p><strong>alg</strong> : 1|&#8217;old&#8217;|&#8217;exp&#8217;|&#8217;exp2&#8217;</p>
+<p><strong>alg</strong> : 1|’old’|’exp’|’exp2’</p>
 <blockquote>
 <div><p>version of run for signature</p>
 </div></blockquote>
@@ -707,10 +711,10 @@ python : progress bar in ipython</p>
 <p class="rubric">Notes</p>
 <p>update self.ak and self.tk</p>
 <dl class="docutils">
-<dt>self.ak</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">ndarray</span><dd>alpha_k</dd>
-<dt>self.tk</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">ndarray</span><dd>tau_k</dd>
+<dt>self.ak <span class="classifier-delimiter">:</span> <span class="classifier">ndarray</span></dt>
+<dd>alpha_k</dd>
+<dt>self.tk <span class="classifier-delimiter">:</span> <span class="classifier">ndarray</span></dt>
+<dd>tau_k</dd>
 </dl>
 <p class="rubric">Examples</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.simul.link import *
@@ -744,7 +748,7 @@ The self.H variable is updated</p>
 <dd><p>Determine the data group name for the given configuration</p>
 <p class="rubric">Notes</p>
 <p>Update the key grpname of self.dexist[key] dictionnary,
-where key  = &#8216;sig&#8217;|&#8217;ray&#8217;|&#8217;Ct&#8217;|&#8217;H&#8217;</p>
+where key  = ‘sig’|’ray’|’Ct’|’H’</p>
 </dd></dl>
 
 <dl class="method">
@@ -753,7 +757,7 @@ where key  = &#8216;sig&#8217;|&#8217;ray&#8217;|&#8217;Ct&#8217;|&#8217;H&#8217
 <dd><dl class="docutils">
 <dt>try to get the index of the requested array in the group key</dt>
 <dd>of the hdf5 file.
-If array doesn&#8217;t exist, the hdf5file[key] array is stacked</dd>
+If array doesn’t exist, the hdf5file[key] array is stacked</dd>
 </dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -769,7 +773,7 @@ If array doesn&#8217;t exist, the hdf5file[key] array is stacked</dd>
 </div></blockquote>
 <p><strong>tol</strong> : np.float64</p>
 <blockquote>
-<div><p>tolerance (in meters for key == &#8216;p_map&#8217;)</p>
+<div><p>tolerance (in meters for key == ‘p_map’)</p>
 </div></blockquote>
 </td>
 </tr>
@@ -778,10 +782,10 @@ If array doesn&#8217;t exist, the hdf5file[key] array is stacked</dd>
 <blockquote>
 <div><p>the index in the array of the file[key] group</p>
 </div></blockquote>
-<p><strong>u_opt</strong> : string (&#8216;r&#8217;|&#8217;s&#8217;)</p>
+<p><strong>u_opt</strong> : string (‘r’|’s’)</p>
 <blockquote>
-<div><p>return &#8216;r&#8217; if array has been read into h5py file
-return &#8216;s&#8217; if array has been stacked into the array of group key</p>
+<div><p>return ‘r’ if array has been read into h5py file
+return ‘s’ if array has been stacked into the array of group key</p>
 </div></blockquote>
 <p>See Also:</p>
 <p class="last">Links.array_exist</p>
@@ -909,7 +913,7 @@ return &#8216;s&#8217; if array has been stacked into the array of group key</p>
 <div><p>polar representation</p>
 </div></blockquote>
 <p><strong>cmap: matplotlib.cmap</strong></p>
-<p><strong>mode: &#8216;center&#8217; | &#8216;mean&#8217; | &#8216;in&#8217;</strong></p>
+<p><strong>mode: ‘center’ | ‘mean’ | ‘in’</strong></p>
 <blockquote>
 <div><p>see bsignal.energy</p>
 </div></blockquote>
@@ -958,7 +962,7 @@ return &#8216;s&#8217; if array has been stacked into the array of group key</p>
 <div><p>polar representation</p>
 </div></blockquote>
 <p><strong>cmap: matplotlib.cmap</strong></p>
-<p><strong>mode: &#8216;center&#8217; | &#8216;mean&#8217; | &#8216;in&#8217;</strong></p>
+<p><strong>mode: ‘center’ | ‘mean’ | ‘in’</strong></p>
 <blockquote>
 <div><p>see bsignal.energy</p>
 </div></blockquote>
@@ -1031,16 +1035,16 @@ return &#8216;s&#8217; if array has been stacked into the array of group key</p>
 <blockquote>
 <div><p>complete path and filename</p>
 </div></blockquote>
-<p><strong>&#8216;sig&#8217;</strong> : Signatures</p>
-<p><strong>&#8216;ray2&#8217;</strong> : 2D rays</p>
-<p><strong>&#8216;ray&#8217;</strong> : 3D rays</p>
-<p><strong>&#8216;Ct&#8217;</strong> : Propagation channel</p>
-<p><strong>&#8216;H&#8217;</strong> : Transmission channel</p>
-<p><strong>&#8216;p_map&#8217;</strong> : points</p>
-<p><strong>&#8216;c_map&#8217;</strong> : cycles</p>
-<p><strong>&#8216;f_map&#8217;</strong> : frequency</p>
-<p><strong>&#8216;A_map&#8217;</strong> : antennas</p>
-<p class="last"><strong>&#8216;T_map&#8217;</strong> : rotation</p>
+<p><strong>‘sig’</strong> : Signatures</p>
+<p><strong>‘ray2’</strong> : 2D rays</p>
+<p><strong>‘ray’</strong> : 3D rays</p>
+<p><strong>‘Ct’</strong> : Propagation channel</p>
+<p><strong>‘H’</strong> : Transmission channel</p>
+<p><strong>‘p_map’</strong> : points</p>
+<p><strong>‘c_map’</strong> : cycles</p>
+<p><strong>‘f_map’</strong> : frequency</p>
+<p><strong>‘A_map’</strong> : antennas</p>
+<p class="last"><strong>‘T_map’</strong> : rotation</p>
 </td>
 </tr>
 </tbody>
@@ -1111,11 +1115,11 @@ return &#8216;s&#8217; if array has been stacked into the array of group key</p>
 </div></blockquote>
 <p><strong>pol</strong> : string</p>
 <blockquote>
-<div><p>&#8216;tt&#8217;,&#8217;pp&#8217;,&#8217;tp&#8217;,&#8217;pt&#8217;,&#8217;co&#8217;,&#8217;cross&#8217;,tot&#8217;</p>
+<div><p>‘tt’,’pp’,’tp’,’pt’,’co’,’cross’,tot’</p>
 </div></blockquote>
 <p><strong>col</strong> : string</p>
 <blockquote>
-<div><p>&#8216;cmap&#8217;</p>
+<div><p>‘cmap’</p>
 </div></blockquote>
 <p><strong>width</strong> : float</p>
 <p><strong>alpha</strong> : float</p>
@@ -1180,7 +1184,7 @@ return &#8216;s&#8217; if array has been stacked into the array of group key</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 14, 2017.
+      Last updated on Nov 17, 2017.
 
     </p>
   </div>
@@ -1211,7 +1215,7 @@ return &#8216;s&#8217; if array has been stacked into the array of group key</p>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

@@ -34,6 +34,9 @@
   
         <link rel="author" title="About these documents"
               href="../about.html"/>
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="PyLayers" href="../index.html"/>
         <link rel="up" title="1   pylayers.util.project Module" href="references.html"/>
         <link rel="next" title="Noise" href="pylayers.signal.bsignal.Noise.html"/> 
@@ -159,6 +162,13 @@
 <li class="toctree-l2"><a class="reference internal" href="references.html#id117">34.11&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -223,7 +233,7 @@
 <td>(nd.array((1xN)))</td>
 </tr>
 <tr class="row-even"><td>y</td>
-<td>(Complex nd.array((... x N ))</td>
+<td>(Complex nd.array((… x N ))</td>
 </tr>
 </tbody>
 </table>
@@ -279,7 +289,7 @@
 <td>(align two FUsignal on a same frequency base)</td>
 </tr>
 <tr class="row-even"><td>window   :</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 </tr>
 </tbody>
 </table>
@@ -365,7 +375,7 @@
 <code class="descname">decimate</code><span class="sig-paren">(</span><em>N=2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.decimate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.decimate" title="Permalink to this definition">¶</a></dt>
 <dd><p>decimate FUsignal by N
 Parameters
-&#8212;&#8212;&#8212;-
+———-
 N : int</p>
 <blockquote>
 <div>decimation factor (default 2)</div></blockquote>
@@ -407,11 +417,11 @@ N : int</p>
 <p>If Friis is true energy is multiplied by</p>
 <p><span class="math">\(\frac{-j*c}{4 pi fGHz}\)</span></p>
 <p>axis = 0 is ray axis</p>
-<p>if mode == &#8216;mean&#8217;</p>
+<p>if mode == ‘mean’</p>
 <p><span class="math">\(E=\frac{1}{K} \sum_k |y_k|^2\)</span></p>
-<p>if mode == &#8216;integ&#8217;</p>
+<p>if mode == ‘integ’</p>
 <p><span class="math">\(E=\delta_x \sum_k |y_k|^2\)</span></p>
-<p>if mode == &#8216;center&#8217;</p>
+<p>if mode == ‘center’</p>
 <p><span class="math">\(E= |y_{K/2}|^2\)</span></p>
 <p class="rubric">Examples</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; ip = TUsignal()
@@ -514,7 +524,7 @@ N : int</p>
 <p class="last"><a class="reference internal" href="pylayers.signal.bsignal.FHsignal.html#pylayers.signal.bsignal.FHsignal.ifft" title="pylayers.signal.bsignal.FHsignal.ifft"><code class="xref py py-obj docutils literal"><span class="pre">FHsignal.ifft</span></code></a>, <a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.symH" title="pylayers.signal.bsignal.FUsignal.symH"><code class="xref py py-obj docutils literal"><span class="pre">FUsignal.symH</span></code></a>, <a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal.symHz" title="pylayers.signal.bsignal.FUsignal.symHz"><code class="xref py py-obj docutils literal"><span class="pre">FUsignal.symHz</span></code></a></p>
 </div>
 <p class="rubric">Notes</p>
-<p>1 - Force Hermitian symmetry &#8211;&gt; FHsignal with or without zero padding
+<p>1 - Force Hermitian symmetry –&gt; FHsignal with or without zero padding
 2 - Inverse Fourier transform with or without fftshift</p>
 <p class="rubric">Examples</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.signal.bsignal import *
@@ -548,7 +558,7 @@ N : int</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>df</strong></p>
 <p><strong>Returns</strong></p>
-<p><strong>&#8212;&#8212;-</strong></p>
+<p><strong>——-</strong></p>
 <blockquote class="last">
 <div><p>U : FUsignal</p>
 </div></blockquote>
@@ -602,7 +612,7 @@ cmap : colormap</p>
 </div></blockquote>
 <p><strong>scale</strong> : string</p>
 <blockquote>
-<div><p>default : &#8216;extract&#8217; | &#8216;cir&#8217;</p>
+<div><p>default : ‘extract’ | ‘cir’</p>
 </div></blockquote>
 </td>
 </tr>
@@ -708,7 +718,7 @@ mathbb{W}_u}right]`</div></blockquote>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 08, 2017.
+      Last updated on Nov 17, 2017.
 
     </p>
   </div>
@@ -739,7 +749,7 @@ mathbb{W}_u}right]`</div></blockquote>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

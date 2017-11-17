@@ -34,6 +34,9 @@
   
         <link rel="author" title="About these documents"
               href="../../../about.html"/>
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
     <link rel="top" title="PyLayers" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
@@ -133,12 +136,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.device">35&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.DF">36&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">37&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">38&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">39&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id134">40&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -184,278 +188,278 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pylayers.antprop.antssh</h1><div class="highlight"><pre>
-<span></span><span class="c1">#from pylayers.antprop.antenna import *</span>
-<span class="c1">#from pylayers.antprop.antvsh import *</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">.. currentmodule:: pylayers.antprop.antssh</span>
+<span></span>#from pylayers.antprop.antenna import *
+#from pylayers.antprop.antvsh import *
+&quot;&quot;&quot;
+.. currentmodule:: pylayers.antprop.antssh
 
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :members:</span>
+.. autosummary::
+    :members:
 
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
-<span class="kn">import</span> <span class="nn">doctest</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">glob</span>
-<span class="kn">from</span> <span class="nn">pylayers.antprop.spharm</span> <span class="kn">import</span> <span class="o">*</span>
+&quot;&quot;&quot;
+from __future__ import print_function
+import doctest
+import os
+import glob
+from pylayers.antprop.spharm import *
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
-<span class="kn">import</span> <span class="nn">pdb</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">doctest</span>
-
-
-<div class="viewcode-block" id="SSHFunc"><a class="viewcode-back" href="../../../api/pylayers.antprop.antssh.SSHFunc.html#pylayers.antprop.antssh.SSHFunc">[docs]</a><span class="k">def</span> <span class="nf">SSHFunc</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; ssh function</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-
-<span class="sd">    L : integer,</span>
-<span class="sd">        spherical harmonics order</span>
-<span class="sd">    theta: numpy array (1,nth)</span>
-<span class="sd">    phi: numpy array (1,nph)</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-
-<span class="sd">    Y : np.array</span>
-<span class="sd">        ((1+L)*(2+L)/2,nth*nph)</span>
-<span class="sd">    indx : np.array</span>
+import numpy as np
+import scipy as sp
+import pdb
+import sys
+import matplotlib.pyplot as plt
+import doctest
 
 
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
+<div class="viewcode-block" id="SSHFunc"><a class="viewcode-back" href="../../../api/pylayers.antprop.antssh.SSHFunc.html#pylayers.antprop.antssh.SSHFunc">[docs]</a>def SSHFunc(L, theta,phi):
+    &quot;&quot;&quot; ssh function
 
-<span class="sd">    Compute the spherical harmonic functions for the order L</span>
-<span class="sd">    return a spherical matrix ((1+L)*(2+L)/2,nth*nph) and the index (l,m) of the shperical harmonics</span>
+    Parameters
+    ----------
 
-<span class="sd">    &quot;&quot;&quot;</span>
+    L : integer,
+        spherical harmonics order
+    theta: numpy array (1,nth)
+    phi: numpy array (1,nph)
 
-    <span class="n">l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,(</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">))</span>
-    <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(((</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">),</span><span class="mi">1</span><span class="p">))</span>
-    <span class="c1"># normalize the associated Legendre polynoms</span>
-    <span class="n">NRM</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="mi">2</span><span class="o">*</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">factorial</span><span class="p">(</span><span class="n">l</span><span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="n">m</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">factorial</span><span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="nb">abs</span><span class="p">(</span><span class="n">m</span><span class="p">))))</span>
-    <span class="n">NRM</span> <span class="o">=</span> <span class="n">NRM</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">,</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
-    <span class="c1"># compute the associated Legendre polynoms part Plm(cos(theta))</span>
-    <span class="n">ll</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,(</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">mm</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">reshape</span><span class="p">(((</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">),</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
-    <span class="n">x</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)))</span>
-    <span class="n">PLM</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">lpmv</span><span class="p">(</span><span class="n">mm</span><span class="p">,</span><span class="n">ll</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
-    <span class="c1"># Normalize</span>
-    <span class="n">NPLM</span> <span class="o">=</span> <span class="n">NRM</span><span class="o">*</span><span class="n">PLM</span>
-    <span class="n">NPLM</span> <span class="o">=</span> <span class="n">NPLM</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">,</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span><span class="mi">1</span><span class="p">))</span>
-    <span class="c1"># compute the exp(j*m*phi) part</span>
-    <span class="n">PHI</span> <span class="o">=</span> <span class="n">phi</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">phi</span><span class="p">)))</span>
-    <span class="n">mm</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">reshape</span><span class="p">(((</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">),</span><span class="mi">1</span><span class="p">))</span>
-    <span class="n">EXP</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1j</span><span class="o">*</span><span class="n">mm</span><span class="o">*</span><span class="n">PHI</span><span class="p">)</span>
-    <span class="n">EXP</span> <span class="o">=</span> <span class="n">EXP</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">phi</span><span class="p">)))</span>
-    <span class="c1"># Compute Y : the spherical harmonics matrix and reshaping it</span>
-    <span class="n">Yi</span><span class="o">=</span> <span class="n">NPLM</span><span class="o">*</span><span class="n">EXP</span>
-    <span class="n">Yi</span> <span class="o">=</span> <span class="n">Yi</span><span class="o">.</span><span class="n">reshape</span><span class="p">(((</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">phi</span><span class="p">)))</span>
-    <span class="c1">#~ Y = Yi</span>
-    <span class="n">nzero_rows</span> <span class="o">=</span> <span class="n">Yi</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">Y</span>  <span class="o">=</span> <span class="n">Yi</span><span class="p">[</span><span class="n">nzero_rows</span><span class="p">]</span> <span class="c1"># eliminating the undefined functions (Y01)</span>
-    <span class="n">ll</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">,</span><span class="mi">1</span><span class="p">)))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(((</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
-    <span class="n">mm</span> <span class="o">=</span> <span class="p">(</span><span class="n">m</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">)))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(((</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
-    <span class="c1"># spherical harmonics index</span>
-    <span class="c1">#~ indx = np.array([ll[nzero_rows],mm[nzero_rows]]).T</span>
-    <span class="n">indx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ll</span><span class="p">[</span><span class="n">nzero_rows</span><span class="p">],</span><span class="n">mm</span><span class="p">[</span><span class="n">nzero_rows</span><span class="p">]])</span><span class="o">.</span><span class="n">T</span>
-    <span class="n">Y2</span> <span class="o">=</span> <span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="n">indx</span><span class="p">[</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">:,</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">indx</span><span class="p">[</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">:,</span><span class="mi">1</span><span class="p">]),</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">Y</span><span class="p">[</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">:,:])</span>
-    <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span><span class="n">Y2</span><span class="p">,</span> <span class="n">axis</span>  <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">indx2</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">indx</span><span class="p">[</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">:,</span><span class="mi">0</span><span class="p">],(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">indx</span><span class="p">[</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">:,</span><span class="mi">1</span><span class="p">]])</span><span class="o">.</span><span class="n">T</span>
-    <span class="n">indx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">indx</span><span class="p">,</span><span class="n">indx2</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">Y</span><span class="p">,</span>  <span class="n">indx</span></div>
+    Returns
+    -------
 
-<div class="viewcode-block" id="SSHFunc2"><a class="viewcode-back" href="../../../api/pylayers.antprop.antssh.SSHFunc2.html#pylayers.antprop.antssh.SSHFunc2">[docs]</a><span class="k">def</span> <span class="nf">SSHFunc2</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; ssh function version 2</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-
-<span class="sd">    L : integer,</span>
-<span class="sd">        spherical harmonics order</span>
-<span class="sd">    theta: numpy array(1,ndir)</span>
-<span class="sd">    phi: numpy array(1,ndir)</span>
-
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-
-<span class="sd">    theta and phi should have the same dimensions which represents the rays</span>
-<span class="sd">    Compute the spherical harmonic functions for the order L</span>
-<span class="sd">    return a spherical matrix ((1+L)*(2+L)/2,ndir) and the index (l,m) of the shperical harmonics</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">nray</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
-    <span class="n">l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,(</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">))</span>
-    <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(((</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">),</span><span class="mi">1</span><span class="p">))</span>
-    <span class="c1"># normalize the associated legendre polynoms</span>
-    <span class="n">NRM</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="mi">2</span><span class="o">*</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">factorial</span><span class="p">(</span><span class="n">l</span><span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="n">m</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">factorial</span><span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="nb">abs</span><span class="p">(</span><span class="n">m</span><span class="p">))))</span>
-    <span class="n">NRM</span> <span class="o">=</span> <span class="n">NRM</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">,</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
-    <span class="c1"># compute the associated legendre polynoms part Plm(cos(theta))</span>
-    <span class="n">ll</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,(</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">mm</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">reshape</span><span class="p">(((</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">),</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
-    <span class="n">x</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="n">nray</span><span class="p">))</span>
-    <span class="n">PLM</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">lpmv</span><span class="p">(</span><span class="n">mm</span><span class="p">,</span><span class="n">ll</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
-    <span class="c1"># Normalize</span>
-    <span class="n">NPLM</span> <span class="o">=</span> <span class="n">NRM</span><span class="o">*</span><span class="n">PLM</span>
-    <span class="n">NPLM</span> <span class="o">=</span> <span class="n">NPLM</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">,</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">,</span><span class="n">nray</span><span class="p">))</span>
-    <span class="c1"># compute the exp(j*m*phi) part</span>
-    <span class="n">PHI</span> <span class="o">=</span> <span class="n">phi</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="n">nray</span><span class="p">))</span>
-    <span class="n">mm</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">reshape</span><span class="p">(((</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">),</span><span class="mi">1</span><span class="p">))</span>
-    <span class="n">EXP</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1j</span><span class="o">*</span><span class="n">mm</span><span class="o">*</span><span class="n">PHI</span><span class="p">)</span>
-    <span class="n">EXP</span> <span class="o">=</span> <span class="n">EXP</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">nray</span><span class="p">))</span>
-    <span class="c1"># Compute Y : the spherical harmonics matrix and reshaping it</span>
-    <span class="n">Yi</span><span class="o">=</span> <span class="n">NPLM</span><span class="o">*</span><span class="n">EXP</span>
-    <span class="n">Yi</span> <span class="o">=</span> <span class="n">Yi</span><span class="o">.</span><span class="n">reshape</span><span class="p">(((</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">nray</span><span class="p">))</span>
-    <span class="c1">#~ Y = Yi</span>
-    <span class="n">nzero_rows</span> <span class="o">=</span> <span class="n">Yi</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">Y</span> <span class="o">=</span> <span class="n">Yi</span><span class="p">[</span><span class="n">nzero_rows</span><span class="p">]</span> <span class="c1"># eliminating the non defined functions (Y01)</span>
-    <span class="n">ll</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">,</span><span class="mi">1</span><span class="p">)))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(((</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
-    <span class="n">mm</span> <span class="o">=</span> <span class="p">(</span><span class="n">m</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">)))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(((</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
-    <span class="c1"># spherical harmonics index</span>
-    <span class="c1">#~ indx = np.array([ll[nzero_rows],mm[nzero_rows]]).T</span>
-    <span class="n">indx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ll</span><span class="p">[</span><span class="n">nzero_rows</span><span class="p">],</span><span class="n">mm</span><span class="p">[</span><span class="n">nzero_rows</span><span class="p">]])</span><span class="o">.</span><span class="n">T</span>
-    <span class="n">Y2</span> <span class="o">=</span> <span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="n">indx</span><span class="p">[</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">:,</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">indx</span><span class="p">[</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">:,</span><span class="mi">1</span><span class="p">]),</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">Y</span><span class="p">[</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">:,:])</span>
-    <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span><span class="n">Y2</span><span class="p">,</span> <span class="n">axis</span>  <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">indx2</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">indx</span><span class="p">[</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">:,</span><span class="mi">0</span><span class="p">],(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">indx</span><span class="p">[</span><span class="mi">1</span><span class="o">+</span><span class="n">L</span><span class="p">:,</span><span class="mi">1</span><span class="p">]])</span><span class="o">.</span><span class="n">T</span>
-    <span class="n">indx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">indx</span><span class="p">,</span><span class="n">indx2</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">Y</span><span class="p">,</span> <span class="n">indx</span></div>
-
-<div class="viewcode-block" id="SphereToCart"><a class="viewcode-back" href="../../../api/pylayers.antprop.antssh.SphereToCart.html#pylayers.antprop.antssh.SphereToCart">[docs]</a><span class="k">def</span> <span class="nf">SphereToCart</span> <span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">eth</span><span class="p">,</span> <span class="n">eph</span><span class="p">,</span> <span class="n">bfreq</span> <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Spherical to Cartesian</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-
-<span class="sd">    theta :</span>
-<span class="sd">    phi   :</span>
-<span class="sd">    eth   :</span>
-<span class="sd">    eph   :</span>
-<span class="sd">    bfreq: boolean</span>
-<span class="sd">        indicate if the conversion is done for all frequencies or only one.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">if</span> <span class="n">bfreq</span> <span class="o">==</span> <span class="bp">False</span><span class="p">:</span>
-        <span class="n">PHI</span> <span class="o">=</span> <span class="n">phi</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">phi</span><span class="p">)))</span>
-        <span class="n">THETA</span> <span class="o">=</span> <span class="n">theta</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span><span class="mi">1</span><span class="p">))</span>
-        <span class="n">ec</span> <span class="o">=</span> <span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="n">phi</span><span class="p">))</span> <span class="p">,</span> <span class="n">dtype</span>  <span class="o">=</span> <span class="nb">complex</span>  <span class="p">)</span>
-
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">PHI</span> <span class="o">=</span> <span class="n">phi</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">phi</span><span class="p">),</span><span class="mi">1</span><span class="p">))</span>
-        <span class="n">THETA</span> <span class="o">=</span> <span class="n">theta</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
-        <span class="n">ec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="n">phi</span><span class="p">),</span><span class="n">eth</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="p">)</span> <span class="p">,</span> <span class="n">dtype</span>  <span class="o">=</span> <span class="nb">complex</span>  <span class="p">)</span>
+    Y : np.array
+        ((1+L)*(2+L)/2,nth*nph)
+    indx : np.array
 
 
-    <span class="n">ec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">THETA</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">PHI</span><span class="p">)</span><span class="o">*</span><span class="n">eth</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">PHI</span><span class="p">)</span><span class="o">*</span><span class="n">eph</span>
-    <span class="n">ec</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">THETA</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">PHI</span><span class="p">)</span><span class="o">*</span><span class="n">eth</span> <span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">PHI</span><span class="p">)</span><span class="o">*</span><span class="n">eph</span>
-    <span class="n">ec</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">THETA</span><span class="p">)</span><span class="o">*</span><span class="n">eth</span>
+    Notes
+    -----
 
-    <span class="k">return</span> <span class="n">ec</span></div>
+    Compute the spherical harmonic functions for the order L
+    return a spherical matrix ((1+L)*(2+L)/2,nth*nph) and the index (l,m) of the shperical harmonics
 
-<div class="viewcode-block" id="CartToSphere"><a class="viewcode-back" href="../../../api/pylayers.antprop.antssh.CartToSphere.html#pylayers.antprop.antssh.CartToSphere">[docs]</a><span class="k">def</span> <span class="nf">CartToSphere</span> <span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span><span class="n">ex</span><span class="p">,</span><span class="n">ey</span><span class="p">,</span><span class="n">ez</span><span class="p">,</span> <span class="n">bfreq</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">pattern</span> <span class="o">=</span> <span class="bp">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Convert from Cartesian to Spherical</span>
+    &quot;&quot;&quot;
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    theta</span>
-<span class="sd">    phi</span>
-<span class="sd">    ex</span>
-<span class="sd">    ey</span>
-<span class="sd">    ez</span>
-<span class="sd">    bfreq  : boolean</span>
-<span class="sd">    pattern : boolean</span>
+    l = np.arange(0,1+L).reshape(1,(1+L))
+    m = np.arange(0,1+L).reshape(((1+L),1))
+    # normalize the associated Legendre polynoms
+    NRM = np.sqrt((2*l+1)*factorial(l-abs(m))/(4*np.pi*factorial(l+abs(m))))
+    NRM = NRM.reshape((1+L,1+L,1))
+    # compute the associated Legendre polynoms part Plm(cos(theta))
+    ll = l.reshape(1,(1+L),1)
+    mm = m.reshape(((1+L),1,1))
+    x  = np.cos(theta).reshape((1,1, len(theta)))
+    PLM = sp.special.lpmv(mm,ll,x)
+    # Normalize
+    NPLM = NRM*PLM
+    NPLM = NPLM.reshape((1+L,1+L,len(theta),1))
+    # compute the exp(j*m*phi) part
+    PHI = phi.reshape((1,len(phi)))
+    mm = m.reshape(((1+L),1))
+    EXP = np.exp(1j*mm*PHI)
+    EXP = EXP.reshape((1+L,1,1,len(phi)))
+    # Compute Y : the spherical harmonics matrix and reshaping it
+    Yi= NPLM*EXP
+    Yi = Yi.reshape(((1+L)**2,len(theta)*len(phi)))
+    #~ Y = Yi
+    nzero_rows = Yi.any(axis = 1)
+    Y  = Yi[nzero_rows] # eliminating the undefined functions (Y01)
+    ll = (l*np.ones((1+L,1))).reshape(((1+L)**2))
+    mm = (m*np.ones((1,1+L))).reshape(((1+L)**2))
+    # spherical harmonics index
+    #~ indx = np.array([ll[nzero_rows],mm[nzero_rows]]).T
+    indx = np.array([ll[nzero_rows],mm[nzero_rows]]).T
+    Y2 = ((-1)**indx[1+L:,1]).reshape((len(indx[1+L:,1]),1))*np.conj(Y[1+L:,:])
+    Y = np.append(Y,Y2, axis  = 0)
+    indx2 =  np.array([indx[1+L:,0],(-1)*indx[1+L:,1]]).T
+    indx = np.append(indx,indx2, axis = 0)
+    return Y,  indx</div>
 
-<span class="sd">    Convert from cartesian to spherical  coordinates</span>
-<span class="sd">    bfreq : boolean parameter to indicate if the conversion is done for all frequencies of only one.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="SSHFunc2"><a class="viewcode-back" href="../../../api/pylayers.antprop.antssh.SSHFunc2.html#pylayers.antprop.antssh.SSHFunc2">[docs]</a>def SSHFunc2(L, theta,phi):
+    &quot;&quot;&quot; ssh function version 2
 
-    <span class="n">nray</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    Parameters
+    ----------
 
-    <span class="k">if</span> <span class="n">bfreq</span> <span class="o">==</span> <span class="bp">False</span><span class="p">:</span>
-        <span class="n">es</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">nray</span><span class="p">)</span> <span class="p">,</span> <span class="n">dtype</span>  <span class="o">=</span> <span class="nb">complex</span>  <span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">es</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">ex</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nray</span><span class="p">)</span> <span class="p">,</span> <span class="n">dtype</span>  <span class="o">=</span> <span class="nb">complex</span>  <span class="p">)</span>
+    L : integer,
+        spherical harmonics order
+    theta: numpy array(1,ndir)
+    phi: numpy array(1,ndir)
 
-    <span class="n">es</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span><span class="o">*</span><span class="n">ex</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span><span class="o">*</span><span class="n">ey</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="n">ez</span>
-    <span class="n">es</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span><span class="o">*</span><span class="n">ex</span> <span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span><span class="o">*</span><span class="n">ey</span>
+    Notes
+    -----
 
-    <span class="k">return</span> <span class="n">es</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">es</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
+    theta and phi should have the same dimensions which represents the rays
+    Compute the spherical harmonic functions for the order L
+    return a spherical matrix ((1+L)*(2+L)/2,ndir) and the index (l,m) of the shperical harmonics
 
+    &quot;&quot;&quot;
 
-<div class="viewcode-block" id="ssh"><a class="viewcode-back" href="../../../api/pylayers.antprop.antssh.ssh.html#pylayers.antprop.antssh.ssh">[docs]</a><span class="k">def</span> <span class="nf">ssh</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">L</span><span class="o">=</span> <span class="mi">20</span><span class="p">,</span><span class="n">dsf</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    nray = len(theta)
+    l = np.arange(0,1+L).reshape(1,(1+L))
+    m = np.arange(0,1+L).reshape(((1+L),1))
+    # normalize the associated legendre polynoms
+    NRM = np.sqrt((2*l+1)*factorial(l-abs(m))/(4*np.pi*factorial(l+abs(m))))
+    NRM = NRM.reshape((1+L,1+L,1))
+    # compute the associated legendre polynoms part Plm(cos(theta))
+    ll = l.reshape(1,(1+L),1)
+    mm = m.reshape(((1+L),1,1))
+    x  = np.cos(theta).reshape((1,1, nray))
+    PLM = sp.special.lpmv(mm,ll,x)
+    # Normalize
+    NPLM = NRM*PLM
+    NPLM = NPLM.reshape((1+L,1+L,nray))
+    # compute the exp(j*m*phi) part
+    PHI = phi.reshape((1,nray))
+    mm = m.reshape(((1+L),1))
+    EXP = np.exp(1j*mm*PHI)
+    EXP = EXP.reshape((1+L,1,nray))
+    # Compute Y : the spherical harmonics matrix and reshaping it
+    Yi= NPLM*EXP
+    Yi = Yi.reshape(((1+L)**2,nray))
+    #~ Y = Yi
+    nzero_rows = Yi.any(axis = 1)
+    Y = Yi[nzero_rows] # eliminating the non defined functions (Y01)
+    ll = (l*np.ones((1+L,1))).reshape(((1+L)**2))
+    mm = (m*np.ones((1,1+L))).reshape(((1+L)**2))
+    # spherical harmonics index
+    #~ indx = np.array([ll[nzero_rows],mm[nzero_rows]]).T
+    indx = np.array([ll[nzero_rows],mm[nzero_rows]]).T
+    Y2 = ((-1)**indx[1+L:,1]).reshape((len(indx[1+L:,1]),1))*np.conj(Y[1+L:,:])
+    Y = np.append(Y,Y2, axis  = 0)
+    indx2 =  np.array([indx[1+L:,0],(-1)*indx[1+L:,1]]).T
+    indx = np.append(indx,indx2, axis = 0)
+    return Y, indx</div>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
+<div class="viewcode-block" id="SphereToCart"><a class="viewcode-back" href="../../../api/pylayers.antprop.antssh.SphereToCart.html#pylayers.antprop.antssh.SphereToCart">[docs]</a>def SphereToCart (theta, phi, eth, eph, bfreq ):
+    &quot;&quot;&quot; Spherical to Cartesian
 
-<span class="sd">    A   :  antenna</span>
-<span class="sd">    dsf :  int</span>
-<span class="sd">        down sampling factor  &#39;default 1&#39;</span>
+    Parameters
+    ----------
 
-<span class="sd">    Summary</span>
-<span class="sd">    -------</span>
+    theta :
+    phi   :
+    eth   :
+    eph   :
+    bfreq: boolean
+        indicate if the conversion is done for all frequencies or only one.
 
-<span class="sd">    This function calculates the Scalar Spherical Harmonics coefficients</span>
+    &quot;&quot;&quot;
 
-<span class="sd">        m : phi    longitude</span>
-<span class="sd">        l : theta  latitude</span>
+    if bfreq == False:
+        PHI = phi.reshape((1,len(phi)))
+        THETA = theta.reshape((len(theta),1))
+        ec = ndarray(shape = (3, len(theta),len(phi)) , dtype  = complex  )
 
-<span class="sd">    Antenna pattern are stored       (f theta phi)</span>
-<span class="sd">    Coeff are stored with this order (f , l , m )</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">th</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">theta</span><span class="p">[::</span><span class="n">dsf</span><span class="p">]</span>
-    <span class="n">ph</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">phi</span><span class="p">[::</span><span class="n">dsf</span><span class="p">]</span>
-    <span class="n">nth</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">th</span><span class="p">)</span>
-    <span class="n">nph</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ph</span><span class="p">)</span>
-    <span class="n">nf</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">nf</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">nph</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">mdab</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">nth</span><span class="p">,</span> <span class="p">(</span><span class="n">nph</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">mdab</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">nth</span><span class="p">,</span> <span class="n">nph</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-
-    <span class="n">ndab</span> <span class="o">=</span> <span class="n">nth</span>
-
-
-    <span class="n">Etheta</span>  <span class="o">=</span>  <span class="n">A</span><span class="o">.</span><span class="n">Ft</span><span class="p">[::</span><span class="n">dsf</span><span class="p">,::</span><span class="n">dsf</span><span class="p">,:]</span>
-    <span class="n">Ephi</span>    <span class="o">=</span>  <span class="n">A</span><span class="o">.</span><span class="n">Fp</span><span class="p">[::</span><span class="n">dsf</span><span class="p">,::</span><span class="n">dsf</span><span class="p">,:]</span>
-
-    <span class="c1"># compute the spherical harmonics functions at the order L</span>
-    <span class="n">Y</span><span class="p">,</span><span class="n">ssh_index</span>  <span class="o">=</span> <span class="n">SSHFunc</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">th</span><span class="p">,</span><span class="n">ph</span><span class="p">)</span>
-    <span class="c1"># Compute the pseudo inverse of Y</span>
-    <span class="n">Ypinv</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
-
-    <span class="c1"># convert the field from spherical to cartesian coordinates system</span>
-    <span class="n">Ex</span><span class="p">,</span><span class="n">Ey</span><span class="p">,</span><span class="n">Ez</span> <span class="o">=</span> <span class="n">SphereToCart</span> <span class="p">(</span><span class="n">th</span><span class="p">,</span> <span class="n">ph</span><span class="p">,</span> <span class="n">Etheta</span><span class="p">,</span> <span class="n">Ephi</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
-    <span class="c1">#</span>
-    <span class="n">Ex</span> <span class="o">=</span> <span class="n">Ex</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">nf</span><span class="p">,</span><span class="n">nth</span><span class="o">*</span><span class="n">nph</span><span class="p">))</span>
-    <span class="n">Ey</span> <span class="o">=</span> <span class="n">Ey</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">nf</span><span class="p">,</span><span class="n">nth</span><span class="o">*</span><span class="n">nph</span><span class="p">))</span>
-    <span class="n">Ez</span> <span class="o">=</span> <span class="n">Ez</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">nf</span><span class="p">,</span><span class="n">nth</span><span class="o">*</span><span class="n">nph</span><span class="p">))</span>
-
-    <span class="n">cx</span>  <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Ex</span><span class="p">,</span><span class="n">Ypinv</span><span class="p">)</span>
-    <span class="n">cy</span>  <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Ey</span><span class="p">,</span><span class="n">Ypinv</span><span class="p">)</span>
-    <span class="n">cz</span>  <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Ez</span><span class="p">,</span><span class="n">Ypinv</span><span class="p">)</span>
-    <span class="n">lmax</span> <span class="o">=</span> <span class="n">L</span>
-
-    <span class="n">Cx</span> <span class="o">=</span> <span class="n">SCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;s2&#39;</span><span class="p">,</span><span class="n">fmin</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">fmax</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">lmax</span><span class="o">=</span><span class="n">lmax</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">cx</span><span class="p">,</span><span class="n">ind</span><span class="o">=</span><span class="n">ssh_index</span><span class="p">)</span>
-    <span class="n">Cy</span> <span class="o">=</span> <span class="n">SCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;s2&#39;</span><span class="p">,</span><span class="n">fmin</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">fmax</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">lmax</span><span class="o">=</span><span class="n">lmax</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">cy</span><span class="p">,</span><span class="n">ind</span><span class="o">=</span><span class="n">ssh_index</span><span class="p">)</span>
-    <span class="n">Cz</span> <span class="o">=</span> <span class="n">SCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;s2&#39;</span><span class="p">,</span><span class="n">fmin</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">fmax</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">lmax</span><span class="o">=</span><span class="n">lmax</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">cz</span><span class="p">,</span><span class="n">ind</span><span class="o">=</span><span class="n">ssh_index</span><span class="p">)</span>
-
-    <span class="n">A</span><span class="o">.</span><span class="n">S</span> <span class="o">=</span> <span class="n">SSHCoeff</span><span class="p">(</span><span class="n">Cx</span><span class="p">,</span><span class="n">Cy</span><span class="p">,</span><span class="n">Cz</span><span class="p">)</span>
-
-
-    <span class="k">return</span><span class="p">(</span><span class="n">A</span><span class="p">)</span></div>
+    else:
+        PHI = phi.reshape((1,len(phi),1))
+        THETA = theta.reshape((len(theta),1,1))
+        ec = np.ndarray(shape = (3, len(theta),len(phi),eth.shape[-1] ) , dtype  = complex  )
 
 
-<span class="k">if</span> <span class="p">(</span><span class="n">__name__</span><span class="o">==</span><span class="s2">&quot;__main__&quot;</span><span class="p">):</span>
-    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+    ec[0] = np.cos(THETA)*np.cos(PHI)*eth -np.sin(PHI)*eph
+    ec[1] = np.cos(THETA)*np.sin(PHI)*eth +np.cos(PHI)*eph
+    ec[2] = -np.sin(THETA)*eth
+
+    return ec</div>
+
+<div class="viewcode-block" id="CartToSphere"><a class="viewcode-back" href="../../../api/pylayers.antprop.antssh.CartToSphere.html#pylayers.antprop.antssh.CartToSphere">[docs]</a>def CartToSphere (theta, phi,ex,ey,ez, bfreq=True, pattern = True):
+    &quot;&quot;&quot; Convert from Cartesian to Spherical
+
+    Parameters
+    ----------
+    theta
+    phi
+    ex
+    ey
+    ez
+    bfreq  : boolean
+    pattern : boolean
+
+    Convert from cartesian to spherical  coordinates
+    bfreq : boolean parameter to indicate if the conversion is done for all frequencies of only one.
+    &quot;&quot;&quot;
+
+    nray = len(theta)
+
+    if bfreq == False:
+        es = np.ndarray(shape = (2, nray) , dtype  = complex  )
+    else:
+        es = np.ndarray(shape = (2, ex.shape[0], nray) , dtype  = complex  )
+
+    es[0] = np.cos(theta)*np.cos(phi)*ex + np.cos(theta)*np.sin(phi)*ey -np.sin(theta)*ez
+    es[1] = -np.sin(phi)*ex +np.cos(phi)*ey
+
+    return es[0],es[1]</div>
+
+
+<div class="viewcode-block" id="ssh"><a class="viewcode-back" href="../../../api/pylayers.antprop.antssh.ssh.html#pylayers.antprop.antssh.ssh">[docs]</a>def ssh(A,L= 20,dsf=1):
+    &quot;&quot;&quot;
+
+    Parameters
+    ----------
+
+    A   :  antenna
+    dsf :  int
+        down sampling factor  &#39;default 1&#39;
+
+    Summary
+    -------
+
+    This function calculates the Scalar Spherical Harmonics coefficients
+
+        m : phi    longitude
+        l : theta  latitude
+
+    Antenna pattern are stored       (f theta phi)
+    Coeff are stored with this order (f , l , m )
+
+    &quot;&quot;&quot;
+
+    th = A.theta[::dsf]
+    ph = A.phi[::dsf]
+    nth = len(th)
+    nph = len(ph)
+    nf = A.nf
+
+    if (nph % 2) == 1:
+        mdab = min(nth, (nph + 1) / 2)
+    else:
+        mdab = min(nth, nph / 2)
+
+    ndab = nth
+
+
+    Etheta  =  A.Ft[::dsf,::dsf,:]
+    Ephi    =  A.Fp[::dsf,::dsf,:]
+
+    # compute the spherical harmonics functions at the order L
+    Y,ssh_index  = SSHFunc(L,th,ph)
+    # Compute the pseudo inverse of Y
+    Ypinv = sp.linalg.pinv(Y)
+
+    # convert the field from spherical to cartesian coordinates system
+    Ex,Ey,Ez = SphereToCart (th, ph, Etheta, Ephi, True)
+    #
+    Ex = Ex.reshape((nf,nth*nph))
+    Ey = Ey.reshape((nf,nth*nph))
+    Ez = Ez.reshape((nf,nth*nph))
+
+    cx  =  np.dot(Ex,Ypinv)
+    cy  =  np.dot(Ey,Ypinv)
+    cz  =  np.dot(Ez,Ypinv)
+    lmax = L
+
+    Cx = SCoeff(typ=&#39;s2&#39;,fmin=A.fGHz[0],fmax=A.fGHz[-1],lmax=lmax,data=cx,ind=ssh_index)
+    Cy = SCoeff(typ=&#39;s2&#39;,fmin=A.fGHz[0],fmax=A.fGHz[-1],lmax=lmax,data=cy,ind=ssh_index)
+    Cz = SCoeff(typ=&#39;s2&#39;,fmin=A.fGHz[0],fmax=A.fGHz[-1],lmax=lmax,data=cz,ind=ssh_index)
+
+    A.S = SSHCoeff(Cx,Cy,Cz)
+
+
+    return(A)</div>
+
+
+if (__name__==&quot;__main__&quot;):
+    doctest.testmod()
 
 </pre></div>
 
@@ -469,7 +473,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 14, 2017.
+      Last updated on Nov 17, 2017.
 
     </p>
   </div>
@@ -500,7 +504,7 @@
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

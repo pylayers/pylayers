@@ -34,6 +34,9 @@
   
         <link rel="author" title="About these documents"
               href="../about.html"/>
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="PyLayers" href="../index.html"/>
         <link rel="up" title="&lt;no title&gt;" href="index.html"/>
         <link rel="next" title="8 Random Layout" href="plot_layout.html"/>
@@ -135,12 +138,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.signal.device">35&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.signal.DF">36&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.signal.waveform">37&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.mobility.agent">38&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.mobility.ban.body">39&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../api/references.html#id134">40&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -199,17 +203,17 @@ nx = 80
 ny = 40
 boundary = [20,0,30,20]
 mode = full ; file, zone , full
-file = &#8216;points.ini&#8217;</p>
+file = ‘points.ini’</p>
 <p>[layout]
 filename = TA-Office.lay ; 0 40 0 15
 ;filename = W2PTIN.lay
 ;filename = Lstruc.lay</p>
 <p>[ap]
-0 = {&#8216;name&#8217;:&#8217;room1&#8217;,&#8217;wstd&#8217;:&#8217;ieee80211b&#8217;,&#8217;p&#8217;:(1,12,1.2),&#8217;PtdBm&#8217;:0,&#8217;chan&#8217;:[11],&#8217;on&#8217;:True,&#8217;ant&#8217;:&#8217;Gauss&#8217;,&#8217;phideg&#8217;:90}
-1 = {&#8216;name&#8217;:&#8217;room2&#8217;,&#8217;wstd&#8217;:&#8217;ieee80211b&#8217;,&#8217;p&#8217;:(10,2,1.2),&#8217;PtdBm&#8217;:0,&#8217;chan&#8217;:[11],&#8217;on&#8217;:True,&#8217;ant&#8217;:&#8217;Omni&#8217;,&#8217;phideg&#8217;:0}
-2 = {&#8216;name&#8217;:&#8217;room3&#8217;,&#8217;wstd&#8217;:&#8217;ieee80211b&#8217;,&#8217;p&#8217;:(20,1,1.2),&#8217;PtdBm&#8217;:0,&#8217;chan&#8217;:[11],&#8217;on&#8217;:True,&#8217;ant&#8217;:&#8217;Gauss&#8217;,&#8217;phideg&#8217;:75}
-3 = {&#8216;name&#8217;:&#8217;room4&#8217;,&#8217;wstd&#8217;:&#8217;ieee80211b&#8217;,&#8217;p&#8217;:(36.5,1.5,1.2),&#8217;PtdBm&#8217;:0,&#8217;chan&#8217;:[11],&#8217;on&#8217;:True,&#8217;ant&#8217;:&#8217;Gauss&#8217;,&#8217;phideg&#8217;:120}
-4 = {&#8216;name&#8217;:&#8217;room5&#8217;,&#8217;wstd&#8217;:&#8217;ieee80211b&#8217;,&#8217;p&#8217;:(25,12,1.2),&#8217;PtdBm&#8217;:0,&#8217;chan&#8217;:[11],&#8217;on&#8217;:True,&#8217;ant&#8217;:&#8217;Gauss&#8217;,&#8217;phideg&#8217;:180}</p>
+0 = {‘name’:’room1’,’wstd’:’ieee80211b’,’p’:(1,12,1.2),’PtdBm’:0,’chan’:[11],’on’:True,’ant’:’Gauss’,’phideg’:90}
+1 = {‘name’:’room2’,’wstd’:’ieee80211b’,’p’:(10,2,1.2),’PtdBm’:0,’chan’:[11],’on’:True,’ant’:’Omni’,’phideg’:0}
+2 = {‘name’:’room3’,’wstd’:’ieee80211b’,’p’:(20,1,1.2),’PtdBm’:0,’chan’:[11],’on’:True,’ant’:’Gauss’,’phideg’:75}
+3 = {‘name’:’room4’,’wstd’:’ieee80211b’,’p’:(36.5,1.5,1.2),’PtdBm’:0,’chan’:[11],’on’:True,’ant’:’Gauss’,’phideg’:120}
+4 = {‘name’:’room5’,’wstd’:’ieee80211b’,’p’:(25,12,1.2),’PtdBm’:0,’chan’:[11],’on’:True,’ant’:’Gauss’,’phideg’:180}</p>
 <p>[rx]
 temperaturek = 300
 noisefactordb = 0</p>
@@ -270,7 +274,7 @@ Warning Unable to read graph Gw
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 14, 2017.
+      Last updated on Nov 17, 2017.
 
     </p>
   </div>
@@ -301,7 +305,7 @@ Warning Unable to read graph Gw
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

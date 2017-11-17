@@ -34,6 +34,9 @@
   
         <link rel="author" title="About these documents"
               href="../../../about.html"/>
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
     <link rel="top" title="PyLayers" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
@@ -133,12 +136,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.device">35&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.DF">36&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">37&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">38&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">39&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id134">40&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -184,136 +188,136 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pylayers.antprop.antvsh</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
-<span class="kn">import</span> <span class="nn">pdb</span>
-<span class="kn">import</span> <span class="nn">doctest</span>
-<span class="kn">from</span> <span class="nn">pylayers.antprop.spharm</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">sphere</span> <span class="kn">import</span> <span class="n">spherepack</span><span class="p">,</span> <span class="n">Wrapec</span><span class="p">,</span> <span class="n">mathtogeo</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">doctest</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">glob</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">.. currentmodule:: pylayers.antprop.antvsh</span>
+<span></span>from __future__ import print_function
+import pdb
+import doctest
+from pylayers.antprop.spharm import *
+from sphere import spherepack, Wrapec, mathtogeo
+import numpy as np
+import doctest
+import os
+import glob
+&quot;&quot;&quot;
+.. currentmodule:: pylayers.antprop.antvsh
 
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :members:</span>
+.. autosummary::
+    :members:
 
-<span class="sd">&quot;&quot;&quot;</span>
+&quot;&quot;&quot;
 
-<div class="viewcode-block" id="vsh"><a class="viewcode-back" href="../../../api/pylayers.antprop.antvsh.vsh.html#pylayers.antprop.antvsh.vsh">[docs]</a><span class="k">def</span> <span class="nf">vsh</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">dsf</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="vsh"><a class="viewcode-back" href="../../../api/pylayers.antprop.antvsh.vsh.html#pylayers.antprop.antvsh.vsh">[docs]</a>def vsh(A, dsf=1):
+    &quot;&quot;&quot;
 
-<span class="sd">    Summary</span>
-<span class="sd">    -------</span>
+    Summary
+    -------
 
-<span class="sd">    This function calculates the Vector Spherical Harmonics coefficients</span>
-<span class="sd">    It makes use of the spherepack function vha</span>
+    This function calculates the Vector Spherical Harmonics coefficients
+    It makes use of the spherepack function vha
 
-<span class="sd">        m : phi    longitude</span>
-<span class="sd">        n : theta  latitude</span>
+        m : phi    longitude
+        n : theta  latitude
 
-<span class="sd">    Antenna pattern are stored       (f theta phi)</span>
-<span class="sd">    Coeff are stored with this order (f , n , m )</span>
+    Antenna pattern are stored       (f theta phi)
+    Coeff are stored with this order (f , n , m )
 
-<span class="sd">    The vsh coefficient are organized differently</span>
-<span class="sd">    should be better for compression along frequency axis</span>
+    The vsh coefficient are organized differently
+    should be better for compression along frequency axis
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
+    Parameters
+    ----------
 
-<span class="sd">    A   :  antenna</span>
-<span class="sd">    dsf :  int</span>
-<span class="sd">        down sampling factor  &#39;default 1&#39;</span>
+    A   :  antenna
+    dsf :  int
+        down sampling factor  &#39;default 1&#39;
 
 
-<span class="sd">    &quot;&quot;&quot;</span>
+    &quot;&quot;&quot;
 
-    <span class="n">th</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">theta</span><span class="p">[::</span><span class="n">dsf</span><span class="p">]</span>
-    <span class="n">ph</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">phi</span><span class="p">[::</span><span class="n">dsf</span><span class="p">]</span>
+    th = A.theta[::dsf]
+    ph = A.phi[::dsf]
 
-    <span class="c1">#th = A.theta[::dsf,0]</span>
-    <span class="c1">#ph = A.phi[0,::dsf]</span>
+    #th = A.theta[::dsf,0]
+    #ph = A.phi[0,::dsf]
 
-    <span class="n">nth</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">th</span><span class="p">)</span>
-    <span class="n">nph</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ph</span><span class="p">)</span>
+    nth = len(th)
+    nph = len(ph)
 
-    <span class="n">nf</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">nf</span>
+    nf = A.nf
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">nph</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">mdab</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">nth</span><span class="p">,</span> <span class="p">(</span><span class="n">nph</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">mdab</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">nth</span><span class="p">,</span> <span class="n">nph</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    if (nph % 2) == 1:
+        mdab = min(nth, (nph + 1) / 2)
+    else:
+        mdab = min(nth, nph / 2)
 
-    <span class="n">ndab</span> <span class="o">=</span> <span class="n">nth</span>
+    ndab = nth
 
-    <span class="n">Br</span> <span class="o">=</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nf</span><span class="p">,</span> <span class="n">ndab</span><span class="p">,</span> <span class="n">mdab</span><span class="p">))</span>
-    <span class="n">Bi</span> <span class="o">=</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nf</span><span class="p">,</span> <span class="n">ndab</span><span class="p">,</span> <span class="n">mdab</span><span class="p">))</span>
-    <span class="n">Cr</span> <span class="o">=</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nf</span><span class="p">,</span> <span class="n">ndab</span><span class="p">,</span> <span class="n">mdab</span><span class="p">))</span>
-    <span class="n">Ci</span> <span class="o">=</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nf</span><span class="p">,</span> <span class="n">ndab</span><span class="p">,</span> <span class="n">mdab</span><span class="p">))</span>
+    Br = 1j * np.zeros((nf, ndab, mdab))
+    Bi = 1j * np.zeros((nf, ndab, mdab))
+    Cr = 1j * np.zeros((nf, ndab, mdab))
+    Ci = 1j * np.zeros((nf, ndab, mdab))
 
-    <span class="n">gridComp</span> <span class="o">=</span> <span class="n">Wrapec</span><span class="p">()</span>
-    <span class="n">wvha</span><span class="p">,</span> <span class="n">lvha</span> <span class="o">=</span> <span class="n">gridComp</span><span class="o">.</span><span class="n">vhai</span><span class="p">(</span><span class="n">nth</span><span class="p">,</span> <span class="n">nph</span><span class="p">)</span>
+    gridComp = Wrapec()
+    wvha, lvha = gridComp.vhai(nth, nph)
 
-    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nf</span><span class="p">):</span>
-        <span class="c1">#</span>
-        <span class="c1"># Real part</span>
-        <span class="c1">#</span>
-        <span class="n">Ftr</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Ft</span><span class="p">[::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">real</span>
-        <span class="n">Fpr</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Fp</span><span class="p">[::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">real</span>
-        <span class="c1">#</span>
-        <span class="c1"># Ftr  Ntheta,Nphi</span>
-        <span class="c1"># Fpr  Ntheta,Nphi</span>
-        <span class="c1">#</span>
-        <span class="k">if</span> <span class="n">Ftr</span><span class="o">.</span><span class="n">shape</span><span class="o">!=</span><span class="p">(</span><span class="n">nth</span><span class="p">,</span><span class="n">nph</span><span class="p">):</span>
-            <span class="n">Ftr</span><span class="o">=</span><span class="n">Ftr</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nth</span><span class="p">,</span><span class="n">nph</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">Fpr</span><span class="o">.</span><span class="n">shape</span><span class="o">!=</span><span class="p">(</span><span class="n">nth</span><span class="p">,</span><span class="n">nph</span><span class="p">):</span>
-            <span class="n">Fpr</span><span class="o">=</span><span class="n">Fpr</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nth</span><span class="p">,</span><span class="n">nph</span><span class="p">))</span>
+    for k in range(nf):
+        #
+        # Real part
+        #
+        Ftr = A.Ft[::dsf, ::dsf,k].real
+        Fpr = A.Fp[::dsf, ::dsf,k].real
+        #
+        # Ftr  Ntheta,Nphi
+        # Fpr  Ntheta,Nphi
+        #
+        if Ftr.shape!=(nth,nph):
+            Ftr=Ftr*np.ones((nth,nph))
+        if Fpr.shape!=(nth,nph):
+            Fpr=Fpr*np.ones((nth,nph))
         
-        <span class="n">brr</span><span class="p">,</span> <span class="n">bir</span><span class="p">,</span> <span class="n">crr</span><span class="p">,</span> <span class="n">cir</span> <span class="o">=</span> <span class="n">gridComp</span><span class="o">.</span><span class="n">vha</span><span class="p">(</span><span class="n">nth</span><span class="p">,</span> <span class="n">nph</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
-                                          <span class="n">lvha</span><span class="p">,</span> <span class="n">wvha</span><span class="p">,</span>
-                                          <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Fpr</span><span class="p">),</span>
-                                          <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Ftr</span><span class="p">))</span>
-        <span class="c1">#</span>
-        <span class="c1"># Imaginary part</span>
-        <span class="c1">#</span>
-        <span class="n">Fti</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Ft</span><span class="p">[::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">imag</span>
-        <span class="n">Fpi</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Fp</span><span class="p">[::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">imag</span>
+        brr, bir, crr, cir = gridComp.vha(nth, nph, 1,
+                                          lvha, wvha,
+                                          np.transpose(Fpr),
+                                          np.transpose(Ftr))
+        #
+        # Imaginary part
+        #
+        Fti = A.Ft[::dsf, ::dsf,k].imag
+        Fpi = A.Fp[::dsf, ::dsf,k].imag
 
-        <span class="k">if</span> <span class="n">Fti</span><span class="o">.</span><span class="n">shape</span><span class="o">!=</span><span class="p">(</span><span class="n">nth</span><span class="p">,</span><span class="n">nph</span><span class="p">):</span>
-            <span class="n">Fti</span><span class="o">=</span><span class="n">Fti</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nth</span><span class="p">,</span><span class="n">nph</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">Fpi</span><span class="o">.</span><span class="n">shape</span><span class="o">!=</span><span class="p">(</span><span class="n">nth</span><span class="p">,</span><span class="n">nph</span><span class="p">):</span>
-            <span class="n">Fpi</span><span class="o">=</span><span class="n">Fpi</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nth</span><span class="p">,</span><span class="n">nph</span><span class="p">))</span>
+        if Fti.shape!=(nth,nph):
+            Fti=Fti*np.ones((nth,nph))
+        if Fpi.shape!=(nth,nph):
+            Fpi=Fpi*np.ones((nth,nph))
 
-        <span class="n">bri</span><span class="p">,</span> <span class="n">bii</span><span class="p">,</span> <span class="n">cri</span><span class="p">,</span> <span class="n">cii</span> <span class="o">=</span> <span class="n">gridComp</span><span class="o">.</span><span class="n">vha</span><span class="p">(</span><span class="n">nth</span><span class="p">,</span> <span class="n">nph</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
-                                          <span class="n">lvha</span><span class="p">,</span> <span class="n">wvha</span><span class="p">,</span>
-                                          <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Fpi</span><span class="p">),</span>
-                                          <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Fti</span><span class="p">))</span>
+        bri, bii, cri, cii = gridComp.vha(nth, nph, 1,
+                                          lvha, wvha,
+                                          np.transpose(Fpi),
+                                          np.transpose(Fti))
 
-        <span class="n">Br</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">brr</span> <span class="o">+</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">bri</span>
-        <span class="n">Bi</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">bir</span> <span class="o">+</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">bii</span>
-        <span class="n">Cr</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">crr</span> <span class="o">+</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">cri</span>
-        <span class="n">Ci</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">cir</span> <span class="o">+</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">cii</span>
+        Br[k, :, :] = brr + 1j * bri
+        Bi[k, :, :] = bir + 1j * bii
+        Cr[k, :, :] = crr + 1j * cri
+        Ci[k, :, :] = cir + 1j * cii
 
-    <span class="c1">#</span>
-    <span class="c1"># m=0 row is multiplied by 0.5</span>
-    <span class="c1">#</span>
+    #
+    # m=0 row is multiplied by 0.5
+    #
 
-    <span class="n">Br</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">Br</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="n">Bi</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">Bi</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="n">Cr</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">Cr</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="n">Ci</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">Ci</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
+    Br[:, :, 0] = 0.5 * Br[:, :, 0]
+    Bi[:, :, 0] = 0.5 * Bi[:, :, 0]
+    Cr[:, :, 0] = 0.5 * Cr[:, :, 0]
+    Ci[:, :, 0] = 0.5 * Ci[:, :, 0]
 
 
-    <span class="n">Br</span> <span class="o">=</span> <span class="n">VCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fmax</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">Br</span><span class="p">)</span>
-    <span class="n">Bi</span> <span class="o">=</span> <span class="n">VCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fmax</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">Bi</span><span class="p">)</span>
-    <span class="n">Cr</span> <span class="o">=</span> <span class="n">VCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fmax</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">Cr</span><span class="p">)</span>
-    <span class="n">Ci</span> <span class="o">=</span> <span class="n">VCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fmax</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">Ci</span><span class="p">)</span>
-    <span class="n">A</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="n">VSHCoeff</span><span class="p">(</span><span class="n">Br</span><span class="p">,</span> <span class="n">Bi</span><span class="p">,</span> <span class="n">Cr</span><span class="p">,</span> <span class="n">Ci</span><span class="p">)</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">A</span><span class="p">)</span></div>
+    Br = VCoeff(typ=&#39;s1&#39;, fmin=A.fGHz[0], fmax=A.fGHz[-1], data=Br)
+    Bi = VCoeff(typ=&#39;s1&#39;, fmin=A.fGHz[0], fmax=A.fGHz[-1], data=Bi)
+    Cr = VCoeff(typ=&#39;s1&#39;, fmin=A.fGHz[0], fmax=A.fGHz[-1], data=Cr)
+    Ci = VCoeff(typ=&#39;s1&#39;, fmin=A.fGHz[0], fmax=A.fGHz[-1], data=Ci)
+    A.C = VSHCoeff(Br, Bi, Cr, Ci)
+    return(A)</div>
 
-<span class="k">if</span> <span class="p">(</span><span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">):</span>
-    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+if (__name__ == &quot;__main__&quot;):
+    doctest.testmod()
 
 </pre></div>
 
@@ -327,7 +331,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 14, 2017.
+      Last updated on Nov 17, 2017.
 
     </p>
   </div>
@@ -358,7 +362,7 @@
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

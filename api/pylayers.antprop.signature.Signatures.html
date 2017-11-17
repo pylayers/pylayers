@@ -34,6 +34,9 @@
   
         <link rel="author" title="About these documents"
               href="../about.html"/>
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="PyLayers" href="../index.html"/>
         <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
 
@@ -144,12 +147,13 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">35&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">36&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">37&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">38&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">39&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id134">40&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -249,10 +253,10 @@
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.signature.Signatures.exist" title="pylayers.antprop.signature.Signatures.exist"><code class="xref py py-obj docutils literal"><span class="pre">exist</span></code></a>(seq)</td>
 <td>verifies if seq exists in signatures</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">fromkeys</span></code>(...)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">fromkeys</span></code>(…)</td>
 <td>v defaults to None.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get</span></code>((k[,d])&nbsp;-&gt;&nbsp;D[k]&nbsp;if&nbsp;k&nbsp;in&nbsp;D,&nbsp;...)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get</span></code>((k[,d])&nbsp;-&gt;&nbsp;D[k]&nbsp;if&nbsp;k&nbsp;in&nbsp;D,&nbsp;…)</td>
 <td></td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">has_key</span></code>((k)&nbsp;-&gt;&nbsp;True&nbsp;if&nbsp;D&nbsp;has&nbsp;a&nbsp;key&nbsp;k,&nbsp;else&nbsp;False)</td>
@@ -270,19 +274,19 @@
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.signature.Signatures.info" title="pylayers.antprop.signature.Signatures.info"><code class="xref py py-obj docutils literal"><span class="pre">info</span></code></a>()</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">items</span></code>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D&#8217;s&nbsp;(key,&nbsp;value)&nbsp;pairs,&nbsp;...)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">items</span></code>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D’s&nbsp;(key,&nbsp;value)&nbsp;pairs,&nbsp;…)</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">iteritems</span></code>(()&nbsp;-&gt;&nbsp;an&nbsp;iterator&nbsp;over&nbsp;the&nbsp;(key,&nbsp;...)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">iteritems</span></code>(()&nbsp;-&gt;&nbsp;an&nbsp;iterator&nbsp;over&nbsp;the&nbsp;(key,&nbsp;…)</td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">iterkeys</span></code>(()&nbsp;-&gt;&nbsp;an&nbsp;iterator&nbsp;over&nbsp;the&nbsp;keys&nbsp;of&nbsp;D)</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">itervalues</span></code>(...)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">itervalues</span></code>(…)</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">keys</span></code>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D&#8217;s&nbsp;keys)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">keys</span></code>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D’s&nbsp;keys)</td>
 <td></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.signature.Signatures.load" title="pylayers.antprop.signature.Signatures.load"><code class="xref py py-obj docutils literal"><span class="pre">load</span></code></a>([filename])</td>
@@ -300,10 +304,10 @@
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.signature.Signatures.pltunfold" title="pylayers.antprop.signature.Signatures.pltunfold"><code class="xref py py-obj docutils literal"><span class="pre">pltunfold</span></code></a>(L[,&nbsp;i,&nbsp;s])</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">pop</span></code>((k[,d])&nbsp;-&gt;&nbsp;v,&nbsp;...)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">pop</span></code>((k[,d])&nbsp;-&gt;&nbsp;v,&nbsp;…)</td>
 <td>If key is not found, d is returned if given, otherwise KeyError is raised</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">popitem</span></code>(()&nbsp;-&gt;&nbsp;(k,&nbsp;v),&nbsp;...)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">popitem</span></code>(()&nbsp;-&gt;&nbsp;(k,&nbsp;v),&nbsp;…)</td>
 <td>2-tuple; but raise KeyError if D is empty.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.signature.Signatures.rays" title="pylayers.antprop.signature.Signatures.rays"><code class="xref py py-obj docutils literal"><span class="pre">rays</span></code></a>([ptx,&nbsp;prx])</td>
@@ -321,7 +325,7 @@
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.signature.Signatures.saveh5" title="pylayers.antprop.signature.Signatures.saveh5"><code class="xref py py-obj docutils literal"><span class="pre">saveh5</span></code></a>()</td>
 <td>save signatures in hdf5 format</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">setdefault</span></code>((k[,d])&nbsp;-&gt;&nbsp;D.get(k,d),&nbsp;...)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">setdefault</span></code>((k[,d])&nbsp;-&gt;&nbsp;D.get(k,d),&nbsp;…)</td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.signature.Signatures.show" title="pylayers.antprop.signature.Signatures.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>(L,&nbsp;**kwargs)</td>
@@ -342,19 +346,19 @@
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.signature.Signatures.unfold" title="pylayers.antprop.signature.Signatures.unfold"><code class="xref py py-obj docutils literal"><span class="pre">unfold</span></code></a>(L[,&nbsp;i,&nbsp;s])</td>
 <td>unfold a given signature</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code>(([E,&nbsp;...)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code>(([E,&nbsp;…)</td>
 <td>If E present and has a .keys() method, does:     for k in E: D[k] = E[k]</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">values</span></code>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D&#8217;s&nbsp;values)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">values</span></code>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D’s&nbsp;values)</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">viewitems</span></code>(...)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">viewitems</span></code>(…)</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">viewkeys</span></code>(...)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">viewkeys</span></code>(…)</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">viewvalues</span></code>(...)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">viewvalues</span></code>(…)</td>
 <td></td>
 </tr>
 </tbody>
@@ -461,11 +465,11 @@ this is quite new need to be validated !!!</dd>
 <div><p>position of tx (2,)</p>
 </div></blockquote>
 <dl class="docutils">
-<dt>rx</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">ndarray</span><dd><p class="first last">position of tx (2,)</p>
+<dt>rx <span class="classifier-delimiter">:</span> <span class="classifier">ndarray</span></dt>
+<dd><p class="first last">position of tx (2,)</p>
 </dd>
-<dt>M</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">dict</span><dd><p class="first last">position of intermediate points obtained from self.image()</p>
+<dt>M <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first last">position of intermediate points obtained from self.image()</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -727,10 +731,10 @@ A block of signatures gathers all signatures with the same number of interaction
 AUTHOR = {Amiot, Nicolas},
 URL = {<a class="reference external" href="https://tel.archives-ouvertes.fr/tel-00971809">https://tel.archives-ouvertes.fr/tel-00971809</a>},
 NUMBER = {2013REN1S125},
-SCHOOL = {{Universit{&#8216;e} Rennes 1}},
+SCHOOL = {{Universit{‘e} Rennes 1}},
 YEAR = {2013},
 MONTH = Dec,
-KEYWORDS = {Electromagnetic wave propagation simulation ; Human mobility simulation ; Wireless localization methods ; Position estimation methods in wireless networks ; Vectorized computation ; Ray-tracing ; Ultra wide band ; Simulateur de propagation {&#8216;e}lectromagn{&#8216;e}tique ; Simulateur de mobilit{&#8216;e} humaine ; M{&#8216;e}thodes de localisation sans fils ; M{&#8216;e}thodes d&#8217;estimation de la position dans les r{&#8216;e}seaux sans fils ; Calcul informatique vectoris{&#8216;e} ; Outil de trac{&#8216;e} de rayons ; Ultra large bande},
+KEYWORDS = {Electromagnetic wave propagation simulation ; Human mobility simulation ; Wireless localization methods ; Position estimation methods in wireless networks ; Vectorized computation ; Ray-tracing ; Ultra wide band ; Simulateur de propagation {‘e}lectromagn{‘e}tique ; Simulateur de mobilit{‘e} humaine ; M{‘e}thodes de localisation sans fils ; M{‘e}thodes d’estimation de la position dans les r{‘e}seaux sans fils ; Calcul informatique vectoris{‘e} ; Outil de trac{‘e} de rayons ; Ultra large bande},
 TYPE = {Theses},
 HAL_ID = {tel-00971809},
 HAL_VERSION = {v1},</dd>
@@ -911,7 +915,7 @@ lsi : nd.array</p>
 <dt id="pylayers.antprop.signature.Signatures.unfold">
 <code class="descname">unfold</code><span class="sig-paren">(</span><em>L</em>, <em>i=0</em>, <em>s=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.unfold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.unfold" title="Permalink to this definition">¶</a></dt>
 <dd><p>unfold a given signature</p>
-<p>return 2 np.ndarray of pta and phe &#8220;aligned&#8221;
+<p>return 2 np.ndarray of pta and phe “aligned”
 (reflexion interaction are mirrored)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -954,7 +958,7 @@ lsi : nd.array</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 14, 2017.
+      Last updated on Nov 17, 2017.
 
     </p>
   </div>
@@ -985,7 +989,7 @@ lsi : nd.array</p>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

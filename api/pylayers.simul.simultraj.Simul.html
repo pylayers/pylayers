@@ -34,6 +34,9 @@
   
         <link rel="author" title="About these documents"
               href="../about.html"/>
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="PyLayers" href="../index.html"/>
         <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
 
@@ -141,7 +144,14 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.cormoran">31&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">34&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -339,7 +349,7 @@ False otherwise</p>
 <blockquote>
 <div><p>wireless standard used for commmunication between na and nb</p>
 </div></blockquote>
-<p><strong>fmode</strong> : string (&#8216;center&#8217;|&#8217;band&#8217;|&#8217;force&#8217;)</p>
+<p><strong>fmode</strong> : string (‘center’|’band’|’force’)</p>
 <blockquote>
 <div><p>mode of frequency evaluation
 center : single frequency (center frequency of a channel)
@@ -348,7 +358,7 @@ force : takes directly fGHz</p>
 </div></blockquote>
 <p><strong>nf</strong> : int:</p>
 <blockquote>
-<div><p>number of frequency points (if fmode = &#8216;band&#8217;)</p>
+<div><p>number of frequency points (if fmode = ‘band’)</p>
 </div></blockquote>
 <p><strong>**kwargs</strong> : argument of DLink</p>
 </td>
@@ -507,11 +517,11 @@ force : takes directly fGHz</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">output: dict</p>
 <blockquote class="last">
 <div><dl class="docutils">
-<dt>[link_key][&#8216;t&#8217;]</dt>
-<dd><p class="first last">[&#8216;ak&#8217;]</p>
+<dt>[link_key][‘t’]</dt>
+<dd><p class="first last">[‘ak’]</p>
 </dd>
 </dl>
-<p>...</p>
+<p>…</p>
 </div></blockquote>
 </td>
 </tr>
@@ -719,7 +729,7 @@ False otherwise</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 08, 2017.
+      Last updated on Nov 17, 2017.
 
     </p>
   </div>
@@ -750,7 +760,7 @@ False otherwise</p>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
