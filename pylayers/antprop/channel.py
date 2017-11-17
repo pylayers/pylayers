@@ -2153,7 +2153,7 @@ class TUchannel(TBchannel,bs.TUsignal):
         ----------
         filename : string
             long file name if outdir is []
-            short file name is outdir is <> []
+            short file name is outdir is != []
         outdir : string
             output directory
         """

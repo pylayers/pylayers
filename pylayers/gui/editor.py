@@ -662,7 +662,7 @@ class Overset(QMainWindow):
 
         if filename != '':
             self._fileoverlay = pyu.getshort(str(filename))
-            print 'overlay loaded'
+            print('overlay loaded')
 
 
 
@@ -960,7 +960,7 @@ class GridSet(QDialog):    # any super class is okay
 
 
     def ok(self):
-        print self.xspacing.value(),self.yspacing.value()
+        print(self.xspacing.value(),self.yspacing.value())
         self.parent.selectl.stepgridx = self.xspacing.value()
         self.parent.selectl.stepgridy = self.yspacing.value()
         self.parent.selectl.gridOn=True
@@ -1000,7 +1000,7 @@ class AppForm(QMainWindow):
         self.on_draw()
         self.setWindowTitle(self.L._filename + '- Pylayers : Stand Alone Editor (Alpha)')
         self.resize(self.fig.canvas.width(),self.fig.canvas.height())
-        print 'loaded'
+        print('loaded')
 
 
     def new(self):
@@ -1023,7 +1023,7 @@ class AppForm(QMainWindow):
             self.on_draw()
             self.setWindowTitle(self.L._filename + '- Pylayers : Stand Alone Editor (Alpha)')
             self.resize(self.fig.canvas.width(),self.fig.canvas.height())
-            print 'loaded'
+            print('loaded')
 
         # self.setgrid()
     def save(self,force=False):
@@ -1057,7 +1057,7 @@ class AppForm(QMainWindow):
         if filename != '':
             _filename= pyu.getshort(str(filename))
             self.L.display['fileoverlay']=_filename
-            print 'loaded overlay'
+            print('loaded overlay')
 
     def toggleoverl(self):
         """ toggle overlay
