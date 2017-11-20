@@ -894,8 +894,10 @@ class DLink(Link):
         #
         if self.L.typ=='outdoor':
             nodes = [n for n in nodes if n!=0 and not self.L.Gt.node[n]['indoor']]
+        elif self.L.typ=='indoor':
+            nodes = [n for n in nodes if n!=0 and self.L.Gt.node[n]['indoor']] 
         else:
-            nodes = [n for n in nodes if n!=0 ]
+            nodes = [n for n in nodes if n!=0 ] 
 
         # draw the link extremities randomly
 

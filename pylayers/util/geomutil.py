@@ -3375,26 +3375,46 @@ def are_points_inside_cone(points,apex,v,radius=np.inf):
     return bcone__ 
 
 def intersect_cone_seg(line0,line1,seg,bvis=False,bbool=False):
-    """
+    """ intersection of a cone and a segment 
+
     Parameters
     ----------
 
-    line0
-    line1
-    seg
+    line0 : tuple(np.array,np.array)
+        ( apex , pt1 ) 
+    line1 : tuple(np.array,np.array)
+        ( apex , pt2 ) 
+    seg  : tuple(np.array,np.array)
+        (pta , ptb ) 
     bvis 
+    bbool
+
+    See Also 
+    --------
+
+    Signature.run 
+    are_points_inside_cone 
+    intersect_halfline_seg
 
     """
     tahe = []
     ratio = 0 
+    # points : np.array 2 x 2   
     points = np.vstack((seg[0],seg[1]))
     apex = line0[0]
+    # if second point of lines are the same (problem)
     if ( (line0[1][0]==line1[1][0]) and
          (line0[1][1]==line1[1][1])   ):
          pdb.set_trace() 
+
+    # v : np.array 2 x 2 
+    # first column  termination of line0 
+    # second column termination of line1 
+    
     v = np.vstack((line0[1],line1[1])).T
 
     bb = are_points_inside_cone(seg,apex,v,radius=np.inf)
+
     x0,p0 = intersect_halfline_seg(line0, seg)
     x1,p1 = intersect_halfline_seg(line1, seg)
 
@@ -3420,7 +3440,10 @@ def intersect_cone_seg(line0,line1,seg,bvis=False,bbool=False):
         if (( (x0>0) or np.isclose(x0,0)) & ((x0<1) or np.isclose(x0,1)) ): 
             tahe = [seg[0],p0] 
         if (np.abs(x0)!=np.inf) and (np.abs(x1)!=np.inf):
-            ratio = np.linalg.norm(tahe[1]-tahe[0])/np.linalg.norm(p1-p0)
+            try:
+                ratio = np.linalg.norm(tahe[1]-tahe[0])/np.linalg.norm(p1-p0)
+            except:
+                pdb.set_trace()
         else:
             ratio = 1
 
