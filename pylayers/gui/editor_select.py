@@ -1,5 +1,7 @@
 #!usr/bin/python
 # -*- coding: latin1 -*-
+from __future__ import print_function
+
 import os
 import pdb
 import Image
@@ -201,7 +203,7 @@ class SelectL2(object):
             pt : list
             list of points or segmetns to plot
         """
-        print pt
+        print(pt)
         if len(pt)>0:
             pts = np.array([self.L.Gs.pos[x] for x in pt])
             p1 = self.ax.plot(pts[:,0], pts[:,1], 'o',
@@ -243,9 +245,9 @@ class SelectL2(object):
 
         if verbose:
             try:
-                print "Evenement :", self.evt,self.ddoc[self.evt]
+                print("Evenement :", self.evt,self.ddoc[self.evt])
             except:
-                print self.evt+ 'N/A'
+                print(self.evt+ 'N/A')
 
         self.new_state()
 
@@ -299,7 +301,7 @@ class SelectL2(object):
                 y=self.gridy[np.where(y<=self.gridy)[0][0]]
             self.ptsel = np.array((x, y))
             self.nsel = self.L.ispoint(self.ptsel, dd / 50)
-            print self.nsel
+            print(self.nsel)
             if self.selected_pt1==self.nsel and self.nsel != 0 and not 'SM' in self.state :
                 self.ptmove=True
             else :
@@ -341,7 +343,7 @@ class SelectL2(object):
                         savepid = self.pt_previousid
                         pt_currentid=savepid
 
-                        print self.pt_previousid
+                        print(self.pt_previousid)
                         self.createseg(newpt1=self.pt_previousid,newpt2=self.nsel)
                         self.nsel=0
                         self.modeIni()
@@ -438,7 +440,7 @@ class SelectL2(object):
         #print "Selected point coord : ", self.ptsel
         #print "Selected point number: ", self.nsel
         if self.nsel > 0:
-            print "Selected segment : ", self.nsel
+            print("Selected segment : ", self.nsel)
 
 
     def OnMotion(self,event):
@@ -578,7 +580,7 @@ class SelectL2(object):
         """
         # fig = plt.gcf()
         # ax = plt.gca()
-        print self.state
+        print(self.state)
         if not self.bundo:
             self.undoGs.append(self.L.Gs.copy())
             if len(self.undoGs) > 50:
@@ -634,7 +636,7 @@ class SelectL2(object):
         if self.state == 'SP1':
             self.fig,self.ax = self.show(self.fig,self.ax,clear=False)
             self.ax.title.set_text(self.statename[self.state])
-            print 'Selected node : '+str(self.nsel)
+            print('Selected node : '+str(self.nsel))
             #ax.title.set_text(self.nsel))
             self.selected_pt1 = self.nsel
             self.pt1 = np.array(self.L.Gs.pos[self.nsel]).reshape(2, 1)
@@ -652,7 +654,7 @@ class SelectL2(object):
             self.p1[0].set_color('green')
             self.ax.title.set_text(self.statename[self.state])
             #ax.title.set_text('Selected node : %d ' % (self.nsel))
-            print 'Selected node : ' + str(self.nsel)
+            print('Selected node : ' + str(self.nsel))
             self.selected_pt2 = self.nsel
             self.pt2 = np.array(self.L.Gs.pos[self.nsel]).reshape(2, 1)
             self.pt_previous = self.pt2
@@ -691,7 +693,7 @@ class SelectL2(object):
                 titre = 'Select Segment : %d (%d->%d) Layer : %s Coseg : %s ' % (nse, ta, he, self.current_layer, cosegname)
             else:
                 titre = 'Select Segment : %d (%d->%d) Layer : %s' % (nse, ta, he, self.L.Gs.node[nse]['name'])
-            print titre
+            print(titre)
             #ax.title.set_text(titre)
             self.L.show_nodes(ndlist=[nse], size=200, color='r', alpha=0.5,fig=self.fig,ax=self.ax)
             print self.selected_edge1
