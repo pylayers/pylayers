@@ -1399,6 +1399,129 @@ class Rays(PyLayers, dict):
         r3d.filename = L._filename.split('.')[0] + '_' + str(r3d.nray)
         return(r3d)
 
+
+    def get_rays_slabs(self,L,ir):
+        """ return the slabs for a given interaction index 
+
+
+            Parameters
+            ----------
+
+            L : Layout
+            ir : interaction block
+
+            Returns
+            -------
+
+            numpy array of slabs strings at the shape (ir,r)
+            ir : number of interactions ( of the interaction block)
+            r : number of rays
+
+        """
+
+        v=np.vectorize( lambda t: L.Gs.node[t]['name'] if (t!=0) and (t>0) else '_')
+        return v(self[ir]['sig'][0])
+
+
+    def remove_aw(self,L):
+        """ remove AIR interactions
+        """
+        # def consecutive(data, stepsize=1):
+        #     return np.split(data, np.where(np.diff(data) != stepsize)[0]+1)
+
+
+        R = Rays(self.pTx,self.pRx)
+        R.__dict__.update(self.__dict__)
+        # R.is3D=True
+        # R.nray = self.nray
+        # R.nray2D = self.nray2D
+        # R.nray2D = self.nray2D
+        # R.nray2D = self.nray2D
+
+
+        for k in self:
+            lr = self[k]['sig'].shape[1]
+
+            inter = self.get_rays_slabs(L,k)
+
+            for ur,r in enumerate(inter.T):
+                # if self[k]['rayidx'][ur] == 2:
+                #     import ipdb
+                #     ipdb.set_trace()
+                not_air_mask  = ~((r =='_AIR') | (r == 'AIR' ))
+                nb_air = sum(~not_air_mask)
+                if nb_air != 0 :
+                    new_bi = k-nb_air
+                    # +2 : add tx & rx interaciton
+                    # -1 : 2 interactions correspond to 1 distance
+                    lsi = new_bi + 2 - 1 
+                    si = np.zeros(lsi) 
+                    si_old = self[k]['si'][:,ur]
+
+                    vsi = np.zeros((3,lsi)) 
+                    vsi_old = self[k]['vsi'][...,ur]
+
+                    sig = self[k]['sig'][:,not_air_mask,ur][...,None]
+                    pt = self[k]['pt'][:,not_air_mask,ur][...,None]
+
+                    u = 0
+                    si_aw = 0
+
+
+                    for uold,b in enumerate(not_air_mask[1:]):
+                        if b:
+                            # update new si with sum of all 
+                            # distance from preceding airwall
+                            si[u] = si_old[uold] + si_aw
+                            # keep vsi from the last airwall
+                            # because vsi don't change on an airwall
+                            vsi[:,u] = vsi_old[:,uold] 
+                            u += 1
+                            si_aw=0
+                        else:
+                            si_aw += si_old[uold]
+                    si = si[...,None]
+                    vsi = vsi[...,None]
+                    dis = np.array([np.sum(si)])
+                    
+                    assert np.allclose(dis,np.sum(si_old))
+
+
+                else:
+                    # no air wall case, fill R with self values
+                    new_bi = k
+                    pt = self[k]['pt'][...,ur][...,None]
+                    sig = self[k]['sig'][...,ur][...,None]
+                    si = self[k]['si'][:,ur][:,None]
+                    vsi = self[k]['vsi'][...,ur][...,None]
+                    dis = np.array([self[k]['dis'][ur]])
+
+                if new_bi == 2:
+                    import ipdb
+                    ipdb.set_trace()
+                if R.has_key(new_bi):
+
+                    # R[new_bi]['sig2d'].append(self[k]['sig2d'][ur])
+                    R[new_bi]['pt'] = np.concatenate((R[new_bi]['pt'],pt),axis=2)
+                    R[new_bi]['sig'] = np.concatenate((R[new_bi]['sig'],sig),axis=2)
+                    R[new_bi]['rayidx'] = np.concatenate((R[new_bi]['rayidx'],np.array([self[k]['rayidx'][ur]])))
+                    R[new_bi]['si'] = np.concatenate((R[new_bi]['si'],si),axis=1)
+                    R[new_bi]['vsi'] = np.concatenate((R[new_bi]['vsi'],vsi),axis=2)
+                    R[new_bi]['dis'] = np.concatenate((R[new_bi]['dis'],dis),axis=0)
+                else:
+                    R[new_bi] = {}
+                    # R[new_bi]['sig2d'] = [self[k]['sig2d'][ur]]
+                    R[new_bi]['pt'] = pt
+                    R[new_bi]['sig'] = sig
+                    R[new_bi]['rayidx'] = np.array([self[k]['rayidx'][ur]])
+                    R[new_bi]['si'] = si
+                    R[new_bi]['vsi'] = vsi
+                    R[new_bi]['dis'] = dis
+
+
+
+        return R
+
     def length(self,typ=2):
         """ calculate length of rays
 
@@ -2000,6 +2123,7 @@ class Rays(PyLayers, dict):
 
             # if los exists
             else :
+
                 self[k]['nstrwall'] = np.array(())
                 self[k]['norm'] = np.array(())
                 si = np.sqrt(np.sum((self[0]['pt'][:,0]-self[0]['pt'][:,1])**2,axis=0))

@@ -1510,6 +1510,7 @@ class DLink(Link):
                    'debug':False,
                    'verbose':[],
                    'progressbar':None,
+                   'rm_aw':True
                    }
         # check antenna frequency range compatibility
         if (self.Aa.fGHz!=self.Ab.fGHz).all():
@@ -1680,6 +1681,12 @@ class DLink(Link):
             # TODO 
             # R.remove_air()
 
+            if kwargs['rm_aw']:
+                R2 = R.remove_aw(self.L)
+                # R.locbas(self.L)
+                # R2.locbas(self.L)
+            return R,R2
+            
             R.locbas(self.L)
             
 
