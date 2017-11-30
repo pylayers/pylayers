@@ -696,14 +696,14 @@ class SelectL2(object):
             print(titre)
             #ax.title.set_text(titre)
             self.L.show_nodes(ndlist=[nse], size=200, color='r', alpha=0.5,fig=self.fig,ax=self.ax)
-            print self.selected_edge1
+            print(self.selected_edge1)
         if self.state == 'SSS':
             self.ax.title.set_text(self.statename[self.state])
             nse = self.selected_edge1
             segdico = self.L.Gs.node[nse]
             z  = segdico['ss_z']
             #ax.title.set_text('SSS : '+self.L.Gs.node[nse]['name']+' ['+str(z[0])+']')
-            print self.L.Gs.node[nse]['name']+' ['+str(z[0])+']'
+            print(self.L.Gs.node[nse]['name']+' ['+str(z[0])+']')
             self.segment[0].set_color('blue')
         #
         # Create Point state
@@ -722,7 +722,7 @@ class SelectL2(object):
                 self.segment2[0].set_visible(False)
             except:
                 pass
-            print 'lclic : free point, +CTRL same x, +SHIFT: same y'
+            print('lclic : free point, +CTRL same x, +SHIFT: same y')
             self.fig,self.ax=self.show(self.fig,self.ax,clear=False)
             # manage void layout
             try:
@@ -836,7 +836,7 @@ class SelectL2(object):
         """ self.evt==ctrl+z
         """
         self.bundo=True
-        print len(self.L.Gs)
+        print(len(self.L.Gs))
         if len (self.undoGs) >2:
             oGs=self.undoGs.pop(-1)
             oGs=self.undoGs.pop(-1)
@@ -887,7 +887,7 @@ class SelectL2(object):
         offy = self.ptsel[1]
         xmin,xmax,ymin,ymax = self.L.display['box']
         if parameter=='O':
-            print offx,offy
+            print(offx,offy)
             self.L.display['box'] = [xmin-offx,xmax-offx,ymin-offy,ymax-offy]
             self.set_origin=False
             self.set_x=True
@@ -902,7 +902,7 @@ class SelectL2(object):
         if parameter=='y':
             val  = eval(enterbox('enter y value'))
             ratio = val/offy
-            print ratio
+            print(ratio)
             xmin,xmax,ymin,ymax = self.L.display['box']
             self.L.display['box'] = [xmin,xmax,ratio*ymin,ratio*ymax]
             self.set_y=False
@@ -934,7 +934,7 @@ class SelectL2(object):
         else:
             self.L.display['overlay'] = True
             self.update_state()
-        print self.L.display['overlay']
+        print(self.L.display['overlay'])
         self.fig.canvas.draw()
 
 
@@ -943,7 +943,7 @@ class SelectL2(object):
          self.evt=='f':
         """
         self.L.display['nodes'] = not self.L.display['nodes']
-        print self.L.display['nodes']
+        print(self.L.display['nodes'])
         self.update_state()
 
     def toggleseg(self):
@@ -953,7 +953,7 @@ class SelectL2(object):
         self.evt=='g'
         """
         self.L.display['ednodes'] = not self.L.display['ednodes']
-        print self.L.display['ednodes']
+        print(self.L.display['ednodes'])
         self.update_state()
 
     def toggledisnsl(self):
@@ -964,7 +964,7 @@ class SelectL2(object):
         """
         self.L.display['ndlabel'] = not self.L.display['ndlabel']
         self.L.display['edlabel'] = not self.L.display['edlabel']
-        print self.L.display['activelayer']
+        print(self.L.display['activelayer'])
         self.fig,ax = self.show(fig=self.fig,ax=self.ax,clear=True)
         self.fig.canvas.draw()
 
@@ -978,7 +978,7 @@ class SelectL2(object):
         index = self.L.display['layerset'].index(self.L.display['activelayer'])
         self.L.display['activelayer'] = self.L.display['layerset'][(index+1) % N]
         self.current_layer = self.L.display['activelayer']
-        print self.current_layer
+        print(self.current_layer)
         self.update_state()
 
     def declayer(self):
@@ -1137,7 +1137,7 @@ class SelectL2(object):
             self.update_state()
             return
         else :
-            print 'no selected region'
+            print('no selected region')
 
 
     def delmulseg(self):
@@ -1153,7 +1153,7 @@ class SelectL2(object):
             self.update_state()
             return
         else :
-            print 'no selected region'
+            print('no selected region')
 
 
     def refresh(self):
@@ -1258,7 +1258,7 @@ class SelectL2(object):
         #self.L.savestr2(filename)
 
         self.L.save(filelay)
-        print "structure saved in ", filelay
+        print("structure saved in ", filelay)
 
     # def disalllay(self):
     #     """ display all layers
@@ -1480,7 +1480,7 @@ class SelectL2(object):
 
 
         else:
-            print "segment ("+str(ta)+","+str(he)+") already exists"
+            print("segment ("+str(ta)+","+str(he)+") already exists")
         if self.L.Ns > 1:
             self.L.g2npy()
         if newpt1==[]:
@@ -1629,7 +1629,7 @@ class SelectL2(object):
         #
         if self.evt == ',':
             for k in self.ddoc.keys():
-                print k,self.ddoc[k]
+                print(k,self.ddoc[k])
 
         if self.evt == 'v':
             for n in self.L.Gs.pos:

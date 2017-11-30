@@ -1533,7 +1533,10 @@ class Signatures(PyLayers,dict):
                             else: # cone from connected segments 
 
                                 v0n  = v0/np.linalg.norm(v0)
-                                v_n  = v_/np.linalg.norm(v_)
+                                try:
+                                    v_n  = v_/np.linalg.norm(v_)
+                                except:
+                                    pdb.set_trace()
 
                                 # import ipdb
                                 # ipdb.set_trace()
@@ -1556,6 +1559,8 @@ class Signatures(PyLayers,dict):
                             # 
                             if ( (not np.isclose(angle_cone,0) )
                              and ( not np.isclose(angle_cone,np.pi)) ) : 
+                                #if self.cpt==16176:
+                                #    pdb.set_trace()
                                 seg,ratio2 = geu.intersect_cone_seg((apex,vl_n),(apex,vr_n),(th_mirror[0],th_mirror[1]),bvis=False)
                             elif ( not np.isclose(angle_cone,0) ):
                                 ratio2 = 1           

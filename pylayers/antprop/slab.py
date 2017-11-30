@@ -22,7 +22,6 @@ import matplotlib.pylab as plt
 import struct as stru
 import pylayers.util.pyutil as pyu
 import pylayers.util.plotutil as plu
-from pylayers.util.easygui import *
 from pylayers.util.project import *
 
 """

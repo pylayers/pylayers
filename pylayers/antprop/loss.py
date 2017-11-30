@@ -125,6 +125,7 @@ def FMetisShad2(fGHz,r,D,sign=1):
     lamda = 0.3/fGHz[None,None,:]
     F = np.arctan(sign[:,:,None]*np.pi/2.*(np.sqrt((np.pi/lamda)*(D[:,:,None]-r[:,None,None])))) / np.pi
     return(F)
+
 def FMetisShad(fGHz,r,D,sign=1):
     """ F Metis shadowing function
 

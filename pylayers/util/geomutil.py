@@ -3343,20 +3343,29 @@ def are_points_inside_cone(points,apex,v,radius=np.inf):
     Parameters 
     ----------
 
-    points : np.array (Noints x Ndim ) 
+    points : np.array (Npoints x Ndim ) 
     apex : (Ndim x 1)
     v    : (Ndim x Nvec)
     radius : float
+        
 
     """
 
+    assert(type(points)==np.ndarray)
+    assert(type(apex)==np.ndarray)
+    assert(type(v)==np.ndarray)
+
     w = points - apex[None,:]  
+    nw = np.linalg.norm(w,axis=1)
+    # remove point which are too close to the apex 
+    bvalid = ~np.isclose(nw,0)
+
     Nvec = v.shape[1]
     # vcone  : cone axis 
     v_n  = v/np.linalg.norm(v,axis=0)
     vcone = np.mean(v_n,axis=1)
     # cliping half space 
-    bhs = np.dot(w,vcone)>0
+    bhs = bvalid & (np.dot(w,vcone)>0)
     # cliping distance 
     brad = np.linalg.norm(w[bhs,:],axis=1) < radius
 
@@ -3412,8 +3421,7 @@ def intersect_cone_seg(line0,line1,seg,bvis=False,bbool=False):
     # second column termination of line1 
     
     v = np.vstack((line0[1],line1[1])).T
-
-    bb = are_points_inside_cone(seg,apex,v,radius=np.inf)
+    bb = are_points_inside_cone(points,apex,v,radius=np.inf)
 
     x0,p0 = intersect_halfline_seg(line0, seg)
     x1,p1 = intersect_halfline_seg(line1, seg)
@@ -3641,8 +3649,10 @@ def intersect_halfline_seg(line, seg):
     Parameters 
     ----------
 
-    line : (point,vec)
-    seg :  (pta,phe)
+    line : tuple 
+        (point,vec)
+    seg :  tuple 
+        (pta,phe)
 
     Returns
     -------
@@ -3651,6 +3661,7 @@ def intersect_halfline_seg(line, seg):
     P : intersection point P = pta + k vseg
 
     """
+
     ptO, u = line
     pta, phe = seg
     v  = phe-pta
