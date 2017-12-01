@@ -130,14 +130,15 @@ def draw(G,**kwargs):
     #
 
     if kwargs['nodelist']==[]:
-        nodelist =  G.nodes()
+        nodelist =  np.array(G.nodes)
     else:
         nodelist=kwargs['nodelist']
 
     if kwargs['edgelist']==[]:
         edgelist =  G.edges()
     else:
-        edgelist = map(lambda x : G.edges()[x],kwargs['edgelist']) # for nx an edge list is a list of tuple
+        #v1.1 edgelist = map(lambda x : G.edges()[x],kwargs['edgelist']) # for nx an edge list is a list of tuple
+        edgelist = [ x for k,x in enumerate(G.edges) if k in kwargs['edgelist'] ] # for nx an edge list is a list of tuple
     # remove airwalls
         #pno = filter(lambda x : G.nodes()[x]>0,nodelist)
     pno = filter(lambda x : x>0,nodelist)
@@ -148,8 +149,8 @@ def draw(G,**kwargs):
         na = na1 + na2
         # edge == air
         ea=[]
-        [[ea.append((n1,n2)) for n2 in G.edge[n1].keys()] for n1 in na]
-        [[ea.append((n2,n1)) for n2 in G.edge[n1].keys()] for n1 in na]
+        [[ea.append((n1,n2)) for n2 in G[n1].keys()] for n1 in na]
+        [[ea.append((n2,n1)) for n2 in G[n1].keys()] for n1 in na]
 
         nodelista = filter(lambda x: x in na, nodelist)
         edgelista = filter(lambda x: x in ea, edgelist)
