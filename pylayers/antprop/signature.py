@@ -1557,7 +1557,7 @@ class Signatures(PyLayers,dict):
                             # the illuminating cone is defined
                             # the th_mirror to be tested with this cone are known 
                             # 
-                            if ( (not np.isclose(angle_cone,0) )
+                            if ( (not np.isclose(angle_cone,0,atol=1e-6) )
                              and ( not np.isclose(angle_cone,np.pi)) ) : 
                                 #if self.cpt==16176:
                                 #    pdb.set_trace()

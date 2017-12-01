@@ -1648,6 +1648,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
 
         lring = self.exterior
         points = shg.MultiPoint(lring)
+
         for k, pt in enumerate(points):
             if tcc[k % Np] == 1:
                 ax.plot(pt.x, pt.y, 'o', color='red')
