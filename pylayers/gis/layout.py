@@ -1034,10 +1034,15 @@ class Layout(pro.PyLayers):
         mno = max(self.Gs.nodes())
         self.sgsg = sparse.lil_matrix((mno+1,mno+1),dtype='int')
 
+        # loop over segments 
+        # a segment is always connected to 2 nodes 
+        # pdb.set_trace() 
         for s in useg:
-
+            # get point index of the segment 
             lpts = self.Gs.edge[s].keys()
+            # get point 0 neighbors 
             a = self.Gs.edge[lpts[0]].keys()
+            # get point 1 neighbors 
             b = self.Gs.edge[lpts[1]].keys()
 
             nsa = np.setdiff1d(a,b)
