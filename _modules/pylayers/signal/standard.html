@@ -202,7 +202,7 @@ import pylayers.util.pyutil as pyu
 import pylayers.antprop.antenna as ant
 from pylayers.util.project import *
 
-<div class="viewcode-block" id="Band"><a class="viewcode-back" href="../../../api/pylayers.signal.standard.Band.html#pylayers.signal.standard.Band">[docs]</a>class Band(dict):
+<div class="viewcode-block" id="Band"><a class="viewcode-back" href="../../../api/pylayers.signal.standard.Band.html#pylayers.signal.standard.Band">[docs]</a>class Band(PyLayers,dict):
     &quot;&quot;&quot; A Band is a structured portion of the spectrum
 
     A band is subdivided into channels
@@ -270,7 +270,7 @@ from pylayers.util.project import *
         self[&#39;bmhz&#39;] = eval(band[&#39;bmhz&#39;])
         self.channelize()</div></div>
 
-<div class="viewcode-block" id="Channel"><a class="viewcode-back" href="../../../api/pylayers.signal.standard.Channel.html#pylayers.signal.standard.Channel">[docs]</a>class Channel(dict):
+<div class="viewcode-block" id="Channel"><a class="viewcode-back" href="../../../api/pylayers.signal.standard.Channel.html#pylayers.signal.standard.Channel">[docs]</a>class Channel(PyLayers,dict):
     &quot;&quot;&quot; a radio channel abstraction
     &quot;&quot;&quot;
     def __init__(self,fcghz,bmhz,gmhz=0):
@@ -353,14 +353,15 @@ from pylayers.util.project import *
          C : Channel capacity in Mbit/s (M=1e6)
 
         &quot;&quot;&quot;
+
         C = self.bmhz*np.log(1+10**(SNRdB/10.))/np.log(2)
+
         return(C)</div></div>
 
-<div class="viewcode-block" id="Wstandard"><a class="viewcode-back" href="../../../api/pylayers.signal.standard.Wstandard.html#pylayers.signal.standard.Wstandard">[docs]</a>class Wstandard(dict):
+<div class="viewcode-block" id="Wstandard"><a class="viewcode-back" href="../../../api/pylayers.signal.standard.Wstandard.html#pylayers.signal.standard.Wstandard">[docs]</a>class Wstandard(PyLayers,dict):
     &quot;&quot;&quot; Wireless standard class
 
     The various available standard are described in a wstd.json file
-    It could be a mongodb database
 
     &quot;&quot;&quot;
     def __init__(self,stdname=&#39;&#39;,_filejson=&#39;wstd.json&#39;):
@@ -454,7 +455,7 @@ from pylayers.util.project import *
             print k + &#39; , &#39;,</div>
 
 <div class="viewcode-block" id="Wstandard.power"><a class="viewcode-back" href="../../../api/pylayers.signal.standard.Wstandard.html#pylayers.signal.standard.Wstandard.power">[docs]</a>    def power(self, band, info =&#39;max&#39;, unit=&#39;mw&#39;):
-        &quot;&quot;&quot; Return  for a given channel
+        &quot;&quot;&quot; Returns power information for a given channel
 
         Parameters
         ----------
@@ -472,8 +473,10 @@ from pylayers.util.project import *
 
         Returns
         -------
+
         Pmaxmw
-            power iformations for given bandnb/fghz/
+            power informations for given bandnb/fghz/
+
         &quot;&quot;&quot;
 
         fp = open(pyu.getlong(&#39;wstd.json&#39;,pstruc[&#39;DIRSIMUL&#39;]))
@@ -678,7 +681,7 @@ from pylayers.util.project import *
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 17, 2017.
+      Last updated on Dec 01, 2017.
 
     </p>
   </div>

@@ -1084,8 +1084,10 @@ import pdb
         #
         if self.L.typ==&#39;outdoor&#39;:
             nodes = [n for n in nodes if n!=0 and not self.L.Gt.node[n][&#39;indoor&#39;]]
+        elif self.L.typ==&#39;indoor&#39;:
+            nodes = [n for n in nodes if n!=0 and self.L.Gt.node[n][&#39;indoor&#39;]] 
         else:
-            nodes = [n for n in nodes if n!=0 ]
+            nodes = [n for n in nodes if n!=0 ] 
 
         # draw the link extremities randomly
 
@@ -2778,7 +2780,7 @@ if (__name__ == &quot;__main__&quot;):
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 17, 2017.
+      Last updated on Dec 01, 2017.
 
     </p>
   </div>

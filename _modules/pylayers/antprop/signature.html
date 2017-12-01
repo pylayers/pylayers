@@ -1723,7 +1723,10 @@ from tqdm import tqdm
                             else: # cone from connected segments 
 
                                 v0n  = v0/np.linalg.norm(v0)
-                                v_n  = v_/np.linalg.norm(v_)
+                                try:
+                                    v_n  = v_/np.linalg.norm(v_)
+                                except:
+                                    pdb.set_trace()
 
                                 # import ipdb
                                 # ipdb.set_trace()
@@ -1744,8 +1747,10 @@ from tqdm import tqdm
                             # the illuminating cone is defined
                             # the th_mirror to be tested with this cone are known 
                             # 
-                            if ( (not np.isclose(angle_cone,0) )
+                            if ( (not np.isclose(angle_cone,0,atol=1e-6) )
                              and ( not np.isclose(angle_cone,np.pi)) ) : 
+                                #if self.cpt==16176:
+                                #    pdb.set_trace()
                                 seg,ratio2 = geu.intersect_cone_seg((apex,vl_n),(apex,vr_n),(th_mirror[0],th_mirror[1]),bvis=False)
                             elif ( not np.isclose(angle_cone,0) ):
                                 ratio2 = 1           
@@ -1769,93 +1774,93 @@ from tqdm import tqdm
                             # l&#39;ouverture du cone est nul =&gt; arret. Cela pourrait être géré dans Gi en interdisant 
                             # la visibilité (-4) (6,4) 
                             
-                            if angle_cone ==0:
-                                ratio = 0
-                            else:    
-                                if np.allclose(th_mirror[0],apex) or np.allclose(th_mirror[1],apex):
-                                    ratio = 1.
-                                else:
-                                    wseg0 = th_mirror[0] - apex
-                                    wseg1 = th_mirror[1] - apex
-                                    mod_wseg0 = np.sqrt(np.sum(wseg0*wseg0,axis=0))
-                                    mod_wseg1 = np.sqrt(np.sum(wseg1*wseg1,axis=0))
-
-                                    if np.isclose(mod_wseg0,0):
-                                        #bvisu = True 
-                                        #pdb.set_trace()#
-                                        pass
-                                    if np.isclose(mod_wseg1,0):
-                                        #bvisu = True 
-                                        #pdb.set_trace()#
-                                        pass
-                                    #wseg0_n = wseg0/mod_wseg0
-                                    #wseg1_n = wseg1/mod_wseg1
-                                    wseg0_n = wseg0/np.linalg.norm(wseg0)
-                                    wseg1_n = wseg1/np.linalg.norm(wseg1)
-                                    aseg0 = np.arctan2(wseg0_n[1],wseg0_n[0])
-                                    aseg1 = np.arctan2(wseg1_n[1],wseg1_n[0])
-                                    
-                                    # if al==aseg0 or al==aseg1 or ar==aseg0 or ar==aseg1:
-                                    #     ratio = 1
-                                        #print &quot;toto&quot;
-                                    # else:
-                                    I = geu.angle_intersection2(al,ar,aseg0,aseg1)
-                                    ratio = I/angle_cone
-                                    #if ratio&gt;=1:
-                                    #    pdb.set_trace()
-
-                                # if connected:
-                                #     print &quot;ratio :&quot;,ratio
-                                
-
-                            #if visited == [(104, 23, 17), (1, 17), (53, 17)]:
-                            if (bvisu):
-                                fig ,ax = self.L.showG(&#39;s&#39;,aw=1,labels=0)
-                                #
-                                # magenta : start of the cone
-                                # cyan    :
-                                # yellow  : last interaction
-                                #
-                                ax = geu.linet(ax,pta0,phe0,al=1,color=&#39;magenta&#39;,linewidth=3)
-                                ax = geu.linet(ax,pta_,phe_,al=1,color=&#39;cyan&#39;,linewidth=3)
-                                ax = geu.linet(ax,np.array(self.L.Gs.pos[nseg_points[0]]),np.array(self.L.Gs.pos[nseg_points[1]]),al=1,color=&#39;yellow&#39;,linewidth=4)
-                                # ax = geu.linet(ax,vr[0],vr[1],al=1,color=&#39;red&#39;,linewidth=3)
-                                # ax = geu.linet(ax,vl[0],vl[1],al=1,color=&#39;blue&#39;,linewidth=3)
-                                ax = geu.linet(ax,seg[0],seg[1],al=1,color=&#39;k&#39;,linewidth=3)
-                                ax = geu.linet(ax,th_mirror[0,:],th_mirror[1,:],al=1,color=&#39;green&#39;,linewidth=3)
-                                nx.draw_networkx_labels(self.L.Gi,
-                                        self.L.Gi.pos,labels={x:str(x) for x in visited},
-                                        ax=ax,fontsize=18)
-                                plt.title(str(visited)+&#39;  &#39;+str(ratio))
-                                ax.plot(apex[0],apex[1],&#39;or&#39;)
-                                plt.axis(&#39;auto&#39;)
-                                pdb.set_trace()
-                            #if visited == [(104, 23, 17), (1, 17), (53, 17), (108, 17, 18)]:
-                            # if visited == [(104, 23, 17), (1, 17), (53, 17)]:
-                            if (1==0):
-                                fig ,ax = self.L.showG(&#39;s&#39;,aw=1,labels=0)
-                                ax = geu.linet(ax,pta0,phe0,al=1,color=&#39;magenta&#39;,linewidth=3)
-                                ax = geu.linet(ax,pta_,phe_,al=1,color=&#39;cyan&#39;,linewidth=3)
-
-                                ax = geu.linet(ax,np.array(self.L.Gs.pos[pts[0]]),np.array(self.L.Gs.pos[pts[1]]),al=1,color=&#39;yellow&#39;,linewidth=4)
-                                ax = geu.linet(ax,vr[0],vr[1],al=1,color=&#39;red&#39;,linewidth=3)
-                                ax = geu.linet(ax,vl[0],vl[1],al=1,color=&#39;blue&#39;,linewidth=3)
-                                #ax = geu.linet(ax,seg[0],seg[1],al=1,color=&#39;k&#39;,linewidth=3)
-                                ax = geu.linet(ax,th[0,:],th[1,:],al=1,color=&#39;green&#39;,linewidth=3)
-                                plt.title(str(visited)+&#39;  &#39;+str(ratio))
-                                ax.plot(apex[0],apex[1],&#39;or&#39;)
-                                plt.axis(&#39;auto&#39;)
-                                plt.show()
+#                            if angle_cone ==0:
+#                                ratio = 0
+#                            else:    
+#                                if np.allclose(th_mirror[0],apex) or np.allclose(th_mirror[1],apex):
+#                                    ratio = 1.
+#                                else:
+#                                    wseg0 = th_mirror[0] - apex
+#                                    wseg1 = th_mirror[1] - apex
+#                                    mod_wseg0 = np.sqrt(np.sum(wseg0*wseg0,axis=0))
+#                                    mod_wseg1 = np.sqrt(np.sum(wseg1*wseg1,axis=0))
+#
+#                                    if np.isclose(mod_wseg0,0):
+#                                        #bvisu = True 
+#                                        #pdb.set_trace()#
+#                                        pass
+#                                    if np.isclose(mod_wseg1,0):
+#                                        #bvisu = True 
+#                                        #pdb.set_trace()#
+#                                        pass
+#                                    #wseg0_n = wseg0/mod_wseg0
+#                                    #wseg1_n = wseg1/mod_wseg1
+#                                    wseg0_n = wseg0/np.linalg.norm(wseg0)
+#                                    wseg1_n = wseg1/np.linalg.norm(wseg1)
+#                                    aseg0 = np.arctan2(wseg0_n[1],wseg0_n[0])
+#                                    aseg1 = np.arctan2(wseg1_n[1],wseg1_n[0])
+#                                    
+#                                    # if al==aseg0 or al==aseg1 or ar==aseg0 or ar==aseg1:
+#                                    #     ratio = 1
+#                                        #print &quot;toto&quot;
+#                                    # else:
+#                                    I = geu.angle_intersection2(al,ar,aseg0,aseg1)
+#                                    ratio = I/angle_cone
+#                                    #if ratio&gt;=1:
+#                                    #    pdb.set_trace()
+#
+#                                # if connected:
+#                                #     print &quot;ratio :&quot;,ratio
+#                                
+#
+#                            #if visited == [(104, 23, 17), (1, 17), (53, 17)]:
+#                            if (bvisu):
+#                                fig ,ax = self.L.showG(&#39;s&#39;,aw=1,labels=0)
+#                                #
+#                                # magenta : start of the cone
+#                                # cyan    :
+#                                # yellow  : last interaction
+#                                #
+#                                ax = geu.linet(ax,pta0,phe0,al=1,color=&#39;magenta&#39;,linewidth=3)
+#                                ax = geu.linet(ax,pta_,phe_,al=1,color=&#39;cyan&#39;,linewidth=3)
+#                                ax = geu.linet(ax,np.array(self.L.Gs.pos[nseg_points[0]]),np.array(self.L.Gs.pos[nseg_points[1]]),al=1,color=&#39;yellow&#39;,linewidth=4)
+#                                # ax = geu.linet(ax,vr[0],vr[1],al=1,color=&#39;red&#39;,linewidth=3)
+#                                # ax = geu.linet(ax,vl[0],vl[1],al=1,color=&#39;blue&#39;,linewidth=3)
+#                                ax = geu.linet(ax,seg[0],seg[1],al=1,color=&#39;k&#39;,linewidth=3)
+#                                ax = geu.linet(ax,th_mirror[0,:],th_mirror[1,:],al=1,color=&#39;green&#39;,linewidth=3)
+#                                nx.draw_networkx_labels(self.L.Gi,
+#                                        self.L.Gi.pos,labels={x:str(x) for x in visited},
+#                                        ax=ax,fontsize=18)
+#                                plt.title(str(visited)+&#39;  &#39;+str(ratio))
+#                                ax.plot(apex[0],apex[1],&#39;or&#39;)
+#                                plt.axis(&#39;auto&#39;)
+#                                pdb.set_trace()
+#                            #if visited == [(104, 23, 17), (1, 17), (53, 17), (108, 17, 18)]:
+#                            # if visited == [(104, 23, 17), (1, 17), (53, 17)]:
+#                            if (1==0):
+#                                fig ,ax = self.L.showG(&#39;s&#39;,aw=1,labels=0)
+#                                ax = geu.linet(ax,pta0,phe0,al=1,color=&#39;magenta&#39;,linewidth=3)
+#                                ax = geu.linet(ax,pta_,phe_,al=1,color=&#39;cyan&#39;,linewidth=3)
+#
+#                                ax = geu.linet(ax,np.array(self.L.Gs.pos[pts[0]]),np.array(self.L.Gs.pos[pts[1]]),al=1,color=&#39;yellow&#39;,linewidth=4)
+#                                ax = geu.linet(ax,vr[0],vr[1],al=1,color=&#39;red&#39;,linewidth=3)
+#                                ax = geu.linet(ax,vl[0],vl[1],al=1,color=&#39;blue&#39;,linewidth=3)
+#                                #ax = geu.linet(ax,seg[0],seg[1],al=1,color=&#39;k&#39;,linewidth=3)
+#                                ax = geu.linet(ax,th[0,:],th[1,:],al=1,color=&#39;green&#39;,linewidth=3)
+#                                plt.title(str(visited)+&#39;  &#39;+str(ratio))
+#                                ax.plot(apex[0],apex[1],&#39;or&#39;)
+#                                plt.axis(&#39;auto&#39;)
+#                                plt.show()
                     #else:
                     #    th = self.L.Gs.pos[nstr]
                     #    th = np.array([th,th])
                     #    ratio = 1
                         #print self.cpt,ratio,ratio2
-                        if (ratio&gt;0.1) and (ratio2==0):
-                             pdb.set_trace()
+                        #if (ratio&gt;0.1) and (ratio2==0):
+                        #     pdb.set_trace()
                         #print d_excess,dist_excess_max
                         #if (ratio2 &gt; self.threshold) and (d_excess&lt;dist_excess_max):
-                        if (ratio &gt; self.threshold) and (d_excess&lt;dist_excess_max):
+                        if (ratio2 &gt; self.threshold) and (d_excess&lt;dist_excess_max):
                         #if (ratio &gt; self.threshold):
                             #
                             # Update sequence of mirrored points
@@ -3157,7 +3162,7 @@ from tqdm import tqdm
         return dM</div></div>
 
 
-<div class="viewcode-block" id="Signature"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.Signature.html#pylayers.antprop.signature.Signature">[docs]</a>class Signature(object):
+<div class="viewcode-block" id="Signature"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.Signature.html#pylayers.antprop.signature.Signature">[docs]</a>class Signature(PyLayers,object):
     &quot;&quot;&quot; class Signature
 
     Attributes
@@ -3789,7 +3794,7 @@ if __name__ == &quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 17, 2017.
+      Last updated on Dec 01, 2017.
 
     </p>
   </div>

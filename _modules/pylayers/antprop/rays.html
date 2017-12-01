@@ -229,7 +229,7 @@ from pylayers.gis.layout import Layout
 import pylayers.signal.bsignal as bs
 import shapely.geometry as shg
 import h5py
-
+import operator
 
 <div class="viewcode-block" id="Rays"><a class="viewcode-back" href="../../../api/pylayers.antprop.rays.Rays.html#pylayers.antprop.rays.Rays">[docs]</a>class Rays(PyLayers, dict):
     &quot;&quot;&quot; Class hendling a set of rays
@@ -337,49 +337,58 @@ import h5py
 
     # def __add__(self,r):
 
-    #     if self.is3D:
-    #         if not r.is3D:
-    #             raise AttributeError(&#39;r is not 3d while self is 3d&#39;)
-    #     if self.isbased:
-    #         if not r.isbased:
-    #             raise AttributeError(&#39;r is not based while self is based&#39;)
+    #     if (not r.is3D) and (not r.isbased) and (not self.is3D) and (not self.isbased) :
+    #         raise AttributeError(&#39;both Ray structures must be 3D and based to be added&#39;)
 
 
     #     for ni in r:
-    #         if self.haskey(ni):
-    #             self[ni][&#39;pt&#39;] = np.concatenate((self[ni][&#39;pt&#39;],r[&#39;pt&#39;]),axis=2)
-    #             self[ni][&#39;sig&#39;] = np.concatenate((self[ni][&#39;sig&#39;],r[&#39;sig&#39;]),axis=2)
-    #             if self.is3D:
-    #                 self[ni][&#39;si&#39;] = np.concatenate((self[ni][&#39;si&#39;],r[&#39;si&#39;]),axis=1)
-    #                 self[ni][&#39;sig2d&#39;] = np.concatenate((self[ni][&#39;sig2d&#39;],r[&#39;sig2d&#39;]),axis=2)
-    #                 self[ni][&#39;rayidx&#39;] = np.concatenate((self[ni][&#39;rayidx&#39;],r[&#39;rayidx&#39;]),axis=0)
-    #                 self[ni][&#39;dis&#39;] = np.concatenate((self[ni][&#39;dis&#39;],r[&#39;dis&#39;]),axis=0)
-    #                 self[ni][&#39;vsi&#39;] = np.concatenate((self[ni][&#39;vsi&#39;],r[&#39;vsi&#39;]),axis=2)
-    #                 self[ni][&#39;nbrays&#39;] += 1
-    #             if self.isbased:
-    #                 self[ni][&#39;BiN&#39;] = np.concatenate((self[ni][&#39;BiN&#39;],r[&#39;BiN&#39;]),axis=2)
-    #                 self[ni][&#39;B&#39;] = np.concatenate((self[ni][&#39;B&#39;],r[&#39;B&#39;]),axis=3)
-    #                 if r[ni].haskey(&#39;diffidx&#39;):
-    #                     if self[ni].has_key(&#39;diffidx&#39;):
-    #                         self[ni][&#39;diffidx&#39;] = np.concatenate((self[ni][&#39;diffidx&#39;],r[&#39;diffidx&#39;]))
-    #                         self[ni][&#39;diffvect&#39;] = np.concatenate((self[ni][&#39;diffvect&#39;],r[&#39;diffvect&#39;]),axis=1)
-    #                         self[ni][&#39;diffslabs&#39;].append(r[&#39;diffslabs&#39;])
-                            
-    #                     else:
-    #                         self[ni][&#39;diffidx&#39;] = r[&#39;diffidx&#39;]
-    #                         self[ni][&#39;diffvect&#39;] = r[&#39;diffvect&#39;]
-    #                         self[ni][&#39;diffslabs&#39;] = r[&#39;diffslabs&#39;]
-    #                 self[ni][&#39;Bo0&#39;] = np.concatenate((self[ni][&#39;Bo0&#39;],r[&#39;Bo0&#39;]),axis=2)
-    #                 self[ni][&#39;Bo&#39;] = np.concatenate((self[ni][&#39;Bo&#39;],r[&#39;Bo&#39;]),axis=3)
-    #                 self[ni][&#39;scpr&#39;] = np.concatenate((self[ni][&#39;scpr&#39;],r[&#39;scpr&#39;]),axis=1)
-    #                 self[ni][&#39;Bi&#39;] = np.concatenate((self[ni][&#39;Bi&#39;],r[&#39;Bi&#39;]),axis=3)
-    #                 self[ni][&#39;aod&#39;] = np.concatenate((self[ni][&#39;aod&#39;],r[&#39;aod&#39;]),axis=1)
-    #                 self[ni][&#39;aoa&#39;] = np.concatenate((self[ni][&#39;aoa&#39;],r[&#39;aoa&#39;]),axis=1)
-    #                 self[ni][&#39;theta&#39;] = np.concatenate((self[ni][&#39;theta&#39;],r[&#39;theta&#39;]),axis=1)
-    #                 self[ni][&#39;norm&#39;] = np.concatenate((self[ni][&#39;norm&#39;],r[&#39;norm&#39;]),axis=2)
+    #         if self.has_key(ni):
+    #             import ipdb
+    #             ipdb.set_trace()
+    #             #Â check if som rays already exists
+    #             #Â if so, don&#39;t add them
+    #             lur = np.array([])
+    #             for ur in range(self[ni][&#39;pt&#39;].shape[2]):
+    #                 udifferent = np.where(np.all(np.all(r[ni][&#39;pt&#39;][...,ur][...,None]!=self[ni][&#39;pt&#39;],axis=0),axis=0))[0]
+    #                 lur = np.hstack((lur,udifferent ))
+    #                 import ipdb
+    #                 ipdb.set_trace()
+
+    #             self[ni][&#39;pt&#39;] = np.concatenate((self[ni][&#39;pt&#39;],r[ni][&#39;pt&#39;]),axis=2)
+    #             self[ni][&#39;sig&#39;] = np.concatenate((self[ni][&#39;sig&#39;],r[ni][&#39;sig&#39;]),axis=2)
+    #             self[ni][&#39;si&#39;] = np.concatenate((self[ni][&#39;si&#39;],r[ni][&#39;si&#39;]),axis=1)
+    #             self[ni][&#39;rayidx&#39;] = np.concatenate((self[ni][&#39;rayidx&#39;],r[ni][&#39;rayidx&#39;]),axis=0)
+    #             self[ni][&#39;dis&#39;] = np.concatenate((self[ni][&#39;dis&#39;],r[ni][&#39;dis&#39;]),axis=0)
+    #             self[ni][&#39;vsi&#39;] = np.concatenate((self[ni][&#39;vsi&#39;],r[ni][&#39;vsi&#39;]),axis=1)
+    #             self[ni][&#39;nbrays&#39;] += 1
+    #             if ni != 0:
+    #                 self[ni][&#39;BiN&#39;] = np.concatenate((self[ni][&#39;BiN&#39;],r[ni][&#39;BiN&#39;]),axis=2)
+    #                 self[ni][&#39;Bi&#39;] = np.concatenate((self[ni][&#39;Bi&#39;],r[ni][&#39;Bi&#39;]),axis=3)
+    #                 self[ni][&#39;Bo&#39;] = np.concatenate((self[ni][&#39;Bo&#39;],r[ni][&#39;Bo&#39;]),axis=3)
+    #                 self[ni][&#39;Bo0&#39;] = np.concatenate((self[ni][&#39;Bo0&#39;],r[ni][&#39;Bo0&#39;]),axis=2)
+    #                 self[ni][&#39;scpr&#39;] = np.concatenate((self[ni][&#39;scpr&#39;],r[ni][&#39;scpr&#39;]),axis=1)
+    #                 self[ni][&#39;norm&#39;] = np.concatenate((self[ni][&#39;norm&#39;],r[ni][&#39;norm&#39;]),axis=2)
+
+    #             self[ni][&#39;B&#39;] = np.concatenate((self[ni][&#39;B&#39;],r[ni][&#39;B&#39;]),axis=3)
+    #             self[ni][&#39;aod&#39;] = np.concatenate((self[ni][&#39;aod&#39;],r[ni][&#39;aod&#39;]),axis=1)
+    #             self[ni][&#39;aoa&#39;] = np.concatenate((self[ni][&#39;aoa&#39;],r[ni][&#39;aoa&#39;]),axis=1)
+    #             self[ni][&#39;theta&#39;] = np.concatenate((self[ni][&#39;theta&#39;],r[ni][&#39;theta&#39;]),axis=1)
+
+    #             if r[ni].has_key(&#39;diffidx&#39;):
+    #                 if self[ni].has_key(&#39;diffidx&#39;):
+    #                     self[ni][&#39;diffidx&#39;] = np.concatenate((self[ni][&#39;diffidx&#39;],r[ni][&#39;diffidx&#39;]))
+    #                     self[ni][&#39;diffvect&#39;] = np.concatenate((self[ni][&#39;diffvect&#39;],r[ni][&#39;diffvect&#39;]),axis=1)
+    #                     self[ni][&#39;diffslabs&#39;].append(r[ni][&#39;diffslabs&#39;])
+                        
+    #                 else:
+    #                     self[ni][&#39;diffidx&#39;] = r[&#39;diffidx&#39;]
+    #                     self[ni][&#39;diffvect&#39;] = r[&#39;diffvect&#39;]
+    #                     self[ni][&#39;diffslabs&#39;] = r[&#39;diffslabs&#39;]
 
     #         else:
     #             self[ni]=r[ni]
+
+
 
 
 
@@ -760,20 +769,29 @@ import h5py
         u = np.argsort(self.dis)</div>
 
 
-    def rayfromtyp_order(self,nD=1,nR=1,nT=1):
+    def rayfromtyp_order(self,nD=[1],nR=[1],nT=[1],llo=&#39;&amp;&amp;&#39;):
         &quot;&quot;&quot;
             Return rays from a given type (R|T|D) to a given order
             ( number of interaction)
 
+            list logic operator : llo [&#39;op0op1&#39;] 
+
+            nD &lt;op0&gt; nR &lt;op1&gt; nT
+
+
             Parameters
             ----------
 
-                nD = int
+                nD = list|int
                     requested number of Diffraction
-                nR = int
+                nR = list|int
                     requested number of Reflection
-                nT = int
+                nT = list|int
                     requested number of Transmission
+                llo = list logic operator [op0,op1]
+                    nD &lt;op0&gt; nR &lt;op1&gt; nT
+
+
             Returns
             -------
 
@@ -784,32 +802,62 @@ import h5py
 
         &quot;&quot;&quot;
 
+        if not isinstance(nD,list):
+            nD=[nD]
+        if not isinstance(nR,list):
+            nR=[nR]
+        if not isinstance(nT,list):
+            nT=[nT]
+
+        op = {&#39;and&#39;:operator.and_,
+              &#39;or&#39;:operator.or_,
+              &#39;&amp;&#39;:operator.and_,
+              &#39;|&#39;:operator.or_,
+              }
+
 
         lr=[]
-        for r in xrange(self.nray):
+        for ur,r in enumerate(xrange(self.nray)):
             li = self.ray2ityp(r)
             nRli = li.count(&#39;R&#39;)
             nTli = li.count(&#39;T&#39;)
             nDli = li.count(&#39;D&#39;)
-            if (nR == nRli) and (nT==nTli) and (nD==nDli):
+
+
+
+            cD = (nDli in nD)
+            cR = (nRli in nR)
+            cT = (nTli in nT)
+
+            # if (nDli in nD) and (nRli in nR) and (nTli in nT) :
+            if op[llo[1].lower()]( op[llo[0].lower()](cD,cR) , cT):
+                lr.append(r)
+            elif (self.los) and (1 in nT ) and (0 in nD) and (0 in nR) and (ur == 0):
                 lr.append(r)
         return lr
 
 
-    def extract_typ_order(self,L,nD=0,nR=1,nT=1):
+    def extract_typ_order(self,L,nD=[1],nR=[1],nT=[1],llo=&#39;&amp;&amp;&#39;):
         &quot;&quot;&quot; Extract group of rays from a certain type (R|T|D) 
             at a order ( &lt;=&gt; given number of interaction)
+
+            list logic operator : llo [op0,op1]
+
+            nD &lt;op0&gt; nR &lt;op1&gt; nT
+
 
         Parameters
             ----------
 
         L  : Layout
-        nD = int
+        nD = list|int
             requested number of Diffraction
-        nR = int
+        nR = list|int
             requested number of Reflection
-        nT = int
+        nT = list|int
             requested number of Transmission
+        llo = list logic operator [op0,op1]
+            nD &lt;op0&gt; nR &lt;op1&gt; nT
 
         Returns
         -------
@@ -821,7 +869,7 @@ import h5py
 
         &quot;&quot;&quot;
 
-        lr = self.rayfromtyp_order(nD=nD,nR=nR,nT=nT)
+        lr = self.rayfromtyp_order(nD=nD,nR=nR,nT=nT,llo=llo)
         return self.extract(lr,L)
 
 
@@ -850,10 +898,19 @@ import h5py
             ni = self.ray2nbi(nr)
             ur = np.where(self[ni][&#39;rayidx&#39;]==nr)[0][0]
 
+
+
+
+            if ni == 0:
+                los = True
+            else:
+                los = False
+
             if &#39;D&#39; in self.typ(nr):
                 diff=True
             else:
                 diff=False
+
 
             if self[ni].has_key(&#39;diffvect&#39;):
                 # check if the ray has diffraction interaction
@@ -865,11 +922,23 @@ import h5py
             diffkey = [&#39;diffvect&#39;,&#39;diffidx&#39;,&#39;diffslabs&#39;]
 
             cray = {}
+
+
             for k in self[ni].keys():
-                if k not in [&#39;nbrays&#39;,&#39;rayidx&#39;,&#39;dis&#39;,&#39;nstrwall&#39;,&#39;nstrswall&#39;]:
+
+                if ni ==0 : 
+
+                    cray = self[ni]
+                    break
+
+                elif k not in [&#39;nbrays&#39;,&#39;rayidx&#39;,&#39;dis&#39;,&#39;nstrwall&#39;,&#39;nstrswall&#39;]:
                     tab  = self[ni][k]
                     if type(tab)==np.ndarray and k not in diffkey:
-                            cray[k] = tab[...,ur][...,np.newaxis]
+                            try:
+                                cray[k] = tab[...,ur][...,np.newaxis]
+                            except:
+                                import ipdb
+                                ipdb.set_trace()
                     if diff : 
                         if k in diffkey :
                             if k != &#39;diffslabs&#39;:
@@ -892,10 +961,12 @@ import h5py
 
                 # R[ni][&#39;sig2d&#39;].append(self[k][&#39;sig2d&#39;][ur])
 
+                if not los :
+                    r[ni][&#39;BiN&#39;] = np.concatenate((r[ni][&#39;BiN&#39;],cray[&#39;BiN&#39;]),axis=2)
+                    r[ni][&#39;Bo&#39;] = np.concatenate((r[ni][&#39;Bo&#39;],cray[&#39;Bo&#39;]),axis=3)
+                    r[ni][&#39;Bi&#39;] = np.concatenate((r[ni][&#39;Bi&#39;],cray[&#39;Bi&#39;]),axis=3)
 
-                r[ni][&#39;BiN&#39;] = np.concatenate((r[ni][&#39;BiN&#39;],cray[&#39;BiN&#39;]),axis=2)
-                r[ni][&#39;nbrays&#39;] += 1
-                r[ni][&#39;B&#39;] = np.concatenate((r[ni][&#39;B&#39;],cray[&#39;B&#39;]),axis=3)
+                
                 if diff:
                     if r[ni].has_key(&#39;diffidx&#39;):
                         r[ni][&#39;diffidx&#39;] = np.concatenate((r[ni][&#39;diffidx&#39;],cray[&#39;diffidx&#39;]))
@@ -906,12 +977,15 @@ import h5py
                         r[ni][&#39;diffidx&#39;] = cray[&#39;diffidx&#39;]
                         r[ni][&#39;diffvect&#39;] = cray[&#39;diffvect&#39;]
                         r[ni][&#39;diffslabs&#39;] = cray[&#39;diffslabs&#39;]
+
+                r[ni][&#39;nbrays&#39;] += 1
+                r[ni][&#39;B&#39;] = np.concatenate((r[ni][&#39;B&#39;],cray[&#39;B&#39;]),axis=3)
+
                 r[ni][&#39;pt&#39;] = np.concatenate((r[ni][&#39;pt&#39;],cray[&#39;pt&#39;]),axis=2)
                 r[ni][&#39;rayidx&#39;] = np.concatenate((r[ni][&#39;rayidx&#39;],cray[&#39;rayidx&#39;]),axis=0)
                 r[ni][&#39;Bo0&#39;] = np.concatenate((r[ni][&#39;Bo0&#39;],cray[&#39;Bo0&#39;]),axis=2)
-                r[ni][&#39;Bo&#39;] = np.concatenate((r[ni][&#39;Bo&#39;],cray[&#39;Bo&#39;]),axis=3)
+                
                 r[ni][&#39;scpr&#39;] = np.concatenate((r[ni][&#39;scpr&#39;],cray[&#39;scpr&#39;]),axis=1)
-                r[ni][&#39;Bi&#39;] = np.concatenate((r[ni][&#39;Bi&#39;],cray[&#39;Bi&#39;]),axis=3)
                 r[ni][&#39;aod&#39;] = np.concatenate((r[ni][&#39;aod&#39;],cray[&#39;aod&#39;]),axis=1)
                 r[ni][&#39;si&#39;] = np.concatenate((r[ni][&#39;si&#39;],cray[&#39;si&#39;]),axis=1)
                 r[ni][&#39;sig&#39;] = np.concatenate((r[ni][&#39;sig&#39;],cray[&#39;sig&#39;]),axis=2)
@@ -1039,6 +1113,7 @@ import h5py
                     &#39;points&#39;:True,
                     &#39;labels&#39;:False
                    }
+
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
@@ -1078,8 +1153,8 @@ import h5py
                 # list of rays 
                 lray = range(len(self[i][&#39;pt&#39;][0, 0, :]))
 
-                if self.filled :
-                    ax.set_title(&#39;rays index :&#39;+ str(self[i][&#39;rayidx&#39;]))
+                #if self.filled :
+                #    ax.set_title(&#39;rays index :&#39;+ str(self[i][&#39;rayidx&#39;]))
 
                 for j in lray:
 
@@ -1111,8 +1186,8 @@ import h5py
                                 linewidth = widthray)
 
                     ax.axis(&#39;off&#39;)
-                    if self.filled :
-                        ax.set_title(&#39;rays index :&#39;+ str(self[i][&#39;rayidx&#39;][lray]))
+                    #if self.filled :
+                    #    ax.set_title(&#39;rays index :&#39;+ str(self[i][&#39;rayidx&#39;][lray]))
         else:
             rlist = kwargs[&#39;rlist&#39;]
             # 3D ray 
@@ -1142,8 +1217,8 @@ import h5py
 
                 for i in rlist:
                     lray = range(len(self[i][&#39;pt&#39;][0, 0, :]))
-                    if self.filled :
-                        ax.set_title(&#39;rays index :&#39;+ str(self[i][&#39;rayidx&#39;]))
+                    #if self.filled :
+                    #    ax.set_title(&#39;rays index :&#39;+ str(self[i][&#39;rayidx&#39;]))
                     for j in lray:
                         ray = np.hstack((self.pTx[0:2].reshape((2, 1)),
                                          np.hstack((self[i][&#39;pt&#39;][0:2, :, j],
@@ -1155,8 +1230,8 @@ import h5py
                                 linewidth=kwargs[&#39;widthray&#39;])
                         ax.axis(&#39;off&#39;)
 
-                        if self.filled :
-                            ax.set_title(&#39;rays index :&#39;+ str(self[i][&#39;rayidx&#39;][lray]))
+                        #if self.filled :
+                        #    ax.set_title(&#39;rays index :&#39;+ str(self[i][&#39;rayidx&#39;][lray]))
 
 
 
@@ -1718,7 +1793,6 @@ import h5py
                             siges = np.delete(siges,uc[1][uout],axis=2)
                             sigsave = np.delete(sigsave,uc[1][uout],axis=2)
 
-                
                 if r3d.has_key(k+Nint):
                     r3d[k+Nint][&#39;pt&#39;]  = np.dstack((r3d[k+Nint][&#39;pt&#39;], ptees))
                     r3d[k+Nint][&#39;sig&#39;] = np.dstack((r3d[k+Nint][&#39;sig&#39;], siges))
@@ -1872,6 +1946,7 @@ import h5py
                     vsi_old = self[k][&#39;vsi&#39;][...,ur]
 
                     sig = self[k][&#39;sig&#39;][:,not_air_mask,ur][...,None]
+                    # sig2d = self[k][&#39;sig2d&#39;][0][...,ur]
                     pt = self[k][&#39;pt&#39;][:,not_air_mask,ur][...,None]
 
                     u = 0
@@ -1904,11 +1979,11 @@ import h5py
                     new_bi = k
                     pt = self[k][&#39;pt&#39;][...,ur][...,None]
                     sig = self[k][&#39;sig&#39;][...,ur][...,None]
+                    # sig2d = self[k][&#39;sig2d&#39;][0][...,ur]
                     si = self[k][&#39;si&#39;][:,ur][:,None]
                     vsi = self[k][&#39;vsi&#39;][...,ur][...,None]
                     dis = np.array([self[k][&#39;dis&#39;][ur]])
 
-               
                 if R.has_key(new_bi):
 
                     # R[new_bi][&#39;sig2d&#39;].append(self[k][&#39;sig2d&#39;][ur])
@@ -1920,7 +1995,7 @@ import h5py
                     R[new_bi][&#39;dis&#39;] = np.concatenate((R[new_bi][&#39;dis&#39;],dis),axis=0)
                 else:
                     R[new_bi] = {}
-                    # R[new_bi][&#39;sig2d&#39;] = [self[k][&#39;sig2d&#39;][ur]]
+                    # R[new_bi][&#39;sig2d&#39;] = [self[k][&#39;sig2d&#39;][0][...,ur]]
                     R[new_bi][&#39;pt&#39;] = pt
                     R[new_bi][&#39;sig&#39;] = sig
                     R[new_bi][&#39;rayidx&#39;] = np.array([self[k][&#39;rayidx&#39;][ur]])
@@ -3985,7 +4060,7 @@ if __name__ == &quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 17, 2017.
+      Last updated on Dec 01, 2017.
 
     </p>
   </div>

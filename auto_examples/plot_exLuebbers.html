@@ -194,14 +194,7 @@
   <div class="section" id="uwb-ray-tracing-simulation-in-outdoor-scenario">
 <span id="sphx-glr-auto-examples-plot-exluebbers-py"></span><h1>UWB Ray tracing simulation  in outdoor scenario<a class="headerlink" href="#uwb-ray-tracing-simulation-in-outdoor-scenario" title="Permalink to this headline">¶</a></h1>
 <p>Example taken from Joseph W. Schuster, R.J Luebbers [Techniques for Evaluating the Accuracy of Ray-Tracing Propagation Models for Microcells](<a class="reference external" href="http://tinyurl.com/z2plo2v">http://tinyurl.com/z2plo2v</a>)</p>
-<ul class="sphx-glr-horizontal">
-<li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_exLuebbers_001.png"><img alt="../_images/sphx_glr_plot_exLuebbers_001.png" src="../_images/sphx_glr_plot_exLuebbers_001.png" style="width: 376.0px; height: 282.0px;" /></a>
-</li>
-<li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_exLuebbers_002.png"><img alt="../_images/sphx_glr_plot_exLuebbers_002.png" src="../_images/sphx_glr_plot_exLuebbers_002.png" style="width: 376.0px; height: 282.0px;" /></a>
-</li>
-<li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_exLuebbers_003.png"><img alt="../_images/sphx_glr_plot_exLuebbers_003.png" src="../_images/sphx_glr_plot_exLuebbers_003.png" style="width: 235.0px; height: 235.0px;" /></a>
-</li>
-</ul>
+<img alt="../_images/sphx_glr_plot_exLuebbers_001.png" class="align-center" src="../_images/sphx_glr_plot_exLuebbers_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none"><div class="highlight"><pre><span></span>Warning Unable to read graph Gr
 Warning Unable to read graph Gw
@@ -243,7 +236,7 @@ Layout Graph loaded
 
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
-<span class="n">DL</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">DL</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
+<span class="n">DL</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">DL</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
 <span class="n">cir</span> <span class="o">=</span> <span class="n">DL</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">getcir</span><span class="p">(</span><span class="n">BWGHz</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">Nf</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
 <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
 <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cir</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cir</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:])))</span>
@@ -259,7 +252,7 @@ Layout Graph loaded
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 1 minutes  8.768 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 1 minutes  8.145 seconds)</p>
 <div class="sphx-glr-footer container">
 <div class="sphx-glr-download container">
 <a class="reference download internal" href="../_downloads/plot_exLuebbers.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_exLuebbers.py</span></code></a></div>
@@ -289,7 +282,7 @@ Layout Graph loaded
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Nov 17, 2017.
+      Last updated on Dec 01, 2017.
 
     </p>
   </div>

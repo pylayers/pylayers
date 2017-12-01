@@ -39,7 +39,7 @@ DL.eval(force=1,cutoff=3,threshold=0.1,diffraction=1,nD=2)
 
 fig = plt.figure()
 ax1 = fig.add_subplot(121)
-DL.R.show(L=DL.L,ax=ax1)
+DL.R.show(L=DL.L,fig=fig,ax=ax1)
 cir = DL.H.getcir(BWGHz=0.5,Nf=10000)
 ax2 = fig.add_subplot(122)
 ax2.plot(cir.x,20*np.log10(np.abs(cir.y[0,0,:])))
