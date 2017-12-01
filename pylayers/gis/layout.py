@@ -5913,11 +5913,13 @@ class Layout(pro.PyLayers):
         if vnodes == []:
             vnodes = self.Gs.nodes()
 
-        # find segments of layout
-        # v1.1 seg = np.array([nx.neighbors(self.Gs, x) for x in vnodes
-        #                if x > 0
-        #                and x not in segbounds])
-            seg = np.array([self.Gs[x]  for x in vnodes
+        # find termination points of segments of layout
+            if nx.__version__>1.10:
+                seg = np.array([self.Gs[x]  for x in vnodes
+                        if x > 0
+                        and x not in segbounds])
+            else:
+                seg = np.array([nx.neighbors(self.Gs, x) for x in vnodes
                         if x > 0
                         and x not in segbounds])
         # get vertices/points of layout

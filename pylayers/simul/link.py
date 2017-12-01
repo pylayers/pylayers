@@ -388,17 +388,17 @@ class DLink(Link):
                 lTiw = [ k for k in lTi if self.L.Gs.node[k[0]]['name']!='AIR' ]
 
                 self.L.Gi.remove_nodes_from(lTiw)
-                lE = self.L.Gi.edges()
+                lE = list(self.L.Gi.edges())
                 for k in range(len(lE)):
                     e = lE[k]
                     try:
-                        output = self.L.Gi.edge[e[0]][e[1]]['output']
+                        output = self.L.Gi[e[0]][e[1]]['output']
                     except:
                         pdb.set_trace()
                     for l in output.keys():
                         if l in lTiw:
                             del output[l]
-                    self.L.Gi.edge[e[0]][e[1]]['output']=output
+                    self.L.Gi[e[0]][e[1]]['output']=output
                 
             #self.L.dumpw()
             #self.L.build()
