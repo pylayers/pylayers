@@ -101,7 +101,6 @@ import pylayers.gis.furniture as fur
 import pylayers.gis.osmparser as osm
 from pylayers.gis.selectl import SelectL
 import pylayers.util.graphutil as gph
-import pylayers.util.easygui as eag
 import pylayers.util.project as pro
 
 def pbar(verbose,**kwargs):
@@ -3283,56 +3282,6 @@ class Layout(pro.PyLayers):
         self.Np = len(np.nonzero(np.array(self.Gs.node.keys()) < 0)[0])
         self.g2npy()
 
-    def displaygui(self):
-        """ open a GUI for displaying configuration
-
-        """
-
-        displaygui = eag.multenterbox('', 'Display Parameters',
-                                  ('filename',
-                                   'nodes',
-                                   'ednodes',
-                                   'ndlabel',
-                                   'edlabel',
-                                   'edges',
-                                   'subseg',
-                                   'visu',
-                                   'thin',
-                                   'scaled',
-                                   'overlay',
-                                   'overlay_file',
-                                   'overlay_flip',
-                                   'alpha'),
-                                  (self._filename,
-                                   int(self.display['nodes']),
-                                   int(self.display['ednodes']),
-                                   int(self.display['ndlabel']),
-                                   int(self.display['edlabel']),
-                                   int(self.display['edges']),
-                                   int(self.display['subseg']),
-                                   int(self.display['visu']),
-                                   int(self.display['thin']),
-                                   int(self.display['scaled']),
-                                   int(self.display['overlay']),
-                                   self.display['overlay_file'],
-                                   self.display['overlay_flip'],
-                                   self.display['alpha']))
-        if displaygui is not None:
-            self._filename = displaygui[0]
-            self.display['nodes'] = bool(eval(displaygui[1]))
-            self.display['ednodes'] = bool(eval(displaygui[2]))
-            self.display['ndlabel'] = bool(eval(displaygui[3]))
-            self.display['edlabel'] = bool(eval(displaygui[4]))
-            self.display['edges'] = bool(eval(displaygui[5]))
-            self.display['subseg'] = bool(eval(displaygui[6]))
-            self.display['visu'] = bool(eval(displaygui[7]))
-            self.display['thin'] = bool(eval(displaygui[8]))
-            self.display['scaled'] = bool(eval(displaygui[9]))
-            self.display['overlay'] = bool(eval(displaygui[10]))
-            self.display['overlay_file'] = displaygui[11]
-            self.display['overlay_flip'] = eval(displaygui[12])
-            self.display['alpha'] = eval(displaygui[14])
-
     def info_segment(self, s1):
         """ information about segment
 
@@ -3361,110 +3310,6 @@ class Layout(pro.PyLayers):
             print('subseg (zmin,zmax) (m) : ', ds1['ss_z'])
         except:
             pass
-
-    def edit_point(self, np):
-        """ edit point
-
-        Parameters
-        ----------
-
-        np : integer
-            point number
-
-        """
-        title = "Point (" + str(np) + ")"
-        message = "Enter coordinates "
-        pt = self.Gs.pos[np]
-        data = eag.multenterbox(message, title, (('x', 'y')),
-                            ((str(pt[0]), str(pt[1]))))
-        self.Gs.pos[np] = tuple(eval(data[0]), eval(data[1]))
-
-    def edit_segment(self, e1, gui=True, outdata={}):
-        """ edit segment WITH EasyGUI
-
-        Parameters
-        ----------
-
-        e1 : integer
-            edge number
-        gui : boolean
-
-        Notes
-        -----
-
-        A segment has the following properties :
-            + name  : string
-            + z  :  tuple
-            + transition : boolean (default FALSE)
-
-        If a segment has subsegments attached the following properties are
-        added :
-            + ss_name : string
-            + ss_z : subsegment [(min height (meters),max height (meters))]
-
-
-        """
-        nebd = self.Gs.neighbors(e1)
-        n1 = nebd[0]
-        n2 = nebd[1]
-        de1 = self.Gs.node[e1]
-        title = "Segment (" + str(n1) + ',' + str(n2) + ")"
-        message = str(self.sl.keys())
-        if 'ss_name' not in de1.keys():
-            de1k = ['name', 'z', 'transition', 'offset']
-            de1v = [de1['name'], de1['z'], de1['transition'], de1['offset']]
-        else:
-            de1k = ['name', 'z', 'ss_name', 'ss_z', 'transition', 'ss_offset']
-            de1v = [de1['name'], de1['z'], de1['ss_name'], de1['ss_z'],
-                    de1['transition'], de1['ss_offset']]
-        #de1v    = de1.values()
-        if gui:
-            outdata = {}
-            data0 = choicebox('chose slab', title, self.sl.keys())
-            try:
-                data1 = eag.multenterbox(
-                    'attribute for ' + data0, title, tuple(de1k[1:]), tuple(de1v[1:]))
-                d1 = data1[0].split(' ')
-                d1t = tuple((eval(d1[0]), eval(d1[1])))
-                data1[0] = d1t
-                data = [data0] + data1
-                #data = eag.multenterbox(message, title, tuple(de1k), tuple(de1v))
-                i = 0
-                self.name[de1['name']].remove(e1)
-                for k in de1k:
-                    try:
-                        self.Gs.node[e1][k] = eval(data[i])
-                        outdata[k] = eval(data[i])
-                    except:
-                        self.Gs.node[e1][k] = data[i]
-                        outdata[k] = data[i]
-                        if k == 'name':
-                            try:
-                                self.name[data[i]].append(e1)
-                            except:
-                                self.name[data[i]] = [e1]
-                    i = i + 1
-            except:
-                # if cancel
-                pass
-        else:
-            if outdata == {}:
-                pass
-                # data = {}
-                # val = '1'
-                # while(val!='0'):
-                #     clear
-                #     print'0 : exit'
-                #     for e,(k,v) in enumerate(zip(de1k,de1v)):
-                #         printstr(e+1)+ ' '+k+': '+  str(v)+'\n'
-                #     val = input('Your choice :')
-                #     if val!='0':
-                #         pass
-            else:
-                for k in de1k:
-                    if k in ['z', 'name', 'transition', 'offset']:
-                        self.Gs.node[e1][k] = outdata[k]
-        return outdata
 
     def edit_seg(self, e1, data={}):
         """ edit segment
@@ -3778,7 +3623,7 @@ class Layout(pro.PyLayers):
 
         return ptlist, seglist
 
-    def get_points(self, ax):
+    def get_points(self, ax , tol = 0.05):
         """ get points list and segments list in a polygonal zone
 
         Parameters
@@ -3796,17 +3641,17 @@ class Layout(pro.PyLayers):
         Notes
         -----
 
-        This methods returns all the 
+        This methods returns all the point inside a zone or a polygon 
 
         """
 
         if type(ax) == geu.Polygon:
             N = len(ax.vnodes)/2
             eax  = ax.exterior.xy
-            xmin = np.min(eax[0])
-            xmax = np.max(eax[0])
-            ymin = np.min(eax[1])
-            ymax = np.max(eax[1])
+            xmin = np.min(eax[0])-tol
+            xmax = np.max(eax[0])+tol
+            ymin = np.min(eax[1])-tol
+            ymax = np.max(eax[1])+tol
         else:
             xmin = ax[0]
             xmax = ax[1]
@@ -5995,9 +5840,8 @@ class Layout(pro.PyLayers):
 
         return lMP
 
-    def _triangle(self, holes=[], vnodes=[]):
-        """
-        perfom a Delaunay partitioning on shapely polygons
+    def _triangle(self, holes=[], vnodes=[] ,bplot = False):
+        """ Delaunay partitioning on shapely polygons
 
         Parameters
         ----------
@@ -6008,18 +5852,19 @@ class Layout(pro.PyLayers):
                         is applied on outdoor
 
 
-        Return
-        ------
+        Returns
+        -------
+
             T : dict 
-                dictionnary from triangle.triangulate library
-                >>> T.keys()
+                dictionnary from triangle.triangulate library with the following keys
                 ['segment_markers', 'segments', 'holes', 'vertices', 'vertex_markers', 'triangles']
+            map_vertices : points index 
 
 
         Notes
         -----
 
-        This methoc uses the triangle library
+        This methods uses the `triangle` library
 
         """
 
@@ -6027,6 +5872,7 @@ class Layout(pro.PyLayers):
         # and inside polygon will be discarded
         segbounds = []
         ptbounds = []
+
         if holes == []:
             # remove air segments around layout
             pass
@@ -6035,16 +5881,22 @@ class Layout(pro.PyLayers):
 
         if vnodes == []:
             vnodes = self.Gs.nodes()
+
         # find segments of layout
         seg = np.array([nx.neighbors(self.Gs, x) for x in vnodes
                         if x > 0
                         and x not in segbounds])
+
         # get vertices/points of layout
         ivertices = np.array([(x, self.Gs.pos[x][0], self.Gs.pos[x][1]) for x in vnodes
                               if x < 0
                               and x not in ptbounds])
-        map_vertices = ivertices[:, 0]
+        
+        # map_vertices : points negative index  (Np,) 
+        map_vertices = ivertices[:, 0].astype('int')
+        # vertices : coordinates (Np x 2) 
         vertices = ivertices[:, 1:]
+
         sorter = np.argsort(map_vertices)
 
         # mapping between Gs graph segments and triangle segments
@@ -6056,15 +5908,18 @@ class Layout(pro.PyLayers):
             C = {'vertices': vertices, 'segments': segments, 'holes': holes}
 
         T = triangle.triangulate(C, 'pa')
+        
 
-        # import triangle.plot as plot
-        # ax=plt.gca()
-        # plot.plot(ax,**T)
-        # plt.show()
+        if bplot:
+            import triangle.plot as plot
+            ax=plt.gca()
+            plot.plot(ax,**T)
+            plt.show()
+
         return T, map_vertices
 
     def buildGt(self, check=True,difftol=0.01,verbose=False,tqdmpos=0):
-        """ build graph of convex cycle
+        """ build graph of convex cycles
 
         Parameters
         ----------
@@ -6094,14 +5949,13 @@ class Layout(pro.PyLayers):
 
         Gtpbar = pbar(verbose,total=100., desc ='BuildGt',position=tqdmpos)
         pbartmp = pbar(verbose,total=100., desc ='Triangulation',leave=True,position=tqdmpos+1)
-
+        
         T, map_vertices = self._triangle()
 
         if verbose:
             pbartmp.update(100.)
             Gtpbar.update(100./12.)
-        # point index are integer
-        map_vertices = map_vertices.astype(int)
+
         ptri = T['vertices'][T['triangles']]
 
         # List of Triangle Polygons
@@ -6125,6 +5979,7 @@ class Layout(pro.PyLayers):
         # get_points(p) : get points from polygon
         # this is for limiting the search region for large Layout 
         #
+
         [ p.setvnodes_new(self.get_points(p),self) for p in lTP ]
 
         if verbose:
@@ -6543,8 +6398,10 @@ class Layout(pro.PyLayers):
 
             ax = axs[0, 1]
             f, ax = self.showG('s', aw=1, ax=ax, fig=fig)
-            diffpos = np.array([self.Gs.pos[x] for x in self.ddiff.keys()])
-            ax.scatter(diffpos[:, 0], diffpos[:, 1],s=130)
+
+            if hasattr(self,'ddiff'):
+                diffpos = np.array([self.Gs.pos[x] for x in self.ddiff.keys()])
+                ax.scatter(diffpos[:, 0], diffpos[:, 1],s=130)
             #ax.set_title('Diffraction points')
 
             ax = axs[1, 0]

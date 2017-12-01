@@ -124,7 +124,7 @@ class LPRS(object):
                 out = ''
                 out += self.ser.read(1)
                 time.sleep(0.005)
-                if self.ser.inWaiting() <>0:
+                if self.ser.inWaiting() !=0:
                     while self.ser.inWaiting() > 0:
                         time.sleep(0.01)
                         out += self.ser.read(1)
@@ -177,7 +177,7 @@ class LPRS(object):
             self.send('A')
             time.sleep(delay)
             resp = ' '
-            while (resp[-1]<>'B'):
+            while (resp[-1]!='B'):
                 resp = ' '
                 while self.ser.inWaiting()>0:
                 #time.sleep(0.005)

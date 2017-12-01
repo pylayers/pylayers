@@ -1,6 +1,7 @@
 #!usr/bin/python
 # -*- coding: latin1 -*-
 from __future__ import print_function
+
 import os
 import pdb
 import Image
@@ -10,7 +11,6 @@ from pylayers.util import pyutil as pyu
 import pylayers.util.plotutil as plu
 
 import matplotlib.pyplot as plt
-from pylayers.util.easygui import *
 from matplotlib.widgets import RectangleSelector
 import shapely.geometry as sh
 

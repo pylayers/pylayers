@@ -44,10 +44,10 @@ BiN_0 = DL0.R[1]['BiN'][:,:,0]
 #print ("\n")
 #print("with air wall")
 ## Avec mur d'air 
-Bo0_1 = DL1.R[2]['Bo0'][:,:,0]
-Bi_1 = DL1.R[2]['Bi'][:,:,:,0]
-Bo_1 = DL1.R[2]['Bo'][:,:,:,0]
-BiN_1 = DL1.R[2]['BiN'][:,:,0]
+Bo0_1 = DL1.R[1]['Bo0'][:,:,0]
+Bi_1 = DL1.R[1]['Bi'][:,:,:,0]
+Bo_1 = DL1.R[1]['Bo'][:,:,:,0]
+BiN_1 = DL1.R[1]['BiN'][:,:,0]
 #print "Bo0"
 #print Bo0
 #print DL1.R[2]['B'][:,:,0,0]

@@ -1,6 +1,6 @@
 # -*t coding:Utf-8 -*-
 """
-.. currentmodeul:: pylayters.antprop.channel 
+.. currentmodule:: pylaydoers.antprop.channel 
 
 .. autosummary::
     :members:
@@ -444,17 +444,17 @@ class ADPchannel(bs.TUsignal):
         padp = np.abs(self.y)[:,imin:imax].T
         if dB:
             padp  = 20*np.log10(padp)
-	    im = ax.imshow(padp,extent=extent,aspect='auto',**kwargs)
+            im = ax.imshow(padp,extent=extent,aspect='auto',**kwargs)
             plt.axis('equal')
 
-        if blos:
+        if blos: 
             a1 = ang_offset + orientation*self.angpeak_est
             a2 = ang_offset + orientation*self.anglos_geo
             ax.scatter(a1,self.taupeak_est,marker='*',s=70,color='k')
             ax.scatter(a2,self.taulos_geo,marker='D',s=70,color='k')
 
-	if bcolorbar:
-    	    cbar = plt.colorbar(im)
+        if bcolorbar:
+            cbar = plt.colorbar(im)
 
             if dB:
                 cbar.set_label(label+' dB',fontsize=fonts)
@@ -467,8 +467,8 @@ class ADPchannel(bs.TUsignal):
         ax.set_ylabel('Propagation delay [ns]',fontsize=fonts)
         ax.set_xlabel('Angle[deg]',fontsize=fonts)
 
-	#ax.title('PADP',fontsize=fonts)
-	
+        #ax.title('PADP',fontsize=fonts)
+
         for tick in ax.xaxis.get_major_ticks():
             tick.label.set_fontsize(fonts) 
         for tick in ax.yaxis.get_major_ticks():
@@ -2153,7 +2153,7 @@ class TUchannel(TBchannel,bs.TUsignal):
         ----------
         filename : string
             long file name if outdir is []
-            short file name is outdir is <> []
+            short file name is outdir is != []
         outdir : string
             output directory
         """

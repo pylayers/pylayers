@@ -41,7 +41,7 @@ from pylayers.antprop.rays import Rays
 from pylayers.antprop.channel import Ctilde, Tchannel , AFPchannel
 from pylayers.antprop.statModel import getchannel
 import tqdm
-
+import copy
 
 import h5py
 import pdb
@@ -894,8 +894,10 @@ class DLink(Link):
         #
         if self.L.typ=='outdoor':
             nodes = [n for n in nodes if n!=0 and not self.L.Gt.node[n]['indoor']]
+        elif self.L.typ=='indoor':
+            nodes = [n for n in nodes if n!=0 and self.L.Gt.node[n]['indoor']] 
         else:
-            nodes = [n for n in nodes if n!=0 ]
+            nodes = [n for n in nodes if n!=0 ] 
 
         # draw the link extremities randomly
 
@@ -1677,19 +1679,11 @@ class DLink(Link):
 
 
             R = self.r2d.to3D(self.L,H=ceilheight, N=kwargs['ra_number_mirror_cf'])
-            # 
-            # TODO 
-            # R.remove_air()
-
             if kwargs['rm_aw']:
-                R2 = R.remove_aw(self.L)
-                # R.locbas(self.L)
-                # R2.locbas(self.L)
-            return R,R2
+                R = R.remove_aw(self.L)
             
             R.locbas(self.L)
             
-
             R.fillinter(self.L)
 
             # C = Ctilde()
@@ -1900,6 +1894,7 @@ class DLink(Link):
 
 
 
+
     def select(self):
         fig,ax = self.show()
         self.cid = fig.canvas.mpl_connect('button_press_event',self.OnClick)
@@ -2078,8 +2073,9 @@ class DLink(Link):
             # limitation of the vizualization zone around the center of the link 
             #
             pm = (self.a+self.b)/2.
-            ax.set_xlim(pm[0]-kwargs['radius'],pm[0]+kwargs['radius'])
-            ax.set_ylim(pm[1]-kwargs['radius'],pm[1]+kwargs['radius'])
+            R  = np.minimum(kwargs['radius'],1.5*self.L.radius)
+            ax.set_xlim(pm[0]-R,pm[0]+R)
+            ax.set_ylim(pm[1]-R,pm[1]+R)
 
             for ir  in lr:
                 if kwargs['dB']:
@@ -2105,6 +2101,7 @@ class DLink(Link):
                                fig=fig,ax=ax,
                                layout=False,
                                points=False)
+
             if kwargs['col']=='cmap':
                 sm = plt.cm.ScalarMappable(cmap=kwargs['cmap'], norm=plt.Normalize(vmin=vmin, vmax=vmax))
                 sm._A = []
@@ -2112,6 +2109,7 @@ class DLink(Link):
         #
         # Plot signature
         #
+
         if kwargs['bsig']:
             for addr in kwargs['laddr']: 
                 seq = self.Si[addr[0]][2*addr[1]:2*addr[1]+2,:]

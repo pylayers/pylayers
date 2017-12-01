@@ -460,7 +460,7 @@ class Body(PyLayers):
         self.mocapinfo = info
 
         self.filename = filename
-        if nframes<>-1:
+        if nframes!=-1:
             self.nframes = nframes
         else:
             self.nframes = np.shape(self._f)[0]
@@ -2236,7 +2236,7 @@ class Body(PyLayers):
         if not kwargs['topos']:
             _filebody = str(iframe).zfill(4)+'body'
         else:
-            if kwargs['tag']<>'':
+            if kwargs['tag']!='':
                 _filebody = kwargs['tag']+'-body'
             else:
                 _filebody = 'body'
@@ -2510,7 +2510,7 @@ class Body(PyLayers):
                 #     #print 'dmin = ', dmin
                 #     #print 'r = ', self.sl[k,2]
                 #     dAB = np.sqrt(sum((A-B)**2))
-                #     if alpha <> 0:
+                #     if alpha != 0:
                 #         mu[k] =(dmin-self.sl[k,2])*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))
 
         return intersect
@@ -2942,7 +2942,7 @@ class Cylinder(object):
 
         self.mocapinfo = info
 
-        if nframes<>-1:
+        if nframes!=-1:
             self.nframes = nframes
         else:
             self.nframes = np.shape(self._f)[0]
