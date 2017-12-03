@@ -13,8 +13,8 @@ import matplotlib.pyplot as plt
 import pdb
 
 def diff(fGHz,phi0,phi,si,sd,N,beta):
-    """  diffraction coefficient 
-    
+    """  diffraction coefficient
+
     Parameters
     ----------
 
@@ -22,7 +22,7 @@ def diff(fGHz,phi0,phi,si,sd,N,beta):
     phi0 : np.array
     phi : np.array
     si : np.array
-    sd : np.array 
+    sd : np.array
     N : np.array
     beta : np.array
 

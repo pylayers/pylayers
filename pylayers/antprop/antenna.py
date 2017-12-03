@@ -1,4 +1,4 @@
-#-*- coding:Utf-8 -*-
+# -*- coding:Utf-8 -*-
 """
 .. currentmodule:: pylayers.antprop.antenna
 
@@ -13,7 +13,29 @@ import glob
 import re
 import pdb
 import sys
-if sys.version_info.major==2:
+import numpy as np
+import scipy.linalg as la
+import matplotlib.pylab as plt
+from scipy import io
+from matplotlib import rc
+from matplotlib import cm  # colormaps
+from mpl_toolkits.mplot3d import axes3d
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+from matplotlib.ticker import MaxNLocator
+from scipy.special import sici, fresnel
+import pandas as pd
+import pylayers.util.pyutil as pyu
+import pylayers.util.geomutil as geu
+from pylayers.util.project import PyLayers
+from pylayers.antprop.spharm import *
+from pylayers.antprop.antssh import ssh, SSHFunc2, SSHFunc, SSHCoeff, CartToSphere
+from pylayers.antprop.coeffModel import *
+
+try:
+    from pylayers.antprop.antvsh import vsh
+except:
+    pass
+if sys.version_info.major == 2:
     import PIL.Image as Image
     try:
         import mayavi.mlab as mlab
@@ -21,31 +43,11 @@ if sys.version_info.major==2:
         pass
 else:
     import image
-import numpy as np
-import scipy.linalg as la
-from scipy import io
-import pylayers.util.pyutil as pyu
-import pylayers.util.geomutil as geu
-from pylayers.util.project import *
-from pylayers.antprop.spharm import *
-try:
-    from pylayers.antprop.antvsh import vsh 
-except:
-    pass
-from pylayers.antprop.antssh import ssh,SSHFunc2, SSHFunc, SSHCoeff, CartToSphere
-from pylayers.antprop.coeffModel import *
-from matplotlib import rc
-from matplotlib import cm # colormaps
-from mpl_toolkits.mplot3d import axes3d
-from mpl_toolkits.axes_grid1 import make_axes_locatable
-from matplotlib.ticker import MaxNLocator
-from scipy.special import sici , fresnel
-import pandas as pd
 
-import matplotlib.pylab as plt
 
 class Pattern(PyLayers):
     """ Class Pattern
+
 
     MetaClass of Antenna
 
@@ -70,14 +72,14 @@ class Pattern(PyLayers):
 
     def __repr__(self):
         st = ''
-        st = st + 'Antenna type : ' + self.typ +'\n'
+        st = st + 'Antenna type : ' + self.typ + '\n'
         st = st+'------------------------\n'
         if 'param' in self.__dict__:
             for k in self.param:
                 st = st + ' ' + k + ' : ' + str(self.param[k])+'\n'
         return (st)
 
-    def eval(self,**kwargs):
+    def eval(self, **kwargs):
         """  evaluate pattern functions
 
 
@@ -130,21 +132,21 @@ class Pattern(PyLayers):
         >>> #A3.eval()
 
         """
-        defaults = {'Rfloor':False,
-                    'nth':90,
-                    'nph':181,
-                    'grid':True,
-                    'th0':0,
-                    'th1':np.pi,
-                    'ph0':0,
-                    'ph1':2*np.pi,
-                    'azoffset':0,
-                    'inplace':True
+        defaults = {'Rfloor': False,
+                    'nth': 90,
+                    'nph': 181,
+                    'grid': True,
+                    'th0': 0,
+                    'th1': np.pi,
+                    'ph0': 0,
+                    'ph1': 2*np.pi,
+                    'azoffset': 0,
+                    'inplace': True
                    }
 
         for k in defaults:
             if k not in kwargs:
-                kwargs[k]=defaults[k]
+                kwargs[k] = defaults[k]
 
         if 'fGHz' not in kwargs:
             if 'fGHz' not in self.__dict__:
@@ -159,8 +161,8 @@ class Pattern(PyLayers):
         self.grid = kwargs['grid']
         #
         # if th and ph are empty 
-        #    if pt and pr are empty 
-        #          calculates from th0,th1,nth 
+        #    if pt and pr are empty
+        #          calculates from th0,th1,nth
         #                           ph0,phi,nph
         #    else
         #          calculates from points coordinates pt and pr
@@ -323,7 +325,7 @@ class Pattern(PyLayers):
                               'polar':'x',
                               'window':'rect'
                              }}
-        
+
         if 'param' not in kwargs or kwargs['param']=={}:
             kwargs['param']=defaults['param']
 
@@ -344,7 +346,7 @@ class Pattern(PyLayers):
             # Ndir x Nf 
             theta = self.theta[:,None]
             phi = self.phi[:,None]
-        
+
         vx = Dx_n[...,:]*np.sin(theta)*np.cos(phi) # 18.1.4
         vy = Dy_n[...,:]*np.sin(theta)*np.sin(phi) # 18.1.4
 
@@ -385,7 +387,7 @@ class Pattern(PyLayers):
 #
 #            Kp = np.fft.ifft2(self.Fp,axes=(0,1))
 #            Kt = np.fft.ifft2(self.Ft,axes=(0,1))
-#            
+#
 #            self.Fp = np.fft.fft2(Kp*Wt,axes=(0,1))
 #            self.Ft = np.fft.fft2(Kt*Wp,axes=(0,1))
 
@@ -397,7 +399,7 @@ class Pattern(PyLayers):
         Aperture in the (x,y) plane. Main lobe in theta=0 direction
 
         polar indicates the orientation of the Electric field either 'x' or 'y'
-       
+
         See theoretical background in : 
 
         http://www.ece.rutgers.edu/~orfanidi/ewa/ch18.pdf
@@ -419,7 +421,7 @@ class Pattern(PyLayers):
                               'polar':'x',
                               'window':'rect'
                              }}
-        
+
         if 'param' not in kwargs or kwargs['param']=={}:
             kwargs['param']=defaults['param']
 
@@ -440,7 +442,7 @@ class Pattern(PyLayers):
             # Ndir x Nf 
             theta = self.theta[:,None]
             phi = self.phi[:,None]
-        
+
         vx = a_n[...,:]*np.sin(theta)*np.cos(phi) # 18.1.4
         vy = b_n[...,:]*np.sin(theta)*np.sin(phi) # 18.1.4
 
@@ -483,7 +485,7 @@ class Pattern(PyLayers):
 #
 #            Kp = np.fft.ifft2(self.Fp,axes=(0,1))
 #            Kt = np.fft.ifft2(self.Ft,axes=(0,1))
-#            
+#
 #            self.Fp = np.fft.fft2(Kp*Wt,axes=(0,1))
 #            self.Ft = np.fft.fft2(Kt*Wp,axes=(0,1))
 
@@ -492,10 +494,9 @@ class Pattern(PyLayers):
     def __phplanesectoralhorn(self,**kwargs):
         """ H plane sectoral horn 
 
-
         Parameters
         ----------
-        
+
         rho1 : float 
             sector radius (meter)
         a1 : float
@@ -637,7 +638,7 @@ class Pattern(PyLayers):
                               'fcGHz':28.,
                               'polar':'x'
                              }}
-        
+
         if 'param' not in kwargs or kwargs['param']=={}:
             kwargs['param']=defaults['param']
 
@@ -677,7 +678,7 @@ class Pattern(PyLayers):
             # Ndir x Nf 
             theta = self.theta[:,None]
             phi = self.phi[:,None]
-        
+
         vx = A_n[...,:]*np.sin(theta)*np.cos(phi) # 18.3.4
         vy = B_n[...,:]*np.sin(theta)*np.sin(phi) # 18.3.4
 

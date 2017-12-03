@@ -8,7 +8,7 @@
 """
 .. currentmodule:: pylayers.gis.layout
 
-.. autosummary:: 
+.. autosummary::
 
 """
 from __future__ import print_function
@@ -44,22 +44,19 @@ from shapely.ops import cascaded_union
 from descartes.patch import PolygonPatch
 from numpy import array
 import PIL.Image as Image
-import logging
+import hashlib
+from pathos.multiprocessing import ProcessingPool as Pool
+from pathos.multiprocessing import cpu_count
+from functools import partial
+
 if sys.version_info.major==2:
     from  urllib2 import urlopen
     import ConfigParser
 else:
     from  urllib.request import urlopen
     import configparser
-import hashlib
-#from cStringIO import StringIO
-
-from pathos.multiprocessing import ProcessingPool as Pool
-from pathos.multiprocessing import cpu_count
-
-
+# from cStringIO import StringIO
 # from multiprocessing import Pool
-from functools import partial
 
 def _pickle_method(method):
 	func_name = method.im_func.__name__
@@ -338,7 +335,7 @@ class Layout(pro.PyLayers):
         loadlay = False
         loadosm = False
         loadres = False
-       
+
         #
         # Layout main argument
         #   If no .ini extension provided it is added
@@ -386,9 +383,9 @@ class Layout(pro.PyLayers):
             else:  # load from address geocoding
                 self.importosm(address=string, dist_m=dist_m, cart=True,typ=self.typ)
                 self.loadosm = True
-            
+
             # add boundary if it not exist
-            if not self.hasboundary:    
+            if not self.hasboundary:
                 self.boundary()
             self.subseg()
             self.updateshseg()
@@ -399,15 +396,15 @@ class Layout(pro.PyLayers):
                 print("problem to construct geomfile")
 
             #
-            # check layout 
+            # check layout
             #
             bconsistent = True
             if bcheck:
                 bconsistent = self.check()
-            
+
             # if Layout is correctly described
             # check if the graph gpickle files have been built
-            if bconsistent: 
+            if bconsistent:
                 #
                 # build and save graphs 
                 # 
@@ -457,19 +454,19 @@ class Layout(pro.PyLayers):
         st = '\n'
         st = st + "----------------\n"
         home = os.path.expanduser('~')
-        with open(os.path.join(home,'.pylayers'),'r') as f:
+        with open(os.path.join(home, '.pylayers'),'r') as f:
             paths = f.readlines()
         uporj = paths.index('project\n')
         project = paths[uporj+1]
         st = st + "Project : " + project+'\n'
-        if hasattr(self,'_hash'):
+        if hasattr(self, '_hash'):
             st = st + self._filename + ' : ' + self._hash + "\n"
         else:
             st = st + self._filename + "\n"
-        
+
         if self.isbuilt:
             st = st + 'Built with : ' + self.Gt.node[0]['hash'] + "\n"
-        st = st + 'Type : '+ self.typ+'\n'
+        st = st + 'Type : ' + self.typ+'\n'
 
         if self.display['overlay_file'] != '':
             filename = pyu.getlong(
@@ -477,7 +474,7 @@ class Layout(pro.PyLayers):
             st = st + "Image('" + filename + "')\n"
         st = st + "Coordinates : " + self.coordinates + "\n"
         st = st + "----------------\n"
-        if hasattr(self,'Gs'):
+        if hasattr(self, 'Gs'):
             st = st + "Gs : "+str(len(self.Gs.node))+"("+str(self.Np)+'/'+str(self.Ns)+'/'+str(len(self.lsss))+') :'+str(len(self.Gs.edges()))+'\n'
         if hasattr(self,'Gt'):
             st = st + "Gt : "+str(len(self.Gt.node))+' : '+str(len(self.Gt.edges()))+'\n'
@@ -545,8 +542,6 @@ class Layout(pro.PyLayers):
         #st = st + \
         #    "s -> u = self.tgs[s] -> v = self.tahe[:,u] -> s_ab = self.pt[:,v]\n\n"
         return(st)
-
-
 
     def __add__(self, other):
         """ addition
@@ -1070,7 +1065,7 @@ class Layout(pro.PyLayers):
 
         # degree of segment nodes
         degseg = map(lambda x: nx.degree(self.Gs, x), useg)
-        
+
         assert(np.all(array(degseg) == 2))  # all segments must have degree 2
 
         #
@@ -1172,18 +1167,18 @@ class Layout(pro.PyLayers):
         # convert to compressed row sparse matrix 
         # to be more efficient on row slicing
         self.s2pu = self.s2pu.tocsr()
-        
+
 
         # tic = time.time()
         # self.tahe[0, :] = np.array(
         #      map(lambda x: np.nonzero(np.array(upnt) == x)[0][0], ntail))
         # self.tahe[1, :] = np.array(
         #    map(lambda x: np.nonzero(np.array(upnt) == x)[0][0], nhead))
-        
+
         aupnt = np.array(upnt)
         self.tahe[0, :] = np.array([np.where(aupnt==x)[0][0] for x in ntail ])
         self.tahe[1, :] = np.array([np.where(aupnt==x)[0][0] for x in nhead ])
-        
+
         if verbose:
             print('tahe in numpy array : Done')
         #
@@ -1199,7 +1194,7 @@ class Layout(pro.PyLayers):
         #
         # handling of segment related arrays
         #
-       
+
         if Nsmax > 0:
             self.tgs = -np.ones(Nsmax + 1, dtype=int)
             rag = np.arange(len(useg))
@@ -3687,20 +3682,20 @@ class Layout(pro.PyLayers):
         return((pt,ke))
 
     def angleonlink3(self, p1=np.array([0, 0, 1]), p2=np.array([10, 3, 1])):
-        """ angleonlink(self,p1,p2) return (seglist,angle) between p1 and p2
+        """ return (seglist,angle) between p1 and p2
 
         Parameters
         ----------
 
-        p1 : np.array (3 x N) or (3,)  
+        p1 : np.array (3 x N) or (3,)
         p2 : np.array (3 x N) or (3,)
 
         Returns
         -------
 
         data : structured array x N
-            'i' : index 
-            's' : slab 
+            'i' : index
+            's' : slab
             'a' : angle (in radians)
 
 
@@ -3720,8 +3715,8 @@ class Layout(pro.PyLayers):
         See Also
         --------
 
-        antprop.loss.Losst 
-        
+        antprop.loss.Losst
+
         """
 
         sh1 = np.shape(p1)
@@ -3750,13 +3745,13 @@ class Layout(pro.PyLayers):
         # warning : seglist contains the segment number in tahe not in Gs
         #
         #
-        
+
         seglist  = np.unique(self.seginframe2(p1[0:2], p2[0:2]))
-    
+
 
         upos = np.nonzero(seglist >= 0)[0]
         uneg = np.nonzero(seglist < 0)[0]
-        
+
 
         # nNLOS = len(uneg) + 1
         # # retrieve the number of segments per link
@@ -3774,7 +3769,7 @@ class Layout(pro.PyLayers):
         Pta = self.pt[:, npta]
         Phe = self.pt[:, nphe]
 
-        
+
         # #
         # # This part should possibly be improved
         # #
@@ -3807,24 +3802,24 @@ class Layout(pro.PyLayers):
         L2 = zmax - zmin
         U2 = np.array([0, 0, 1])[:, None]  # 3 x 1  U2 is along z
         #
-        # p1 : 3 x Ng 
+        # p1 : 3 x Ng
         # p2 : 3 x Ng
         # Pg : 3 x Nscreen
-        # U1 : 3 x Nscreen 
-        # U2 : 3 x 1 
+        # U1 : 3 x Nscreen
+        # U2 : 3 x 1
         # L1 : ,Nscreen
-        # L2 : ,Nscreen 
+        # L2 : ,Nscreen
 
         bo = geu.intersect3(p1, p2, Pg, U1, U2, L1, L2)
         ubo = np.where(bo)
 
         Nseg = len(ubo[0])
-        data = np.zeros(Nseg, dtype=[
-                        ('i', 'i8'), ('s', 'i8'), ('a', np.float32)])
+        pdb.set_trace()
+        data = np.zeros(Nseg, dtype=[('i', 'i8'), ('s', 'i8'), ('a', np.float32)])
 
-        data['i']=ubo[0]
-        data['s']=self.tsg[ubo[1]]
-        
+        data['i'] = ubo[0]
+        data['s'] = self.tsg[ubo[1]]
+
         #
         # Calculate angle of incidence refered from segment normal
         #
