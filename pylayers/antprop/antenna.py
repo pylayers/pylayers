@@ -187,7 +187,7 @@ class Pattern(PyLayers):
                     thetaR = np.arccos((kwargs['pr'][2,:] + kwargs['pt'][2,:]) / dR)
                     self.theta = np.hstack([self.theta,thetaR])
                     self.phi = np.hstack([self.phi,self.phi])
-                    
+
         else :
             assert(len(kwargs['th'])==len(kwargs['ph']))
             self.theta = kwargs['th']

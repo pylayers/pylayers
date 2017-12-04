@@ -61,7 +61,6 @@ class Link(PyLayers):
         """ Link evaluation metaclass
         """
         PyLayers.__init__(self)
-   
 
 
     def __add__(self,l):
@@ -153,9 +152,9 @@ class DLink(Link):
             position of a device dev_a
         b : np.ndarray (3,)
             position of a device dev_b
-        ca : int 
+        ca : int
             cycle a number
-        cb : int 
+        cb : int
             cycle b number
         Ta : np.ndarray (3,3)
             Rotation matrice of Antenna of device dev_a relative to global Layout scene
@@ -173,7 +172,7 @@ class DLink(Link):
     def __init__(self, **kwargs):
         """ deterministic link evaluation
 
-        
+
         Advanced (change only if you really know what you do !)
 
         save_opt : list (['sig','ray','Ct','H'])
@@ -277,19 +276,19 @@ class DLink(Link):
 
         Link.__init__(self)
 
-        defaults={ 'L':'',
-                   'a':np.array(()),
-                   'b':np.array(()),
-                   'Aa':[],
-                   'Ab':[],
-                   'Ta':np.eye(3),
-                   'Tb':np.eye(3),
-                   'fGHz':np.array([2.4]),
-                   'wav':wvf.Waveform(),
-                   'cutoff':3,
-                   'threshold':0.8,
+        defaults={ 'L': '',
+                   'a': np.array(()),
+                   'b': np.array(()),
+                   'Aa': [],
+                   'Ab': [],
+                   'Ta': np.eye(3),
+                   'Tb': np.eye(3),
+                   'fGHz': np.array([2.4]),
+                   'wav': wvf.Waveform(),
+                   'cutoff': 3,
+                   'threshold': 0.8,
                    'delay_excess_max_ns':500,
-                   'save_opt':['sig','ray2','ray','Ct','H'],
+                   'save_opt': ['sig','ray2','ray','Ct','H'],
                    'save_idx':0,
                    'force_create':False,
                    'verbose':False,
@@ -2556,6 +2555,7 @@ class DLink(Link):
 
         pylayers.antprop.loss.losst
         pylayers.gis.layout.angleonlink3
+
         """
 
         v = np.vectorize( lambda t:self.L.Gs.node[t]['name'])

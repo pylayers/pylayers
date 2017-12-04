@@ -3664,13 +3664,15 @@ class Layout(pro.PyLayers):
         uymin = (y>=ymin)
         uxmax = (x<=xmax)
         uymax = (y<=ymax)
-        
+
         #
         # k True when all conditons are True simultaneously
-        # 
+        #
+
         k  = np.where(uxmin*uymin*uxmax*uymax==1)[0]
         pt = np.array(zip(x[k],y[k])).T
         ke = self.upnt[k]
+
         # if(pt.shape[1]<N):
         #     plt.ion()
         #     fig,a=self.showG('s')
@@ -3679,6 +3681,7 @@ class Layout(pro.PyLayers):
         #     plt.show()
         # ux = ((x>=xmin).all() and (x<=xmax).all())
         # uy = ((y>=ymin).all() and (y<=ymax).all())
+
         return((pt,ke))
 
     def angleonlink3(self, p1=np.array([0, 0, 1]), p2=np.array([10, 3, 1])):
@@ -3810,11 +3813,10 @@ class Layout(pro.PyLayers):
         # L1 : ,Nscreen
         # L2 : ,Nscreen
 
-        bo = geu.intersect3(p1, p2, Pg, U1, U2, L1, L2)
+        bo, pt = geu.intersect3(p1, p2, Pg, U1, U2, L1, L2)
         ubo = np.where(bo)
 
         Nseg = len(ubo[0])
-        pdb.set_trace()
         data = np.zeros(Nseg, dtype=[('i', 'i8'), ('s', 'i8'), ('a', np.float32)])
 
         data['i'] = ubo[0]
