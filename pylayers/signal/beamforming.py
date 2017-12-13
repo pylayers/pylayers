@@ -3,10 +3,10 @@ import numpy as np
 import scipy as sp
 
 
-def weight(N,**kwags):
-    default = {'sll':20,
-               'typ':'uniform'
-              }
+def weight(N,**kwargs):
+    defaults = {'sll':20,
+                'typ':'uniform'
+               }
 
     for k in defaults:
         if k not in kwargs:
