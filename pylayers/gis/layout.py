@@ -5877,7 +5877,7 @@ class Layout(pro.PyLayers):
         Parameters
         ----------
 
-            holes : ndarray
+        holes : ndarray
                 if holes ==[] : it means the merge is applied on the interior of the layout (indoor)
                 if holes == np.ndarray (centroid of polygon). indoor is discarded and delaunay
                         is applied on outdoor
@@ -5886,10 +5886,10 @@ class Layout(pro.PyLayers):
         Returns
         -------
 
-            T : dict 
+        T : dict 
                 dictionnary from triangle.triangulate library with the following keys
                 ['segment_markers', 'segments', 'holes', 'vertices', 'vertex_markers', 'triangles']
-            map_vertices : points index 
+        map_vertices : points index 
 
 
         Notes
@@ -5914,7 +5914,7 @@ class Layout(pro.PyLayers):
             vnodes = self.Gs.nodes()
 
         # find termination points of segments of layout
-            if nx.__version__>1.10:
+            if nx.__version__!='1.10':
                 seg = np.array([self.Gs[x]  for x in vnodes
                         if x > 0
                         and x not in segbounds])
@@ -5926,7 +5926,7 @@ class Layout(pro.PyLayers):
         ivertices = np.array([(x, self.Gs.pos[x][0], self.Gs.pos[x][1]) for x in vnodes
                               if x < 0
                               and x not in ptbounds])
-        
+
         # map_vertices : points negative index  (Np,) 
         map_vertices = ivertices[:, 0].astype('int')
         # vertices : coordinates (Np x 2) 
