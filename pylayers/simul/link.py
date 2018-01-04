@@ -306,7 +306,7 @@ class DLink(Link):
         # set default attribute
 
         for key, value in defaults.items():
-        
+
             if key not in kwargs:
                 if key in specset :
                     setattr(self,'_'+key,value)
@@ -326,7 +326,7 @@ class DLink(Link):
         force = self.force_create
         delattr(self,'force_create')
 
-       
+
         # dictionnary data exists
         self.dexist={'sig':{'exist':False,'grpname':''},
                      'ray':{'exist':False,'grpname':''},
@@ -342,7 +342,7 @@ class DLink(Link):
             self.Aa=Antenna(typ='Omni',fGHz=self.fGHz)
         if self.Ab==[]:
             self.Ab=Antenna(typ='Omni',fGHz=self.fGHz)
-        
+
         if isinstance(self._L,str):
             self._Lname = self._L
             self._L = Layout(self._Lname,bgraphs=True,bcheck=False)
@@ -361,8 +361,8 @@ class DLink(Link):
                 print('Creating file. You\'ll see this message only once per Layout')
                 self.save_init(filenameh5)
 
-            
-            
+
+
             try:
                 self.L.dumpr()
                 print('Layout Graph loaded')
@@ -370,7 +370,7 @@ class DLink(Link):
                 print('This is the first time the Layout is used. Graphs have to be built. Please Wait')
                 self.L.build(graph=self.graph)
                 self.L.dumpw()
-            
+
             #
             # In outdoor situation we delete transmission node involving  
             # an indoor cycle at the exception of AIR 
@@ -398,14 +398,14 @@ class DLink(Link):
                         if l in lTiw:
                             del output[l]
                     self.L.Gi.edge[e[0]][e[1]]['output']=output
-                
+
             #self.L.dumpw()
             #self.L.build()
 
             self.init_positions()
 
 
-           
+
             ###########
             # init freq
             # TODO Check where it is used redundant with fGHz
@@ -596,7 +596,7 @@ class DLink(Link):
 
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
             self._update_show3(ant='a')
-        
+
         if hasattr(self,'ca') and hasattr(self,'cb'):
             self.checkh5()
 
@@ -607,7 +607,7 @@ class DLink(Link):
            self.Ab._mayamesh.remove()
 
 
-        
+
         #save rot
         rot = self.Tb
         self._Ab = Ant
@@ -620,7 +620,7 @@ class DLink(Link):
 
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
             self._update_show3(ant='b')
-        
+
         if hasattr(self,'ca') and hasattr(self,'cb'):
             self.checkh5()
 
@@ -630,7 +630,7 @@ class DLink(Link):
         self._Ta = orientation
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
             self._update_show3(ant='a')
-        
+
         if hasattr(self,'ca') and hasattr(self,'cb'):
             self.checkh5()
 
@@ -641,7 +641,7 @@ class DLink(Link):
         self._Tb = orientation
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
             self._update_show3(ant='b')
-        
+
         if hasattr(self,'ca') and hasattr(self,'cb'):
             self.checkh5()
 
@@ -675,7 +675,7 @@ class DLink(Link):
     def delay_excess_max_ns(self,delay_excess_max_ns):
 
         delay_excess_max_ns = max(delay_excess_max_ns,0.)
-       
+
         self._delay_excess_max_ns = delay_excess_max_ns
 
         if hasattr(self,'ca') and hasattr(self,'cb'):
@@ -710,7 +710,7 @@ class DLink(Link):
             self.Aa.fGHz=self.fGHz
             self.Ab.fGHz=self.fGHz
 
-        
+
         if hasattr(self,'ca') and hasattr(self,'cb'):
             self.checkh5()
 
@@ -798,7 +798,7 @@ class DLink(Link):
         Parameters
         ----------
 
-        iray : int 
+        iray : int
             ray index
 
         """
@@ -828,10 +828,10 @@ class DLink(Link):
     #         if len(fa)==0:
     #             fa = np.array([2.4])
     #             self.Aa.fGHz = fa
-    #             # raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz") 
+    #             # raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz")
     #             print "Incompatible frequency range in Antenna. WARNING  Dlink.fGHz changed to 2.4GHz"
     #         try:
-    #             sa = fa[1]-fa[0]  # step frequecy 
+    #             sa = fa[1]-fa[0]  # step frequecy
     #         except: #single frequency
     #             sa = fa[0]
     #         # step
@@ -852,7 +852,6 @@ class DLink(Link):
     #             self.Ab.fGHz=fb
     #             # raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz") 
     #             print "Incompatible frequency range in Antenna. WARNING  Dlink.fGHz changed to 2.4GHz"
-        
     #         try:
     #             sb = fb[1]-fb[0] # step frequency 
     #         except:
@@ -896,13 +895,13 @@ class DLink(Link):
         elif self.L.typ=='indoor':
             nodes = [n for n in nodes if n!=0 and self.L.Gt.node[n]['indoor']] 
         else:
-            nodes = [n for n in nodes if n!=0 ] 
+            nodes = [n for n in nodes if n!=0 ]
 
         # draw the link extremities randomly
 
         np.random.seed(self.seed)
-        ia = np.random.randint(0,len(nodes))    
-        ib = np.random.randint(0,len(nodes))    
+        ia = np.random.randint(0,len(nodes))
+        ib = np.random.randint(0,len(nodes))
         if len(self.a)==0 or force:
             self.ca = nodes[ia]
         else:
@@ -993,7 +992,7 @@ class DLink(Link):
 
         filename_long : str
             complete path and filename
-        
+
         'sig'    : Signatures
         'ray2'   : 2D rays 
         'ray'    : 3D rays 
@@ -1424,7 +1423,7 @@ class DLink(Link):
         # Antenna Rotation
         self.C.locbas(Ta=self.Ta, Tb=self.Tb)
         # Transmission channel calculation
-        H = self.C.prop2tran(a=self.Aa,b=self.Ab,Friis=True,debug=True)
+        H = self.C.prop2tran(a=self.Aa, b=self.Ab, Friis=True, debug=True)
         self.H = H
 
     def eval(self,**kwargs):
@@ -1450,7 +1449,7 @@ class DLink(Link):
             ceil height . 
                 If [] : Layout max ceil height 
                 If 0 : only floor reflection (outdoor case) 
-                If -1 : neither ceil nor floor reflection (2D case) 
+                If -1 : neither ceil nor floor reflection (2D case)
         ra_vectorized: boolean (True)
             if True used the (2015 new) vectorized approach to determine 2drays
         progressbar: str
@@ -1493,15 +1492,13 @@ class DLink(Link):
 
         """
 
-
-
-        defaults={ 'applywav':False,
-                   'si_progress':True,
-                   'diffraction':True,
-                   'ra_vectorized':True,
-                   'ra_ceil_H':[],
-                   'ra_number_mirror_cf':1,
-                   'force':[],
+        defaults = {'applywav': False,
+                   'si_progress': True,
+                   'diffraction': True,
+                   'ra_vectorized': True,
+                   'ra_ceil_H': [],
+                   'ra_number_mirror_cf': 1,
+                   'force':True,
                    'bt':True,
                    'alg':1,
                    'si_reverb':4,
@@ -1549,7 +1546,6 @@ class DLink(Link):
         if kwargs['verbose'] != []:
             self.verbose=kwargs['verbose']
 
-        
         # must be placed after all the init !!!!
         # if self.verbose :
         #     print("checkh5")
@@ -1568,28 +1564,28 @@ class DLink(Link):
         ############
         # Signatures
         ############
-        
-        if self.verbose :
+
+        if self.verbose:
             print("Start Signatures")
         tic = time.time()
         Si = Signatures(self.L,
                         self.ca,
                         self.cb,
-                        cutoff=kwargs['cutoff'],
+                        cutoff = kwargs['cutoff'],
                         threshold = kwargs['threshold'])
 
         if (self.dexist['sig']['exist'] and not ('sig' in kwargs['force'])):
-            self.load(Si,self.dexist['sig']['grpname'],L=self.L)
-            if self.verbose :
+            self.load(Si, self.dexist['sig']['grpname'], L=self.L)
+            if self.verbose:
                 print("load signature")
-        else :
+        else:
             ## 1 is the default signature determination algorithm
             if kwargs['alg']==1:
                 self.nD = kwargs['nD']
                 self.nT = kwargs['nT']
                 self.nR = kwargs['nR']
                 self.bt = kwargs['bt']
-                
+
                 Si.run(cutoff = self.cutoff,
                         diffraction = kwargs['diffraction'],
                         threshold = self.threshold,
@@ -1617,7 +1613,7 @@ class DLink(Link):
 
         #Si.run6(diffraction=kwargs['diffraction'])
         # save sig
-            
+
             self.save(Si,'sig',self.dexist['sig']['grpname'],force = kwargs['force'])
 
         self.Si = Si
@@ -1639,7 +1635,7 @@ class DLink(Link):
             print("Start Rays")
         tic = time.time()
         r2d = Rays(self.a,self.b)
-       
+
 
         #
         # get 2D rays 
@@ -1680,9 +1676,9 @@ class DLink(Link):
             R = self.r2d.to3D(self.L,H=ceilheight, N=kwargs['ra_number_mirror_cf'])
             if kwargs['rm_aw']:
                 R = R.remove_aw(self.L)
-            
+
             R.locbas(self.L)
-            
+
             R.fillinter(self.L)
 
             # C = Ctilde()
@@ -1693,12 +1689,12 @@ class DLink(Link):
 
             self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])
 
-        
+
         self.R = R
         toc = time.time()
         if self.verbose :
             print("Stop rays",toc-tic)
-        
+
         if self.R.nray == 0:
             raise NameError('No rays have been found. Try to re-run the simulation with a higher S.cutoff ')
         try:
@@ -1708,7 +1704,7 @@ class DLink(Link):
         ############
         # Ctilde
         ############
-        
+
         if self.dexist['Ct']['exist'] and not ('Ct' in kwargs['force']):
             C = Ctilde()
             self.load(C,self.dexist['Ct']['grpname'])
@@ -1717,7 +1713,7 @@ class DLink(Link):
             # Ctilde...
             # Find an other criteria in order to decide if the R has
             # already been evaluated
-            
+
             C = R.eval(self.fGHz)
             # ...save Ct
             self.save(C,'Ct',self.dexist['Ct']['grpname'],force = kwargs['force'])
@@ -1748,8 +1744,6 @@ class DLink(Link):
         except: 
             pass
 
-
-
         if kwargs['applywav']:
             if self.H.isFriis:
                 self.ir = self.H.get_cir(self.wav.sf)
@@ -1773,7 +1767,7 @@ class DLink(Link):
         self.adpmes.cut(imax=imax)
         self.adprt = self.afprt.toadp()
         self.adprt.cut(imax=imax)
-        
+
     def afp(self,**kwargs):
         """ Evaluate angular frequency profile 
 
@@ -2060,14 +2054,14 @@ class DLink(Link):
                 lr  = np.arange(self.R.nray)
             else:
                 lr = kwargs['lr']
-            
+
             vmin = val.min()
             vmax = val.max() 
             if kwargs['dB']:
                 vmin = 10*np.log10(vmin)
                 vmax = 10*np.log10(vmax)
-            
-            
+
+
             #
             # limitation of the vizualization zone around the center of the link 
             #
@@ -2091,7 +2085,7 @@ class DLink(Link):
                     col = kwargs['col']
                     width = kwargs['width']
                     alpha = kwargs['alpha']
-                
+
                 # plot ray (i,r) 
                 fig,ax = self.R.show(rlist=[ir],
                                colray=col,

@@ -2655,10 +2655,7 @@ class Rays(PyLayers, dict):
                 b0 = self[k]['B'][:,:,0,:]
                 # first unitary matrix 1:
                 # dimension i and r are merged
-                try:
-                    b = self[k]['B'][:,:,1:,:].reshape(3, 3, size2-nbray,order='F')
-                except:
-                    pdb.set_trace()
+                b = self[k]['B'][:,:,1:,:].reshape(3, 3, size2-nbray,order='F')
 
 
                 ## find used slab
@@ -2783,9 +2780,12 @@ class Rays(PyLayers, dict):
                 B.stack(data=np.eye(3)[np.newaxis,:,:], idx=ze)
                 B0.stack(data=np.eye(3)[np.newaxis,:,:],idx=ze)
 
-        T.create_dusl(tsl)
-        R.create_dusl(rsl)
-        D.create_dusl(dw)
+        if len(tsl)>0:
+            T.create_dusl(tsl)
+        if len(rsl)>0:
+            R.create_dusl(rsl)
+        if len(dw)>0:
+            D.create_dusl(dw)
         # create interactions structure
         self.I = I
         self.I.add([T, R, D])

@@ -118,7 +118,6 @@ class Inter(PyLayers):
             self.dusl[s]=np.where(a==s)[0]
 
 
-
     def sinsout(self):
         """ calculate sin sout of the interaction
 
