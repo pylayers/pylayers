@@ -2471,9 +2471,9 @@ class Rays(PyLayers, dict):
         Notes
         -------
 
-        This method adds the following members 
-        
-        I : Interactions 
+        This method adds the following members
+
+        I : Interactions
         B : IntB
         B0 : IntB
 
@@ -2545,7 +2545,7 @@ class Rays(PyLayers, dict):
 
         R.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
         T.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
-        
+
         #to be specified and limited to used wedges
         if hasattr(self,'_luw'):
             D.dusl = dict.fromkeys(self._luw, np.array((), dtype=int))
@@ -2579,7 +2579,7 @@ class Rays(PyLayers, dict):
                 s_in = si[0:-1,:]
                 # distance in
                 s_out = si[1:,:]
-                
+
                 if self[k].has_key('diffvect'):
 
                     dvec = self[k]['diffvect']
@@ -2638,7 +2638,7 @@ class Rays(PyLayers, dict):
                 # TODO
                 # dirty fix
                 # nbray is either an int or an array. why ?
-                if type(nbray)==np.array:
+                if type(nbray)==np.ndarray:
                     nbray=nbray[0]
 
                 #  ,(i+1)xr
@@ -2655,7 +2655,10 @@ class Rays(PyLayers, dict):
                 b0 = self[k]['B'][:,:,0,:]
                 # first unitary matrix 1:
                 # dimension i and r are merged
-                b  = self[k]['B'][:,:,1:,:].reshape(3, 3, size2-nbray,order='F')
+                try:
+                    b = self[k]['B'][:,:,1:,:].reshape(3, 3, size2-nbray,order='F')
+                except:
+                    pdb.set_trace()
 
 
                 ## find used slab
@@ -2664,7 +2667,7 @@ class Rays(PyLayers, dict):
                 # nstrf is a number of slab
                 # this is a problem for handling subsegment
                 #
-                
+
                 # seek for interactions position
                 ################################
 

@@ -1458,8 +1458,8 @@ class DLink(Link):
             python : progress bar in ipython
 
 
-    
-        Notes    
+
+        Notes
         -----
 
         update self.ak and self.tk
