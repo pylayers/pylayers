@@ -35,7 +35,7 @@ A = np.array(([[0,0,3],
 D = np.sqrt(np.sum((A[:,None,:]-P[:,:,None])**2,axis=0))
 toa = D/0.3
 
-#error 
+#error
 n = std*np.random.randn(N,A.shape[1])
 toa= toa + n
 
@@ -43,9 +43,6 @@ toa= toa + n
 tdoa = np.array(([toa[:,0]-toa[:,1]],[toa[:,0]-toa[:,2]],[toa[:,0]-toa[:,3]])).reshape(N,3)
 #ATDOA : nb_tdoa,a1a2,xy
 ATDOA= np.array(([A[:,0],A[:,1]], [A[:,0],A[:,2]], [A[:,0],A[:,3]]))
-
-
-
 
 # nodes={}
 # ldp={}
@@ -90,18 +87,11 @@ pe_toa=np.array(pe_toa).T
 pe_tdoa=np.array(pe_tdoa).T
 pe_toa_tdoa=np.array(pe_toa_tdoa).T
 
-
-
-
-
 RMSE={}
 
 RMSE['toa'] = np.sqrt(np.sum((pe_toa-P)**2,axis=0))
 RMSE['tdoa'] = np.sqrt(np.sum((pe_tdoa-P)**2,axis=0))
 RMSE['toa+tdoa'] = np.sqrt(np.sum((pe_toa_tdoa-P)**2,axis=0))
-
-
-
 
 co = ['r','g','b']
 lv=[]

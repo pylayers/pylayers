@@ -2063,24 +2063,24 @@ class TUsignal(TBsignal, Usignal):
         O.x = self.x
         return(O)
 
-    # def ftshift(self):
-    #     """ return the associated FUsignal
+    def ftshift(self):
+         """ return the associated FUsignal
 
-    #     Returns
-    #     -------
+         Returns
+         -------
 
-    #     H : FUsignal
+         H : FUsignal
 
-    #     See Also
-    #     --------
+         See Also
+         --------
 
-    #     pylayers.signal.bsignal.TUsignal.fftsh
-    #     pylayers.signal.waveform.ip_generic
+         pylayers.signal.bsignal.TUsignal.fftsh
+         pylayers.signal.waveform.ip_generic
 
-    #     """
-    #     A  = self.fftsh()
-    #     AU = A.unrex()
-    #     return(AU)
+         """
+         A  = self.fftsh()
+         AU = A.unrex()
+         return(AU)
 
 
     def psd(self, Tpns=100, R=50,periodic=True):
