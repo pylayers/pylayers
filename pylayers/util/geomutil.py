@@ -2923,6 +2923,24 @@ def onb(A, B, v):
     T = T.swapaxes(0, 1)
     return T
 
+def dist_sph(u1,u2):
+    """ distance betwwen points on the sphere
+
+    Parameters
+    ----------
+    u1 : np.array (Nx2)
+        (theta,phi)
+    u2 : np.array (Mx2)
+        (theta,phi)
+    """
+    v1 = np.array((np.cos(u1[:, 1])*np.sin(u1[:, 0]),
+                   np.sin(u1[:, 1])*np.sin(u1[:, 0]),
+                   np.cos(u1[:, 0])))
+    v2 = np.array((np.cos(u2[:, 1])*np.sin(u2[:, 0]),
+                   np.sin(u2[:, 1])*np.sin(u2[:, 0]),
+                   np.cos(u2[:, 0])))
+    A = (1-np.dot(v1.T,v2))/2
+    return(v1,v2,A)
 
 def vec_sph(th, ph):
     """

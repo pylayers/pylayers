@@ -212,7 +212,7 @@ class Pattern(PyLayers):
             self.gain()
         else:
             return Ft,Fp
-        
+
     def vsh(self,threshold=-1):
         if self.evaluated:
             vsh(self)
@@ -224,20 +224,20 @@ class Pattern(PyLayers):
             ssh(self,L,dsf)
 
     def __pdipole(self,**kwargs):
-        """ dipole antenna along z axis 
+        """ dipole antenna along z axis
 
-        From Balanis (Formula 4.62(a)) 
-        
-        .. math:: 
-        
-            F_{\theta}(\theta,\phi) = \left[  \frac{\cos\left(\frac{kl}{2}\cos\theta\right)- \cos\left(\frac{kl}{2}\right)}{\sin \theta} \right] 
+        From Balanis (Formula 4.62(a))
+
+        .. math::
+
+            F_{\theta}(\theta,\phi) = \left[  \frac{\cos\left(\frac{kl}{2}\cos\theta\right)- \cos\left(\frac{kl}{2}\right)}{\sin \theta} \right]
 
         """
         defaults = { 'param' : { 'l' : 0.25 } }
 
         if 'param' not in kwargs or kwargs['param']=={}:
             kwargs['param']=defaults['param']
-        
+
         l = kwargs['param']['l']
         if self.grid:
             # Nth x Nphx Nf
@@ -303,7 +303,7 @@ class Pattern(PyLayers):
         Aperture in the (x,y) plane. Main lobe in theta=0 direction
 
         polar indicates the orientation of the Electric field either 'x' or 'y'
-       
+
         See theoretical background in : 
 
         http://www.ece.rutgers.edu/~orfanidi/ewa/ch18.pdf
@@ -948,7 +948,7 @@ class Pattern(PyLayers):
         """
         assert hasattr(self,'C'),'no spherical coefficient'
         assert hasattr(self.C.Br,'s1'),'no shape 1 coeff in vsh'
-        
+
         if self.grid:
             theta = np.kron(self.theta, np.ones(self.nph))
             phi = np.kron(np.ones(self.nth),self.phi)
@@ -1015,7 +1015,7 @@ class Pattern(PyLayers):
         # last axis should be frequency 
         assert(Ft.shape[-1]==self.nf)
         assert(Fp.shape[-1]==self.nf)
-        
+
         return Ft, Fp
 
     def __pvsh3(self,**kwargs):
@@ -1073,12 +1073,12 @@ class Pattern(PyLayers):
         # last axis should be frequency 
         assert(Ft.shape[-1]==self.nf)
         assert(Fp.shape[-1]==self.nf)
-        
+
         return Ft,Fp
 
     def __psh3(self,**kwargs):
         """ calculate pattern for sh3
-        
+
         Parameters
         ----------
 
@@ -1122,7 +1122,7 @@ class Pattern(PyLayers):
 
         assert(Ft.shape[-1]==self.nf)
         assert(Fp.shape[-1]==self.nf)
-        
+
         return Ft,Fp
 
     def __pwireplate(self,**kwargs):
@@ -1173,7 +1173,7 @@ class Pattern(PyLayers):
     def __pcst(self,**kwargs):
         """ read antenna in text format
         """
-       
+
         defaults = {'param':{'p' : 2,
                     'directory':'ant/FF_Results_txt_port_1_2/',
                     'fGHz':np.arange(2,6.5,0.5)}}
@@ -1182,10 +1182,10 @@ class Pattern(PyLayers):
             param=defaults['param']
         else:
             param=kwargs['param']
-       
+
         self.fGHz = param['fGHz']
         self.nf = len(self.fGHz)
-        
+
         for f in param['fGHz']:
             if ((int(f*10))%10)==0:
                _filename1 = 'E_port'+str(param['p'])+'_f'+str(int(f))+'GHz.txt'
@@ -1194,11 +1194,11 @@ class Pattern(PyLayers):
             else:
                 _filename1 = 'E_port'+str(param['p'])+'_f'+str(f)+'GHz.txt'
                 _filename2 = 'E_port'+str(param['p'])+'_f'+str(f)+'Ghz.txt'
-        
-            
+
+
             filename1 = pyu.getlong(_filename1, param['directory'])
             filename2 = pyu.getlong(_filename2, param['directory'])
-            
+
             try:
                 df = pd.read_csv(filename1,sep=';')
             except:
@@ -1233,9 +1233,9 @@ class Pattern(PyLayers):
 
     def __pHertz(self,**kwargs):
         """ Hertz dipole
-        
+
         param = {'param':{'le':np.array([0,0,1])}}
-        le unit vector defining the dipole orientation 
+        le unit vector defining the dipole orientation
 
         """
         defaults = {'param':{'le':np.array([0,0,1])}}
@@ -1417,7 +1417,7 @@ class Pattern(PyLayers):
             p = self.p.reshape(3,Np)
         else:
             p = self.p
-        
+
         Np = p.shape[1]
         self.Sc = self.param['Sc']
         if self.Sc==[]:
@@ -1443,7 +1443,7 @@ class Pattern(PyLayers):
         # sdotp : Nd x Np
 
         sdotp  = np.dot(self.s,p)   # s . p
-        
+
         for a in self.la:
             if not self.grid:
                 a.eval(grid=self.grid,ph=self.phi,th=self.theta)
@@ -1460,7 +1460,7 @@ class Pattern(PyLayers):
         shF = aFt.shape
         aFt = aFt.reshape(np.prod(shF[0:-1]),shF[-1])
         aFp = aFp.reshape(np.prod(shF[0:-1]),shF[-1])
-        
+
         #
         # Same pattern on each point
         #
@@ -1552,7 +1552,7 @@ class Pattern(PyLayers):
 
     def gain(self):
         """  calculates antenna gain
-        
+
         Notes
         -----
 
@@ -2237,8 +2237,8 @@ class Antenna(Pattern):
 
 
     def load_atoll(self,directory="ant"):
-        """ load antenna from Atoll file 
-        
+        """ load antenna from Atoll file
+
         Atoll format provides Antenna gain given for the horizontal and vertical plane 
         for different frequencies and different tilt values 
 
@@ -2279,7 +2279,7 @@ class Antenna(Pattern):
         # Parse polarization in the field name
         #
         upolarp45 = ['(+45)' in x for x in dff['Name']]
-        upolarm45 = ['(-45)' in x for x in dff['Name']]  
+        upolarm45 = ['(-45)' in x for x in dff['Name']]
         if (sum(upolarp45)>0):
             dff.loc[upolarp45,'Polar']=45
         if (sum(upolarm45)>0):
@@ -2295,7 +2295,7 @@ class Antenna(Pattern):
                 atoll[keyband][p[0]] = {} # polar
                 dftilt = p[1].groupby(['Tilt'])
                 Ghor = np.empty((360,1))  # angle , tilt , frequency
-                Gver = np.empty((360,1))  # angle , 
+                Gver = np.empty((360,1))  # angle ,
                 ct = 0
                 tilt = []
                 for t in dftilt:

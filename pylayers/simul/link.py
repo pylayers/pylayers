@@ -2346,14 +2346,14 @@ class DLink(Link):
         Parameters
         ----------
 
-        BWGHz : Bandwidth 
+        BWGHz : Bandwidth
         Nf    : Number of frequency points
-        fftshift : boolean 
+        fftshift : boolean
         rays : boolean
             display rays contributors
         fspl : boolean
             display free space path loss
-        
+
         See Also
         --------
 
@@ -2362,8 +2362,8 @@ class DLink(Link):
         """
 
         defaults = {'fig':[],
-                    'ax': [],
-                     'BWGHz':5,
+                    'ax':[],
+                    'BWGHz':5,
                     'Nf':1000,
                     'rays':True,
                     'fspl':True,
@@ -2383,22 +2383,23 @@ class DLink(Link):
             ax = plt.gca()
         else:
             ax = kwargs['ax']
-        
+
         taumax = self.H.taud.max()
         BWGHz = kwargs['BWGHz']
 
         Nf = np.maximum(kwargs['Nf'],taumax*BWGHz).astype(int)
-        # getcir is a Tchannel method 
+        # getcir is a Tchannel method
 
-        ir = self.H.getcir(BWGHz =BWGHz,Nf=Nf)
-        ir.plot(fig=fig,ax=ax)
+        self.ir = self.H.getcir(BWGHz =BWGHz,Nf=Nf)
+        self.ir.plot(fig=fig,ax=ax)
         plt.ylim(kwargs['vmin'],kwargs['vmax'])
 
 
-        delay = ir.x 
+        delay = self.ir.x
+        delay = delay[delay>0]
         dist = delay*0.3
-        FSPL0 = -32.4- 20*np.log10(self.fGHz[0])-20*np.log10(dist) 
-        FSPLG = FSPL0 + self.Aa.GdBmax[0] + self.Ab.GdBmax[0] 
+        FSPL0 = -32.4- 20*np.log10(self.fGHz[0])-20*np.log10(dist)
+        FSPLG = FSPL0 + self.Aa.GdBmax[0] + self.Ab.GdBmax[0]
         if kwargs['fspl']:
             # Free space path loss
             ax.plot(delay,FSPL0,linewidth=2,color='b',label='FSPL')
@@ -2406,19 +2407,19 @@ class DLink(Link):
             ax.plot(delay,FSPLG,linewidth=3,color='k',label='FSPL+Gtmax+Grmax')
 
 
-        if kwargs['rays'] : 
+        if kwargs['rays']:
             # energy of each ray
             ER = np.squeeze(self.H.energy())
             color_range = np.linspace( 0, 1., len(ER))#np.linspace( 0, np.pi, len(ER))
             # sort rays by increasing energy
             uER = ER.argsort()[::-1]
             colors= color_range[uER]
-            # most important rays , it=0 ir=0 , if =0 
+            # most important rays , it=0 ir=0 , if =0
             ax.scatter(self.H.taud[uER],20*np.log10(np.abs(self.H.y[uER,0,0,0])),c=colors,cmap='hot')
             ax.set_xlim([min(self.H.taud)-10,max(self.H.taud)+10])
 
         ax.legend()
-        return fig,ax,ir
+        return fig,ax
 
 
     def plt_doa(self,**kwargs):
