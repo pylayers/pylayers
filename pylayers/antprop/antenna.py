@@ -86,33 +86,33 @@ class Pattern(PyLayers):
         Parameters
         ----------
 
-        th: list 
+        th: list
             []
-        ph: list 
+        ph: list
             []
         pt : np.array (3,N)
         pr : np.array (3,N)
-        azoffset : int (0) 
+        azoffset : int (0)
         Rfloor:bool
-            if true add gain value to reflected ray on the floor. 
+            if true add gain value to reflected ray on the floor.
             values are append at the end of sqG.
-        fGHz:list 
+        fGHz:list
             []
-        nth: int 
+        nth: int
             90
-        nph: int 
+        nph: int
             181
-        first: boolean 
+        first: boolean
             True if first call (to define self.param)
-        grid:  boolean 
+        grid:  boolean
             True for pattern mode, False for Ray Tracing mode
-        th0 : float 
+        th0 : float
             theta initial value
-        th1 : float 
+        th1 : float
             theta finale value
-        ph0 : float 
+        ph0 : float
             phi initial value
-        ph1 : float 
+        ph1 : float
             phi final value
 
 
@@ -285,7 +285,7 @@ class Pattern(PyLayers):
         self.param = kwargs['param']
         self.GmaxdB  = self.param['GmaxdB']
         self.pol  = self.param['pol']
-        G    = pow(10.,self.GmaxdB/10.) # linear gain
+        G = pow(10.,self.GmaxdB/10.) # linear gain
         if self.grid:
             # Nth x Nphx Nf
             self.sqG  = np.array(np.sqrt(G))*np.ones(len(self.fGHz))[None,None,:]
@@ -1559,12 +1559,12 @@ class Pattern(PyLayers):
         This function updates the following attributes
 
         + self.G  : np.array(Nt,Np,Nf) dtype:float
-            linear gain 
+            linear gain
                   or np.array(Nr,Nf)
-        + self.sqG : np.array(Nt,Np,Nf) dtype:float 
-            linear sqare root of gain 
+        + self.sqG : np.array(Nt,Np,Nf) dtype:float
+            linear sqare root of gain
                   or np.array(Nr,Nf)
-        + self.efficiency : np.array (,Nf) dtype:float 
+        + self.efficiency : np.array (,Nf) dtype:float
             efficiency 
         + self.hpster : np.array (,Nf) dtype:float
             half power solid angle :  1 ~ 4pi steradian 
@@ -1576,7 +1576,7 @@ class Pattern(PyLayers):
 
         """
         self.G = np.real( self.Fp * np.conj(self.Fp)
-                       +  self.Ft * np.conj(self.Ft) )
+                       +  self.Ft * np.conj(self.Ft))
 
 
         if self.grid:
@@ -1590,16 +1590,16 @@ class Pattern(PyLayers):
             self.sqG = np.sqrt(self.G)
             self.GdB = 10*np.log10(self.G)
             # GdBmax (,Nf)
-            # Get direction of Gmax and get the polarisation state in that direction 
-            # 
+            # Get direction of Gmax and get the polarisation state in that direction
+            #
             self.GdBmax = np.max(np.max(self.GdB,axis=0),axis=0)
             self.umax = np.array(np.where(self.GdB==self.GdBmax))[:,0]
             self.theta_max = self.theta[self.umax[0]]
             self.phi_max = self.phi[self.umax[1]]
             M = geu.SphericalBasis(np.array([[self.theta_max,self.phi_max]]))
             self.sl = M[:,2].squeeze()
-            uth = M[:,0] 
-            uph = M[:,1] 
+            uth = M[:,0]
+            uph = M[:,1]
 
             el = self.Ft[tuple(self.umax)]*uth + self.Fp[tuple(self.umax)]*uph
             eln = el/np.linalg.norm(el)
@@ -3078,19 +3078,19 @@ class Antenna(Pattern):
             self.eval(pattern=True)
 
         # k is the frequency index
-        if hasattr(self,'p'):
+        if hasattr(self, 'p'):
             lpshp = len(self.p.shape)
-            sum_index = tuple(np.arange(1,lpshp))
-            po = np.mean(self.p,axis=sum_index)
-            kwargs['po']=po
+            sum_index = tuple(np.arange(1, lpshp))
+            po = np.mean(self.p, axis=sum_index)
+            kwargs['po'] = po
 
-        x, y, z, k, scalar  = self._computemesh(**kwargs)
+        x, y, z, k, scalar = self._computemesh(**kwargs)
 
         if bnewfig:
             mlab.clf()
-            f=mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
-        else :
-            f=mlab.gcf()
+            f = mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
+        else:
+            f = mlab.gcf()
 
         if kwargs.has_key('opacity'):
             opacity = kwargs['opacity']
@@ -3186,12 +3186,12 @@ class Antenna(Pattern):
         k frequency point evaluated
 
         """
-        defaults = { 'fGHz' :[],
-                     'po': np.array([0,0,0]),
-                     'T' : np.eye(3),
-                     'minr' : 0.1,
-                     'maxr' : 1 ,
-                     'scale':1.,
+        defaults = {'fGHz': [],
+                     'po': np.array([0, 0, 0]),
+                     'T': np.eye(3),
+                     'minr': 0.1,
+                     'maxr': 1,
+                     'scale': 1.,
                      'tag' : 'Pat',
                      'txru' : 0,
                      'ilog' : False,
@@ -3206,24 +3206,24 @@ class Antenna(Pattern):
         fGHz = kwargs['fGHz']
         minr = kwargs['minr']
         maxr = kwargs['maxr']
-        tag  = kwargs['tag']
+        tag = kwargs['tag']
         ilog = kwargs['ilog']
         txru = kwargs['txru']
-        scale= kwargs['scale']
+        scale = kwargs['scale']
 
         po = kwargs['po']
         # T is an unitary matrix
-        T  = kwargs['T']
+        T = kwargs['T']
         if fGHz == []:
             # self.ext == '' <=> mathematically generated => nf = 1
             if self.ext != '':
                 k = len(self.fGHz)/2
-            else: 
+            else:
                 k = 0
         else :
             if self.ext != '':
                 k = np.where(self.fGHz>=fGHz)[0][0]
-            else: 
+            else:
                 k = 0
 
         if len(self.Ft.shape)==2:

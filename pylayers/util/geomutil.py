@@ -2923,7 +2923,7 @@ def onb(A, B, v):
     T = T.swapaxes(0, 1)
     return T
 
-def dist_sph(u1,u2):
+def dist_sph(u1,u2,mode=1):
     """ distance betwwen points on the sphere
 
     Parameters
@@ -2939,8 +2939,16 @@ def dist_sph(u1,u2):
     v2 = np.array((np.cos(u2[:, 1])*np.sin(u2[:, 0]),
                    np.sin(u2[:, 1])*np.sin(u2[:, 0]),
                    np.cos(u2[:, 0])))
-    A = (1-np.dot(v1.T,v2))/2
-    return(v1,v2,A)
+    v1dv2 = np.dot(v1.T,v2)
+    v1dv2 = np.maximum(v1dv2,-1)
+    v1dv2 = np.minimum(v1dv2,1)
+    if mode==0:
+        A = np.arccos(v1dv2)/np.pi
+    elif mode==1:
+        A = 1.-np.dot(v1.T,v2)
+    elif  mode ==2:
+        A = (1.-np.dot(v1.T,v2))/2.0
+    return A
 
 def vec_sph(th, ph):
     """
@@ -2952,7 +2960,7 @@ def vec_sph(th, ph):
       [ eph]    (theta,phi)
       [ er ] ]
 
-    See Also 
+    See Also
     --------
 
     SphericalBasis

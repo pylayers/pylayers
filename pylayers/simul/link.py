@@ -23,7 +23,7 @@ import time
 import numpy as np
 import matplotlib.pylab as plt
 import pylayers.signal.waveform as wvf
-import pylayers.util.geomutil as geu 
+import pylayers.util.geomutil as geu
 
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
@@ -355,14 +355,11 @@ class DLink(Link):
 
             self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5'
             filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
-            # check if save file alreasdy exists
+            # check if save file already exists
             if not os.path.exists(filenameh5) or force:
                 print('Links save file for ' + self.L._filename + ' does not exist.')
                 print('Creating file. You\'ll see this message only once per Layout')
                 self.save_init(filenameh5)
-
-
-
             try:
                 self.L.dumpr()
                 print('Layout Graph loaded')
@@ -372,18 +369,18 @@ class DLink(Link):
                 self.L.dumpw()
 
             #
-            # In outdoor situation we delete transmission node involving  
-            # an indoor cycle at the exception of AIR 
+            # In outdoor situation we delete transmission node involving
+            # an indoor cycle at the exception of AIR
             #
             cindoor = [p for p in self.L.Gt.nodes() if self.L.Gt.node[p]['indoor']]
 
             if self._L.typ =='outdoor':
                 u = self.L.Gi.node.keys()
-                # lT : list of transmission interactions 
+                # lT : list of transmission interactions
                 lT  =  [k for k in u if (len(k)==3)]
                 # lTi : transmission connected at least to an indoor cycle
                 lTi = [ k for k in lT if ((k[1]  in cindoor) or (k[2] in cindoor))]
-                # lTiw : those which are wall (not those above buildings) 
+                # lTiw : those which are wall (not those above buildings)
                 lTiw = [ k for k in lTi if self.L.Gs.node[k[0]]['name']!='AIR' ]
 
                 self.L.Gi.remove_nodes_from(lTiw)

@@ -9354,6 +9354,11 @@ class Layout(pro.PyLayers):
             cy = np.unique(cy).tolist()
             return cy
 
+    def isindoor(self,pt=np.array((0,0)))
+        cy = self.pt2cy(pt)
+        b1 = self.L.Gt.node[cy]['indoor']
+        return b1
+
     def pt2cy(self, pt=np.array((0, 0))):
         """ point to cycle
 

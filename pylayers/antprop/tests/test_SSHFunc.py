@@ -12,7 +12,7 @@ A.eval()
 G = A.G[:,:,0]
 nth = G.shape[0]
 nph = G.shape[1]
-L  = 15
+L  = 45
 theta = np.linspace(0,np.pi,nth)
 phi = np.linspace(0,2*np.pi,nph)
 # Spherical Harmonics matrix
@@ -27,8 +27,8 @@ Gr = np.real(np.dot(cg,Y).reshape(nth,nph))
 #plt.imshow(np.angle(Y.T),cmap='jet')
 #plt.axis('auto')
 #
-Gt = G[:,[45,90]]
-Y2,idx = SSHFunc(L,theta,phi[[45,90]])
+Gt = G[:,[0,45,90,135]]
+Y2,idx = SSHFunc(L,theta,phi[[0,45,90,135]])
 
 def fun(x,Y2=Y2,gt=Gt.ravel(),alpha=0.1):
     c  = x[::2]+1j*x[1::2]
@@ -43,11 +43,11 @@ cg2 = np.dot(Gt.ravel(),Y2pinv)
 xg2 = np.array(zip(np.real(cg2),np.imag(cg2))).ravel()
 xg = np.array(zip(np.real(cg),np.imag(cg))).ravel()
 print "Start optimization"
-#ropt = minimize(fun,xg2,method='CG')
-#xopt = fmin(fun,xg2)
-#xopt = ropt.x
-#copt = xopt[::2]+1j*xopt[1::2]
-Gr2 = np.real(np.dot(cg2,Y).reshape(90,181))
+ropt = minimize(fun,xg2,method='CG')
+xopt = fmin(fun,xg2)
+xopt = ropt.x
+copt = xopt[::2]+1j*xopt[1::2]
+Gr2 = np.real(np.dot(copt,Y).reshape(90,181))
 plt.subplot()
 plt.subplot(311)
 plt.imshow(10*np.log10(np.abs(G)),cmap='jet',vmin=-40)
@@ -56,7 +56,7 @@ plt.subplot(312)
 plt.imshow(10*np.log10(np.abs(Gr)),cmap='jet',vmin=-40)
 plt.colorbar()
 plt.subplot(313)
-plt.imshow(10*np.log10(np.abs(Gr2)),cmap='jet',vmin=-40)
+plt.imshow(10*np.log10(np.abs(Gr2)),cmap='jet',vmin=-40,vmax=18)
 plt.colorbar()
 plt.show()
 #alpha = 0.1
