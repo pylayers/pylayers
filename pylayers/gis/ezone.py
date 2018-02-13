@@ -22,6 +22,7 @@ from scipy.interpolate import interp2d
 #from geomutil import *
 #from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
+import pylayers.util.geomutil as geu
 import pylayers.util.plotutil as plu
 from pylayers.util.project import *
 from shapely.geometry import Polygon
@@ -167,14 +168,17 @@ def expand(A):
 
     A : np.array (MxN)
 
+    Returns
+    -------
+
     """
 
-    M,N = A.shape
-    t = np.kron(A.flatten(),np.ones(N))
+    M, N = A.shape
+    t = np.kron(A.flatten(), np.ones(N))
     u = np.triu(np.ones((N,N))).flatten()
-    v = np.kron(np.ones(M),u)
-    w  = t *  v
-    return(w.reshape(M,N,N).swapaxes(1,2)[:,1:,:])
+    v = np.kron(np.ones(M), u)
+    w = t * v
+    return(w.reshape(M, N, N).swapaxes(1, 2)[:, 1:, :])
     
     #return(w.reshape(M,N,N).swapaxes(1,2))
 
@@ -598,17 +602,22 @@ class Ezone(PyLayers):
         source : string
             source of data 'srtm' or 'aster'
 
+        Info
+        ----
+        This methods recalculate the longitude and latitude base based on the
+        DEM source choice aster or srtm
+
         """
         if source =='srtm':
             Nlat,Nlon = self.hgts.shape
-        else:
+        elif source=='aster':
             Nlat,Nlon = self.hgta.shape
 
         self.lon = np.linspace(self.extent[0],self.extent[1],Nlon)
         self.lat = np.linspace(self.extent[3],self.extent[2],Nlat)
         self.lonstep = (self.extent[1]-self.extent[0])/(Nlon-1.)
         self.latstep = (self.extent[3]-self.extent[2])/(Nlat-1.)
-        self.tocart(Nx=Nlon,Ny=Nlat)
+        self.tocart(Nx=Nlon,Ny=Nlat,source=source)
 
     def tocart(self,Nx=1201,Ny=1201,source='srtm'):
         """ convert to cartesian coordinates
@@ -644,8 +653,10 @@ class Ezone(PyLayers):
         #
         if source=='srtm':
             self.hgts_cart = self.hgts[ry,rx]
-        else:
+        elif source =='aster':
             self.hgta_cart = self.hgta[ry,rx]
+        else:
+            print('unrecognized source')
         #self.lcv_cart = self.lcv[ry,rx]
 
         self.x = x
@@ -678,12 +689,12 @@ class Ezone(PyLayers):
 
         """
 
-        defaults = {'Npt':1000,
-                    'ha':30,
-                    'hb':1.5,
-                    'K':1.3333,
-                    'fGHz':.3,
-                    'source':'srtm'}
+        defaults = {'Npt': 1000,
+                    'ha': 30,
+                    'hb': 1.5,
+                    'K': 1.3333,
+                    'fGHz': .3,
+                    'source': 'srtm'}
 
         for key in defaults:
             if key not in kwargs:
@@ -692,32 +703,34 @@ class Ezone(PyLayers):
         # wavelength
         lmbda = 0.3/kwargs['fGHz']
 
-        # transmitter coordinates
-        x_a,y_a = self.m(pa[0],pa[1])
+        # transmitter cartesian coordinates
+        x_a, y_a = self.m(pa[0], pa[1])
 
-        # receiver coordinates
-        x_b,y_b = self.m(pb[0],pb[1])
+        # receiver cartesian coordinates
+        x_b, y_b = self.m(pb[0], pb[1])
 
-        x = np.linspace(x_a,x_b,kwargs['Npt'])
-        y = np.linspace(y_a,y_b,kwargs['Npt'])
+        x = np.linspace(x_a, x_b, kwargs['Npt'])
+        y = np.linspace(y_a, y_b, kwargs['Npt'])
 
+        # distance along path
         d = np.sqrt((x-x[0])*(x-x[0])+(y-y[0])*(y-y[0]))
 
+        # equivalent earth curvature
         dh = d*(d[::-1])/(2*kwargs['K']*6375e3)
 
-        #if mode=='cover':
+        # if mode=='cover':
         #    extent_c = np.array([x.min(),x.max(),y.min(),y.max()])
 
-        lon,lat = self.m(x,y,inverse=True)
+        lon, lat = self.m(x, y, inverse=True)
 
         rx = np.round((lon - self.extent[0]) / self.lonstep).astype(int)
         ry = np.round((self.extent[3]-lat) / self.latstep).astype(int)
 
         # add earth sphericity deviation to hgt (depends on K factor)
-        if kwargs['source']=='srtm':
-            height = self.hgts[ry,rx] + dh
+        if kwargs['source'] == 'srtm':
+            height = self.hgts[ry, rx] + dh
 
-        if kwargs['source']=='aster':
+        if kwargs['source'] == 'aster':
             height = self.hgta[ry,rx] + dh
 
         # seek for local maxima along link profile
@@ -727,15 +740,19 @@ class Ezone(PyLayers):
         hb = height[-1]+ kwargs['hb']
         LOS = ha+(hb-ha)*d/d[-1]
         diff = height-LOS
-        fac  = np.sqrt(2*d[-1]/(lmbda*d*d[::-1]))
-        nu   = diff*fac
-        num,ind  = maxloc(nu[None,:])
+        fac = np.sqrt(2*d[-1]/(lmbda*d*d[::-1]))
+        nu = diff*fac
+        num,ind = maxloc(nu[None,:])
+        # construction of first Fresnel ellipsoid
+        pa = np.array([0, ha])
+        pb = np.array([d[-1], hb])
+        ellFresnel = geu.ellipse2D(pa, pb, lmbda, 100)
 
         #plt.plot(d,dh,'r',d,height,'b',d,m[0,:],d,LOS,'k')
         #plt.figure()
         #plt.plot(d,nu,num)
 
-        return(height,d,dh,nu,num,m,LOS)
+        return(height, d, dh, nu, num, m, LOS, ellFresnel)
 
     def cov(self,**kwargs):
         """ coverage around a point
@@ -744,7 +761,7 @@ class Ezone(PyLayers):
         ----------
 
         pc : np.array
-            center point in cartesian coordinates
+            center point in latlon coordinates
         Nphi : int
             Number of angular direction
         Nr : int
@@ -775,42 +792,48 @@ class Ezone(PyLayers):
         Ltot
 
         """
-        defaults = {'pc':(27000,12000),
-                    'Nphi':'360',
-                    'Nr':200,
-                    'Rmax':4000,
-                    'Ht':30,
-                    'Hr':1.5,
-                    'K':1.3333,
-                    'fGHz':.3,
-                    'divider':[]
+        defaults = {'pc': (-1.627449, 48.124648),
+                    'Nphi': '360',
+                    'Nr': 200,
+                    'Rmax': 4000,
+                    'Ht': 30,
+                    'Hr': 1.5,
+                    'K': 1.3333,
+                    'fGHz': .3,
+                    'source': 'srtm',
+                    'divider': []
                     }
 
         for key in defaults:
             if key not in kwargs:
                 kwargs[key] = defaults[key]
 
-        pc = kwargs['pc']
+        x_c, y_c = self.m(kwargs['pc'][0], kwargs['pc'][1])
+        pc = np.array([x_c, y_c])
         lmbda = 0.3/kwargs['fGHz']
-        phi  = np.linspace(0,2*np.pi,kwargs['Nphi'])[:,None]
-        r  = np.linspace(0.02,kwargs['Rmax'],kwargs['Nr'])[None,:]
+        phi = np.linspace(0, 2*np.pi, kwargs['Nphi'])[:, None]
+        r = np.linspace(0.02, kwargs['Rmax'], kwargs['Nr'])[None, :]
 
         # cartesian
-        x  = pc[0] + r*np.cos(phi)
-        y  = pc[1] + r*np.sin(phi)
-        extent_c = np.array([x.min(),x.max(),y.min(),y.max()])
+        x = pc[0] + r*np.cos(phi)
+        y = pc[1] + r*np.sin(phi)
+        # extent_c = np.array([x.min(), x.max(), y.min(), y.max()])
 
         # back to lon lat
-        lon,lat = self.m(x,y,inverse=True)
+        lon, lat = self.m(x, y, inverse=True)
 
         rx = np.round((lon - self.extent[0]) / self.lonstep).astype(int)
         ry = np.round((self.extent[3]-lat) / self.latstep).astype(int)
 
         # dem
-        dem = self.hgts[ry,rx]
+        if source == 'srtm':
+            dem = self.hgts[ry, rx]
+        else:
+            dem = self.hgta[ry, rx]
 
 
         # adding effect of earth equivalent curvature
+        pdb.set_trace()
         R = expand(r)
         B = r.T-R
         h_earth = (R*B)/(2*kwargs['K']*6375e3)
@@ -843,7 +866,7 @@ class Ezone(PyLayers):
         ----------
 
         pc : np.array
-            center point in cartesian coordinates
+            center point in lonlat coordinates
         Nphi : int
             Number of angular direction
         Nr : int
@@ -858,14 +881,14 @@ class Ezone(PyLayers):
             K factor
 
         """
-        defaults = {'pc':(27000,12000),
-                    'Nphi':'360',
-                    'Nr':200,
-                    'Rmax':4000,
-                    'Ht':30,
-                    'Hr':1.5,
-                    'K':1.3333,
-                    'fGHz':.3,
+        defaults = {'pc': (-1.627449, 48.124648),
+                    'Nphi': 360,
+                    'Nr': 200,
+                    'Rmax': 4000,
+                    'Ht': 30,
+                    'Hr': 1.5,
+                    'K': 1.3333,
+                    'fGHz': .3,
                     'divider':[]
                     }
 
@@ -879,28 +902,31 @@ class Ezone(PyLayers):
             f = kwargs['fig']
             a = kwargs['ax']
 
-        pc = kwargs['pc']
-        lmbda = 0.3/kwargs['fGHz']
-        phi  = np.linspace(0,2*np.pi,kwargs['Nphi'])[:,None]
-        r  = np.linspace(0.02,kwargs['Rmax'],kwargs['Nr'])[None,:]
+        x_c, y_c = self.m(kwargs['pc'][0], kwargs['pc'][1])
+        pc = np.array([x_c, y_c])
 
-        x  = pc[0] + r*np.cos(phi)
-        y  = pc[1] + r*np.sin(phi)
+        lmbda = 0.3/kwargs['fGHz']
+        phi = np.linspace(0,2*np.pi,kwargs['Nphi'])[:,None]
+        r = np.linspace(0.02,kwargs['Rmax'],kwargs['Nr'])[None,:]
+
+        x = pc[0] + r*np.cos(phi)
+        y = pc[1] + r*np.sin(phi)
         extent_c = np.array([x.min(),x.max(),y.min(),y.max()])
 
         # Triangulation
-        triang = tri.Triangulation(x.flatten(),y.flatten())
-        lon,lat = self.m(triang.x,triang.y,inverse=True)
+        triang = tri.Triangulation(x.flatten(), y.flatten())
+        lon, lat = self.m(triang.x, triang.y, inverse=True)
         # back in lon,lat coordinates
         triang.x = lon
         triang.y = lat
 
-        lon,lat = self.m(x,y,inverse=True)
+        lon,lat = self.m(x, y, inverse=True)
 
         rx = np.round((lon - self.extent[0]) / self.lonstep).astype(int)
         ry = np.round((self.extent[3]-lat) / self.latstep).astype(int)
 
-        cov = self.hgts[ry,rx]
+        pdb.set_trace()
+        cov = self.hgts[ry, rx]
 
         # adding effect of earth equivalent curvature
         R = expand(r)
@@ -908,7 +934,7 @@ class Ezone(PyLayers):
         h_earth = (R*B)/(2*kwargs['K']*6375e3)
 
         # ground height + antenna height
-        Ha = kwargs['Ht'] + self.hgts[ry[0,0],rx[0,0]]
+        Ha = kwargs['Ht'] + self.hgts[ry[0, 0], rx[0, 0]]
         Hb = kwargs['Hr'] + cov
 
         pdb.set_trace()

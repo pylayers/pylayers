@@ -684,7 +684,8 @@ class Polygon(pro.PyLayers, shg.Polygon):
 
         """
         p = self.ndarray()
-        return sum(np.hstack((p[0, 1::], p[0, 0:1])) * (np.hstack((p[1, 2::], p[1, 0:2])) - p[1, :])) / 2.
+        return sum(np.hstack((p[0, 1::], p[0, 0:1])) *
+                  (np.hstack((p[1, 2::], p[1, 0:2])) - p[1, :])) / 2.
 
     def coorddeter(self):
         """ determine polygon coordinates
@@ -708,9 +709,9 @@ class Polygon(pro.PyLayers, shg.Polygon):
         Notes
         -----
 
-        the algorithm tests all triplet of points and determines 
+        the algorithm tests all triplet of points and determines
         if the third point is at the left to the 2 first.
-        a tolerance can be introduce in cases the polygon is 
+        a tolerance can be introduce in cases the polygon is
         *almost* convex.
 
         """
@@ -719,7 +720,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
         a = p
         b = np.roll(p, 1, axis=1)
         c = np.roll(p, 2, axis=1)
-        return ( np.sum(isleft(a, b, c, tol=tol)) == 0 ) or \
+        return (np.sum(isleft(a, b, c, tol=tol)) == 0 ) or \
             (np.sum(isleft(c, b, a, tol=tol)) == 0)
 
     def reverberation(self, fGHz, L):
@@ -734,13 +735,13 @@ class Polygon(pro.PyLayers, shg.Polygon):
         Returns
         -------
 
-        V    : float 
+        V    : float
             Volume
-        A    : float 
+        A    : float
             Area
-        eta  : float 
+        eta  : float
             absorption coefficient
-        tau_sab  : float 
+        tau_sab  : float
             Sabine delay
         tau_eyr  : float
             Eyring delay
@@ -6115,7 +6116,7 @@ def get_pol_angles(poly, unit='rad', inside=True):
 
 
 def reflection_matrix(U):
-    """ 
+    """
     https://en.wikipedia.org/wiki/Transformation_matrix#Reflection
     u = np.ndarray (2,Nvec)
 
@@ -6128,7 +6129,7 @@ def reflection_matrix(U):
 
     u = np.array([2,2])
     U=np.vstack((u,u/2.,2*u)).T
-    
+
 
     """
 
@@ -6142,6 +6143,48 @@ def reflection_matrix(U):
 
     return M
 
+def ellipse2D(pa, pb, l, N):
+    """ points on an ellipse
+
+    pa : np.array
+        focus a
+    pb : np.array
+        focus b
+    l  : float
+        excess
+    N  : int
+        Number of points
+
+    Returns
+    -------
+
+    points : np.array
+        2 x Npt
+
+    Examples
+    --------
+        >>> import numpy as np
+        >>> import matplotlib.pyplot as plt
+        >>> pa = np.array([0,1])
+        >>> pb = np.array([10,3])
+        >>> N = 100
+        >>> l = 1
+        >>> p = ellipse2D(pa,pb,l,N)
+        >>> plt.plot(pa[0],pa[1],'ob')
+        >>> plt.plot(pb[0],pb[1],'or')
+        >>> plt.plot(p[0,:],p[1,:])
+
+    """
+    dmax = np.sqrt(np.dot(pb-pa, pb-pa))
+    a = (dmax/2. + l/4.)
+    b = 0.5*np.sqrt(dmax*l)
+    pg = (pa+pb)/2.
+    u = (pb-pa)/dmax
+    z = np.array([0, 0, 1])
+    v = np.cross(z, u)[0:2]
+    ag = np.linspace(0, 2*np.pi, N)
+    p = pg[:, None] + a*u[:, None]*np.cos(ag[None, :])+b*v[:, None]*np.sin(ag[None, :])
+    return(p)
 
 if __name__ == "__main__":
     plt.ion()

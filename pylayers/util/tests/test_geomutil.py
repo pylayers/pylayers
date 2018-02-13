@@ -145,5 +145,17 @@ class Tesgeu(TestCase):
         bo, pinter = geu.intersect3(a, b,pg, u1,u2,l1,l2)
         assert bo
 
+import numpy as np
+import matplotlib.pyplot as plt
+pa = np.array([0,3])
+pb = np.array([10,6])
+N = 100
+l = 1
+p = geu.ellipse2D(pa,pb,l,N)
+plt.plot(pa[0],pa[1],'ob')
+plt.plot(pb[0],pb[1],'or')
+plt.plot(p[0,:],p[1,:])
+plt.axis('equal')
+
 if __name__ == "__main__":
     run_module_suite()
