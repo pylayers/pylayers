@@ -9354,9 +9354,22 @@ class Layout(pro.PyLayers):
             cy = np.unique(cy).tolist()
             return cy
 
-    def isindoor(self,pt=np.array((0,0)))
+    def isindoor(self,pt=np.array([0,0])):
+        """ test if a point is indoor 
+
+        Parameters
+        ----------
+        pt : np.array 1x2
+            2d point
+
+        Returns
+        -------
+        b1 : boolean
+            True if indoor
+
+        """
         cy = self.pt2cy(pt)
-        b1 = self.L.Gt.node[cy]['indoor']
+        b1 = self.Gt.node[cy]['indoor']
         return b1
 
     def pt2cy(self, pt=np.array((0, 0))):

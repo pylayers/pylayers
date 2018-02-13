@@ -1104,7 +1104,7 @@ class DLink(Link):
             key of the h5py file
         gpname : string
             groupe name of the h5py file
-        force : boolean or list 
+        force : boolean or list
         """
 
         if not force :
@@ -1114,7 +1114,7 @@ class DLink(Link):
         else :
             if self.dexist[key]['exist']:
                 self._delete(key,grpname)
-              
+
             obj._saveh5(self.filename,grpname)
 
         if self.verbose :
@@ -1412,8 +1412,8 @@ class DLink(Link):
         -----
 
         This function modifies the orientation of the antenna at both sides
-        via Ta and Tb 3x3 matrices and recalculates the channel transfer function 
-        for those new orientations. 
+        via Ta and Tb 3x3 matrices and recalculates the channel transfer function
+        for those new orientations.
         The self.H variable is updated
 
         """
@@ -1849,7 +1849,7 @@ class DLink(Link):
         # rx = b 
         # angular range (a) : phi 
         #
-       
+
         self.afprt = AFPchannel(tx=self.a,rx=self.b,az=az)
         for k,ph in enumerate(az.squeeze()):
             self.Tb = geu.MATP(self.Ab.sl,self.Ab.el,ph,tilt,polar)
@@ -1858,7 +1858,7 @@ class DLink(Link):
             self.evalH()
             E = self.H.energy()
             if k==0:
-                self.dpadp = E[None,...] 
+                self.dpadp = E[None,...]
             else:
                 self.dpadp = np.concatenate((self.dpadp,E[None,...]),axis=0)
 
@@ -1877,7 +1877,7 @@ class DLink(Link):
         else:
             self.afprt.x = fGHz
             self.afprt.fcGHz = fGHz[len(fGHz)/2]
-        
+
         self.dpdp = np.sum(self.dpadp,axis=0)
         self.dpap = np.sum(self.dpadp,axis=1)
         #return(afp)
@@ -2146,17 +2146,22 @@ class DLink(Link):
         else:
             self._maya_fig=mlab.figure(bgcolor=(1,1,1),fgcolor=(0,0,0))
 
+        if 'scale' in kwargs:
+            scale = kwargs.pop('scale')
+        else:
+            scale = 0.5
+
         if 'centered' in kwargs:
             centered = kwargs['centered']
         else :
             centered = False
 
         if centered:
-            pg =np.zeros((3))
-            pg[:2]=self.L.pg
+            pg = np.zeros((3))
+            pg[:2] = self.L.pg
 
 
-        if centered :
+        if centered:
             ptx = self.a-pg
             prx = self.b-pg
         else :
@@ -2175,50 +2180,50 @@ class DLink(Link):
             # evaluate antenna if required
             if not Atx.evaluated:
                 Atx.eval()
-            try:
-                Atx._show3(T=Ttx.reshape(3,3),
-                           po=ptx,
-                           title=False,
-                           bcolorbar=False,
-                           bnewfig=False,
-                           bcircle = False,
-                           name = Atx._filename,
-                           scale= 0.5,
-                           binteract=False)
-            except:
-                Atx.eval()
-                Atx._show3(T=Ttx.reshape(3,3),
-                            po=ptx,
-                            title=False,
-                            bcolorbar=False,
-                            bnewfig=False,
-                            bcircle = False,
-                            name = Atx._filename,
-                            scale= 0.5,
-                            binteract=False)
+#            try:
+#                Atx._show3(T=Ttx.reshape(3,3),
+#                           po=ptx,
+#                           title=False,
+#                           bcolorbar=False,
+#                           bnewfig=False,
+#                           bcircle = False,
+#                           name = Atx._filename,
+#                           scale= scale,
+#                           binteract=False)
+#            except:
+#                Atx.eval()
+            Atx._show3(T=Ttx.reshape(3,3),
+                        po=ptx,
+                        title=False,
+                        bcolorbar=False,
+                        bnewfig=False,
+                        bcircle = False,
+                        name = Atx._filename,
+                        scale= scale,
+                        binteract=False)
             if not Arx.evaluated:
                 Arx.eval()
-            try:
-                Arx._show3(T=Trx.reshape(3,3),
-                            po=prx,
-                            title=False,
-                            bcolorbar=False,
-                            bnewfig=False,
-                            bcircle = False,
-                            name = Arx._filename,
-                            scale= 0.5,
-                            binteract=False)
-            except:
-                Arx.eval()
-                Arx._show3(T=Trx.reshape(3,3),
-                            po=prx,
-                            title=False,
-                            bcolorbar=False,
-                            bnewfig=False,
-                            bcircle = False,
-                            name = Arx._filename,
-                            scale= 0.5,
-                            binteract=False)
+#            try:
+#                Arx._show3(T=Trx.reshape(3,3),
+#                            po=prx,
+#                            title=False,
+#                            bcolorbar=False,
+#                            bnewfig=False,
+#                            bcircle = False,
+#                            name = Arx._filename,
+#                            scale= scale,
+#                            binteract=False)
+#            except:
+                #Arx.eval()
+            Arx._show3(T=Trx.reshape(3,3),
+                        po=prx,
+                        title=False,
+                        bcolorbar=False,
+                        bnewfig=False,
+                        bcircle = False,
+                        name = Arx._filename,
+                        scale= scale,
+                        binteract=False)
         if lay:
             # check if indoor/outdoor, outdoor or indoor situations
             # a_in = self.L.Gt.node[self.ca]['indoor']

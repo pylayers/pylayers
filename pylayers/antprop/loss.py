@@ -618,7 +618,7 @@ def cost231(pBS,pMS,hroof,phir,wr,fMHz,wb=20,dB=True,city='medium'):
     return(pl)
 
 def cost259(pMS,pBS,fMHz):
-    """ cost259 model 
+    """ cost259 model
 
     Parameters
     ----------
@@ -650,12 +650,23 @@ def hata(pMS,pBS,fGHz,hMS,hBS,typ):
     fGHz : np.array
     hMS : height mobile station (m)
     hBS : height base station (m)
+    typ : 'small' or 'big'
 
     Returns
     -------
 
     L : Attenuation (dB)
 
+    Example
+    -------
+
+    >>> d = np.linspace(100,5000,120)
+    >>> hBS = 30
+    >>> hMS = 1.5
+    >>> fGHz = 0.9
+    >>> pMS = np.array([d,0,hMS])
+    >>> pBS = np.array([d,0,hBS])
+    >>> L = hata(pMS,pBS,fGHz,hMS,hBS,'small')
 
     Notes
     -----

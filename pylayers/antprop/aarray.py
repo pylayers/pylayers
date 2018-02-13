@@ -27,7 +27,7 @@ class Array(ant.Pattern):
 
     An array is defined as the association of  :
 
-        + a set of points 
+        + a set of points
         + a set of frequency dependent weights
 
     """
@@ -43,7 +43,7 @@ class Array(ant.Pattern):
                        or  Nx x Ny x Nz x Nf
 
         Nf : number of frequency points
-        Nb : Number of beams  
+        Nb : Number of beams
 
         """
         assert type(p) == np.ndarray, " Array not an array"
@@ -54,7 +54,7 @@ class Array(ant.Pattern):
             self.Np = p.shape[1]
         shp = np.shape(p)
 
-        # If no excitation choose 1 beam of uniform weights 
+        # If no excitation choose 1 beam of uniform weights
         # Nb x Np x Nf
         if w == []:
             w = np.ones((shp[1:]))[..., None]
@@ -112,7 +112,7 @@ class ULArray(Array):
             basis of the ULA (by default the othonormal basis I3)
         mode : string
             'step' | 'point'
-        p : 
+        p :
 
         """
         defaults = { 'N'    : [8, 1, 1],
@@ -278,7 +278,7 @@ class AntArray(Array, ant.Antenna):
             assert len(self.typant) == self.Na, "Wrong number of antennas"
         else:
             self.sameAnt = True
-       
+
         # Uniform Array
         # p is obtained from ULArray
         #
@@ -303,7 +303,7 @@ class AntArray(Array, ant.Antenna):
         # init Antenna parent
         self.la = []
         if self.sameAnt:
-            self.la.append(ant.Antenna(typ=self.typant)) 
+            self.la.append(ant.Antenna(typ=self.typant))
         else:
             for t in self.typant:
                 self.la.append(ant.Antenna(typ=t))

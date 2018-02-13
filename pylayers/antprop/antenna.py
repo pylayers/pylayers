@@ -3195,7 +3195,7 @@ class Antenna(Pattern):
                      'tag' : 'Pat',
                      'txru' : 0,
                      'ilog' : False,
-                     'title':True,
+                     'title': True,
 
                      }
 
