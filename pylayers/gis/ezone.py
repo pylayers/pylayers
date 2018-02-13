@@ -319,7 +319,7 @@ class DEM(PyLayers):
                             continue
                         path = os.path.join(path, word)
                     zf.extract(member, path)
-        
+
         # 
         # Commented while gdal is broken in anaconda
         #f = gdal.Open(fileaster)
@@ -439,7 +439,11 @@ class Ezone(PyLayers):
             ' '+str(self.bloM)+'\n'
             st = st + "i-latitude  : "+str(self.blam)+\
             ' '+str(self.blaM)+'\n'
-
+            st = st + '--------- \n'
+        if 'hgta' in self.__dict__:
+            st = st + 'DEM Aster (hgta) :' + str(self.hgta.shape)+'\n'
+        if 'hgts' in self.__dict__:
+            st = st + 'DEM srtm (hgts) :' + str(self.hgts.shape)
 
         return(st)
 
@@ -713,7 +717,7 @@ class Ezone(PyLayers):
         if kwargs['source']=='srtm':
             height = self.hgts[ry,rx] + dh
 
-        if kwargs['source']=='srta':
+        if kwargs['source']=='aster':
             height = self.hgta[ry,rx] + dh
 
         # seek for local maxima along link profile
@@ -753,6 +757,22 @@ class Ezone(PyLayers):
             Transmitter height
         K : float
             K factor
+
+        Returns
+        -------
+        x
+        y
+        r
+        R
+        dem
+        LOS
+        h_earth
+        diff
+        fac
+        nu
+        numax
+        LFS
+        Ltot
 
         """
         defaults = {'pc':(27000,12000),
