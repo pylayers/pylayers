@@ -16,10 +16,11 @@ import logging
 import numpy as np
 from scipy import io
 import matplotlib.pylab as plt
-import pylayers.measures.mesuwb
 import pylayers.gis.gisutil as gu
 import numpy.linalg as la
 import pdb
+import time
+from numba import jit
 
 def PL0(fGHz,GtdB=0,GrdB=0,R=1):
     """  Path Loss at frequency fGHZ @ R
@@ -1239,66 +1240,109 @@ def calnu(h,d1,d2,fGHz):
     return(nu)
 
 
-
-def showfurniture(fig,ax):
-    """ show furniture (not the good module) 
+#@jit
+def cover(X, Y, Z, Ha, Hb,fGHz):
     """
-    #R1_A.show(fig,ax)
-    #R1_B1.show(fig,ax)
-    #R1_B2.show(fig,ax)
-    #R2_A.show(fig,ax)
-    #R6_A.show(fig,ax)
-    #R6_B.show(fig,ax)
-    #R6_C.show(fig,ax)
-    R6_D.show(fig,ax)
-    R6_E.show(fig,ax)
-    R6_F.show(fig,ax)
-    R6_G.show(fig,ax)
-    R6_HA.show(fig,ax)
-    R6_HB.show(fig,ax)
-    R6_IA.show(fig,ax)
-    R6_IB.show(fig,ax)
-    R13_A.show(fig,ax)
-    R13_B.show(fig,ax)
-    R13_C.show(fig,ax)
-    R12_A1.show(fig,ax)
-    R12_A2.show(fig,ax)
-    #R12_B.show(fig,ax)
-    #R12_C1.show(fig,ax)
-    #R12_C2.show(fig,ax)
-    R12_D.show(fig,ax)
-    #R7_A1.show(fig,ax)
-    #R7_A2.show(fig,ax)
-    #R7_B.show(fig,ax)
-    R7_C1.show(fig,ax)
-    R7_C2.show(fig,ax)
-    R7_D.show(fig,ax)
-    #R10_A.show(fig,ax)
-    #R10_B.show(fig,ax)
-    R10_C.show(fig,ax)
-    R10_D.show(fig,ax)
-    #R11_A.show(fig,ax)
-    #R11_B.show(fig,ax)
-    R11_C.show(fig,ax)
-    R11_D1.show(fig,ax)
-    R11_D2.show(fig,ax)
-    R11_E1.show(fig,ax)
-    R11_E2.show(fig,ax)
-    R11_F.show(fig,ax)
-    #R8_A.show(fig,ax)
-    #R8_B.show(fig,ax)
-    #R9_A1.show(fig,ax)
-    #R9_A2.show(fig,ax)
-    R9_B1.show(fig,ax)
-    R9_B2.show(fig,ax)
-    R9_B3.show(fig,ax)
-    #R9_C.show(fig,ax)
-    R9_D.show(fig,ax)
-    R9_E1.show(fig,ax)
-    R9_E2.show(fig,ax)
-    R9_F.show(fig,ax)
-    R9_G.show(fig,ax)
-    axis('scaled')
+
+    Parameters
+    ----------
+
+    X : np.array (Nphi,Nr)
+        cartesian coordinate grid
+    Y : np.array (Nphi,Nr)
+        cartesian coordinate grid
+    Z : np.array (Nphi,Nr)
+        height (meters)
+
+    Ha : float
+    Hb : float
+    fGHz : np.array (,Nf)
+        frequency in GHz
+
+    Returns
+    -------
+    L : Losses (dB)
+
+    """
+    Nphi,Nr = Z.shape
+
+    if (type(fGHz)==float):
+        fGHz = np.array([fGHz])
+
+    Nf = len(fGHz)
+    #pdb.set_trace()
+    #print Nphi,Nl
+    #L = np.zeros((Nphi, Nr-2, Nf))
+    #L = np.zeros((Nphi, Nr-2))
+    L = np.zeros((Nphi, Nr, Nf))
+    L0 = np.zeros(Nf)
+    # loop over azimut
+    for ip in xrange(Nphi):
+    # loop over range
+        #for il in xrange(Nr-1):
+        # il : 2 ... Nr-2
+        # uk : 0 ....Nr-1
+        for il in np.arange(2, Nr-1):
+            uk = np.arange(0, il+1)
+            z = np.empty(len(uk))
+            x = X[ip, uk]
+            y = Y[ip, uk]
+            z[uk] = Z[ip, uk]
+            d = np.sqrt((x-x[0])**2+(y-y[0])**2)
+            LOS = 32.4 + 20*np.log10(fGHz) + 20*np.log10(d[-1])
+            z[0] = z[0] + Ha
+            #pdb.set_trace()
+            z[-1] = z[-1] + Hb
+            #plt.plot(d,z)
+            LD = Deygout(z, d, fGHz, L0, 0)
+            #print v
+            L[ip,il,:] = LD[None,:]+LOS[None,:]
+    return(L)
+
+#@jit
+def Deygout(z, d, fGHz, L, depth):
+    """ Deygout attenuation
+
+    Parameters
+    ----------
+
+    z : np.array (,N)
+        height profile
+    d : np.array (,N)
+        horizontal distance
+    fGHz : np.array (,Nf)
+        frequency GHz
+    L : np.array (,Nf)
+        Additional Loss
+    depth : recursive depth
+
+    """
+    lmbda = 0.3/fGHz
+    L0 = np.zeros(len(fGHz))
+    depth = depth+1
+    if depth < 3:
+        if len(z) > 3:
+            u = np.arange(len(z))/(len(z)-1.0)
+            l = (z[0])*(1-u)+(z[-1])*u
+            h = z[1:-1]-l[1:-1]
+            nu = h[:,None]*np.sqrt((2/lmbda[None,:])*(1/d[1:-1,None]+1/(d[-1]-d[1:-1,None])))
+            imax = np.unique(np.nanargmax(nu,axis=0))[0]
+            numax = nu[imax,:]
+        else:
+            numax = -10*np.ones(len(fGHz))
+        if (numax > -0.78).any():
+            w = numax - 0.1
+            L = np.maximum(L + 6.9 + 20*np.log10(np.sqrt(w**2+1)+w),0)
+            # left link
+            z1 = z[0:imax]
+            d1 = d[0:imax]
+            Ll = Deygout(z1, d1, fGHz, L0, depth)
+            # right link
+            z2 = z[imax:]
+            d2 = d[imax:]
+            Lr = Deygout(z2,d2,fGHz,L0,depth)
+            L = L + Lr + Ll
+    return(L)
 
 def two_rays_flatearth(fGHz,**kwargs):
     """
@@ -1488,7 +1532,7 @@ def lossref_compute(P,h0,h1,k=4/3.) :
     Parameters
     ----------
 
-    P : float |list 
+    P : float |list
 
         if len(P) == 1 => P is a distance
         if len(P) == 4 => P is a list of [lon0,lat0,lon1,lat1]
@@ -1503,9 +1547,9 @@ def lossref_compute(P,h0,h1,k=4/3.) :
         lon1 : float |string
             longitude second point (decimal |deg min sec Direction)
     h0 : float:
-        height of 1st point 
+        height of 1st point
     h1 : float:
-        height of 2nd point 
+        height of 2nd point
     k : electromagnetic earth factor
 
 
@@ -1644,7 +1688,7 @@ def two_rays_curvedearthold(P,h0,h1,fGHz=2.4,**kwargs):
     Returns
     -------
 
-    P : 
+    P :
         received power
 
 
@@ -1654,7 +1698,7 @@ def two_rays_curvedearthold(P,h0,h1,fGHz=2.4,**kwargs):
 
     .. plot::
         :include-source:
-        
+
         >>> from pylayers.antprop.loss import *
         >>> import matplotlib.pyplot as plt
         >>> fGHz=2.4
