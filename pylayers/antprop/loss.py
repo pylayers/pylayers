@@ -1241,7 +1241,7 @@ def calnu(h,d1,d2,fGHz):
 
 
 #@jit
-def cover(X, Y, Z, Ha, Hb,fGHz):
+def cover(X, Y, Z, Ha, Hb, fGHz, K):
     """
 
     Parameters
@@ -1261,7 +1261,9 @@ def cover(X, Y, Z, Ha, Hb,fGHz):
 
     Returns
     -------
+
     L : Losses (dB)
+
 
     """
     Nphi,Nr = Z.shape
@@ -1289,18 +1291,21 @@ def cover(X, Y, Z, Ha, Hb,fGHz):
             y = Y[ip, uk]
             z[uk] = Z[ip, uk]
             d = np.sqrt((x-x[0])**2+(y-y[0])**2)
+            # effect of refraction in equivalent earth curvature
+            dh = d*(d[::-1])/(2*K*6375e3)
+            z = z + dh 
             LOS = 32.4 + 20*np.log10(fGHz) + 20*np.log10(d[-1])
             z[0] = z[0] + Ha
             #pdb.set_trace()
             z[-1] = z[-1] + Hb
             #plt.plot(d,z)
-            LD = Deygout(z, d, fGHz, L0, 0)
+            LD = deygout(z, d, fGHz, L0, 0)
             #print v
             L[ip,il,:] = LD[None,:]+LOS[None,:]
     return(L)
 
 #@jit
-def Deygout(z, d, fGHz, L, depth):
+def deygout(z, d, fGHz, L, depth):
     """ Deygout attenuation
 
     Parameters
@@ -1315,6 +1320,11 @@ def Deygout(z, d, fGHz, L, depth):
     L : np.array (,Nf)
         Additional Loss
     depth : recursive depth
+
+    Notes
+    -----
+
+    This function is recursive
 
     """
     lmbda = 0.3/fGHz
@@ -1332,19 +1342,113 @@ def Deygout(z, d, fGHz, L, depth):
             numax = -10*np.ones(len(fGHz))
         if (numax > -0.78).any():
             w = numax - 0.1
-            L = np.maximum(L + 6.9 + 20*np.log10(np.sqrt(w**2+1)+w),0)
+            L = L + np.maximum(6.9 + 20*np.log10(np.sqrt(w**2+1)+w),0)
             # left link
-            z1 = z[0:imax]
-            d1 = d[0:imax]
-            Ll = Deygout(z1, d1, fGHz, L0, depth)
+            z1 = z[0:imax+2]
+            d1 = d[0:imax+2]
+            Ll = deygout(z1, d1, fGHz, L0, depth)
             # right link
-            z2 = z[imax:]
-            d2 = d[imax:]
-            Lr = Deygout(z2,d2,fGHz,L0,depth)
+            z2 = z[imax+1:]
+            d2 = d[imax+1:]
+            Lr = deygout(z2,d2,fGHz,L0,depth)
             L = L + Lr + Ll
+
     return(L)
 
-def two_rays_flatearth(fGHz,**kwargs):
+def bullington(z,d,fGHz):
+    """ edges attenuation with Bullington method
+
+    Parameters
+    ----------
+
+    z :
+    d:
+    fGHz :
+
+    Returns
+    -------
+
+    L :
+
+    """
+
+    def recl(d, z):
+        N = len(z)
+        u = np.arange(N)/(N-1.)
+        l = z[0]*(1-u)+(z[-1])*u
+        h = z - l
+        imax = np.argmax(h)
+        hmax = h[imax]
+        ul = np.arange(imax)/(imax-1.)
+        #ur = np.arange(N-imax)/(N-imax-1.)
+        dhl = h[0] + hmax*ul
+        #dhr = hmax*(1-ur) + h[-1]*ur
+        #plt.plot(d,h)
+        #plt.plot(d[0:imax],dhl)
+        #plt.plot(d[imax-1:-1],dhr)
+
+        el  = dhl - h[0:imax]
+        if np.min(el)<0:
+            u,v = recl(d[0:imax+1],h[0:imax+1])
+        else:
+            u = d[0:imax+1]
+            v = h[0:imax+1]
+
+        return(u,v)
+    #if min(er)<0:
+    #    u,v = rec(d[imax-1:-1],dhl)
+    #else:
+    #er  = dhr - h[imax-1:-1]
+    def recr(d, z):
+        N = len(z)
+        u = np.arange(N)/(N-1.)
+        l = z[0]*(1-u)+(z[-1])*u
+        h = z - l
+        imax = np.argmax(h)
+        hmax = h[imax]
+        #ul = np.arange(imax)/(imax-1.)
+        ur = np.arange(N-imax)/(N-imax-1.)
+        #dhl = h[0] + hmax*ul
+        dhr = hmax*(1-ur) + h[-1]*ur
+        #plt.plot(d,h)
+        #plt.plot(d[0:imax],dhl)
+        #plt.plot(d[imax-1:-1],dhr)
+
+        er  = dhr - h[imax:]
+        if np.min(er)<0:
+            u,v = recr(d[imax:],h[imax:])
+        else:
+            u = d[imax:]
+            v = h[imax:]
+
+        return(u,v)
+        #if min(er)<0:
+    #    u,v = rec(d[imax-1:-1],dhl)
+    #else:
+    #er  = dhr - h[imax-1:-1]
+
+    lmbda = 0.3/fGHz
+    u = np.arange(len(z))/(len(z)-1.)
+    l = (z[0])*(1-u)+(z[-1])*u
+    h = z - l
+    ul,vl = recl(d,z)
+    ur,vr = recr(d,z)
+    idtx = len(ul)
+    idrx = len(h)-len(ur)
+    #idtx = 7000
+    #idrx = 22000
+    dtx = d[idtx]
+    drx = d[-1]-d[idrx]
+    htx = h[idtx-1]
+    hrx = h[idrx]
+    deq = (dtx*hrx)*d[-1]/(drx*htx+dtx*hrx)
+    heq = deq*(htx/dtx)
+    nu  = heq*np.sqrt((2/lmbda)*(1/deq+1/(d[-1]-deq)))
+    w= nu - 0.1
+    L = np.maximum(6.9 + 20*np.log10(np.sqrt(w**2+1)+w),0)
+    return(L,deq,heq)
+
+def two_rays_flatearth(fGHz, **kwargs):
     """
     Parameters
     ----------
@@ -1372,7 +1476,7 @@ def two_rays_flatearth(fGHz,**kwargs):
     gamma : complex (-1.+0.j)
         Reflexion coeff
 
-    
+
     dB : boolean (True)
         return result in d
 
@@ -1380,7 +1484,7 @@ def two_rays_flatearth(fGHz,**kwargs):
     Returns
     -------
 
-    P : 
+    P :
         received power
 
 
@@ -1489,33 +1593,29 @@ def two_rays_flatearth(fGHz,**kwargs):
         dloss=kwargs['d']
         ht=kwargs['ht']
         hr=kwargs['hr']
-        
-
-
+    
     Gt = 10**((1.*Gt)/10.)
     Gr = 10**((1.*Gr)/10.)
 
-
-    
     d0 = np.sqrt( dloss**2 - 1.*(ht-hr)**2 ) # d0
     dref = np.sqrt(d0**2+1.*(ht+hr)**2) #l0'
 
 
     if eps != []:
         psy = np.arcsin((ht+hr)/dref)
-        er = eps  - 60.j*sig*0.3/fGHz
+        er = eps - 60.j*sig*0.3/fGHz
         if pol == 'v':
-            Z= (1./er)* np.sqrt(er-np.cos(psy)**2)
+            Z = (1./er)* np.sqrt(er-np.cos(psy)**2)
         elif pol == 'h':
-            Z= np.sqrt(er-np.cos(psy)**2)
+            Z = np.sqrt(er-np.cos(psy)**2)
 
         gamma = (np.sin(psy)-Z)/((np.sin(psy)+Z))
 
 
 
-    deltad= dref-dloss
+    deltad = dref-dloss
     deltaphi = (2*np.pi*fGHz*deltad)/0.3
-    E= (0.3/(4*np.pi*fGHz) ) *(np.sqrt(Gt*Gr)/dloss + gamma * np.sqrt(Gr*Gr)*(np.exp(-1.j*deltaphi))/dref)
+    E= (0.3/(4*np.pi*fGHz)) * (np.sqrt(Gt*Gr)/dloss + gamma * np.sqrt(Gr*Gr)*(np.exp(-1.j*deltaphi))/dref)
     P = abs(E)**2
 
     # import ipdb
@@ -1555,7 +1655,7 @@ def lossref_compute(P,h0,h1,k=4/3.) :
 
     Returns
     -------
-    
+
     dloss : float
         length of direct path (meter)
     dref : float
@@ -1657,9 +1757,9 @@ def two_rays_curvedearthold(P,h0,h1,fGHz=2.4,**kwargs):
         lon1 : float |string
             longitude second point (decimal |deg min sec Direction)
     h0 : float:
-        height of 1st point 
+        height of 1st point
     h1 : float:
-        height of 2nd point 
+        height of 2nd point
     fGHz : float
         frequency (GHz)
 

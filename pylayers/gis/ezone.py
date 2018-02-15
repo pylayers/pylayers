@@ -29,6 +29,7 @@ from pylayers.gis.gisutil import *
 import pylayers.gis.srtm as srtm
 from mpl_toolkits.basemap import Basemap
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+from mpl_toolkits.axes_grid1.colorbar import colorbar
 
 def maxloc(f, threshold=-np.sqrt(2)):
     """ determine local maximum above a threshold
@@ -915,6 +916,7 @@ class Ezone(PyLayers):
                     'Hr': 1.5,
                     'K': 1.3333,
                     'fGHz': .3,
+                    'source': 'srtm',
                     'divider':[]
                     }
 
@@ -928,22 +930,33 @@ class Ezone(PyLayers):
             f = kwargs['fig']
             a = kwargs['ax']
 
+        Ht = kwargs['Ht']
+        Hr = kwargs['Hr']
+        fGHz = kwargs['fGHz']
+        K = kwargs['K']
+        Rmax = kwargs['Rmax']
+        Nr = kwargs['Nr']
+        Nphi = kwargs['Nphi']
+
         x_c, y_c = self.m(kwargs['pc'][0], kwargs['pc'][1])
         pc = np.array([x_c, y_c])
 
-        lmbda = 0.3/kwargs['fGHz']
+        #lmbda = 0.3/fGHz
         # phi:  Nphi x 1
-        phi = np.linspace(0, 2*np.pi, kwargs['Nphi'])[:, None]
+        phi = np.linspace(0, 2*np.pi, Nphi)[:, None]
         # r :   1 x Nr
-        r = np.linspace(0.02, kwargs['Rmax'], kwargs['Nr'])[None, :]
+        r = np.linspace(0.02, Rmax, Nr)[None, :]
 
         x = pc[0] + r*np.cos(phi)
         y = pc[1] + r*np.sin(phi)
         # extent_c = np.array([x.min(),x.max(),y.min(),y.max()])
 
+        #dh = d*(d[::-1])/(2*K*6375e3)
+
         # Triangulation of the coverage zone
         triang = tri.Triangulation(x.flatten(), y.flatten())
         lon, lat = self.m(triang.x, triang.y, inverse=True)
+
         # back in lon,lat coordinates
         triang.x = lon
         triang.y = lat
@@ -953,8 +966,16 @@ class Ezone(PyLayers):
         rx = np.round((lon - self.extent[0]) / self.lonstep).astype(int)
         ry = np.round((self.extent[3]-lat) / self.latstep).astype(int)
 
-        cov = self.hgts[ry, rx]
-        L = loss.cover(x, y, cov, kwargs['Ht'], kwargs['Hr'], kwargs['fGHz'])
+        # height
+        #cov = self.hgts[ry, rx]
+        if kwargs['source'] == 'srtm':
+            height = self.hgts[ry,rx]
+
+        if kwargs['source'] == 'aster':
+            height = self.hgta[ry,rx]
+
+        L = loss.cover(x, y, height, Ht, Hr, fGHz, K)
+
         return triang, L
 
 #        # adding effect of earth equivalent curvature
@@ -988,7 +1009,7 @@ class Ezone(PyLayers):
 #
 #        return triang,LFS,L,Ltot
 
-    def showcov(self,triang,val,vmin=-130,vmax=-50,cmap=plt.cm.jet,bbuild=False):
+    def showcov(self, triang, val, vmin=-130, vmax=-50, cmap=plt.cm.jet, bbuild = False):
         """ Show a coverage
 
         Parameters
@@ -998,29 +1019,28 @@ class Ezone(PyLayers):
         val : values
 
         """
-        f = plt.figure()
-        a = f.add_subplot(111)
-        tc = a.tripcolor(triang,
+        ax = plt.gca()
+        tc = ax.tripcolor(triang,
                          val.flatten(),
                          shading='gouraud',
                          cmap=cmap,
-                         vmax=vmin,
-                         vmin=vmax)
+                         vmax=vmax,
+                         vmin=vmin)
+        plt.axis('equal')
         if bbuild:
-            f, a, d = self.show(fig=f,
-                                ax=a,
+            f, ax, d = self.show(fig=plt.gcf(),
+                                ax=plt.gca(),
                                 contour=False,
                                 bldg=True,
                                 height=False,
                                 coord='lonlat',
                                 extent=self.extent)
 
-        divider = make_axes_locatable(a)
-
-        cax = divider.append_axes("right", size="100%", pad=0.5)
-        cb = f.colorbar(tc, cax)
-        cb.set_label('Loss(dB)')
-        plt.axis('equal')
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes("right",size="5%",pad="5%")
+        cb = colorbar(tc, cax=cax)
+        cb.set_label_text('Loss(dB)',fontsize=18)
+        return(cb)
 
     def rennes(self):
         """
