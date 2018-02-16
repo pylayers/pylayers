@@ -30,6 +30,7 @@ import pylayers.gis.srtm as srtm
 from mpl_toolkits.basemap import Basemap
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from mpl_toolkits.axes_grid1.colorbar import colorbar
+import smopy
 
 def maxloc(f, threshold=-np.sqrt(2)):
     """ determine local maximum above a threshold
@@ -179,11 +180,11 @@ def expand(A):
     u = np.triu(np.ones((N, N))).flatten()
     v = np.kron(np.ones(M), u)
     w = t * v
-    #return(w.reshape(M, N, N).swapaxes(1, 2)[:, 1:, :])
+    # return(w.reshape(M, N, N).swapaxes(1, 2)[:, 1:, :])
 
-    return(w.reshape(M,N,N).swapaxes(1,2))
+    return(w.reshape(M, N, N).swapaxes(1,2))
 
-def conv(extent,m,mode='tocart'):
+def conv(extent, m, mode='tocart'):
     """ convert zone to cartesian or lon lat
 
     Parameters
@@ -203,12 +204,12 @@ def conv(extent,m,mode='tocart'):
 
     """
     if mode == 'tocart':
-        pll = m(extent[0],extent[2])
-        pur = m(extent[1],extent[3])
-        out = np.array([pll[0],pur[0],pll[1],pur[1]])
+        pll = m(extent[0], extent[2])
+        pur = m(extent[1], extent[3])
+        out = np.array([pll[0], pur[0], pll[1], pur[1]])
     if mode == 'toll':
-        lllon, lllat = m(extent[0],extent[2],inverse=True)
-        rulon, rulat = m(extent[1],extent[3],inverse=True)
+        lllon, lllat = m(extent[0], extent[2], inverse=True)
+        rulon, rulat = m(extent[1], extent[3], inverse=True)
         out = np.array([lllon, rulon, lllat, rulat])
     return(out)
 
@@ -1009,7 +1010,12 @@ class Ezone(PyLayers):
 #
 #        return triang,LFS,L,Ltot
 
-    def showcov(self, triang, val, vmin=-130, vmax=-50, cmap=plt.cm.jet, bbuild = False):
+    def showcov(self, triang, val,
+                vmin=-130,
+                vmax=-50,
+                cmap=plt.cm.jet,
+                bbuild = False,
+                btile=True):
         """ Show a coverage
 
         Parameters
@@ -1019,22 +1025,40 @@ class Ezone(PyLayers):
         val : values
 
         """
+        lonmin = np.min(triang.x)
+        lonmax = np.max(triang.x)
+        latmin = np.min(triang.y)
+        latmax = np.max(triang.y)
+        extent = (lonmin,lonmax,latmin,latmax)
+        print(extent)
+        mp = smopy.Map((extent[2]+0.1, extent[0]+0.1, extent[3]-0.1,extent[1]-0.1), z=12)
+        if bbuild:
+            f, ax, d = self.show(fig=f,
+                                 ax=ax,
+                                 contour=False,
+                                 btile=False,
+                                 bldg=True,
+                                 height=False,
+                                 coord='lonlat',
+                                 extent=self.extent)
+
+        #ax = plt.gca()
+        if mp!=[]:
+            triang.x,triang.y = mp.to_pixels(triang.y, triang.x)
+        #ax = mp.show_mpl(figsize=(10,10))
         ax = plt.gca()
         tc = ax.tripcolor(triang,
-                         val.flatten(),
-                         shading='gouraud',
-                         cmap=cmap,
-                         vmax=vmax,
-                         vmin=vmin)
-        plt.axis('equal')
-        if bbuild:
-            f, ax, d = self.show(fig=plt.gcf(),
-                                ax=plt.gca(),
-                                contour=False,
-                                bldg=True,
-                                height=False,
-                                coord='lonlat',
-                                extent=self.extent)
+                          val.flatten(),
+                          #shading='gouraud',
+                          #shading='flat',
+                          cmap=cmap,
+                          vmax=vmax,
+                          vmin=vmin,
+                          alpha = 0.4,
+                          edgecolors='k',
+                          linewidth=0.0)
+        #plt.axis('equal')
+        ax = mp.show_mpl(ax=ax)
 
         divider = make_axes_locatable(ax)
         cax = divider.append_axes("right",size="5%",pad="5%")
@@ -1100,6 +1124,8 @@ class Ezone(PyLayers):
             display dem if True
         bldg : boolean
             display building if True
+        btile : boolean
+            display tile overlay with smopy
         coord : string
             'lonlat'| 'cartesian'
         source: string
@@ -1125,8 +1151,10 @@ class Ezone(PyLayers):
                     'figsize':(10,10),
                     'height':True,
                     'bldg':False,
+                    'btile':False,
                     'clim':(0,200),
                     'coord':'lonlat',
+                    'zoom': 10,
                     'extent':[],
                     'contour':False,
                     'source':'srtm',
@@ -1136,6 +1164,7 @@ class Ezone(PyLayers):
                    }
 
         divider = []
+        mp = [] 
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]
@@ -1145,13 +1174,8 @@ class Ezone(PyLayers):
         else:
             fig = plt.figure(figsize=kwargs['figsize'])
 
-        if 'ax' in kwargs:
-            ax = kwargs['ax']
-        else:
-            ax =  fig.add_subplot(111)
         # get zone limitation
         # lon,lat or cartesian
-
         if kwargs['extent']==[]:
             if kwargs['coord']=='lonlat':
                 extent = self.extent
@@ -1163,6 +1187,18 @@ class Ezone(PyLayers):
                 extent = conv(extent_c,self.m,mode='toll')
             if kwargs['coord']=='lonlat':
                 extent = kwargs['extent']
+        if 'ax' in kwargs:
+            ax = kwargs['ax']
+        else:
+            if kwargs['btile']:
+            # lon min lon max lat min lat max
+            # lat min , lon min , lat max , lon max
+            # 2 0 3 1
+                mp = smopy.Map((extent[2], extent[0], extent[3], extent[1]), z=kwargs['zoom'])
+                ax = mp.show_mpl(figsize=kwargs['figsize'],alpha=0.3)
+            else:
+                ax = fig.add_subplot(111)
+
 
 
         # ploting buildings with collection of polygons
@@ -1177,6 +1213,7 @@ class Ezone(PyLayers):
         ax.set_title(kwargs['title'])
         ax.set_xlabel(kwargs['xlabel'])
         ax.set_ylabel(kwargs['ylabel'])
+
 
         if (kwargs['height'] | kwargs['contour']):
             if kwargs['source']=='srtm':
@@ -1210,12 +1247,15 @@ class Ezone(PyLayers):
 
             # get index corresponding to the selected zone
 
-            ix = np.where((x>=extent[0]) & (x<=extent[1]))[0]
-            iy = np.where((y>=extent[2]) & (y<=extent[3]))[0]
+            ix = np.where((x >= extent[0]) & (x <= extent[1]))[0]
+            iy = np.where((y >= extent[2]) & (y <= extent[3]))[0]
 
             if kwargs['height']:
                 im = ax.imshow(hgt[iy[0]:(iy[-1]+1),ix[0]:(ix[-1]+1)],
-                               extent=extent,clim=kwargs['clim'],cmap=kwargs['cmap'],alpha=kwargs['alpha'])
+                               extent=extent,
+                               clim = kwargs['clim'],
+                               cmap = kwargs['cmap'],
+                               alpha = kwargs['alpha'])
                 divider = make_axes_locatable(ax)
                 cax = divider.append_axes("right", size="5%", pad=0.05)
                 cb = fig.colorbar(im,cax)
@@ -1245,13 +1285,12 @@ class Ezone(PyLayers):
                             facecolor=kwargs['facecolor'],
                             fig=fig,ax=ax)
                    else:
-                       fig,ax = plu.polycol(poly,info[:,3],
-                            clim = kwargs['clim'],
-                            fig=fig,
-                            ax=ax)
+                       fig, ax = plu.polycol(poly, info[:, 3],
+                                             clim=kwargs['clim'],
+                                             fig=fig,
+                                             ax=ax)
 
-
-        return(fig,ax,divider)
+        return fig, ax, divider, mp
 
     def loadtmp(self,_fileh5='RennesFull.h5'):
         """ load an Ezone from hdf5 file
@@ -1267,10 +1306,10 @@ class Ezone(PyLayers):
         f = h5py.File(fileh5,'r',dtype=np.float32)
         self.bdpt = f['osm']['bdpt'].value
         self.bdma = f['osm']['bdma'].value
-        lonm =  self.bdpt[:,0].min()
-        lonM =  self.bdpt[:,0].max()
-        latm =  self.bdpt[:,1].min()
-        latM =  self.bdpt[:,1].max()
+        lonm = self.bdpt[:,0].min()
+        lonM = self.bdpt[:,0].max()
+        latm = self.bdpt[:,1].min()
+        latM = self.bdpt[:,1].max()
         self.extentc = (lonm,lonM,latm,latM)
         D = DEM()
         D.loadsrtm()

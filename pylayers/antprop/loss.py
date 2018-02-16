@@ -1239,10 +1239,8 @@ def calnu(h,d1,d2,fGHz):
 
     return(nu)
 
-
-#@jit
-def cover(X, Y, Z, Ha, Hb, fGHz, K):
-    """
+def outdoor(X, Y, Z, Ha, Hb, fGHz, K, method='deygout'):
+    """ outdoor coverage on a region
 
     Parameters
     ----------
@@ -1258,6 +1256,7 @@ def cover(X, Y, Z, Ha, Hb, fGHz, K):
     Hb : float
     fGHz : np.array (,Nf)
         frequency in GHz
+    method : 'deygout' | 'bullington'
 
     Returns
     -------
@@ -1272,16 +1271,11 @@ def cover(X, Y, Z, Ha, Hb, fGHz, K):
         fGHz = np.array([fGHz])
 
     Nf = len(fGHz)
-    #pdb.set_trace()
-    #print Nphi,Nl
-    #L = np.zeros((Nphi, Nr-2, Nf))
-    #L = np.zeros((Nphi, Nr-2))
     L = np.zeros((Nphi, Nr, Nf))
     L0 = np.zeros(Nf)
     # loop over azimut
     for ip in xrange(Nphi):
-    # loop over range
-        #for il in xrange(Nr-1):
+        # loop over range
         # il : 2 ... Nr-2
         # uk : 0 ....Nr-1
         for il in np.arange(2, Nr-1):
@@ -1293,18 +1287,17 @@ def cover(X, Y, Z, Ha, Hb, fGHz, K):
             d = np.sqrt((x-x[0])**2+(y-y[0])**2)
             # effect of refraction in equivalent earth curvature
             dh = d*(d[::-1])/(2*K*6375e3)
-            z = z + dh 
+            z = z + dh
             LOS = 32.4 + 20*np.log10(fGHz) + 20*np.log10(d[-1])
             z[0] = z[0] + Ha
-            #pdb.set_trace()
             z[-1] = z[-1] + Hb
-            #plt.plot(d,z)
-            LD = deygout(z, d, fGHz, L0, 0)
-            #print v
-            L[ip,il,:] = LD[None,:]+LOS[None,:]
+            if method=='deygout':
+                LDiff = deygout(z, d, fGHz, L0, 0)
+            if method=='bullington':
+                LDiff = bullington(z, d, fGHz)
+            L[ip,il,:] = LDiff[None,:]+LOS[None,:]
     return(L)
 
-#@jit
 def deygout(z, d, fGHz, L, depth):
     """ Deygout attenuation
 
