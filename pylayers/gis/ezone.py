@@ -376,11 +376,11 @@ class Ezone(PyLayers):
 
         An Ezone is a class related to a region of Earth delimited by
         (lonmin,lonmax,latmin,latmax)
-        
+
         An Ezone gathers raster and vector data
             + raster data comes either from srtm or aster data
             + vector data comes from openstreetmap
-        
+
         An Ezone is stored in hdf5 format
 
         Attributes
@@ -399,7 +399,7 @@ class Ezone(PyLayers):
         Parameters
         ----------
 
-        prefix : string 
+        prefix : string
             filename without extension
 
         """
@@ -886,6 +886,51 @@ class Ezone(PyLayers):
 
         return x,y,r,R,dem,LOS,h_earth,diff,fac,nu,numax,LFS,Ltot
 
+    def route(self, pa, pb, **kwargs):
+        """ coverage on a route
+        pa : np.array (1x2)
+            lon,lat
+        pb : np.array (Nx2)
+            lon,lat
+        """
+
+        defaults = {'Nr': 200,
+                    'Ha': 30,
+                    'Hb': 1.5,
+                    'K': 1.3333,
+                    'fGHz': .868,
+                    'source': 'srtm',
+                    'method': 'deygout',
+                    'divider': []
+                    }
+
+        for key in defaults:
+            if key not in kwargs:
+                kwargs[key] = defaults[key]
+
+        Ha = kwargs['Ha']
+        Hb = kwargs['Hb']
+        fGHz = kwargs['fGHz']
+        K = kwargs['K']
+        method = kwargs['method']
+
+        x_a, y_a = self.m(pa[0], pa[1])
+        x_b, y_b = self.m(pb[:, 0], pb[:, 1])
+        u = np.linspace(0, 1, kwargs['Nr'])
+        x = x_a + (x_b[:,None] - x_a)*u[None,:]
+        y = y_a + (y_b[:,None] - y_a)*u[None,:]
+
+        lon, lat = self.m(x, y, inverse=True)
+
+        rx = np.round((lon - self.extent[0]) / self.lonstep).astype(int)
+        ry = np.round((self.extent[3]-lat) / self.latstep).astype(int)
+
+        if kwargs['source'] == 'srtm':
+            height = self.hgts[ry, rx]
+
+        L = loss.route(x, y, height, Ha, Hb, fGHz, K, method=method)
+
+        return(L,lon,lat)
 
     def cover(self, **kwargs):
         """ coverage around a point
@@ -918,7 +963,7 @@ class Ezone(PyLayers):
                     'K': 1.3333,
                     'fGHz': .3,
                     'source': 'srtm',
-                    'divider':[]
+                    'divider': []
                     }
 
         for key in defaults:
@@ -926,7 +971,7 @@ class Ezone(PyLayers):
                 kwargs[key] = defaults[key]
 
         if 'fig' not in kwargs:
-            f,a = plt.subplots(1,1)
+            f, a = plt.subplots(1, 1)
         else:
             f = kwargs['fig']
             a = kwargs['ax']
@@ -970,12 +1015,12 @@ class Ezone(PyLayers):
         # height
         #cov = self.hgts[ry, rx]
         if kwargs['source'] == 'srtm':
-            height = self.hgts[ry,rx]
+            height = self.hgts[ry, rx]
 
         if kwargs['source'] == 'aster':
-            height = self.hgta[ry,rx]
+            height = self.hgta[ry, rx]
 
-        L = loss.cover(x, y, height, Ht, Hr, fGHz, K)
+        L = loss.outdoor(x, y, height, Ht, Hr, fGHz, K, method='deygout')
 
         return triang, L
 
@@ -1029,7 +1074,7 @@ class Ezone(PyLayers):
         lonmax = np.max(triang.x)
         latmin = np.min(triang.y)
         latmax = np.max(triang.y)
-        extent = (lonmin,lonmax,latmin,latmax)
+        extent = (lonmin, lonmax, latmin, latmax)
         print(extent)
         mp = smopy.Map((extent[2]+0.1, extent[0]+0.1, extent[3]-0.1,extent[1]-0.1), z=12)
         if bbuild:
