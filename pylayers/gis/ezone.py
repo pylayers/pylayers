@@ -15,7 +15,7 @@ import os
 import pdb
 import matplotlib.pyplot as plt
 import matplotlib.tri as tri
-# from osgeo import gdal
+from osgeo import gdal
 # from imposm.parser import OSMParser
 # from geomutil import *
 # from pylayers.util.project import *
@@ -300,6 +300,10 @@ class DEM(PyLayers):
     def loadaster(self,fileaster=[]):
         """ load Aster files
 
+        The Aster file has the structure 
+
+        ASTGTM2_prefix_dem.tif
+
         """
 
 
@@ -328,7 +332,7 @@ class DEM(PyLayers):
 
         # 
         # Commented while gdal is broken in anaconda
-        #f = gdal.Open(fileaster)
+        f = gdal.Open(fileaster)
         self.hgta = f.ReadAsArray()
 
     def show(self,**kwargs):
@@ -700,11 +704,11 @@ class Ezone(PyLayers):
             earth curvature depending on K factor
         nu : np.array(,Npt)
             Fresnel parameter
-        num : np.array(1,Npt) 
+        num : np.array(1,Npt)
             Fresnel parameter above threshold (default : -sqrt(2))
         hlos : (,Npt)
-            height of the line of sight 
-        ellFresnel : (2,N) 
+            height of the line of sight
+        ellFresnel : (2,N)
             Fresnel ellipsoid set of points
 
         """
@@ -713,7 +717,7 @@ class Ezone(PyLayers):
                     'ha': 30,
                     'hb': 1.5,
                     'K': 1.3333,
-                    'fGHz': .3,
+                    'fGHz': .868,
                     'threshold': -np.sqrt(2),
                     'source': 'srtm'}
 
@@ -744,15 +748,40 @@ class Ezone(PyLayers):
 
         lon, lat = self.m(x, y, inverse=True)
 
-        rx = np.round((lon - self.extent[0]) / self.lonstep).astype(int)
-        ry = np.round((self.extent[3]-lat) / self.latstep).astype(int)
+        Dx = (lon - self.extent[0]) / self.lonstep
+        Dy = (self.extent[3]-lat) / self.latstep
+        rx = np.floor(Dx).astype(int)
+        ry = np.floor(Dy).astype(int)
+        dx = Dx-rx
+        dy = Dy-ry
+
+        rx_old = np.round((lon - self.extent[0]) / self.lonstep).astype(int)
+        ry_old = np.round((self.extent[3]-lat) / self.latstep).astype(int)
 
         # add earth sphericity deviation to hgt (depends on K factor)
         if kwargs['source'] == 'srtm':
-            height = self.hgts[ry, rx] + dh
+            hll = self.hgts[ry, rx]
+            hlr = self.hgts[ry, rx+1]
+            hul = self.hgts[ry+1, rx]
+            hur = self.hgts[ry+1, rx+1]
+            wll = np.sqrt(dx**2+(1-dy)**2)
+            wlr = np.sqrt((1-dx)**2+(1-dy)**2)
+            wul = np.sqrt(dx**2+dy**2)
+            wur = np.sqrt((1-dx)**2+dy**2)
+            height = (wll*hll+wlr*hlr+wul*hul+wur*hur)/(wll+wlr+wul+wur)
+            height_old = self.hgts[ry_old, rx_old] + dh
 
         if kwargs['source'] == 'aster':
-            height = self.hgta[ry,rx] + dh
+            hll = self.hgta[ry, rx]
+            hlr = self.hgta[ry, rx+1]
+            hul = self.hgta[ry+1, rx]
+            hur = self.hgta[ry+1, rx+1]
+            wll = np.sqrt(dx**2+(1-dy)**2)
+            wlr = np.sqrt((1-dx)**2+(1-dy)**2)
+            wul = np.sqrt(dx**2+dy**2)
+            wur = np.sqrt((1-dx)**2+dy**2)
+            height = (wll*hll+wlr*hlr+wul*hul+wur*hur)/(wll+wlr+wul+wur)
+            height_old = self.hgta[ry,rx] + dh
 
         # seek for local maxima along link profile
 
@@ -781,117 +810,27 @@ class Ezone(PyLayers):
         Ltot = -(LFS+L)
         ellFresnel = geu.ellipse2D(pa, pb, lmbda, 100)
 
-        return(height, d, dh, nu,numax, m, hlos, ellFresnel,LFS,L)
+        return(height,height_old, d, dh, nu,numax, m, hlos, ellFresnel,LFS,L)
 
-    def cov(self, **kwargs):
-        """ coverage around a point
+
+    def route(self, pa, pb, **kwargs):
+        """ coverage on a route
 
         Parameters
         ----------
 
-        pc : np.array
-            center point in latlon coordinates
-        Nphi : int
-            Number of angular direction
-        Nr : int
-            Number of points along radius
-        Rmax : float
-            Radius maximum (meters)
-        Hr : float
-            Receiver height
-        Ht : float
-            Transmitter height
-        K : float
-            K factor
-
-        Returns
-        -------
-        x
-        y
-        r
-        R
-        dem
-        LOS
-        h_earth
-        diff
-        fac
-        nu
-        numax
-        LFS
-        Ltot
-
-        """
-        defaults = {'pc': (-1.627449, 48.124648),
-                    'Nphi': '360',
-                    'Nr': 200,
-                    'Rmax': 4000,
-                    'Ht': 30,
-                    'Hr': 1.5,
-                    'K': 1.3333,
-                    'fGHz': .3,
-                    'source': 'srtm',
-                    'divider': []
-                    }
-
-        for key in defaults:
-            if key not in kwargs:
-                kwargs[key] = defaults[key]
-
-        x_c, y_c = self.m(kwargs['pc'][0], kwargs['pc'][1])
-        pc = np.array([x_c, y_c])
-        lmbda = 0.3/kwargs['fGHz']
-        phi = np.linspace(0, 2*np.pi, kwargs['Nphi'])[:, None]
-        r = np.linspace(0.02, kwargs['Rmax'], kwargs['Nr'])[None, :]
-
-        # cartesian
-        x = pc[0] + r*np.cos(phi)
-        y = pc[1] + r*np.sin(phi)
-        # extent_c = np.array([x.min(), x.max(), y.min(), y.max()])
-
-        # back to lon lat
-        lon, lat = self.m(x, y, inverse=True)
-
-        rx = np.round((lon - self.extent[0]) / self.lonstep).astype(int)
-        ry = np.round((self.extent[3]-lat) / self.latstep).astype(int)
-
-        # dem
-        if source == 'srtm':
-            dem = self.hgts[ry, rx]
-        else:
-            dem = self.hgta[ry, rx]
-
-
-        # adding effect of earth equivalent curvature
-        R = expand(r)
-        B = r.T-R
-        h_earth = (R*B)/(2*kwargs['K']*6375e3)
-
-        # ground height + antenna height
-        Ha = kwargs['Ht'] + self.hgts[ry[0,0],rx[0,0]]
-        Hb = kwargs['Hr'] + dem
-
-        # Nphi x Nr x Nr
-        Hb = Hb[:,None,:]
-        # LOS line
-        LOS = Ha+(Hb-Ha)*R/r.T
-        diff = expand(dem)+h_earth-LOS
-        fac = np.sqrt(2*r[...,None]/(lmbda*R*B))
-        nu = diff*fac
-        #num,ind  = maxloc(nu)
-        numax = np.max(nu,axis=2)
-        w = numax -0.1
-        L = 6.9 + 20*np.log10(np.sqrt(w**2+1)-w)
-        LFS = 32.4 + 20*np.log10(r)+20*np.log10(kwargs['fGHz'])
-        Ltot = LFS+L
-
-        return x,y,r,R,dem,LOS,h_earth,diff,fac,nu,numax,LFS,Ltot
-
-    def route(self, pa, pb, **kwargs):
-        """ coverage on a route
         pa : np.array (1x2)
             lon,lat
         pb : np.array (Nx2)
             lon,lat
+
+        Returns
+        -------
+
+        L : Loss
+        lon
+        lat
+
         """
 
         defaults = {'Nr': 200,
@@ -921,12 +860,50 @@ class Ezone(PyLayers):
         y = y_a + (y_b[:,None] - y_a)*u[None,:]
 
         lon, lat = self.m(x, y, inverse=True)
+        # distance along path
+        Dx = x - x[:, 0][:, None]
+        Dy = y - y[:, 0][:, None]
+        d = np.sqrt(Dx*Dx+Dy*Dy)
+        # equivalent earth curvature
+        dh = d*(d[:,::-1])/(2*K*6375e3)
 
-        rx = np.round((lon - self.extent[0]) / self.lonstep).astype(int)
-        ry = np.round((self.extent[3]-lat) / self.latstep).astype(int)
+        Dlon = (lon - self.extent[0]) / self.lonstep
+        Dlat= (self.extent[3]-lat) / self.latstep
+        #
+        # Interpolation
+        #
 
-        if kwargs['source'] == 'srtm':
-            height = self.hgts[ry, rx]
+        if binterp:
+            rlon = np.floor(Dlon).astype(int)
+            rlat = np.floor(Dlat).astype(int)
+            dlon = Dlon - rlon
+            dlat = Dlat - rlat
+
+            if kwargs['source'] == 'srtm':
+                hll = self.hgts[rlat, rlon]
+                hlr = self.hgts[rlat, rlon+1]
+                hul = self.hgts[rlat+1, rlon]
+                hur = self.hgts[rlat+1, rlon+1]
+
+            if kwargs['source'] == 'aster':
+                hll = self.hgta[rlat, rlon]
+                hlr = self.hgta[rlat, rlon+1]
+                hul = self.hgta[rlat+1, rlon]
+                hur = self.hgta[rlat+1, rlon+1]
+            #    height = self.hgta[ry, rx]
+
+            wll = dlon**2 + (1-dlat)**2
+            wlr = (1-dlon)**2 + (1-dlat)**2
+            wul = dlon**2 + dlat**2
+            wur = (1-dlon)**2 + dlat**2
+            height = (wll*hll+wlr*hlr+wul*hul+wur*hur)/(wll+wlr+wul+wur) + dh
+        else:
+            rlon = np.round(Dlon).astype(int)
+            rlat = np.round(Dlat).astype(int)
+            if kwargs['source'] == 'srtm':
+                height = self.hgts[rlat, rlon] + dh
+            if kwargs['source'] == 'srtm':
+                height = self.hgta[rlat, rlon] + dh
 
         L = loss.route(x, y, height, Ha, Hb, fGHz, K, method=method)
 
@@ -1020,7 +997,7 @@ class Ezone(PyLayers):
         if kwargs['source'] == 'aster':
             height = self.hgta[ry, rx]
 
-        L = loss.outdoor(x, y, height, Ht, Hr, fGHz, K, method='deygout')
+        L = loss.cover(x, y, height, Ht, Hr, fGHz, K, method='deygout')
 
         return triang, L
 

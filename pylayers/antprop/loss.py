@@ -1241,7 +1241,8 @@ def calnu(h,d1,d2,fGHz):
 
 
 def route(X, Y, Z, Ha, Hb, fGHz, K, method='deygout'):
-    """ outdoor route
+    """ diffraction loss along a route
+
 
     Parameters
     ----------
@@ -1289,11 +1290,11 @@ def route(X, Y, Z, Ha, Hb, fGHz, K, method='deygout'):
         if method == 'deygout':
             LDiff = deygout(d, z, fGHz, L0, 0)
         if method == 'bullington':
-            LDiff, u, v = bullington(d, z, fGHz)
+            LDiff, deq, heq = bullington(d, z, fGHz)
         L[ip, :] = LDiff+LOS
     return(L)
 
-def outdoor(X, Y, Z, Ha, Hb, fGHz, K, method='deygout'):
+def cover(X, Y, Z, Ha, Hb, fGHz, K, method='deygout'):
     """ outdoor coverage on a region
 
     Parameters
@@ -1346,9 +1347,9 @@ def outdoor(X, Y, Z, Ha, Hb, fGHz, K, method='deygout'):
             z[0] = z[0] + Ha
             z[-1] = z[-1] + Hb
             if method == 'deygout':
-                LDiff = deygout(d, z,  fGHz, L0, 0)
+                LDiff = deygout(d, z, fGHz, L0, 0)
             if method == 'bullington':
-                LDiff = bullington(d, z, fGHz)
+                LDiff, deq, heq = bullington(d, z, fGHz)
             L[ip, il, :] = LDiff[None, :]+LOS[None,:]
     return(L)
 
