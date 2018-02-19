@@ -14,6 +14,7 @@ import pickle
 import os
 import pdb
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 import matplotlib.tri as tri
 from osgeo import gdal
 # from imposm.parser import OSMParser
@@ -26,6 +27,7 @@ import pylayers.antprop.loss as loss
 from pylayers.util.project import *
 from shapely.geometry import Polygon
 from pylayers.gis.gisutil import *
+import pylayers.gis.kml as gkml
 import pylayers.gis.srtm as srtm
 from mpl_toolkits.basemap import Basemap
 from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -376,7 +378,7 @@ class DEM(PyLayers):
         return fig,ax,divider
 
 class Ezone(PyLayers):
-    """ Earth zone 
+    """ Earth zone
 
         An Ezone is a class related to a region of Earth delimited by
         (lonmin,lonmax,latmin,latmax)
@@ -833,29 +835,19 @@ class Ezone(PyLayers):
 
         """
 
-        defaults = {'Nr': 200,
-                    'Ha': 30,
-                    'Hb': 1.5,
-                    'K': 1.3333,
-                    'fGHz': .868,
-                    'source': 'srtm',
-                    'method': 'deygout',
-                    'divider': []
-                    }
-
-        for key in defaults:
-            if key not in kwargs:
-                kwargs[key] = defaults[key]
-
-        Ha = kwargs['Ha']
-        Hb = kwargs['Hb']
-        fGHz = kwargs['fGHz']
-        K = kwargs['K']
-        method = kwargs['method']
+        Nr = kwargs.pop('Nr',200)
+        Ha = kwargs.pop('Ha',30)
+        Hb = kwargs.pop('Hb',200)
+        fGHz = kwargs.pop('fGHz',0.868)
+        K = kwargs.pop('K',1.333)
+        method = kwargs.pop('method','deygout')
+        source = kwargs.pop('source','deygout')
+        binterp = kwargs.pop('binterp',True)
+        divider = kwargs.pop('divider',[])
 
         x_a, y_a = self.m(pa[0], pa[1])
         x_b, y_b = self.m(pb[:, 0], pb[:, 1])
-        u = np.linspace(0, 1, kwargs['Nr'])
+        u = np.linspace(0, 1, Nr)
         x = x_a + (x_b[:,None] - x_a)*u[None,:]
         y = y_a + (y_b[:,None] - y_a)*u[None,:]
 
@@ -879,13 +871,13 @@ class Ezone(PyLayers):
             dlon = Dlon - rlon
             dlat = Dlat - rlat
 
-            if kwargs['source'] == 'srtm':
+            if source == 'srtm':
                 hll = self.hgts[rlat, rlon]
                 hlr = self.hgts[rlat, rlon+1]
                 hul = self.hgts[rlat+1, rlon]
                 hur = self.hgts[rlat+1, rlon+1]
 
-            if kwargs['source'] == 'aster':
+            if source == 'aster':
                 hll = self.hgta[rlat, rlon]
                 hlr = self.hgta[rlat, rlon+1]
                 hul = self.hgta[rlat+1, rlon]
@@ -900,9 +892,9 @@ class Ezone(PyLayers):
         else:
             rlon = np.round(Dlon).astype(int)
             rlat = np.round(Dlat).astype(int)
-            if kwargs['source'] == 'srtm':
+            if source == 'srtm':
                 height = self.hgts[rlat, rlon] + dh
-            if kwargs['source'] == 'srtm':
+            if source == 'srtm':
                 height = self.hgta[rlat, rlon] + dh
 
         L = loss.route(x, y, height, Ha, Hb, fGHz, K, method=method)
@@ -1031,6 +1023,31 @@ class Ezone(PyLayers):
 #        Ltot = -(LFS+L)
 #
 #        return triang,LFS,L,Ltot
+
+    def to_kmz(self, **kwargs):
+        llcrnrlon = self.extent[0]
+        llcrnrlat = self.extent[2]
+
+        urcrnrlon = self.extent[1]
+        urcrnrlat = self.extent[3]
+
+        fig, ax = gkml.gearth_fig(self.extent,self.extent_c)
+
+        #cs = ax.pcolormesh(self.hgts, cmap='jet')
+        cs = ax.imshow(self.hgts,extent=self.extent,cmap='jet')
+        pngfile = self.prefix+'_overlay.png'
+        kmzfile = self.prefix+'.kmz'
+
+        fig.savefig(pngfile, transparent=True, format='png')
+
+        gkml.make_kml(llcrnrlon = llcrnrlon,
+                 llcrnrlat = llcrnrlat,
+                 urcrnrlon = urcrnrlon,
+                 urcrnrlat = urcrnrlat,
+                 figs = [pngfile],
+                 kmzfile = kmzfile,
+                 name = 'SRTM DSM')
+
 
     def showcov(self, triang, val,
                 vmin=-130,
