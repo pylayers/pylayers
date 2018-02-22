@@ -465,25 +465,25 @@ class Ezone(PyLayers):
         Parameters
         ----------
 
-        ltile : list of string
+        ltile : list of strings
 
         """
         ltile = filter(lambda x : x in self.dbldg,ltile)
         self.lpoly = []
         for it in ltile:
-            h,p=self.dbldg[it]
+            h, p = self.dbldg[it]
             for pt in p:
                 try:
                     poly = np.vstack((poly,np.array(pt)))
                 except:
                     poly = np.array(pt)
-                if (sum(pt)==0):
-                    self.lpoly.append(poly[0:-1,:])
+                if (sum(pt) == 0):
+                    self.lpoly.append(poly[0:-1, :])
                     del poly
             try:
-                th = np.hstack((th,h[:,3]))
+                th = np.hstack((th, h[:, 3]))
             except:
-                th = h[:,3]
+                th = h[:, 3]
 
 
         self.height = th
@@ -835,6 +835,8 @@ class Ezone(PyLayers):
 
         """
 
+        self.pa = pa
+        self.pb = pb
         Nr = kwargs.pop('Nr',200)
         Ha = kwargs.pop('Ha',30)
         Hb = kwargs.pop('Hb',200)
@@ -897,9 +899,9 @@ class Ezone(PyLayers):
             if source == 'srtm':
                 height = self.hgta[rlat, rlon] + dh
 
-        L = loss.route(x, y, height, Ha, Hb, fGHz, K, method=method)
+        self.L = loss.route(x, y, height, Ha, Hb, fGHz, K, method=method)
 
-        return(L,lon,lat)
+        return(self.L,lon,lat)
 
     def cover(self, **kwargs):
         """ coverage around a point
@@ -990,7 +992,8 @@ class Ezone(PyLayers):
             height = self.hgta[ry, rx]
 
         L = loss.cover(x, y, height, Ht, Hr, fGHz, K, method='deygout')
-
+        self.triang = triang
+        self.cover  = L 
         return triang, L
 
 #        # adding effect of earth equivalent curvature
@@ -1025,28 +1028,93 @@ class Ezone(PyLayers):
 #        return triang,LFS,L,Ltot
 
     def to_kmz(self, **kwargs):
+        """ export to kmz file
+        """
         llcrnrlon = self.extent[0]
         llcrnrlat = self.extent[2]
 
         urcrnrlon = self.extent[1]
         urcrnrlat = self.extent[3]
 
+        pngsrtm = self.prefix+'_srtm.png'
+        pngaster = self.prefix+'_aster.png'
+        pngroute = self.prefix+'_route.png'
+        pngcover = self.prefix+'_cover.png'
+        kmzsrtm = self.prefix+'_srtm.kmz'
+        kmzaster = self.prefix+'_aster.kmz'
+        kmzroute = self.prefix+'_route.kmz'
+        kmzcover = self.prefix+'_cover.kmz'
+
+        #
+        # srtm overlay
+        #
         fig, ax = gkml.gearth_fig(self.extent,self.extent_c)
 
         #cs = ax.pcolormesh(self.hgts, cmap='jet')
-        cs = ax.imshow(self.hgts,extent=self.extent,cmap='jet')
-        pngfile = self.prefix+'_overlay.png'
-        kmzfile = self.prefix+'.kmz'
+        csrtm = ax.imshow(self.hgts,extent=self.extent,cmap='jet')
 
-        fig.savefig(pngfile, transparent=True, format='png')
+
+        fig.savefig(pngsrtm, transparent=True, format='png')
+        #
+        # aster overlay
+        #
+        fig, ax = gkml.gearth_fig(self.extent,self.extent_c)
+        caster = ax.imshow(self.hgta,extent=self.extent,cmap='jet')
+
+        fig.savefig(pngaster, transparent=True, format='png')
+        #
+        # route overlay
+        #
+        fig, ax = gkml.gearth_fig(self.extent,self.extent_c)
+        sp = ax.scatter(self.pb[:,0], self.pb[:,1], c = -self.L,
+                        s=30,linewidth=0,cmap='jet',vmax=-60, vmin=-120)
+        fig.savefig(pngroute, transparent=True, format='png')
+        # 
+        # cover overlay
+        #
+        fig, ax = gkml.gearth_fig(self.extent,self.extent_c)
+        tc = ax.tripcolor(self.triang,
+                          -self.cover.flatten(),
+                          shading='gouraud',
+                          cmap='jet',
+                          vmax=-60,
+                          vmin=-120,
+                          alpha = 1,
+                          edgecolors='k',
+                          linewidth=0.0)
+        fig.savefig(pngcover, transparent=True, format='png')
 
         gkml.make_kml(llcrnrlon = llcrnrlon,
                  llcrnrlat = llcrnrlat,
                  urcrnrlon = urcrnrlon,
                  urcrnrlat = urcrnrlat,
-                 figs = [pngfile],
-                 kmzfile = kmzfile,
+                 figs = [pngroute],
+                 kmzfile = kmzroute,
+                 name = 'route')
+
+        gkml.make_kml(llcrnrlon = llcrnrlon,
+                 llcrnrlat = llcrnrlat,
+                 urcrnrlon = urcrnrlon,
+                 urcrnrlat = urcrnrlat,
+                 figs = [pngcover],
+                 kmzfile = kmzcover,
+                 name = 'coverage')
+
+        gkml.make_kml(llcrnrlon = llcrnrlon,
+                 llcrnrlat = llcrnrlat,
+                 urcrnrlon = urcrnrlon,
+                 urcrnrlat = urcrnrlat,
+                 figs = [pngsrtm],
+                 kmzfile = kmzsrtm,
                  name = 'SRTM DSM')
+
+        gkml.make_kml(llcrnrlon = llcrnrlon,
+                 llcrnrlat = llcrnrlat,
+                 urcrnrlon = urcrnrlon,
+                 urcrnrlat = urcrnrlat,
+                 figs = [pngaster],
+                 kmzfile = kmzaster,
+                 name = 'ASTER DSM')
 
 
     def showcov(self, triang, val,
@@ -1203,7 +1271,7 @@ class Ezone(PyLayers):
                    }
 
         divider = []
-        mp = [] 
+        mp = []
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]
@@ -1240,8 +1308,6 @@ class Ezone(PyLayers):
 
 
 
-        # ploting buildings with collection of polygons
-        #
 
         if kwargs['coord'] == 'cartesian':
             kwargs['xlabel'] = 'W-E Distance (meters)'
@@ -1304,6 +1370,8 @@ class Ezone(PyLayers):
                 cnt = ax.contour(hgt[iy[0]:(iy[-1]+1),ix[0]:(ix[-1]+1)],N=10,extent=extent,origin='upper')
 
         # display buildings
+        # ploting buildings with collection of polygons
+        #
         if kwargs['bldg']:
             # get subtiles corresponding to extent
             if kwargs['coord']=='cartesian':

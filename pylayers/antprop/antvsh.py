@@ -83,7 +83,7 @@ def vsh(A, dsf=1):
             Ftr=Ftr*np.ones((nth,nph))
         if Fpr.shape!=(nth,nph):
             Fpr=Fpr*np.ones((nth,nph))
-        
+
         brr, bir, crr, cir = gridComp.vha(nth, nph, 1,
                                           lvha, wvha,
                                           np.transpose(Fpr),

@@ -618,11 +618,48 @@ class Pattern(PyLayers):
 
         return Ft,Fp
 
+    def __patoll(self,**kwargs):
+        """
+        """
+        paramdef = {'iband':0,
+                 'polar':-45.0,
+                 'tilt':0
+                }
+
+        param = kwargs.pop('param')
+        if param =={}:
+            param = paramdef
+        iband = param.pop('iband')
+        polar = param.pop('polar')
+        tilt = param.pop('tilt')
+        # TODO check tilt value is compatible
+
+        # lbands : list of antenna bands
+        lbands = self.atoll.keys()
+        # Gver : 360,Nf
+        # Ghor : 360,Nf
+        Gver = self.atoll[lbands[iband]][polar]['ver'][:,tilt,:]
+        Ghor = self.atoll[lbands[iband]][polar]['hor'][:,tilt,:]
+        shG = Gver.shape
+        # grid mode (180,360,Nf)
+        self.theta = np.linspace(0,180,180)
+        self.phi = np.linspace(0,360,360)
+        sqG = np.empty((180,360,shG[-1]))
+        sqG[:,0,:]  = np.sqrt(10**(Gver[0:180,:]/10))
+        sqG[:,180,:] = np.sqrt(10**(Gver[180:,:]/10))
+        sqG[:,90,:] = np.sqrt(10**(Ghor[0:180,:]/10))
+        sqG[:,270,:] = np.sqrt(10**(Ghor[180:,:]/10))
+
+        Ft = sqG/np.sqrt(2)
+        Fp = sqG/np.sqrt(2)
+
+        return Ft,Fp
+
     def __phorn(self,**kwargs):
-        """ Horn antenna 
+        """ Horn antenna
 
 
-        http://www.ece.rutgers.edu/~orfanidi/ewa/ch18.pdf (18.2) 
+        http://www.ece.rutgers.edu/~orfanidi/ewa/ch18.pdf (18.2)
 
         Parameters
         ----------
@@ -668,14 +705,12 @@ class Pattern(PyLayers):
         A_n = A/ld
         B_n = B/ld
 
-
-
-        if self.grid: 
+        if self.grid:
             # Nth x Nph x Nf
             theta = self.theta[:,None,None]
             phi = self.phi[None,:,None]
         else:
-            # Ndir x Nf 
+            # Ndir x Nf
             theta = self.theta[:,None]
             phi = self.phi[:,None]
 
@@ -683,40 +718,40 @@ class Pattern(PyLayers):
         vy = B_n[...,:]*np.sin(theta)*np.sin(phi) # 18.3.4
 
         F = ((1+np.cos(theta))/2.)*(F1(vx,sigma_a)*F0(vy,sigma_b))
-        normF = np.abs(F1(0,sigma_a)*F0(0,sigma_b))**2  
+        normF = np.abs(F1(0,sigma_a)*F0(0,sigma_b))**2
         F_nor = F/np.sqrt(normF)
         efficiency = 0.125*normF # 18.4.3
         Gmax = efficiency*4*np.pi*A*B/ld**2
-        F  = np.sqrt(Gmax[...,:])*F_nor # Ndir x Nf 
+        F  = np.sqrt(Gmax[...,:])*F_nor # Ndir x Nf
 
         # Handling repatition on both vector components
-        # enforce E.y = 0 
+        # enforce E.y = 0
         if self.param['polar']=='x':
             Ft = F/np.sqrt(1+(np.cos(theta)*np.sin(phi)/np.cos(phi))**2)
             Fp = (-np.cos(theta)*np.sin(phi)/np.cos(phi))*Ft
             nan_bool = np.isnan(Fp)
-            Fp[nan_bool] = F[nan_bool] 
-        # enforce E.x = 0 
+            Fp[nan_bool] = F[nan_bool]
+        # enforce E.x = 0
         if self.param['polar']=='y':
             Ft = F/np.sqrt(1+(np.cos(theta)*np.cos(phi)/np.sin(phi))**2)
             Fp = (np.cos(theta)*np.cos(phi)/np.sin(phi))*Ft
             nan_bool = np.isnan(Fp)
-            Fp[nan_bool] = F[nan_bool] 
+            Fp[nan_bool] = F[nan_bool]
 
-        return Ft,Fp 
+        return Ft,Fp
 
     def __pazel(self,**kwargs):
-        """ Azimuth Elevation pattern from file
+        """ Azimuth elevation pattern from file
 
         Parameters
         ----------
 
         filename : ANT filename
 
-        Notes 
+        Notes
         -----
 
-        The 3D pattern is obtained by taking the product 
+        The 3D pattern is obtained by taking the product
         of azimuth pattern and elevation pattern.
 
         """
@@ -1070,7 +1105,7 @@ class Pattern(PyLayers):
             Ft = Ft.reshape(self.nth, self.nph,self.nf)
             Fp = Fp.reshape(self.nth, self.nph,self.nf)
 
-        # last axis should be frequency 
+        # last axis should be frequency
         assert(Ft.shape[-1]==self.nf)
         assert(Fp.shape[-1]==self.nf)
 
@@ -2034,10 +2069,10 @@ class Antenna(Pattern):
                 self.ext='hfss'
                 self.loadhfss(typ, self.nth, self.nph)
 
-        else: # not from file 
+        else: # not from file
             self.typ = typ
             self._filename = typ
-            if self.typ=='vsh3':  
+            if self.typ=='vsh3':
                 self.initvsh()
             else:
                 self.eval()
@@ -2214,7 +2249,7 @@ class Antenna(Pattern):
 
 
     def photo(self,directory=''):
-        """ show a picture of the antenna 
+        """ show a picture of the antenna
 
         Parameters
         ----------
@@ -2239,15 +2274,22 @@ class Antenna(Pattern):
     def load_atoll(self,directory="ant"):
         """ load antenna from Atoll file
 
-        Atoll format provides Antenna gain given for the horizontal and vertical plane 
-        for different frequencies and different tilt values 
+        Atoll format provides Antenna gain in the horizontal and vertical plane
+        for different frequencies and different tilt values
 
         Parameters
         ----------
 
-        directory : string 
+        directory : string
 
-        The dictionnary attol is created 
+        Info
+        ----
+
+        attol dictionnary is created
+        atoll[keyband][polar]['hor'] = Ghor.reshape(360,ct,cf)
+        atoll[keyband][polar]['ver'] = Gver.reshape(360,ct,cf)
+        atoll[keyband][polar]['tilt'] = np.array(tilt)
+        atoll[keyband][polar]['freq'] = np.array(tilt)
 
         """
         _filemat = self._filename
@@ -2301,7 +2343,7 @@ class Antenna(Pattern):
                 for t in dftilt:
                     dffreq = t[1].groupby(['F'])
                     ct+=1
-                    cf=0 
+                    cf=0
                     tilt.append(t[0])
                     freq = []
                     for f in dffreq:
@@ -2349,7 +2391,7 @@ class Antenna(Pattern):
         #ax.set_rmin(-30)
         #plt.title(dir1+'/'+filename+' Gain : '+df['Gain  (dBi)'].values[0])
         #BXD-634X638XCF-EDIN.txt
-        #BXD-636X638XCF-EDIN.txt        
+        #BXD-636X638XCF-EDIN.txt
 
     def loadmat(self, directory="ant"):
         """ load an antenna stored in a mat file
