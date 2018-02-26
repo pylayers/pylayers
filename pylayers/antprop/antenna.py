@@ -622,9 +622,9 @@ class Pattern(PyLayers):
         """
         """
         paramdef = {'iband':0,
-                 'polar':-45.0,
-                 'tilt':0
-                }
+                    'polar':-45.0,
+                    'tilt':8
+                    }
 
         param = kwargs.pop('param')
         if param =={}:
@@ -639,16 +639,40 @@ class Pattern(PyLayers):
         # Gver : 360,Nf
         # Ghor : 360,Nf
         Gver = self.atoll[lbands[iband]][polar]['ver'][:,tilt,:]
+        self.fGHz = self.atoll[lbands[iband]][polar]['freq']
+        self.tilt_theo = self.atoll[lbands[iband]][polar]['tilt'][tilt]
         Ghor = self.atoll[lbands[iband]][polar]['hor'][:,tilt,:]
         shG = Gver.shape
         # grid mode (180,360,Nf)
-        self.theta = np.linspace(0,180,180)
-        self.phi = np.linspace(0,360,360)
-        sqG = np.empty((180,360,shG[-1]))
-        sqG[:,0,:]  = np.sqrt(10**(Gver[0:180,:]/10))
-        sqG[:,180,:] = np.sqrt(10**(Gver[180:,:]/10))
-        sqG[:,90,:] = np.sqrt(10**(Ghor[0:180,:]/10))
-        sqG[:,270,:] = np.sqrt(10**(Ghor[180:,:]/10))
+        self.theta = np.linspace(0,181,181)*np.pi/180
+        self.phi = np.linspace(0,360,360)*np.pi/180
+        self.nth = len(self.theta)
+        self.nph = len(self.phi)
+        #a1 = np.kron(self.theta,np.ones(len(self.phi)))
+        #2 = np.kron(np.ones(len(self.theta)),self.phi)
+        #g = np.hstack((a1[:,None],a2[:,None]))
+
+        sqG = np.ones((181,360,shG[-1]))
+        uvermax = zeros(shG[-1]).astype(int)
+        for k in range(shG[-1]):
+            uvermax[k]  = np.where(Gver[:,k]==np.max(Gver[:,k]))[0][0]
+            # offset of vertical pattern
+            Gver_roll = np.roll(Gver[:,k],-uvermax[k])
+            sqG[0,:,k]  = np.sqrt(10**(Gver_roll[0]/10))
+            sqG[180,:,k] = np.sqrt(10**(Gver_roll[180]/10))
+            sqG[:,0,k]  = np.sqrt(10**(Gver_roll[0:181]/10))
+            sqG[1:-1,180,k] = np.sqrt(10**(Gver_roll[181:][::-1]/10))
+            sqG[:,90,k] = np.sqrt(10**(Ghor[0:181,k]/10))
+            sqG[1:-1,270,k] = np.sqrt(10**(Ghor[181:,k][::-1]/10))
+            u1 = np.linspace(1,89,89)/89.
+            sqG[1:-1,1:90,k] = sqG[1:-1,0,k][:,None]*(1-u1[None,:])+sqG[1:-1,90,k][:,None]*u1[None,:]
+            sqG[1:-1,91:180,k]= sqG[1:-1,90,k][:,None]*(1-u1[None,:])+sqG[1:-1,180,k][:,None]*u1[None,:]
+            sqG[1:-1,181:270,k] = sqG[1:-1,180,k][:,None]*(1-u1[None,:])+sqG[1:-1,270,k][:,None]*u1[None,:]
+            sqG[1:-1,271:,k]= sqG[1:-1,270,k][:,None]*(1-u1[None,:])+sqG[1:-1,0,k][:,None]*u1[None,:]
+        #plt.plot(sqG[:,0,:])
+        #plt.plot(sqG[:,180,:])
+        #plt.plot(sqG[:,90,:])
+        #plt.plot(sqG[:,270,:])
 
         Ft = sqG/np.sqrt(2)
         Fp = sqG/np.sqrt(2)
@@ -1619,16 +1643,20 @@ class Pattern(PyLayers):
             dp = self.phi[1]-self.phi[0]
             Nt = len(self.theta)
             Np = len(self.phi)
-            Gs = self.G*np.sin(self.theta)[:,None,None]*np.ones(Np)[None,:,None]
+            Gs = self.G * np.sin(self.theta)[:, None, None] * np.ones(Np)[None, :, None]
             self.efficiency = np.sum(np.sum(Gs,axis=0),axis=0)*dt*dp/(4*np.pi)
 
             self.sqG = np.sqrt(self.G)
             self.GdB = 10*np.log10(self.G)
             # GdBmax (,Nf)
             # Get direction of Gmax and get the polarisation state in that direction
-            #
             self.GdBmax = np.max(np.max(self.GdB,axis=0),axis=0)
-            self.umax = np.array(np.where(self.GdB==self.GdBmax))[:,0]
+            #
+            # The GdB maximum is determined over all the frequencies
+            #
+            GdBmax = np.max(self.GdBmax)
+            #self.umax = np.array(np.where(self.GdB==self.GdBmax))[:,0]
+            self.umax = np.array(np.where(self.GdB==GdBmax))[:,0]
             self.theta_max = self.theta[self.umax[0]]
             self.phi_max = self.phi[self.umax[1]]
             M = geu.SphericalBasis(np.array([[self.theta_max,self.phi_max]]))
@@ -1668,14 +1696,29 @@ class Pattern(PyLayers):
         fGHz : frequency
         plan : 'theta' | 'phi' depending on the selected plan to be displayed
         angdeg : phi or theta in degrees, if plan=='phi' it corresponds to theta
-        GmaxdB :  max gain to be displayed
+        GmaxdB :  max gain to be displayed (20)
         polar : boolean
+        dyn : 8 ,
+        legend : True,
+        polar : boolean
+            linear or polar representation
+        topos : False,
+        source :satimo,
+        show : True,
+        mode : string
+            'index' |
+        color: string
+            'black'
 
         Returns
         -------
 
         fig
         ax
+
+        Info
+        ----
+        self.nth and self.nph has to be correctly set 
 
         Examples
         --------
