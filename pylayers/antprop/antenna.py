@@ -1933,6 +1933,7 @@ class Pattern(PyLayers):
 
                 plt.title(u'$\\phi$ plane ')
             # actual plotting
+
             if len(lfreq)>1: 
                 ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
             else:
@@ -2036,7 +2037,7 @@ class Antenna(Pattern):
                     'ntheta':90,
                     'nphi':181,
                     'L':90, # L max
-                    'param':{}
+                    'param':{},
                     }
 
         for k in defaults:
@@ -2098,7 +2099,7 @@ class Antenna(Pattern):
                     self.load_trx(kwargs['directory'],self.nf,self.nth,self.nph)
                 if self.ext == 'trx':
                     self.typ='trx'
-                    self.loadtrx(kwargs['directory'])
+                    self.loadtrx(kwargs['directory'],kwargs['param'])
                 if self.ext == 'mat':
                     self.typ='mat'
                     self.loadmat(kwargs['directory'])
@@ -2893,7 +2894,7 @@ class Antenna(Pattern):
 
 
 
-    def loadtrx(self,directory):
+    def loadtrx(self,directory,param={}):
         """ load trx file (SATIMO Near Field Chamber raw data)
 
         Parameters
@@ -2907,14 +2908,33 @@ class Antenna(Pattern):
 
         .. todo:
             consider using an ini file for the header
-
         Trx header structure
 
         fmin fmax Nf  phmin   phmax   Nphi    thmin    thmax    Ntheta  #EDelay
         0     1   2   3       4       5       6        7        8       9
         1     10  121 0       6.19    72      0        3.14     37      0
 
+
+        param  : dict
+            mode : string
+            mode 1 : columns are organized ['f','phi','th','ReFph','ImFphi','ReFth','ImFth']
+            mode 2 : columns are organized ['f','phi','th','GdB','GdB_ph','GdB_th']
+                    mode2 corresponds to TRXV2 
+
+
+        Notes
+        ------
+
+        for mode 2 :
+        it is require to create a header file "header_<_filename>.txt with the structure 
+        # fmin fmax Nf  phmin   phmax   Nphi    thmin    thmax    Ntheta  #EDelay
+        and to remove header for trx file.
+
         """
+
+
+        if param== {}:
+            param = {'mode' : 1}
 
         _filetrx = self._filename
         _headtrx = 'header_' + _filetrx
@@ -2950,17 +2970,23 @@ class Antenna(Pattern):
             tau = 0
 
         #
-        # Data are stored in 7 columns
+        # Data are stored in 7 columns in mode 1 
         #
         # 0  1   2     3        4       5       6
         # f  phi th    ReFph   ImFphi  ReFth    ImFth
         #
         #
+
+
         fi = open(filename)
         d = np.array(fi.read().split())
         N = len(d)
-        M = N / 7
-        d = d.reshape(M, 7)
+        if param['mode'] == 1:
+            M = N / 7
+            d = d.reshape(M, 7)
+        elif param['mode'] == 2:
+            M = N / 6
+            d = d.reshape(M, 6)
         d = d.astype('float')
 
         f = d[:, 0]
@@ -2973,8 +2999,10 @@ class Antenna(Pattern):
         if (f[0] > 2000):
             f = f / 1.0e9
 
+
         phi   = d[:, 1]
         theta = d[:, 2]
+
         #
         # type : refers to the way the angular values are stored in the file
         # Detection of file type
@@ -2997,8 +3025,13 @@ class Antenna(Pattern):
             typ = 'natural'
 
         self.typ = typ
-        Fphi   = d[:, 3] + d[:, 4] * 1j
-        Ftheta = d[:, 5] + d[:, 6] * 1j
+
+        if param['mode']==1:
+            Fphi   = d[:, 3] + d[:, 4] * 1j
+            Ftheta = d[:, 5] + d[:, 6] * 1j
+        elif param['mode']==2:
+            Fphi   = 10**(d[:, 4]/20)
+            Ftheta = 10**(d[:, 5]/20)
         #
         # Normalization
         #
@@ -3012,12 +3045,21 @@ class Antenna(Pattern):
         # Reshaping
         #
         if typ == 'natural':
+
             self.Fp = Fphi.reshape((nf, ntheta, nphi))
             self.Ft = Ftheta.reshape((nf, ntheta, nphi))
             self.sqG = SqG.reshape((nf, ntheta, nphi))
             Ttheta = theta.reshape((nf, ntheta, nphi))
             Tphi = phi.reshape((nf, ntheta, nphi))
             Tf = f.reshape((nf, ntheta, nphi))
+            self.Fp = self.Fp.swapaxes(0, 1).swapaxes(1,2)
+            self.Ft = self.Ft.swapaxes(0, 1).swapaxes(1,2)
+            self.sqG = self.sqG.swapaxes(0, 1).swapaxes(1,2)
+            Ttheta = Ttheta.swapaxes(0, 1).swapaxes(1,2)
+            Tphi = Tphi.swapaxes(0, 1).swapaxes(1,2)
+            Tf = Tf.swapaxes(0, 1).swapaxes(1,2)
+
+
         if typ == 'nfc':
             self.Fp = Fphi.reshape((nf, nphi, ntheta))
             self.Ft = Ftheta.reshape((nf, nphi, ntheta))
@@ -3025,24 +3067,32 @@ class Antenna(Pattern):
             Ttheta = theta.reshape((nf, nphi, ntheta))
             Tphi = phi.reshape((nf, nphi, ntheta))
             Tf = f.reshape((nf, nphi, ntheta))
+
         #
         # Force natural order (f,theta,phi)
         # This is not the order of the satimo nfc which is  (f,phi,theta)
         #
 
-            self.Fp = self.Fp.swapaxes(1, 2)
-            self.Ft = self.Ft.swapaxes(1, 2)
-            self.sqG = self.sqG.swapaxes(1, 2)
-            Ttheta = Ttheta.swapaxes(1, 2)
-            Tphi = Tphi.swapaxes(1, 2)
-            Tf = Tf.swapaxes(1, 2)
+            # self.Fp = self.Fp.swapaxes(1, 2)
+            # self.Ft = self.Ft.swapaxes(1, 2)
+            # self.sqG = self.sqG.swapaxes(1, 2)
+            self.Fp = self.Fp.swapaxes(0, 2)
+            self.Ft = self.Ft.swapaxes(0, 2)
+            self.sqG = self.sqG.swapaxes(0, 2)
+            Ttheta = Ttheta.swapaxes(0, 2)
+            Tphi = Tphi.swapaxes(0, 2)
+            Tf = Tf.swapaxes(0, 2)
 
-        self.fGHz = Tf[:, 0, 0]
-        self.theta = Ttheta[0, :, 0]
-        self.phi = Tphi[0, 0, :]
+        # sqg=np.sqrt(10**(d[:,3]/10))
+        # self.sqG=sqg.reshape((nf, nphi, ntheta)).swapaxes(0, 2)
+
+        self.fGHz = Tf[0, 0, :]
+        self.theta = Ttheta[:, 0, 0]
+        self.phi = Tphi[0, :, 0]
         #
         # check header consistency
         #
+
         np.testing.assert_almost_equal(self.fGHz[0],fmin,6)
         np.testing.assert_almost_equal(self.fGHz[-1],fmax,6)
         np.testing.assert_almost_equal(self.theta[0],thmin,3)
@@ -3056,6 +3106,68 @@ class Antenna(Pattern):
         self.tau = tau
 
         self.evaluated = True
+
+
+    def _swap_theta_phi(self):
+        """ swapping theta and phi in case where e.g.
+            theta in [0, 2*pi] and phi in [0,pi]
+            
+            swapping allow to correctly return with the assumption
+            where 
+            theta in [0,pi] and phi [0,2*pi] and allow e.g using vsh
+            methods.
+
+        """
+        assert self.nth>self.nph,'nth < nph so swapping is not possible'
+
+        mid_nth = int(np.ceil(self.nth/2.))
+        new_nph = self.nph*2
+
+        # process for self.sqG
+
+        B1=self.sqG[:mid_nth,...]#self.sqG[:65,...]
+        B2=self.sqG[mid_nth:,...]#self.sqG[65:,...]
+        B2i= B2[::-1,...]
+
+        R=np.zeros((mid_nth,new_nph,self.nf))#R=np.zeros((65,128,31))
+        R[:,:mid_nth-1,:]=B1         #R[:,:64,:]=B1 
+        R[:-1,mid_nth-1:,:]=B2i      #  R[:-1,64:,:]=B2i
+        R[-1,mid_nth-1:,:]=B1[-1,:,:]# R[-1,64:,:]=B1[-1,:,:] 
+        self.sqG = R
+
+
+        # process for self.Ft
+        B1=self.Ft[:mid_nth,...]#self.Ft[:65,...]
+        B2=self.Ft[mid_nth:,...]#self.Ft[65:,...]
+        B2i= B2[::-1,...]
+
+        R=np.zeros((mid_nth,new_nph,self.nf))#R=np.zeros((65,128,31))
+        R[:,:mid_nth-1,:]=B1         #R[:,:64,:]=B1 
+        R[:-1,mid_nth-1:,:]=B2i      #  R[:-1,64:,:]=B2i
+        R[-1,mid_nth-1:,:]=B1[-1,:,:]# R[-1,64:,:]=B1[-1,:,:] 
+        self.Ft = R
+
+
+        # process for self.Fp
+        B1=self.Fp[:mid_nth,...]#self.Ft[:65,...]
+        B2=self.Fp[mid_nth:,...]#self.Ft[65:,...]
+        B2i= B2[::-1,...]
+
+        R=np.zeros((mid_nth,new_nph,self.nf))#R=np.zeros((65,128,31))
+        R[:,:mid_nth-1,:]=B1         #R[:,:64,:]=B1 
+        R[:-1,mid_nth-1:,:]=B2i      #  R[:-1,64:,:]=B2i
+        R[-1,mid_nth-1:,:]=B1[-1,:,:]# R[-1,64:,:]=B1[-1,:,:] 
+        self.Fp = R
+
+
+        # update theta,phi
+        self.theta = np.linspace(0,np.pi,mid_nth)
+        self.phi = np.linspace(0,2*np.pi,new_nph)
+        self.nth = mid_nth
+        self.nph = new_nph
+
+
+
 
     def checkpole(self, kf=0):
         """ display the reconstructed field on pole for integrity verification
@@ -3310,7 +3422,7 @@ class Antenna(Pattern):
                 k = np.where(self.fGHz>=fGHz)[0][0]
             else:
                 k = 0
-
+        print(k)
         if len(self.Ft.shape)==2:
             r = self.sqG[:,k]
         elif len(self.Ft.shape)==3:
