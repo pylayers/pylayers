@@ -335,13 +335,13 @@ class DLink(Link):
                      'H':{'exist':False,'grpname':''}
                     }
 
-        # The link frequency range depends on the antenna 
+        # The link frequency range depends on the antenna
         # self.fGHz = kwargs['fGHz']
 
-        if self.Aa==[]:
-            self.Aa=Antenna(typ='Omni',fGHz=self.fGHz)
-        if self.Ab==[]:
-            self.Ab=Antenna(typ='Omni',fGHz=self.fGHz)
+        if self.Aa == []:
+            self.Aa = Antenna(typ='Omni',fGHz=self.fGHz)
+        if self.Ab == []:
+            self.Ab = Antenna(typ='Omni',fGHz=self.fGHz)
 
         if isinstance(self._L,str):
             self._Lname = self._L

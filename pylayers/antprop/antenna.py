@@ -69,27 +69,19 @@ class Pattern(PyLayers):
     """
     def __init__(self):
         PyLayers.__init__(self)
-
-    def __repr__(self):
-        st = ''
-        st = st + 'Antenna type : ' + self.typ + '\n'
-        st = st+'------------------------\n'
-        if 'param' in self.__dict__:
-            for k in self.param:
-                st = st + ' ' + k + ' : ' + str(self.param[k])+'\n'
-        return (st)
+        self.grid = False
+        self.evaluated = False
+        self.full = False
 
     def eval(self, **kwargs):
         """  evaluate pattern functions
 
-
         Parameters
         ----------
 
-        th: list
-            []
-        ph: list
-            []
+        th: np.array
+            if this array is present it means grid = False
+        ph: np.array
         pt : np.array (3,N)
         pr : np.array (3,N)
         azoffset : int (0)
@@ -104,8 +96,6 @@ class Pattern(PyLayers):
             181
         first: boolean
             True if first call (to define self.param)
-        grid:  boolean
-            True for pattern mode, False for Ray Tracing mode
         th0 : float
             theta initial value
         th1 : float
@@ -118,8 +108,6 @@ class Pattern(PyLayers):
 
         Examples
         --------
-
-
 
         >>> from pylayers.antprop.aarray import *
         >>> A0=Antenna('Omni',param={'pol':'t','GmaxdB':0})
@@ -135,7 +123,6 @@ class Pattern(PyLayers):
         defaults = {'Rfloor': False,
                     'nth': 90,
                     'nph': 181,
-                    'grid': True,
                     'th0': 0,
                     'th1': np.pi,
                     'ph0': 0,
@@ -158,9 +145,9 @@ class Pattern(PyLayers):
                 self.fGHz = np.array([kwargs['fGHz']])
 
         self.nf = len(self.fGHz)
-        self.grid = kwargs['grid']
+
         #
-        # if th and ph are empty 
+        # if th and ph are empty
         #    if pt and pr are empty
         #          calculates from th0,th1,nth
         #                           ph0,phi,nph
@@ -168,20 +155,27 @@ class Pattern(PyLayers):
         #          calculates from points coordinates pt and pr
         # else
         #     take specified values
+        #
         if ('th' not in kwargs) and ('ph' not in kwargs):
             if ('pt' not in kwargs) and ('pr' not in kwargs):
+                # grid = True
+                # Determine theta and phi fr
                 self.theta = np.linspace(kwargs['th0'],kwargs['th1'],kwargs['nth'])
                 self.phi = np.linspace(kwargs['ph0'],kwargs['ph1'],kwargs['nph'],endpoint=False)
                 self.grid = True
-                self.full_evaluated = True
+                condth = np.abs((kwargs['th1']-kwargs['th0'])-np.pi)<1e-2
+                condph = np.abs((kwargs['ph1']-kwargs['ph0'])-2*np.pi)<1e-2
+                if (condth and condph):
+                    self.full = True
             else:
+                # Gain between 2 points (One or 2 directions (uf Rfloor)
+                # grid = False
                 si = kwargs['pr']-kwargs['pt']
                 ssi = np.sqrt(np.sum(si*si,axis=0))
                 sn = si/ssi[None,:]
                 self.theta = np.arccos(sn[2,:])
                 self.phi = np.mod(np.arctan2(sn[1,:],sn[0,:])+kwargs['azoffset'],2*np.pi)
                 self.grid = False
-                self.full_evaluated = True
                 if kwargs['Rfloor']:
                     dR = np.sqrt(ssi**2 + (kwargs['pr'][2,:] + kwargs['pt'][2,:])**2)  #  reflexion length
                     thetaR = np.arccos((kwargs['pr'][2,:] + kwargs['pt'][2,:]) / dR)
@@ -189,20 +183,21 @@ class Pattern(PyLayers):
                     self.phi = np.hstack([self.phi,self.phi])
 
         else :
+            self.grid = False
+            self.full = False
             assert(len(kwargs['th'])==len(kwargs['ph']))
             self.theta = kwargs['th']
             self.phi = kwargs['ph']
-            self.full_evaluated = False
 
         if self.typ=='azel':
             self.theta=np.linspace(-np.pi,np.pi,360)
             self.phi=np.linspace(-np.pi,np.pi,360)
-            self.full_evaluated = False
+
         self.nth = len(self.theta)
         self.nph = len(self.phi)
 
         #
-        # evaluation of the specific Pattern__p function 
+        # evaluation of the specific Pattern__p function
         #
         Ft,Fp = eval('self._Pattern__p'+self.typ)(param=self.param)
         if kwargs['inplace']:
@@ -575,28 +570,28 @@ class Pattern(PyLayers):
         if self.grid:
             N_theta  = np.einsum('tpnmf->tpf',Jy*ctsp*ejkrrp) # 12-12 a assuming Jx,Jz=0
             N_phi    = np.einsum('tpnmf->tpf',Jy*cp*ejkrrp)   # 12-12 b ""
-            L_theta  = np.einsum('tpnmf->tpf',Mx*ctcp*ejkrrp) # 12-12 c assuming My,Mz=0 
+            L_theta  = np.einsum('tpnmf->tpf',Mx*ctcp*ejkrrp) # 12-12 c assuming My,Mz=0
             L_phi    = np.einsum('tpnmf->tpf',-Mx*sp*ejkrrp)  # 12-12 d ""
         else:
             N_theta  = np.einsum('rnmf->rf',Jy*ctsp*ejkrrp) # 12-12 a assuming Jx,Jz=0
             N_phi    = np.einsum('rnmf->rf',Jy*cp*ejkrrp)   # 12-12 b ""
-            L_theta  = np.einsum('rnmf->rf',Mx*ctcp*ejkrrp) # 12-12 c assuming My,Mz=0 
+            L_theta  = np.einsum('rnmf->rf',Mx*ctcp*ejkrrp) # 12-12 c assuming My,Mz=0
             L_phi    = np.einsum('rnmf->rf',-Mx*sp*ejkrrp)  # 12-12 d ""
 
 
         # Far-Field
         Ft  = -L_phi  - eta0*N_theta # 12-10b p 661
-        Fp  = L_theta - eta0*N_phi   # 12-10c p 661 
+        Fp  = L_theta - eta0*N_phi   # 12-10c p 661
         G = Ft*np.conj(Ft)+Fp*np.conj(Fp)
         if self.grid:
-            # Umax : ,f 
+            # Umax : ,f
             self.Umax = G.max(axis=(0,1))
             Ft = Ft/np.sqrt(self.Umax[None,None,:])
             Fp = Fp/np.sqrt(self.Umax[None,None,:])
             # centered frequency range
             fcc = np.abs(self.fGHz-fcGHz)
-            idxc = np.where(fcc==np.min(fcc))[0][0] 
-            # Gain @ center frequency 
+            idxc = np.where(fcc==np.min(fcc))[0][0]
+            # Gain @ center frequency
             #G = _gain(Ft[:,:,idxc],Fp[:,:,idxc])
             G = _gain(Ft,Fp)
             # effective half power beamwidth
@@ -607,8 +602,8 @@ class Pattern(PyLayers):
             Fp = np.sqrt(Gmax[None,None,:])*Fp
         else:
             ##
-            ## Ft (r x f ) 
-            ## Fp (r x f ) 
+            ## Ft (r x f )
+            ## Fp (r x f )
             ##
             Ft = Ft/np.sqrt(self.Umax[None,:])
             Fp = Fp/np.sqrt(self.Umax[None,:])
@@ -623,7 +618,7 @@ class Pattern(PyLayers):
         """
         paramdef = {'iband':0,
                     'polar':-45.0,
-                    'tilt':8
+                    'tilt':0
                     }
 
         param = kwargs.pop('param')
@@ -633,8 +628,6 @@ class Pattern(PyLayers):
         polar = param.pop('polar')
         tilt = param.pop('tilt')
         # TODO check tilt value is compatible
-
-        # lbands : list of antenna bands
         lbands = self.atoll.keys()
         # Gver : 360,Nf
         # Ghor : 360,Nf
@@ -643,11 +636,14 @@ class Pattern(PyLayers):
         self.tilt_theo = self.atoll[lbands[iband]][polar]['tilt'][tilt]
         Ghor = self.atoll[lbands[iband]][polar]['hor'][:,tilt,:]
         shG = Gver.shape
+        Nhor = Ghor.shape[0]
+        Nver = Gver.shape[0]
         # grid mode (180,360,Nf)
-        self.theta = np.linspace(0,181,181)*np.pi/180
-        self.phi = np.linspace(0,360,360)*np.pi/180
-        self.nth = len(self.theta)
-        self.nph = len(self.phi)
+        rmax = (Nver/2)
+        self.theta = np.linspace(0,np.pi,rmax+1)
+        self.phi = np.linspace(0,2*np.pi-2*np.pi/Nhor,Nhor)
+        #self.nth = len(self.theta)
+        #self.nph = len(self.phi)
         #a1 = np.kron(self.theta,np.ones(len(self.phi)))
         #2 = np.kron(np.ones(len(self.theta)),self.phi)
         #g = np.hstack((a1[:,None],a2[:,None]))
@@ -655,16 +651,30 @@ class Pattern(PyLayers):
         sqG = np.ones((181,360,shG[-1]))
         uvermax = zeros(shG[-1]).astype(int)
         for k in range(shG[-1]):
+            # find the maximum in the vertical plane
             uvermax[k]  = np.where(Gver[:,k]==np.max(Gver[:,k]))[0][0]
             # offset of vertical pattern
             Gver_roll = np.roll(Gver[:,k],-uvermax[k])
+            # first row (pole)
             sqG[0,:,k]  = np.sqrt(10**(Gver_roll[0]/10))
-            sqG[180,:,k] = np.sqrt(10**(Gver_roll[180]/10))
-            sqG[:,0,k]  = np.sqrt(10**(Gver_roll[0:181]/10))
-            sqG[1:-1,180,k] = np.sqrt(10**(Gver_roll[181:][::-1]/10))
-            sqG[:,90,k] = np.sqrt(10**(Ghor[0:181,k]/10))
-            sqG[1:-1,270,k] = np.sqrt(10**(Ghor[181:,k][::-1]/10))
+            # last row (pole)
+            sqG[-1,:,k] = np.sqrt(10**(Gver_roll[rmax]/10))
+            # first column (Vertical)
+            c1 = 0
+            sqG[:,c1,k]  = np.sqrt(10**(Gver_roll[0:rmax+1]/10))
+            # third column (Vertical)
+            c3 = 180
+            sqG[1:-1,c3,k] = np.sqrt(10**(Gver_roll[rmax+1:][::-1]/10))
+            # second column (Horizontal)
+            c2 = 90
+            sqG[:,c2,k] = np.sqrt(10**(Ghor[0:181,k]/10))
+            # fourth column (Horizontal)
+            c4 = 270
+            sqG[1:-1,c4,k] = np.sqrt(10**(Ghor[rmax+1:,k][::-1]/10))
             u1 = np.linspace(1,89,89)/89.
+            #
+            # interpolation
+            #
             sqG[1:-1,1:90,k] = sqG[1:-1,0,k][:,None]*(1-u1[None,:])+sqG[1:-1,90,k][:,None]*u1[None,:]
             sqG[1:-1,91:180,k]= sqG[1:-1,90,k][:,None]*(1-u1[None,:])+sqG[1:-1,180,k][:,None]*u1[None,:]
             sqG[1:-1,181:270,k] = sqG[1:-1,180,k][:,None]*(1-u1[None,:])+sqG[1:-1,270,k][:,None]*u1[None,:]
@@ -2059,7 +2069,7 @@ class Antenna(Pattern):
 
         self.param = kwargs['param']
 
-        #super(Antenna,self).__init__()
+        super(Antenna,self).__init__()
         #Pattern.__init__(self)
         #
         # if typ string has an extension it is a file
@@ -2077,7 +2087,6 @@ class Antenna(Pattern):
         self.tau = 0
         self.evaluated = False
         #determine if pattern for all theta/phi is constructed
-        self.full_evaluated = False
 
         if self.fromfile:
             if isinstance(typ,str):
@@ -2426,6 +2435,8 @@ class Antenna(Pattern):
                 atoll[keyband][p[0]]['tilt'] = np.array(tilt)
                 atoll[keyband][p[0]]['freq'] = np.array(freq)
         self.atoll = atoll
+        # lbands : list of antenna bands
+
         # Gmax = eval(self.df['Gain  (dBi)'].values[0])
         #fig = plt.figure()
         #ax =plt.gca(projection='polar')
@@ -3111,9 +3122,9 @@ class Antenna(Pattern):
     def _swap_theta_phi(self):
         """ swapping theta and phi in case where e.g.
             theta in [0, 2*pi] and phi in [0,pi]
-            
+
             swapping allow to correctly return with the assumption
-            where 
+            where
             theta in [0,pi] and phi [0,2*pi] and allow e.g using vsh
             methods.
 
@@ -3165,7 +3176,6 @@ class Antenna(Pattern):
         self.phi = np.linspace(0,2*np.pi,new_nph)
         self.nth = mid_nth
         self.nph = new_nph
-
 
 
 

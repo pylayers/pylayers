@@ -1,6 +1,6 @@
 # -*t coding:Utf-8 -*-
 """
-.. currentmodule:: pylayers.antprop.channel 
+.. currentmodule:: pylayers.antprop.channel
 
 .. autosummary::
     :members:
@@ -5625,11 +5625,12 @@ class Ctilde(PyLayers):
         if b ==[]:
             b = ant.Antenna('Omni',param={'pol':'t','GmaxdB':0},fGHz=self.fGHz)
 
-        a.eval(th=self.tangl[:, 0], ph=self.tangl[:, 1], grid=False)
+        a.eval(th = self.tangl[:, 0], ph = self.tangl[:, 1])
         Fat = bs.FUsignal(a.fGHz, a.Ft)
         Fap = bs.FUsignal(a.fGHz, a.Fp)
         #b.eval(th=self.rangl[:, 0], ph=self.rangl[:, 1], grid=False)
-        b.eval(th=self.rangl[:, 0], ph=self.rangl[:, 1], grid=False)
+        b.eval(th = self.rangl[:, 0], ph = self.rangl[:, 1])
+
         Fbt = bs.FUsignal(b.fGHz, b.Ft)
         Fbp = bs.FUsignal(b.fGHz, b.Fp)
 
