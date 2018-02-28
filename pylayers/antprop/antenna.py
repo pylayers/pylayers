@@ -453,11 +453,21 @@ class Pattern(PyLayers):
 
         ratio_ph = (phi-self._phi[cudph])/(self._phi[cudph+1]-self._phi[cudph])
 
-        Ft=self._Ft[cudth,:,:]*(1.-ratio_th[:,None,None])+ratio_th[:,None,None]*self._Ft[cudth+1,:,:]
-        Ft=Ft[:,cudph,:]*(1.-ratio_ph[None,:,None])+ratio_ph[None,:,None]*Ft[:,cudph+1,:]
-        Fp=self._Fp[cudth,:,:]*(1.-ratio_th[:,None,None])+ratio_th[:,None,None]*self._Fp[cudth+1,:,:]
-        Fp=Fp[:,cudph,:]*(1.-ratio_ph[None,:,None])+ratio_ph[None,:,None]*Fp[:,cudph+1,:]
-
+        if self.grid:
+            Ft=self._Ft[cudth,:,:]*(1.-ratio_th[:,None,None])+ratio_th[:,None,None]*self._Ft[cudth+1,:,:]
+            Ft=Ft[:,cudph,:]*(1.-ratio_ph[None,:,None])+ratio_ph[None,:,None]*Ft[:,cudph+1,:]
+            Fp=self._Fp[cudth,:,:]*(1.-ratio_th[:,None,None])+ratio_th[:,None,None]*self._Fp[cudth+1,:,:]
+            Fp=Fp[:,cudph,:]*(1.-ratio_ph[None,:,None])+ratio_ph[None,:,None]*Fp[:,cudph+1,:]
+        else:
+            Ft0=self._Ft[cudth,cudph,:]*(1.-ratio_th[:,None])+ratio_th[:,None]*self._Ft[cudth+1,cudph,:]
+            Ft1=self._Ft[cudth,cudph+1,:]*(1.-ratio_th[:,None])+ratio_th[:,None]*self._Ft[cudth+1,cudph+1,:]
+            Ft = Ft0*(1.-ratio_ph[:,None])+Ft1*ratio_ph[:,None]
+            Fp0=self._Fp[cudth,cudph,:]*(1.-ratio_th[:,None])+ratio_th[:,None]*self._Fp[cudth+1,cudph,:]
+            Fp1=self._Fp[cudth,cudph+1,:]*(1.-ratio_th[:,None])+ratio_th[:,None]*self._Fp[cudth+1,cudph+1,:]
+            Fp = Fp0*(1.-ratio_ph[:,None])+Fp1*ratio_ph[:,None]
+        
+        # Ft = (self._Ft[cudth,cudph]+self._Ft[cudth,cudph+1]+self._Ft[cudth+1,cudph]+self._Ft[cudth+1,cudph+1])/4.
+        # Fp = (self._Fp[cudth,cudph]+self._Fp[cudth,cudph+1]+self._Fp[cudth+1,cudph]+self._Fp[cudth+1,cudph+1])/4.
         return Ft,Fp
 
 
@@ -3518,7 +3528,6 @@ class Antenna(Pattern):
                 k = np.where(self.fGHz>=fGHz)[0][0]
             else:
                 k = 0
-        print(k)
         if len(self.Ft.shape)==2:
             r = self.sqG[:,k]
         elif len(self.Ft.shape)==3:
