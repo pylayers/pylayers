@@ -30,6 +30,7 @@ from pylayers.util.project import PyLayers
 from pylayers.antprop.spharm import *
 from pylayers.antprop.antssh import ssh, SSHFunc2, SSHFunc, SSHCoeff, CartToSphere
 from pylayers.antprop.coeffModel import *
+import copy
 
 try:
     from pylayers.antprop.antvsh import vsh
@@ -392,6 +393,80 @@ class Pattern(PyLayers):
 #            self.Ft = np.fft.fft2(Kt*Wp,axes=(0,1))
 
         return Ft,Fp
+
+
+    def __pnfc(self,**kwargs):
+        """ nfc Pattern 
+
+        interpolation of Ft,Fp for measured antenna
+
+        Interpolation between known values of Ft and Fp contained in
+        self._Ft and self._Fp to a given set of theta, phi.
+
+        """
+        defaults = {'param': {''}}
+
+        if 'param' not in kwargs or kwargs['param']=={}:
+            kwargs['param']=defaults['param']
+
+        self.param = kwargs['param']
+
+        # if self.grid: 
+        #     # Nth x Nph x Nf
+        #     theta = self.theta[:,None,None]
+        #     phi = self.phi[None,:,None]
+        # else:
+
+        theta = self.theta
+        phi = self.phi
+
+
+        # th0=np.array([0.12,3.1415,0.01])
+        # ph0=np.array([0.01,0.5,2])
+
+        # find closest theta arg : N
+        dth = self._theta[:,None]-theta
+        udth = abs(dth).argmin(axis=0)
+        # determine sign of this arg to know which from N-1 or N+1 is candidate
+        sdth = np.sign(np.diag(dth[udth]))
+
+
+        # specific process if the find argument is N-1 or N+1 a.k.a self._theta-th >0 or <0
+        neg_mask = sdth<0
+        pos_mask = ~neg_mask
+
+        cudth= np.ndarray((len(theta)),dtype=int)
+        cudth[pos_mask]=udth[pos_mask]-1
+        cudth[neg_mask]=udth[neg_mask]
+
+
+        ratio_th = (theta-self._theta[cudth])/(self._theta[cudth+1]-self._theta[cudth])
+
+        # find closest phi arg : N
+        dph = self._phi[:,None]-phi
+        udph = abs(dph).argmin(axis=0)
+        # determine sign of this arg to know which from N-1 or N+1 is candidate
+        sdph = np.sign(np.diag(dph[udph]))
+
+        # specific process if the find argument is N-1 or N+1 a.k.a self._phi-ph >0 or <0
+        neg_mask = sdph<0
+        pos_mask = ~neg_mask
+
+        cudph= np.ndarray((len(phi)),dtype=int)
+        cudph[pos_mask]=udph[pos_mask]-1
+        cudph[neg_mask]=udph[neg_mask]
+
+        ratio_ph = (phi-self._phi[cudph])/(self._phi[cudph+1]-self._phi[cudph])
+
+        Ft=self._Ft[cudth,:,:]*(1.-ratio_th[:,None,None])+ratio_th[:,None,None]*self._Ft[cudth+1,:,:]
+        Ft=Ft[:,cudph,:]*(1.-ratio_ph[None,:,None])+ratio_ph[None,:,None]*Ft[:,cudph+1,:]
+        Fp=self._Fp[cudth,:,:]*(1.-ratio_th[:,None,None])+ratio_th[:,None,None]*self._Fp[cudth+1,:,:]
+        Fp=Fp[:,cudph,:]*(1.-ratio_ph[None,:,None])+ratio_ph[None,:,None]*Fp[:,cudph+1,:]
+
+        return Ft,Fp
+
+
+
 
     def __paperture2(self,**kwargs):
         """ Aperture Pattern 
@@ -2837,6 +2912,12 @@ class Antenna(Pattern):
                     mode2 corresponds to TRXV2 
 
 
+        The measured values of Fp Ft and sqG and the associated theta and phi range
+        are stored using the underscore prefix.
+        e.g. self._Ft; self._Fp; self._sqG
+
+
+
         Notes
         ------
 
@@ -2845,6 +2926,7 @@ class Antenna(Pattern):
         # fmin fmax Nf  phmin   phmax   Nphi    thmin    thmax    Ntheta  #EDelay
         and to remove header for trx file.
 
+        Warning Mode 2 invert automatocally apply _swap_theta_phi !
         """
 
 
@@ -2961,24 +3043,24 @@ class Antenna(Pattern):
         #
         if typ == 'natural':
 
-            self.Fp = Fphi.reshape((nf, ntheta, nphi))
-            self.Ft = Ftheta.reshape((nf, ntheta, nphi))
-            self.sqG = SqG.reshape((nf, ntheta, nphi))
+            self._Fp = Fphi.reshape((nf, ntheta, nphi))
+            self._Ft = Ftheta.reshape((nf, ntheta, nphi))
+            self._sqG = SqG.reshape((nf, ntheta, nphi))
             Ttheta = theta.reshape((nf, ntheta, nphi))
             Tphi = phi.reshape((nf, ntheta, nphi))
             Tf = f.reshape((nf, ntheta, nphi))
-            self.Fp = self.Fp.swapaxes(0, 1).swapaxes(1,2)
-            self.Ft = self.Ft.swapaxes(0, 1).swapaxes(1,2)
-            self.sqG = self.sqG.swapaxes(0, 1).swapaxes(1,2)
+            self._Fp = self.Fp.swapaxes(0, 1).swapaxes(1,2)
+            self._Ft = self.Ft.swapaxes(0, 1).swapaxes(1,2)
+            self._sqG = self.sqG.swapaxes(0, 1).swapaxes(1,2)
             Ttheta = Ttheta.swapaxes(0, 1).swapaxes(1,2)
             Tphi = Tphi.swapaxes(0, 1).swapaxes(1,2)
             Tf = Tf.swapaxes(0, 1).swapaxes(1,2)
 
 
         if typ == 'nfc':
-            self.Fp = Fphi.reshape((nf, nphi, ntheta))
-            self.Ft = Ftheta.reshape((nf, nphi, ntheta))
-            self.sqG = SqG.reshape((nf, nphi, ntheta))
+            self._Fp = Fphi.reshape((nf, nphi, ntheta))
+            self._Ft = Ftheta.reshape((nf, nphi, ntheta))
+            self._sqG = SqG.reshape((nf, nphi, ntheta))
             Ttheta = theta.reshape((nf, nphi, ntheta))
             Tphi = phi.reshape((nf, nphi, ntheta))
             Tf = f.reshape((nf, nphi, ntheta))
@@ -2991,9 +3073,9 @@ class Antenna(Pattern):
             # self.Fp = self.Fp.swapaxes(1, 2)
             # self.Ft = self.Ft.swapaxes(1, 2)
             # self.sqG = self.sqG.swapaxes(1, 2)
-            self.Fp = self.Fp.swapaxes(0, 2)
-            self.Ft = self.Ft.swapaxes(0, 2)
-            self.sqG = self.sqG.swapaxes(0, 2)
+            self._Fp = self._Fp.swapaxes(0, 2)
+            self._Ft = self._Ft.swapaxes(0, 2)
+            self._sqG = self._sqG.swapaxes(0, 2)
             Ttheta = Ttheta.swapaxes(0, 2)
             Tphi = Tphi.swapaxes(0, 2)
             Tf = Tf.swapaxes(0, 2)
@@ -3002,25 +3084,29 @@ class Antenna(Pattern):
         # self.sqG=sqg.reshape((nf, nphi, ntheta)).swapaxes(0, 2)
 
         self.fGHz = Tf[0, 0, :]
-        self.theta = Ttheta[:, 0, 0]
-        self.phi = Tphi[0, :, 0]
+        self._theta = Ttheta[:, 0, 0]
+        self._phi = Tphi[0, :, 0]
         #
         # check header consistency
         #
 
         np.testing.assert_almost_equal(self.fGHz[0],fmin,6)
         np.testing.assert_almost_equal(self.fGHz[-1],fmax,6)
-        np.testing.assert_almost_equal(self.theta[0],thmin,3)
-        np.testing.assert_almost_equal(self.theta[-1],thmax,3)
-        np.testing.assert_almost_equal(self.phi[0],phmin,3)
-        np.testing.assert_almost_equal(self.phi[-1],phmax,3)
+        np.testing.assert_almost_equal(self._theta[0],thmin,3)
+        np.testing.assert_almost_equal(self._theta[-1],thmax,3)
+        np.testing.assert_almost_equal(self._phi[0],phmin,3)
+        np.testing.assert_almost_equal(self._phi[-1],phmax,3)
 
         self.nf = nf
-        self.nth = ntheta
-        self.nph = nphi
-        self.tau = tau
+        self._nth = ntheta
+        self._nph = nphi
+        self._tau = tau
 
-        self.evaluated = True
+
+        if param['mode']==2:
+            self._swap_theta_phi()
+
+        self.evaluated = False
 
 
     def _swap_theta_phi(self):
@@ -3033,53 +3119,53 @@ class Antenna(Pattern):
             methods.
 
         """
-        assert self.nth>self.nph,'nth < nph so swapping is not possible'
+        assert self._nth>self._nph,'nth < nph so swapping is not possible'
 
-        mid_nth = int(np.ceil(self.nth/2.))
-        new_nph = self.nph*2
+        mid_nth = int(np.ceil(self._nth/2.))
+        new_nph = self._nph*2
 
         # process for self.sqG
 
-        B1=self.sqG[:mid_nth,...]#self.sqG[:65,...]
-        B2=self.sqG[mid_nth:,...]#self.sqG[65:,...]
+        B1=self._sqG[:mid_nth,...]#self.sqG[:65,...]
+        B2=self._sqG[mid_nth:,...]#self.sqG[65:,...]
         B2i= B2[::-1,...]
 
         R=np.zeros((mid_nth,new_nph,self.nf))#R=np.zeros((65,128,31))
         R[:,:mid_nth-1,:]=B1         #R[:,:64,:]=B1 
         R[:-1,mid_nth-1:,:]=B2i      #  R[:-1,64:,:]=B2i
         R[-1,mid_nth-1:,:]=B1[-1,:,:]# R[-1,64:,:]=B1[-1,:,:] 
-        self.sqG = R
+        self._sqG = R
 
 
         # process for self.Ft
-        B1=self.Ft[:mid_nth,...]#self.Ft[:65,...]
-        B2=self.Ft[mid_nth:,...]#self.Ft[65:,...]
+        B1=self._Ft[:mid_nth,...]#self.Ft[:65,...]
+        B2=self._Ft[mid_nth:,...]#self.Ft[65:,...]
         B2i= B2[::-1,...]
 
         R=np.zeros((mid_nth,new_nph,self.nf))#R=np.zeros((65,128,31))
         R[:,:mid_nth-1,:]=B1         #R[:,:64,:]=B1 
         R[:-1,mid_nth-1:,:]=B2i      #  R[:-1,64:,:]=B2i
         R[-1,mid_nth-1:,:]=B1[-1,:,:]# R[-1,64:,:]=B1[-1,:,:] 
-        self.Ft = R
+        self._Ft = R
 
 
         # process for self.Fp
-        B1=self.Fp[:mid_nth,...]#self.Ft[:65,...]
-        B2=self.Fp[mid_nth:,...]#self.Ft[65:,...]
+        B1=self._Fp[:mid_nth,...]#self.Ft[:65,...]
+        B2=self._Fp[mid_nth:,...]#self.Ft[65:,...]
         B2i= B2[::-1,...]
 
         R=np.zeros((mid_nth,new_nph,self.nf))#R=np.zeros((65,128,31))
         R[:,:mid_nth-1,:]=B1         #R[:,:64,:]=B1 
         R[:-1,mid_nth-1:,:]=B2i      #  R[:-1,64:,:]=B2i
         R[-1,mid_nth-1:,:]=B1[-1,:,:]# R[-1,64:,:]=B1[-1,:,:] 
-        self.Fp = R
+        self._Fp = R
 
 
         # update theta,phi
-        self.theta = np.linspace(0,np.pi,mid_nth)
-        self.phi = np.linspace(0,2*np.pi,new_nph)
-        self.nth = mid_nth
-        self.nph = new_nph
+        self._theta = np.linspace(0,np.pi,mid_nth)
+        self._phi = np.linspace(0,2*np.pi,new_nph)
+        self._nth = mid_nth
+        self._nph = new_nph
 
 
 
