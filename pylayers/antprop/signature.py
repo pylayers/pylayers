@@ -1122,8 +1122,8 @@ class Signatures(PyLayers,dict):
         self.cpt = 0
         for k in defaults:
             if k not in kwargs:
-                kwargs[k] = defaults[k] 
-        
+                kwargs[k] = defaults[k]
+
         self.cutoff = kwargs['cutoff']
         if 'threshold' not in kwargs:
             kwargs['threshold'] = self.threshold
@@ -1133,13 +1133,13 @@ class Signatures(PyLayers,dict):
         nD = kwargs['nD']
         nT = kwargs['nT']
         nR = kwargs['nR']
-        bt = kwargs['bt'] 
-        progress = kwargs['progress'] 
+        bt = kwargs['bt']
+        progress = kwargs['progress']
         diffraction = kwargs['diffraction']
         animation = kwargs['animation'] 
         delay_excess_max_ns = kwargs['delay_excess_max_ns']
         dist_excess_max = delay_excess_max_ns*0.3
-        
+
 
 
         self.filename = self.L._filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
@@ -1208,7 +1208,7 @@ class Signatures(PyLayers,dict):
         # pts : list of neighbour nodes from s[0]
         # tahe : segment extremities or point coordinates (repeated twice)
         lhash = []
-        
+
         if progress :
             pbar = tqdm(total=100,desc='Signatures')
 
@@ -1216,7 +1216,7 @@ class Signatures(PyLayers,dict):
             if progress:
                 pbar.update(100./(1.*len(lis)))
 
-            # start from a segment     
+            # start from a segment
             if s[0]>0:
                 pts = self.L.Gs[s[0]].keys()
                 tahe = [np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])]

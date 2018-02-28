@@ -1234,15 +1234,15 @@ def calnu(h,d1,d2,fGHz):
 
     """
 
-    ld  = 0.3/fGHz
-    nu  = h*np.sqrt(2*(d1+d2)/(ld*d1*d2))
+    ld = 0.3/fGHz
+    nu = h*np.sqrt(2*(d1+d2)/(ld*d1*d2))
 
     return(nu)
 
 
-#@jit
-def cover(X, Y, Z, Ha, Hb, fGHz, K):
-    """
+def route(X, Y, Z, Ha, Hb, fGHz, K, method='deygout'):
+    """ diffraction loss along a route
+
 
     Parameters
     ----------
@@ -1258,6 +1258,7 @@ def cover(X, Y, Z, Ha, Hb, fGHz, K):
     Hb : float
     fGHz : np.array (,Nf)
         frequency in GHz
+    method : 'deygout' | 'bullington'
 
     Returns
     -------
@@ -1266,22 +1267,70 @@ def cover(X, Y, Z, Ha, Hb, fGHz, K):
 
 
     """
-    Nphi,Nr = Z.shape
+    Nphi, Nr = Z.shape
 
-    if (type(fGHz)==float):
+    if (type(fGHz) == float):
         fGHz = np.array([fGHz])
 
     Nf = len(fGHz)
-    #pdb.set_trace()
-    #print Nphi,Nl
-    #L = np.zeros((Nphi, Nr-2, Nf))
-    #L = np.zeros((Nphi, Nr-2))
+    L = np.zeros((Nphi, Nf))
+    L0 = np.zeros(Nf)
+    # loop over azimut
+    for ip in xrange(Nphi):
+        x = X[ip, :]
+        y = Y[ip, :]
+        z = Z[ip, :]
+        d = np.sqrt((x-x[0])**2+(y-y[0])**2)
+        # effect of refraction in equivalent earth curvature
+        dh = d*(d[::-1])/(2*K*6375e3)
+        z = z + dh
+        LOS = 32.4 + 20*np.log10(fGHz) + 20*np.log10(d[-1])
+        z[0] = z[0] + Ha
+        z[-1] = z[-1] + Hb
+        if method == 'deygout':
+            LDiff = deygout(d, z, fGHz, L0, 0)
+        if method == 'bullington':
+            LDiff, deq, heq = bullington(d, z, fGHz)
+        L[ip, :] = LDiff+LOS
+    return(L)
+
+def cover(X, Y, Z, Ha, Hb, fGHz, K, method='deygout'):
+    """ outdoor coverage on a region
+
+    Parameters
+    ----------
+
+    X : np.array (Nphi,Nr)
+        cartesian coordinate grid
+    Y : np.array (Nphi,Nr)
+        cartesian coordinate grid
+    Z : np.array (Nphi,Nr)
+        height (meters)
+
+    Ha : float
+    Hb : float
+    fGHz : np.array (,Nf)
+        frequency in GHz
+    method : 'deygout' | 'bullington'
+
+    Returns
+    -------
+
+    L : Losses (dB)
+
+
+    """
+    Nphi, Nr = Z.shape
+
+    if (type(fGHz) == float):
+        fGHz = np.array([fGHz])
+
+    Nf = len(fGHz)
     L = np.zeros((Nphi, Nr, Nf))
     L0 = np.zeros(Nf)
     # loop over azimut
     for ip in xrange(Nphi):
-    # loop over range
-        #for il in xrange(Nr-1):
+        # loop over range
         # il : 2 ... Nr-2
         # uk : 0 ....Nr-1
         for il in np.arange(2, Nr-1):
@@ -1293,28 +1342,28 @@ def cover(X, Y, Z, Ha, Hb, fGHz, K):
             d = np.sqrt((x-x[0])**2+(y-y[0])**2)
             # effect of refraction in equivalent earth curvature
             dh = d*(d[::-1])/(2*K*6375e3)
-            z = z + dh 
+            z = z + dh
             LOS = 32.4 + 20*np.log10(fGHz) + 20*np.log10(d[-1])
             z[0] = z[0] + Ha
-            #pdb.set_trace()
             z[-1] = z[-1] + Hb
-            #plt.plot(d,z)
-            LD = deygout(z, d, fGHz, L0, 0)
-            #print v
-            L[ip,il,:] = LD[None,:]+LOS[None,:]
+            if method == 'deygout':
+                LDiff = deygout(d, z, fGHz, L0, 0)
+            if method == 'bullington':
+                LDiff, deq, heq = bullington(d, z, fGHz)
+            L[ip, il, :] = LDiff[None, :]+LOS[None,:]
     return(L)
 
-#@jit
-def deygout(z, d, fGHz, L, depth):
+
+def deygout(d, height, fGHz, L, depth):
     """ Deygout attenuation
 
     Parameters
     ----------
 
-    z : np.array (,N)
-        height profile
     d : np.array (,N)
         horizontal distance
+    height : np.array (,N)
+        height profile
     fGHz : np.array (,Nf)
         frequency GHz
     L : np.array (,Nf)
@@ -1330,93 +1379,108 @@ def deygout(z, d, fGHz, L, depth):
     lmbda = 0.3/fGHz
     L0 = np.zeros(len(fGHz))
     depth = depth+1
+    N = len(height)
     if depth < 3:
-        if len(z) > 3:
-            u = np.arange(len(z))/(len(z)-1.0)
-            l = (z[0])*(1-u)+(z[-1])*u
-            h = z[1:-1]-l[1:-1]
-            nu = h[:,None]*np.sqrt((2/lmbda[None,:])*(1/d[1:-1,None]+1/(d[-1]-d[1:-1,None])))
-            imax = np.unique(np.nanargmax(nu,axis=0))[0]
-            numax = nu[imax,:]
+        if N > 3:
+            u = np.arange(N)/(N-1.0)  # float
+            # l : straight line between termination (LOS)
+            l = (height[0])*(1-u)+(height[-1])*u
+            # h excludes termination points
+            h = height[1:-1] - l[1:-1]
+            # Fresnel parameter (engagement)
+            nu = h[:, None] * np.sqrt((2/lmbda[None, :]) *
+                             (1/d[1:-1, None]+1/(d[-1]-d[1:-1, None])))
+            imax = np.unique(np.nanargmax(nu, axis=0))[0]
+            numax = nu[imax, :]
         else:
             numax = -10*np.ones(len(fGHz))
         if (numax > -0.78).any():
             w = numax - 0.1
-            L = L + np.maximum(6.9 + 20*np.log10(np.sqrt(w**2+1)+w),0)
+            L = L + np.maximum(6.9 + 20*np.log10(np.sqrt(w**2+1)+w), 0)
             # left link
-            z1 = z[0:imax+2]
+            height1 = height[0:imax+2]
             d1 = d[0:imax+2]
-            Ll = deygout(z1, d1, fGHz, L0, depth)
+            Ll = deygout(d1, height1, fGHz, L0, depth)
             # right link
-            z2 = z[imax+1:]
+            height2 = height[imax+1:]
             d2 = d[imax+1:]
-            Lr = deygout(z2,d2,fGHz,L0,depth)
+            Lr = deygout(d2, height2, fGHz, L0, depth)
+            # add losses
             L = L + Lr + Ll
 
     return(L)
 
-def bullington(z,d,fGHz):
+def bullington(d, height, fGHz):
     """ edges attenuation with Bullington method
 
     Parameters
     ----------
 
-    z :
-    d:
-    fGHz :
+    d : np.array
+    height : np.array
+        antenna height is includes in height[0] and height[-1]
+    fGHz : np.array
 
     Returns
     -------
 
-    L :
+    L : np.array
+        total loss
 
     """
 
-    def recl(d, z):
-        N = len(z)
+    def recl(d, height):
+        """ determine left interception point
+        Parameters
+        ----------
+        d : np.array
+        height : np.array
+
+        """
+        N = len(height)
         u = np.arange(N)/(N-1.)
-        l = z[0]*(1-u)+(z[-1])*u
-        h = z - l
+        # l : straight line between termination (LOS)
+        l = height[0]*(1-u)+(height[-1])*u
+        h = height - l
+        # imax : index of the maximum height offset
         imax = np.argmax(h)
-        hmax = h[imax]
-        ul = np.arange(imax)/(imax-1.)
-        #ur = np.arange(N-imax)/(N-imax-1.)
-        dhl = h[0] + hmax*ul
-        #dhr = hmax*(1-ur) + h[-1]*ur
-        #plt.plot(d,h)
-        #plt.plot(d[0:imax],dhl)
-        #plt.plot(d[imax-1:-1],dhr)
-
-        el  = dhl - h[0:imax]
-        if np.min(el)<0:
-            u,v = recl(d[0:imax+1],h[0:imax+1])
+        if imax>0:
+            # hmax : maximum height offset
+            hmax = h[imax]
+            # parameterization from 0 to imax
+            ul = np.arange(imax)/(imax-1.)
+            # straight line
+            dhl = h[0]*(1-ul) + hmax*ul
+            # el : offset if <0 split again
+            el = dhl - h[0:imax]
+            if np.min(el) < 0:
+                u, v = recl(d[0:imax+1], height[0:imax+1])
+            else:
+                u = d[0:imax+1]
+                v = h[0:imax+1]
         else:
-            u = d[0:imax+1]
-            v = h[0:imax+1]
-
-        return(u,v)
+            u = d[0:1]
+            v = d[0:1]
+        return(u, v)
     #if min(er)<0:
     #    u,v = rec(d[imax-1:-1],dhl)
     #else:
     #er  = dhr - h[imax-1:-1]
-    def recr(d, z):
-        N = len(z)
+    def recr(d, height):
+        """ determine the right interception point
+        """
+        N = len(height)
         u = np.arange(N)/(N-1.)
-        l = z[0]*(1-u)+(z[-1])*u
-        h = z - l
+        l = height[0]*(1-u)+(height[-1])*u
+        h = height - l
         imax = np.argmax(h)
         hmax = h[imax]
-        #ul = np.arange(imax)/(imax-1.)
         ur = np.arange(N-imax)/(N-imax-1.)
-        #dhl = h[0] + hmax*ul
         dhr = hmax*(1-ur) + h[-1]*ur
-        #plt.plot(d,h)
-        #plt.plot(d[0:imax],dhl)
-        #plt.plot(d[imax-1:-1],dhr)
 
-        er  = dhr - h[imax:]
-        if np.min(er)<0:
-            u,v = recr(d[imax:],h[imax:])
+        er = dhr - h[imax:]
+        if np.min(er) < 0:
+            u, v = recr(d[imax:],h[imax:])
         else:
             u = d[imax:]
             v = h[imax:]
@@ -1428,25 +1492,29 @@ def bullington(z,d,fGHz):
     #er  = dhr - h[imax-1:-1]
 
     lmbda = 0.3/fGHz
-    u = np.arange(len(z))/(len(z)-1.)
-    l = (z[0])*(1-u)+(z[-1])*u
-    h = z - l
-    ul,vl = recl(d,z)
-    ur,vr = recr(d,z)
-    idtx = len(ul)
-    idrx = len(h)-len(ur)
-    #idtx = 7000
-    #idrx = 22000
-    dtx = d[idtx]
-    drx = d[-1]-d[idrx]
-    htx = h[idtx-1]
-    hrx = h[idrx]
-    deq = (dtx*hrx)*d[-1]/(drx*htx+dtx*hrx)
-    heq = deq*(htx/dtx)
-    nu  = heq*np.sqrt((2/lmbda)*(1/deq+1/(d[-1]-deq)))
-    w= nu - 0.1
-    L = np.maximum(6.9 + 20*np.log10(np.sqrt(w**2+1)+w),0)
-    return(L,deq,heq)
+    u = np.arange(len(height))/(len(height)-1.)
+    l = (height[0])*(1-u)+(height[-1])*u
+    h = height - l
+    if (h>0).any():
+        ul, vl = recl(d, height)
+        ur, vr = recr(d, height)
+        idtx = len(ul)
+        idrx = len(h) - len(ur)
+        dtx = d[idtx]
+        drx = d[-1]-d[idrx]
+        htx = h[idtx-1]
+        hrx = h[idrx]
+        deq = (dtx*hrx)*d[-1]/(drx*htx+dtx*hrx)
+        heq = deq*(htx/dtx)
+    else:
+        heq = -np.min(np.abs(h[1:-1]))
+        ieq = np.where(h==heq)[0][0]
+        deq = d[ieq]
+
+    nu = heq*np.sqrt((2/lmbda)*(1/deq+1/(d[-1]-deq)))
+    w = nu - 0.1
+    L = np.maximum(6.9 + 20*np.log10(np.sqrt(w**2+1)+w), 0)
+    return(L, deq, heq)
 
 def two_rays_flatearth(fGHz, **kwargs):
     """
