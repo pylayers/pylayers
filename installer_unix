@@ -8,7 +8,7 @@ conda install seaborn --yes
 conda install PIL --yes
 conda install basemap --yes
 conda install wxpython --yes
-conda install -c conda-forge scikit-rf
+conda install -c conda-forge scikit-rf --yes
 pip install protobuf 
 pip install tqdm
 pip install descartes

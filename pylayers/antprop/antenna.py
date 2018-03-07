@@ -137,13 +137,22 @@ class Pattern(PyLayers):
                 kwargs[k] = defaults[k]
 
         if 'fGHz' not in kwargs:
-            if 'fGHz' not in self.__dict__:
+            # case antenna has been measured 
+            if hasattr(self,'_fGHz'):
+                self.fGHz=self._fGHz
+            elif 'fGHz' not in self.__dict__:
                 self.fGHz = np.array([2.4])
+            
         else:
             if type(kwargs['fGHz'])==np.ndarray:
                 self.fGHz = kwargs['fGHz']
             else:
                 self.fGHz = np.array([kwargs['fGHz']])
+
+        # if current antenna is a measured antenna, pass the request frequencies
+        # in particular if antenna pattern is type = nfc
+        if hasattr(self,'_fGHz'):
+            self.param.update({'fGHz':self.fGHz})
 
         self.nf = len(self.fGHz)
 
@@ -399,10 +408,10 @@ class Pattern(PyLayers):
         self._Ft and self._Fp to a given set of theta, phi.
 
         """
-        defaults = {'param': {''}}
-
+        defaults = {'param': {'fGHz':[]}}
         if 'param' not in kwargs or kwargs['param']=={}:
             kwargs['param']=defaults['param']
+
 
         self.param = kwargs['param']
 
@@ -412,9 +421,13 @@ class Pattern(PyLayers):
         #     phi = self.phi[None,:,None]
         # else:
 
+        uf=np.ndarray(shape=0,dtype=int)
+        for k in self.param['fGHz']:
+            uf = np.hstack((uf,np.where(self._fGHz<=k)[0][-1]))
+        
+
         theta = self.theta
         phi = self.phi
-
 
         # th0=np.array([0.12,3.1415,0.01])
         # ph0=np.array([0.01,0.5,2])
@@ -454,20 +467,18 @@ class Pattern(PyLayers):
         ratio_ph = (phi-self._phi[cudph])/(self._phi[cudph+1]-self._phi[cudph])
 
         if self.grid:
-            Ft=self._Ft[cudth,:,:]*(1.-ratio_th[:,None,None])+ratio_th[:,None,None]*self._Ft[cudth+1,:,:]
+            Ft=self._Ft[cudth,:,:][...,uf]*(1.-ratio_th[:,None,None])+ratio_th[:,None,None]*self._Ft[cudth+1,:,:][...,uf]
             Ft=Ft[:,cudph,:]*(1.-ratio_ph[None,:,None])+ratio_ph[None,:,None]*Ft[:,cudph+1,:]
-            Fp=self._Fp[cudth,:,:]*(1.-ratio_th[:,None,None])+ratio_th[:,None,None]*self._Fp[cudth+1,:,:]
+            Fp=self._Fp[cudth,:,:][...,uf]*(1.-ratio_th[:,None,None])+ratio_th[:,None,None]*self._Fp[cudth+1,:,:][...,uf]
             Fp=Fp[:,cudph,:]*(1.-ratio_ph[None,:,None])+ratio_ph[None,:,None]*Fp[:,cudph+1,:]
         else:
-            Ft0=self._Ft[cudth,cudph,:]*(1.-ratio_th[:,None])+ratio_th[:,None]*self._Ft[cudth+1,cudph,:]
-            Ft1=self._Ft[cudth,cudph+1,:]*(1.-ratio_th[:,None])+ratio_th[:,None]*self._Ft[cudth+1,cudph+1,:]
+            Ft0=self._Ft[cudth,cudph,:][...,uf]*(1.-ratio_th[:,None])+ratio_th[:,None]*self._Ft[cudth+1,cudph,:][...,uf]
+            Ft1=self._Ft[cudth,cudph+1,:][...,uf]*(1.-ratio_th[:,None])+ratio_th[:,None]*self._Ft[cudth+1,cudph+1,:][...,uf]
             Ft = Ft0*(1.-ratio_ph[:,None])+Ft1*ratio_ph[:,None]
-            Fp0=self._Fp[cudth,cudph,:]*(1.-ratio_th[:,None])+ratio_th[:,None]*self._Fp[cudth+1,cudph,:]
-            Fp1=self._Fp[cudth,cudph+1,:]*(1.-ratio_th[:,None])+ratio_th[:,None]*self._Fp[cudth+1,cudph+1,:]
+            Fp0=self._Fp[cudth,cudph,:][...,uf]*(1.-ratio_th[:,None])+ratio_th[:,None]*self._Fp[cudth+1,cudph,:][...,uf]
+            Fp1=self._Fp[cudth,cudph+1,:][...,uf]*(1.-ratio_th[:,None])+ratio_th[:,None]*self._Fp[cudth+1,cudph+1,:][...,uf]
             Fp = Fp0*(1.-ratio_ph[:,None])+Fp1*ratio_ph[:,None]
         
-        # Ft = (self._Ft[cudth,cudph]+self._Ft[cudth,cudph+1]+self._Ft[cudth+1,cudph]+self._Ft[cudth+1,cudph+1])/4.
-        # Fp = (self._Fp[cudth,cudph]+self._Fp[cudth,cudph+1]+self._Fp[cudth+1,cudph]+self._Fp[cudth+1,cudph+1])/4.
         return Ft,Fp
 
 
@@ -1733,6 +1744,7 @@ class Pattern(PyLayers):
                        +  self.Ft * np.conj(self.Ft))
 
 
+
         if self.grid:
             dt = self.theta[1]-self.theta[0]
             dp = self.phi[1]-self.phi[0]
@@ -1761,7 +1773,7 @@ class Pattern(PyLayers):
 
             el = self.Ft[tuple(self.umax)]*uth + self.Fp[tuple(self.umax)]*uph
             eln = el/np.linalg.norm(el)
-            self.el = np.abs(eln.squeeze())
+            self.el = eln.squeeze()
             self.hl = np.cross(self.sl,self.el)
             #assert((self.efficiency<1.0).all()),pdb.set_trace()
             self.hpster=np.zeros(len(self.fGHz))
@@ -2154,7 +2166,7 @@ class Antenna(Pattern):
 
         self.param = kwargs['param']
 
-        super(Antenna,self).__init__()
+        # super(Antenna,self).__init__()
         #Pattern.__init__(self)
         #
         # if typ string has an extension it is a file
@@ -3189,21 +3201,21 @@ class Antenna(Pattern):
         # sqg=np.sqrt(10**(d[:,3]/10))
         # self.sqG=sqg.reshape((nf, nphi, ntheta)).swapaxes(0, 2)
 
-        self.fGHz = Tf[0, 0, :]
+        self._fGHz = Tf[0, 0, :]
         self._theta = Ttheta[:, 0, 0]
         self._phi = Tphi[0, :, 0]
         #
         # check header consistency
         #
 
-        np.testing.assert_almost_equal(self.fGHz[0],fmin,6)
-        np.testing.assert_almost_equal(self.fGHz[-1],fmax,6)
+        np.testing.assert_almost_equal(self._fGHz[0],fmin,6)
+        np.testing.assert_almost_equal(self._fGHz[-1],fmax,6)
         np.testing.assert_almost_equal(self._theta[0],thmin,3)
         np.testing.assert_almost_equal(self._theta[-1],thmax,3)
         np.testing.assert_almost_equal(self._phi[0],phmin,3)
         np.testing.assert_almost_equal(self._phi[-1],phmax,3)
 
-        self.nf = nf
+        self._nf = nf
         self._nth = ntheta
         self._nph = nphi
         self._tau = tau
@@ -3236,7 +3248,7 @@ class Antenna(Pattern):
         B2=self._sqG[mid_nth:,...]#self.sqG[65:,...]
         B2i= B2[::-1,...]
 
-        R=np.zeros((mid_nth,new_nph,self.nf))#R=np.zeros((65,128,31))
+        R=np.zeros((mid_nth,new_nph,self._nf))#R=np.zeros((65,128,31))
         R[:,:mid_nth-1,:]=B1         #R[:,:64,:]=B1 
         R[:-1,mid_nth-1:,:]=B2i      #  R[:-1,64:,:]=B2i
         R[-1,mid_nth-1:,:]=B1[-1,:,:]# R[-1,64:,:]=B1[-1,:,:] 
@@ -3248,7 +3260,7 @@ class Antenna(Pattern):
         B2=self._Ft[mid_nth:,...]#self.Ft[65:,...]
         B2i= B2[::-1,...]
 
-        R=np.zeros((mid_nth,new_nph,self.nf))#R=np.zeros((65,128,31))
+        R=np.zeros((mid_nth,new_nph,self._nf))#R=np.zeros((65,128,31))
         R[:,:mid_nth-1,:]=B1         #R[:,:64,:]=B1 
         R[:-1,mid_nth-1:,:]=B2i      #  R[:-1,64:,:]=B2i
         R[-1,mid_nth-1:,:]=B1[-1,:,:]# R[-1,64:,:]=B1[-1,:,:] 
@@ -3260,7 +3272,7 @@ class Antenna(Pattern):
         B2=self._Fp[mid_nth:,...]#self.Ft[65:,...]
         B2i= B2[::-1,...]
 
-        R=np.zeros((mid_nth,new_nph,self.nf))#R=np.zeros((65,128,31))
+        R=np.zeros((mid_nth,new_nph,self._nf))#R=np.zeros((65,128,31))
         R[:,:mid_nth-1,:]=B1         #R[:,:64,:]=B1 
         R[:-1,mid_nth-1:,:]=B2i      #  R[:-1,64:,:]=B2i
         R[-1,mid_nth-1:,:]=B1[-1,:,:]# R[-1,64:,:]=B1[-1,:,:] 
