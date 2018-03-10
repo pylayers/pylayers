@@ -1069,7 +1069,7 @@ class Ezone(PyLayers):
         sp = ax.scatter(self.pb[:,0], self.pb[:,1], c = -self.L,
                         s=30,linewidth=0,cmap='jet',vmax=-60, vmin=-120)
         fig.savefig(pngroute, transparent=True, format='png')
-        # 
+        #
         # cover overlay
         #
         fig, ax = gkml.gearth_fig(self.extent,self.extent_c)
@@ -1084,34 +1084,22 @@ class Ezone(PyLayers):
                           linewidth=0.0)
         fig.savefig(pngcover, transparent=True, format='png')
 
-        gkml.make_kml(llcrnrlon = llcrnrlon,
-                 llcrnrlat = llcrnrlat,
-                 urcrnrlon = urcrnrlon,
-                 urcrnrlat = urcrnrlat,
+        gkml.make_kml(self.extent,
                  figs = [pngroute],
                  kmzfile = kmzroute,
                  name = 'route')
 
-        gkml.make_kml(llcrnrlon = llcrnrlon,
-                 llcrnrlat = llcrnrlat,
-                 urcrnrlon = urcrnrlon,
-                 urcrnrlat = urcrnrlat,
+        gkml.make_kml(self.extent,
                  figs = [pngcover],
                  kmzfile = kmzcover,
                  name = 'coverage')
 
-        gkml.make_kml(llcrnrlon = llcrnrlon,
-                 llcrnrlat = llcrnrlat,
-                 urcrnrlon = urcrnrlon,
-                 urcrnrlat = urcrnrlat,
+        gkml.make_kml(self.extent,
                  figs = [pngsrtm],
                  kmzfile = kmzsrtm,
                  name = 'SRTM DSM')
 
-        gkml.make_kml(llcrnrlon = llcrnrlon,
-                 llcrnrlat = llcrnrlat,
-                 urcrnrlon = urcrnrlon,
-                 urcrnrlat = urcrnrlat,
+        gkml.make_kml(self.extent,
                  figs = [pngaster],
                  kmzfile = kmzaster,
                  name = 'ASTER DSM')
