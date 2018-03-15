@@ -168,7 +168,6 @@ pstruc = {}
 pstruc['DIRSIMUL'] ='ini'
 pstruc['DIRWRL'] =os.path.join('struc','wrl')
 pstruc['DIRLAY'] =os.path.join('struc','lay')
-pstruc['DIRINI'] =os.path.join('struc','ini')
 pstruc['DIROSM'] =os.path.join('struc','osm')
 pstruc['DIRFUR'] = os.path.join('struc','furnitures')
 pstruc['DIRIMAGE'] = os.path.join('struc','images')
@@ -302,7 +301,7 @@ if basename != os.path.join(pylayersdir,'data'):
     if not 'win' in sys.platform:
         dirlist=['ini','struc','struc/furnitures'
         ,'struc/osm','struc/wrl','struc/res','struc/str'
-        ,'struc/images','struc/lay','struc/ini'
+        ,'struc/images','struc/lay'
         ,'ant','output/Tx001','output'
         ,'geom','output/r2d'
         ,'output/r3d','body','body/c3d','body/wear']
@@ -314,14 +313,12 @@ if basename != os.path.join(pylayersdir,'data'):
         ,os.path.join('struc','str')
         ,os.path.join('struc','images')
         ,os.path.join('struc','lay')
-        ,os.path.join('struc','ini')
         ,'ant',os.path.join('output','Tx001'),'output'
         ,'geom'
         ,os.path.join('output','r2d')
         ,os.path.join('output','r3d'),'body'
         ,os.path.join('body','c3d')
         ,os.path.join('body','wear')]
-
     for dl in dirlist:
         filelist = os.listdir(os.path.join(pylayersdir,'data', dl))
         for fi in filelist:

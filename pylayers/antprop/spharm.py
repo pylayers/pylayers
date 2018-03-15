@@ -797,7 +797,6 @@ class VCoeff(object):
         self.s3 = np.array([])
         self.fmin = fmin
         self.fmax = fmax
-
         if typ == 's1':
             self.inits1(data)
         if typ == 's2':

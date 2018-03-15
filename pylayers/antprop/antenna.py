@@ -31,7 +31,7 @@ from pylayers.antprop.spharm import *
 from pylayers.antprop.antssh import ssh, SSHFunc2, SSHFunc, SSHCoeff, CartToSphere
 from pylayers.antprop.coeffModel import *
 import copy
-
+from mayavi import mlab
 try:
     from pylayers.antprop.antvsh import vsh
 except:
@@ -223,6 +223,8 @@ class Pattern(PyLayers):
             vsh(self)
             self.C.s1tos2()
             self.C.s2tos3(threshold=threshold)
+        else:
+            print('antenna must be evaluated to be converted into spherical harmonics.')
 
     def ssh(self,L=89,dsf=1):
         if self.evaluated:
@@ -1155,15 +1157,37 @@ class Pattern(PyLayers):
         #   l : axis l (theta)
         #   m : axis m (phi)
         #
-        Fth = np.eisum('klm,kilm->ki',Br,np.real(V.T)) - \
-              np.eisum('klm,kilm->ki',Bi,np.imag(V.T)) + \
-              np.eisum('klm,kilm->ki',Ci,np.real(W.T)) + \
-              np.eisum('klm,kilm->ki',Cr,np.imag(W.T))
 
-        Fph = -np.eisum('klm,kilm->ki',Cr,np.real(V.T)) + \
-              np.eisum('klm,kilm->ki',Ci,np.imag(V.T)) + \
-              np.eisum('klm,kilm->ki',Bi,np.real(W.T)) + \
-              np.eisum('klm,kilm->ki',Br,np.imag(W.T))
+
+
+        # The following cannot work du to shape issue!:
+
+        # Fth = np.einsum('klm,kilm->ki',Br,np.real(V.T)) - \
+        #       np.einsum('klm,kilm->ki',Bi,np.imag(V.T)) + \
+        #       np.einsum('klm,kilm->ki',Ci,np.real(W.T)) + \
+        #       np.einsum('klm,kilm->ki',Cr,np.imag(W.T))
+
+        # Fph = -np.einsum('klm,kilm->ki',Cr,np.real(V.T)) + \
+        #       np.einsum('klm,kilm->ki',Ci,np.imag(V.T)) + \
+        #       np.einsum('klm,kilm->ki',Bi,np.real(W.T)) + \
+        #       np.einsum('klm,kilm->ki',Br,np.imag(W.T))
+
+        # this is replaced without garantee of correct 
+        # broadcasting on fequency by :
+
+        Brr = Br[:,l,m]
+        Bir = Bi[:,l,m]
+        Crr = Cr[:,l,m]
+        Cir = Ci[:,l,m]
+
+        Fth = np.dot(Brr, np.real(V.T)) - \
+              np.dot(Bir, np.imag(V.T)) + \
+              np.dot(Cir, np.real(W.T)) + \
+              np.dot(Crr, np.imag(W.T))
+        Fph = -np.dot(Crr, np.real(V.T)) + \
+              np.dot(Cir, np.imag(V.T)) + \
+              np.dot(Bir, np.real(W.T)) + \
+              np.dot(Brr, np.imag(W.T))
 
         # here Nf x Nd
 
@@ -4013,15 +4037,29 @@ class Antenna(Pattern):
         #   k : frequency axis
         #   l : coeff l
         #   m
-        Fth = np.eisum('klm,kilm->ki',Br,np.real(V.T)) - \
-              np.eisum('klm,kilm->ki',Bi,np.imag(V.T)) + \
-              np.eisum('klm,kilm->ki',Ci,np.real(W.T)) + \
-              np.eisum('klm,kilm->ki',Cr,np.imag(W.T))
+        # Fth = np.eisum('klm,kilm->ki',Br,np.real(V.T)) - \
+        #       np.eisum('klm,kilm->ki',Bi,np.imag(V.T)) + \
+        #       np.eisum('klm,kilm->ki',Ci,np.real(W.T)) + \
+        #       np.eisum('klm,kilm->ki',Cr,np.imag(W.T))
 
-        Fph = -np.eisum('klm,kilm->ki',Cr,np.real(V.T)) + \
-              np.eisum('klm,kilm->ki',Ci,np.imag(V.T)) + \
-              np.eisum('klm,kilm->ki',Bi,np.real(W.T)) + \
-              np.eisum('klm,kilm->ki',Br,np.imag(W.T))
+        # Fph = -np.eisum('klm,kilm->ki',Cr,np.real(V.T)) + \
+        #       np.eisum('klm,kilm->ki',Ci,np.imag(V.T)) + \
+        #       np.eisum('klm,kilm->ki',Bi,np.real(W.T)) + \
+        #       np.eisum('klm,kilm->ki',Br,np.imag(W.T))
+
+        Brr = Br[:,l,m]
+        Bir = Bi[:,l,m]
+        Crr = Cr[:,l,m]
+        Cir = Ci[:,l,m]
+
+        Fth = np.dot(Brr, np.real(V.T)) - \
+              np.dot(Bir, np.imag(V.T)) + \
+              np.dot(Cir, np.real(W.T)) + \
+              np.dot(Crr, np.imag(W.T))
+        Fph = -np.dot(Crr, np.real(V.T)) + \
+              np.dot(Cir, np.imag(V.T)) + \
+              np.dot(Bir, np.real(W.T)) + \
+              np.dot(Brr, np.imag(W.T))
 
         #Fth = np.dot(Br, np.real(V.T)) - \
         #    np.dot(Bi, np.imag(V.T)) + \
