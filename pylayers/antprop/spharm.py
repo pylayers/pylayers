@@ -591,14 +591,30 @@ class SCoeff(PyLayers):
         # retrieve Nf and Lmax to build a void s2 structure
         Nf   = np.shape(self.s3)[0]
         Lmax = max(self.ind3[:,0])
-        K2   = (Lmax+1)*(Lmax+2)/2
+        # -1 added due to an extra last element otherwise
+        # K2   = (Lmax+1)*(Lmax+2)/2
+        K2   = (Lmax+1)*(Lmax+2)/2 -1
         self.s2 = np.zeros((Nf,K2),dtype=complex)
-
         # fill s2 with s3 at proper coefficient location
         self.s2[:,self.k2] = self.s3
         self.L2 = Lmax
         self.M2 = Lmax
         self.ind2 = indexvsh(Lmax)
+
+
+
+    def s2tos1(self):
+        """ transform shape2 to shape 1
+
+        s2  shape 2   array [ Nf x (L+1)*(M+1) ]
+        s1  shape 1   array [ Nf , (L+1) , (M+1) ]
+
+        """
+        Nf   = np.shape(self.s2)[0]
+        Lmax = max(self.ind2[:,0])
+        self.s1 = np.zeros((Nf,Lmax+1,Lmax+1),dtype=complex)
+        self.s1[:,self.ind2[:,0],self.ind2[:,1]]=self.s2
+
 
     def plot(self,typ='s3',title='',xl=False,yl=False,log=False,stem=True,color='b'):
         """ plot coeff
@@ -1057,14 +1073,28 @@ class VCoeff(object):
         # retrieve Nf and Lmax to build a void s2 structure
         Nf   = np.shape(self.s3)[0]
         Lmax = max(self.ind3[:,0])
-        K2   = (Lmax+1)*(Lmax+2)/2
+        # K2   = (Lmax+1)*(Lmax+2)/2
+        # -1 added due to an extra last element otherwise
+        K2   = (Lmax+1)*(Lmax+2)/2 -1
         self.s2 = np.zeros((Nf,K2),dtype=complex)
-
         # fill s2 with s3 at proper coefficient location
         self.s2[:,self.k2] = self.s3
         self.L2 = Lmax
         self.M2 = Lmax
         self.ind2 = indexvsh(Lmax)
+
+    def s2tos1(self):
+        """ transform shape2 to shape 1
+
+        s2  shape 2   array [ Nf x (L+1)*(M+1) ]
+        s1  shape 1   array [ Nf , (L+1) , (M+1) ]
+
+        """
+        Nf   = np.shape(self.s2)[0]
+        Lmax = max(self.ind2[:,0])
+        self.s1 = np.zeros((Nf,Lmax+1,Lmax+1),dtype=complex)
+
+        self.s1[:,self.ind2[:,0],self.ind2[:,1]]=self.s2
 
     def plot(self,typ='s3',title='',xl=False,yl=False,log=False,stem=True,color='b'):
         """
@@ -1492,6 +1522,15 @@ class VSHCoeff(object):
         self.Bi.s3tos2()
         self.Cr.s3tos2()
         self.Ci.s3tos2()
+
+    def s2tos1(self):
+        """ shape 2 to shape 1
+
+        """
+        self.Br.s2tos1()
+        self.Bi.s2tos1()
+        self.Cr.s2tos1()
+        self.Ci.s2tos1()
 
     def strip3(self):
         """ Thresholded coefficient conversion
