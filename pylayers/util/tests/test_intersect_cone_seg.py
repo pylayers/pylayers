@@ -4,6 +4,13 @@ line0 = (np.array([0,0]),np.array([1,1]))
 line1 = (np.array([0,0]),np.array([1,-1]))
 #
 #
+pta = np.array([0,0])
+phe = np.array([3,1])
+seg  = (pta,phe)
+pdb.set_trace()
+tahe,r =  intersect_cone_seg(line0,line1,seg,bvis=True,bbool=True)
+#
+#
 #
 pta = np.array([10,3])
 phe = np.array([-10,2.9])
@@ -32,7 +39,6 @@ print seg[0],seg[1],tahe,r
 pta = np.array([3,10])
 phe = np.array([3,0])
 seg = (phe,pta)
-pdb.set_trace()
 tahe,r = intersect_cone_seg(line0,line1,seg,bvis=False)
 print seg[0],seg[1],tahe,r
 #print tahe,r

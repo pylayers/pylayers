@@ -5,10 +5,10 @@ from numpy.linalg import *
 #import cvxmod as cvxm
 #import cvxopt as cvxo
 from string import *
-from CRBLocation import *
-from RSSLocation import *
-from ToALocation import *
-from TDoALocation import *
+from crlb import *
+from rss import *
+from toa import *
+from tdoa import *
 
 
 class HDFLocation(object):

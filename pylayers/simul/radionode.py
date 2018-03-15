@@ -1,56 +1,16 @@
 #/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-
-
-RadioNode Class
-===============
-
-A radio Node is a data structure which store positions of
-a radio node at several time step.
-
-This data structure is used in DLink.
-
-Members of a radionode are
-
-position    : 3xNt
-time        : 1xNt
-orientation : 3x3xNt
-typ         : 'tx' or 'rx'
-name        : string
-
+.. currentmodule:: pylayers.antprop.radionode
 
 .. autosummary::
-    :toctree: generated/
-
-
-    RadioNode.__init__
-    RadioNode.__repr__
-    RadioNode.pos2pt
-    RadioNode.transform
-    RadioNode.info
-    RadioNode.clear
-    RadioNode.points
-    RadioNode.point
-    RadioNode.linevect
-    RadioNode.line
-    RadioNode.surface
-    RadioNode.volume
-    RadioNode.loadini
-    RadioNode.loadspa
-    RadioNode.save
-    RadioNode.gpoint
-    RadioNode.gline
-    RadioNode.gsurface
-    RadioNode.gvolume
-    RadioNode.show
-    RadioNode.show3
-    RadioNode.move
-    RadioNode.extract
-    RadioNode.loadvsh
+    :members:
 
 """
-
+from __future__ import print_function
+import doctest
+import os
+import glob
 import os
 import sys 
 import doctest

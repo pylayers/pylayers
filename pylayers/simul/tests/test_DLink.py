@@ -3,7 +3,7 @@ import pylayers.signal.waveform as wvf
 import pdb
 import warnings 
 
-# warnings.filterwarnings("error")
+#warnings.filterwarnings("error")
 # set the frequency range
 fcGHz=5
 WMHz = 3000
@@ -11,11 +11,11 @@ Nf = 400
 fGHz = np.linspace(fcGHz-WMHz*0.5e-3,fcGHz+WMHz*0.5e-3,Nf)
 #fGHz = np.array([fcGHz])
 # set the layout
-L=Layout('defstr.lay',bbuild=1)
-#L=Layout('defstr.ini',bdiffraction=True)
-#L=Layout('defstr.ini',bbuild=True)
-#L=Layout('TC2_METIS.ini',bbuild=1)
-#L=Layout('W2PTIN.ini',build=False)
+#L=Layout('CEA.lay',bbuild=1)
+#L=Layout('defstr.lay')
+#L=Layout('defstr.lay',bbuild=True)
+L=Layout('TC2_METIS.lay',bbuild=1)
+#L=Layout('W2PTIN.lay',build=False)
 # set the link
 DL=DLink(L=L,fGHz=fGHz,outdoor=False,applywav=True)
 DL.L.indoor=True
@@ -23,16 +23,17 @@ DL.L.indoor=True
 DL.L.build()
 #DL.ca= 23
 #DL.cb=14
-DL.ca= 2
-DL.cb= 5
+#DL.ca= 2
+#DL.cb= 5
 #DL.b = np.array([761.5,1113,1.2])
 DL.Aa=Antenna(typ='Omni')
 DL.Ab=Antenna(typ='Omni')
-
+DL.a[2]=7
+DL.b[2]=1.5
 #DL.b=np.array([766,1115,1.8])
 tic = time.time()
 #DL.eval(verbose=True,force=True,bt=False,cutoff=4,threshold=0.1,ra_vectorized=False)
-DL.eval(verbose=True,force=True,bt=False,cutoff=4,threshold=0.1,ra_vectorized=True,nD=1)
+DL.eval(verbose=True,force=True,bt=True,cutoff=5,threshold=0,ra_vectorized=True,nD=1,diffraction=True)
 toc = time.time()
 print(toc-tic)
 #DL.b=np.array([755,1110,1.5])

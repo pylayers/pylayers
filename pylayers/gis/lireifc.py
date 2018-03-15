@@ -1,5 +1,14 @@
 # -*- coding: utf-8 -*-
+"""
+.. currentmodule:: pylayers.antprop.lireifc
 
+.. autosummary:: 
+
+"""
+from __future__ import print_function
+import doctest
+import os
+import glob
 import sys
 import os
 import numpy as np
@@ -59,7 +68,7 @@ for li in lig:
         if v.find('IFCDIRECTION')!=-1:
             spt  = v.split('DIRECTION')[1]
             sspt = spt.replace('(','').replace(')','').split(',')
-            print sspt
+            print(sspt)
             if len(sspt)==3:
                 vec  = np.array([float(sspt[0]),float(sspt[1]),float(sspt[2])])
             else:

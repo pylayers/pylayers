@@ -85,4 +85,4 @@ llcrnrlon = 24.6332735386
 llcrnrlat = 60.2114326091
 urcrnrlon = 24.6333547988
 urcrnrlat = 60.2115132796
-
+projection = cass

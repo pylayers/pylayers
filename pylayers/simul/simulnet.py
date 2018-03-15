@@ -1,25 +1,14 @@
 #   -*- coding:Utf-8 -*-
+from __future__ import print_function
 """
-
-Simul class
-===========
+.. currentmodule:: pylayers.simul.simulnet
 
 .. autosummary::
-    :toctree: generated/
-
-    Simul.__init__
-    Simul.__repr__
-    Simul.create_layout
-    Simul.create_agent
-    Simul.create_EMS
-    Simul.create_network
-    Simul.create_visual
-    Simul.create
-    Simul.create_show
-    Simul.runsimul
 
 """
-
+import doctest
+import os
+import glob
 #####################################################################
 # authors :
 # Nicolas AMIOT        : nicolas.amiot@univ-rennes1.fr
@@ -175,12 +164,12 @@ class Simul(SimulationRT):  # Sympy 2
 
         try:
             self.L.dumpr()
-            print 'Layout graphs are loaded from ' + basename + '/struc/ini'
+            print('Layout graphs are loaded from ' + basename + '/struc/ini')
         except:
             #self.L.sl = sl
             # self.L.loadGr(G1)
-            print 'This is the first time the layout file is used\
-            Layout graphs are curently being built, it may take few minutes.'
+            print('This is the first time the layout file is used\
+            Layout graphs are curently being built, it may take few minutes.')
             self.L.build()
             self.L.dumpw()
 
@@ -297,7 +286,7 @@ class Simul(SimulationRT):  # Sympy 2
         if 'txt' in self.save_opt['save']:
             pyu.writeDetails(self)
             if os.path.isfile(os.path.join(basename, 'output', 'Nodes.txt')):
-                print 'would you like to erase previous txt files ?'
+                print('would you like to erase previous txt files ?')
                 A = raw_input()
                 if A == 'y':
                     for f in os.listdir(os.path.join(basename, 'output')):

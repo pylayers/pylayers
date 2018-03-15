@@ -31,7 +31,7 @@ DL.cb= 5
 #DL.Aa=Antenna(typ='Omni')
 lmbda = 0.3/fcGHz
 DL.Aa = AntArray(tarr='UA',N=[10,10,1],dm=[lmbda*0.5,lmbda*0.5,0],fGHz=fcGHz)
-DL.Ab = AntArray(tarr='UA',N=[4,4,1],dm=[lmbda*0.5,lmbda*0.5,0],fGHz=fcGHz)
+DL.Ab = AntArray(tarr='UA',N=[10,10,1],dm=[lmbda*0.5,lmbda*0.5,0],fGHz=fcGHz)
 #DL.b=np.array([766,1115,1.8])
 tic = time.time()
 #DL.eval(verbose=True,force=True,bt=False,cutoff=4,threshold=0.1,ra_vectorized=False)
@@ -63,21 +63,31 @@ APSphd=np.sum(dod[:,1]*E)/np.sum(E)
 APStha=np.sum(doa[:,0]*E)/np.sum(E)
 APSpha=np.sum(doa[:,1]*E)/np.sum(E)
 
+#
+# calculate baseband H matrix Nf frequency points
+#
 H = DL.H.baseband(fcGHz=fcGHz,WMHz=200,Nf=128)
-fig = plt.figure()
-k = 0 
-im = plt.imshow(np.log10(np.abs(H.y[:,:,k])),animated=True,interpolation='nearest',cmap='jet')
-tit=plt.title('f ='+str(fcGHz+H.x[k]/1000.)+ ' GHz',fontsize=24)
-plt.colorbar(im)
 
-def updatefig(*args):
-    global k 
-    k = k+ 1
-    im.set_array(np.log10(np.abs(H.y[:,:,k%128])))
-    tit.set_label('f =' + str(fcGHz+H.x[k%128]/1000.)+' GHz')
-    return im,tit,
-
-ani = animation.FuncAnimation(fig,updatefig,128,interval=0.5,blit=True) 
-writer = animation.writers['ffmpeg'](fps=30)
-ani.save('MIMO.mp4',writer=writer,dpi=100)
-plt.show()
+#fig = plt.figure()
+#ax = plt.gca()
+#k = 0  
+#def init():
+#    global k  
+#    im = ax.imshow(np.log10(np.abs(H.y[:,:,k])),animated=True,interpolation='nearest',cmap='jet')
+#    plt.axis('auto')
+#    tit = ax.set_title('f ='+str(fcGHz+H.x[k]/1000.)+ ' GHz',fontsize=24)
+#    #cb = plt.colorbar(im)
+#    return im,tit
+#
+#def updatefig(*args):
+#    global k 
+#    k = k+ 1
+#    im.set_array(np.log10(np.abs(H.y[:,:,k%128])))
+#    tit.set_label('f =' + str(fcGHz+H.x[k%128]/1000.)+' GHz')
+#    return im,tit
+#
+#ani = animation.FuncAnimation(fig,updatefig,init_func=init,interval=0.5,blit=True) 
+##writer = animation.writers['ffmpeg'](fps=30)
+##ani.save('MIMO.mp4',writer=writer,dpi=100)
+#ani.save('MIMO.gif',writer='imagemagick',fps=60)
+#plt.show()

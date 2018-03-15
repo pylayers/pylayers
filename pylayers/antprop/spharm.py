@@ -1,105 +1,15 @@
 # -*- coding:Utf-8 -*-
 """
-
-This module handles Scalar and Vector Spherical Harmonics in PyLayers
-
-Class VectorCoeff
-==================
+.. currentmodule:: pylayers.antprop.spharm
 
 .. autosummary::
-    :toctree: generated/
-
-    VectorCoeff.__init__
-    VectorCoeff.inits1
-
-class SSHCoeff
-==============
-
-.. autosummary::
-    :toctree: generated/
-
-     SSHCoeff.__init__
-     SSHCoeff.s2tos3
-     SSHCoeff.sets3
-
-
-class SCoeff
-============
-
-.. autosummary::
-    :toctree: generated/
-
-     SCoeff.__init__
-     SCoeff.__repr__
-     SCoeff.inits2
-     SCoeff.inits3
-     SCoeff.delete
-     SCoeff.put
-     SCoeff.delete3
-     SCoeff.put3
-     SCoeff.s3tos2
-     SCoeff.plot
-     SCoeff.show
-
-class VCoeff
-============
-
-.. autosummary::
-    :toctree: generated/
-
-     VCoeff.__init__
-     VCoeff.__repr__
-     VCoeff.inits1
-     VCoeff.inits2
-     VCoeff.inits3
-     VCoeff.s1tos2
-     VCoeff.delete
-     VCoeff.put
-     VCoeff.delete3
-     VCoeff.put3
-     VCoeff.s3tos2
-     VCoeff.plot
-     VCoeff.show
-
-class VSHCoeff
-==============
-
-.. autosummary::
-    :toctree: generated/
-
-     VSHCoeff.__init__
-     VSHCoeff.__repr__
-     VSHCoeff.plot
-     VSHCoeff.show
-     VSHCoeff.s1tos2
-     VSHCoeff.s2tos3_new
-     VSHCoeff.s2tos3
-     VSHCoeff.s3tos2
-     VSHCoeff.strip3
-     VSHCoeff.ens3
-     VSHCoeff.drag3
-     VSHCoeff.put3
-
-
-Utility Functions
-=================
-
-.. autosummary::
-    :toctree: generated/
-
-     indexssh
-     indexvsh
-     index_vsh
-     AFLegendre3
-     AFLegendre2
-     AFLegendre
-     VW2
-     VW
-     VW0
-     plotVW
-
+    :members:
 
 """
+from __future__ import print_function
+import doctest
+import os
+import glob
 import doctest
 import subprocess
 import os
@@ -887,7 +797,6 @@ class VCoeff(object):
         self.s3 = np.array([])
         self.fmin = fmin
         self.fmax = fmax
-
         if typ == 's1':
             self.inits1(data)
         if typ == 's2':

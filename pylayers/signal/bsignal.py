@@ -8,189 +8,51 @@ r"""
 Bsignal Class
 =============
 
-.. autosummary::
-    :toctree: generated/
-
-    Bsignal.__init__
-    Bsignal.__repr__
-    Bsignal.mean
-    Bsignal.min
-    Bsignal.max
-    Bsignal.len
-    Bsignal.append
-    Bsignal.extract
-    Bsignal.save
-    Bsignal.load
-    Bsignal.setx
-    Bsignal.sety
-    Bsignal.stem
-    Bsignal.step
-    Bsignal.cformat
-    Bsignal.imshow
-    Bsignal.plot
-    Bsignal.flatteny
-    Bsignal.gating
+.. autoclass:: Bsignal 
+    :members:
 
 Usignal Class
 =============
 
-.. autosummary::
-    :toctree: generated/
-
-    Usignal.__init__
-    Usignal.__repr__
-    Usignal.setx
-    Usignal.dx
-    Usignal.width
-    Usignal.expand
-    Usignal.max
-    Usignal.min
-    Usignal.truncate
-    Usignal.abs
-    Usignal.eprfl
-    Usignal.energy
-    Usignal.fftshift
-    Usignal.zright
-    Usignal.zleft
-    Usignal.zlr
+.. autoclass: Usignal
+    :members:
 
 TBsignal Class
 ==============
 
-.. autosummary::
-    :toctree: generated/
-
-    TBsignal.__init__
-    TBsignal.__repr__
-    TBsignal.plot
-    TBsignal.translate
-    TBsignal.b2tu
-    TBsignal.b2fu
+.. autoclass:: TBsignal
+    :members:
 
 TUsignal Class
 ==============
 
-.. autosummary::
-    :toctree: generated/
-
-    TUsignal.__init__
-    TUsignal.__repr__
-    TUsignal.__add__
-    TUsignal.diff
-    TUsignal.info
-    TUsignal.align
-    TUsignal.filter
-    TUsignal.ftshift
-    TUsignal.show
-    TUsignal.esd
-    TUsignal.shift
-
-
-
-Fourier Functions
------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    TUsignal.ft
-    TUsignal.fft
-    TUsignal.fftsh
-    TUsignal.ftshift
-    TUsignal.psd
-    TUsignal.Yadd_zeros2l
-    TUsignal.Yadd_zeros2r
-    TUsignal.esd
-
-Visualization functions
------------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    TUsignal.show
-    TUsignal.shift
-    TUsignal.filter
-    TUsignal.correlate
-    TUsignal.corrgauss
-    TUsignal.resample
-    TUsignal.convolve
-
-Input Output Functions
------------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    TUsignal.readcir
-    TUsignal.readuwb
+.. autoclass:: TUsignal
+    :members:
 
 FBsignal Class
 ==============
 
-.. autosummary::
-    :toctree: generated/
+.. autoclass:: FBsignal
+    :members:
 
-    FBsignal.__init__
-    FBsignal.__repr__
-    FBsignal.plotri
-    FBsignal.plot
-    FBsignal.plotdB
-    FBsignal.stem
 
 FUsignal Class
 ==============
 
-.. autosummary::
-    :toctree: generated/
-
-    FUsignal.__init__
-    FUsignal.__repr__
-    FUsignal.__add__
-    FUsignal.__sub__
-    FUsignal.__mul__
-    FUsignal.__div__
-    FUsignal.window
-    FUsignal.get
-    FUsignal.info
-    FUsignal.energy
-    FUsignal.applyFriis
-    FUsignal.enthrsh
-    FUsignal.dBthrsh
-    FUsignal.zp
-    FUsignal.newdf
-    FUsignal.dftresamp
-    FUsignal.resample
-    FUsignal.symH
-    FUsignal.symHz
-    FUsignal.align
-    FUsignal.ifft
-    FUsignal.ift
-    FUsignal.iftshift
-    FUsignal.show
-    FUsignal.decimate
+.. autoclass:: FUsignal 
+    :members:
 
 FHsignal Class
 ================
 
-.. autosummary::
-    :toctree: generated/
-
-    FHsignal.__init__
-    FHsignal.__repr__
-    FHsignal.__mul__
-    FHsignal.ifft
-    FHsignal.unrex
+.. autolass:: FHsignal
+    :members:
 
 Noise Class
 ===========
 
-.. autosummary::
-    :toctree: generated/
-
-    Noise.__init__
-    Noise.amplify
-    Noise.gating
+.. autoclass:: Noise
+    :members:
 
 """
 import doctest
@@ -2201,24 +2063,24 @@ class TUsignal(TBsignal, Usignal):
         O.x = self.x
         return(O)
 
-    # def ftshift(self):
-    #     """ return the associated FUsignal
+    def ftshift(self):
+         """ return the associated FUsignal
 
-    #     Returns
-    #     -------
+         Returns
+         -------
 
-    #     H : FUsignal
+         H : FUsignal
 
-    #     See Also
-    #     --------
+         See Also
+         --------
 
-    #     pylayers.signal.bsignal.TUsignal.fftsh
-    #     pylayers.signal.waveform.ip_generic
+         pylayers.signal.bsignal.TUsignal.fftsh
+         pylayers.signal.waveform.ip_generic
 
-    #     """
-    #     A  = self.fftsh()
-    #     AU = A.unrex()
-    #     return(AU)
+         """
+         A  = self.fftsh()
+         AU = A.unrex()
+         return(AU)
 
 
     def psd(self, Tpns=100, R=50,periodic=True):

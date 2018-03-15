@@ -1,3 +1,9 @@
+"""
+
+.. autoclass::  TDOA
+    :members:
+
+"""
 # -*- coding:Utf-8 -*-
 #####################################################################
 #This file is part of RGPA.
@@ -160,13 +166,16 @@ class TDOA(Constraint):
         delta = self.drange
         deltap = min(delta + eps, self.nv)
         deltam = max(delta - eps, -self.nv)
-        c = delta / 2
-        cp = deltap / 2
-        cm = deltam / 2
+        c = delta / 2.
+        cp = deltap / 2.
+        cm = deltam / 2.
         arge = self.f ** 2 - c ** 2
         argep = self.f ** 2 - cp ** 2
         argem = self.f ** 2 - cm ** 2
-        e = np.sqrt(arge)
+        try:
+            e = np.sqrt(arge)
+        except:
+            pdb.set_trace()
         ep = np.sqrt(argep)
         em = np.sqrt(argem)
 

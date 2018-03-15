@@ -164,6 +164,8 @@ type = outdoor
 85 = {'name': 'PARTITION', 'connect': [-72, -5], 'z': (0.0, 3.0), 'transition' : True}
 86 = {'name': 'PARTITION', 'connect': [-3, -34], 'z': (0.0, 3.0)}
 87 = {'name': 'PARTITION', 'connect': [-3, -73], 'z': (0.0, 3.0), 'transition' : True}
+[faces] 
+1 = {'name':'CONCRETE','vnode':[],z=3}
 
 [files]
 furniture = 

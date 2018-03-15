@@ -7,9 +7,6 @@ import pdb
 .. currentmodule:: pylayers.gis.gisutil
 
 .. autosummary::
-    :toctree: generated
-
-
 
 """
 

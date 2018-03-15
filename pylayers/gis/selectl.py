@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 r"""
 
-.. currentmodule:: pylayers.gis.selectL
+.. currentmodule:: pylayers.gis.selectl
+
+.. autosummary::
 
 """
 import os
 import pdb
-import Image
+from PIL import Image
 import numpy as np
 from pylayers.util import geomutil as geu
 from pylayers.util import pyutil as pyu

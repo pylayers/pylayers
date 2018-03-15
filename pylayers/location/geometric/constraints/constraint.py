@@ -4,14 +4,8 @@
 Constraint Class
 ================
 
-.. autosummary::
-    :toctree: generated/
-
-    Constraint.__init__
-    Constraint.__repr__
-    Constraint.updc
-    Constraint.info
-    Constraint.show3
+.. autoclass:: Constraint
+    :members:
 
 """
 #####################################################################

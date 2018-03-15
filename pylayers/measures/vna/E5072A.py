@@ -30,34 +30,11 @@ Enhanced by M.D.BALDE
 
 .. currentmodule:: pylayers.measures.vna.E5072A
 
-.. autosummary::
-    :toctree: generated
-
 SCPI Class
 ==========
 
-.. autosummary::
-    :toctree: generated/
-
-    SCPI.__init__
-    SCPI.__repr__
-    SCPI._write
-    SCPI._read
-    SCPI.write
-    SCPI.read
-    SCPI.ask
-    SCPI.close
-    SCPI.parS
-    SCPI.reset
-    SCPI.trace
-    SCPI.autoscale
-    SCPI.points
-    SCPI.freq
-    SCPI.getIdent
-    SCPI.getdata
-    SCPI.avrg
-    SCPI.ifband
-    SCPI.calibh5
+.. autoclass:: SCPI
+    :members:
 
 """
 
@@ -597,7 +574,7 @@ class SCPI(PyLayers):
             for k in  range(Nmeas):
                 buff = ''
 
-                while len(buff) <> (self.Nf*16+8):
+                while len(buff) != (self.Nf*16+8):
                     buff = self.read(com)
 
                 S = np.frombuffer(buff[8:self.Nf*16+8], dtype='>f8')

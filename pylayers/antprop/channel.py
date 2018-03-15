@@ -1,151 +1,9 @@
 # -*t coding:Utf-8 -*-
-r"""
+"""
 .. currentmodule:: pylayers.antprop.channel
 
 .. autosummary::
-    :toctree: generated/
-
-TBchannel class
-===============
-
-.. autosummary::
-    :toctree: generated/
-
-    TBchannel.tau_Emax
-    TBchannel.tau_moy
-    TBchannel.tau_rms
-    TBchannel.delays
-    TBchannel.toFD
-    TBchannel.SalehValenzuela
-
-TUchannel class
-===============
-
-.. autosummary::
-    :toctree:generated/
-
-    TUchannel.psd
-    TUchannel.awgn
-    TUchannel.Etau0
-    TUchannel.Ewin
-    TUchannel.Etot
-    TUchannel.Emax
-    TUchannel.toa_max2
-    TUchannel.toa_new
-    TUchannel.toa_win
-    TUchannel.toa_max
-
-
-TUDchannel
-==========
-
-.. autosummary::
-    :toctree: generated/
-
-    TUDchannel.fig
-
-Tchannel
-=========
-
-.. autosummary::
-    :toctree: generated/
-
-    Tchannel.saveh5
-    Tchannel.loadh5
-    Tchannel.apply
-    Tchannel.applywav
-    Tchannel.getcir
-    Tchannel.get_cir
-    Tchannel.chantap
-    Tchannel.baseband
-    Tchannel.plotd
-    Tchannel.plotad
-    Tchannel.doadod
-    Tchannel.energy
-    Tchannel.rssi
-    Tchannel.wavefig
-    Tchannel.rayfig
-    Tchannel.rssi
-    Tchannel.cut
-    Tchannel.sort
-    Tchannel.showtap
-    Tchannel.tap
-    Tchannel.ifft
-    Tchannel.totime
-    Tchannel.iftd
-    Tchannel.ft1
-    Tchannel.ftau
-    Tchannel.rir
-    Tchannel.cir
-    Tchannel.plot3d
-    Tchannel.ft2
-    Tchannel.frombuf
-    Tchannel.capacity
-    Tchannel.calibrate
-    Tchannel.pdp
-
-Mchannel
-========
-
-VNA Measured channel 
-
-.. autosummary::
-    :toctree: generated/
-
-    Mchannel.eig
-    Mchannel.Bcapacity
-    Mchannel.WFcapacity
-    Mchannel.plt2
-
-
-AFPchannel
-==========
-
-Angular Frequency Profile Channel 
-
-.. autosummary::
-    :toctree: generated/
-
-    AFPchannel.loadmes 
-    AFPchannel.toadp 
-
-ADPchannel
-==========
-
-Angular Delay Profile Channel 
-
-.. autosummary::
-    :toctree: generated/
-
-    ADPchannel.correlate
-    ADPchannel.clean
-    ADPchannel.pdp
-    ADPchannel.app
-    ADPchannel.tomap
-    ADPchannel.polarplot
-
-Ctilde
-======
-
-.. autosummary::
-    :toctree: generated/
-
-    Ctilde.inforay 
-    Ctilde.saveh5 
-    Ctilde.loadh5 
-    Ctilde._loadh5 
-    Ctilde.los 
-    Ctilde.mobility
-    Ctilde.plotd
-    Ctilde.doadod
-    Ctilde.locbas
-    Ctilde.Cg2Cl
-    Ctilde.show
-    Ctilde.check_reciprocity
-    Ctilde.energy 
-    Ctilde.cut
-    Ctilde.sort
-    Ctilde.prop2tran
+    :members:
 
 """
 from __future__ import print_function
@@ -177,8 +35,8 @@ except:
 class AFPchannel(bs.FUsignal):
     """ Angular Frequency Profile channel
 
-    Members
-    -------
+    Attributes
+    ----------
 
     x : np.array
         frequency ,Nf
@@ -252,6 +110,7 @@ class AFPchannel(bs.FUsignal):
 
         Notes 
         -----
+
         This function updates : 
         + self.x (frequency GHz)
         + self.y 
@@ -260,9 +119,11 @@ class AFPchannel(bs.FUsignal):
         The calibration file _filecal (.mat file) should be added in the data directory
         In practice for Espoo B2B.mat
 
-        SEE ALSO 
+        See Also 
         --------
+
         pylayers.util.pyutil.getlong 
+
 
         """
         self._filename = _filename
@@ -365,14 +226,15 @@ class AFPchannel(bs.FUsignal):
 class ADPchannel(bs.TUsignal):
     """ Angular Delay Profile channel
 
-    Members
-    -------
+    Attributes
+    ----------
 
-    a : 
-    offset :
+    az : array
+        azimuth in radian 
+    ang_offset :
     theta :  float 
-    phi : 
-    tau : 
+    phi : float 
+    tau : float 
     _filename : string
         short filename for saving     
 
@@ -492,7 +354,8 @@ class ADPchannel(bs.TUsignal):
 
         Notes
         -----
-        This can be uesd to compare a measured PADP with a Ray tracing PADP 
+        This can be used to compare a measured PADP with a Ray tracing PADP 
+
 
         """
         #import ipdb
@@ -601,10 +464,12 @@ class ADPchannel(bs.TUsignal):
         padp = np.abs(self.y)[:,imin:imax].T
         if dB:
             padp  = 20*np.log10(padp)
+
         im = ax.imshow(padp,extent=extent,interpolation=interpolation,aspect=aspect,**kwargs)
         plt.axis('equal')
 
-        if blos:
+
+        if blos: 
             a1 = ang_offset + orientation*self.angpeak_est
             a2 = ang_offset + orientation*self.anglos_geo
             ax.scatter(a1,self.taupeak_est,marker='*',s=70,color='k')
@@ -624,10 +489,6 @@ class ADPchannel(bs.TUsignal):
         ax.set_ylabel('Propagation delay [ns]',fontsize=fonts)
         ax.set_xlabel('Angle[deg]',fontsize=fonts)
 
-    #ax.title('PADP',fontsize=fonts)
-    
-        for tick in ax.xaxis.get_major_ticks():
-            tick.label.set_fontsize(fonts) 
         for tick in ax.yaxis.get_major_ticks():
             tick.label.set_fontsize(fonts) 
 
@@ -927,7 +788,7 @@ class ADPchannel(bs.TUsignal):
                      'raw': False,
                      'Gmax':22.68,
                      'Gmin':19,
-                     'threshdB':-82.5,
+                     'threshdB':75,
                      'imax':-1,
                      'Tilt':10,
                      'HPBW':10,
@@ -954,7 +815,7 @@ class ADPchannel(bs.TUsignal):
         Py = np.real(self.y*np.conj(self.y))
         pap0 = np.sum(Py,axis=1)
         pap0dB = 10*np.log10(pap0)
-        u = pap0dB>threshdB
+        u = pap0dB>np.percentile(pap0dB,threshdB)
         pdp = np.sum(Py[u,:],axis=0)
         pdp = pdp[0:imax]
         x = self.x[0:imax]
@@ -1012,7 +873,7 @@ class ADPchannel(bs.TUsignal):
                 ax.hlines(self.taulos_geo,xmin=-130,xmax=-40,linestyles='dashed',color='red')
 
             if kwargs['noisefloor']:
-                ax.vlines(-120,ymin=0,ymax=x[-1],linestyles='dashed',color='black')
+                ax.vlines(-130,ymin=0,ymax=x[-1],linestyles='dashed',color='black')
 
             #ax.set_xlim(10,1000)
             if kwargs['xlabel']:
@@ -1049,6 +910,8 @@ class ADPchannel(bs.TUsignal):
                 ax.hlines(self.taupeak_est,xmin=-130,xmax=-40,linestyles='dashed',color='blue')
                 ax.hlines(self.taulos_geo,xmin=-130,xmax=-40,linestyles='dashed',color='red')
 
+            if kwargs['noisefloor']:
+                ax.vlines(-130,ymin=0,ymax=x[-1],linestyles='dashed',color='red')
             #ax.set_xlim(0,1000)
             if kwargs['xlabel']:
                 ax.set_ylabel('Delay (ns)',fontsize=kwargs['fontsize']) 
@@ -2810,7 +2673,7 @@ class TUchannel(TBchannel,bs.TUsignal):
         ----------
         filename : string
             long file name if outdir is []
-            short file name is outdir is <> []
+            short file name is outdir is != []
         outdir : string
             output directory
         """
@@ -3299,8 +3162,8 @@ class Tchannel(bs.FUsignal):
     This channel contains all the spatial information for each individual ray. 
     Warning : This is a frequency domain channel deriving from bs.FUsignal 
 
-    Members
-    -------
+    Attributes
+    ----------
 
         ray transfer functions  (nray,nfreq)
     dod  :
@@ -6282,11 +6145,12 @@ class Ctilde(PyLayers):
         if b ==[]:
             b = ant.Antenna('Omni',param={'pol':'t','GmaxdB':0},fGHz=self.fGHz)
 
-        a.eval(th=self.tangl[:, 0], ph=self.tangl[:, 1], grid=False)
+        a.eval(th = self.tangl[:, 0], ph = self.tangl[:, 1])
         Fat = bs.FUsignal(a.fGHz, a.Ft)
         Fap = bs.FUsignal(a.fGHz, a.Fp)
         #b.eval(th=self.rangl[:, 0], ph=self.rangl[:, 1], grid=False)
-        b.eval(th=self.rangl[:, 0], ph=self.rangl[:, 1], grid=False)
+        b.eval(th = self.rangl[:, 0], ph = self.rangl[:, 1])
+
         Fbt = bs.FUsignal(b.fGHz, b.Ft)
         Fbp = bs.FUsignal(b.fGHz, b.Fp)
 

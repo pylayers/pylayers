@@ -1,39 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-
-Utility Functions
-=================
+.. currentmodule:: pylayers.antprop.readvrml
 
 .. autosummary::
-    :toctree: generated/
-
-    savestr2
-    stretch
-    segsplit
-    extract
-    inbracket
-    incrochet
-    geomLine
-    geomFace
-    ParseDirectionalLight
-    ParseMaterial
-    show
-    parsevrml
-    vrml2sha
-    vrml2geom
-
-VLayout Class
-=============
-
-.. autosummary::
-    :toctree: generated/
-
-    Vlayout.load
-    Vlayout.show
-    Vlayout.wallanalysis
-    Vlayout.show3entity
 
 """
+import doctest
+import os
+import glob
 import os
 import doctest
 import glob
@@ -50,9 +24,11 @@ import networkx as nx
 from pylayers.gis.layout import Layout
 
 
-def savestr2(dpt,dwall, _filename='struc.str2'):
-    """ save walls in str2 format
+def savelay(dpt,dwall, _filename='struc.lay'):
+    """ save walls in lay format
 
+    .. TODO 
+        to implement 
     The default filename is struc.str2
 
     Parameters
@@ -416,7 +392,7 @@ def ParseMaterial(st):
     sp1 = st.split('diffuseColor')
     t = sp1[1]
     ts = t.split(',')
-    print ts
+    print(ts)
     d['diffuseColor'] = ts[0]
     try:
         d['specularColor'] = ts[1].split('specularColor')[1]

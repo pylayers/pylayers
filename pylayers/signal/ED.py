@@ -1,36 +1,10 @@
 #-*- coding:Utf-8 -*-
+from __future__ import print_function
 r""""
 .. currentmodule:: pylayers.signal.ED
 
 .. autosummary::
-    :toctree: generated
 
-Energy Detector
-===============
-
-.. autosummary::
-    :toctree: generated/
-
-    ED.__init__
-    ED.__repr__
-    ED.apply
-    ED.moment
-    ED.pdf
-    ED.errprob
-    ED.roc
-    ED.plot
-
-References
-----------
-
-    Cite the relevant literature, e.g. [1]_.  You may also cite these
-    references in the notes section above.
-
-.. [1] O. McNoleg, "The integration of GIS, remote sensing,
-       expert systems and adaptive co-kriging for environmental habitat
-       modelling of the Highland Haggis using object-oriented, fuzzy-logic
-       and neural-network techniques," Computers & Geosciences, vol. 22,
-       pp. 585-588, 1996.
 
 """
 from scipy.signal import *

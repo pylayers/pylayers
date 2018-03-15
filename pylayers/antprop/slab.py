@@ -1,153 +1,51 @@
 #!/usr/bin/python
 # -*- coding: latin1 -*-
-"""
-This module implements the Material and Slab class which are used 
-in the ray tracing engine rays.py. 
-It exploits heavily numpy broadcasting mechanism :
-
-
-The adopted axis convention is the following
-
-+ nf : axis = 0 frequency axis
-+ nt : axis = 1 angular axis
-+ p  : axis = 2 parallel polarization axis
-+ o  : axis = 3 orhogonal polarization axis
-
-
-.. currentmodule:: pylayers.antprop.slab
-
-.. autosummary::
-    :toctree: generated/
-
-Interface Class
-===============
-
-.. autosummary::
-    :toctree: generated/
-
-    Interface.__init__
-    Interface.RT
-    Interface.pcolor
-    Interface.tocolor
-    Interface.loss0
-    Interface.losst
-    Interface.plotwrt
-
-MatInterface Class
-==================
-
-.. autosummary::
-    :toctree: generated/
-
-     MatInterface.__init__
-
-
-Mat Class
-=========
-
-.. autosummary::
-    :toctree: generated/
-
-    Mat.__init__
-    Mat.eval
-    Mat.info
-    Mat.R
-
-
-MatDB Class
-===========
-
-.. autosummary::
-    :toctree: generated/
-
-    MatDB.__init__
-    MatDB.info
-    MatDB.dass
-    MatDB.delete
-    MatDB.edit
-    MatDB.add
-    MatDB.addgui
-    MatDB.choose
-    MatDB.load
-    MatDB.save
-    MatDB.savemat
-
-Slab Class
-==========
-
-.. autosummary::
-    :toctree: generated/
-
-    Slab.__init__
-    Slab.__repr__
-    Slab.info
-    Slab.conv
-    Slab.ev
-    Slab.filter
-    Slab.excess_grdelay
-    Slab.tocolor
-    Slab.loss0
-    Slab.losst
-    Slab.editgui
-    Slab.show
-
-SlabDB Class
-============
-
-.. autosummary::
-    :toctree: generated/
-
-    SlabDB.__init__
-    SlabDB.showall
-    SlabDB.info
-    SlabDB.dass
-    SlabDB.delete
-    SlabDB.edit
-    SlabDB.show
-    SlabDB.add
-    SlabDB.addgui
-    SlabDB.load
-    SlabDB.loadsl
-    SlabDB.save
-    SlabDB.savesl
-
-Utility Functions
-==================
-
-.. autosummary::
-    :toctree: generated/
-
-    calsig
-
-"""
+from __future__ import print_function
 from __future__ import division, print_function, absolute_import 
 import os
 import sys
 import string
 if sys.version_info.major==2:
     import cPickle
+    import ConfigParser as configparser
 else:
     import _pickle as cPickle
+    import configparser
 import doctest
 #import objxml
-import numpy as np
-import scipy as sp
-import matplotlib.pylab as plt
-import struct as stru
-import ConfigParser
-from pylayers.util.project import *
-import pylayers.util.pyutil as pyu
-import pylayers.util.plotutil as plu
-from pylayers.util.easygui import *
-from scipy.interpolate import interp1d
-import copy
 import pdb
 import copy
+import numpy as np
+import scipy as sp
+from scipy.interpolate import interp1d
+import matplotlib.pylab as plt
+import struct as stru
+import pylayers.util.pyutil as pyu
+import pylayers.util.plotutil as plu
+from pylayers.util.project import *
 
+"""
+.. currentmodule:: pylayers.antprop.slab
 
+.. autosummary::
+    :members:
+
+"""
+import doctest
+import os
+import glob
 class Interface(PyLayers):
     """ Interface between 2 medium
 
+    Notes
+    -----
+
+    The adopted axis convention is the following
+
+    + nf : axis = 0 frequency axis
+    + nt : axis = 1 angular axis
+    + p  : axis = 2 parallel polarization axis
+    + o  : axis = 3 orhogonal polarization axis
     Attributes
     ----------
 
@@ -205,8 +103,8 @@ class Interface(PyLayers):
 
         .. math::
 
-            R = \left[\begin{array}[cc](R_o & 0\\0 & R_p)\end{array}\right]
-            T = \left[\begin{array}[cc](T_o & 0\\0 & T_p)\end{array}\right]
+            R = \left[\begin{array}[cc]R_{\perp} & 0\\0 & R_{\para}\end{array}\right]
+            T = \left[\begin{array}[cc]T_{\perp} & 0\\0 & T_{\para}\end{array}\right]
 
         R : np.array (f , th , 2, 2)
         T : np.array (f , th , 2, 2)
@@ -514,22 +412,22 @@ class Interface(PyLayers):
                 #args['titles'].append(u'$R_{\perp}$')
                 args['titles'].append(u'$R_{//}$')
                 if var=='f': # wrt frequency
-                    Ro = self.R[:, kv, 1, 1]
+                    Ro = self.R[:, kv, 0, 0]
                     y = Ro
                 if var=='a': # wrt angle
-                    Ro = self.R[kv, :, 1, 1]
+                    Ro = self.R[kv, :, 0, 0]
                     y = Ro
             if 'p' in kwargs['polar']:
                 #args['titles'].append(u'$R_{//}$')
                 args['titles'].append(u'$R_{\perp}$')
                 if var=='f': # wrt frequency
-                    Rp = self.R[:, kv, 0, 0]
+                    Rp = self.R[:, kv, 1, 1]
                     try:
                         y = np.vstack((y,Rp))
                     except:
                         y = Rp
                 if var =='a': # wrt angle
-                    Rp = self.R[kv, :, 0, 0]
+                    Rp = self.R[kv, :, 1, 1]
                     try:
                         y = np.vstack((y,Rp))
                     except:
@@ -540,13 +438,13 @@ class Interface(PyLayers):
                 #args['titles'].append(u'$T_{\perp}$')
                 args['titles'].append(u'$T_{//}$')
                 if var=='f': # wrt frequency
-                    To = self.T[:, kv, 1, 1]
+                    To = self.T[:, kv, 0, 0]
                     try:
                         y = np.vstack((y,To))
                     except:
                         y = To
                 if var =='a': # wrt angle
-                    To = self.T[kv, :, 1, 1]
+                    To = self.T[kv, :, 0, 0]
                     try:
                         y = np.vstack((y,To))
                     except:
@@ -555,13 +453,13 @@ class Interface(PyLayers):
                 #args['titles'].append(u'$T_{//}$')
                 args['titles'].append(u'$T_{\perp}$')
                 if var=='f': # wrt frequency
-                    Tp = self.T[:, kv, 0, 0]
+                    Tp = self.T[:, kv, 1, 1]
                     try:
                         y = np.vstack((y,Tp))
                     except:
                         y = To
                 if var =='a': # wrt angle
-                    Tp = self.T[kv, :, 0, 0]
+                    Tp = self.T[kv, :, 1, 1]
                     try:
                         y = np.vstack((y,Tp))
                     except:
@@ -1165,7 +1063,7 @@ class MatDB(PyLayers,dict):
 
         """
         fileini = pyu.getlong(_fileini, pstruc['DIRMAT'])
-        materials = ConfigParser.ConfigParser()
+        materials = configparser.ConfigParser()
         materials.read(fileini)
         for k,matname in enumerate(materials.sections()):
             M = Mat(name=matname)
@@ -1190,7 +1088,7 @@ class MatDB(PyLayers,dict):
         """
         fileini = pyu.getlong(_fileini, pstruc['DIRMAT'])
         fd = open(fileini, "w")
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         #
         # config names
         #
@@ -1783,7 +1681,16 @@ class SlabDB(dict):
     DB : slab dictionnary
 
     """
-    def __init__(self,fileslab='', filemat='',ds={},dm={}):
+    def __init__(self,fileslab='',
+                 filemat='',
+                 ds={},
+                 dm={'AIR':
+                     {'mur':(1+0j),'epr':(1+0j),'roughness':0.0,'sigma':0.0},
+                     '_AIR':
+                     {'mur':(1+0j),'epr':(1+0j),'roughness':0.0,'sigma':0.0},
+                     'METAL':
+                     {'mur':(1+0j),'epr':(1+0j),'roughness':0.0,'sigma':10000000}}
+                     ):
         """ class constructor
 
         Parameters
@@ -2050,7 +1957,7 @@ class SlabDB(dict):
 
         """
         fileini = pyu.getlong(_fileini, pstruc['DIRMAT'])
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         config.read(fileini)
 
         if hasattr(self,'mat'):
@@ -2084,7 +1991,7 @@ class SlabDB(dict):
 
         fileini = pyu.getlong(_fileini, pstruc['DIRSLAB'])
         fd = open(fileini, "w")
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         #
         # config names
         #

@@ -25,7 +25,11 @@ import numpy as np
 import scipy as sp 
 from pylayers.location.geometric.util.boxn import *
 from pylayers.location.geometric.constraints.constraint import *
+"""
+.. autoclass:: Exclude 
+    :members:
 
+"""
 
 class Exclude(Constraint):        
     """

@@ -1173,20 +1173,20 @@ class Tdd(PyLayers):
         >>> bo = T.box()
 
         """
-        max1 = max(self.ch1.y)
-        min1 = min(self.ch1.y)
+        max1 = np.max(np.abs(self.ch1.y))
+        min1 = np.min(np.abs(self.ch1.y))
 
-        max2 = max(self.ch2.y)
-        min2 = min(self.ch2.y)
+        max2 = np.max(np.abs(self.ch2.y))
+        min2 = np.min(np.abs(self.ch2.y))
 
-        max3 = max(self.ch3.y)
-        min3 = min(self.ch3.y)
+        max3 = np.max(np.abs(self.ch3.y))
+        min3 = np.min(np.abs(self.ch3.y))
 
-        max4 = max(self.ch4.y)
-        min4 = min(self.ch4.y)
-
-        ma = max(max1, max2, max3, max4)
-        mi = min(min1, min2, min3, min4)
+        max4 = np.max(np.abs(self.ch4.y))
+        min4 = np.min(np.abs(self.ch4.y))
+        
+        ma = np.max([max1, max2, max3, max4])
+        mi = np.min([min1, min2, min3, min4])
 
         b = np.array([mi, ma])
         return(b)

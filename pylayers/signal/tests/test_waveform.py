@@ -1,5 +1,6 @@
 from pylayers.signal.waveform import *
-w = Waveform(type='W1offset')
+w1 = Waveform(typ='W1offset')
+w2 = Waveform(typ='W1compensate')
 
 
 

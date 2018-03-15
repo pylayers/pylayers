@@ -15,13 +15,18 @@ lL = L.ls()
 for tL in lL:
     print  'Layout :     ',tL
     print  '--------------------------'
-    L = Layout(tL,bbuild=0,bgraphs=0)
-    if L.check():
-        L.save()
-        filein = pyu.getlong(L._filename, pstruc['DIRLAY'])
-        fileout = '/home/uguen/Documents/rch/devel/pylayers/data/struc/lay/'+L._filename
-        print fileout
-        shutil.copy2(filein,fileout)
+    if 'Munich' not in tL:
+        L = Layout(tL,bbuild=0,bgraphs=0)
+        f,a = L.showG('s')
+        plt.title(tL,fontsize=32)
+        plt.show()
+        plt.close('all')
+    #if L.check():
+    #    L.save()
+        #filein = pyu.getlong(L._filename, pstruc['DIRLAY'])
+        #fileout = '/home/uguen/Documents/rch/devel/pylayers/data/struc/lay/'+L._filename
+        #print fileout
+        #shutil.copy2(filein,fileout)
 #figure(figsize=(20,10))
 #plt.axis('off')
 #f,a = L.showG('s',nodes=False,fig=f)

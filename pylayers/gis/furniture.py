@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 """ Handle Furnitures
 
+.. curentmoddue:: pylayers.gis.furniture 
+
+.. autosummary
+
 """
 
 import numpy as np
@@ -10,12 +14,11 @@ import ConfigParser
 from   matplotlib.path import Path
 from   matplotlib.patches import PathPatch
 import matplotlib.pyplot as plt
-import pylayers.util.easygui
 from   pylayers.util import pyutil as pyu
 from   pylayers.util.project import *
 
 
-class Furniture(object):
+class Furniture(PyLayers):
     """ Class Furniture
 
     Attributes
@@ -102,9 +105,9 @@ class Furniture(object):
 
         """
         if p == []:
-            data = multenterbox('Choose position and angle ', 'Enter',
-                                ('x', 'y', 'angle(deg)'),
-                                (self.origin[0], self.origin[1], self.angle))
+            #data = multenterbox('Choose position and angle ', 'Enter',
+            #                    ('x', 'y', 'angle(deg)'),
+            #                    (self.origin[0], self.origin[1], self.angle))
             self.origin[0] = eval(data[0])
             self.origin[1] = eval(data[1])
             self.angle = eval(data[2])

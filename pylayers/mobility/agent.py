@@ -1,3 +1,14 @@
+"""
+.. automodule::
+    :members:
+
+Agent Class
+==================
+
+.. autoclass:: Agent
+    :members:
+
+"""
 from SimPy.SimulationRT import Simulation
 #from simpy.simulation import *
 from pylayers.mobility.transit.Person import Person

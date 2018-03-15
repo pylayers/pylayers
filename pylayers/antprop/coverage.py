@@ -1,16 +1,8 @@
 """
-
-Class Coverage
-==============
+.. currentmodule:: pylayers.antprop.coverage
 
 .. autosummary::
-    :toctree: generated/
-
-    Coverage.creategrid
-    Coverage.cover
-    Coverage.sinr
-    Coverage.best
-    Coverage.show
+   :members:
 
 """
 from pylayers.util.project import *
@@ -177,7 +169,7 @@ class Coverage(PyLayers):
             st= st+ 'noisefactor (dB) : '+ str(self.noisefactordb) + '\n\n'
             st = st + '--- Grid ----'+'\n'
             st= st+ 'mode : ' + str(self.mode) + '\n'
-            if self.mode<>'file':
+            if self.mode!='file':
                 st= st+ 'nx : ' + str(self.nx) + '\n'
                 st= st+ 'ny : ' + str(self.ny) + '\n'
             if self.mode=='zone':
@@ -210,7 +202,7 @@ class Coverage(PyLayers):
                 mi=np.min(self.L.Gs.pos.values(),axis=0)+0.01
                 ma=np.max(self.L.Gs.pos.values(),axis=0)-0.01
             if mode=="zone":
-                assert boundary<>[]
+                assert boundary!=[]
                 mi = np.array([boundary[0],boundary[1]])
                 ma = np.array([boundary[2],boundary[3]])
 
@@ -386,7 +378,7 @@ class Coverage(PyLayers):
         for k in p:
             pg = self.grid[k[0],:]
             pa = np.array(self.dap[k[1]]['p'])
-            # exemple with 3 AP 
+            # exemple with 3 AP
             # 321 0
             # 321 1
             # 321 2
@@ -408,7 +400,7 @@ class Coverage(PyLayers):
             self.pa = np.vstack((self.pa,np.ones(shpa[1])))
         self.pg = self.pg.T
         self.pg = np.vstack((self.pg,self.zgrid*np.ones(shpg[0])))
-        
+
         self.nf = len(self.fGHz)
 
         # retrieving dimensions along the 3 axis
@@ -416,7 +408,7 @@ class Coverage(PyLayers):
         self.na = na
         ng = self.ng
         nf = self.nf
-        
+
         for k,iap in enumerate(self.dap):
             # select only one access point
             u = na*np.arange(0,ng,1).astype('int')+k
@@ -424,8 +416,8 @@ class Coverage(PyLayers):
                 pt = self.pa[:,u]
                 pr = self.pg[:,u]
                 azoffset = self.dap[iap]['phideg']*np.pi/180.
-                self.dap[iap].A.eval(fGHz=self.fGHz,pt=pt,pr=pr,azoffset=azoffset)
-                
+                self.dap[iap].A.eval(fGHz=self.fGHz, pt=pt, pr=pr, azoffset=azoffset)
+
                 gain = (self.dap[iap].A.G).T
                 #pdb.set_trace()
                 # to handle omnidirectional antenna (nf,1,1)
@@ -435,10 +427,10 @@ class Coverage(PyLayers):
                     tgain = np.dstack((tgain,gain[:,:,None]))
                 except:
                     tgain = gain[:,:,None]
-        
+
         #Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
         Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
-        
+
         self.Lwo = Lwo.reshape(nf,ng,na)
         self.Edo = Edo.reshape(nf,ng,na)
         self.Lwp = Lwp.reshape(nf,ng,na)
@@ -818,7 +810,7 @@ class Coverage(PyLayers):
             ax = fig.add_subplot(111)
 
         if kwargs['typ']=='pr':
-            if kwargs['a']<>-1:
+            if kwargs['a']!=-1:
                 if kwargs['pol']=='p':
                     U = self.CmWp[kwargs['f'],:,kwargs['a']]
                 if kwargs['pol']=='o':
@@ -832,7 +824,7 @@ class Coverage(PyLayers):
                 U = 10*np.log10(U)
 
         D = np.sqrt(np.sum((self.pa-self.pg)*(self.pa-self.pg),axis=0))
-        if kwargs['a']<>-1:
+        if kwargs['a']!=-1:
             D = D.reshape(self.ng,self.na)
             ax.semilogx(D[:,kwargs['a']],U,'.',color=kwargs['col'],label=kwargs['label'])
         else:
@@ -940,7 +932,7 @@ class Coverage(PyLayers):
                 if polar=='o':    
                     bestsv =  self.bestsvo[f,:,ka]
                 m = np.ma.masked_where(bestsv == 0,bestsv)
-                if self.mode<>'file':
+                if self.mode!='file':
                     W = m.reshape(self.nx,self.ny).T
                     ax.imshow(W, extent=(l,r,b,t),
                             origin='lower',
@@ -1054,7 +1046,7 @@ class Coverage(PyLayers):
             clb = fig.colorbar(img,cax)
             clb.set_label(legcb)
             if best:
-                if self.mode<>'file':
+                if self.mode!='file':
                     if polar=='o':
                         ax.contour(np.sum(self.bestsvo,axis=2)[f,:].reshape(self.nx,self.ny).T,extent=(l,r,b,t),linestyles='dotted')
                     if polar=='p':

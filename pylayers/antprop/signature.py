@@ -1,71 +1,15 @@
 #-*- coding:Utf-8 -*-
+from __future__ import print_function
 """
-Class Signatures
-================
+.. currentmodule:: pylayers.antprop.signature
 
 .. autosummary::
-    :toctree: generated/
-
-    Signatures.__init__
-    Signatures.__repr__
-    Signatures.__len__
-    Signatures.num
-    Signatures.info
-    Signatures.saveh5
-    Signatures.loadh5
-    Signatures._saveh5
-    Signatures._loadh5
-    Signatures.load
-    Signatures.save
-    Signatures.sp
-    Signatures.calsig
-    Signatures.exist
-    Signatures.dido
-    Signatures.run
-    Signatures.meta
-    Signatures.lineofcycle
-    Signatures.cones
-    Signatures.unfold
-    Signatures.show
-    Signatures.showi
-    Signatures.rays
-    Signatures.raysv
-    Signatures.image
-    Signatures.image2
-
-Class Signature
-===============
-
-.. autosummary::
-    :toctree: generated/
-
-    Signature.__init__
-    Signature.__repr__
-    Signature.info
-    Signature.split
-    Signature.ev2
-    Signature.evf
-    Signature.ev
-    Signature.unfold
-    Signature.evtx
-    Signature.image
-    Signature.backtrace
-    Signature.sig2beam
-    Signature.sig2ray
-
-Utility functions
-=================
-
-.. autosummary::
-    :toctree: generated/
-
-    showsig
-    gidl
-    frontline
-    edgeout2
-    edgeout
+    :members:
 
 """
+import doctest
+import os
+import glob
 import doctest
 import numpy as np
 #import scipy as sp
@@ -700,26 +644,26 @@ class Signatures(PyLayers,dict):
         # print "source : ", self.source
         # print "target : ", self.target
         size = {}
-        print self.__class__.__name__ + '\n' + '----------'+'\n'
+        print(self.__class__.__name__ + '\n' + '----------'+'\n')
         #s = s + str(self.__sizeof__())+'\n'
         for k in self:
             size[k] = len(self[k])/2
-        print 'from cycle : '+ str(self.source) + ' to cycle ' + str(self.target)+'\n'
+        print('from cycle : '+ str(self.source) + ' to cycle ' + str(self.target)+'\n')
         pyu.printout('Reflection',pyu.BLUE)
-        print '  '
+        print('  ')
         pyu.printout('Transmission',pyu.GREEN)
-        print '  '
+        print('  ')
         pyu.printout('Diffraction',pyu.RED)
-        print '  \n'
+        print('  \n')
         for k in self:
-            print str(k) + ' : ' + str(size[k])
+            print(str(k) + ' : ' + str(size[k]))
             a = np.swapaxes(self[k].reshape(size[k],2,k),0,2)
             # nl x 2 x nsig
             for i in range(k):
 
                 nstr=a[i,0,:]
                 typ=a[i,1,:]
-                print '[',
+                print('[',)
                 for n,t in zip(nstr,typ):
                     if t==1:
                         pyu.printout(str(n),pyu.BLUE)
@@ -727,8 +671,8 @@ class Signatures(PyLayers,dict):
                         pyu.printout(str(n),pyu.GREEN)
                     if t==3:
                         pyu.printout(str(n),pyu.RED)
-                print ']'
-            print'\n'
+                print(']')
+            print('\n')
                 # s = s + '   '+ str(a[i,0,:]) + '\n'
 
                 # s = s + '   '+ str(a[i,1,:]) + '\n'
@@ -831,8 +775,6 @@ class Signatures(PyLayers,dict):
         filenameh5
         hrpname
 
-        Notes
-        -----
         """
 
 
@@ -1136,7 +1078,7 @@ class Signatures(PyLayers,dict):
 
 
     def run(self,**kwargs):
-        """ get signatures (in one list of arrays) between tx and rx
+        """ evaluate signatures between cycle of tx and cycle of rx
 
         Parameters
         ----------
@@ -1151,19 +1093,19 @@ class Signatures(PyLayers,dict):
             activate diffraction 
         threshold : float 
             for reducing calculation time
+        animations :  boolean 
+        nD : int 
+            maximum number of diffraction 
+        nR : int 
+            maximum number of reflection  
+        nT : int 
+            maximum number of transmission   
 
-
-        Returns
-        -------
-
-        siglist :  numpy.ndarray
 
         See Also
         --------
 
         pylayers.simul.link.Dlink.eval
-        pylayers.antprop.signature.Signatures.propath2
-        pylayers.antprop.signature.Signatures.procone2
 
         """
         defaults = {'cutoff' : 2, 
@@ -1182,8 +1124,8 @@ class Signatures(PyLayers,dict):
 
         for k in defaults:
             if k not in kwargs:
-                kwargs[k] = defaults[k] 
-        
+                kwargs[k] = defaults[k]
+
         self.cutoff = kwargs['cutoff']
         if 'threshold' not in kwargs:
             kwargs['threshold'] = self.threshold
@@ -1193,13 +1135,13 @@ class Signatures(PyLayers,dict):
         nD = kwargs['nD']
         nT = kwargs['nT']
         nR = kwargs['nR']
-        bt = kwargs['bt'] 
-        progress = kwargs['progress'] 
+        bt = kwargs['bt']
+        progress = kwargs['progress']
         diffraction = kwargs['diffraction']
         animation = kwargs['animation'] 
         delay_excess_max_ns = kwargs['delay_excess_max_ns']
         dist_excess_max = delay_excess_max_ns*0.3
-        
+
 
 
         self.filename = self.L._filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
@@ -1227,8 +1169,8 @@ class Signatures(PyLayers,dict):
         pt_target = np.array(self.L.Gt.node[self.target]['polyg'].centroid.coords.xy)
         d_source_target = np.linalg.norm(pt_source - pt_target)
         
-        #print "source,lis :",self.source,lis
-        #print "target,lit :",self.target,lit
+        #print("source,lis :",self.source,lis)
+        #print("target,lit :",self.target,lit)
         # for u in lit: 
         #     print u
         # print "-------------"
@@ -1268,7 +1210,7 @@ class Signatures(PyLayers,dict):
         # pts : list of neighbour nodes from s[0]
         # tahe : segment extremities or point coordinates (repeated twice)
         lhash = []
-        
+
         if progress :
             pbar = tqdm(total=100,desc='Signatures')
 
@@ -1276,7 +1218,7 @@ class Signatures(PyLayers,dict):
             if progress:
                 pbar.update(100./(1.*len(lis)))
 
-            # start from a segment     
+            # start from a segment
             if s[0]>0:
                 pts = self.L.Gs[s[0]].keys()
                 tahe = [np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])]
@@ -1593,7 +1535,10 @@ class Signatures(PyLayers,dict):
                             else: # cone from connected segments 
 
                                 v0n  = v0/np.linalg.norm(v0)
-                                v_n  = v_/np.linalg.norm(v_)
+                                try:
+                                    v_n  = v_/np.linalg.norm(v_)
+                                except:
+                                    pdb.set_trace()
 
                                 # import ipdb
                                 # ipdb.set_trace()
@@ -1614,8 +1559,10 @@ class Signatures(PyLayers,dict):
                             # the illuminating cone is defined
                             # the th_mirror to be tested with this cone are known 
                             # 
-                            if ( (not np.isclose(angle_cone,0) )
+                            if ( (not np.isclose(angle_cone,0,atol=1e-6) )
                              and ( not np.isclose(angle_cone,np.pi)) ) : 
+                                #if self.cpt==16176:
+                                #    pdb.set_trace()
                                 seg,ratio2 = geu.intersect_cone_seg((apex,vl_n),(apex,vr_n),(th_mirror[0],th_mirror[1]),bvis=False)
                             elif ( not np.isclose(angle_cone,0) ):
                                 ratio2 = 1           
@@ -1639,93 +1586,93 @@ class Signatures(PyLayers,dict):
                             # l'ouverture du cone est nul => arret. Cela pourrait être géré dans Gi en interdisant 
                             # la visibilité (-4) (6,4) 
                             
-                            if angle_cone ==0:
-                                ratio = 0
-                            else:    
-                                if np.allclose(th_mirror[0],apex) or np.allclose(th_mirror[1],apex):
-                                    ratio = 1.
-                                else:
-                                    wseg0 = th_mirror[0] - apex
-                                    wseg1 = th_mirror[1] - apex
-                                    mod_wseg0 = np.sqrt(np.sum(wseg0*wseg0,axis=0))
-                                    mod_wseg1 = np.sqrt(np.sum(wseg1*wseg1,axis=0))
-
-                                    if np.isclose(mod_wseg0,0):
-                                        #bvisu = True 
-                                        #pdb.set_trace()#
-                                        pass
-                                    if np.isclose(mod_wseg1,0):
-                                        #bvisu = True 
-                                        #pdb.set_trace()#
-                                        pass
-                                    #wseg0_n = wseg0/mod_wseg0
-                                    #wseg1_n = wseg1/mod_wseg1
-                                    wseg0_n = wseg0/np.linalg.norm(wseg0)
-                                    wseg1_n = wseg1/np.linalg.norm(wseg1)
-                                    aseg0 = np.arctan2(wseg0_n[1],wseg0_n[0])
-                                    aseg1 = np.arctan2(wseg1_n[1],wseg1_n[0])
-                                    
-                                    # if al==aseg0 or al==aseg1 or ar==aseg0 or ar==aseg1:
-                                    #     ratio = 1
-                                        #print "toto"
-                                    # else:
-                                    I = geu.angle_intersection2(al,ar,aseg0,aseg1)
-                                    ratio = I/angle_cone
-                                    #if ratio>=1:
-                                    #    pdb.set_trace()
-
-                                # if connected:
-                                #     print "ratio :",ratio
-                                
-
-                            #if visited == [(104, 23, 17), (1, 17), (53, 17)]:
-                            if (bvisu):
-                                fig ,ax = self.L.showG('s',aw=1,labels=0)
-                                #
-                                # magenta : start of the cone
-                                # cyan    :
-                                # yellow  : last interaction
-                                #
-                                ax = geu.linet(ax,pta0,phe0,al=1,color='magenta',linewidth=3)
-                                ax = geu.linet(ax,pta_,phe_,al=1,color='cyan',linewidth=3)
-                                ax = geu.linet(ax,np.array(self.L.Gs.pos[nseg_points[0]]),np.array(self.L.Gs.pos[nseg_points[1]]),al=1,color='yellow',linewidth=4)
-                                # ax = geu.linet(ax,vr[0],vr[1],al=1,color='red',linewidth=3)
-                                # ax = geu.linet(ax,vl[0],vl[1],al=1,color='blue',linewidth=3)
-                                ax = geu.linet(ax,seg[0],seg[1],al=1,color='k',linewidth=3)
-                                ax = geu.linet(ax,th_mirror[0,:],th_mirror[1,:],al=1,color='green',linewidth=3)
-                                nx.draw_networkx_labels(self.L.Gi,
-                                        self.L.Gi.pos,labels={x:str(x) for x in visited},
-                                        ax=ax,fontsize=18)
-                                plt.title(str(visited)+'  '+str(ratio))
-                                ax.plot(apex[0],apex[1],'or')
-                                plt.axis('auto')
-                                pdb.set_trace()
-                            #if visited == [(104, 23, 17), (1, 17), (53, 17), (108, 17, 18)]:
-                            # if visited == [(104, 23, 17), (1, 17), (53, 17)]:
-                            if (1==0):
-                                fig ,ax = self.L.showG('s',aw=1,labels=0)
-                                ax = geu.linet(ax,pta0,phe0,al=1,color='magenta',linewidth=3)
-                                ax = geu.linet(ax,pta_,phe_,al=1,color='cyan',linewidth=3)
-
-                                ax = geu.linet(ax,np.array(self.L.Gs.pos[pts[0]]),np.array(self.L.Gs.pos[pts[1]]),al=1,color='yellow',linewidth=4)
-                                ax = geu.linet(ax,vr[0],vr[1],al=1,color='red',linewidth=3)
-                                ax = geu.linet(ax,vl[0],vl[1],al=1,color='blue',linewidth=3)
-                                #ax = geu.linet(ax,seg[0],seg[1],al=1,color='k',linewidth=3)
-                                ax = geu.linet(ax,th[0,:],th[1,:],al=1,color='green',linewidth=3)
-                                plt.title(str(visited)+'  '+str(ratio))
-                                ax.plot(apex[0],apex[1],'or')
-                                plt.axis('auto')
-                                plt.show()
+#                            if angle_cone ==0:
+#                                ratio = 0
+#                            else:    
+#                                if np.allclose(th_mirror[0],apex) or np.allclose(th_mirror[1],apex):
+#                                    ratio = 1.
+#                                else:
+#                                    wseg0 = th_mirror[0] - apex
+#                                    wseg1 = th_mirror[1] - apex
+#                                    mod_wseg0 = np.sqrt(np.sum(wseg0*wseg0,axis=0))
+#                                    mod_wseg1 = np.sqrt(np.sum(wseg1*wseg1,axis=0))
+#
+#                                    if np.isclose(mod_wseg0,0):
+#                                        #bvisu = True 
+#                                        #pdb.set_trace()#
+#                                        pass
+#                                    if np.isclose(mod_wseg1,0):
+#                                        #bvisu = True 
+#                                        #pdb.set_trace()#
+#                                        pass
+#                                    #wseg0_n = wseg0/mod_wseg0
+#                                    #wseg1_n = wseg1/mod_wseg1
+#                                    wseg0_n = wseg0/np.linalg.norm(wseg0)
+#                                    wseg1_n = wseg1/np.linalg.norm(wseg1)
+#                                    aseg0 = np.arctan2(wseg0_n[1],wseg0_n[0])
+#                                    aseg1 = np.arctan2(wseg1_n[1],wseg1_n[0])
+#                                    
+#                                    # if al==aseg0 or al==aseg1 or ar==aseg0 or ar==aseg1:
+#                                    #     ratio = 1
+#                                        #print "toto"
+#                                    # else:
+#                                    I = geu.angle_intersection2(al,ar,aseg0,aseg1)
+#                                    ratio = I/angle_cone
+#                                    #if ratio>=1:
+#                                    #    pdb.set_trace()
+#
+#                                # if connected:
+#                                #     print "ratio :",ratio
+#                                
+#
+#                            #if visited == [(104, 23, 17), (1, 17), (53, 17)]:
+#                            if (bvisu):
+#                                fig ,ax = self.L.showG('s',aw=1,labels=0)
+#                                #
+#                                # magenta : start of the cone
+#                                # cyan    :
+#                                # yellow  : last interaction
+#                                #
+#                                ax = geu.linet(ax,pta0,phe0,al=1,color='magenta',linewidth=3)
+#                                ax = geu.linet(ax,pta_,phe_,al=1,color='cyan',linewidth=3)
+#                                ax = geu.linet(ax,np.array(self.L.Gs.pos[nseg_points[0]]),np.array(self.L.Gs.pos[nseg_points[1]]),al=1,color='yellow',linewidth=4)
+#                                # ax = geu.linet(ax,vr[0],vr[1],al=1,color='red',linewidth=3)
+#                                # ax = geu.linet(ax,vl[0],vl[1],al=1,color='blue',linewidth=3)
+#                                ax = geu.linet(ax,seg[0],seg[1],al=1,color='k',linewidth=3)
+#                                ax = geu.linet(ax,th_mirror[0,:],th_mirror[1,:],al=1,color='green',linewidth=3)
+#                                nx.draw_networkx_labels(self.L.Gi,
+#                                        self.L.Gi.pos,labels={x:str(x) for x in visited},
+#                                        ax=ax,fontsize=18)
+#                                plt.title(str(visited)+'  '+str(ratio))
+#                                ax.plot(apex[0],apex[1],'or')
+#                                plt.axis('auto')
+#                                pdb.set_trace()
+#                            #if visited == [(104, 23, 17), (1, 17), (53, 17), (108, 17, 18)]:
+#                            # if visited == [(104, 23, 17), (1, 17), (53, 17)]:
+#                            if (1==0):
+#                                fig ,ax = self.L.showG('s',aw=1,labels=0)
+#                                ax = geu.linet(ax,pta0,phe0,al=1,color='magenta',linewidth=3)
+#                                ax = geu.linet(ax,pta_,phe_,al=1,color='cyan',linewidth=3)
+#
+#                                ax = geu.linet(ax,np.array(self.L.Gs.pos[pts[0]]),np.array(self.L.Gs.pos[pts[1]]),al=1,color='yellow',linewidth=4)
+#                                ax = geu.linet(ax,vr[0],vr[1],al=1,color='red',linewidth=3)
+#                                ax = geu.linet(ax,vl[0],vl[1],al=1,color='blue',linewidth=3)
+#                                #ax = geu.linet(ax,seg[0],seg[1],al=1,color='k',linewidth=3)
+#                                ax = geu.linet(ax,th[0,:],th[1,:],al=1,color='green',linewidth=3)
+#                                plt.title(str(visited)+'  '+str(ratio))
+#                                ax.plot(apex[0],apex[1],'or')
+#                                plt.axis('auto')
+#                                plt.show()
                     #else:
                     #    th = self.L.Gs.pos[nstr]
                     #    th = np.array([th,th])
                     #    ratio = 1
                         #print self.cpt,ratio,ratio2
-                        if (ratio>0.1) and (ratio2==0):
-                             pdb.set_trace()
+                        #if (ratio>0.1) and (ratio2==0):
+                        #     pdb.set_trace()
                         #print d_excess,dist_excess_max
                         #if (ratio2 > self.threshold) and (d_excess<dist_excess_max):
-                        if (ratio > self.threshold) and (d_excess<dist_excess_max):
+                        if (ratio2 > self.threshold) and (d_excess<dist_excess_max):
                         #if (ratio > self.threshold):
                             #
                             # Update sequence of mirrored points
@@ -2087,7 +2034,7 @@ class Signatures(PyLayers,dict):
             ax.plot(prx[0],prx[1],'xb')
 
             if ni not in self.keys():
-                print "incorrect number of interactions"
+                print("incorrect number of interactions")
             pos={}
 
             try:
@@ -2104,12 +2051,12 @@ class Signatures(PyLayers,dict):
                     if ii == 3:
                         inter.append('D')
             except:
-                print "signature index out of bounds of signature"
+                print("signature index out of bounds of signature")
 
             line = np.vstack((line,prx))
             ax.plot(line[:,0],line[:,1])
             plt.draw()
-            print inter
+            print(inter)
             st = raw_input()
             ax.cla()
             if st == 'n':
@@ -2127,7 +2074,7 @@ class Signatures(PyLayers,dict):
                         ni=nit[uni]
                         us = 0
             else:
-                print 'press n for next signature'
+                print('press n for next signature')
 
 
     def rays(self,ptx=0,prx=1):
@@ -2970,7 +2917,7 @@ class Signatures(PyLayers,dict):
                 # NEVER TESTED !!!!!!!!!!!
                 y[uDy1,uDy2]=a[uDf]
             except:
-                print "signatures.image diffraction line 3672 Not yet tested !"
+                print("signatures.image diffraction line 3672 Not yet tested !")
 
                 pass #print 'no D'
 
@@ -3006,7 +2953,7 @@ class Signatures(PyLayers,dict):
                     ly=np.split(y,nsp)
                     del A
                     del y
-                    print nsp
+                    print(nsp)
                     for s in range(nsp):
 
                         lm=np.linalg.solve(lA[s], ly[s])
@@ -3027,7 +2974,7 @@ class Signatures(PyLayers,dict):
         return dM
 
 
-class Signature(object):
+class Signature(PyLayers,object):
     """ class Signature
 
     Attributes
@@ -3086,7 +3033,7 @@ class Signature(object):
 
     def info(self):
         for k in self.__dict__.keys():
-            print k, ':', self.__dict__[k]
+            print(k, ':', self.__dict__[k])
 
     def ev2(self, L):
         """  evaluation of Signature
@@ -3644,6 +3591,6 @@ class Signature(object):
 
 if __name__ == "__main__":
     plt.ion()
-    print "testing pylayers/antprop/signature.py"
+    print("testing pylayers/antprop/signature.py")
     doctest.testmod()
-    print "-------------------------------------"
+    print("-------------------------------------")

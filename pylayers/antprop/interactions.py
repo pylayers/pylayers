@@ -1,73 +1,16 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
+from __future__ import print_function
 """
-
 .. currentmodule:: pylayers.antprop.interactions
 
-Inters Class
-============
-
 .. autosummary::
-    :toctree: generated/
+    :members:
 
-    Inter.__init__
-    Inter.__repr__
-    Inter.create_dusl
-    Inter.sinsout
-    Inter.stack
-
-Interactions Class
-==================
-
-
-.. autosummary::
-    :toctree: generated/
-
-    Interactions.__init__
-    Interactions.add
-    Interactions.addi
-    Interactions.eval
-
-IntB Class
-===========
-
-.. autosummary::
-    :toctree: generated/
-
-    IntB.__init__
-    IntB.__repr__
-    IntB.eval
-
-IntR Class
-===========
-
-.. autosummary::
-    :toctree: generated/
-
-    IntR.__init__
-    IntR.__repr__
-    IntR.eval
-
-IntT Class
-===========
-
-.. autosummary::
-    :toctree: generated/
-
-    IntT.__init__
-    IntT.__repr__
-    IntT.eval
-
-IntD Class
-===========
-
-.. autosummary::
-    :toctree: generated/
-
-    IntD.__init__
-    IntD.__repr__
-    IntD.eval
 """
+import doctest
+import os
+import glob
 import pdb
 import os
 import pdb
@@ -173,7 +116,6 @@ class Inter(PyLayers):
         """
         for s in self.dusl:
             self.dusl[s]=np.where(a==s)[0]
-
 
 
     def sinsout(self):
@@ -540,7 +482,7 @@ class IntB(Inter):
             #return(self.olf[:, np.newaxis, np.newaxis, np.newaxis]*data[np.newaxis, :, :, :])
             return(np.ones((len(fGHz),1,1,1))*data[None, :, :, :])
         else:
-            print 'no B interactions to evaluate'
+            print('no B interactions to evaluate')
             return(self.data[:, None, None, None])
 
 #####Interaction Loss in not used for speed purpose
@@ -826,16 +768,22 @@ class IntT(Inter):
         if len(self.data) != 0:
             mapp = []
             for m in self.dusl.keys():
-                # used theta of the given slab
+                # ut : used theta of the given slab
                 ut = self.data[self.dusl[m], 0]
                 if ut.size != 0:
                     #if m not in self.slab:
                     #    m = m.lower()
                     # get alpha and gamma for divergence factor
                     if len(self.slab[m]['lmat']) > 1:
-                        print 'Warning : IntR class implemented for mat with only 1 layer '
+                        print('Warning : IntR class implemented for mat with only 1 layer ')
+                    #
+                    #  1/sqrt(epsr)
+                    #
                     a = 1./np.sqrt(np.array(([self.slab[m]['lmat'][0]['epr']])) \
                                * np.ones(len(ut), dtype=complex))
+                    #
+                    #  (1-sin(theta)^2)  / ( 1 - (1/sqrt(epr)) sin(theta)^2 )
+                    #
                     g = (1.-np.sin(ut)**2)/(1.-a*np.sin(ut)**2)
                     try:
                         alpha = np.concatenate((alpha, a), axis=0)
@@ -939,7 +887,7 @@ class IntD(Inter):
         else :
             self.A = self.data[:, None, None, None]
             return(self.A)
-            print 'not yet implemented'
+            print('not yet implemented')
         # else:
         #     self.A = self.data[:, None, None, None]
         #     print 'no D interaction to evaluate'
@@ -947,5 +895,5 @@ class IntD(Inter):
 
 if (__name__ == "__main__"):
     plt.ion()
-    print "testing pylayers/antprop/interactions.py"
+    print("testing pylayers/antprop/interactions.py")
     doctest.testmod()

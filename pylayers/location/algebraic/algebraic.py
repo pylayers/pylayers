@@ -40,7 +40,6 @@ import pdb
 
 class algloc(object):
     """
-<<<<<<< HEAD
     This class gathers algebraic localization algorithms
 
     Attributes
@@ -48,11 +47,9 @@ class algloc(object):
 
     nodes : dictionnary
     ldp : dictionnary
-=======
     This class regroups algebraic localization algorithms
         All nodes positions are gatherred in nodes dictionnary
         All location dependent parameters are gathered in ldp dictionnary
->>>>>>> 95d88122037bbe1e5d26beff4fd79e7448eb3dd8
 
     Methods
     --------
@@ -76,7 +73,6 @@ class algloc(object):
 
         nodes : dict
             the keys of nodes dict :
-            
 
         nodes['BN'] : blind node position (dim x N)
         nodes['RN_RSS']= RSS nodes position (dim x N)
@@ -1040,6 +1036,7 @@ class algloc(object):
     def fim(self, P, rss, toa, tdoa):
         """
         Compute the fisher information matrix in P for the given
+
         Parameters
         ----------
             P : numpy.ndarray
@@ -1049,7 +1046,8 @@ class algloc(object):
 
         Returns
         -------
-            FIM : numpy.ndarray
+
+        FIM : numpy.ndarray
 
         """
         if rss == 0 and toa == 0 and tdoa == 0:
@@ -1153,11 +1151,11 @@ def scenario():
     """
     This method is not a class member, it defines a sample scenario.
     Defines a sample scenario for testing
-    
+
     Returns
     -------
-        nodes : dictionnary 
-            'BN' 
+        nodes : dictionnary
+            'BN'
             'RN_RSS'
             'RN_TDOA'
             'RN_TOA'
@@ -1268,7 +1266,7 @@ def scenario():
     tdof = (d - dr) / c  # actual TDOA
     tdoa_std = 0.001 / c * np.ones(np.shape(tdof))
     tdoa_ns = tdof + tdoa_std
-    
+
     nodes = {}
     nodes['BN'] = bn
     nodes['RN_RSS'] = rn_rss

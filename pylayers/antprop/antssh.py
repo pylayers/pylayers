@@ -1,20 +1,16 @@
+#from pylayers.antprop.antenna import *
+#from pylayers.antprop.antvsh import *
 """
 .. currentmodule:: pylayers.antprop.antssh
 
-Scalar Spherical Harmonics Functions
-====================================
-
 .. autosummary::
-  :toctree: generated/
-
-   SSHFunc
-   SSHFunc2
-   SphereToCart
-   CartToSphere
+    :members:
 
 """
-#from pylayers.antprop.antenna import *
-#from pylayers.antprop.antvsh import *
+from __future__ import print_function
+import doctest
+import os
+import glob
 from pylayers.antprop.spharm import *
 
 import numpy as np
@@ -270,6 +266,64 @@ def ssh(A,L= 20,dsf=1):
 
 
     return(A)
+
+def sshs(G,fGHz,th,ph,L= 20):
+    """scalar spherical harmonics transform 
+
+    Parameters
+    ----------
+
+    G    :  antenna gain (f,th,phi)
+    fGHz : np.array
+    th   : np.array
+    ph   : np.array
+
+    Summary
+    -------
+
+    This function calculates the Scalar Spherical Harmonics coefficients
+
+        m : phi    longitude
+        l : theta  latitude
+
+    Antenna pattern are stored       (f theta phi)
+    Coeff are stored with this order (f , l , m )
+
+    """
+
+    th = A.theta[::dsf]
+    ph = A.phi[::dsf]
+    nth = len(th)
+    nph = len(ph)
+    nf = A.nf
+
+    if (nph % 2) == 1:
+        mdab = min(nth, (nph + 1) / 2)
+    else:
+        mdab = min(nth, nph / 2)
+
+    ndab = nth
+
+
+    #Etheta  =  A.Ft[::dsf,::dsf,:]
+    #Ephi    =  A.Fp[::dsf,::dsf,:]
+
+    # compute the spherical harmonics functions at the order L
+    Y,ssh_index  = SSHFunc(L,th,ph)
+    # Compute the pseudo inverse of Y
+    Ypinv = sp.linalg.pinv(Y)
+
+    # convert the field from spherical to cartesian coordinates system
+    #Ex,Ey,Ez = SphereToCart (th, ph, Etheta, Ephi, True)
+    #
+    G = G.reshape((nf,nth*nph))
+
+    cg  =  np.dot(G,Ypinv)
+    lmax = L
+
+    Cg = SCoeff(typ='s2',fmin=fGHz[0],fmax=fGHz[-1],lmax=lmax,data=cg,ind=ssh_index)
+
+    return(Cg)
 
 
 if (__name__=="__main__"):

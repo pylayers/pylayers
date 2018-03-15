@@ -2,7 +2,9 @@
 """
 Module OSMParser
 
-This module provides classes to handle open street map (OSM) objects
+.. currentmodule:: pylayers.gis.osmparser
+
+.. autosummary::
 
 """
 from osmapi import OsmApi
@@ -89,8 +91,7 @@ class Way(object):
         return(fig,ax)
 
 class Coords(object):
-    """
-    Coords describes a set of points in OSM 
+    """ Coords describes a set of points in OSM 
 
     Attributes
     ----------
@@ -130,6 +131,7 @@ class Coords(object):
         for k in self.xy:
             st = st + str(k)+ ':' + str(self.xy[k])+'\n'
         st = st+ 'Ncoords = '+ str(len(self.xy))+'\n'
+
         return(st)
     
     def filter(self,lexcluded):
@@ -213,18 +215,18 @@ class Coords(object):
                     urcrnrlon=bd[2]+delta, urcrnrlat=bd[3]+delta,
                 resolution='i', projection='cass', lon_0=lon_0, lat_0=lat_0)
 
-        for id in self.latlon:
+        for kid in self.latlon:
             if cart:
-                x, y = m(self.latlon[id][0], self.latlon[id][1])
+                x, y = m(self.latlon[kid][0], self.latlon[kid][1])
             else:
-                x, y = (self.latlon[id][0], self.latlon[id][1])
+                x, y = (self.latlon[kid][0], self.latlon[kid][1])
 
-            self.xy[id]  = np.array([x,y])
+            self.xy[kid]  = np.array([x,y])
 
         return(m)
 
     def from_nodes(self,nodes):
-        """ read coordinates from a map 
+        """ read coordinates from nodes 
 
         Parameters
         ----------
@@ -268,6 +270,12 @@ class Nodes(object):
             lon = coords[0]
             lat = coords[1]
             self.cpt += 1
+    
+    def __repr__(self):
+        st = ''
+        for kid in self.node:
+            st = st+str(kid) + ' : ' + str(self.node[kid]['lonlat'])+'\n'
+        return(st)
 
     def clean(self):
         self.node= {}
@@ -316,6 +324,12 @@ class Ways(object):
         for osmid, tags, refs in ways:
             self.w[osmid] = [refs,tags]
             self.cpt += 1
+
+    def __repr__(self):
+        st = ''
+        for kid in self.w:
+            st = st + str(self.w[kid])+'\n'
+        return st 
 
     def clean(self):
         """ clean ways 
@@ -485,7 +499,7 @@ class Ways(object):
         plt.axis('scaled')
         return(fig,ax)
 
-    def readmap(self,osmmap,coords,typ='outdoor'):
+    def readmap(self,osmmap,coords,typ='building'):
         """ read ways from a map 
         
         osmmap : OSM Map in json from OsmAPI
@@ -640,18 +654,27 @@ def getosm(address='Rennes',latlon=0,dist_m=400,cart=False):
     ----------
 
     address : string 
-    latlon : tuple
+    latlon : tuple or 0 
     dist_m : float 
     cart : boolean 
 
+    Notes
+    -----
+
+    if latlon tuple is precised it has priority over the string 
+
     """
+
     level_height = 3.45
     rad_to_deg = (180/np.pi)
     deg_to_rad = (np.pi/180)
 
     if latlon==0:
         place = geo.google(address)
-        lat,lon = place.latlng
+        try:
+            lat,lon = place.latlng
+        except:
+            print place
     else:
         lat = latlon[0]
         lon = latlon[1]
@@ -659,8 +682,14 @@ def getosm(address='Rennes',latlon=0,dist_m=400,cart=False):
     r_earth = 6370e3
     alpha = (dist_m/r_earth)*rad_to_deg
     Osm = OsmApi()
-    # Get Map around coordinate 
+
+    #
+    # Get Map around the specified coordinates 
+    #
+
     osmmap  = Osm.Map(lon-alpha,lat-alpha,lon+alpha,lat+alpha)
+
+    #print(osmmap)
     
     nodes = Nodes()
     nodes.clean()

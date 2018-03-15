@@ -1,4 +1,11 @@
 #-*- coding:Utf-8 -*-
+from __future__ import print_function
+"""
+.. curentmodule:: pylayers.util.project 
+
+.. autosummary::
+
+"""
 import numpy as np
 import os
 import sys
@@ -9,6 +16,7 @@ import seaborn as sns
 
 class PyLayers(object):
     """ Generic PyLayers Meta Class
+
     """
 
 #        sns.set_style("white")
@@ -311,7 +319,6 @@ if basename != os.path.join(pylayersdir,'data'):
         ,os.path.join('output','r3d'),'body'
         ,os.path.join('body','c3d')
         ,os.path.join('body','wear')]
-
     for dl in dirlist:
         filelist = os.listdir(os.path.join(pylayersdir,'data', dl))
         for fi in filelist:

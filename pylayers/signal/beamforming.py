@@ -3,21 +3,18 @@ import numpy as np
 import scipy as sp
 
 
-def weight(N,**kwags):
-    default = {'sll':20,
-               'typ','uniform'
-              }
+def weight(N,**kwargs):
+    defaults = {'sll':20,
+                'typ':'uniform'
+               }
 
     for k in defaults:
-        fi k not in kwargs:
-            kwargs[k]=defaluts[k]
+        if k not in kwargs:
+            kwargs[k]=defaults[k]
 
     if typ=='uniform':
         pass
-<<<<<<< HEAD
-=======
 
->>>>>>> 3d
 def rejection(w,theta,fGHz=10,d=[],thresh=0.1):
     """
     Calculate rejection for a given arbitrary array

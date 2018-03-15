@@ -1,20 +1,21 @@
 # -*- coding:Utf-8 -*-
 import numpy as np
 import scipy as sp
+import os
 import matplotlib.pyplot as plt
 import pdb
 try:
     import mplrc.ieee.transaction
 except:
     pass
+
 from matplotlib import rcParams
 rcParams['text.usetex'] = True
 rcParams['text.latex.unicode'] = True
 
 
 class CDF(object):
-
-    def __init__(self, ld, filename):
+    def __init__(self, ld, filename='cdf'):
         """
         cdf = CDF(ld)
 
@@ -75,8 +76,14 @@ class CDF(object):
             legend = d['legend']
             cdf = self.cdf[k]
             c.append(
-                ax.plot(bound, cdf, marker=marker, markevery=markerfrequency,
-                        ms=markersize, mfc=markercolor, ls=line, c=color, linewidth=linewidth, label=legend))
+                ax.plot(bound, cdf, 
+                        marker=marker, 
+                        markevery=markerfrequency,
+                        ms=markersize, 
+                        mfc=markercolor, 
+                        ls=line, c=color,
+                        linewidth=linewidth,
+                        label=legend))
         plt.xlabel(self.ld[0]['xlabel'])
         plt.ylabel(self.ld[0]['ylabel'])
         ax.legend(loc='best', scatterpoints=1, numpoints=1.)
@@ -99,7 +106,12 @@ if __name__ == "__main__":
     d0['ylabel'] = 'ylabel'
     d0['legend'] = 'legend '
     d0['title'] = 'title'
-    d0['marker'] = 'r-'
+    d0['marker'] = '*'
+    d0['line'] = '-'
+    d0['color'] = 'red' 
+    d0['markersize'] = 10 
+    d0['markercolor']='b'
+    d0['markerfrequency']=4
     d0['linewidth'] = 3
     d0['filename'] = 'essai.png'
     d1 = {}
@@ -109,7 +121,12 @@ if __name__ == "__main__":
     d1['ylabel'] = 'ylabel'
     d1['legend'] = 'legend '
     d1['title'] = 'title'
-    d1['marker'] = 'bo'
+    d1['marker'] = 'o'
+    d1['color'] = 'red' 
+    d1['markersize'] = 10 
+    d1['markercolor']='b'
+    d1['markerfrequency']=4
+    d1['line'] = '-'
     d1['linewidth'] = 3
     lv = [d0, d1]
-    c = CDF(lv)
+    c = CDF(lv,'filename')

@@ -17,8 +17,8 @@ The modulus of the cross product between :math:`\mathbf{u}` and :math:`\mathbf{v
 
 :math:`\mathbf{u} \times \mathbf{v} = \alpha \mathbf{z} \;\; \textrm{with} \;\;\alpha > 0`
 
-.. autosummary::
-    :toctree:
+.. autoclass:: Cone
+    :members:
 
 """
 import numpy as np
@@ -60,7 +60,7 @@ class Cone(PyLayers):
         self.dot = np.dot(self.u,self.v)
         self.cross = np.cross(self.u,self.v)
 
-        if self.cross<>0:
+        if self.cross!=0:
             self.degenerated = False
         else:
             self.degenerated = True    
@@ -364,7 +364,7 @@ class Cone(PyLayers):
             a0 = self.seg0[:,0]
             b0 = self.seg0[:,1]
 
-            if self.u[0]<>0:
+            if self.u[0]!=0:
                 slope = self.u[1]/self.u[0]
                 y0 = a0[1]-slope*a0[0]
                 y1 = b0[1]-slope*b0[0]
@@ -382,7 +382,7 @@ class Cone(PyLayers):
         """
         bo1 = self.belong(p)
         pb = p[:,bo1]
-        if self.v[1]<>0:
+        if self.v[1]!=0:
             slope1 = self.v[1]/self.v[0]
             b1 = self.v[1] - slope1*self.v[0]
             bo2 = pb[1,:] > slope1*pb[0,:]+b

@@ -1,35 +1,40 @@
 # -*- coding: utf-8 -*-
 """
 
-This module handles the description of an earth zone
+.. currentmodule:: pylayers.gis.ezone*
 
+.. autosummary::
 
 """
 import h5py
 import numpy as np
 import pandas as pd
-import struct
 import zipfile
 import pickle
 import os
 import pdb
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 import matplotlib.tri as tri
-#from osgeo import gdal
-from scipy.interpolate import interp2d
-#from imposm.parser import OSMParser
-#from geomutil import *
-#from pylayers.util.project import *
+from osgeo import gdal
+# from imposm.parser import OSMParser
+# from geomutil import *
+# from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
+import pylayers.util.geomutil as geu
 import pylayers.util.plotutil as plu
+import pylayers.antprop.loss as loss
 from pylayers.util.project import *
 from shapely.geometry import Polygon
 from pylayers.gis.gisutil import *
+import pylayers.gis.kml as gkml
 import pylayers.gis.srtm as srtm
 from mpl_toolkits.basemap import Basemap
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+from mpl_toolkits.axes_grid1.colorbar import colorbar
+import smopy
 
-def maxloc(f,threshold=-np.sqrt(2)):
+def maxloc(f, threshold=-np.sqrt(2)):
     """ determine local maximum above a threshold
 
     Parameters
@@ -42,13 +47,14 @@ def maxloc(f,threshold=-np.sqrt(2)):
     -------
 
     g : np.array
-        values of local maximum 
+        values of local maximum
     ind : np.array
-        index of local maximum 
+        index of local maximum
 
     Examples
     --------
-        >>> import numpy as np 
+
+        >>> import numpy as np
         >>> t = np.arange(0,6*np.pi)
         >>> f = np.sin(2*t)*cos(3*t)*sin(5*t)
         >>> g,ind = maxloc(f,threshold=0.3)
@@ -60,7 +66,7 @@ def maxloc(f,threshold=-np.sqrt(2)):
     g = threshold*np.ones(np.shape(f))
     #
     g[ind] = f[ind]
-    return(g,ind)
+    return(g, ind)
 
 def enctile(lon,lat):
     """ encode tile prefix from (lon,lat)
@@ -166,18 +172,21 @@ def expand(A):
 
     A : np.array (MxN)
 
+    Returns
+    -------
+
     """
 
-    M,N = A.shape
-    t = np.kron(A.flatten(),np.ones(N))
-    u = np.triu(np.ones((N,N))).flatten()
-    v = np.kron(np.ones(M),u)
-    w  = t *  v
-    return(w.reshape(M,N,N).swapaxes(1,2)[:,1:,:])
-    
-    #return(w.reshape(M,N,N).swapaxes(1,2))
+    M, N = A.shape
+    t = np.kron(A.flatten(), np.ones(N))
+    u = np.triu(np.ones((N, N))).flatten()
+    v = np.kron(np.ones(M), u)
+    w = t * v
+    # return(w.reshape(M, N, N).swapaxes(1, 2)[:, 1:, :])
 
-def conv(extent,m,mode='tocart'):
+    return(w.reshape(M, N, N).swapaxes(1,2))
+
+def conv(extent, m, mode='tocart'):
     """ convert zone to cartesian or lon lat
 
     Parameters
@@ -196,14 +205,14 @@ def conv(extent,m,mode='tocart'):
         [lonmin,lonmax,latmin,latmax] if mode == 'toll'
 
     """
-    if mode=='tocart':
-        pll = m(extent[0],extent[2])
-        pur = m(extent[1],extent[3])
-        out = np.array([pll[0],pur[0],pll[1],pur[1]])
-    if mode=='toll':
-        lllon,lllat = m(extent[0],extent[2],inverse=True)
-        rulon,rulat = m(extent[1],extent[3],inverse=True)
-        out = np.array([lllon,rulon,lllat,rulat])
+    if mode == 'tocart':
+        pll = m(extent[0], extent[2])
+        pur = m(extent[1], extent[3])
+        out = np.array([pll[0], pur[0], pll[1], pur[1]])
+    if mode == 'toll':
+        lllon, lllat = m(extent[0], extent[2], inverse=True)
+        rulon, rulat = m(extent[1], extent[3], inverse=True)
+        out = np.array([lllon, rulon, lllat, rulat])
     return(out)
 
 def zone(pt,rm=1000):
@@ -231,7 +240,7 @@ def zone(pt,rm=1000):
 class DEM(PyLayers):
     """ Class Digital Elevation Model
 
-    
+
 
     """
     def __init__(self,prefix):
@@ -293,6 +302,10 @@ class DEM(PyLayers):
     def loadaster(self,fileaster=[]):
         """ load Aster files
 
+        The Aster file has the structure 
+
+        ASTGTM2_prefix_dem.tif
+
         """
 
 
@@ -318,10 +331,10 @@ class DEM(PyLayers):
                             continue
                         path = os.path.join(path, word)
                     zf.extract(member, path)
-        
+
         # 
         # Commented while gdal is broken in anaconda
-        #f = gdal.Open(fileaster)
+        f = gdal.Open(fileaster)
         self.hgta = f.ReadAsArray()
 
     def show(self,**kwargs):
@@ -365,15 +378,15 @@ class DEM(PyLayers):
         return fig,ax,divider
 
 class Ezone(PyLayers):
-    """ Earth zone 
+    """ Earth zone
 
         An Ezone is a class related to a region of Earth delimited by
         (lonmin,lonmax,latmin,latmax)
-        
+
         An Ezone gathers raster and vector data
             + raster data comes either from srtm or aster data
             + vector data comes from openstreetmap
-        
+
         An Ezone is stored in hdf5 format
 
         Attributes
@@ -392,7 +405,7 @@ class Ezone(PyLayers):
         Parameters
         ----------
 
-        prefix : string 
+        prefix : string
             filename without extension
 
         """
@@ -438,7 +451,11 @@ class Ezone(PyLayers):
             ' '+str(self.bloM)+'\n'
             st = st + "i-latitude  : "+str(self.blam)+\
             ' '+str(self.blaM)+'\n'
-
+            st = st + '--------- \n'
+        if 'hgta' in self.__dict__:
+            st = st + 'DEM Aster (hgta) :' + str(self.hgta.shape)+'\n'
+        if 'hgts' in self.__dict__:
+            st = st + 'DEM srtm (hgts) :' + str(self.hgts.shape)
 
         return(st)
 
@@ -448,25 +465,25 @@ class Ezone(PyLayers):
         Parameters
         ----------
 
-        ltile : list of string
+        ltile : list of strings
 
         """
         ltile = filter(lambda x : x in self.dbldg,ltile)
         self.lpoly = []
         for it in ltile:
-            h,p=self.dbldg[it]
+            h, p = self.dbldg[it]
             for pt in p:
                 try:
                     poly = np.vstack((poly,np.array(pt)))
                 except:
                     poly = np.array(pt)
-                if (sum(pt)==0):
-                    self.lpoly.append(poly[0:-1,:])
+                if (sum(pt) == 0):
+                    self.lpoly.append(poly[0:-1, :])
                     del poly
             try:
-                th = np.hstack((th,h[:,3]))
+                th = np.hstack((th, h[:, 3]))
             except:
-                th = h[:,3]
+                th = h[:, 3]
 
 
         self.height = th
@@ -593,17 +610,22 @@ class Ezone(PyLayers):
         source : string
             source of data 'srtm' or 'aster'
 
+        Info
+        ----
+        This methods recalculate the longitude and latitude base based on the
+        DEM source choice aster or srtm
+
         """
         if source =='srtm':
             Nlat,Nlon = self.hgts.shape
-        else:
+        elif source=='aster':
             Nlat,Nlon = self.hgta.shape
 
         self.lon = np.linspace(self.extent[0],self.extent[1],Nlon)
         self.lat = np.linspace(self.extent[3],self.extent[2],Nlat)
         self.lonstep = (self.extent[1]-self.extent[0])/(Nlon-1.)
         self.latstep = (self.extent[3]-self.extent[2])/(Nlat-1.)
-        self.tocart(Nx=Nlon,Ny=Nlat)
+        self.tocart(Nx=Nlon,Ny=Nlat,source=source)
 
     def tocart(self,Nx=1201,Ny=1201,source='srtm'):
         """ convert to cartesian coordinates
@@ -639,16 +661,18 @@ class Ezone(PyLayers):
         #
         if source=='srtm':
             self.hgts_cart = self.hgts[ry,rx]
-        else:
+        elif source =='aster':
             self.hgta_cart = self.hgta[ry,rx]
+        else:
+            print('unrecognized source')
         #self.lcv_cart = self.lcv[ry,rx]
 
         self.x = x
         # axis inversion
         self.y = y[::-1]
-        self.extent_c = (self.x.min(),self.x.max(),self.y.min(),self.y.max())
+        self.extent_c = (self.x.min(), self.x.max(), self.y.min(), self.y.max())
 
-    def profile(self,pa,pb,**kwargs):
+    def profile(self, pa, pb, **kwargs):
         """ profile extraction between 2 points
 
         Parameters
@@ -671,14 +695,33 @@ class Ezone(PyLayers):
         source : string
             'aster' | 'srtm'
 
+        Returns
+        -------
+
+        height : np.array (,Npt)
+            total heigh including eath curvature
+        d : np.array(,Npt) 
+            horizontal distance along the link 
+        dh : np.array(,Npy)
+            earth curvature depending on K factor
+        nu : np.array(,Npt)
+            Fresnel parameter
+        num : np.array(1,Npt)
+            Fresnel parameter above threshold (default : -sqrt(2))
+        hlos : (,Npt)
+            height of the line of sight
+        ellFresnel : (2,N)
+            Fresnel ellipsoid set of points
+
         """
 
-        defaults = {'Npt':1000,
-                    'ha':30,
-                    'hb':1.5,
-                    'K':1.3333,
-                    'fGHz':.3,
-                    'source':'srtm'}
+        defaults = {'Npt': 1000,
+                    'ha': 30,
+                    'hb': 1.5,
+                    'K': 1.3333,
+                    'fGHz': .868,
+                    'threshold': -np.sqrt(2),
+                    'source': 'srtm'}
 
         for key in defaults:
             if key not in kwargs:
@@ -687,59 +730,187 @@ class Ezone(PyLayers):
         # wavelength
         lmbda = 0.3/kwargs['fGHz']
 
-        # transmitter coordinates
-        x_a,y_a = self.m(pa[0],pa[1])
+        # transmitter cartesian coordinates
+        x_a, y_a = self.m(pa[0], pa[1])
 
-        # receiver coordinates
-        x_b,y_b = self.m(pb[0],pb[1])
+        # receiver cartesian coordinates
+        x_b, y_b = self.m(pb[0], pb[1])
 
-        x = np.linspace(x_a,x_b,kwargs['Npt'])
-        y = np.linspace(y_a,y_b,kwargs['Npt'])
+        x = np.linspace(x_a, x_b, kwargs['Npt'])
+        y = np.linspace(y_a, y_b, kwargs['Npt'])
 
+        # distance along path
         d = np.sqrt((x-x[0])*(x-x[0])+(y-y[0])*(y-y[0]))
 
+        # equivalent earth curvature
         dh = d*(d[::-1])/(2*kwargs['K']*6375e3)
 
-        #if mode=='cover':
+        # if mode=='cover':
         #    extent_c = np.array([x.min(),x.max(),y.min(),y.max()])
 
-        lon,lat = self.m(x,y,inverse=True)
+        lon, lat = self.m(x, y, inverse=True)
 
-        rx = np.round((lon - self.extent[0]) / self.lonstep).astype(int)
-        ry = np.round((self.extent[3]-lat) / self.latstep).astype(int)
+        Dx = (lon - self.extent[0]) / self.lonstep
+        Dy = (self.extent[3]-lat) / self.latstep
+        rx = np.floor(Dx).astype(int)
+        ry = np.floor(Dy).astype(int)
+        dx = Dx-rx
+        dy = Dy-ry
+
+        rx_old = np.round((lon - self.extent[0]) / self.lonstep).astype(int)
+        ry_old = np.round((self.extent[3]-lat) / self.latstep).astype(int)
 
         # add earth sphericity deviation to hgt (depends on K factor)
-        if kwargs['source']=='srtm':
-            height = self.hgts[ry,rx] + dh
+        if kwargs['source'] == 'srtm':
+            hll = self.hgts[ry, rx]
+            hlr = self.hgts[ry, rx+1]
+            hul = self.hgts[ry+1, rx]
+            hur = self.hgts[ry+1, rx+1]
+            wll = np.sqrt(dx**2+(1-dy)**2)
+            wlr = np.sqrt((1-dx)**2+(1-dy)**2)
+            wul = np.sqrt(dx**2+dy**2)
+            wur = np.sqrt((1-dx)**2+dy**2)
+            height = (wll*hll+wlr*hlr+wul*hul+wur*hur)/(wll+wlr+wul+wur)
+            height_old = self.hgts[ry_old, rx_old] + dh
 
-        if kwargs['source']=='srta':
-            height = self.hgta[ry,rx] + dh
+        if kwargs['source'] == 'aster':
+            hll = self.hgta[ry, rx]
+            hlr = self.hgta[ry, rx+1]
+            hul = self.hgta[ry+1, rx]
+            hur = self.hgta[ry+1, rx+1]
+            wll = np.sqrt(dx**2+(1-dy)**2)
+            wlr = np.sqrt((1-dx)**2+(1-dy)**2)
+            wul = np.sqrt(dx**2+dy**2)
+            wur = np.sqrt((1-dx)**2+dy**2)
+            height = (wll*hll+wlr*hlr+wul*hul+wur*hur)/(wll+wlr+wul+wur)
+            height_old = self.hgta[ry,rx] + dh
 
         # seek for local maxima along link profile
-        m,ind = maxloc(height[None,:])
+
+        m, ind = maxloc(height[None, :])
 
         ha = height[0] + kwargs['ha']
-        hb = height[-1]+ kwargs['hb']
-        LOS = ha+(hb-ha)*d/d[-1]
-        diff = height-LOS
-        fac  = np.sqrt(2*d[-1]/(lmbda*d*d[::-1]))
-        nu   = diff*fac
-        num,ind  = maxloc(nu[None,:])
+        hb = height[-1] + kwargs['hb']
+        hlos = ha+(hb-ha)*d/d[-1]
+        diff = height-hlos
+        fac = np.sqrt(2*d[-1]/(lmbda*d*d[::-1]))
+        nu = diff*fac
+        imax = np.argmax(nu)
+        numax = nu[imax]
+        #z0 = np.zeros(np.shape(nu))
+        #u1 = np.ones(np.shape(nu))
+        #z0[imax:]=1
+        #d1 = d - z0*d[imax]
+        #h1 = hlos - u1*hlos[imax]
+        #num, ind = maxloc(nu[None,:],threshold=kwargs['threshold'])
+        # construction of first Fresnel ellipsoid
+        pa = np.array([0, ha])
+        pb = np.array([d[-1], hb])
+        w = numax-0.1
+        L = 6.9+20*np.log10(np.sqrt(w**2+1)+w)
+        LFS = 32.4 + 20*np.log10(d[-1])+20*np.log10(kwargs['fGHz'])
+        Ltot = -(LFS+L)
+        ellFresnel = geu.ellipse2D(pa, pb, lmbda, 100)
 
-        #plt.plot(d,dh,'r',d,height,'b',d,m[0,:],d,LOS,'k')
-        #plt.figure()
-        #plt.plot(d,nu,num)
+        return(height,height_old, d, dh, nu,numax, m, hlos, ellFresnel,LFS,L)
 
-        return(height,d,dh,nu,num,m,LOS)
 
-    def cov(self,**kwargs):
+    def route(self, pa, pb, **kwargs):
+        """ coverage on a route
+
+        Parameters
+        ----------
+
+        pa : np.array (1x2)
+            lon,lat
+        pb : np.array (Nx2)
+            lon,lat
+
+        Returns
+        -------
+
+        L : Loss
+        lon
+        lat
+
+        """
+
+        self.pa = pa
+        self.pb = pb
+        Nr = kwargs.pop('Nr',200)
+        Ha = kwargs.pop('Ha',30)
+        Hb = kwargs.pop('Hb',200)
+        fGHz = kwargs.pop('fGHz',0.868)
+        K = kwargs.pop('K',1.333)
+        method = kwargs.pop('method','deygout')
+        source = kwargs.pop('source','deygout')
+        binterp = kwargs.pop('binterp',True)
+        divider = kwargs.pop('divider',[])
+
+        x_a, y_a = self.m(pa[0], pa[1])
+        x_b, y_b = self.m(pb[:, 0], pb[:, 1])
+        u = np.linspace(0, 1, Nr)
+        x = x_a + (x_b[:,None] - x_a)*u[None,:]
+        y = y_a + (y_b[:,None] - y_a)*u[None,:]
+
+        lon, lat = self.m(x, y, inverse=True)
+        # distance along path
+        Dx = x - x[:, 0][:, None]
+        Dy = y - y[:, 0][:, None]
+        d = np.sqrt(Dx*Dx+Dy*Dy)
+        # equivalent earth curvature
+        dh = d*(d[:,::-1])/(2*K*6375e3)
+
+        Dlon = (lon - self.extent[0]) / self.lonstep
+        Dlat= (self.extent[3]-lat) / self.latstep
+        #
+        # Interpolation
+        #
+
+        if binterp:
+            rlon = np.floor(Dlon).astype(int)
+            rlat = np.floor(Dlat).astype(int)
+            dlon = Dlon - rlon
+            dlat = Dlat - rlat
+
+            if source == 'srtm':
+                hll = self.hgts[rlat, rlon]
+                hlr = self.hgts[rlat, rlon+1]
+                hul = self.hgts[rlat+1, rlon]
+                hur = self.hgts[rlat+1, rlon+1]
+
+            if source == 'aster':
+                hll = self.hgta[rlat, rlon]
+                hlr = self.hgta[rlat, rlon+1]
+                hul = self.hgta[rlat+1, rlon]
+                hur = self.hgta[rlat+1, rlon+1]
+            #    height = self.hgta[ry, rx]
+
+            wll = dlon**2 + (1-dlat)**2
+            wlr = (1-dlon)**2 + (1-dlat)**2
+            wul = dlon**2 + dlat**2
+            wur = (1-dlon)**2 + dlat**2
+            height = (wll*hll+wlr*hlr+wul*hul+wur*hur)/(wll+wlr+wul+wur) + dh
+        else:
+            rlon = np.round(Dlon).astype(int)
+            rlat = np.round(Dlat).astype(int)
+            if source == 'srtm':
+                height = self.hgts[rlat, rlon] + dh
+            if source == 'srtm':
+                height = self.hgta[rlat, rlon] + dh
+
+        self.L = loss.route(x, y, height, Ha, Hb, fGHz, K, method=method)
+
+        return(self.L,lon,lat)
+
+    def cover(self, **kwargs):
         """ coverage around a point
 
         Parameters
         ----------
 
         pc : np.array
-            center point in cartesian coordinates
+            center point in lonlat coordinates
         Nphi : int
             Number of angular direction
         Nr : int
@@ -754,98 +925,16 @@ class Ezone(PyLayers):
             K factor
 
         """
-        defaults = {'pc':(27000,12000),
-                    'Nphi':'360',
-                    'Nr':200,
-                    'Rmax':4000,
-                    'Ht':30,
-                    'Hr':1.5,
-                    'K':1.3333,
-                    'fGHz':.3,
-                    'divider':[]
-                    }
-
-        for key in defaults:
-            if key not in kwargs:
-                kwargs[key] = defaults[key]
-
-        pc = kwargs['pc']
-        lmbda = 0.3/kwargs['fGHz']
-        phi  = np.linspace(0,2*np.pi,kwargs['Nphi'])[:,None]
-        r  = np.linspace(0.02,kwargs['Rmax'],kwargs['Nr'])[None,:]
-
-        # cartesian
-        x  = pc[0] + r*np.cos(phi)
-        y  = pc[1] + r*np.sin(phi)
-        extent_c = np.array([x.min(),x.max(),y.min(),y.max()])
-
-        # back to lon lat
-        lon,lat = self.m(x,y,inverse=True)
-
-        rx = np.round((lon - self.extent[0]) / self.lonstep).astype(int)
-        ry = np.round((self.extent[3]-lat) / self.latstep).astype(int)
-
-        # dem
-        dem = self.hgts[ry,rx]
-
-
-        # adding effect of earth equivalent curvature
-        R = expand(r)
-        B = r.T-R
-        h_earth = (R*B)/(2*kwargs['K']*6375e3)
-
-        # ground height + antenna height
-        Ha = kwargs['Ht'] + self.hgts[ry[0,0],rx[0,0]]
-        Hb = kwargs['Hr'] + dem
-
-        # Nphi x Nr x Nr
-        Hb = Hb[:,None,:]
-        # LOS line
-        LOS  = Ha+(Hb-Ha)*R/r.T
-        diff = expand(dem)+h_earth-LOS
-        fac  = np.sqrt(2*r[...,None]/(lmbda*R*B))
-        nu   = diff*fac
-        #num,ind  = maxloc(nu)
-        numax = np.max(nu,axis=2)
-        w = numax -0.1
-        L = 6.9 + 20*np.log10(np.sqrt(w**2+1)-w)
-        LFS = 32.4 + 20*np.log10(r)+20*np.log10(kwargs['fGHz'])
-        Ltot = LFS+L
-
-        return x,y,r,R,dem,LOS,h_earth,diff,fac,nu,numax,LFS,Ltot
-
-
-    def cover(self,**kwargs):
-        """ coverage around a point
-
-        Parameters
-        ----------
-
-        pc : np.array
-            center point in cartesian coordinates
-        Nphi : int
-            Number of angular direction
-        Nr : int
-            Number of points along radius
-        Rmax : float
-            Radius maximum (meters)
-        Hr : float
-            Receiver height
-        Ht : float
-            Transmitter height
-        K : float
-            K factor
-
-        """
-        defaults = {'pc':(27000,12000),
-                    'Nphi':'360',
-                    'Nr':200,
-                    'Rmax':4000,
-                    'Ht':30,
-                    'Hr':1.5,
-                    'K':1.3333,
-                    'fGHz':.3,
-                    'divider':[]
+        defaults = {'pc': (-1.627449, 48.124648),
+                    'Nphi': 360,
+                    'Nr': 200,
+                    'Rmax': 4000,
+                    'Ht': 30,
+                    'Hr': 1.5,
+                    'K': 1.3333,
+                    'fGHz': .3,
+                    'source': 'srtm',
+                    'divider': []
                     }
 
         for key in defaults:
@@ -853,75 +942,236 @@ class Ezone(PyLayers):
                 kwargs[key] = defaults[key]
 
         if 'fig' not in kwargs:
-            f,a = plt.subplots(1,1)
+            f, a = plt.subplots(1, 1)
         else:
             f = kwargs['fig']
             a = kwargs['ax']
 
-        pc = kwargs['pc']
-        lmbda = 0.3/kwargs['fGHz']
-        phi  = np.linspace(0,2*np.pi,kwargs['Nphi'])[:,None]
-        r  = np.linspace(0.02,kwargs['Rmax'],kwargs['Nr'])[None,:]
+        Ht = kwargs['Ht']
+        Hr = kwargs['Hr']
+        fGHz = kwargs['fGHz']
+        K = kwargs['K']
+        Rmax = kwargs['Rmax']
+        Nr = kwargs['Nr']
+        Nphi = kwargs['Nphi']
 
-        x  = pc[0] + r*np.cos(phi)
-        y  = pc[1] + r*np.sin(phi)
-        extent_c = np.array([x.min(),x.max(),y.min(),y.max()])
+        x_c, y_c = self.m(kwargs['pc'][0], kwargs['pc'][1])
+        pc = np.array([x_c, y_c])
 
-        # Triangulation
-        triang = tri.Triangulation(x.flatten(),y.flatten())
-        lon,lat = self.m(triang.x,triang.y,inverse=True)
+        #lmbda = 0.3/fGHz
+        # phi:  Nphi x 1
+        phi = np.linspace(0, 2*np.pi, Nphi)[:, None]
+        # r :   1 x Nr
+        r = np.linspace(0.02, Rmax, Nr)[None, :]
+
+        x = pc[0] + r*np.cos(phi)
+        y = pc[1] + r*np.sin(phi)
+        # extent_c = np.array([x.min(),x.max(),y.min(),y.max()])
+
+        #dh = d*(d[::-1])/(2*K*6375e3)
+
+        # Triangulation of the coverage zone
+        triang = tri.Triangulation(x.flatten(), y.flatten())
+        lon, lat = self.m(triang.x, triang.y, inverse=True)
+
         # back in lon,lat coordinates
         triang.x = lon
         triang.y = lat
 
-        lon,lat = self.m(x,y,inverse=True)
+        lon, lat = self.m(x, y, inverse=True)
 
         rx = np.round((lon - self.extent[0]) / self.lonstep).astype(int)
         ry = np.round((self.extent[3]-lat) / self.latstep).astype(int)
 
-        cov = self.hgts[ry,rx]
+        # height
+        #cov = self.hgts[ry, rx]
+        if kwargs['source'] == 'srtm':
+            height = self.hgts[ry, rx]
 
-        # adding effect of earth equivalent curvature
-        R = expand(r)
-        B = r.T-R
-        h_earth = (R*B)/(2*kwargs['K']*6375e3)
+        if kwargs['source'] == 'aster':
+            height = self.hgta[ry, rx]
 
-        # ground height + antenna height
-        Ha = kwargs['Ht'] + self.hgts[ry[0,0],rx[0,0]]
-        Hb = kwargs['Hr'] + cov
+        L = loss.cover(x, y, height, Ht, Hr, fGHz, K, method='deygout')
+        self.triang = triang
+        self.cover  = L 
+        return triang, L
 
-        pdb.set_trace()
-        # Nphi x Nr x Nr
-        Hb = Hb[:,None,:]
-        # LOS line
-        LOS  = Ha+(Hb-Ha)*R/r.T
-        diff = expand(cov)+h_earth-LOS
-        fac  = np.sqrt(2*r[...,None]/(lmbda*R*B))
-        nu   = diff*fac
-        num  = maxloc(nu)
-        numax = np.max(num,axis=1)
-        w = numax -0.1
-        L = 6.9 + 20*np.log10(np.sqrt(w**2+1)-w)
-        LFS = 32.4 + 20*np.log10(r)+20*np.log10(kwargs['fGHz'])
-        Ltot = -(LFS+L)
+#        # adding effect of earth equivalent curvature
+#        # r : 1 x 200
+#        # R : 1 x 199 x 200
+#        R = expand(r)
+#        B = r.T-R
+#        h_earth = (R*B)/(2*kwargs['K']*6375e3)
+#
+#        # ground height + antenna height
+#        Ha = kwargs['Ht'] + self.hgts[ry[0, 0], rx[0, 0]]
+#        Hb = kwargs['Hr'] + cov
+#
+#        # Nphi x Nr x Nr
+#        Hb = Hb[:, None, :]
+#        # LOS line
+#        LOS = Ha+(Hb-Ha)*R/r.T
+#        diff = expand(cov) + h_earth-LOS
+#        fac = np.sqrt(2*r[...,None]/(lmbda*R*B))
+#        nu = diff*fac
+#        num, ind = maxloc(nu)
+#        # numax : Nph x Nr
+#        numax = np.max(num, axis=1)
+#        w = numax -0.1
+#        # L : Nph  x Nr
+#        L = 6.9 + 20*np.log10(np.sqrt(w**2+1)-w)
+#        # LFS : 1 x Nr
+#        LFS = 32.4 + 20*np.log10(r) + 20*np.log10(kwargs['fGHz'])
+#        # LFS : Nphi x Nr
+#        Ltot = -(LFS+L)
+#
+#        return triang,LFS,L,Ltot
 
-        # display coverage region
-        #plt.tripcolor(triang, cov.flatten(), shading='gouraud', cmap=plt.cm.jet)
-        #f,a = self.show(fig=f,ax=a,contour=False,bldg=True,height=False,coord='cartesian',extent=extent_c)
-        f,a,d = self.show(fig=f,ax=a,contour=False,bldg=True,height=False,coord='lonlat',extent=self.extent)
-        tc = a.tripcolor(triang, Ltot.flatten(), shading='gouraud', cmap=plt.cm.jet,vmax=-50,vmin=-130)
-        #tc = a.tripcolor(triang, w.flatten(), shading='gouraud', cmap=plt.cm.jet,vmax=-50,vmin=-130)
-        if kwargs['divider']==[]:
-            divider = make_axes_locatable(a)
-        else:
-            divider=kwargs['divider']
-        cax = divider.append_axes("left", size="5%", pad=0.5)
-        cb = f.colorbar(tc,cax)
-        cb.set_label('Loss(dB)')
-        plt.axis('equal')
+    def to_kmz(self, **kwargs):
+        """ export to kmz file
+        """
+        llcrnrlon = self.extent[0]
+        llcrnrlat = self.extent[2]
 
-        return x,y,r,cov,LOS,h_earth,diff,fac,num,LFS
+        urcrnrlon = self.extent[1]
+        urcrnrlat = self.extent[3]
 
+        pngsrtm = self.prefix+'_srtm.png'
+        pngaster = self.prefix+'_aster.png'
+        pngroute = self.prefix+'_route.png'
+        pngcover = self.prefix+'_cover.png'
+        kmzsrtm = self.prefix+'_srtm.kmz'
+        kmzaster = self.prefix+'_aster.kmz'
+        kmzroute = self.prefix+'_route.kmz'
+        kmzcover = self.prefix+'_cover.kmz'
+
+        #
+        # srtm overlay
+        #
+        fig, ax = gkml.gearth_fig(self.extent,self.extent_c)
+
+        #cs = ax.pcolormesh(self.hgts, cmap='jet')
+        csrtm = ax.imshow(self.hgts,extent=self.extent,cmap='jet')
+
+
+        fig.savefig(pngsrtm, transparent=True, format='png')
+        #
+        # aster overlay
+        #
+        fig, ax = gkml.gearth_fig(self.extent,self.extent_c)
+        caster = ax.imshow(self.hgta,extent=self.extent,cmap='jet')
+
+        fig.savefig(pngaster, transparent=True, format='png')
+        #
+        # route overlay
+        #
+        fig, ax = gkml.gearth_fig(self.extent,self.extent_c)
+        sp = ax.scatter(self.pb[:,0], self.pb[:,1], c = -self.L,
+                        s=30,linewidth=0,cmap='jet',vmax=-60, vmin=-120)
+        fig.savefig(pngroute, transparent=True, format='png')
+        # 
+        # cover overlay
+        #
+        fig, ax = gkml.gearth_fig(self.extent,self.extent_c)
+        tc = ax.tripcolor(self.triang,
+                          -self.cover.flatten(),
+                          shading='gouraud',
+                          cmap='jet',
+                          vmax=-60,
+                          vmin=-120,
+                          alpha = 1,
+                          edgecolors='k',
+                          linewidth=0.0)
+        fig.savefig(pngcover, transparent=True, format='png')
+
+        gkml.make_kml(llcrnrlon = llcrnrlon,
+                 llcrnrlat = llcrnrlat,
+                 urcrnrlon = urcrnrlon,
+                 urcrnrlat = urcrnrlat,
+                 figs = [pngroute],
+                 kmzfile = kmzroute,
+                 name = 'route')
+
+        gkml.make_kml(llcrnrlon = llcrnrlon,
+                 llcrnrlat = llcrnrlat,
+                 urcrnrlon = urcrnrlon,
+                 urcrnrlat = urcrnrlat,
+                 figs = [pngcover],
+                 kmzfile = kmzcover,
+                 name = 'coverage')
+
+        gkml.make_kml(llcrnrlon = llcrnrlon,
+                 llcrnrlat = llcrnrlat,
+                 urcrnrlon = urcrnrlon,
+                 urcrnrlat = urcrnrlat,
+                 figs = [pngsrtm],
+                 kmzfile = kmzsrtm,
+                 name = 'SRTM DSM')
+
+        gkml.make_kml(llcrnrlon = llcrnrlon,
+                 llcrnrlat = llcrnrlat,
+                 urcrnrlon = urcrnrlon,
+                 urcrnrlat = urcrnrlat,
+                 figs = [pngaster],
+                 kmzfile = kmzaster,
+                 name = 'ASTER DSM')
+
+
+    def showcov(self, triang, val,
+                vmin=-130,
+                vmax=-50,
+                cmap=plt.cm.jet,
+                bbuild = False,
+                btile=True):
+        """ Show a coverage
+
+        Parameters
+        ----------
+
+        triang : triangulation
+        val : values
+
+        """
+        lonmin = np.min(triang.x)
+        lonmax = np.max(triang.x)
+        latmin = np.min(triang.y)
+        latmax = np.max(triang.y)
+        extent = (lonmin, lonmax, latmin, latmax)
+        print(extent)
+        mp = smopy.Map((extent[2]+0.1, extent[0]+0.1, extent[3]-0.1,extent[1]-0.1), z=12)
+        if bbuild:
+            f, ax, d = self.show(fig=f,
+                                 ax=ax,
+                                 contour=False,
+                                 btile=False,
+                                 bldg=True,
+                                 height=False,
+                                 coord='lonlat',
+                                 extent=self.extent)
+
+        #ax = plt.gca()
+        if mp!=[]:
+            triang.x,triang.y = mp.to_pixels(triang.y, triang.x)
+        #ax = mp.show_mpl(figsize=(10,10))
+        ax = plt.gca()
+        tc = ax.tripcolor(triang,
+                          val.flatten(),
+                          #shading='gouraud',
+                          #shading='flat',
+                          cmap=cmap,
+                          vmax=vmax,
+                          vmin=vmin,
+                          alpha = 0.4,
+                          edgecolors='k',
+                          linewidth=0.0)
+        #plt.axis('equal')
+        ax = mp.show_mpl(ax=ax)
+
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes("right",size="5%",pad="5%")
+        cb = colorbar(tc, cax=cax)
+        cb.set_label_text('Loss(dB)',fontsize=18)
+        return(cb)
 
     def rennes(self):
         """
@@ -981,6 +1231,8 @@ class Ezone(PyLayers):
             display dem if True
         bldg : boolean
             display building if True
+        btile : boolean
+            display tile overlay with smopy
         coord : string
             'lonlat'| 'cartesian'
         source: string
@@ -1006,8 +1258,10 @@ class Ezone(PyLayers):
                     'figsize':(10,10),
                     'height':True,
                     'bldg':False,
+                    'btile':False,
                     'clim':(0,200),
                     'coord':'lonlat',
+                    'zoom': 10,
                     'extent':[],
                     'contour':False,
                     'source':'srtm',
@@ -1017,6 +1271,7 @@ class Ezone(PyLayers):
                    }
 
         divider = []
+        mp = []
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]
@@ -1026,13 +1281,8 @@ class Ezone(PyLayers):
         else:
             fig = plt.figure(figsize=kwargs['figsize'])
 
-        if 'ax' in kwargs:
-            ax = kwargs['ax']
-        else:
-            ax =  fig.add_subplot(111)
         # get zone limitation
         # lon,lat or cartesian
-
         if kwargs['extent']==[]:
             if kwargs['coord']=='lonlat':
                 extent = self.extent
@@ -1044,10 +1294,20 @@ class Ezone(PyLayers):
                 extent = conv(extent_c,self.m,mode='toll')
             if kwargs['coord']=='lonlat':
                 extent = kwargs['extent']
+        if 'ax' in kwargs:
+            ax = kwargs['ax']
+        else:
+            if kwargs['btile']:
+            # lon min lon max lat min lat max
+            # lat min , lon min , lat max , lon max
+            # 2 0 3 1
+                mp = smopy.Map((extent[2], extent[0], extent[3], extent[1]), z=kwargs['zoom'])
+                ax = mp.show_mpl(figsize=kwargs['figsize'],alpha=0.3)
+            else:
+                ax = fig.add_subplot(111)
 
 
-        # ploting buildings with collection of polygons
-        #
+
 
         if kwargs['coord'] == 'cartesian':
             kwargs['xlabel'] = 'W-E Distance (meters)'
@@ -1058,6 +1318,7 @@ class Ezone(PyLayers):
         ax.set_title(kwargs['title'])
         ax.set_xlabel(kwargs['xlabel'])
         ax.set_ylabel(kwargs['ylabel'])
+
 
         if (kwargs['height'] | kwargs['contour']):
             if kwargs['source']=='srtm':
@@ -1091,12 +1352,15 @@ class Ezone(PyLayers):
 
             # get index corresponding to the selected zone
 
-            ix = np.where((x>=extent[0]) & (x<=extent[1]))[0]
-            iy = np.where((y>=extent[2]) & (y<=extent[3]))[0]
+            ix = np.where((x >= extent[0]) & (x <= extent[1]))[0]
+            iy = np.where((y >= extent[2]) & (y <= extent[3]))[0]
 
             if kwargs['height']:
                 im = ax.imshow(hgt[iy[0]:(iy[-1]+1),ix[0]:(ix[-1]+1)],
-                               extent=extent,clim=kwargs['clim'],cmap=kwargs['cmap'],alpha=kwargs['alpha'])
+                               extent=extent,
+                               clim = kwargs['clim'],
+                               cmap = kwargs['cmap'],
+                               alpha = kwargs['alpha'])
                 divider = make_axes_locatable(ax)
                 cax = divider.append_axes("right", size="5%", pad=0.05)
                 cb = fig.colorbar(im,cax)
@@ -1106,6 +1370,8 @@ class Ezone(PyLayers):
                 cnt = ax.contour(hgt[iy[0]:(iy[-1]+1),ix[0]:(ix[-1]+1)],N=10,extent=extent,origin='upper')
 
         # display buildings
+        # ploting buildings with collection of polygons
+        #
         if kwargs['bldg']:
             # get subtiles corresponding to extent
             if kwargs['coord']=='cartesian':
@@ -1126,13 +1392,12 @@ class Ezone(PyLayers):
                             facecolor=kwargs['facecolor'],
                             fig=fig,ax=ax)
                    else:
-                       fig,ax = plu.polycol(poly,info[:,3],
-                            clim = kwargs['clim'],
-                            fig=fig,
-                            ax=ax)
+                       fig, ax = plu.polycol(poly, info[:, 3],
+                                             clim=kwargs['clim'],
+                                             fig=fig,
+                                             ax=ax)
 
-
-        return(fig,ax,divider)
+        return fig, ax, divider, mp
 
     def loadtmp(self,_fileh5='RennesFull.h5'):
         """ load an Ezone from hdf5 file
@@ -1148,10 +1413,10 @@ class Ezone(PyLayers):
         f = h5py.File(fileh5,'r',dtype=np.float32)
         self.bdpt = f['osm']['bdpt'].value
         self.bdma = f['osm']['bdma'].value
-        lonm =  self.bdpt[:,0].min()
-        lonM =  self.bdpt[:,0].max()
-        latm =  self.bdpt[:,1].min()
-        latM =  self.bdpt[:,1].max()
+        lonm = self.bdpt[:,0].min()
+        lonM = self.bdpt[:,0].max()
+        latm = self.bdpt[:,1].min()
+        latM = self.bdpt[:,1].max()
         self.extentc = (lonm,lonM,latm,latM)
         D = DEM()
         D.loadsrtm()

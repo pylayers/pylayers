@@ -3,7 +3,10 @@ from pylayers.measures.parker.smparker import *
 from pylayers.antprop.channel import *
 from pylayers.antprop.aarray import *
 import pylayers.util.pyutil as pyu
+"""
+.. currentmodule:: pylayers.measures.mesmmimo
 
+"""
 #Nr = input ("Number of receiving antennas : ")
 #Nt = input ("Number of transmitting antennas : ")
 Nr = 2

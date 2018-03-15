@@ -1,41 +1,12 @@
 """
+.. automodule::
+    :members:
 
 Trajectories Class
 ==================
-.. autosummary::
-    :toctree: generated/
 
-    Trajectories.__init__
-    Trajectories.__repr__
-    Trajectories.loadh5
-    Trajectories.ishow
-
-Trajectory Class
-================
-
-.. autosummary::
-    :toctree: generated/
-
-    Trajectory.__init__
-    Trajectory.__repr__
-    Trajectory.update
-    Trajectory.generate
-    Trajectory.resample
-    Trajectory.rescale
-    Trajectory.replay
-    Trajectory.distance
-    Trajectory.space
-    Trajectory.time
-    Trajectory.plot
-
-Utility Functions
-=================
-
-.. autosummary::
-    :toctree: generated/
-
-    importsn
-    importh5
+.. autoclass:: Trajectories
+    :members:
 
 """
 try:

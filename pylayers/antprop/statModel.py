@@ -1,6 +1,16 @@
+from __future__ import print_function
+"""
+.. currentmodule:: pylayers.antprop.statModel
+
+.. autosummary::
+    :members:
+
+"""
 import scipy.stats as st
 import numpy as np
-
+import doctest
+import os
+import glob
 
 def getchannel(emplacement = 'trunku',intersection = 1):
     """ get channel
