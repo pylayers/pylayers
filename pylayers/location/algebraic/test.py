@@ -1,4 +1,4 @@
-# -*- coding:Utf-8 -*-
+# -*- coding:utf-8 -*-
 #####################################################################
 #This file is part of RGPA.
 
@@ -114,7 +114,7 @@ if __name__=="__main__":
     MS = np.vstack((MS,MS2))
     MS = np.vstack((MS,MS3))
     MS = np.vstack((MS,MS4))
-     MS = np.delete(MS,0,0)
+    MS = np.delete(MS,0,0)
 
 
 

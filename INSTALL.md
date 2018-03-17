@@ -131,7 +131,7 @@ descartes>=1.0
 SimPy>=2.2  
 PIL>=1.1.5  
 bitstring>=3.0.2  
-pyintervall>=1.0  
+pyinterval>=1.0  
 osmapi>=0.3  
 imposm  
 basemap>=1.0  

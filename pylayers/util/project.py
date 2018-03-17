@@ -319,7 +319,6 @@ if basename != os.path.join(pylayersdir,'data'):
         ,os.path.join('output','r3d'),'body'
         ,os.path.join('body','c3d')
         ,os.path.join('body','wear')]
-
     for dl in dirlist:
         filelist = os.listdir(os.path.join(pylayersdir,'data', dl))
         for fi in filelist:

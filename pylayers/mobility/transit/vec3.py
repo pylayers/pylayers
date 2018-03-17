@@ -506,6 +506,10 @@ class vec3:
 	a1.y	= math.sin(self.ang0()-math.pi/6.0)*self.length()
 	return [a0,self,a1]
 
+    def tolist(self):
+	return [self.x, self.y, self.z]
+ 
+
 ######################################################################
 def _test():
     import doctest, vec3
