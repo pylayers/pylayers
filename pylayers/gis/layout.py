@@ -2859,7 +2859,7 @@ class Layout(pro.PyLayers):
             self.add_segment(p2_index, p3_index, z=znhigh, name=namen1)
 
     def repair(self,dseg):
-        """ repai layout
+        """ repair layout
 
         Parameters
         ----------
@@ -2874,7 +2874,16 @@ class Layout(pro.PyLayers):
         method.
 
         """
-        pass
+        for nseg in dseg:
+            num_p = dseg[nseg]
+            if len(num_p)==2:
+                ns1 = np.r_[nx.neighbors(self.Gs,num_p[0])]
+                ns2 = np.r_[nx.neighbors(self.Gs,num_p[1])]
+                ns_inter = np.intersect1d(ns1,ns2)
+                for nseg2 in ns_inter:
+                    if ((self.Gs.node[nseg2]['name']!='AIR')
+                        and ((self.Gs.node[nseg2]['name']!='_AIR'))):
+                        self.merge_segment(nseg,nseg2)
 
     def wedge2(self, apnt):
         """ calculate wedge angle of a point
@@ -3160,7 +3169,7 @@ class Layout(pro.PyLayers):
             assert(e > 0)
             name = self.Gs.node[e]['name']
             iso = self.Gs.node[e]['iso']
-            [self.Gs.node[i]['iso'].remove(e) for i in iso 
+            [self.Gs.node[i]['iso'].remove(e) for i in iso
              if e in self.Gs.node[i]['iso']]
             del self.Gs.pos[e]  # delete edge position
             self.Gs.remove_node(e)
@@ -3173,7 +3182,6 @@ class Layout(pro.PyLayers):
             try:
                 # remove shapely seg
                 self._shseg.pop(e)
-
             except:
                 pass
         if g2npy:
