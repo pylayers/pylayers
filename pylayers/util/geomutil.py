@@ -619,25 +619,27 @@ class Polygon(pro.PyLayers, shg.Polygon):
 
         pylayers.layout.Layout.ispoint
 
-        vnodes is a list of point and segments of the polygon. 
-        If there are isosegments the sequence of iso segments 
-        is repeated between the termination points. 
+        vnodes is a list of point and segments of the polygon.
+        If there are isosegments the sequence of iso segments
+        is repeated between the termination points.
         L.numseg has been adapted in order to return either the first segment (default)
         or the list of all segments
 
         """
-        # get coordinates of the exterior of the polygon 
+        # get coordinates of the exterior of the polygon
         x, y = self.exterior.xy
         #
-        # npts : list of points which are in the layout (with tolerance 1cm) 
-        #        0 means not in the layout 
+        # npts : list of points which are in the layout (with tolerance 1cm)
+        #        0 means not in the layout
         #
-        # TODO : Sometimes polygon points are not exactly correspondong to nodes of Layout (Why ? ) 
-        #        This is the reason of the applied tolerance of 5cm 
+        # TODO : Sometimes polygon points are not exactly corresponding to nodes of Layout (Why ? )
+        #        This is the reason of the applied tolerance of 5cm
         #
-        npts = [ispoint(tpts,np.array(xx), tol=0.05) for xx in zip(x[0:-1], y[0:-1])]
+        npts = [ ispoint(tpts, np.array(xx), tol=0.05) for xx in zip(x[0:-1], y[0:-1])]
 
         assert (0 not in npts), pdb.set_trace()
+        #if 0 in npts:
+        #    return
         # seg list of tuple [(n1,n2),(n2,n3),....(,)]
         seg = zip(npts, np.roll(npts, -1))
         vnodes = []
@@ -3516,7 +3518,7 @@ def intersect_cone_seg(line0,line1,seg,bvis=False,bbool=False):
         #    ax.scatter(seg[1][0],seg[1][1],s=100,color='red')
         #if len(tahe)==2:
         #    linet(ax,tahe[0],tahe[1],color='green',al=1,linewidth=2)
-        #plt.show()    
+        #plt.show()
 
     return(tahe,ratio)
 
@@ -3528,11 +3530,11 @@ def intersect_cone_seg_old(line0,line1,seg,bvis=False,bbool=False):
     line0
     line1
     seg
-    bvis 
+    bvis
 
     """
 
-     
+
     x0,p0 = intersect_halfline_seg(line0, seg)
     x1,p1 = intersect_halfline_seg(line1, seg)
     tahe = []
@@ -3934,32 +3936,34 @@ def intersect(a, b, c, d):
 
 
 def is_aligned4(a, b, c, d, tol=1e-2):
-    """ test aligment of 4 points 
+    """ test aligment of 4 points
+
     Parameters
     ----------
 
     a : np.array
-    b : np.array 
-    c : np.array 
-    d : np.array 
-    tol : float 
+    b : np.array
+    c : np.array
+    d : np.array
+    tol : float
         default 1e-2
     """
+
     cond = is_aligned3(a, b, c, tol=tol) & is_aligned3(a, b, d, tol=tol)
     return cond
 
 
 def is_aligned3(a, b, c, tol=1e-2):
-    """ test aligment of 3 points 
+    """ test aligment of 3 points
 
     Parameters
     ----------
 
     a : np.array
-    b : np.array 
-    c : np.array 
+    b : np.array
+    c : np.array
 
-    tol : float 
+    tol : float
         default 1e-2
     """
     # return abs(((b[0,:]-a[0,:])*(c[1,:]-a[1,:]) -
@@ -4137,10 +4141,10 @@ def MATP(sl,el,phi,tilt,pol):
     Parameters
     ----------
 
-    sl : np.array (,3) unitary 
+    sl : np.array (,3) unitary
         main radiation direction in antenna local frame
-    el : np.array(,3) unitary 
-        main direction in the E field plane 
+    el : np.array(,3) unitary
+        main direction in the E field plane
     phi : float 0<phi<2*pi
     tilt : float -pi/2<tilt<pi/2
     pol : string 'H' (Horizontal) or 'V' (Vertical)

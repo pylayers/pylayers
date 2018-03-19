@@ -12,7 +12,6 @@ import pylayers.util.pyutil as pyu
 from pylayers.util.utilnet import str2bool
 from pylayers.gis.layout import Layout
 import pylayers.antprop.loss as loss
-import pylayers.antprop.deygout as dg
 import pylayers.gis.ezone as ez
 import pylayers.signal.standard as std
 

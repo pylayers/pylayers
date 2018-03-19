@@ -5,37 +5,40 @@ import matplotlib.pyplot as plt
 from simplekml import (Kml, OverlayXY, ScreenXY, Units, RotationXY,
                        AltitudeMode, Camera)
 
-def make_kml(llcrnrlon, llcrnrlat, urcrnrlon, urcrnrlat,
-             figs, colorbar=None, **kw):
+def make_kml(extent,figs,colorbar=None, **kw):
     """
     Parameters
     ----------
 
-    llcrnlon : np.array
+    extent : tuple
+        (lm,lM,Lm,LM)
         lower left corner longitude
-    llcrnlat : np.array
-        lower left corner latitude
-    urcrnlon : np.array
-        lower left corner longitude
-    urcrnlat : np.array
-        lower left corner latitude
+        upper right corner longitude
+        lower left corner Latitude
+        upper right corner Latitude
 
     altitude : float
-    altitudemode : 
+    altitudemode :
     roll : float
     tilt : float
-    visibility : int 
+    visibility : int
 
     """
 
+    lm = extent[0]
+    lM = extent[1]
+    Lm = extent[2]
+    LM = extent[3]
+
     kml = Kml()
+
     altitude = kw.pop('altitude', 2e6)
     roll = kw.pop('roll', 0)
     tilt = kw.pop('tilt', 0)
     altitudemode = kw.pop('altitudemode', AltitudeMode.relativetoground)
 
-    camera = Camera(latitude  = np.mean([urcrnrlat, llcrnrlat]),
-                    longitude = np.mean([urcrnrlon, llcrnrlon]),
+    camera = Camera(latitude  = np.mean([Lm, LM]),
+                    longitude = np.mean([lm, lM]),
                     altitude = altitude,
                     roll=roll,
                     tilt=tilt,
@@ -57,10 +60,10 @@ def make_kml(llcrnrlon, llcrnrlat, urcrnrlon, urcrnrlat,
         ground.description = kw.pop('description', 'matplotlib figure')
         ground.gxaltitudemode = kw.pop('gxaltitudemode', 'clampToSeaFloor')
         ground.icon.href = fig
-        ground.latlonbox.east = urcrnrlon
-        ground.latlonbox.south = llcrnrlat
-        ground.latlonbox.north = urcrnrlat
-        ground.latlonbox.west = llcrnrlon
+        ground.latlonbox.east = lM
+        ground.latlonbox.south = Lm
+        ground.latlonbox.north = LM
+        ground.latlonbox.west = lm
 
     if colorbar:  # Options for colorbar are hard-coded (to avoid a big mess).
         screen = kml.newscreenoverlay(name='ScreenOverlay')

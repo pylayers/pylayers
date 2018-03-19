@@ -338,24 +338,44 @@ class Ways(object):
         self.way = {}
         self.cpt = 0
 
-    def building(self, ways , height=8.5):
+    def building(self, ways , height=8.5,min_heigh=0):
         """ building callback function
 
         Parameters
         ----------
 
         ways : Ways
-        height : float 
+        height : float
 
         """
         for osmid, tags, refs in ways:
             if 'building' in tags:
+                ntags ={}
+                # height : from ground to roof top
                 if 'height' in tags:
-                    tags = {'height':tags['height']}
+                    ntags['height'] = tags['height']
+                elif 'building:height' in tags:
+                    ntags['height']  = tags['building:height']
                 else:
-                    tags = {'height': height}
+                    ntags['height'] = height
 
-                self.w[osmid] = [refs,tags]
+                # min_height : from ground to roof top
+                if 'building:min_height' in tags:
+                    ntags['min_height'] = tags['building:min_height']
+                elif 'min_height' in tags:
+                    ntags['min_height'] = tags['min_height']
+                else:
+                    ntags['min_height'] = min_height
+
+                # material : from ground to roof top
+                if 'building:material' in tags:
+                    ntags['material'] = tags['building:material']
+                elif 'material' in tags:
+                    ntags['material'] = tags['material']
+                else:
+                    ntags['material'] = 'WALL'
+
+                self.w[osmid] = [refs,ntags]
                 self.cpt += 1
 
     def eval(self,coords):
@@ -647,25 +667,30 @@ class FloorPlan(nx.DiGraph):
 #     getbdg
 #
 #
-def getosm(address='Rennes',latlon=0,dist_m=400,cart=False):
+def getosm(address='Rennes', latlon=0, dist_m=400,
+           cart=False,
+           level_height = 3.45, typical_height = 10):
     """ get osm region from osmapi
 
     Parameters
     ----------
 
-    address : string 
-    latlon : tuple or 0 
-    dist_m : float 
-    cart : boolean 
+    address : string
+    latlon : tuple or 0
+    dist_m : float
+    cart : boolean
+    level_height :  float
+        typical level height for deriving building height from # levels
+    typical_height : float
+        typical height for building when no information
 
     Notes
     -----
 
-    if latlon tuple is precised it has priority over the string 
+    if latlon tuple is precised it has priority over the string
 
     """
 
-    level_height = 3.45
     rad_to_deg = (180/np.pi)
     deg_to_rad = (np.pi/180)
 
@@ -684,17 +709,17 @@ def getosm(address='Rennes',latlon=0,dist_m=400,cart=False):
     Osm = OsmApi()
 
     #
-    # Get Map around the specified coordinates 
+    # Get Map around the specified coordinates
     #
 
     osmmap  = Osm.Map(lon-alpha,lat-alpha,lon+alpha,lat+alpha)
 
     #print(osmmap)
-    
+
     nodes = Nodes()
     nodes.clean()
     nodes.readmap(osmmap)
-   
+
     coords = Coords()
     coords.clean()
     coords.from_nodes(nodes)
@@ -704,7 +729,7 @@ def getosm(address='Rennes',latlon=0,dist_m=400,cart=False):
     ways = Ways()
     ways.clean()
     ways.readmap(osmmap,coords)
-    
+
     # list of nodes involved in buildings
     lnodes_id=[]
     for iw in ways.w:
@@ -719,26 +744,32 @@ def getosm(address='Rennes',latlon=0,dist_m=400,cart=False):
     dpoly={}
     for iw in ways.w:
         ways.way[iw].tags = {}
-        # material 
+        # material
         if ways.w[iw][1].has_key('material'):
             ways.way[iw].tags['name']=ways.w[iw][1]['material']
         elif ways.w[iw][1].has_key('building:material'):
             ways.way[iw].tags['name']=ways.w[iw][1]['building:material']
         else:
             ways.way[iw].tags['name']='WALL'
-        # height 
+
+        # min_height
+        if ways.w[iw][1].has_key('building:min_height'):
+            min_height = eval(ways.w[iw][1]['building:min_height'])
+        else:
+            min_height = 0
+        # height
         if ways.w[iw][1].has_key('height'):
-            ways.way[iw].tags['z']=(0,eval(ways.w[iw][1]['height']))
+            ways.way[iw].tags['z'] = (min_height, eval(ways.w[iw][1]['height']))
         elif ways.w[iw][1].has_key('building:height'):
-            ways.way[iw].tags['z']=(0,eval(ways.w[iw][1]['building:height']))
+            ways.way[iw].tags['z'] = (min_height, eval(ways.w[iw][1]['building:height']))
         elif ways.w[iw][1].has_key('building:levels'):
             nb_levels = eval(ways.w[iw][1]['building:levels'])
             if type(nb_levels)!=int:
                 try:
-                    nb_levels=max(nb_levels)
+                    nb_levels = max(nb_levels)
                 except:
                     nb_levels=2
-            ways.way[iw].tags['z']=(0,nb_levels*level_height)
+            ways.way[iw].tags['z']=(min_height,nb_levels*level_height)
         elif ways.w[iw][1].has_key('levels'):
             nb_levels = eval(ways.w[iw][1]['levels'])
             if type(nb_levels)!=int:
@@ -746,13 +777,14 @@ def getosm(address='Rennes',latlon=0,dist_m=400,cart=False):
                     nb_levels=max(nb_levels)
                 except:
                     nb_levels=2
-            ways.way[iw].tags['z']=(0,nb_levels*level_height)
+            ways.way[iw].tags['z']=(min_height,nb_levels*level_height)
         else:
-            ways.way[iw].tags['z']=(0,12)
-                          
-        ptpoly=[coords.xy[x] for x in ways.w[iw][0]]
-        dpoly[iw]=geu.Polygon(ptpoly,vnodes=ways.w[iw][0])
+            ways.way[iw].tags['z'] = (0,typical_height)
+
+        ptpoly = [coords.xy[x] for x in ways.w[iw][0]]
+        dpoly[iw] = geu.Polygon(ptpoly,vnodes=ways.w[iw][0])
         dpoly[iw].coorddeter()
+
     return coords,nodes,ways,dpoly,m
 
 
@@ -763,7 +795,7 @@ def osmparse(_filename,typ='indoor',verbose=False,c=True,n=True,w=True,r=True,ca
     ----------
 
     typ : string
-        indoor | outdoor 
+        indoor | outdoor
     verbose : boolean
         default : False
     c : boolean
@@ -772,10 +804,11 @@ def osmparse(_filename,typ='indoor',verbose=False,c=True,n=True,w=True,r=True,ca
         read nodes
     w : boolean
         read  ways
-    r : booleanif c:
+    r : boolean
+        read relations
+    if c:
         coords = Coords()
         coords.clean()
-        read relations
 
     Returns
     -------
