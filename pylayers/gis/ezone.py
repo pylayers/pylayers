@@ -161,7 +161,6 @@ def dectile(prefix='N48W002'):
             lonmin = int(st)
 
         lonmax = lonmin+1
-
     return (lonmin,lonmax,latmin,latmax)
 
 def expand(A):

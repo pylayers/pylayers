@@ -485,7 +485,6 @@ class Pattern(PyLayers):
 
 
 
-
     def __paperture2(self,**kwargs):
         """ Aperture Pattern 
 
@@ -4615,7 +4614,7 @@ class Antenna(Pattern):
 
             pos = pos + 1
 
-    def savevsh3(self):
+    def savevsh3(self,force=False):
         """ save antenna in vsh3 format
 
         Create a .vsh3 antenna file
@@ -4630,7 +4629,7 @@ class Antenna(Pattern):
 
         #filevsh3 = pyu.getlong(self._filename,'ant')
 
-        if os.path.isfile(filevsh3):
+        if os.path.isfile(filevsh3) and not force:
             print( filevsh3, ' already exist')
         else:
             print( 'create ', filevsh3, ' file')
@@ -4650,6 +4649,9 @@ class Antenna(Pattern):
             coeff['Bi.s3'] = self.C.Bi.s3
             coeff['Cr.s3'] = self.C.Cr.s3
             coeff['Ci.s3'] = self.C.Ci.s3
+            if self.evaluated:
+                coeff['sl'] = self.sl
+                coeff['el'] = self.el
             io.savemat(filevsh3, coeff, appendmat=False)
 
     def savesh2(self):
@@ -4763,6 +4765,11 @@ class Antenna(Pattern):
             self.C = VSHCoeff(Br, Bi, Cr, Ci)
             self.nf = np.shape(Br.s3)[0]
             self.fGHz = np.linspace(fmin, fmax, self.nf)
+
+            if 'sl' in coeff:
+                self.sl = coeff['sl'][0]
+                self.el = coeff['el'][0]
+
         else:
             print(_filevsh3, ' does not exist')
 
