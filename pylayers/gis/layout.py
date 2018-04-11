@@ -401,7 +401,7 @@ class Layout(pro.PyLayers):
             #
             bconsistent = True
             if bcheck:
-                bconsistent = self.check()
+                bconsistent,dseg = self.check()
 
             # if Layout is correctly described
             # check if the graph gpickle files have been built
@@ -793,6 +793,7 @@ class Layout(pro.PyLayers):
 
         consistent : Boolean
               True if consistent
+        dseg : dictionnary of segments
 
         See Also
         --------
@@ -1308,8 +1309,8 @@ class Layout(pro.PyLayers):
         #     assert(np.array(self.s2pc[k,:].todense())==self.seg2pts(k).T).all(),pdb.set_trace()
         #pdb.set_trace()
         #
-        # This is wrong and asume a continuous indexation of points 
-        # TODO FIX : This problem cleanly 
+        # This is wrong and asume a continuous indexation of points
+        # TODO FIX : This problem cleanly
         # 
         # self.p2pc is only used in Gspos in outputGi_func only caled in case of 
         # multiprocessing 
