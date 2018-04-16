@@ -2797,7 +2797,8 @@ class FUsignal(FBsignal,Usignal):
             self.y = self.y*factor
             self.isFriis = True
 
-
+    def electrical_delay(self,tauns):
+        self.y = self.y * np.exp(-2*1j*np.pi*self.x[None,:]*tauns)
 
     def get(self, k):
         """

@@ -24,6 +24,9 @@ import numpy as np
 import matplotlib.pylab as plt
 import pylayers.signal.waveform as wvf
 import pylayers.util.geomutil as geu
+import logging
+
+logger = logging.getLogger(__name__)
 
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
@@ -42,11 +45,10 @@ from pylayers.antprop.channel import Ctilde, Tchannel , AFPchannel
 from pylayers.antprop.statModel import getchannel
 import tqdm
 import copy
-
 import h5py
 import pdb
 
-
+logger = logging.getLogger(__name__)
 
 class Link(PyLayers):
     """
@@ -291,7 +293,6 @@ class DLink(Link):
                    'save_opt': ['sig','ray2','ray','Ct','H'],
                    'save_idx':0,
                    'force_create':False,
-                   'verbose':False,
                    'seed':0,
                    'graph':'tcvirw'
                 }
@@ -1117,8 +1118,7 @@ class DLink(Link):
 
             obj._saveh5(self.filename,grpname)
 
-        if self.verbose :
-            print(str(obj.__class__).split('.')[-1] + ' from '+ grpname + ' saved')
+        logger.debug(str(obj.__class__).split('.')[-1] + ' from '+ grpname + ' saved')
 
 
     def load(self,obj,grpname,**kwargs):
@@ -1130,9 +1130,9 @@ class DLink(Link):
         obj : Object
             (Signatures|Rays|Ctilde|Tchannel)
         grpname : string
-            groupe name of the h5py file
+            group name of the h5py file
 
-        kwargs : 
+        kwargs :
         layout for sig and rays
 
         Examples
@@ -1142,10 +1142,8 @@ class DLink(Link):
         """
 
 
-
         obj._loadh5(self.filename,grpname,**kwargs)
-        if self.verbose :
-            print(str(obj.__class__).split('.')[-1] + ' from '+ grpname + ' loaded')
+        logger.debug(str(obj.__class__).split('.')[-1] + ' from '+ grpname + ' loaded')
 
 
     def get_grpname(self):
@@ -1426,7 +1424,6 @@ class DLink(Link):
     def eval(self,**kwargs):
         """ link evaluation
 
-
         Parameters
         ----------
 
@@ -1443,16 +1440,15 @@ class DLink(Link):
         ra_number_mirror_cf : int
             rays.to3D number of ceil/floor reflexions
         ra_ceil_H: float, (default [])
-            ceil height . 
-                If [] : Layout max ceil height 
-                If 0 : only floor reflection (outdoor case) 
+            ceil height .
+                If [] : Layout max ceil height
+                If 0 : only floor reflection (outdoor case)
                 If -1 : neither ceil nor floor reflection (2D case)
         ra_vectorized: boolean (True)
             if True used the (2015 new) vectorized approach to determine 2drays
         progressbar: str
             None: no progress bar
             python : progress bar in ipython
-
 
 
         Notes
@@ -1497,13 +1493,11 @@ class DLink(Link):
                    'ra_number_mirror_cf': 1,
                    'force':True,
                    'bt':True,
-                   'alg':1,
                    'si_reverb':4,
                    'nD':2,
                    'nR':10,
                    'nT':10,
                    'debug':False,
-                   'verbose':[],
                    'progressbar':None,
                    'rm_aw':True
                    }
@@ -1535,17 +1529,11 @@ class DLink(Link):
                 if kwargs['force'] == True :
                     kwargs['force'] = ['sig','ray2','ray','Ct','H']
                 else :
-                    # Ct and H are not yet saved/load 
+                    # Ct and H are not yet saved/loaded
                     # compliantly with the given configutain
                     # their are disabled here
                     kwargs['force'] = ['Ct','H']
 
-        if kwargs['verbose'] != []:
-            self.verbose=kwargs['verbose']
-
-        # must be placed after all the init !!!!
-        # if self.verbose :
-        #     print("checkh5")
         # self.checkh5()
 
         if isinstance(kwargs['progressbar'],str):
@@ -1562,8 +1550,7 @@ class DLink(Link):
         # Signatures
         ############
 
-        if self.verbose:
-            print("Start Signatures")
+
         tic = time.time()
         Si = Signatures(self.L,
                         self.ca,
@@ -1572,125 +1559,120 @@ class DLink(Link):
                         threshold = kwargs['threshold'])
 
         if (self.dexist['sig']['exist'] and not ('sig' in kwargs['force'])):
+            logger.info(" Load existing signatures from :%s",self.dexist['sig']['grpname'])
             self.load(Si, self.dexist['sig']['grpname'], L=self.L)
-            if self.verbose:
-                print("load signature")
         else:
-            ## 1 is the default signature determination algorithm
-            if kwargs['alg']==1:
-                self.nD = kwargs['nD']
-                self.nT = kwargs['nT']
-                self.nR = kwargs['nR']
-                self.bt = kwargs['bt']
+            logger.info(" Run signatures")
 
-                Si.run(cutoff = self.cutoff,
-                        diffraction = kwargs['diffraction'],
-                        threshold = self.threshold,
-                        delay_excess_max_ns = self.delay_excess_max_ns,
-                        nD = self.nD,
-                        nR = self.nR,
-                        nT = self.nT,
-                        progress = kwargs['si_progress'],
-                        bt = self.bt)
+            self.nD = kwargs['nD']
+            self.nT = kwargs['nT']
+            self.nR = kwargs['nR']
+            self.bt = kwargs['bt']
 
-                if self.verbose:
-                    print("default algorithm")
+            Si.run(cutoff = self.cutoff,
+                    diffraction = kwargs['diffraction'],
+                    threshold = self.threshold,
+                    delay_excess_max_ns = self.delay_excess_max_ns,
+                    nD = self.nD,
+                    nR = self.nR,
+                    nT = self.nT,
+                    progress = kwargs['si_progress'],
+                    bt = self.bt)
 
-            if kwargs['alg']=='exp':
-                TMP = Si.run_exp(cutoff=kwargs['cutoff'],
-                         cutoffbound=kwargs['si_reverb'])
-                if self.verbose :
-                    print("experimental (ex 2015)")
-
-            if kwargs['alg']=='exp2':
-                TMP = Si.run_exp2(cutoff=kwargs['cutoff'],
-                        cutoffbound=kwargs['si_reverb'])
-                if self.verbose :
-                    print("algo exp2 ( ex 20152)")
-
-        #Si.run6(diffraction=kwargs['diffraction'])
-        # save sig
-
+            logger.info(" Save signature in %s ",self.dexist['sig']['grpname'])
             self.save(Si,'sig',self.dexist['sig']['grpname'],force = kwargs['force'])
 
         self.Si = Si
+
         toc = time.time()
-        if self.verbose :
-            print("Stop signature",toc-tic)
+        logger.info(" End signature in %d sec",toc-tic)
+
         try:
             pbar.update(20)
-        except: 
+        except:
             pass
-
 
 
         ############
         # Rays
         ############
 
-        if self.verbose :
-            print("Start Rays")
+        logger.info(" Start Rays determination")
         tic = time.time()
         r2d = Rays(self.a,self.b)
 
 
-        #
-        # get 2D rays 
-        #
+        #############
+        # get 2D rays
+        #############
+
         if self.dexist['ray2']['exist'] and not ('ray2' in kwargs['force']):
-            self.load(r2d,self.dexist['ray2']['grpname'],L=self.L)
+            logger.info(" Load r2d from %s", self.dexist['ray2']['grpname'])
+            self.load(r2d,self.dexist['ray2']['grpname'], L=self.L)
         else :
             # perform computation ...
-            # ... with vectorized ray evaluation 
+            # ... with vectorized ray evaluation
+            logger.debug(" a : (%d,%d,%d)",self.a)
+            logger.debug(" b : (%d,%d,%d)",self.b)
+
             if kwargs['ra_vectorized']:
+                logger.info(" Determine r2d vectorized version")
                 r2d = Si.raysv(self.a,self.b)
             # ... or with original and slow approach ( to be removed in a near future)
             else :
+                logger("Determine r2d non vectorized version")
                 r2d = Si.rays(self.a,self.b)
             # save 2D rays
-            self.save(r2d,'ray2',self.dexist['ray2']['grpname'],force = kwargs['force'])
+
+            logger.info(" save r2d in %s ",self.dexist['ray2']['grpname'])
+            self.save(r2d,'ray2', self.dexist['ray2']['grpname'], force = kwargs['force'])
 
         self.r2d = r2d
 
-        #
-        # get 3D rays 
-        #
+        #############
+        # get 3D rays
+        #############
+
         R = Rays(self.a,self.b)
         R.is3D = True
         if self.dexist['ray']['exist'] and not ('ray' in kwargs['force']):
-            self.load(R,self.dexist['ray']['grpname'],L=self.L)
+            logger.info(" Load r3d from %s", self.dexist['ray']['grpname'])
+            self.load(R,self.dexist['ray']['grpname'], L=self.L)
         else :
-
             if kwargs['ra_ceil_H'] == []:
                 if self.L.typ=='indoor':
                     ceilheight = self.L.maxheight
                 else:
-                    ceilheight = 0 
+                    ceilheight = 0
             else:
                 ceilheight = kwargs['ra_ceil_H']
 
 
-            R = self.r2d.to3D(self.L,H=ceilheight, N=kwargs['ra_number_mirror_cf'])
+            logger.info(" Run to3d H: %d, N: %d", ceilheight,kwargs['ra_number_mirror_cf'] )
+            R = self.r2d.to3D(self.L, H=ceilheight, N=kwargs['ra_number_mirror_cf'])
             if kwargs['rm_aw']:
                 R = R.remove_aw(self.L)
 
+
+            logger.info(" Run R.locbas ")
             R.locbas(self.L)
 
+            logger.info(" Run R.fillinter ")
             R.fillinter(self.L)
 
             # C = Ctilde()
 
             # C = R.eval(self.fGHz)
 
-            # save 3D rays 
+            # save 3D rays
 
-            self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])
+            logger.info(" Save 3D rays in %s",self.dexist['ray']['grpname'])
+            self.save(R, 'ray', self.dexist['ray']['grpname'], force = kwargs['force'])
 
 
         self.R = R
         toc = time.time()
-        if self.verbose :
-            print("Stop rays",toc-tic)
+        logger.info(" Stop rays %d",toc-tic)
 
         if self.R.nray == 0:
             raise NameError('No rays have been found. Try to re-run the simulation with a higher S.cutoff ')
@@ -1719,7 +1701,7 @@ class DLink(Link):
 
         try:
             pbar.update(20)
-        except: 
+        except:
             pass
         ############
         # H
@@ -2136,7 +2118,7 @@ class DLink(Link):
 
 
             >>> from pylayers.simul.link import *
-            >>> L=DLink(verbose=False)
+            >>> L=DLink()
             >>> L.eval()
 
         """

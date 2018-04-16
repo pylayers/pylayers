@@ -38,20 +38,25 @@ import shapely.ops as sho
 from tqdm import tqdm
 #from numba import autojit
 
+logger = logging.getLogger(__name__)
 
 def plot_lines(ax, ob, color = []):
-    """
+    """ plot lines with colors
+
     Parameters
     ----------
 
-    ax : 
-    ob : 
+    ax : matplotlib axis
+    ob : list of lines
+    color : list (optional)
+
     """
 
     from descartes.patch import PolygonPatch
+
     for ii,line in enumerate(ob):
         if color == []:
-            if ii ==0 : 
+            if ii ==0 :
                 c ='g'
             elif ii == len(ob)-1:
                 c ='r'
@@ -61,21 +66,21 @@ def plot_lines(ax, ob, color = []):
             c=color
 
         x, y = line.xy
-        
+
         ax.plot(x, y, color=c, alpha=0.7, linewidth=3, solid_capstyle='round', zorder=2)
     return ax
 
 def plot_poly(ax, ob, color = []):
-    """ plot polygon 
+    """ plot polygon
 
     Parameters
     ----------
 
-    ax : 
-    ob : 
+    ax :
+    ob :
 
     """
-    
+
     from descartes.patch import PolygonPatch
     for ii,poly in enumerate(ob):
         pp = PolygonPatch(poly,alpha=0.3)
@@ -117,7 +122,7 @@ def gidl(g):
    Returns
    -------
 
-   gr : A graph 
+   gr : A graph
 
    """
 
@@ -165,7 +170,7 @@ def showsig2(lsig,L,tahe):
         ta = th[0]
         he = th[1]
         plu.displot(ta.reshape(2,1),he.reshape(2,1),color='k',linewidth=1)
-                      
+
 
     tahe = np.array(tahe) # Nseg x tahe x xy 
     pta = tahe[:,0,:].T  #2 x Nseg
@@ -1089,17 +1094,17 @@ class Signatures(PyLayers,dict):
             backtrace (allow to visit already visited nodes in simple path algorithm)
         progress : boolean
             display the time passed in the loop
-        diffraction : boolean 
-            activate diffraction 
-        threshold : float 
+        diffraction : boolean
+            activate diffraction
+        threshold : float
             for reducing calculation time
-        animations :  boolean 
-        nD : int 
-            maximum number of diffraction 
-        nR : int 
-            maximum number of reflection  
-        nT : int 
-            maximum number of transmission   
+        animations :  boolean
+        nD : int
+            maximum number of diffraction
+        nR : int
+            maximum number of reflection
+        nT : int
+            maximum number of transmission
 
 
         See Also
@@ -1108,7 +1113,7 @@ class Signatures(PyLayers,dict):
         pylayers.simul.link.Dlink.eval
 
         """
-        defaults = {'cutoff' : 2, 
+        defaults = {'cutoff' : 2,
                     'threshold':0.1,
                     'delay_excess_max_ns':400,
                     'nD':1,
@@ -1166,10 +1171,10 @@ class Signatures(PyLayers,dict):
         pt_source = np.array(self.L.Gt.node[self.source]['polyg'].centroid.coords.xy)
         pt_target = np.array(self.L.Gt.node[self.target]['polyg'].centroid.coords.xy)
         d_source_target = np.linalg.norm(pt_source - pt_target)
-        
+
         #print("source,lis :",self.source,lis)
         #print("target,lit :",self.target,lit)
-        # for u in lit: 
+        # for u in lit:
         #     print u
         # print "-------------"
 
@@ -1220,22 +1225,22 @@ class Signatures(PyLayers,dict):
             if s[0]>0:
                 pts = self.L.Gs[s[0]].keys()
                 tahe = [np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])]
-            # start from a point 
+            # start from a point
             else:
                 tahe = [np.array([self.L.Gs.pos[s[0]],self.L.Gs.pos[s[0]]])]
 
             # R is a list which contains reflexion matrices (Sn) and translation matrices(vn)
-            # for interaction mirroring 
+            # for interaction mirroring
             # R=[[S0,v0],[S1,v1],...]
 
             R = [(np.eye(2),np.array([0,0]))]
-            
+
             # initialize visited list sequence with the first intercation s
 
             visited = [s]
-           
-            # if 
-            #   + s is in target interaction list 
+
+            # if
+            #   + s is in target interaction list
             # or
             #   + arrival cycle is equal to target cycle
             # then stack a new signature in self[len(typ)] 
@@ -1260,7 +1265,7 @@ class Signatures(PyLayers,dict):
             # air walls do not intervene in the number of transmission (cutoff criteria) 
             # lawp is the list of airwall position in visited sequence
             # handle the case of the first segment which can be an airwall
-            # 
+            #
             if len(s)==3:
                 nseg = s[0]
                 if ((self.L.Gs.node[nseg]['name']=='_AIR') or 

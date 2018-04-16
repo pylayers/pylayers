@@ -27,7 +27,7 @@ import networkx as nx
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
-import matplotlib.cm as cm 
+import matplotlib.cm as cm
 import struct as stru
 import pylayers.util.geomutil as geu
 import pylayers.util.pyutil as pyu
@@ -1119,6 +1119,7 @@ class Rays(PyLayers, dict):
             zb=self.pRx[2]
         ht = za
         hr = zb
+
         assert (hr<H or H==0 or H == -1),"mirror : receiver higher than ceil height"
         assert (ht<H or H==0 or H == -1),"mirror : transmitter higher than ceil height"
 
@@ -1160,7 +1161,7 @@ class Rays(PyLayers, dict):
             # print "thrp",thrp
             # print "alphap",d[zp]
 
-        return(d)
+        return d
 
     def to3D(self, L, H=3, N=1, rmoutceilR=True):
         """ transform 2D ray to 3D ray
@@ -1177,8 +1178,8 @@ class Rays(PyLayers, dict):
         N : int
             number of mirror reflexions
         rmoutceilR : bool
-            Remove ceil reflexions in cycles (Gt nodes) 
-            with indoor=False attribute 
+            Remove ceil reflexions in cycles (Gt nodes)
+            with indoor=False attribute
 
         Returns
         -------
@@ -1204,7 +1205,7 @@ class Rays(PyLayers, dict):
         #
 
         d = self.mirror(H=H, N=N, za=tx[2], zb=rx[2])
-        
+
         #
         # Elimination of invalid diffraction point 
         # If the diffaction point is a separation between 2 air wall 
@@ -1220,7 +1221,7 @@ class Rays(PyLayers, dict):
 
             pts = self[i]['pt'][0:2, :, :]
             sig = self[i]['sig']
-            
+
             if pts.shape[2]!=0:
                 # broadcasting of t and r
                 t = self.pTx[0:2].reshape((2, 1, 1)) * \
@@ -1233,8 +1234,8 @@ class Rays(PyLayers, dict):
                 r = self.pRx[0:2].reshape((2, 1, 1))
                 pts1 = np.hstack((t,r))
             # append t and r to interaction points in 2D
-            
-            
+
+
             si1 = pts1[:, 1:, :] - pts1[:, :-1, :]
             # array of all ray segments distances
             si = np.sqrt(np.sum(si1 * si1, axis=0))
@@ -1289,7 +1290,7 @@ class Rays(PyLayers, dict):
             # add parameterization of tx and rx (0,1)
             a1 = np.concatenate((np.zeros((1, Nrayk)), a1, np.ones((1, Nrayk))))
             # reshape signature in adding tx and rx
-            
+
             if sig.shape[0]!=0:
                 sig = np.hstack((np.zeros((2, 1, Nrayk), dtype=int),
                              sig,
@@ -1309,7 +1310,7 @@ class Rays(PyLayers, dict):
             else:
                  pte = np.hstack((Tx, Rx))
 
-            # extension 
+            # extension
             for l in d:                     # for each vertical pattern (C,F,CF,FC,....)
                 #print k,l,d[l]
                 Nint = len(d[l])            # number of additional interaction
@@ -1363,7 +1364,7 @@ class Rays(PyLayers, dict):
 
                     elif l > 0 and Nint%2 ==0: # l>0 Nint even
                         u = np.mod(range(Nint), 2)
-                    
+
                     #
                     u = u + 4
                     #
@@ -1476,7 +1477,7 @@ class Rays(PyLayers, dict):
                         z[pz] = 2*H-z[pz]
                         ptees[2, :] = z
                     # case where ceil reflection are inhibited
-                    elif H==0 : 
+                    elif H==0:
                         z  = abs(l+a1es*(rx[2]-l))
                         # pz = np.where(z > H)
                         # z[pz] = 2*H-z[pz]
@@ -1501,7 +1502,7 @@ class Rays(PyLayers, dict):
                 if len(L.lsss)>0:
                     #
                     # lsss : list of sub segments ( iso segments siges)
-                    # lnss : list of diffaction point involving 
+                    # lnss : list of diffaction point involving
 
                     lsss = np.array(L.lsss)
                     lnss = np.array(L.lnss)
@@ -1511,73 +1512,73 @@ class Rays(PyLayers, dict):
                     # type of interaction
                     typi = siges[1,:,:]
 
-                    # lss : list of subsegments in the current signature 
+                    # lss : list of subsegments in the current signature
                     #
                     # scalability : avoid a loop over all the subsegments in lsss
                     #
                     lss = [ x for x in lsss if x in anstr.ravel()]
-                    
+
                     ray_to_delete = []
-                    for s in lss: 
+                    for s in lss:
                         u  = np.where(anstr==s)
                         if len(u)>0:
                             zs = ptees[2,u[0],u[1]]
                             zinterval = L.Gs.node[s]['z']
                             unot_in_interval = ~((zs<=zinterval[1]) & (zs>=zinterval[0]))
                             ray_to_delete.extend(u[1][unot_in_interval])
-                            
-                    # lns : list of diffraction points in the current signature 
+
+                    # lns : list of diffraction points in the current signature
                     #       with involving multi segments (iso)
                     # scalability : avoid a loop over all the points in lnss
                     #
                     lns = [ x for x in lnss if x in anstr.ravel()]
-                    
+
                     #
                     # loop over multi diffraction points
                     #
-                
-                    for npt in lns: 
+
+                    for npt in lns:
                         # diffraction cornet in espoo.lay
                         #if npt==-225:
-                        #    import ipdb 
+                        #    import ipdb
                         #    ipdb.set_trace()
 
                         u  = np.where(anstr==npt)
                         if len(u)>0:
-                           # height of the diffraction point 
+                           # height of the diffraction point
                             zp = ptees[2,u[0],u[1]]
 
                             #
-                            # At which couple of segments belongs this height ? 
+                            # At which couple of segments belongs this height ?
                             # get_diffslab function answers that question
                             #
 
                             ltu_seg,ltu_slab = L.get_diffslab(npt,zp)
 
                             #
-                            # delete rays where diffraction point is connected to  
+                            # delete rays where diffraction point is connected to
                             # 2 AIR segments
-                            # 
+                            #
 
-                            [ray_to_delete.append(u[1][i]) for i in range(len(zp)) 
+                            [ray_to_delete.append(u[1][i]) for i in range(len(zp))
                             if ((ltu_slab[i][0]=='AIR') & (ltu_slab[i][1]=='AIR'))]
                             # #zinterval = L.Gs.node[s]['z']
                             # # if (zs<=zinterval[1]) & (zs>=zinterval[0]):
                             # if ((tu_slab[0]!='AIR') & (tu_slab[1]!='AIR')):
                             #     #print(npt , zp)
                             #     pass
-                            # else: 
+                            # else:
                             #     ray_to_delete.append(u[1][0])
-                    
+
                     # # nstr : structure number
                     # nstr  = np.delete(nstr,ray_to_delete,axis=1)
-                    # typi : type of interaction 
+                    # typi : type of interaction
                     typi  = np.delete(typi,ray_to_delete,axis=1)
                     # 3d sequence of points
                     ptees = np.delete(ptees,ray_to_delete,axis=2)
                     # extended (floor/ceil) signature
                     siges = np.delete(siges,ray_to_delete,axis=2)
-                    
+
                 if rmoutceilR:
                     # 1 determine Ceil reflexion index
                     # uc (inter x ray)
@@ -1598,7 +1599,6 @@ class Rays(PyLayers, dict):
                         uout = np.where([not L.Gt.node[mapnode[u+1]]['indoor'] for u in ucy])[0] #ucy+1 is to manage cycle 0
                         # 3 remove ceil reflexions of outdoor cycles
                         if len(uout)>0:
-                        
                             ptees = np.delete(ptees,uc[1][uout],axis=2)
                             siges = np.delete(siges,uc[1][uout],axis=2)
                             sigsave = np.delete(sigsave,uc[1][uout],axis=2)
@@ -1643,7 +1643,6 @@ class Rays(PyLayers, dict):
         val =0
 
         for k in r3d.keys():
-            
             nrayk = np.shape(r3d[k]['sig'])[2]
             r3d[k]['nbrays'] = nrayk
             r3d[k]['rayidx'] = np.arange(nrayk)+val
@@ -1689,7 +1688,7 @@ class Rays(PyLayers, dict):
         for k in r3d.keys():
             ir = r3d[k]['rayidx']
             r3d.delays[ir] = r3d[k]['dis']/0.3
-           
+
 
         r3d.origin_sig_name = self.origin_sig_name
         r3d.Lfilename = L._filename
