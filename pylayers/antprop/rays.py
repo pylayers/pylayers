@@ -1,4 +1,3 @@
-
 # -*- coding: latin1 -*-
 from __future__ import print_function
 """
@@ -9,6 +8,7 @@ from __future__ import print_function
 
 """
 import doctest
+import logging
 import os
 import glob
 try:
@@ -41,12 +41,14 @@ import shapely.geometry as shg
 import h5py
 import operator
 
+logger = logging.getLogger(__name__)
+
 class Rays(PyLayers, dict):
     """ Class hendling a set of rays
 
     Attributes
     ----------
-    
+
     pTx  : np.array
         transmitter (3,)
     pRx  : np.array
@@ -65,27 +67,27 @@ class Rays(PyLayers, dict):
     I.D  : IntD
     I.D.A : np.array
         (f,iD,3,3)
-    Lfilename : string 
-        Layout name 
+    Lfilename : string
+        Layout name
     delays : np.array
         ray delays
     dis : np.array
         ray distance = delays*0.3
-    nray : int 
-        number of rays 
-    evaluated : boolean 
+    nray : int
+        number of rays
+    evaluated : boolean
         are rays evaluated ?
-    is3D : boolean 
+    is3D : boolean
         are rays 2d or 3d rays ?
-    isbased : boolean 
-        locbas has been applied ? 
-    filles : boolean 
-        filled  has been applied ? 
-    los : boolean 
+    isbased : boolean
+        locbas has been applied ?
+    filles : boolean
+        filled  has been applied ?
+    los : boolean
         Line of sight boolean
     fGHz : np.array
         frequency points for evaluation
-    origin_sig_name : string 
+    origin_sig_name : string
         signature file which produces the rays
 
 
@@ -131,7 +133,7 @@ class Rays(PyLayers, dict):
         self.nray = 0
         self.nray2D = 0
         self.raypt = 0
-        self.los = False  
+        self.los = False
         self.is3D = False
         self.isbased = False
         self.filled = False
@@ -462,7 +464,7 @@ class Rays(PyLayers, dict):
 
             for a,va in f.attrs.items():
                 setattr(self,a,va)
-            
+
 
             fh5.close()
 
@@ -1858,18 +1860,18 @@ class Rays(PyLayers, dict):
         Notes
         -----
 
-        This method adds for each group of interactions the following members 
+        This method adds for each group of interactions the following members
 
         norm : np.array
-            3 x i x r  (interaction vector)  
+            3 x i x r  (interaction vector)
         nstrwall : np.array
-            nstr of interactions 
+            nstr of interactions
         vsi : np.array
-            3 x (i+1) x r 
-        aod : np.array 
-            2 x r 
+            3 x (i+1) x r
+        aod : np.array
+            2 x r
         aoa : np.array
-            2 x r 
+            2 x r
         BoO : np.array
             3 x 3 x r
         Bi  : np.array
@@ -1879,15 +1881,15 @@ class Rays(PyLayers, dict):
         BiN : np.array
             3 x 3 x r
         scpr : np.array
-            i x r 
-        theta : np.array 
-            i x r 
-        rays  : int 
-        nbrays  : int 
+            i x r
+        theta : np.array
+            i x r
+        rays  : int
+        nbrays  : int
         rayidx : np.array
-        diffslabs :  list 
+        diffslabs : list
         diffvect :  np.array
-            (phi0,phi,beta,NN) 
+            (phi0,phi,beta,NN)
 
 
         """
@@ -1918,6 +1920,7 @@ class Rays(PyLayers, dict):
         #  nstrs is the nstr of the segment if subsegment :
         #  nstr  is the glabal which allows to recover the slab values
         #
+
         idx = np.array(())
         if self.los:
             idxts = 1
@@ -1928,7 +1931,7 @@ class Rays(PyLayers, dict):
 
         # list of used wedges
         luw=[]
-        
+
         lgi = self.keys()
         lgi.sort()
         for k in lgi:
@@ -1950,10 +1953,10 @@ class Rays(PyLayers, dict):
                 # print nstr
                 #
                 # uss : index of subsegment
-                # subsegments are not nodes of Gs but have positive nst index
+                # subsegments are not nodes of Gs but have positive nstr index
                 #
 
-                uss   = np.where(nstr>nsmax)
+                uss   = np.where(nstr > nsmax)
 
                 # print uss
 
@@ -1961,8 +1964,8 @@ class Rays(PyLayers, dict):
                 #
                 # if subsegments have been found
                 #
-                if len(uss)>0:
-                    ind   = nstr[uss]-nsmax-1
+                if len(uss) >0:
+                    ind   = nstr[uss]- nsmax-1
                     nstrs[uss] = np.array(L.lsss)[ind]
                 #    print nstr
                 #print nstrs
@@ -2071,17 +2074,20 @@ class Rays(PyLayers, dict):
                 #
                 # scpr : i x r
                 #
-                
+
                 scpr = np.sum(vn*si[:,0:-1,:], axis=0)
                 self[k]['scpr'] = scpr
                 self[k]['theta'] = np.arccos(abs(scpr))  # *180/np.pi
-                
 
-                def fix_colinear():
+                def fix_colinear(w):
+                    """
+                    w : vector
+                    """
                     nw = np.sqrt(np.sum(w*w, axis=0))
                     u = np.where(nw==0)
                     if len(u[0])!=0:
-                        print('colinear situation detected')
+                        pdb.set_trace()
+                        logger.debug('colinear situation detected')
                         if (u[0].any() or u[1].any()) \
                             or (u[0].any()==0 or u[1].any()==0):
 
@@ -2094,16 +2100,16 @@ class Rays(PyLayers, dict):
                             # uh : nbi x nbr anti-colinear index
                             uh = uu[np.logical_not(uvv)]
                             try:
-                                #fiw w for colinear index
-                                w[:,uv[:,0],uv[:,1]] = np.array(([1,0,0]))[:,np.newaxis]
+                                #fix w for colinear index
+                                w[:,uv[:,0],uv[:,1]] = np.array(([1,0,0]))[:,None]
                                 # update normal
-                                nw[uv[:,0],uv[:,1]] = \
-                                    np.sqrt(np.sum(w[:,uv[:,0],uh[:,1]]*w[:,uv[:,0],uv[:,1]],axis=0))
+                                nw[uv[:,0],uv[:,1]] = np.sqrt(np.sum(
+                                    w[:,uv[:,0],uh[:,1]]*w[:,uv[:,0],uv[:,1]],axis=0))
                             except:
                                 pass
                             try:
                                 # fix w for anti-colinear index
-                                w[:,uh[:,0],uh[:,1]] = np.array(([0,0,1]))[:,np.newaxis]
+                                w[:,uh[:,0],uh[:,1]] = np.array(([0,0,1]))[:,None]
                                 # update normal
                                 nw[uh[:,0],uh[:,1]] = \
                                     np.sqrt(np.sum(w[:,uh[:,0],uh[:,1]]*w[:,uh[:,0],uh[:,1]],axis=0))
@@ -2118,7 +2124,7 @@ class Rays(PyLayers, dict):
                 w = np.cross(s_in, vn, axisa=0, axisb=0, axisc=0)
 
                 # nw : i x r
-                w, nw = fix_colinear()
+                w, nw = fix_colinear(w)
 
                 wn = w/nw
                 v = np.cross(wn, s_in, axisa=0, axisb=0, axisc=0)
@@ -2131,12 +2137,12 @@ class Rays(PyLayers, dict):
                 #  Bi 3 x 3 x i x r
                 Bi = np.concatenate((es_in,ew,ev),axis=1)
                 #  self[k]['Bi'] 3 x 3 x i x r
-                self[k]['Bi'] = Bi  
+                self[k]['Bi'] = Bi
                 ################################
 
                 w = np.cross(s_out, vn, axisa=0, axisb=0, axisc=0)
 
-                w, nw = fix_colinear()
+                w, nw = fix_colinear(w)
                 #wn = w/np.sqrt(np.sum(w*w, axis=0))
                 wn = w/nw
 
@@ -2149,7 +2155,7 @@ class Rays(PyLayers, dict):
                 #  Bi 3 x 3 x i x r
                 Bo = np.concatenate((es_out,ew,ev),axis=1)
 
-                 # self[k]['Bo'] 3 x 3 x i x r 
+                 # self[k]['Bo'] 3 x 3 x i x r
                 self[k]['Bo'] = Bo
                 #
                 # AOA (rad)
@@ -2183,7 +2189,7 @@ class Rays(PyLayers, dict):
                 #                                   eph[:,np.newaxis,:]),axis=1)
 
                 # Creation of B from Bi and Bo
-                # is done after the potential diffraction 
+                # is done after the potential diffraction
                 # computation
 
                 ## index creation
@@ -2213,7 +2219,7 @@ class Rays(PyLayers, dict):
                 except:
                     self._ray2nbi=_ray2nbi
 
-               
+
                 self._ray2nbi[self[k]['rayidx']]  = k
                 nbrayt = nbrayt + nbray
                 self.raypt = self.raypt + self[k]['nbrays']
@@ -2221,7 +2227,7 @@ class Rays(PyLayers, dict):
                 #################################
                 # Start diffraction specific case
                 #################################
-                
+
                 if len(udiff[0]) != 0 :
                     Z = np.where(ityp.T==1)
                     udiff=Z[1],Z[0]
@@ -2230,7 +2236,7 @@ class Rays(PyLayers, dict):
                     diffupt=nstr[udiff]
                     # position of diff seg (- because iupnt accept > 0 reference to points)
                     #
-                    # TO BE FIXED 
+                    # TO BE FIXED
                     #
                     #ptdiff = L.pt[:,L.iupnt[-diffupt]]
                     ptdiff = np.array([ (L.Gs.pos[x][0],L.Gs.pos[x][1])  for x in diffupt ]).T
@@ -2246,7 +2252,7 @@ class Rays(PyLayers, dict):
                     # get points positions
                     #pdb.set_trace()
                     pts = np.array(map(lambda x : L.seg2pts([x[0],x[1]]),aseg))
-                    
+
                     #self[k]['diffslabs']=[str(L.sl[L.Gs.node[x[0]]['name']])+'_'
                     #                    + str(L.sl[L.Gs.node[x[1]]['name']]]) for x in aseg]
                     self[k]['diffslabs']=[ L.Gs.node[x[0]]['name']+'@'
@@ -2265,14 +2271,14 @@ class Rays(PyLayers, dict):
                     #pts is (nb_diffraction_points x 4 x 2)
                     #- The dimension 4 represent the 2x2 points: t1,h1 and t2,h2
                     # tail and head of segment 1 and 2 respectively
-                    # a segment 
+                    # a segment
                     #- The dimension 2 is x,y
                     #
-                    # The following aims to determine which tails and heads of 
-                    # segments associated to a given diffraction point 
+                    # The following aims to determine which tails and heads of
+                    # segments associated to a given diffraction point
                     # are connected
                     #
-                    # 
+                    #
 
                     # point diff is pt1
                     updpt1 = np.where(np.sum(ptdiff.T==pt1,axis=1)==2)[0]
@@ -2308,11 +2314,11 @@ class Rays(PyLayers, dict):
                     # NN = (2.-NN)*np.pi
 
                     #angle between face 0, diffraction point and s_in
-                    #s_in[:2,udiff[0],udiff[1]]  : 
+                    #s_in[:2,udiff[0],udiff[1]]  :
                     # s_in of insteractions udiff (2D) restricted to diffraction points
                     vptpa = pt-pa
                     vptpan = vptpa.T / np.sqrt(np.sum((vptpa)*(vptpa),axis=1))
-                    # vpapt= pa-pt # papt : direction vector of face 0 
+                    # vpapt= pa-pt # papt : direction vector of face 0
                     # vpaptn = vpapt.T / np.sqrt(np.sum((vpapt)*(vpapt),axis=1))
                     sid = s_in[:,udiff[0],udiff[1]] #s_in restricted to diff
                     sod = s_out[:,udiff[0],udiff[1]] #s_out restricted to diff
@@ -2355,10 +2361,10 @@ class Rays(PyLayers, dict):
                     #Bi diffract
                     #####
                     #w is the \perp \soft in diff
-                    w = np.cross(-sid,vnormz, axisa=0, axisb=0, axisc=0)
+                    w = np.cross(-sid, vnormz, axisa=0, axisb=0, axisc=0)
 
                     # nw : i x r
-                    w, nw = fix_colinear()
+                    w, nw = fix_colinear(w)
 
                     wn = w/nw
                     # Handling channel reciprocity s_in --> -s_in
@@ -2379,7 +2385,7 @@ class Rays(PyLayers, dict):
                     #####
                     w = np.cross(sod,vnormz, axisa=0, axisb=0, axisc=0)
 
-                    w, nw = fix_colinear()
+                    w, nw = fix_colinear(w)
                     wn = w/nw
 
                     #wn = w/np.sqrt(np.sum(w*w, axis=0))
@@ -2796,13 +2802,13 @@ class Rays(PyLayers, dict):
         self.filled = True
 
     def eval(self,fGHz=np.array([2.4]),bfacdiv=False,ib=[]):
-        """  field evaluation of rays  
+        """  field evaluation of rays
 
         Parameters
         ----------
 
         fGHz : array
-            frequency in GHz 
+            frequency in GHz
         ib : list of interactions block
 
         """
