@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """ Handle Furnitures
 
-.. curentmoddue:: pylayers.gis.furniture 
+.. curentmoddue:: pylayers.gis.furniture
 
 .. autosummary
 
@@ -9,8 +9,14 @@
 
 import numpy as np
 import re
+import sys
 import doctest
-import ConfigParser
+if sys.version_info.major==2:
+    from  urllib2 import urlopen
+    import ConfigParser
+else:
+    from  urllib.request import urlopen
+    import configparser
 from   matplotlib.path import Path
 from   matplotlib.patches import PathPatch
 import matplotlib.pyplot as plt
@@ -93,7 +99,7 @@ class Furniture(PyLayers):
 
         """
         for key in self.__dict__:
-            print key, '\t\t:\t', self.__dict__[key]
+            print(key, '\t\t:\t', self.__dict__[key])
 
     def set_position(self, p=[], angle=0):
         """ set position

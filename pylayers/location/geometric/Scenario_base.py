@@ -29,9 +29,6 @@ from pylayers.location.geometric.constraints.toa import *
 from pylayers.location.geometric.constraints.tdoa import *
 from pylayers.location.geometric.constraints.cla import *
 
-
-
-
 class Scenario(object):
     """
     Class Scenario : definition of a static localization scenario
@@ -291,7 +288,7 @@ class Scenario(object):
 
         if self.parmsc['Constrain_Type']=='TDOA':
             lbcl=Nan-1
-        else :             
+        else :
             lbcl=Nan
 
         tdoa_idx = nonzero(np.array(l_connect)=='TDOA')[0]
@@ -334,10 +331,10 @@ class Scenario(object):
             clatdoa = CLA(self.parmsh)
 
 
-            #cla.C_Id=0        
+            #cla.C_Id=0
             if parmsc['exclude_out'] != None :
-                E = Exclude(nodes=parmsc['exclude_out'])   
-                cla.append(E)  
+                E = Exclude(nodes=parmsc['exclude_out'])
+                cla.append(E)
 
 
 
@@ -468,7 +465,7 @@ class Scenario(object):
                 self.errTOA = delete(self.errTOA,0,0)
             if len(self.tdoa_idx) != 0:
                 self.errTDOA = delete(self.errTDOA,0,0)
-            # version boite recursive      
+            # version boite recursive 
             #
             ######################### CLA TOTALE
             cla.merge2()
@@ -528,9 +525,9 @@ class Scenario(object):
             #print errli
             err1=min(errli)
             #print err1
-            self.err1  = np.hstack((self.err1,err1))   
+            self.err1  = np.hstack((self.err1,err1))
 
-            #self.err2  = np.hstack((self.err2,err2))      
+            #self.err2  = np.hstack((self.err2,err2))
 
 
             #if err >3:
@@ -550,15 +547,15 @@ class Scenario(object):
 
                 if self.parmsc['save_pe']:
                     self.p_LS.append(p_LS)
-                if self.parmsc['Constrain_Type'] != 'hybrid':
-                    errLS   = np.sqrt(np.dot(p_LS[:2]-pbn[:2],p_LS[:2]-pbn[:2]))   
+                if self.parmsc['Constrain_Type'] != 'hybrid'
+                    errLS   = np.sqrt(np.dot(p_LS[:2]-pbn[:2],p_LS[:2]-pbn[:2])) 
 
                 #elif self.parmsc['Algebraic_method'] == 'CRB':
                 #       errLS = np.sqrt(self.CRB)
 
                 else :
 
-                    errLS   = np.sqrt(np.dot(p_LS[:2]-pbn[:2],p_LS[:2]-pbn[:2]))       
+                    errLS   = np.sqrt(np.dot(p_LS[:2]-pbn[:2],p_LS[:2]-pbn[:2]))
                 self.errLS  = np.hstack((self.errLS,errLS))    
 
             if errli > errLS:
@@ -597,12 +594,12 @@ class Scenario(object):
                 ss=np.array(atv[i])
 
 
-                RN_RSS=np.vstack((RN_RSS,aa))              
-                Rss=np.vstack((Rss,ss))            
+                RN_RSS=np.vstack((RN_RSS,aa))
+                Rss=np.vstack((Rss,ss)) 
 
 
             RN_RSS=np.delete(RN_RSS,0,0).T
-            RN_RSS = RN_RSS[:2]                
+            RN_RSS = RN_RSS[:2] 
             Rss=np.delete(Rss,0,0)
 
 
@@ -624,8 +621,8 @@ class Scenario(object):
                 ss=np.array(atv[i])
                 tt=np.array(self.std_v[self.ibn,i])
 
-                RN_TOA=np.vstack((RN_TOA,aa))              
-                ToA=np.vstack((ToA,ss))            
+                RN_TOA=np.vstack((RN_TOA,aa)) 
+                ToA=np.vstack((ToA,ss)) 
                 ToAStd=np.vstack((ToAStd,tt))
 
             RN_TOA=np.delete(RN_TOA,0,0).T

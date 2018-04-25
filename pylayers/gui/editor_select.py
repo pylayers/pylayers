@@ -4,7 +4,7 @@ from __future__ import print_function
 
 import os
 import pdb
-import Image
+from PIL import Image
 import numpy as np
 from pylayers.util import geomutil as geu
 from pylayers.util import pyutil as pyu

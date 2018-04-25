@@ -3,7 +3,6 @@ import numpy as np
 import pylayers.antprop.antenna as ant
 import pylayers.util.geomutil as geu
 import matplotlib.pyplot as plt
-import scipy.signal as si
 import doctest
 import pdb
 r"""
@@ -28,7 +27,7 @@ class Array(ant.Pattern):
 
     An array is defined as the association of  :
 
-        + a set of points 
+        + a set of points
         + a set of frequency dependent weights
 
     """
@@ -44,7 +43,7 @@ class Array(ant.Pattern):
                        or  Nx x Ny x Nz x Nf
 
         Nf : number of frequency points
-        Nb : Number of beams  
+        Nb : Number of beams
 
         """
         assert type(p) == np.ndarray, " Array not an array"
@@ -55,7 +54,7 @@ class Array(ant.Pattern):
             self.Np = p.shape[1]
         shp = np.shape(p)
 
-        # If no excitation choose 1 beam of uniform weights 
+        # If no excitation choose 1 beam of uniform weights
         # Nb x Np x Nf
         if w == []:
             w = np.ones((shp[1:]))[..., None]
@@ -113,7 +112,7 @@ class ULArray(Array):
             basis of the ULA (by default the othonormal basis I3)
         mode : string
             'step' | 'point'
-        p : 
+        p :
 
         """
         defaults = { 'N'    : [8, 1, 1],
@@ -166,6 +165,8 @@ class ULArray(Array):
 
 class UCArray(Array):
     """ Uniform Circular Array
+
+
     """
 
     pass
@@ -173,16 +174,17 @@ class UCArray(Array):
 class AntArray(Array, ant.Antenna):
     """ Class AntArray
 
+
     This class inherits from Array and Antenna classes
 
-    An AntArray is the combination of an 
+    An AntArray is the combination of an
         + an Array and an Antenna
         + an Array and an AntArray
 
 
     """
 
-    def __init__(self,**kwargs):
+    def __init__(self, **kwargs):
         """
 
         Parameters
@@ -190,7 +192,7 @@ class AntArray(Array, ant.Antenna):
 
         mode : string
             'array' | 'grid'
-            'array' is for antenna array 
+            'array' is for antenna array
             'grid' for cloud of points (scanner).
 
         typant : string
@@ -225,33 +227,32 @@ class AntArray(Array, ant.Antenna):
         >>> A.plotG()
 
         """
-        defaults = {'tarr'    : 'UA',
-                    'N'       : [8, 1, 1],
-                    'dm'      : [0.075, 0, 0],
-                    'min'     : [0, 0, 0, 0],
-                    'max'     : [0, 0, 0, 0],
-                    'S'       : [],
-                    'typant'  :'Omni', #'S1R1.vsh3'
-                    'mode'    :'array',
-                    'array'   :[],
-                    'p'       :[],
-                    'w'       :[],
-                    'fGHz'   :np.array([60])
+        defaults = {'tarr': 'UA',
+                    'N': [8, 1, 1],
+                    'dm': [0.075, 0, 0],
+                    'min': [0, 0, 0, 0],
+                    'max': [0, 0, 0, 0],
+                    'S': [],
+                    'typant': 'Omni',
+                    'mode': 'array',
+                    'array': [],
+                    'p': [],
+                    'w': [],
+                    'fGHz': np.array([60])
                     }
-
 
         for k in defaults:
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
-        self.tarr   = kwargs.pop('tarr')
-        self.N      = np.array(kwargs.pop('N'))
-        self.max    = np.array(kwargs.pop('max'))
-        self.min    = np.array(kwargs.pop('min'))
-        self.Na     = np.prod(self.N)  # number of antennas
-        self.dm     = np.array(kwargs.pop('dm'))
-        self.array  = kwargs.pop('array')
-        self.w      = kwargs.pop('w')
+        self.tarr = kwargs.pop('tarr')
+        self.N = np.array(kwargs.pop('N'))
+        self.max = np.array(kwargs.pop('max'))
+        self.min = np.array(kwargs.pop('min'))
+        self.Na = np.prod(self.N)  # number of antennas
+        self.dm = np.array(kwargs.pop('dm'))
+        self.array = kwargs.pop('array')
+        self.w = kwargs.pop('w')
 
         if self.array == []:
             self.typant = kwargs.pop('typant')
@@ -277,7 +278,7 @@ class AntArray(Array, ant.Antenna):
             assert len(self.typant) == self.Na, "Wrong number of antennas"
         else:
             self.sameAnt = True
-       
+
         # Uniform Array
         # p is obtained from ULArray
         #
@@ -302,7 +303,7 @@ class AntArray(Array, ant.Antenna):
         # init Antenna parent
         self.la = []
         if self.sameAnt:
-            self.la.append(ant.Antenna(typ=self.typant)) 
+            self.la.append(ant.Antenna(typ=self.typant))
         else:
             for t in self.typant:
                 self.la.append(ant.Antenna(typ=t))

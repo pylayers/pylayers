@@ -131,10 +131,21 @@ descartes>=1.0
 SimPy>=2.2  
 PIL>=1.1.5  
 bitstring>=3.0.2  
-pyintervall>=1.0  
+pyinterval>=1.0  
 osmapi>=0.3  
 imposm  
 basemap>=1.0  
 pandas >=0.12.0  
 mayavi >=4.3.1  
+
+# The gdal module
+
+gdal module is needed for importing aster files
+there are 3 broken links. 
+
+conda install gdal 
+cd ~/anaconda2/lib
+ln -s ../pkgs/libnetcdf-4.3.3.1-3/lib/libnetcdf.so.7 .
+ln -s ../pkgs/hdf5-1.8.15.1-3/lib/libhdf5_cpp.so.10 .
+ln -s ../pkgs/kealib-1.4.5-0/lib/libkea.so.1.4.5 .
 

@@ -23,7 +23,7 @@ import numpy.ma as ma
 # from antenna import *
 import shapely.geometry as shg
 from descartes.patch import PolygonPatch
-from itertools import combinations, permutations,product
+from itertools import combinations, permutations, product
 
 
 COLOR = {
@@ -32,57 +32,58 @@ COLOR = {
 }
 
 def ispoint(tpts, pt, tol=0.05):
-        """ check if pt is a point in a tuple of points
+    """ check if pt is a point in a tuple of points
 
-        Parameters
-        ----------
+    Parameters
+    ----------
 
-        tpts : tuple (points (2xN) , index (1xN))
-        pt  : point (2,1)
-        tol : float
-            default (0.05 meters)
+    tpts : tuple (points (2xN) , index (1xN))
+    pt  : point (2,1)
+    tol : float
+        default (0.05 meters)
 
-        if True the point number (<0) is returned
-        else 0 is return
+    if True the point number (<0) is returned
+    else 0 is return
 
-        Returns
-        -------
+    Returns
+    -------
 
-        k : point index if point exists, 0 otherwise
+    k : point index if point exists, 0 otherwise
 
-        Examples
-        --------
+    Examples
+    --------
 
-            >>> from pylayers.util.geomutil.util import *
-            >>> tpts= (np.array([[1,2,3],[5,6,7]]),np.array([-1,-2,-3]))
-            >>> pt = np.array([[1],[5]])
-            >>> ispoint(tpts,pt)
-            -1
+        >>> from pylayers.util.geomutil.util import *
+        >>> tpts= (np.array([[1,2,3],[5,6,7]]),np.array([-1,-2,-3]))
+        >>> pt = np.array([[1],[5]])
+        >>> ispoint(tpts,pt)
+        -1
 
-        See Also
-        --------
+    See Also
+    --------
 
-        pylayers.util.geomutil.Polygon.setvnodes
+    pylayers.util.geomutil.Polygon.setvnodes
 
-        """
-        # print("ispoint : pt ", pt)
-        pts = tpts[0]
-        ke =  tpts[1]
-        
-        u = pts - pt.reshape(2, 1)
-        v = np.sqrt(np.sum(u * u, axis=0))
-        nz = (v > tol)
-        b = nz.prod()
-        if b == 1:
-            # if all points are different from pt
-            return(0)
+    """
+    # print("ispoint : pt ", pt)
+    pts = tpts[0]
+    ke = tpts[1]
+
+    u = pts - pt.reshape(2, 1)
+    v = np.sqrt(np.sum(u * u, axis=0))
+    nz = (v > tol)
+    b = nz.prod()
+    if b == 1:
+        # if all points are different from pt
+        return(0)
+    else:
+        nup = np.where(nz == False)[0]
+        if len(nup) == 1:
+            return(ke[nup][0])
         else:
-            nup = np.where(nz == False)[0]
-            if len(nup) == 1:
-                return(ke[nup][0])
-            else:
-                mi = np.where(min(v[nup]) == v[nup])[0]
-                return(ke[nup[mi]][0])
+            mi = np.where(min(v[nup]) == v[nup])[0]
+            return(ke[nup[mi]][0])
+
 
 def isconvex(poly, tol=1e-2):
     """ Determine if a polygon is convex
@@ -94,14 +95,15 @@ def isconvex(poly, tol=1e-2):
 
     Returns
     -------
+
     True if convex
 
     Notes
     -----
 
-    the algorithm tests all triplet of point and L.determine
-    if the third point is left to the 2 first.
-    a tolerance can be introduce in cases where the polygon is
+    the algorithm tests all triplet of points and determine
+    if the third point is on the left of the 2 first.
+    a tolerance can be introduced in case the polygon is
     almost convex.
 
     """
@@ -110,11 +112,14 @@ def isconvex(poly, tol=1e-2):
     a = p
     b = np.roll(p, 1, axis=1)
     c = np.roll(p, 2, axis=1)
-    return ( np.sum(np.abs(isleft(a, b, c, tol=tol))) < tol ) or \
-        (np.sum(np.abs(isleft(c, b, a, tol=tol))) < tol)
+
+    return (np.sum(np.abs(isleft(a, b, c, tol=tol))) < tol) or \
+           (np.sum(np.abs(isleft(c, b, a, tol=tol))) < tol)
+
 
 def ptconvex(poly):
     """ Determine convex / concave points in the Polygon
+
 
     Parameters
     ----------
@@ -166,7 +171,7 @@ def signedarea(poly):
 
     """
     p = ndarray(poly)
-    return sum(np.hstack((p[0, 1::], p[0, 0:1])) * (np.hstack((p[1, 2::], p[1, 0:2])) - p[1, :])) / 2.
+    return sum(np.hstack((p[0, 1::], p[0, 0:1])) * (np.hstack((p[1,2::], p[1,0:2])) - p[1, :])) / 2.
 
 
 class Plot_shapely(pro.PyLayers):
@@ -249,6 +254,7 @@ class Plot_shapely(pro.PyLayers):
 
 class LineString(pro.PyLayers, shg.LineString):
     """ Overloaded shapely LineString class
+
     """
 
     def __init__(self, p):
@@ -282,7 +288,7 @@ class LineString(pro.PyLayers, shg.LineString):
         show : boolean
         fig : figure object
         ax  : axes object
-        linewidth : int 
+        linewidth : int
         color :  string
             default #abcdef"
         alpha :  float
@@ -438,7 +444,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
             # now vnodes starts always with <0
             if self.vnodes[0] > 0:
                 self.vnodes = np.roll(self.vnodes, -1)
-                print ('WARNING : Polygon.vnodes == Polygon.ndarray() modulo -1')
+                print ('WARNING:Polygon.vnodes == Polygon.ndarray() modulo -1')
         else:
             # create sequence
             #
@@ -454,7 +460,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
         pickled_state = super(Polygon, self).__reduce__()
         # Create our own tuple to pass to __setstate__
         new_state = (pickled_state[2],) + (self.vnodes,)
-        # Return a tuple that replaces the parent's __setstate__ tuple with our own
+        # Return a tuple that replaces the parent's __setstate__ tuple
         return (pickled_state[0], pickled_state[1], new_state)
 
     def __setstate__(self, state):
@@ -558,7 +564,8 @@ class Polygon(pro.PyLayers, shg.Polygon):
         pylayers.layout.Layout.ispoint
 
         vnodes is a list of points and segments of the polygon. 
-        If there are iso-segments the sequence of iso segments is repeated between the termination points. 
+        If there are iso-segments the sequence of iso segments 
+        is repeated between the termination points. 
         L.numseg has been adapted in order to return either the first segment (default)
         or the list of all segments
 
@@ -595,15 +602,15 @@ class Polygon(pro.PyLayers, shg.Polygon):
         # vnodes = np.kron(npts,np.array([1,0]))+np.kron(nseg,np.array([0,1]))
         self.vnodes = np.array(vnodes)
 
-    
+
     def setvnodes_new(self,tpts,L):
         """ update vnodes members from Layout
 
         Parameters
         ----------
 
-        tpts : tuple 
-           tpts[0] : points coordinates 
+        tpts : tuple
+           tpts[0] : points coordinates
            tpts[1] : points index
         L : pylayers.layout.Layout
 
@@ -612,25 +619,27 @@ class Polygon(pro.PyLayers, shg.Polygon):
 
         pylayers.layout.Layout.ispoint
 
-        vnodes is a list of point and segments of the polygon. 
-        If there are isosegments the sequence of iso segments 
-        is repeated between the termination points. 
+        vnodes is a list of point and segments of the polygon.
+        If there are isosegments the sequence of iso segments
+        is repeated between the termination points.
         L.numseg has been adapted in order to return either the first segment (default)
         or the list of all segments
 
         """
-        # get coordinates of the exterior of the polygon 
+        # get coordinates of the exterior of the polygon
         x, y = self.exterior.xy
         #
-        # npts : list of points which are in the layout (with tolerance 1cm) 
-        #        0 means not in the layout 
+        # npts : list of points which are in the layout (with tolerance 1cm)
+        #        0 means not in the layout
         #
-        # TODO : Sometimes polygon points are not exactly correspondong to nodes of Layout (Why ? ) 
-        #        This is the reason of the applied tolerance of 5cm 
+        # TODO : Sometimes polygon points are not exactly corresponding to nodes of Layout (Why ? )
+        #        This is the reason of the applied tolerance of 5cm
         #
-        npts = [ispoint(tpts,np.array(xx), tol=0.05) for xx in zip(x[0:-1], y[0:-1])]
+        npts = [ ispoint(tpts, np.array(xx), tol=0.05) for xx in zip(x[0:-1], y[0:-1])]
 
         assert (0 not in npts), pdb.set_trace()
+        #if 0 in npts:
+        #    return
         # seg list of tuple [(n1,n2),(n2,n3),....(,)]
         seg = zip(npts, np.roll(npts, -1))
         vnodes = []
@@ -677,7 +686,8 @@ class Polygon(pro.PyLayers, shg.Polygon):
 
         """
         p = self.ndarray()
-        return sum(np.hstack((p[0, 1::], p[0, 0:1])) * (np.hstack((p[1, 2::], p[1, 0:2])) - p[1, :])) / 2.
+        return sum(np.hstack((p[0, 1::], p[0, 0:1])) *
+                  (np.hstack((p[1, 2::], p[1, 0:2])) - p[1, :])) / 2.
 
     def coorddeter(self):
         """ determine polygon coordinates
@@ -701,9 +711,9 @@ class Polygon(pro.PyLayers, shg.Polygon):
         Notes
         -----
 
-        the algorithm tests all triplet of points and determines 
+        the algorithm tests all triplet of points and determines
         if the third point is at the left to the 2 first.
-        a tolerance can be introduce in cases the polygon is 
+        a tolerance can be introduce in cases the polygon is
         *almost* convex.
 
         """
@@ -712,7 +722,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
         a = p
         b = np.roll(p, 1, axis=1)
         c = np.roll(p, 2, axis=1)
-        return ( np.sum(isleft(a, b, c, tol=tol)) == 0 ) or \
+        return (np.sum(isleft(a, b, c, tol=tol)) == 0 ) or \
             (np.sum(isleft(c, b, a, tol=tol)) == 0)
 
     def reverberation(self, fGHz, L):
@@ -727,13 +737,13 @@ class Polygon(pro.PyLayers, shg.Polygon):
         Returns
         -------
 
-        V    : float 
+        V    : float
             Volume
-        A    : float 
+        A    : float
             Area
-        eta  : float 
+        eta  : float
             absorption coefficient
-        tau_sab  : float 
+        tau_sab  : float
             Sabine delay
         tau_eyr  : float
             Eyring delay
@@ -1648,6 +1658,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
 
         lring = self.exterior
         points = shg.MultiPoint(lring)
+
         for k, pt in enumerate(points):
             if tcc[k % Np] == 1:
                 ax.plot(pt.x, pt.y, 'o', color='red')
@@ -1994,7 +2005,8 @@ class GeomVect(Geomview):
                 fo.write("%6.3f %6.3f %6.3f\n" % (phe[0], phe[1], phe[2]))
         fo.close()
 
-    def geomBase(self, M, pt=np.array([0., 0., 0.]), col=np.array([[0, 0, 1], [0, 1, 0], [1, 0, 0]]),
+    def geomBase(self, M, pt=np.array([0., 0., 0.]),
+                 col=np.array([[0, 0, 1], [0, 1, 0], [1, 0, 0]]),
                  linewidth=3, scale=1):
         """ Construct a geomview vect file for vizualisation of a frame
 
@@ -2914,6 +2926,32 @@ def onb(A, B, v):
     T = T.swapaxes(0, 1)
     return T
 
+def dist_sph(u1,u2,mode=1):
+    """ distance betwwen points on the sphere
+
+    Parameters
+    ----------
+    u1 : np.array (Nx2)
+        (theta,phi)
+    u2 : np.array (Mx2)
+        (theta,phi)
+    """
+    v1 = np.array((np.cos(u1[:, 1])*np.sin(u1[:, 0]),
+                   np.sin(u1[:, 1])*np.sin(u1[:, 0]),
+                   np.cos(u1[:, 0])))
+    v2 = np.array((np.cos(u2[:, 1])*np.sin(u2[:, 0]),
+                   np.sin(u2[:, 1])*np.sin(u2[:, 0]),
+                   np.cos(u2[:, 0])))
+    v1dv2 = np.dot(v1.T,v2)
+    v1dv2 = np.maximum(v1dv2,-1)
+    v1dv2 = np.minimum(v1dv2,1)
+    if mode==0:
+        A = np.arccos(v1dv2)/np.pi
+    elif mode==1:
+        A = 1.-np.dot(v1.T,v2)
+    elif  mode ==2:
+        A = (1.-np.dot(v1.T,v2))/2.0
+    return A
 
 def vec_sph(th, ph):
     """
@@ -2925,7 +2963,7 @@ def vec_sph(th, ph):
       [ eph]    (theta,phi)
       [ er ] ]
 
-    See Also 
+    See Also
     --------
 
     SphericalBasis
@@ -3480,7 +3518,7 @@ def intersect_cone_seg(line0,line1,seg,bvis=False,bbool=False):
         #    ax.scatter(seg[1][0],seg[1][1],s=100,color='red')
         #if len(tahe)==2:
         #    linet(ax,tahe[0],tahe[1],color='green',al=1,linewidth=2)
-        #plt.show()    
+        #plt.show()
 
     return(tahe,ratio)
 
@@ -3492,11 +3530,11 @@ def intersect_cone_seg_old(line0,line1,seg,bvis=False,bbool=False):
     line0
     line1
     seg
-    bvis 
+    bvis
 
     """
 
-     
+
     x0,p0 = intersect_halfline_seg(line0, seg)
     x1,p1 = intersect_halfline_seg(line1, seg)
     tahe = []
@@ -3772,7 +3810,7 @@ def intersect3(a, b, pg, u1, u2, l1, l2,binter=False):
     U2e = U2 + np.zeros(U.shape)
     # Ue  : Nseg,Nscreen,3,1
     Ue = U + np.zeros(U2e.shape)
-    
+
     A = np.concatenate((Ue, -U1e, -U2e), axis=3)
     # visi : Nseg,Nscreen
     visi = np.zeros((A.shape[0],A.shape[1]),dtype=bool)
@@ -3838,9 +3876,9 @@ def intersect3(a, b, pg, u1, u2, l1, l2,binter=False):
             #visi[boolvalid] = ~(((condseg + cond1 + cond2) % 2).astype(bool))
 
     if binter:
-        return visi,pinter
+        return visi, pinter
     else:
-        return visi
+        return visi,None
 
 
 def intersect(a, b, c, d):
@@ -3898,32 +3936,34 @@ def intersect(a, b, c, d):
 
 
 def is_aligned4(a, b, c, d, tol=1e-2):
-    """ test aligment of 4 points 
+    """ test aligment of 4 points
+
     Parameters
     ----------
 
     a : np.array
-    b : np.array 
-    c : np.array 
-    d : np.array 
-    tol : float 
+    b : np.array
+    c : np.array
+    d : np.array
+    tol : float
         default 1e-2
     """
+
     cond = is_aligned3(a, b, c, tol=tol) & is_aligned3(a, b, d, tol=tol)
     return cond
 
 
 def is_aligned3(a, b, c, tol=1e-2):
-    """ test aligment of 3 points 
+    """ test aligment of 3 points
 
     Parameters
     ----------
 
     a : np.array
-    b : np.array 
-    c : np.array 
+    b : np.array
+    c : np.array
 
-    tol : float 
+    tol : float
         default 1e-2
     """
     # return abs(((b[0,:]-a[0,:])*(c[1,:]-a[1,:]) -
@@ -3935,8 +3975,7 @@ def is_aligned3(a, b, c, tol=1e-2):
 
 
 def isleft(a, b, c, tol=0.):
-    """ Test point c is at left of the vector a-->b
-
+    """ Test if point c is on the left of the vector a-->b
 
     Parameters
     ----------
@@ -3945,6 +3984,7 @@ def isleft(a, b, c, tol=0.):
     b : np.array (2xN)
     c : np.array (2xN)
     tol : tolerance
+
     Returns
     -------
 
@@ -3983,6 +4023,26 @@ def isleft(a, b, c, tol=0.):
 
 
 def isleftorequal(a, b, c):
+    """ Test if point c is on the left of the vector a-->b
+
+    Parameters
+    ----------
+
+    a : np.array (2xN)
+    b : np.array (2xN)
+    c : np.array (2xN)
+
+    Returns
+    -------
+
+    boolean array (1xN)
+
+    See Also
+    --------
+
+    isleft
+
+    """
     return ((b[0, :] - a[0, :]) * (c[1, :] - a[1, :])) - ((b[1, :] - a[1, :]) * (c[0, :] - a[0, :])) >= 0
 
 
@@ -4081,10 +4141,10 @@ def MATP(sl,el,phi,tilt,pol):
     Parameters
     ----------
 
-    sl : np.array (,3) unitary 
+    sl : np.array (,3) unitary
         main radiation direction in antenna local frame
-    el : np.array(,3) unitary 
-        main direction in the E field plane 
+    el : np.array(,3) unitary
+        main direction in the E field plane
     phi : float 0<phi<2*pi
     tilt : float -pi/2<tilt<pi/2
     pol : string 'H' (Horizontal) or 'V' (Vertical)
@@ -6060,7 +6120,7 @@ def get_pol_angles(poly, unit='rad', inside=True):
 
 
 def reflection_matrix(U):
-    """ 
+    """
     https://en.wikipedia.org/wiki/Transformation_matrix#Reflection
     u = np.ndarray (2,Nvec)
 
@@ -6073,7 +6133,7 @@ def reflection_matrix(U):
 
     u = np.array([2,2])
     U=np.vstack((u,u/2.,2*u)).T
-    
+
 
     """
 
@@ -6087,6 +6147,48 @@ def reflection_matrix(U):
 
     return M
 
+def ellipse2D(pa, pb, l, N):
+    """ points on an ellipse
+
+    pa : np.array
+        focus a
+    pb : np.array
+        focus b
+    l  : float
+        excess
+    N  : int
+        Number of points
+
+    Returns
+    -------
+
+    points : np.array
+        2 x Npt
+
+    Examples
+    --------
+        >>> import numpy as np
+        >>> import matplotlib.pyplot as plt
+        >>> pa = np.array([0,1])
+        >>> pb = np.array([10,3])
+        >>> N = 100
+        >>> l = 1
+        >>> p = ellipse2D(pa,pb,l,N)
+        >>> plt.plot(pa[0],pa[1],'ob')
+        >>> plt.plot(pb[0],pb[1],'or')
+        >>> plt.plot(p[0,:],p[1,:])
+
+    """
+    dmax = np.sqrt(np.dot(pb-pa, pb-pa))
+    a = (dmax/2. + l/4.)
+    b = 0.5*np.sqrt(dmax*l)
+    pg = (pa+pb)/2.
+    u = (pb-pa)/dmax
+    z = np.array([0, 0, 1])
+    v = np.cross(z, u)[0:2]
+    ag = np.linspace(0, 2*np.pi, N)
+    p = pg[:, None] + a*u[:, None]*np.cos(ag[None, :])+b*v[:, None]*np.sin(ag[None, :])
+    return(p)
 
 if __name__ == "__main__":
     plt.ion()

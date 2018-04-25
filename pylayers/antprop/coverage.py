@@ -2,8 +2,8 @@
 .. currentmodule:: pylayers.antprop.coverage
 
 .. autosummary::
-    :members:
-    
+   :members:
+
 """
 from pylayers.util.project import *
 #from pylayers.measures.mesuwb import *
@@ -12,7 +12,6 @@ import pylayers.util.pyutil as pyu
 from pylayers.util.utilnet import str2bool
 from pylayers.gis.layout import Layout
 import pylayers.antprop.loss as loss
-import pylayers.antprop.deygout as dg
 import pylayers.gis.ezone as ez
 import pylayers.signal.standard as std
 
@@ -378,7 +377,7 @@ class Coverage(PyLayers):
         for k in p:
             pg = self.grid[k[0],:]
             pa = np.array(self.dap[k[1]]['p'])
-            # exemple with 3 AP 
+            # exemple with 3 AP
             # 321 0
             # 321 1
             # 321 2
@@ -400,7 +399,7 @@ class Coverage(PyLayers):
             self.pa = np.vstack((self.pa,np.ones(shpa[1])))
         self.pg = self.pg.T
         self.pg = np.vstack((self.pg,self.zgrid*np.ones(shpg[0])))
-        
+
         self.nf = len(self.fGHz)
 
         # retrieving dimensions along the 3 axis
@@ -408,7 +407,7 @@ class Coverage(PyLayers):
         self.na = na
         ng = self.ng
         nf = self.nf
-        
+
         for k,iap in enumerate(self.dap):
             # select only one access point
             u = na*np.arange(0,ng,1).astype('int')+k
@@ -416,8 +415,8 @@ class Coverage(PyLayers):
                 pt = self.pa[:,u]
                 pr = self.pg[:,u]
                 azoffset = self.dap[iap]['phideg']*np.pi/180.
-                self.dap[iap].A.eval(fGHz=self.fGHz,pt=pt,pr=pr,azoffset=azoffset)
-                
+                self.dap[iap].A.eval(fGHz=self.fGHz, pt=pt, pr=pr, azoffset=azoffset)
+
                 gain = (self.dap[iap].A.G).T
                 #pdb.set_trace()
                 # to handle omnidirectional antenna (nf,1,1)
@@ -427,10 +426,10 @@ class Coverage(PyLayers):
                     tgain = np.dstack((tgain,gain[:,:,None]))
                 except:
                     tgain = gain[:,:,None]
-        
+
         #Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
         Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
-        
+
         self.Lwo = Lwo.reshape(nf,ng,na)
         self.Edo = Edo.reshape(nf,ng,na)
         self.Lwp = Lwp.reshape(nf,ng,na)

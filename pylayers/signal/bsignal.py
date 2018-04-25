@@ -39,7 +39,7 @@ FBsignal Class
 FUsignal Class
 ==============
 
-.. autoclass:: FUsignal 
+.. autoclass:: FUsignal
     :members:
 
 FHsignal Class
@@ -1668,36 +1668,36 @@ class TBsignal(Bsignal):
         return U
 
     def tap(self,fcGHz,WGHz,Ntap):
-        """ Back to baseband 
+        """ Back to baseband
 
         Parameters
         ----------
-        fcGHz : float 
-            center frequency 
-        WGHz : float 
-            bandwidth 
-        Ntap : int 
-            Number of tap 
-        
-        Notes 
+        fcGHz : float
+            center frequency
+        WGHz : float
+            bandwidth
+        Ntap : int
+            Number of tap
+
+        Notes
         -----
 
         Implement formula (2.52) from D.Tse book page 50
-            
+
         """
         # self.x : tauk   (,Nx)
         # self.y : alphak (1,Nx)
-        # yb : 1 x delay x 1 
+        # yb : 1 x delay x 1
         yb = self.y[...,None]*np.exp(-2 * 1j * np.pi *self.x[None,:,None] * fcGHz )
-        # create a tap axis index l 
-        # l : 1 x 1 x tap 
+        # create a tap axis index l
+        # l : 1 x 1 x tap
         l   = np.arange(Ntap)[None,None,:]
-        # get delay 
-        # tau : 1 x delay x 1 
+        # get delay
+        # tau : 1 x delay x 1
         tau = self.x[None,:,None]
-        # S : 1 x delay x tap 
+        # S : 1 x delay x tap
         S   = np.sinc(l-tau*WGHz)
-        # htap : 1 x delay x tap 
+        # htap : 1 x delay x tap
         htap  = np.sum(yb*S,axis=0)
         # htapi : integrates over delays
         # 1 x tap 
@@ -2063,24 +2063,24 @@ class TUsignal(TBsignal, Usignal):
         O.x = self.x
         return(O)
 
-    # def ftshift(self):
-    #     """ return the associated FUsignal
+    def ftshift(self):
+         """ return the associated FUsignal
 
-    #     Returns
-    #     -------
+         Returns
+         -------
 
-    #     H : FUsignal
+         H : FUsignal
 
-    #     See Also
-    #     --------
+         See Also
+         --------
 
-    #     pylayers.signal.bsignal.TUsignal.fftsh
-    #     pylayers.signal.waveform.ip_generic
+         pylayers.signal.bsignal.TUsignal.fftsh
+         pylayers.signal.waveform.ip_generic
 
-    #     """
-    #     A  = self.fftsh()
-    #     AU = A.unrex()
-    #     return(AU)
+         """
+         A  = self.fftsh()
+         AU = A.unrex()
+         return(AU)
 
 
     def psd(self, Tpns=100, R=50,periodic=True):
@@ -2797,7 +2797,8 @@ class FUsignal(FBsignal,Usignal):
             self.y = self.y*factor
             self.isFriis = True
 
-
+    def electrical_delay(self,tauns):
+        self.y = self.y * np.exp(-2*1j*np.pi*self.x[None,:]*tauns)
 
     def get(self, k):
         """

@@ -8,6 +8,7 @@ conda install seaborn --yes
 conda install PIL --yes
 conda install basemap --yes
 conda install wxpython --yes
+conda install netCDF4 --yes
 pip install protobuf 
 pip install tqdm
 pip install descartes
@@ -19,4 +20,7 @@ pip install pyshp
 pip install Image
 pip install pathos
 pip install SimPy==2.2
+pip install simplekml
+pip install smopy
+
 python setup.py install

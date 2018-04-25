@@ -49,7 +49,11 @@ if not os.path.isfile(os.path.join(home,'.pylayers')):
         f.write('\nproject\n')
         f.write(os.path.join(home,project))
 
+<<<<<<< HEAD
 # if pylayers has already been installer, a .pylayers exists.
+=======
+# if pylayers has already been installed, a .pylayers exists. 
+>>>>>>> master
 # The idea here is to maintain the project path and to update the source path.
 else:
     with open(os.path.join(home,'.pylayers'),'r') as f:

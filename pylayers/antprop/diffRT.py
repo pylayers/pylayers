@@ -178,7 +178,7 @@ def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2,mode='tab',debug=False):
 
     sign  =  +1.0
     D3     = Dfunc(sign,k,N,phi+phi0,si,sd,xF,F,beta)
-    
+
     sign  =  -1.0
     D4     = Dfunc(sign,k,N,phi+phi0,si,sd,xF,F,beta)
 
@@ -333,10 +333,9 @@ def Dfunc(sign,k,N,dphi,si,sd,xF=[],F=[],beta=np.pi/2):
 
     """
 
-
     cste = (1.0-1.0*1j)*(1.0/(4.0*N*np.sqrt(k*np.pi)*np.sin(beta)))
     rnn = (dphi+np.pi*sign)/(2.0*N*np.pi)
-    nn  =  np.zeros(np.shape(rnn))
+    nn = np.zeros(np.shape(rnn))
 
     nn[rnn>0.5] = 1
     nn[rnn>1.5] = 2
@@ -354,8 +353,8 @@ def Dfunc(sign,k,N,dphi,si,sd,xF=[],F=[],beta=np.pi/2):
     tan   = np.tan(angle)
 
     Di = np.empty(KLA.shape)
-    
-    if F == []:
+
+    if len(F) == 0:
         Fkla,ys,yL = FreF(KLA)
     else :
         #pxF = 10**xF

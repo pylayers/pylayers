@@ -11,19 +11,22 @@ r"""
 
 """
 
-
 try:
     from tvtk.api import tvtk
     from mayavi.sources.vtk_data_source import VTKDataSource
     from mayavi import mlab
 except:
     print('Layout:Mayavi is not installed')
+
 import doctest
 import time
 import numpy as np
 import matplotlib.pylab as plt
 import pylayers.signal.waveform as wvf
-import pylayers.util.geomutil as geu 
+import pylayers.util.geomutil as geu
+import logging
+
+logger = logging.getLogger(__name__)
 
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
@@ -42,26 +45,23 @@ from pylayers.antprop.channel import Ctilde, Tchannel , AFPchannel
 from pylayers.antprop.statModel import getchannel
 import tqdm
 import copy
-
 import h5py
 import pdb
 
-
+logger = logging.getLogger(__name__)
 
 class Link(PyLayers):
-    """
-        Link is a MetaClass, which derives from `Tchannel`.
-        Tchannel is a transmission channel i.e a radio channel
-        which includes both link termination antennas.
+    """ Link class
 
-        A common factor of both statistical (SLink) and deterministic channel (DLink)
-        is the exitence of :math:`\alpha_k` and :math:`\tau_k`
-     """
+    Members
+    -------
+
+    """
+
     def __init__(self):
         """ Link evaluation metaclass
         """
         PyLayers.__init__(self)
-   
 
 
     def __add__(self,l):
@@ -153,9 +153,9 @@ class DLink(Link):
             position of a device dev_a
         b : np.ndarray (3,)
             position of a device dev_b
-        ca : int 
+        ca : int
             cycle a number
-        cb : int 
+        cb : int
             cycle b number
         Ta : np.ndarray (3,3)
             Rotation matrice of Antenna of device dev_a relative to global Layout scene
@@ -173,7 +173,7 @@ class DLink(Link):
     def __init__(self, **kwargs):
         """ deterministic link evaluation
 
-        
+
         Advanced (change only if you really know what you do !)
 
         save_opt : list (['sig','ray','Ct','H'])
@@ -277,22 +277,21 @@ class DLink(Link):
 
         Link.__init__(self)
 
-        defaults={ 'L':'',
-                   'a':np.array(()),
-                   'b':np.array(()),
-                   'Aa':[],
-                   'Ab':[],
-                   'Ta':np.eye(3),
-                   'Tb':np.eye(3),
-                   'fGHz':np.array([2.4]),
-                   'wav':wvf.Waveform(),
-                   'cutoff':3,
-                   'threshold':0.8,
+        defaults={ 'L': '',
+                   'a': np.array(()),
+                   'b': np.array(()),
+                   'Aa': [],
+                   'Ab': [],
+                   'Ta': np.eye(3),
+                   'Tb': np.eye(3),
+                   'fGHz': np.array([2.4]),
+                   'wav': wvf.Waveform(),
+                   'cutoff': 3,
+                   'threshold': 0.8,
                    'delay_excess_max_ns':500,
-                   'save_opt':['sig','ray2','ray','Ct','H'],
+                   'save_opt': ['sig','ray2','ray','Ct','H'],
                    'save_idx':0,
                    'force_create':False,
-                   'verbose':False,
                    'seed':0,
                    'graph':'tcvirw'
                 }
@@ -307,7 +306,7 @@ class DLink(Link):
         # set default attribute
 
         for key, value in defaults.items():
-        
+
             if key not in kwargs:
                 if key in specset :
                     setattr(self,'_'+key,value)
@@ -327,7 +326,7 @@ class DLink(Link):
         force = self.force_create
         delattr(self,'force_create')
 
-       
+
         # dictionnary data exists
         self.dexist={'sig':{'exist':False,'grpname':''},
                      'ray':{'exist':False,'grpname':''},
@@ -336,14 +335,14 @@ class DLink(Link):
                      'H':{'exist':False,'grpname':''}
                     }
 
-        # The link frequency range depends on the antenna 
+        # The link frequency range depends on the antenna
         # self.fGHz = kwargs['fGHz']
 
-        if self.Aa==[]:
-            self.Aa=Antenna(typ='Omni',fGHz=self.fGHz)
-        if self.Ab==[]:
-            self.Ab=Antenna(typ='Omni',fGHz=self.fGHz)
-        
+        if self.Aa == []:
+            self.Aa = Antenna(typ='Omni',fGHz=self.fGHz)
+        if self.Ab == []:
+            self.Ab = Antenna(typ='Omni',fGHz=self.fGHz)
+
         if isinstance(self._L,str):
             self._Lname = self._L
             self._L = Layout(self._Lname,bgraphs=True,bcheck=False)
@@ -356,14 +355,11 @@ class DLink(Link):
 
             self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5'
             filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
-            # check if save file alreasdy exists
+            # check if save file already exists
             if not os.path.exists(filenameh5) or force:
                 print('Links save file for ' + self.L._filename + ' does not exist.')
                 print('Creating file. You\'ll see this message only once per Layout')
                 self.save_init(filenameh5)
-
-            
-            
             try:
                 self.L.dumpr()
                 print('Layout Graph loaded')
@@ -371,20 +367,20 @@ class DLink(Link):
                 print('This is the first time the Layout is used. Graphs have to be built. Please Wait')
                 self.L.build(graph=self.graph)
                 self.L.dumpw()
-            
+
             #
-            # In outdoor situation we delete transmission node involving  
-            # an indoor cycle at the exception of AIR 
+            # In outdoor situation we delete transmission node involving
+            # an indoor cycle at the exception of AIR
             #
             cindoor = [p for p in self.L.Gt.nodes() if self.L.Gt.node[p]['indoor']]
 
             if self._L.typ =='outdoor':
                 u = self.L.Gi.node.keys()
-                # lT : list of transmission interactions 
+                # lT : list of transmission interactions
                 lT  =  [k for k in u if (len(k)==3)]
                 # lTi : transmission connected at least to an indoor cycle
                 lTi = [ k for k in lT if ((k[1]  in cindoor) or (k[2] in cindoor))]
-                # lTiw : those which are wall (not those above buildings) 
+                # lTiw : those which are wall (not those above buildings)
                 lTiw = [ k for k in lTi if self.L.Gs.node[k[0]]['name']!='AIR' ]
 
                 self.L.Gi.remove_nodes_from(lTiw)
@@ -398,15 +394,15 @@ class DLink(Link):
                     for l in output.keys():
                         if l in lTiw:
                             del output[l]
+
                     self.L.Gi[e[0]][e[1]]['output']=output
-                
             #self.L.dumpw()
             #self.L.build()
 
             self.init_positions()
 
 
-           
+
             ###########
             # init freq
             # TODO Check where it is used redundant with fGHz
@@ -597,7 +593,7 @@ class DLink(Link):
 
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
             self._update_show3(ant='a')
-        
+
         if hasattr(self,'ca') and hasattr(self,'cb'):
             self.checkh5()
 
@@ -608,7 +604,7 @@ class DLink(Link):
            self.Ab._mayamesh.remove()
 
 
-        
+
         #save rot
         rot = self.Tb
         self._Ab = Ant
@@ -621,7 +617,7 @@ class DLink(Link):
 
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
             self._update_show3(ant='b')
-        
+
         if hasattr(self,'ca') and hasattr(self,'cb'):
             self.checkh5()
 
@@ -631,7 +627,7 @@ class DLink(Link):
         self._Ta = orientation
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
             self._update_show3(ant='a')
-        
+
         if hasattr(self,'ca') and hasattr(self,'cb'):
             self.checkh5()
 
@@ -642,7 +638,7 @@ class DLink(Link):
         self._Tb = orientation
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
             self._update_show3(ant='b')
-        
+
         if hasattr(self,'ca') and hasattr(self,'cb'):
             self.checkh5()
 
@@ -676,7 +672,7 @@ class DLink(Link):
     def delay_excess_max_ns(self,delay_excess_max_ns):
 
         delay_excess_max_ns = max(delay_excess_max_ns,0.)
-       
+
         self._delay_excess_max_ns = delay_excess_max_ns
 
         if hasattr(self,'ca') and hasattr(self,'cb'):
@@ -711,7 +707,7 @@ class DLink(Link):
             self.Aa.fGHz=self.fGHz
             self.Ab.fGHz=self.fGHz
 
-        
+
         if hasattr(self,'ca') and hasattr(self,'cb'):
             self.checkh5()
 
@@ -799,7 +795,7 @@ class DLink(Link):
         Parameters
         ----------
 
-        iray : int 
+        iray : int
             ray index
 
         """
@@ -829,10 +825,10 @@ class DLink(Link):
     #         if len(fa)==0:
     #             fa = np.array([2.4])
     #             self.Aa.fGHz = fa
-    #             # raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz") 
+    #             # raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz")
     #             print "Incompatible frequency range in Antenna. WARNING  Dlink.fGHz changed to 2.4GHz"
     #         try:
-    #             sa = fa[1]-fa[0]  # step frequecy 
+    #             sa = fa[1]-fa[0]  # step frequecy
     #         except: #single frequency
     #             sa = fa[0]
     #         # step
@@ -853,7 +849,6 @@ class DLink(Link):
     #             self.Ab.fGHz=fb
     #             # raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz") 
     #             print "Incompatible frequency range in Antenna. WARNING  Dlink.fGHz changed to 2.4GHz"
-        
     #         try:
     #             sb = fb[1]-fb[0] # step frequency 
     #         except:
@@ -897,13 +892,13 @@ class DLink(Link):
         elif self.L.typ=='indoor':
             nodes = [n for n in nodes if n!=0 and self.L.Gt.node[n]['indoor']] 
         else:
-            nodes = [n for n in nodes if n!=0 ] 
+            nodes = [n for n in nodes if n!=0 ]
 
         # draw the link extremities randomly
 
         np.random.seed(self.seed)
-        ia = np.random.randint(0,len(nodes))    
-        ib = np.random.randint(0,len(nodes))    
+        ia = np.random.randint(0,len(nodes))
+        ib = np.random.randint(0,len(nodes))
         if len(self.a)==0 or force:
             self.ca = nodes[ia]
         else:
@@ -994,7 +989,7 @@ class DLink(Link):
 
         filename_long : str
             complete path and filename
-        
+
         'sig'    : Signatures
         'ray2'   : 2D rays 
         'ray'    : 3D rays 
@@ -1109,7 +1104,7 @@ class DLink(Link):
             key of the h5py file
         gpname : string
             groupe name of the h5py file
-        force : boolean or list 
+        force : boolean or list
         """
 
         if not force :
@@ -1119,11 +1114,10 @@ class DLink(Link):
         else :
             if self.dexist[key]['exist']:
                 self._delete(key,grpname)
-              
+
             obj._saveh5(self.filename,grpname)
 
-        if self.verbose :
-            print(str(obj.__class__).split('.')[-1] + ' from '+ grpname + ' saved')
+        logger.debug(str(obj.__class__).split('.')[-1] + ' from '+ grpname + ' saved')
 
 
     def load(self,obj,grpname,**kwargs):
@@ -1135,9 +1129,9 @@ class DLink(Link):
         obj : Object
             (Signatures|Rays|Ctilde|Tchannel)
         grpname : string
-            groupe name of the h5py file
+            group name of the h5py file
 
-        kwargs : 
+        kwargs :
         layout for sig and rays
 
         Examples
@@ -1147,10 +1141,8 @@ class DLink(Link):
         """
 
 
-
         obj._loadh5(self.filename,grpname,**kwargs)
-        if self.verbose :
-            print(str(obj.__class__).split('.')[-1] + ' from '+ grpname + ' loaded')
+        logger.debug(str(obj.__class__).split('.')[-1] + ' from '+ grpname + ' loaded')
 
 
     def get_grpname(self):
@@ -1417,20 +1409,19 @@ class DLink(Link):
         -----
 
         This function modifies the orientation of the antenna at both sides
-        via Ta and Tb 3x3 matrices and recalculates the channel transfer function 
-        for those new orientations. 
+        via Ta and Tb 3x3 matrices and recalculates the channel transfer function
+        for those new orientations.
         The self.H variable is updated
 
         """
         # Antenna Rotation
         self.C.locbas(Ta=self.Ta, Tb=self.Tb)
         # Transmission channel calculation
-        H = self.C.prop2tran(a=self.Aa,b=self.Ab,Friis=True,debug=True)
+        H = self.C.prop2tran(a=self.Aa, b=self.Ab, Friis=True, debug=True)
         self.H = H
 
     def eval(self,**kwargs):
         """ link evaluation
-
 
         Parameters
         ----------
@@ -1448,10 +1439,10 @@ class DLink(Link):
         ra_number_mirror_cf : int
             rays.to3D number of ceil/floor reflexions
         ra_ceil_H: float, (default [])
-            ceil height . 
-                If [] : Layout max ceil height 
-                If 0 : only floor reflection (outdoor case) 
-                If -1 : neither ceil nor floor reflection (2D case) 
+            ceil height .
+                If [] : Layout max ceil height
+                If 0 : only floor reflection (outdoor case)
+                If -1 : neither ceil nor floor reflection (2D case)
         ra_vectorized: boolean (True)
             if True used the (2015 new) vectorized approach to determine 2drays
         progressbar: str
@@ -1459,8 +1450,7 @@ class DLink(Link):
             python : progress bar in ipython
 
 
-    
-        Notes    
+        Notes
         -----
 
         update self.ak and self.tk
@@ -1494,23 +1484,19 @@ class DLink(Link):
 
         """
 
-
-
-        defaults={ 'applywav':False,
-                   'si_progress':True,
-                   'diffraction':True,
-                   'ra_vectorized':True,
-                   'ra_ceil_H':[],
-                   'ra_number_mirror_cf':1,
-                   'force':[],
+        defaults = {'applywav': False,
+                   'si_progress': True,
+                   'diffraction': True,
+                   'ra_vectorized': True,
+                   'ra_ceil_H': [],
+                   'ra_number_mirror_cf': 1,
+                   'force':True,
                    'bt':True,
-                   'alg':1,
                    'si_reverb':4,
                    'nD':2,
                    'nR':10,
                    'nT':10,
                    'debug':False,
-                   'verbose':[],
                    'progressbar':None,
                    'rm_aw':True
                    }
@@ -1542,18 +1528,11 @@ class DLink(Link):
                 if kwargs['force'] == True :
                     kwargs['force'] = ['sig','ray2','ray','Ct','H']
                 else :
-                    # Ct and H are not yet saved/load 
+                    # Ct and H are not yet saved/loaded
                     # compliantly with the given configutain
                     # their are disabled here
                     kwargs['force'] = ['Ct','H']
 
-        if kwargs['verbose'] != []:
-            self.verbose=kwargs['verbose']
-
-        
-        # must be placed after all the init !!!!
-        # if self.verbose :
-        #     print("checkh5")
         # self.checkh5()
 
         if isinstance(kwargs['progressbar'],str):
@@ -1569,137 +1548,131 @@ class DLink(Link):
         ############
         # Signatures
         ############
-        
-        if self.verbose :
-            print("Start Signatures")
+
+
         tic = time.time()
         Si = Signatures(self.L,
                         self.ca,
                         self.cb,
-                        cutoff=kwargs['cutoff'],
+                        cutoff = kwargs['cutoff'],
                         threshold = kwargs['threshold'])
 
         if (self.dexist['sig']['exist'] and not ('sig' in kwargs['force'])):
-            self.load(Si,self.dexist['sig']['grpname'],L=self.L)
-            if self.verbose :
-                print("load signature")
-        else :
-            ## 1 is the default signature determination algorithm
-            if kwargs['alg']==1:
-                self.nD = kwargs['nD']
-                self.nT = kwargs['nT']
-                self.nR = kwargs['nR']
-                self.bt = kwargs['bt']
-                
-                Si.run(cutoff = self.cutoff,
-                        diffraction = kwargs['diffraction'],
-                        threshold = self.threshold,
-                        delay_excess_max_ns = self.delay_excess_max_ns,
-                        nD = self.nD,
-                        nR = self.nR,
-                        nT = self.nT,
-                        progress = kwargs['si_progress'],
-                        bt = self.bt)
+            logger.info(" Load existing signatures from :%s",self.dexist['sig']['grpname'])
+            self.load(Si, self.dexist['sig']['grpname'], L=self.L)
+        else:
+            logger.info(" Run signatures")
 
-                if self.verbose:
-                    print("default algorithm")
+            self.nD = kwargs['nD']
+            self.nT = kwargs['nT']
+            self.nR = kwargs['nR']
+            self.bt = kwargs['bt']
 
-            if kwargs['alg']=='exp':
-                TMP = Si.run_exp(cutoff=kwargs['cutoff'],
-                         cutoffbound=kwargs['si_reverb'])
-                if self.verbose :
-                    print("experimental (ex 2015)")
+            Si.run(cutoff = self.cutoff,
+                    diffraction = kwargs['diffraction'],
+                    threshold = self.threshold,
+                    delay_excess_max_ns = self.delay_excess_max_ns,
+                    nD = self.nD,
+                    nR = self.nR,
+                    nT = self.nT,
+                    progress = kwargs['si_progress'],
+                    bt = self.bt)
 
-            if kwargs['alg']=='exp2':
-                TMP = Si.run_exp2(cutoff=kwargs['cutoff'],
-                        cutoffbound=kwargs['si_reverb'])
-                if self.verbose :
-                    print("algo exp2 ( ex 20152)")
-
-        #Si.run6(diffraction=kwargs['diffraction'])
-        # save sig
-            
+            logger.info(" Save signature in %s ",self.dexist['sig']['grpname'])
             self.save(Si,'sig',self.dexist['sig']['grpname'],force = kwargs['force'])
 
         self.Si = Si
+
         toc = time.time()
-        if self.verbose :
-            print("Stop signature",toc-tic)
+        logger.info(" End signature in %d sec",toc-tic)
+
         try:
             pbar.update(20)
-        except: 
+        except:
             pass
-
 
 
         ############
         # Rays
         ############
 
-        if self.verbose :
-            print("Start Rays")
+        logger.info(" Start Rays determination")
         tic = time.time()
         r2d = Rays(self.a,self.b)
-       
 
-        #
-        # get 2D rays 
-        #
+
+        #############
+        # get 2D rays
+        #############
+
         if self.dexist['ray2']['exist'] and not ('ray2' in kwargs['force']):
-            self.load(r2d,self.dexist['ray2']['grpname'],L=self.L)
+            logger.info(" Load r2d from %s", self.dexist['ray2']['grpname'])
+            self.load(r2d,self.dexist['ray2']['grpname'], L=self.L)
         else :
             # perform computation ...
-            # ... with vectorized ray evaluation 
+            # ... with vectorized ray evaluation
+            logger.debug(" a : (%d,%d,%d)", self.a[0], self.a[1], self.a[2])
+            logger.debug(" b : (%d,%d,%d)", self.b[0], self.b[1], self.b[2])
+
             if kwargs['ra_vectorized']:
+                logger.info(" Determine r2d vectorized version")
                 r2d = Si.raysv(self.a,self.b)
             # ... or with original and slow approach ( to be removed in a near future)
             else :
+                logger("Determine r2d non vectorized version")
                 r2d = Si.rays(self.a,self.b)
             # save 2D rays
-            self.save(r2d,'ray2',self.dexist['ray2']['grpname'],force = kwargs['force'])
+
+            logger.info(" save r2d in %s ",self.dexist['ray2']['grpname'])
+            self.save(r2d,'ray2', self.dexist['ray2']['grpname'], force = kwargs['force'])
 
         self.r2d = r2d
 
-        #
-        # get 3D rays 
-        #
+        #############
+        # get 3D rays
+        #############
+
         R = Rays(self.a,self.b)
         R.is3D = True
         if self.dexist['ray']['exist'] and not ('ray' in kwargs['force']):
-            self.load(R,self.dexist['ray']['grpname'],L=self.L)
+            logger.info(" Load r3d from %s", self.dexist['ray']['grpname'])
+            self.load(R,self.dexist['ray']['grpname'], L=self.L)
         else :
-
             if kwargs['ra_ceil_H'] == []:
                 if self.L.typ=='indoor':
                     ceilheight = self.L.maxheight
                 else:
-                    ceilheight = 0 
+                    ceilheight = 0
             else:
                 ceilheight = kwargs['ra_ceil_H']
 
 
-            R = self.r2d.to3D(self.L,H=ceilheight, N=kwargs['ra_number_mirror_cf'])
+            logger.info(" Run to3d H: %d, N: %d", ceilheight,kwargs['ra_number_mirror_cf'] )
+            R = self.r2d.to3D(self.L, H=ceilheight, N=kwargs['ra_number_mirror_cf'])
             if kwargs['rm_aw']:
                 R = R.remove_aw(self.L)
-            
+
+
+            logger.info(" Run R.locbas ")
             R.locbas(self.L)
-            
+
+            logger.info(" Run R.fillinter ")
             R.fillinter(self.L)
 
             # C = Ctilde()
 
             # C = R.eval(self.fGHz)
 
-            # save 3D rays 
+            # save 3D rays
 
-            self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])
+            logger.info(" Save 3D rays in %s",self.dexist['ray']['grpname'])
+            self.save(R, 'ray', self.dexist['ray']['grpname'], force = kwargs['force'])
 
-        
+
         self.R = R
         toc = time.time()
-        if self.verbose :
-            print("Stop rays",toc-tic)
-        
+        logger.info(" Stop rays %d",toc-tic)
+
         if self.R.nray == 0:
             raise NameError('No rays have been found. Try to re-run the simulation with a higher S.cutoff ')
         try:
@@ -1709,7 +1682,7 @@ class DLink(Link):
         ############
         # Ctilde
         ############
-        
+
         if self.dexist['Ct']['exist'] and not ('Ct' in kwargs['force']):
             C = Ctilde()
             self.load(C,self.dexist['Ct']['grpname'])
@@ -1718,7 +1691,7 @@ class DLink(Link):
             # Ctilde...
             # Find an other criteria in order to decide if the R has
             # already been evaluated
-            
+
             C = R.eval(self.fGHz)
             # ...save Ct
             self.save(C,'Ct',self.dexist['Ct']['grpname'],force = kwargs['force'])
@@ -1727,7 +1700,7 @@ class DLink(Link):
 
         try:
             pbar.update(20)
-        except: 
+        except:
             pass
         ############
         # H
@@ -1748,8 +1721,6 @@ class DLink(Link):
             pbar.update(20)
         except: 
             pass
-
-
 
         if kwargs['applywav']:
             if self.H.isFriis:
@@ -1774,7 +1745,7 @@ class DLink(Link):
         self.adpmes.cut(imax=imax)
         self.adprt = self.afprt.toadp()
         self.adprt.cut(imax=imax)
-        
+
     def afp(self,**kwargs):
         """ Evaluate angular frequency profile 
 
@@ -1859,7 +1830,7 @@ class DLink(Link):
         # rx = b 
         # angular range (a) : phi 
         #
-       
+
         self.afprt = AFPchannel(tx=self.a,rx=self.b,az=az)
         for k,ph in enumerate(az.squeeze()):
             self.Tb = geu.MATP(self.Ab.sl,self.Ab.el,ph,tilt,polar)
@@ -1868,7 +1839,7 @@ class DLink(Link):
             self.evalH()
             E = self.H.energy()
             if k==0:
-                self.dpadp = E[None,...] 
+                self.dpadp = E[None,...]
             else:
                 self.dpadp = np.concatenate((self.dpadp,E[None,...]),axis=0)
 
@@ -1887,7 +1858,7 @@ class DLink(Link):
         else:
             self.afprt.x = fGHz
             self.afprt.fcGHz = fGHz[len(fGHz)/2]
-        
+
         self.dpdp = np.sum(self.dpadp,axis=0)
         self.dpap = np.sum(self.dpadp,axis=1)
         #return(afp)
@@ -2061,14 +2032,14 @@ class DLink(Link):
                 lr  = np.arange(self.R.nray)
             else:
                 lr = kwargs['lr']
-            
+
             vmin = val.min()
             vmax = val.max() 
             if kwargs['dB']:
                 vmin = 10*np.log10(vmin)
                 vmax = 10*np.log10(vmax)
-            
-            
+
+
             #
             # limitation of the vizualization zone around the center of the link 
             #
@@ -2092,7 +2063,7 @@ class DLink(Link):
                     col = kwargs['col']
                     width = kwargs['width']
                     alpha = kwargs['alpha']
-                
+
                 # plot ray (i,r) 
                 fig,ax = self.R.show(rlist=[ir],
                                colray=col,
@@ -2146,7 +2117,7 @@ class DLink(Link):
 
 
             >>> from pylayers.simul.link import *
-            >>> L=DLink(verbose=False)
+            >>> L=DLink()
             >>> L.eval()
 
         """
@@ -2156,17 +2127,22 @@ class DLink(Link):
         else:
             self._maya_fig=mlab.figure(bgcolor=(1,1,1),fgcolor=(0,0,0))
 
+        if 'scale' in kwargs:
+            scale = kwargs.pop('scale')
+        else:
+            scale = 0.5
+
         if 'centered' in kwargs:
             centered = kwargs['centered']
         else :
             centered = False
 
         if centered:
-            pg =np.zeros((3))
-            pg[:2]=self.L.pg
+            pg = np.zeros((3))
+            pg[:2] = self.L.pg
 
 
-        if centered :
+        if centered:
             ptx = self.a-pg
             prx = self.b-pg
         else :
@@ -2185,50 +2161,50 @@ class DLink(Link):
             # evaluate antenna if required
             if not Atx.evaluated:
                 Atx.eval()
-            try:
-                Atx._show3(T=Ttx.reshape(3,3),
-                           po=ptx,
-                           title=False,
-                           bcolorbar=False,
-                           bnewfig=False,
-                           bcircle = False,
-                           name = Atx._filename,
-                           scale= 0.5,
-                           binteract=False)
-            except:
-                Atx.eval()
-                Atx._show3(T=Ttx.reshape(3,3),
-                            po=ptx,
-                            title=False,
-                            bcolorbar=False,
-                            bnewfig=False,
-                            bcircle = False,
-                            name = Atx._filename,
-                            scale= 0.5,
-                            binteract=False)
+#            try:
+#                Atx._show3(T=Ttx.reshape(3,3),
+#                           po=ptx,
+#                           title=False,
+#                           bcolorbar=False,
+#                           bnewfig=False,
+#                           bcircle = False,
+#                           name = Atx._filename,
+#                           scale= scale,
+#                           binteract=False)
+#            except:
+#                Atx.eval()
+            Atx._show3(T=Ttx.reshape(3,3),
+                        po=ptx,
+                        title=False,
+                        bcolorbar=False,
+                        bnewfig=False,
+                        bcircle = False,
+                        name = Atx._filename,
+                        scale= scale,
+                        binteract=False)
             if not Arx.evaluated:
                 Arx.eval()
-            try:
-                Arx._show3(T=Trx.reshape(3,3),
-                            po=prx,
-                            title=False,
-                            bcolorbar=False,
-                            bnewfig=False,
-                            bcircle = False,
-                            name = Arx._filename,
-                            scale= 0.5,
-                            binteract=False)
-            except:
-                Arx.eval()
-                Arx._show3(T=Trx.reshape(3,3),
-                            po=prx,
-                            title=False,
-                            bcolorbar=False,
-                            bnewfig=False,
-                            bcircle = False,
-                            name = Arx._filename,
-                            scale= 0.5,
-                            binteract=False)
+#            try:
+#                Arx._show3(T=Trx.reshape(3,3),
+#                            po=prx,
+#                            title=False,
+#                            bcolorbar=False,
+#                            bnewfig=False,
+#                            bcircle = False,
+#                            name = Arx._filename,
+#                            scale= scale,
+#                            binteract=False)
+#            except:
+                #Arx.eval()
+            Arx._show3(T=Trx.reshape(3,3),
+                        po=prx,
+                        title=False,
+                        bcolorbar=False,
+                        bnewfig=False,
+                        bcircle = False,
+                        name = Arx._filename,
+                        scale= scale,
+                        binteract=False)
         if lay:
             # check if indoor/outdoor, outdoor or indoor situations
             # a_in = self.L.Gt.node[self.ca]['indoor']
@@ -2353,14 +2329,14 @@ class DLink(Link):
         Parameters
         ----------
 
-        BWGHz : Bandwidth 
+        BWGHz : Bandwidth
         Nf    : Number of frequency points
-        fftshift : boolean 
+        fftshift : boolean
         rays : boolean
             display rays contributors
         fspl : boolean
             display free space path loss
-        
+
         See Also
         --------
 
@@ -2369,8 +2345,8 @@ class DLink(Link):
         """
 
         defaults = {'fig':[],
-                    'ax': [],
-                     'BWGHz':5,
+                    'ax':[],
+                    'BWGHz':5,
                     'Nf':1000,
                     'rays':True,
                     'fspl':True,
@@ -2390,22 +2366,23 @@ class DLink(Link):
             ax = plt.gca()
         else:
             ax = kwargs['ax']
-        
+
         taumax = self.H.taud.max()
         BWGHz = kwargs['BWGHz']
 
         Nf = np.maximum(kwargs['Nf'],taumax*BWGHz).astype(int)
-        # getcir is a Tchannel method 
+        # getcir is a Tchannel method
 
-        ir = self.H.getcir(BWGHz =BWGHz,Nf=Nf)
-        ir.plot(fig=fig,ax=ax)
+        self.ir = self.H.getcir(BWGHz =BWGHz,Nf=Nf)
+        self.ir.plot(fig=fig,ax=ax)
         plt.ylim(kwargs['vmin'],kwargs['vmax'])
 
 
-        delay = ir.x 
+        delay = self.ir.x
+        delay = delay[delay>0]
         dist = delay*0.3
-        FSPL0 = -32.4- 20*np.log10(self.fGHz[0])-20*np.log10(dist) 
-        FSPLG = FSPL0 + self.Aa.GdBmax[0] + self.Ab.GdBmax[0] 
+        FSPL0 = -32.4- 20*np.log10(self.fGHz[0])-20*np.log10(dist)
+        FSPLG = FSPL0 + self.Aa.GdBmax[0] + self.Ab.GdBmax[0]
         if kwargs['fspl']:
             # Free space path loss
             ax.plot(delay,FSPL0,linewidth=2,color='b',label='FSPL')
@@ -2413,19 +2390,19 @@ class DLink(Link):
             ax.plot(delay,FSPLG,linewidth=3,color='k',label='FSPL+Gtmax+Grmax')
 
 
-        if kwargs['rays'] : 
+        if kwargs['rays']:
             # energy of each ray
             ER = np.squeeze(self.H.energy())
             color_range = np.linspace( 0, 1., len(ER))#np.linspace( 0, np.pi, len(ER))
             # sort rays by increasing energy
             uER = ER.argsort()[::-1]
             colors= color_range[uER]
-            # most important rays , it=0 ir=0 , if =0 
+            # most important rays , it=0 ir=0 , if =0
             ax.scatter(self.H.taud[uER],20*np.log10(np.abs(self.H.y[uER,0,0,0])),c=colors,cmap='hot')
             ax.set_xlim([min(self.H.taud)-10,max(self.H.taud)+10])
 
         ax.legend()
-        return fig,ax,ir
+        return fig,ax
 
 
     def plt_doa(self,**kwargs):
@@ -2556,6 +2533,7 @@ class DLink(Link):
 
         pylayers.antprop.loss.losst
         pylayers.gis.layout.angleonlink3
+
         """
 
         v = np.vectorize( lambda t:self.L.Gs.node[t]['name'])

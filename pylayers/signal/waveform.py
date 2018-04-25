@@ -98,6 +98,8 @@ class Waveform(dict):
         elif self['typ'] == 'hamming':
             sf = FUsignal(x=fGHz,y=np.hamming(len(fGHz)))
             st = sf.ift()
+        elif self['typ'] == 'ref156':
+            [st,sf]=self.ref156() 
         else:
             logging.critical('waveform typ not recognized, check your config \
                              file')
@@ -139,7 +141,7 @@ class Waveform(dict):
         ----------
 
         Tpns : float
-    
+
         """
         plt.subplot(211)
         self.st.plot()
@@ -149,7 +151,7 @@ class Waveform(dict):
         psd.plotdB(mask=True)
 
     def ip_generic(self):
-        """   Create an energy normalized Gaussian impulse (Usignal)
+        """ Create an energy normalized Gaussian impulse (Usignal)
 
         ip_generic(self,parameters)
 
@@ -163,8 +165,8 @@ class Waveform(dict):
         te = 1.0/feGHz
 
         self['te'] = te
-        Np     = feGHz*Tw
-        self['Np']=Np
+        Np = feGHz*Tw
+        self['Np'] = Np
         #x      = np.linspace(-0.5*Tw+te/2,0.5*Tw+te/2,Np,endpoint=False)
         #x     = arange(-Tw,Tw,te)
         w = bs.TUsignal()
@@ -173,28 +175,40 @@ class Waveform(dict):
         W = w.ft()
         return (w,W)
 
-    def ref156(self):
+    def ref156(self,beta=0.5):
         """ reference pulse of IEEE 802.15.6 UWB standard
-        
+
+        Parameters
+        ----------
+
+        beta : float 
+            roll-off factor
+        Tns = 1/499.2MHz
+
         Notes
         -----
 
+        From P8O2.15.6/D02 December 2010  Formula 96 p 215
 
         """
-        Tw     = self['twns']
-        fc     = self['fcGHz']
-        WGHz   = self['WGHz']
-        thresh = self['threshdB']
-        fe     = self['feGHz']
-        te     = 1./fe
+        Tw = self['twns']
+        fe = self['feGHz']
+        te = 1./fe
         beta = 0.5
-        Tns  = 1./0.4992
-        x    =  np.linspace(-0.5*Tw+te/2,0.5*Tw+te/2,Np,endpoint=False)
-        z    = x/T
-        t1  = np.sin(np.pi*(1-beta)*z)
-        t2  = np.cos(np.pi*(1+beta)*z)
-        t3  = (np.pi*z)*(1-(4*beta*z)**2)
-        y   = (t1+4*beta*z*t2)/t3
+        Tns = 1./0.4992
+        x = np.linspace(-0.5*Tw+te/2, 0.5*Tw+te/2, Np, endpoint=False)
+        z = x/Tns
+        t1 = np.sin(np.pi*(1-beta)*z)
+        t2 = np.cos(np.pi*(1+beta)*z)
+        t3 = (np.pi*z)*(1-(4*beta*z)**2)
+        y = (t1 + 4*beta*z*t2)/t3
+
+        st = bs.TUsignal()
+        st.x = x
+        st.y = y
+        sf = st.ftshift()
+
+        return(st,sf)
 
 
     def fromfile(self):
@@ -228,17 +242,17 @@ class Waveform(dict):
 
         yzp = np.zeros(len(yap)-len(ybp)-1)
 
-        tnsp = np.arange(0,tns[-1]-tns[u]+0.5*te,te)
-        tnsm = np.arange(-(tns[-1]-tns[u]),0,te)
+        tnsp = np.arange(0, tns[-1]-tns[u]+0.5*te, te)
+        tnsm = np.arange(-(tns[-1]-tns[u]), 0, te)
 
-        y = np.hstack((yzp,np.hstack((ybp,yap))))
-        tns = np.hstack((tnsm,tnsp))
+        y = np.hstack((yzp, np.hstack((ybp, yap))))
+        tns = np.hstack((tnsm, tnsp))
 
         #
         # Warning (check if 1/sqrt(30) is not applied elsewhere
         #
         w.x = tns
-        w.y = y*(1/np.sqrt(30))
+        w.y = y[None,:]*(1/np.sqrt(30))
 
         #  w : TUsignal
         #  W : FUsignal (Hermitian redundancy removed)
@@ -329,8 +343,8 @@ class Waveform(dict):
         self.eval()
 
     def bandwidth(self,th_ratio=10000,Npt=100):
-        """ Determine effective bandwidth of the waveform. 
-        
+        """ Determine effective bandwidth of the waveform.
+
         Parameters
         ----------
 
