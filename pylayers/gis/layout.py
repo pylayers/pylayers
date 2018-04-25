@@ -1090,16 +1090,16 @@ class Layout(pro.PyLayers):
         # self.iupnt[utmp[:,0]]=utmp[:,1]
 
         # degree of segment nodes
-        degseg = map(lambda x: nx.degree(self.Gs, x), useg)
+        degseg = [ nx.degree(self.Gs,x) for x in useg ]
 
-        assert(np.all(array(degseg) == 2))  # all segments must have degree 2
+        assert(np.all(np.array(degseg) == 2))  # all segments must have degree 2
 
         #
         # self.degree : dictionnary (point degree : list of point index)
         #
 
         # points absolute degrees
-        degpnt = np.array(map(lambda x: nx.degree(self.Gs, x), upnt))
+        degpnt = np.array([nx.degree(self.Gs, x) for x in  upnt])
 
         # lairwall : list of air wall segments
 
@@ -1132,7 +1132,8 @@ class Layout(pro.PyLayers):
                     n = n + 1
             return n
 
-        nairwall = np.array(map(nairwall, upnt))
+        nairwall = np.array([ nairwall(x) for x in  upnt])
+
         if verbose:
             print('buildging nairwall : Done')
         #
@@ -1183,8 +1184,9 @@ class Layout(pro.PyLayers):
         # ntail = map(lambda x: nx.neighbors(self.Gs, x)[0], useg)
         # nhead = map(lambda x: nx.neighbors(self.Gs, x)[1], useg)
         # v1.1 ntahe = np.array([nx.neighbors(self.Gs, x) for x in useg])
-        ntahe = np.array([self.Gs[x].keys() for x in useg])
-
+        #ntahe = np.array([dict(self.Gs[x]).keys() for x in useg])
+        ntahe = np.array([ [n for n in nx.neighbors(self.Gs,x) ]  for x in useg ])
+        #nhead = [ [n for n in nx.neighbors(self.Gs,x) for x in useg ]
         ntail = ntahe[:,0]
         nhead = ntahe[:,1]
 
@@ -1192,7 +1194,7 @@ class Layout(pro.PyLayers):
         mlgsn = max(self.Gs.nodes())+1
         self.s2pu = sparse.lil_matrix((mlgsn,2),dtype='int')
         self.s2pu[useg,:] = ntahe
-        # convert to compressed row sparse matrix 
+        # convert to compressed row sparse matrix
         # to be more efficient on row slicing
         self.s2pu = self.s2pu.tocsr()
 
@@ -2566,10 +2568,8 @@ class Layout(pro.PyLayers):
 
 
         """
-        try:
-            num = -(max(-np.array(self.Gs.node.keys())) + 1)
-        except:
-            num = -1
+        # next free node
+        num = -( -min(self.Gs.node) + 1 )
         self.Gs.add_node(num)
         self.Gs.pos[num] = p
         self.Np = self.Np + 1
@@ -3784,6 +3784,8 @@ class Layout(pro.PyLayers):
         -------
 
         (pt,ke) : points coordinates and index
+            pt : (2xn)
+            ke : (,n)
 
         Notes
         -----
@@ -3823,7 +3825,9 @@ class Layout(pro.PyLayers):
         #
 
         k = np.where(uxmin*uymin*uxmax*uymax==1)[0]
-        pt = np.array(zip(x[k],y[k])).T
+        #pt = np.array(zip(x[k],y[k])).T
+        # pt (2 x N )
+        pt = np.vstack((x[k],y[k]))
         ke = self.upnt[k]
 
         # if(pt.shape[1]<N):
@@ -6137,8 +6141,7 @@ class Layout(pro.PyLayers):
         # get_points(p) : get points from polygon
         # this is for limiting the search region for large Layout
         #
-
-        [ polygon.setvnodes_new(self.get_points(polygon),self) for polygon in lTP ]
+        [ polygon.setvnodes_new(self.get_points(polygon), self) for polygon in lTP ]
 
         if verbose:
             pbartmp.update(100.)
@@ -6149,7 +6152,7 @@ class Layout(pro.PyLayers):
         ###
         # luaw  : list of tuples
         # ( polygon , array of _AIR segments)
-        pbartmp = pbar(verbose,total=100., 
+        pbartmp = pbar(verbose,total=100.,
                         desc ='Buiild list of airwalls',
                         leave=True,
                         position=tqdmpos+1)
@@ -6236,14 +6239,15 @@ class Layout(pro.PyLayers):
         # determine the neighbors of those segments (the 2 connected triangles
         # centroids)
         # v1.1 neigh = [nx.neighbors(G, un) for un in rn]
-        neigh = [G[un].keys() for un in rn]
+        #neigh = [ dict(G[un]).keys() for un in rn ]
+        neigh = [[n for n in nx.neighbors(G,un)] for un in rn ]
 
         # store into networkx compliant format
 
         uE = [(neigh[un][0], neigh[un][1], {'segment': [
-               rn[un]] + self.Gs.node[rn[un]]['iso']}) for un in xrange(len(rn))]
+               rn[un]] + self.Gs.node[rn[un]]['iso']}) for un in range(len(rn))]
         iuE = {rn[un]: [-neigh[un][0], -neigh[un][1]]
-               for un in xrange(len(rn))}
+               for un in range(len(rn))}
 
         # delete temporary graph
         del G
@@ -6274,8 +6278,9 @@ class Layout(pro.PyLayers):
         # # G.add_edges_from(E1)
         # # G.add_edges_from(E2)
 
-        _airseg = np.unique(_airseg)
+        _airseg = np.array(_airseg)
         _airseg = _airseg[_airseg != np.array(None)].astype('int')
+        _airseg = np.unique(_airseg)
 
         #
         # Mikado like progression for simplification of a set of convex polygons
@@ -6372,7 +6377,7 @@ class Layout(pro.PyLayers):
 
         if verbose:
             Gtpbar.update(100./12.)
-        
+
         pbartmp = pbar(verbose,total=100., desc ='Update Gs ncy',leave=True,position=tqdmpos+1)
 
         pos = self.Gt.pos
@@ -6390,6 +6395,7 @@ class Layout(pro.PyLayers):
         # cycle 0 is necessarily outdoor
         #
         self.Gt.add_node(0, indoor=False)
+        pdb.set_trace()
         for s in self.segboundary:
             self.Gs.node[s]['ncycles'].append(0)
 
@@ -11420,6 +11426,7 @@ class Layout(pro.PyLayers):
             Dy = ymax - ymin
             dx = Dx * percx
             dy = Dy * percy
+
             n1 = self.add_fnod((xmin - dx, ymin - dy))
             n2 = self.add_fnod((xmax + dx, ymin - dy))
             n3 = self.add_fnod((xmax + dx, ymax + dy))
@@ -11427,6 +11434,7 @@ class Layout(pro.PyLayers):
 
             self.lboundary = [n1, n2, n3, n4]
 
+            pdb.set_trace()
             self.segboundary = []
 
             ns1 = self.add_segment(n1, n2, name='_AIR')

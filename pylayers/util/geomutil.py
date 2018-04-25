@@ -611,6 +611,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
 
         tpts : tuple
            tpts[0] : points coordinates
+                    np.array
            tpts[1] : points index
         L : pylayers.layout.Layout
 
@@ -635,7 +636,8 @@ class Polygon(pro.PyLayers, shg.Polygon):
         # TODO : Sometimes polygon points are not exactly corresponding to nodes of Layout (Why ? )
         #        This is the reason of the applied tolerance of 5cm
         #
-        npts = [ ispoint(tpts, np.array(xx), tol=0.05) for xx in zip(x[0:-1], y[0:-1])]
+
+        npts = [ ispoint(tpts, np.array(xx), tol=0.05) for xx in zip(x[0:-1], y[0:-1]) ]
 
         assert (0 not in npts), pdb.set_trace()
         #if 0 in npts:
@@ -643,6 +645,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
         # seg list of tuple [(n1,n2),(n2,n3),....(,)]
         seg = zip(npts, np.roll(npts, -1))
         vnodes = []
+
         for pseg in seg:
             vnodes = vnodes + [pseg[0]]
             # get the list of associated segments

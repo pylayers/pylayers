@@ -988,7 +988,7 @@ class ADPchannel(bs.TUsignal):
             if kwargs['fig']==[]:
                 fig = plt.figure(figsize=kwargs['figsize'])
             else:
-                fig = kwargs['fig'] 
+                fig = kwargs['fig']
             if kwargs['ax'] == []:
                 ax  = fig.add_subplot(111)
             else:
@@ -1051,7 +1051,7 @@ class ADPchannel(bs.TUsignal):
                 #ax.set_xlim(0,1000)
                 if kwargs['xlabel']:
                     ax.set_xlabel('Delay (ns)',fontsize=kwargs['fontsize']) 
-                
+
                 if kwargs['bcir']:
                     phi = self.angpeak_est*np.pi/180.
                     dang = np.abs(self.az - phi)
@@ -1063,14 +1063,14 @@ class ADPchannel(bs.TUsignal):
                 ax.set_ylabel('level (dB)',fontsize=kwargs['fontsize']) 
             ax.set_title(self._filename+' '+str(PL))
             if kwargs['legend']:
-                plt.legend(loc='best') 
+                plt.legend(loc='best')
 
             return fig,ax
         else:
             return (self.x,pdp)
-=======
-        PL = -10*np.log10(np.sum(10**(pdp_min_thr/10.)))
-        return self.x,pdp
+
+#        PL = -10*np.log10(np.sum(10**(pdp_min_thr/10.)))
+#        return self.x,pdp
 
 #        if kwargs['fig']==[]:
 #            fig = plt.figure(figsize=kwargs['figsize'])
@@ -1153,7 +1153,6 @@ class ADPchannel(bs.TUsignal):
 #            plt.legend(loc='best')
 #
 #        return fig,ax
->>>>>>> master
 
     def tomap(self,L,**kwargs):
         """ surimpose PADP on the Layout
