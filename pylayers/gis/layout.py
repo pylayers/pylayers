@@ -8258,7 +8258,7 @@ class Layout(pro.PyLayers):
                     v1n = v1/np.sqrt(np.sum(v1*v1))
                     if np.dot(v0n,v1n)<=0:
                         isegments = np.array([ x for x in isegments if x != nstr0 ]) 
-                    #    filter(lambda x: x != nstr0, isegments))
+                    #    [ x for x in rle if  x != nstr0, isegments))
                 # there are one or more segments
                 # if len(isegments) > 0:
                 if isegments.any():
@@ -8324,7 +8324,7 @@ class Layout(pro.PyLayers):
                     # dict   {numint : proba}
                     dsegprob = {k: v for k, v in zip(isegkeep, prob[utypseg])}
                     #########
-                    # output = filter(lambda x: x[0] in isegkeep, i2)
+                    # output = [ x for x in rle if  x[0] in isegkeep, i2)
                     output = [x for x in i2 if x[0] in isegkeep]
                     # probint = map(lambda x: dsegprob[x[0]], output)
                     probint = [dsegprob[x[0]] for x in output]
@@ -8517,7 +8517,7 @@ class Layout(pro.PyLayers):
         #     # list all potential successors of interaction i1
         #     i2 = nx.neighbors(Gi, i1)
         #     ipoints = [x for x in i2 if len(x)==1 ]
-        #     #ipoints = filter(lambda x: len(x) == 1, i2)
+        #     #ipoints = [ x for x in rle if  len(x) == 1, i2)
         #     pipoints = np.array([Gs.pos[ip[0]] for ip in ipoints]).T
         #     # filter tuple (R | T)
         #     #istup = filter(lambda x : type(eval(x))==tuple,i2)
@@ -8545,7 +8545,7 @@ class Layout(pro.PyLayers):
         #         v1n = v1/np.sqrt(np.sum(v1*v1))
         #         if np.dot(v0n,v1n)<=0:
         #             isegments = np.array([ x for x in isegments if x != nstr0 ]) 
-        #         #    filter(lambda x: x != nstr0, isegments))
+        #         #    [ x for x in rle if  x != nstr0, isegments))
         #     # there are one or more segments
         #     if len(isegments) > 0:
         #         points = np.array(s2pc[isegments,:].todense()).T
@@ -8603,7 +8603,7 @@ class Layout(pro.PyLayers):
         #         # dict   {numint : proba}
         #         dsegprob = {k: v for k, v in zip(isegkeep, prob[utypseg])}
         #         #########
-        #         # output = filter(lambda x: x[0] in isegkeep, i2)
+        #         # output = [ x for x in rle if  x[0] in isegkeep, i2)
         #         output = [x for x in i2 if x[0] in isegkeep]
         #         # probint = map(lambda x: dsegprob[x[0]], output)
         #         probint = [dsegprob[x[0]] for x in output]
@@ -8667,17 +8667,17 @@ class Layout(pro.PyLayers):
         lD = [x for x in lint if len(x)==1]
         lR = [x for x in lint if len(x)==2]
         lT = [x for x in lint if len(x)==3]
-        # lD = filter(lambda x: len(x) == 1, lint)
-        # lR = filter(lambda x: len(x) == 2, lint)
-        # lT = filter(lambda x: len(x) == 3, lint)
+        # lD = [ x for x in rle if  len(x) == 1, lint)
+        # lR = [ x for x in rle if  len(x) == 2, lint)
+        # lT = [ x for x in rle if  len(x) == 3, lint)
 
         # visible R|T source cycle is ncy
 
-        lR = filter(lambda x: x[1] == ncy, lR)
+        lR = [ x for x in lR if  x[1] == ncy ]
         if typ == 'source':
-            lT = filter(lambda x: x[1] == ncy, lT)
+            lT = [ x for x in lT if  x[1] == ncy ]
         if typ == 'target':
-            lT = filter(lambda x: x[2] == ncy, lT)
+            lT = [ x for x in lT if  x[2] == ncy ]
         if typ == 'all':
             lT = lT
         # Finding the diffraction points
@@ -8688,7 +8688,7 @@ class Layout(pro.PyLayers):
         #
 
         vnodes = self.Gt.node[ncy]['polyg'].vnodes
-        vpoints = filter(lambda x: x < 0, vnodes)
+        vpoints = [ x for x in vnodes if  x < 0 ] 
         lD = []
         for x in vpoints:
             if x in self.ddiff:
@@ -8743,8 +8743,8 @@ class Layout(pro.PyLayers):
 
         #
         # tsg : list of segment index for mapping with self.tahe
-        #
-        segfilt = filter(lambda x: x not in lair, self.tsg)
+
+        segfilt = [ x for x in self.tsg if  x not in lair ]
         # get the association between segment and nx edges
         edges = self.Gs.edges()
         Ne = len(edges)
@@ -8879,7 +8879,7 @@ class Layout(pro.PyLayers):
             2
         nodelist : list
             []
-        diffraction :boolean 
+        diffraction :boolean
             False
 
 
@@ -9015,8 +9015,8 @@ class Layout(pro.PyLayers):
             # not efficient
             G = self.Gs
 
-            # lss = filter(lambda x: self.Gs.node[x].has_key('ss_name'),self.Gs.nodes())
-            # lss = filter(lambda x: len(self.Gs.node[x]['ss_name'])>0,lss)
+            # lss = [ x for x in self.Gs.nodes if # self.Gs.node[x].has_key('ss_name')]
+            # lss = [ x for x in lss if  len(self.Gs.node[x]['ss_name'])>0 ] 
 
             # keep track of segments already printed
 
@@ -9030,7 +9030,7 @@ class Layout(pro.PyLayers):
                 sllist = list(dict(self.name).keys())
 
             #
-            # Draw segment slab per slab with proper linewidth and color 
+            # Draw segment slab per slab with proper linewidth and color
             #
             for lmat in sllist:
                 #print(lmat)
@@ -9039,7 +9039,7 @@ class Layout(pro.PyLayers):
                     lseg2 = [np.where(np.array(self.Gs.edges()) == i)[0] for i in lseg]
                     kwargs['edgelist'] = []
                     for y in lseg2:
-                        kwargs['edgelist'] = kwargs['edgelist'] + y
+                        kwargs['edgelist'] = kwargs['edgelist'] + list(y)
                     #kwargs['edgelist'] = list(reduce(lambda x, y: list(x) + list(y), lseg2))
                     if kwargs['slab']:
                         kwargs['edge_color'] = cold[self.sl[lmat]['color']]
@@ -9095,9 +9095,10 @@ class Layout(pro.PyLayers):
                 # filter out the 0 cycle
                 nodes = list(G.nodes())
                 edges = list(G.edges())
-                nodf = filter(lambda x: x != 0, nodes)
-                edf = filter(lambda x: ((edges[x][0] != 0) & (
-                    edges[x][1] != 0)), np.arange(len(edges)))
+                nodf = [ x for x in nodes if x != 0 ]
+                edf = [ x for x in np.arange(len(edges)) if ((edges[x][0]!=0) &
+                                                             (edges[x][1]!=0))
+                       ]
                 kwargs['nodelist'] = nodf
                 kwargs['edgelist'] = edf
             else:
@@ -9157,10 +9158,10 @@ class Layout(pro.PyLayers):
 
             edges = list(G.edges())
             rle = range(len(edges))
-            eded = filter(lambda x: (edges[x][0] > 0) & (edges[x][1] > 0), rle)
-            ndnd = filter(lambda x: (edges[x][0] < 0) & (edges[x][1] < 0), rle)
-            nded = filter(lambda x: (((edges[x][0] < 0) & (edges[x][1] > 0)) |
-                                     ((edges[x][0] > 0) & (edges[x][1] < 0))), rle)
+            eded = [ x for x in rle if (edges[x][0] > 0) & (edges[x][1] > 0)]
+            ndnd = [ x for x in rle if (edges[x][0] < 0) & (edges[x][1] < 0)]
+            nded = [ x for x in rle if (((edges[x][0] < 0) & (edges[x][1] > 0)) |
+                                        ((edges[x][0] > 0) & (edges[x][1] < 0)))]
             if 'v' in labels:
                 kwargs['labels'] = True
             else:
@@ -9203,32 +9204,32 @@ class Layout(pro.PyLayers):
 
             rle = range(len(edges))
 
-            DD = filter(lambda x:  ((len(edges[x][0]) == 1) &
-                                    (len(edges[x][1]) == 1)), rle)
+            DD = [ x for x in rle if   ((len(edges[x][0]) == 1) &
+                                    (len(edges[x][1]) == 1))]
 
-            RR = filter(lambda x: ((len(edges[x][0]) == 2) &
-                                   (len(edges[x][1]) == 2)), rle)
+            RR = [ x for x in rle if  ((len(edges[x][0]) == 2) &
+                                   (len(edges[x][1]) == 2))]
 
-            TT = filter(lambda x: ((len(edges[x][0]) == 3) &
-                                   (len(edges[x][1]) == 3)), rle)
+            TT = [ x for x in rle if  ((len(edges[x][0]) == 3) &
+                                   (len(edges[x][1]) == 3))]
 
-            RT = filter(lambda x: ((len(edges[x][0]) == 2) &
-                                   (len(edges[x][1]) == 3)), rle)
+            RT = [ x for x in rle if  ((len(edges[x][0]) == 2) &
+                                   (len(edges[x][1]) == 3))]
 
-            TR = filter(lambda x: ((len(edges[x][0]) == 3) &
-                                   (len(edges[x][1]) == 2)), rle)
+            TR = [ x for x in rle if  ((len(edges[x][0]) == 3) &
+                                   (len(edges[x][1]) == 2))]
 
-            RD = filter(lambda x:  ((len(edges[x][0]) == 2) &
-                                    (len(edges[x][1]) == 1)), rle)
+            RD = [ x for x in rle if   ((len(edges[x][0]) == 2) &
+                                    (len(edges[x][1]) == 1))]
 
-            TD = filter(lambda x:  ((len(edges[x][0]) == 3) &
-                                    (len(edges[x][1]) == 1)), rle)
+            TD = [ x for x in rle if   ((len(edges[x][0]) == 3) &
+                                    (len(edges[x][1]) == 1))]
 
-            DR = filter(lambda x:  ((len(edges[x][0]) == 1) &
-                                    (len(edges[x][1]) == 2)), rle)
+            DR = [ x for x in rle if   ((len(edges[x][0]) == 1) &
+                                    (len(edges[x][1]) == 2))]
 
-            DT = filter(lambda x:  ((len(edges[x][0]) == 1) &
-                                    (len(edges[x][1]) == 3)), rle)
+            DT = [ x for x in rle if   ((len(edges[x][0]) == 1) &
+                                        (len(edges[x][1]) == 3))]
 
             tabcol = ['b', 'g', 'r', 'm', 'c', 'orange',
                       'purple', 'maroon', 'purple', 'k'][::-1]
@@ -9247,8 +9248,9 @@ class Layout(pro.PyLayers):
                     kwargs['edgelist'] = eval(inter)
                     # ndlist = map(lambda x: edges[x][0],kwargs['edgelist'])+\
                     #          map(lambda x: edges[x][1],kwargs['edgelist'])
-                    ndlist = map(lambda x: edges[x][0], kwargs['edgelist']) +\
-                        map(lambda x: edges[x][1], kwargs['edgelist'])
+                    #ndlist = map(lambda x: edges[x][0], kwargs['edgelist']) +\
+                    #    map(lambda x: edges[x][1], kwargs['edgelist'])
+                    ndlist = [ edges[x][0]  for x in kwargs['edgelist']] + [edges[x][1]  for x in kwargs['edgelist']]
                     # keep only unique interaction
                     unique = []
                     [unique.append(it) for it in ndlist if it not in unique]
@@ -10708,7 +10710,7 @@ class Layout(pro.PyLayers):
                 if ((self.Gs.node[i]['name'] != 'AIR') and
                         (self.Gs.node[i]['name'] != '_AIR')):
                     #v1.1 nebr = self.Gs.neighbors(i)
-                    nebr = self.Gs[i].keys()
+                    nebr = list(dict(self.Gs[i]).keys())
                     n1 = nebr[0]
                     n2 = nebr[1]
                     P1[0:2, ik] = np.array(self.Gs.pos[n1]) - pg
@@ -10773,8 +10775,8 @@ class Layout(pro.PyLayers):
         points = np.hstack((points, P4[:, 0:npt_s]))
         points = points.T
 
-        boxes = np.empty((npt / 4, 4), dtype='int')
-        b = np.arange(npt / 4)
+        boxes = np.empty((int(npt / 4), 4), dtype='int')
+        b = np.arange(int(npt / 4))
 
         boxes[:, 0] = b
         boxes[:, 1] = b + npt_s
