@@ -9,8 +9,14 @@
 
 import numpy as np
 import re
+import sys
 import doctest
-import ConfigParser
+if sys.version_info.major==2:
+    from  urllib2 import urlopen
+    import ConfigParser
+else:
+    from  urllib.request import urlopen
+    import configparser
 from   matplotlib.path import Path
 from   matplotlib.patches import PathPatch
 import matplotlib.pyplot as plt

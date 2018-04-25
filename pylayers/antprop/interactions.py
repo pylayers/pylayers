@@ -10,13 +10,14 @@ from __future__ import print_function
 """
 import doctest
 import os
+import sys
 import glob
 import pdb
-import os
-import pdb
-import glob
 import doctest
-import ConfigParser
+if sys.version_info.major==2:
+    import ConfigParser
+else:
+    import configparser
 import networkx as nx
 import numpy as np
 import scipy as sp
@@ -24,6 +25,7 @@ import matplotlib.pyplot as plt
 import struct as stru
 import pylayers.util.geomutil as geu
 import pylayers.util.pyutil as pyu
+
 from pylayers.util.project import *
 from pylayers.antprop.slab import *
 from pylayers.antprop.diffRT import *

@@ -10,17 +10,21 @@ from __future__ import print_function
 import doctest
 import logging
 import os
+import sys
 import glob
 try:
-    from tvtk.api import tvtk
-    from mayavi.sources.vtk_data_source import VTKDataSource
+#    from tvtk.api import tvtk
+#    from mayavi.sources.vtk_data_source import VTKDataSource
     from mayavi import mlab
 except:
     print('Layout:Mayavi is not installed')
 import pdb
 import os
 import copy
-import ConfigParser
+if sys.version_info.major==2:
+    import ConfigParser
+else:
+    import configparser
 import glob
 import doctest
 import networkx as nx

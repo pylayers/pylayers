@@ -55,7 +55,7 @@ if sys.version_info.major==2:
     import ConfigParser
 else:
     from  urllib.request import urlopen
-    import configparser
+    import configparser as ConfigParser
 # from cStringIO import StringIO
 # from multiprocessing import Pool
 
@@ -2196,7 +2196,7 @@ class Layout(pro.PyLayers):
         # cartesian coordinates with the coords.cartesian method
         #
 
-        if di['info'].has_key('format'):
+        if 'format' in di['info']:
             if di['info']['format'] == 'latlon':
                 or_coord_format = 'latlon'
                 coords = osm.Coords()
@@ -2265,21 +2265,21 @@ class Layout(pro.PyLayers):
             name = d['name']
             z = d['z']
 
-            if not d.has_key('transition'):
+            if not 'transition' in d:
                 transition = False
             else:
                 transition = d['transition']
 
-            if not d.has_key('offset'):
-                offset = 0 
+            if not 'offset' in d:
+                offset = 0
             else:
                 offset = d['offset']
 
             # add new segment
             #
             # The segment number is the same as in the .lay file
-            # 
-            # Very useful feature 
+            #
+            # Very useful feature
             #
             num = self.add_segment(nta, nhe,
                                    num = eval(key),
@@ -2381,12 +2381,12 @@ class Layout(pro.PyLayers):
 
         # In this section we handle the ini file format evolution
 
-        if self.display.has_key('fileoverlay'):
+        if 'fileoverlay' in self.display:
             self.display['overlay_file'] = self.display.pop('fileoverlay')
             self.display['overlay_axis'] = self.display['box']
             self.save()
 
-        if self.display.has_key('inverse'):
+        if 'inverse' in self.display:
             self.display['overlay_flip'] = ""
             self.display.pop('inverse')
             self.save()
@@ -7658,11 +7658,11 @@ class Layout(pro.PyLayers):
                 #
                 for x in vnodes:
                     if x < 0:
-                        if self.ddiff.has_key(x):
+                        if x in self.ddiff:
                             for y in self.ddiff[x][0]:
                                 if y == cy:
                                     npt.append(x)
-                
+
                 nseg = [ k for k in vnodes if k>0 ]
                 # all segments and diffraction points of the cycle
                 vnodes = nseg + npt
@@ -7671,7 +7671,7 @@ class Layout(pro.PyLayers):
 
                     if nstr in self.Gv.nodes():
                         # list 1 of interactions
-                        
+
                         li1 = []
                         if nstr > 0:
                             # output cycle 
@@ -8655,7 +8655,7 @@ class Layout(pro.PyLayers):
         vpoints = filter(lambda x: x < 0, vnodes)
         lD = []
         for x in vpoints:
-            if self.ddiff.has_key(x):
+            if x in self.ddiff:
                 for y in self.ddiff[x][0]:
                     if y == ncy:
                         lD.append((x,))
