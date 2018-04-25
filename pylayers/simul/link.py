@@ -11,13 +11,13 @@ r"""
 
 """
 
-
 try:
     from tvtk.api import tvtk
     from mayavi.sources.vtk_data_source import VTKDataSource
     from mayavi import mlab
 except:
     print('Layout:Mayavi is not installed')
+
 import doctest
 import time
 import numpy as np
@@ -51,14 +51,13 @@ import pdb
 logger = logging.getLogger(__name__)
 
 class Link(PyLayers):
-    """
-        Link is a MetaClass, which derives from `Tchannel`.
-        Tchannel is a transmission channel i.e a radio channel
-        which includes both link termination antennas.
+    """ Link class
 
-        A common factor of both statistical (SLink) and deterministic channel (DLink)
-        is the exitence of :math:`\alpha_k` and :math:`\tau_k`
-     """
+    Members
+    -------
+
+    """
+
     def __init__(self):
         """ Link evaluation metaclass
         """

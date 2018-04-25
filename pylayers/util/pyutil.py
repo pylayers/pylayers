@@ -58,7 +58,7 @@ import matplotlib.pylab as plt
 import scipy.special as spe
 import doctest
 import logging
-from   bitstring  import BitString
+#from   bitstring  import BitString
 import datetime as dat
 from pylayers.util.project import *
 import shutil
@@ -1548,30 +1548,30 @@ def cdf(x,color='b',label=" ",lw=1,xlabel="x",ylabel="CDF",logx=False):
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
 
-def bitreverse(N=256,nbit=9):
-    """
-    Parameters
-    ----------
-    N : ideally a power of 2
-
-    Returns
-    -------
-    t : list of the N integers in time reverse order
-
-    Notes
-    -----
-    This function is used for example in buildGv. 
-    One error has been fixed  by forbidding the value 0 
-    The value 0 is not return
-
-    """
-    t = []
-    for k in np.arange(N-1)+1:
-        b = BitString(uint=k,length=nbit) 
-        b.reverse()
-        #b.ror(1)
-        t.append(b.uint)
-    return(np.array(t))
+#def bitreverse(N=256,nbit=9):
+#    """
+#    Parameters
+#    ----------
+#    N : ideally a power of 2
+#
+#    Returns
+#    -------
+#    t : list of the N integers in time reverse order
+#
+#    Notes
+#    -----
+#    This function is used for example in buildGv. 
+#    One error has been fixed  by forbidding the value 0 
+#    The value 0 is not return
+#
+#    """
+#    t = []
+#    for k in np.arange(N-1)+1:
+#        b = BitString(uint=k,length=nbit) 
+#        b.reverse()
+#        #b.ror(1)
+#        t.append(b.uint)
+#    return(np.array(t))
 
 
 def timestamp(now):

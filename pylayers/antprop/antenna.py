@@ -246,6 +246,7 @@ class Pattern(PyLayers):
             kwargs['param']=defaults['param']
 
         l = kwargs['param']['l']
+
         if self.grid:
             # Nth x Nphx Nf
             k = 2*np.pi*self.fGHz[None,None,:]/0.3
@@ -264,15 +265,25 @@ class Pattern(PyLayers):
 
         return Ft,Fp
 
+    def __pPatch(self,**kwargs):
+        """ Patch antenna
+        from Balanis (14-40b) page 835 (Rectangular Patch)
+        """
+
+        defaults = { 'param' : { 'h':0.001588, 'W':0.01186, 'L':0.00906 } }
+        if 'param' not in kwargs or kwargs['param']=={}:
+            kwargs['param']=defaults['param']
+
+
     def __pOmni(self,**kwargs):
         """  omnidirectional pattern
 
         Parameters
         ----------
 
-        param : dict 
+        param : dict
             dictionnary of parameters
-            + pol : string 
+            + pol : string
                 't'| 'p'
             + GmaxdB : float
                 0
