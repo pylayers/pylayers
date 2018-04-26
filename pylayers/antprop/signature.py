@@ -1496,14 +1496,14 @@ class Signatures(PyLayers,dict):
                                 v0 = pta0 - apex
                                 v_ = pta_ - apex
 
-                            pdb.set_trace()
-                            if ((np.linalg.norm(v0)==0) or (np.linalg.norm(v_)==0)):
-                                logger.debug("pta0 : %g,%g", pta0[0], pta0[1])
-                                logger.debug("pta_ : %g,%g", pta_[0], pta_[1])
-                                logger.debug("phe0 : %g,%g", phe0[0], phe0[1])
-                                logger.debug("phe_ : %g,%g", phe_[0], phe_[1])
-                                logger.debug("v0 : %g,%g", v0[0], v0[1])
-                                logger.debug("v_ : %g,%g", v_[0], v_[1])
+                            if connected:
+                                if ((np.linalg.norm(v0)==0) or (np.linalg.norm(v_)==0)):
+                                    logger.debug("pta0 : %g,%g", pta0[0], pta0[1])
+                                    logger.debug("pta_ : %g,%g", pta_[0], pta_[1])
+                                    logger.debug("phe0 : %g,%g", phe0[0], phe0[1])
+                                    logger.debug("phe_ : %g,%g", phe_[0], phe_[1])
+                                    logger.debug("v0 : %g,%g", v0[0], v0[1])
+                                    logger.debug("v_ : %g,%g", v_[0], v_[1])
                             #
                             # Does the cone is built from 2 connected segments or
                             # 2 unconnected segments
