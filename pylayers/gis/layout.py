@@ -475,14 +475,14 @@ class Layout(pro.PyLayers):
                 self.display['overlay_file'], os.path.join('struc', 'images'))
             st = st + "Image('" + filename + "')\n"
         st = st + "Coordinates : " + self.coordinates + "\n"
-        st = st + "----------------\n"
         if hasattr(self,'extent'):
+            st = st + "----------------\n"
             st = st+ str(self.extent)+'\n'
-        st = st + "----------------\n"
         if hasattr(self,'extent_c'):
+            st = st + "----------------\n"
             st = st+ str(self.extent_c)+'\n'
-        st = st + "----------------\n"
         if hasattr(self, 'Gs'):
+            st = st + "----------------\n"
             st = st + "Gs : "+str(len(self.Gs.node))+"("+str(self.Np)+'/'+str(self.Ns)+'/'+str(len(self.lsss))+') :'+str(len(self.Gs.edges()))+'\n'
         if hasattr(self,'Gt'):
             st = st + "Gt : "+str(len(self.Gt.node))+' : '+str(len(self.Gt.edges()))+'\n'
@@ -506,8 +506,8 @@ class Layout(pro.PyLayers):
         st = st + "\n"
         st = st + "xrange : " + str(self.ax[0:2]) + "\n"
         st = st + "yrange : " + str(self.ax[2:]) + "\n"
-        st = st + "center : " + str(self.pg[0]) + "  " + str(self.pg[1])+ "\n"
-        st = st + "radius : " + str(self.radius) + "\n"
+        st = st + "center : " + "( %.2f,%.2f)" % (self.pg[0],self.pg[1]) + "\n"
+        st = st + "radius : %.2f " % self.radius + "\n"
         # st = st + "\nUseful dictionnaries" + "\n----------------\n"
         # if hasattr(self,'dca'):
         #     st = st + "dca {cycle : []} cycle with an airwall" +"\n"

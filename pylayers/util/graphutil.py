@@ -152,10 +152,10 @@ def draw(G,**kwargs):
         [[ea.append((n1,n2)) for n2 in G[n1].keys()] for n1 in na]
         [[ea.append((n2,n1)) for n2 in G[n1].keys()] for n1 in na]
 
-        nodelista = filter(lambda x: x in na, nodelist)
-        edgelista = filter(lambda x: x in ea, edgelist)
-        nodelist = filter(lambda x: x not in na, nodelist)
-        edgelist = filter(lambda x: x not in ea, edgelist)
+        nodelista = [ x for x in nodelist if x in na ]
+        edgelista = [ x for x in edgelist if x in ea ]
+        nodelist = [ x for x in nodelist if x not in na ]
+        edgelist = [ x for x in edgelist if x not in ea ]
     except:
         pass
 
@@ -166,8 +166,9 @@ def draw(G,**kwargs):
                                node_size  = kwargs['node_size'],
                                alpha = kwargs['alphan'],ax=ax)
     if kwargs['labels']:
-        nlp = filter(lambda x: x>0, nodelist)
-        nln = filter(lambda x: x<0, nodelist)
+        nlp = [x for x in nodelist if x > 0 ]
+        nln = [x for x in nodelist if x < 0 ]
+
         nx.draw_networkx_labels(G, G.pos,
                                 labels={n:n for n in nln},
                                 font_color=kwargs['negnode_color'],

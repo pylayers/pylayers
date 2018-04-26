@@ -490,7 +490,7 @@ class Ezone(PyLayers):
     def ls(self):
         files = os.listdir(os.path.join(basename,'gis','h5'))
         for f in files:
-            print f
+            print(f)
 
     def getdem(self):
         """ get a digital elevation model
@@ -517,7 +517,7 @@ class Ezone(PyLayers):
         fileaster = os.path.join(diraster,_fileaster)
 
         if (os.path.isfile(filehgt) & os.path.isfile(filelcv)):
-            print "Load srtm file"
+            print("Load srtm file")
             D = DEM(self.prefix)
             D.loadsrtm()
             self.hgts = D.hgt
@@ -528,17 +528,17 @@ class Ezone(PyLayers):
             self.pur = self.m(self.extent[1],self.extent[3])
             self.rebase(source='srtm')
         else:
-            print "Download srtm file"
+            print("Download srtm file")
             D = DEM(self.prefix)
             D.dwlsrtm()
             self.hgts = D.hgts
         if os.path.isfile(fileaster):
-            print "Load aster file"
+            print("Load aster file")
             D = DEM()
             D.loadaster(fileaster=fileaster)
             self.hgta = D.hgta
         else:
-            print "no aster file for this point"
+            print("no aster file for this point")
 
 
 
@@ -1180,7 +1180,7 @@ class Ezone(PyLayers):
 
         var  = Rennes['ALT_FAITAG'].values-Rennes['ALT_SOL'].values
         #pg   = np.array(map(lambda x : np.array(Polygon(x).centroid.xy).T[0],lpoly)).T
-        pg = np.array([ np.array(Polygon(x).centroid.xy).T[0]] for x in lpoly]).T
+        pg = np.array([ np.array(Polygon(x).centroid.xy).T[0] for x in lpoly]).T
         lL0  = np.array([-2,48])
         # ent : encode in integer
         ibd  = np.array(ent(pg,lL0))
