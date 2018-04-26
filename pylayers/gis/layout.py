@@ -823,9 +823,11 @@ class Layout(pro.PyLayers):
             # points
             # segments
             # degree of segments
-            useg = filter(lambda x: x > 0, nodes)
-            upnt = filter(lambda x: x < 0, nodes)
-            degseg = map(lambda x: nx.degree(self.Gs, x), useg)
+
+            useg = [ x for x in nodes if x > 0 ]
+            upnt = [ x for x in nodes if x < 0 ]
+
+            degseg = [nx.degree(self.Gs, x) for x in  useg ]
 
             #
             # 1)   all segments have degree 2
@@ -837,8 +839,7 @@ class Layout(pro.PyLayers):
             # maximum degree of points
             #
 
-            degpnt = map(lambda x: nx.degree(self.Gs, x),
-                         upnt)  # points absolute degrees
+            degpnt = [ nx.degree(self.Gs, x) for x in  upnt ]  # points absolute degrees
             degmin = min(degpnt)
             degmax = max(degpnt)
 
@@ -3913,8 +3914,8 @@ class Layout(pro.PyLayers):
         #
         #
 
-        #seglist  = np.unique(self.seginframe2(p1[0:2], p2[0:2]))
-        seglist  = np.unique(self.seginframe(p1[0:2], p2[0:2]))
+        seglist  = np.unique(self.seginframe2(p1[0:2], p2[0:2]))
+        #seglist  = np.unique(self.seginframe(p1[0:2], p2[0:2]))
 
 
         upos = np.nonzero(seglist >= 0)[0]
@@ -4372,17 +4373,15 @@ class Layout(pro.PyLayers):
         # tahe 2 x Nseg
         th = zip(self.tahe[0, :], self.tahe[1, :])
 
-        self.max_sx = np.array(
-            map(lambda x: max(pt[0, x[0]], pt[0, x[1]]), th))
-        self.min_sx = np.array(
-            map(lambda x: min(pt[0, x[0]], pt[0, x[1]]), th))
-        self.max_sy = np.array(
-            map(lambda x: max(pt[1, x[0]], pt[1, x[1]]), th))
-        self.min_sy = np.array(
-            map(lambda x: min(pt[1, x[0]], pt[1, x[1]]), th))
+        pdb.set_trace()
+        self.max_sx = np.array([ np.maximum(pt[0, x[0]], pt[0, x[1]]) for x in th ])
+        self.min_sx = np.array([ np.minimum(pt[0, x[0]], pt[0, x[1]]) for x in th ])
+        self.max_sy = np.array([ np.maximum(pt[1, x[0]], pt[1, x[1]]) for x in th ])
+        self.min_sy = np.array([ np.minnimum(pt[1, x[0]], pt[1, x[1]]) for x in th ])
 
     def seginframe2(self, p1, p2):
         """ returns the seg list of a given zone defined by two points
+        (vectorised version)
 
             Parameters
             ----------
@@ -4405,13 +4404,13 @@ class Layout(pro.PyLayers):
             .. plot::
                 :include-source:
 
-            >>> from pylayers.gis.layout import *
-            >>> L = Layout('TA-Office.ini')
-            >>> p1 = np.array([[0,0,0],[0,0,0]])
-            >>> p2 = np.array([[10,10,10],[10,10,10]])
-            >>> seglist = L.seginframe2(p1,p2)
-            >>> edlist  = map(lambda x: L.tsg[x],seglist)
-            >>> fig,ax = L.showG('s',edlist=edlist)
+                >>> from pylayers.gis.layout import *
+                >>> L = Layout('TA-Office.ini')
+                >>> p1 = np.array([[0,0,0],[0,0,0]])
+                >>> p2 = np.array([[10,10,10],[10,10,10]])
+                >>> seglist = L.seginframe2(p1,p2)
+                >>> edlist  = map(lambda x: L.tsg[x],seglist)
+                >>> fig,ax = L.showG('s',edlist=edlist)
 
         """
 
@@ -4440,16 +4439,21 @@ class Layout(pro.PyLayers):
 
         # N x 1
 
-        max_x = map(lambda x: max(x[1], x[0]), zip(p1[0, :], p2[0, :]))
-        min_x = map(lambda x: min(x[1], x[0]), zip(p1[0, :], p2[0, :]))
-        max_y = map(lambda x: max(x[1], x[0]), zip(p1[1, :], p2[1, :]))
-        min_y = map(lambda x: min(x[1], x[0]), zip(p1[1, :], p2[1, :]))
+        #max_x = [ max(x[1], x[0]) for x in  zip(p1[0, :], p2[0, :]) ]
+        #min_x = [ min(x[1], x[0]) for x in  zip(p1[0, :], p2[0, :]) ]
+        #max_y = [ max(x[1], x[0]) for x in  zip(p1[1, :], p2[1, :]) ]
+        #min_y = [ min(x[1], x[0]) for x in  zip(p1[1, :], p2[1, :]) ]
 
-        seglist = map(lambda x: np.nonzero((self.max_sx > x[0]) &
-                                           (self.min_sx < x[1]) &
-                                           (self.max_sy > x[2]) &
-                                           (self.min_sy < x[3]))[0],
-                      zip(min_x, max_x, min_y, max_y))
+        max_x = np.maximum(p1[0,:],p2[0,:])
+        min_x = np.minimum(p1[0,:],p2[0,:])
+        max_y = np.maximum(p1[1,:],p2[1,:])
+        min_y = np.minimum(p1[1,:],p2[1,:])
+
+        seglist = [ np.nonzero((self.max_sx > x[0]) &
+                               (self.min_sx < x[1]) &
+                               (self.max_sy > x[2]) &
+                               (self.min_sy < x[3]))[0]
+                   for x in zip(min_x, max_x, min_y, max_y) ]
 
         # np.array stacking
         # -1 acts as a deliminiter (not as a segment number)
