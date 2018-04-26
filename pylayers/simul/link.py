@@ -982,7 +982,7 @@ class DLink(Link):
 
 
     def save_init(self,filename_long):
-        """ initialize the hdf5 file for link saving 
+        """ initialize the hdf5 file for link saving
 
         Parameters
         ----------
@@ -991,15 +991,15 @@ class DLink(Link):
             complete path and filename
 
         'sig'    : Signatures
-        'ray2'   : 2D rays 
-        'ray'    : 3D rays 
-        'Ct'     : Propagation channel 
-        'H'      : Transmission channel 
-        'p_map'  : points  
-        'c_map'  : cycles 
-        'f_map'  : frequency 
-        'A_map'  : antennas 
-        'T_map'  : rotation 
+        'ray2'   : 2D rays
+        'ray'    : 3D rays
+        'Ct'     : Propagation channel
+        'H'      : Transmission channel
+        'p_map'  : points
+        'c_map'  : cycles
+        'f_map'  : frequency
+        'A_map'  : antennas
+        'T_map'  : rotation
 
         """
 
@@ -1182,9 +1182,9 @@ class DLink(Link):
         # Write in h5py if no prior a-b link
 
         grpname = str(self.cutoff) + '_' + th + '_' + str(ua) + '_' +str(ub)
-        self.dexist['ray2']['grpname']=grpname
-        self.dexist['ray']['grpname']=grpname
-        
+        self.dexist['ray2']['grpname'] = grpname
+        self.dexist['ray']['grpname'] = grpname
+
 
 
         ############
@@ -1195,10 +1195,10 @@ class DLink(Link):
         #farray = np.array(([self.fmin,self.fmax,self.fstep]))
         Nf = len(self.fGHz)
         if Nf > 1:
-            farray = np.array(([self.fGHz[0],self.fGHz[-1],self.fGHz[1]-self.fGHz[0]]))
+            farray = np.array(([self.fGHz[0], self.fGHz[-1], self.fGHz[1]-self.fGHz[0]]))
         else:
-            farray = np.array(([self.fGHz[0],self.fGHz[-1],0]))
-        uf_opt, uf = self.get_idx('f_map',farray)
+            farray = np.array(([self.fGHz[0], self.fGHz[-1],0]))
+        uf_opt, uf = self.get_idx('f_map', farray)
 
         grpname = str(ua) + '_' + str(ub) + '_' + str(uf)
         self.dexist['Ct']['grpname'] = grpname
@@ -1247,10 +1247,10 @@ class DLink(Link):
         try :
             lfilename=pyu.getlong(self.filename,pstruc['DIRLNK'])
             f = h5py.File(lfilename,'r')
-            if grpname.decode('utf8') in f[key].keys():
-                self.dexist[key]['exist']=True
+            if grpname.encode('utf8') in f[key].keys():
+                self.dexist[key]['exist'] = True
             else :
-                self.dexist[key]['exist']=False
+                self.dexist[key]['exist'] = False
             f.close()
         except:
             f.close()
@@ -1322,6 +1322,7 @@ class DLink(Link):
 
         Returns
         -------
+
         (ua)
 
         ua : np.ndarray
@@ -1391,12 +1392,12 @@ class DLink(Link):
                 # ua = np.where(np.in1d(ufmima,ufst))[0]
 
         elif key == 'A_map':
-            ua = np.where(fa==array)[0]
+            ua = np.where(fa == array.encode('utf-8'))[0]
 
         elif key == 'T_map':
             eq = array == fa
-            seq = np.sum(np.sum(eq,axis=1),axis=1)
-            ua = np.where(seq==9)[0]
+            seq = np.sum(np.sum(eq,axis=1), axis=1)
+            ua = np.where(seq == 9)[0]
         else :
             raise NameError('Link.array_exist : invalid key')
 
