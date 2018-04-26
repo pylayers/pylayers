@@ -419,7 +419,7 @@ class Signatures(PyLayers,dict):
         ----------
 
         L : Layout
-        dump : int 
+        dump : int
         source : int
             cycle number
         target : int
@@ -1228,8 +1228,8 @@ class Signatures(PyLayers,dict):
 
             # start from a segment
             if s[0] > 0:
-                pts = self.L.Gs[s[0]].keys()
-                tahe = [np.array([self.L.Gs.pos[pts[0]], self.L.Gs.pos[pts[1]]])]
+                pts = list(dict(self.L.Gs[s[0]]).keys())
+                tahe = [ np.array([ self.L.Gs.pos[pts[0]], self.L.Gs.pos[pts[1]]]) ]
             # start from a point
             else:
                 tahe = [np.array([self.L.Gs.pos[s[0]], self.L.Gs.pos[s[0]]])]
@@ -1248,13 +1248,16 @@ class Signatures(PyLayers,dict):
             #   s is in target interaction list
             # or
             #   arrival cycle is equal to target cycle
-            # then stack a new signature in self[len(typ)] 
+            # then stack a new signature in self[len(typ)]
             #
             # TODO : It concerns self[1] : only one interaction (i.e several single reflection or diffraction)
             #
             if (s in lit) or (s[-1]==self.target):
-                anstr = np.array(map(lambda x: x[0],visited))
-                typ  = np.array(map(lambda x: len(x),visited))
+                #anstr = np.array(map(lambda x: x[0],visited))
+                anstr = np.array([ x[0] for x in visited ])
+                #typ  = np.array(map(lambda x: len(x),visited))
+                typ =np.array([len(x) for x in visited ])
+
                 assert(len(typ)==1)
                 try:
                     self[len(typ)] = np.vstack((self[len(typ)],anstr,typ))
@@ -1264,11 +1267,12 @@ class Signatures(PyLayers,dict):
                     self.ratio[len(typ)] = np.array([1.])
                 # update signature counter
                 cptsig +=1
+
             # stack is a list of iterators
             #
             #
             stack = [iter(Gi[s])]
-            # air walls do not intervene in the number of transmission (cutoff criteria) 
+            # air walls do not intervene in the number of transmission (cutoff criteria)
             # lawp is the list of airwall position in visited sequence
             # handle the case of the first segment which can be an airwall
             #
@@ -1382,7 +1386,7 @@ class Signatures(PyLayers,dict):
                             # 
                             # l'avant dernier point est une reflection 
                             #
-                            nseg_points = self.L.Gs[visited[-2][0]].keys()
+                            nseg_points = list(dict(self.L.Gs[visited[-2][0]]).keys())
                             ta_seg = np.array(self.L.Gs.pos[nseg_points[0]])
                             he_seg = np.array(self.L.Gs.pos[nseg_points[1]])
                             #
@@ -1396,7 +1400,7 @@ class Signatures(PyLayers,dict):
                             pass
                         # current interaction is of segment type
                         if (nstr>0):
-                            nseg_points = self.L.Gs[nstr].keys()
+                            nseg_points = list(dict(self.L.Gs[nstr]).keys())
                             th = np.array([self.L.Gs.pos[nseg_points[0]],
                                            self.L.Gs.pos[nseg_points[1]]])
                         else:
@@ -2234,7 +2238,7 @@ class Signatures(PyLayers,dict):
         return rays
 
 
-    def raysv(self,ptx=0,prx=1):
+    def raysv(self, ptx=0, prx=1):
         """ transform dict of signatures into 2D rays - default vectorized version
 
         Parameters
@@ -2270,7 +2274,6 @@ class Signatures(PyLayers,dict):
           SCHOOL = {{Universit{\'e} Rennes 1}},
           YEAR = {2013},
           MONTH = Dec,
-          KEYWORDS = {Electromagnetic wave propagation simulation ; Human mobility simulation ; Wireless localization methods ; Position estimation methods in wireless networks ; Vectorized computation ; Ray-tracing ; Ultra wide band ; Simulateur de propagation {\'e}lectromagn{\'e}tique ; Simulateur de mobilit{\'e} humaine ; M{\'e}thodes de localisation sans fils ; M{\'e}thodes d'estimation de la position dans les r{\'e}seaux sans fils ; Calcul informatique vectoris{\'e} ; Outil de trac{\'e} de rayons ; Ultra large bande},
           TYPE = {Theses},
           HAL_ID = {tel-00971809},
           HAL_VERSION = {v1},
@@ -2283,6 +2286,7 @@ class Signatures(PyLayers,dict):
         Signatures.backtrace
 
         """
+
         if type(ptx)==int:
             ptx = np.array(self.L.Gt.pos[ptx])
 
@@ -2290,10 +2294,10 @@ class Signatures(PyLayers,dict):
             prx = np.array(self.L.Gt.pos[prx])
 
         if len(ptx) == 2:
-            ptx= np.r_[ptx,0.5]
+            ptx= np.r_[ptx, 0.5]
 
         if len(ptx) == 2:
-            prx= np.r_[prx,0.5]
+            prx= np.r_[prx, 0.5]
 
         rays = Rays(ptx,prx)
 
@@ -2319,8 +2323,8 @@ class Signatures(PyLayers,dict):
         polyctx = self.L.Gt.node[cyptx]['polyg']
         polycrx = self.L.Gt.node[cyprx]['polyg']
 
-        # The Line of sight situation is detected here 
-        # dtxtx : distance between Tx and Rx 
+        # The Line of sight situation is detected here
+        # dtxtx : distance between Tx and Rx
         dtxrx = np.sum((ptx-prx)*(ptx-prx))
         if dtxrx>1e-15:
             if polyctx.contains(los):
@@ -2331,20 +2335,20 @@ class Signatures(PyLayers,dict):
 
         M = self.image2(ptx)
         R = self.backtrace(ptx,prx,M)
-        # 
-        # Add LOS ray in ray 2D 
+        #
+        # Add LOS ray in ray 2D
         #
         if rays.los:
             R[0]= {'sig':np.zeros(shape=(0,0,1)),'pt': np.zeros(shape=(2,1,0))}
-        
+
         rays.update(R)
-        rays.nb_origin_sig = len(self)
+        rays.nb_origin_sig = len(self.keys())
         rays.origin_sig_name = self.filename
         #pdb.set_trace()
         return rays
 
     def backtrace(self, tx, rx, M):
-        ''' backtracing betwen tx and rx 
+        ''' backtracing betwen tx and rx
 
         Warning :
             This is an attempt to vectorize the backtrace process.
@@ -2620,9 +2624,10 @@ class Signatures(PyLayers,dict):
 
             # rayp_i[:2,:,0]=tx[:,None]
             if len(uvalid) !=0:
-                sir1=signatures[::2].T.reshape(ninter,len(usigv)/2)
-                sir2=signatures[1::2].T.reshape(ninter,len(usigv)/2)
-                sig = np.empty((2,ninter,len(usigv)/2))
+                N = int(len(usigv)/2)
+                sir1=signatures[::2].T.reshape(ninter,N)
+                sir2=signatures[1::2].T.reshape(ninter,N)
+                sig = np.empty((2,ninter,N))
                 sig[0,:,:]=sir1
                 sig[1,:,:]=sir2
                 rayp_i=np.swapaxes(rayp_i,1,2)
@@ -2747,15 +2752,15 @@ class Signatures(PyLayers,dict):
 
             ityp = self[ninter][1::2]
 
-            for n in xrange(ninter):
+            for n in np.arange(ninter):
                 #get segment ids of signature with ninter interactions
                 uT = np.where(ityp[:,n]==3)[0]
                 uR = np.where(ityp[:,n]==2)[0]
                 uD = np.where(ityp[:,n]==1)[0]
                 if n ==0:
-                    p=tx[:,None]*np.ones((nsig))
+                    p = tx[:,None]*np.ones((nsig))
                 else :
-                    p=M[:,:,n-1]
+                    p = M[:,:,n-1]
                 #reflexion 0 (2.67)
                 M[:,uR,n] = np.einsum('ijk,jk->ik',K[:,:,uR,n],p[:,uR])+v[:,uR,n]
                 #transmission 0 (2.67)
@@ -3442,7 +3447,7 @@ class Signature(PyLayers,object):
         else:
             l5 = ax.plot(ray[0,:],ray[1,:],color='red',alpha=0.6,linewidth=0.6)
 
-        return fig,ax    
+        return fig,ax
 
     def backtrace(self, tx, rx, M):
         """ backtrace given image, tx, and rx
