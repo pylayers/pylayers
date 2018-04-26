@@ -297,8 +297,6 @@ class Bsignal(PyLayers):
 
         Use __set__ instead
 
-        .. todo:: check coherence of support internally
-
         """
         self.x = x
         Np = len(self.x)
@@ -592,15 +590,15 @@ class Bsignal(PyLayers):
                     'ylabel':''}
 
         for k in defaults.keys():
-            if not kwargs.has_key(k):
+            if not k in kwargs:
                 kwargs[k]=defaults[k]
 
-        if not kwargs.has_key('fig'):
+        if not 'fig' in kwargs:
             fig = plt.figure()
         else:
             fig = kwargs['fig']
 
-        if not kwargs.has_key('ax'):
+        if not 'ax' in kwargs:
             ax = fig.add_subplot(111)
         else:
             ax = kwargs['ax']
@@ -1102,7 +1100,7 @@ class Usignal(Bsignal):
             #pstart2 = findpos(u2.x, xnew[0])
             pstart2 = np.where(u2.x==xnew[0])[0]
             #pstop2 = pstart2 + findpos(u2.x[pstart2:dim2], xnew[-1])
-            pstop2 = pstart2 + np.where(u2.x[pstart2:dim2]==xnew[-1])[0]
+            pstop2 = pstart2 + np.where(u2.x[pstart2:dim2] == xnew[-1])[0]
 
             u2 = u2.truncate(pstart2, pstop2 + 1)
             u1 = u1.resample(xnew)
@@ -1202,8 +1200,8 @@ class Usignal(Bsignal):
         Parameters
         ----------
 
-        imin  : int 
-        imax  : int 
+        imin  : int
+        imax  : int
         axis  : axis to truncate (default -1)
 
         Returns
@@ -1220,7 +1218,7 @@ class Usignal(Bsignal):
             x_new = self.x[imin:imax]
         else:
             x_new = self.x
-        
+
         if (axis==-1):
             y_new = self.y[..., imin:imax]
         if (axis==0):
@@ -1341,8 +1339,8 @@ class Usignal(Bsignal):
         xmax : float
             add zeros after xmax
 
-        Summary
-        --------
+        Notes
+        -----
 
         This corresponds to a gating between xmin and xmax
 
@@ -2226,8 +2224,8 @@ class TUsignal(TBsignal, Usignal):
         normalized : boolean
             default True
 
-        Summary
-        -------
+        Notes
+        -----
             The time step dx should be the same
 
             The chosen time reference is the one of the self signal
@@ -3260,8 +3258,8 @@ class FUsignal(FBsignal,Usignal):
     def iftshift(self, Nz=1):
         """ Return the associated TUsignal
 
-        Summary
-        -------
+        Notes
+        -----
 
         apply the inverse fftshift operator to come back in time
 
@@ -3280,9 +3278,9 @@ class FUsignal(FBsignal,Usignal):
     def show(self,**kwargs):
         """ imshow visualization of Modulus and Phase
 
-        vmin : 
-        vmax : 
-        cmap : colormap 
+        vmin :
+        vmax :
+        cmap : colormap
 
         """
 
@@ -3295,10 +3293,11 @@ class FUsignal(FBsignal,Usignal):
         ax1 = fig.add_subplot(121)
         fig,ax1 = self.imshow(typ='l20',fig=fig,ax=ax1,**kwargs)
         ax2 = fig.add_subplot(122)
-        if 'vmin' in kwargs: 
+        if 'vmin' in kwargs:
             del kwargs['vmin']
-        if 'vmax' in kwargs: 
+        if 'vmax' in kwargs:
             del kwargs['vmax']
+
         fig,ax2= self.imshow(typ='d',fig=fig,ax=ax2,**kwargs)
 
         return fig,[ax1,ax2]

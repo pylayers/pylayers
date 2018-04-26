@@ -593,16 +593,19 @@ class Signatures(PyLayers,dict):
 
     def sig2prob(self,L,lsi):
         """ get signatures probability
-            L : Layout
-            lsi : nd.array 
-                signature (2xnb_sig,sig_length)
+
+        Parameters
+        ---------
+        L : Layout
+        lsi : nd.array 
+            signature (2xnb_sig,sig_length)
 
 
-            Returns
-            -------
+        Returns
+        -------
 
-            tlproba : list  (nb_sig,sig_length-2)
-                output proba of each triplet of interaction
+        tlproba : list  (nb_sig,sig_length-2)
+            output proba of each triplet of interaction
 
 
 
@@ -685,7 +688,7 @@ class Signatures(PyLayers,dict):
 
     def check(self):
         """ check signature
-        
+
         Returns
         -------
 
@@ -697,7 +700,7 @@ class Signatures(PyLayers,dict):
         OK = Signatures(self.L,self.target,self.source)
         KO = Signatures(self.L,self.target,self.source)
         for i in self:
-        
+
             sigs = self[i]
             for s in range(len(sigs)/2):
                 sig = sigs[2*s:2*s+2,:]
@@ -1876,8 +1879,8 @@ class Signatures(PyLayers,dict):
         si = Signature(self[i][(2*s):(2*s)+2])
         si.ev(L)
         pta,phe = si.unfold()
-        
-        
+
+
         return pta,phe
 
     def pltunfold(self,L,i=0,s=0):
@@ -2346,41 +2349,35 @@ class Signatures(PyLayers,dict):
     def backtrace(self, tx, rx, M):
         ''' backtracing betwen tx and rx
 
-        Warning :
-            This is an attempt to vectorize the backtrace process.
-            Despite it has been tested on few cases with succes,
-            this is quite new need to be validated !!!
+        Parameters
+        ----------
 
+            tx : ndarray
+                position of tx (2,)
+            rx : ndarray
+                position of tx (2,)
+            M : dict
+                position of intermediate points obtained from self.image()
 
-            Parameters
-            ----------
+        Returns
+        -------
 
-                tx : ndarray
-                    position of tx (2,)
-                rx : ndarray
-                    position of tx (2,)
-                M : dict
-                    position of intermediate points obtained from self.image()
-
-            Return
-            -------
-
-                rayp : dict
-                key = number_of_interactions
-                value =ndarray positions of interactions for creating rays
-
-            Notes
-            -----
-
-            dictionnary of intermediate coordinated :
+            rayp : dict
             key = number_of_interactions
-            value = nd array M with shape : (2,nb_signatures,nb_interactions)
-            and 2 represent x and y coordinates
+            value =ndarray positions of interactions for creating rays
 
-            See Also
-            --------
+        Notes
+        -----
 
-            pylayers.antprop.signature.image
+        dictionnary of intermediate coordinated :
+        key = number_of_interactions
+        value = nd array M with shape : (2,nb_signatures,nb_interactions)
+        and 2 represent x and y coordinates
+
+        See Also
+        --------
+
+        pylayers.antprop.signature.image
 
         '''
 
@@ -2773,26 +2770,22 @@ class Signatures(PyLayers,dict):
 
     def image(self,tx=np.array([2.7,12.5])):
         ''' Warning :
-            This is an attempt to vectorize the image process.
-            Despite it has been tested on few cases with success,
-            this is quite new need to be validated !!!
 
+        Parameters
+        ----------
 
-            Parameters
-            ----------
+        tx : ndarray
+            position of tx (2,)
 
-                tx : ndarray
-                    position of tx (2,)
+        Returns
+        -------
 
-            Return
-            -------
+        M : dictionnary
 
-                M : dictionnary
-
-            dictionnary of intermediate coordinated :
-            key = number_of_interactions
-            value = nd array M with shape : (2,nb_signatures,nb_interactions)
-            and 2 represent x and y coordinates
+        dictionnary of intermediate coordinates
+        key = number_of_interactions
+        value = nd array M with shape : (2,nb_signatures,nb_interactions)
+        and 2 represent x and y coordinates
 
 
         '''

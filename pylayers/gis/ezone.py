@@ -301,7 +301,7 @@ class DEM(PyLayers):
     def loadaster(self,fileaster=[]):
         """ load Aster files
 
-        The Aster file has the structure 
+        The Aster file has the structure
 
         ASTGTM2_prefix_dem.tif
 
@@ -331,7 +331,7 @@ class DEM(PyLayers):
                         path = os.path.join(path, word)
                     zf.extract(member, path)
 
-        # 
+        #
         # Commented while gdal is broken in anaconda
         f = gdal.Open(fileaster)
         self.hgta = f.ReadAsArray()
@@ -467,7 +467,7 @@ class Ezone(PyLayers):
         ltile : list of strings
 
         """
-        ltile = filter(lambda x : x in self.dbldg,ltile)
+        ltile = [ x for x in ltile if x in self.dbldg ]
         self.lpoly = []
         for it in ltile:
             h, p = self.dbldg[it]
@@ -563,7 +563,6 @@ class Ezone(PyLayers):
         self.lon0 = (self.extent[0]+self.extent[1])/2.
         self.lat0 = (self.extent[2]+self.extent[3])/2.
 
-
         self.m = Basemap(llcrnrlon = self.extent[0],
                          llcrnrlat = self.extent[2],
                          urcrnrlon = self.extent[1],
@@ -609,8 +608,9 @@ class Ezone(PyLayers):
         source : string
             source of data 'srtm' or 'aster'
 
-        Info
-        ----
+        Notes
+        -----
+
         This methods recalculate the longitude and latitude base based on the
         DEM source choice aster or srtm
 
@@ -699,8 +699,8 @@ class Ezone(PyLayers):
 
         height : np.array (,Npt)
             total heigh including eath curvature
-        d : np.array(,Npt) 
-            horizontal distance along the link 
+        d : np.array(,Npt)
+            horizontal distance along the link
         dh : np.array(,Npy)
             earth curvature depending on K factor
         nu : np.array(,Npt)
@@ -1462,9 +1462,9 @@ class Ezone(PyLayers):
                         lpol = arr2lp(b)
                         self.dbldg[k] = [a,lpol]
 
-                l1 = map(lambda x : x.replace('i',''),self.dbldg.keys())
-                llon = map(lambda x: eval(x.split('-')[0]),l1)
-                llat = map(lambda x: eval(x.split('-')[1]),l1)
+                l1 =   [ x.replace('i','') for x in self.dbldg.keys() ]
+                llon = [ eval(x.split('-')[0]) for x in l1 ]
+                llat = [ eval(x.split('-')[1]) for x in l1 ]
 
                 self.blom = min(llon)
                 self.bloM = max(llon)

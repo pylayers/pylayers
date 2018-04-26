@@ -1825,10 +1825,6 @@ class Pattern(PyLayers):
             self.sqG = np.sqrt(self.G)
             self.GdB = 10*np.log10(self.G)
 
-
-
-
-
     def plotG(self,**kwargs):
         """ antenna plot gain in 2D
 
@@ -1858,9 +1854,10 @@ class Pattern(PyLayers):
         fig
         ax
 
-        Info
-        ----
-        self.nth and self.nph has to be correctly set 
+        Notes
+        -----
+
+        self.nth and self.nph has to be correctly set
 
         Examples
         --------
@@ -2467,8 +2464,8 @@ class Antenna(Pattern):
 
         directory : string
 
-        Info
-        ----
+        Notes
+        -----
 
         attol dictionnary is created
         atoll[keyband][polar]['hor'] = Ghor.reshape(360,ct,cf)
@@ -2590,8 +2587,6 @@ class Antenna(Pattern):
 
         Examples
         --------
-
-            Read an Antenna file in UWBAN directory and plot a polar plot
 
         .. plot::
             :include-source:
@@ -3049,9 +3044,6 @@ class Antenna(Pattern):
 
         the file is seek in the $BASENAME/ant directory
 
-        .. todo:
-            consider using an ini file for the header
-        Trx header structure
 
         fmin fmax Nf  phmin   phmax   Nphi    thmin    thmax    Ntheta  #EDelay
         0     1   2   3       4       5       6        7        8       9
@@ -3062,7 +3054,7 @@ class Antenna(Pattern):
             mode : string
             mode 1 : columns are organized ['f','phi','th','ReFph','ImFphi','ReFth','ImFth']
             mode 2 : columns are organized ['f','phi','th','GdB','GdB_ph','GdB_th']
-                    mode2 corresponds to TRXV2 
+                    mode2 corresponds to TRXV2
 
 
         The measured values of Fp Ft and sqG and the associated theta and phi range
@@ -3075,7 +3067,7 @@ class Antenna(Pattern):
         ------
 
         for mode 2 :
-        it is require to create a header file "header_<_filename>.txt with the structure 
+        it is require to create a header file "header_<_filename>.txt with the structure
         # fmin fmax Nf  phmin   phmax   Nphi    thmin    thmax    Ntheta  #EDelay
         and to remove header for trx file.
 
@@ -4587,8 +4579,8 @@ class Antenna(Pattern):
         emax : float
             error default 0.05
 
-        Summary
-        -------
+        Notes
+        -----
 
         Create antenna's vsh3 file which only contains
         the significant vsh coefficients in shape 3,
@@ -5699,7 +5691,12 @@ class AntPosRot(Antenna):
 
 def _gain(Ft,Fp):
     """  calculates antenna gain
-    
+
+    Parameters
+    ----------
+    Ft
+    Fp
+
     Returns
     -------
 
@@ -5720,7 +5717,7 @@ def _gain(Ft,Fp):
     -----
 
     .. math:: 
-    
+
         G(\theta,phi) = |F_{\\theta}|^2 + |F_{\\phi}|^2
 
     """

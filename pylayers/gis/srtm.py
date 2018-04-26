@@ -18,7 +18,11 @@ import glob
 #import xml.dom.minidom
 from HTMLParser import HTMLParser
 import ftplib
-import urllib2
+import sys
+if sys.version_info.major==2:
+    import urllib2
+else:
+    import urllib3 as urllib2
 import re
 import pickle
 import os.path
@@ -28,7 +32,7 @@ import array
 import math
 import pdb
 import matplotlib.pyplot as plt
-import numpy as np 
+import numpy as np
 
 class NoSuchTileError(Exception):
     """Raised when there is no tile for a region."""

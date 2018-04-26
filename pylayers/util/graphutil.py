@@ -90,7 +90,7 @@ def draw(G,**kwargs):
                 'airwalls':False,
                 'labels':True,
                 'width': 2,
-                'node_color':'w',
+                'node_color':'r',
                 'edge_color':'k',
                 'posnode_color':'k',
                 'negnode_color':'b',
@@ -115,7 +115,7 @@ def draw(G,**kwargs):
     #
 
     if kwargs['fig'] == []:
-        fig = plt.figure(figsize=kwargs['figsize'],facecolor='white')
+        fig = plt.figure(figsize=kwargs['figsize'], facecolor='white')
         fig.set_frameon(True)
     else:
         fig = kwargs['fig']
@@ -160,11 +160,12 @@ def draw(G,**kwargs):
         pass
 
     if kwargs['nodes']:
+        ## TODO This does not work
         nx.draw_networkx_nodes(G, G.pos,
                                nodelist = nodelist,
                                node_color = kwargs['node_color'],
                                node_size  = kwargs['node_size'],
-                               alpha = kwargs['alphan'],ax=ax)
+                               alpha = kwargs['alphan'], ax=ax)
     if kwargs['labels']:
         nlp = [x for x in nodelist if x > 0 ]
         nln = [x for x in nodelist if x < 0 ]

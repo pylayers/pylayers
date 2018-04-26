@@ -17,9 +17,15 @@ import glob
 
 def vsh(A, dsf=1):
     """
+    Parameters
+    ----------
 
-    Summary
-    -------
+    A
+    dsf : in
+        downsamplig factor
+
+    Notes
+    -----
 
     This function calculates the Vector Spherical Harmonics coefficients
     It makes use of the spherepack function vha

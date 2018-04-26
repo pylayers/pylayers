@@ -7,7 +7,13 @@
 """
 import numpy as np
 import json
-import ConfigParser
+import sys
+
+if sys.version_info.major==2:
+    import ConfigParser
+else:
+    import configparser as ConfigParser
+
 import pylayers.util.pyutil as pyu
 import pylayers.antprop.antenna as ant
 from pylayers.util.project import *
@@ -262,7 +268,7 @@ class Wstandard(PyLayers,dict):
         stds = json.load(fp)
         fp.close()
         for k in stds:
-            print k + ' , ',
+            print(k + ' , ',)
 
     def power(self, band, info ='max', unit='mw'):
         """ Returns power information for a given channel

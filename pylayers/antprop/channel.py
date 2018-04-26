@@ -3794,8 +3794,8 @@ class Tchannel(bs.FUsignal):
         edgecolors: bool
         colorbar bool
 
-        Summary
-        --------
+        Notes
+        -----
 
         scatter plot of the DoA-DoD channel structure
         the energy is colorcoded over all couples of DoA-DoD
@@ -5336,8 +5336,8 @@ class Ctilde(PyLayers):
         xa :
         xb :
 
-        Summary
-        --------
+        Notes
+        -----
 
         scatter plot of the DoA-DoD channel structure
         the energy is color coded over all couples of DoA-DoD

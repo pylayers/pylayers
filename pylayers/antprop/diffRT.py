@@ -15,6 +15,7 @@ import numpy as np
 import scipy.special as sps
 import matplotlib.pyplot as plt
 import pdb
+
 def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2,mode='tab',debug=False):
     """ Luebbers Diffration coefficient
     for Ray tracing
@@ -44,8 +45,8 @@ def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2,mode='tab',debug=False):
         ( increase accuracy)
         (see FreF)
 
-    Return
-    ------
+    Returns
+    -------
 
     Ds : numpy array
         Diffraction soft
@@ -475,7 +476,7 @@ def FreF(x) :
 
     Examples
     --------
-    
+
     .. plot::
         :include-source:
 
@@ -570,7 +571,7 @@ def R(th,k,er,err,sigma,ur,urr,deltah):
 
     Examples
     --------
-    
+
     .. plot::
         :include-source:
 

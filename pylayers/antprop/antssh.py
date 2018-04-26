@@ -211,8 +211,8 @@ def ssh(A,L= 20,dsf=1):
     dsf :  int
         down sampling factor  'default 1'
 
-    Summary
-    -------
+    Notes 
+    -----
 
     This function calculates the Scalar Spherical Harmonics coefficients
 
@@ -268,7 +268,7 @@ def ssh(A,L= 20,dsf=1):
     return(A)
 
 def sshs(G,fGHz,th,ph,L= 20):
-    """scalar spherical harmonics transform 
+    """scalar spherical harmonics transform
 
     Parameters
     ----------
@@ -278,8 +278,8 @@ def sshs(G,fGHz,th,ph,L= 20):
     th   : np.array
     ph   : np.array
 
-    Summary
-    -------
+    Notes
+    -----
 
     This function calculates the Scalar Spherical Harmonics coefficients
 

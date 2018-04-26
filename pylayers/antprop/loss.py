@@ -202,40 +202,37 @@ def LossMetisShadowing(fGHz,tx,rx,pg,uw,uh,w,h):
     # Besides, M is defined as M = pg + beta*uw + gamma*uh then  alpha*rx + (1-alpha)tx = pg + beta*uw + gamma*uh
     # [rx-tx , -uw, -uh]*[alpha,beta,gamma].T = pg - tx <==> Ax = b solved by la.solve ; x[0]=alpha, x[1]=beta and
 
-    TODO
-    ----
-
-    To be vectorized 
+    TODO To be vectorized
 
     """
 
-    
+
 
     rxtx = rx - tx # LOS distance
-   
+
     # x[2]=gamma.
-    A = np.vstack((rxtx,-uw,-uh)).T 
+    A = np.vstack((rxtx,-uw,-uh)).T
     b = pg - tx
     x = la.solve(A,b)
-    
+
     # condition of shadowing
-    condseg = ((x[0]>1) or (x[0]<0)) 
-    condw = ((x[1]>w/2.) or (x[1]<-w/2.)) 
-    condh = ((x[2]>h/2.) or (x[2]<-h/2.)) 
-    
+    condseg = ((x[0]>1) or (x[0]<0))
+    condw = ((x[1]>w/2.) or (x[1]<-w/2.))
+    condh = ((x[2]>h/2.) or (x[2]<-h/2.))
+
     visi = condseg or condw or condh
     if visi:
         shad = -1
     else:
         shad = 1
-        
+
     r = np.dot(rxtx,rxtx)**0.5
     w1 = pg + uw*w/2.
     w2 = pg - uw*w/2.
     h1 = pg + uh*h/2.
     h2 = pg - uh*h/2.
 
-    
+
     Dtw1 = np.dot(tx-w1,tx-w1)**0.5
     Drw1 = np.dot(rx-w1,rx-w1)**0.5
     Dtw2 = np.dot(tx-w2,tx-w2)**0.5
@@ -244,12 +241,12 @@ def LossMetisShadowing(fGHz,tx,rx,pg,uw,uh,w,h):
     Drh1 = np.dot(rx-h1,rx-h1)**0.5
     Dth2 = np.dot(tx-h2,tx-h2)**0.5
     Drh2 = np.dot(rx-h2,rx-h2)**0.5
-    
+
     D1w = Dtw1+Drw1
     D1h = Dth1+Drh1
     D2w = Dtw2+Drw2
     D2h = Dth2+Drh2
-    
+
 
     if shad == 1:
         signw1 = 1
@@ -658,16 +655,16 @@ def hata(pMS,pBS,fGHz,hMS,hBS,typ):
 
     L : Attenuation (dB)
 
-    Example
-    -------
+    Examples
+    --------
 
-    >>> d = np.linspace(100,5000,120)
-    >>> hBS = 30
-    >>> hMS = 1.5
-    >>> fGHz = 0.9
-    >>> pMS = np.array([d,0,hMS])
-    >>> pBS = np.array([d,0,hBS])
-    >>> L = hata(pMS,pBS,fGHz,hMS,hBS,'small')
+        >>> d = np.linspace(100,5000,120)
+        >>> hBS = 30
+        >>> hMS = 1.5
+        >>> fGHz = 0.9
+        >>> pMS = np.array([d,0,hMS])
+        >>> pBS = np.array([d,0,hBS])
+        >>> L = hata(pMS,pBS,fGHz,hMS,hBS,'small')
 
     Notes
     -----
@@ -756,7 +753,7 @@ def PL(fGHz,pts,p,n=2.0,dB=True,d0=1):
     D = np.sqrt(np.sum((pts-p)**2,axis=0))
     # f x grid x ap
     #PL = np.array([PL0(fGHz)])[:,np.newaxis] + 10*n*np.log10(D)[np.newaxis,:]
-    
+
     PL = PL0(fGHz,d0)[:,np.newaxis] + 10*n*np.log10(D/d0)[np.newaxis,:]
 
     if not dB:
@@ -856,7 +853,7 @@ def Losst(L,fGHz,p1,p2,dB=True):
     LossWallp = np.zeros((len(fGHz),Nlink))
     EdWallo = np.zeros((len(fGHz),Nlink))
     EdWallp = np.zeros((len(fGHz),Nlink))
-    
+
     for slname in cslab:
         # u index of slabs of name slname
         # data['a'][u] angle
@@ -880,11 +877,11 @@ def Losst(L,fGHz,p1,p2,dB=True):
         #
         # sum contribution of slab of a same link
         #
-        Wallo = np.array(map(lambda x: np.sum(lko[:,indices[x]:indicep[x]],axis=1),irange)).T
-        Wallp = np.array(map(lambda x: np.sum(lkp[:,indices[x]:indicep[x]],axis=1),irange)).T
+        Wallo = np.array([ np.sum(lko[:,indices[x]:indicep[x]],axis=1) for x in irange ] ).T
+        Wallp = np.array([ np.sum(lkp[:,indices[x]:indicep[x]],axis=1) for x in irange ] ).T
 
-        Edo = np.array(map(lambda x: np.sum(do[indices[x]:indicep[x]]),irange)).T
-        Edp = np.array(map(lambda x: np.sum(dp[indices[x]:indicep[x]]),irange)).T
+        Edo = np.array([np.sum(do[indices[x]:indicep[x]]) for x in irange]).T
+        Edp = np.array([np.sum(dp[indices[x]:indicep[x]]) for x in irange]).T
 
         LossWallo[:,involved_links] = LossWallo[:,involved_links] + Wallo
         LossWallp[:,involved_links] = LossWallp[:,involved_links] + Wallp
@@ -1810,7 +1807,7 @@ def two_rays_curvedearthold(P,h0,h1,fGHz=2.4,**kwargs):
     Parameters
     ----------
 
-    P : float |list 
+    P : float |list
 
         if len(P) == 1 => P is a distance
         if len(P) == 4 => P is a list of [lon0,lat0,lon1,lat1]
@@ -1846,7 +1843,7 @@ def two_rays_curvedearthold(P,h0,h1,fGHz=2.4,**kwargs):
     'eps' : float ([])
         lossless relative permittivity [],
     'sig': float (0.)
-        conductivity 
+        conductivity
 
 
     dB : boolean (True)
@@ -1859,10 +1856,8 @@ def two_rays_curvedearthold(P,h0,h1,fGHz=2.4,**kwargs):
     P :
         received power
 
-
-
-    Example
-    -------
+    Examples
+    --------
 
     .. plot::
         :include-source:

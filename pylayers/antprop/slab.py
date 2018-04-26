@@ -937,9 +937,6 @@ class MatDB(PyLayers,dict):
         iv) 'THz'
 
         v) ITU parameter (a,b,c,d)
-            
-
-
 
         Examples
         --------
@@ -1052,10 +1049,10 @@ class MatDB(PyLayers,dict):
         _fileini : string
             name of the matDB file (usually matDB.ini)
 
-        TODO
-        ----
+        Notes
+        -----
 
-        add ITU format (abcd)
+        TODO add the ITU format (abcd)
 
         """
         fileini = pyu.getlong(_fileini, pstruc['DIRMAT'])
@@ -1115,8 +1112,8 @@ class MatDB(PyLayers,dict):
 class Slab(Interface,dict):
     """ Handle a Slab
 
-    Summary
-    -------
+    Notes
+    -----
 
     A Slab is a sequence of layers which have
 
@@ -1198,14 +1195,14 @@ class Slab(Interface,dict):
             dict.__setitem__(self,"lmatname", value)
             #dict.__setitem__(self,"nbmat",nbmat)
             dict.__setitem__(self,"lthick",[0.05]*nbmat)
-        
+
         elif key == "lthick":
             #pdb.set_trace()
             #if len(value)!=len(self['lmatname']):
             #    raise ValueError("wrong number of material layers")
             #else:
             dict.__setitem__(self,"lthick",value)
-        else:        
+        else:
             dict.__setitem__(self,key, value)
 
 
@@ -1215,7 +1212,7 @@ class Slab(Interface,dict):
         Parameters
         ----------
 
-        u : Slab 
+        u : Slab
 
         """
         name = self['name']+u['name']
@@ -1223,7 +1220,7 @@ class Slab(Interface,dict):
         # lmatname should be modified before lthick
         U['lmatname'] = self['lmatname']+u['lmatname']
         U['lthick']   = self['lthick']+u['lthick']
-        U['lmat'] = self['lmat']+u['lmat'] 
+        U['lmat'] = self['lmat']+u['lmat']
         #for i in range(len(U['lmatname'])):
         #    namem = U['lmatname'][i]
         #U.conv(matDB)
@@ -1231,11 +1228,14 @@ class Slab(Interface,dict):
 
     def __repr__(self):
         st = self['name']+' : '
-        st = st + reduce(lambda x,y: x+' | '+y,self['lmatname'])+ ' | '
-        st = st + str(self['lthick'])+'\n'
-        st = st + '       ' + str(self['color'])+' '+str(self['linewidth'])+'\n'
+        st1 = ''
+        for x in self['lmatname']:
+            st1 = st1 + '|' + x
+        st = st + st1 + '\n'
+        st = st + str(self['lthick']) + '\n'
+        st = st + '       ' + str(self['color'])+' '+str(self['linewidth']) + '\n'
         for  k in self['lmat']:
-            st = st + '       epr :' + str(k['epr']) + '    sigma : ' + str(k['sigma'])+'\n'
+            st = st + '       epr :' + str(k['epr']) + '    sigma : ' + str(k['sigma']) + '\n'
 
         if self['evaluated']:
             nf = len(self.fGHz)
@@ -1481,11 +1481,6 @@ class Slab(Interface,dict):
     def filter(self,win,theta=0):
         """ filtering waveform
 
-        Warning
-        -------
-
-        Not implemented yet
-
         Parameters
         ----------
 
@@ -1495,6 +1490,11 @@ class Slab(Interface,dict):
         -------
 
         wout : Waveform
+
+        Notes
+        -----
+
+        NOT IMPLEMENTED
 
         """
         # get frequency base of the waveform
@@ -2006,9 +2006,6 @@ class SlabDB(dict):
 
 # class Wedge(Interface,dict):
 #     """ Handle a Wedge
-
-#     Summary
-#     -------
 
 #     A Wedge is a cone with, on its 2 faces :
 

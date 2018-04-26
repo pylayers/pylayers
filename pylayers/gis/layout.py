@@ -9726,27 +9726,28 @@ class Layout(pro.PyLayers):
         return np.sort(nod.tolist())
 
     def get_diffslab(self,npt,lz):
-        """ get the 2 slabs associated to a diffraction point 
+        """ get the 2 slabs associated to a diffraction point
 
-            Parameters
-            ----------
+        Parameters
+        ----------
 
-            lnpt : diffraction point numbers (node of Gs)
-            lz   : array of candidate heights of the diffraction point 
+        lnpt : diffraction point numbers (node of Gs)
+        lz   : array of candidate heights of the diffraction point
 
-            Info
-            ---- 
-            As a diffraction point may involve iso segments the nature 
-            of the diffraction interaction depends on a height parameter
-            This function extacts the couple of slab from this information
+        Notes
+        -----
+        As a diffraction point may involve iso segments the nature
+        of the diffraction interaction depends on a height parameter
+        This function extacts the couple of slab from this information
 
-            Returns
-            -------
-            - a list of 2-segments list. the length of this list == length of lz
-            - a list of slab tuples.  the length of this list == length of lz
+        Returns
+        -------
 
-            [[443, 529], [444, 530]]
-            [['WALL', 'WALL'], ['AIR', 'AIR']]
+        - a list of 2-segments list. the length of this list == length of lz
+        - a list of slab tuples.  the length of this list == length of lz
+
+        [[443, 529], [444, 530]]
+        [['WALL', 'WALL'], ['AIR', 'AIR']]
 
         """
         assert(npt in self.ddiff), logging.error('npt not a diffraction point')
@@ -9756,8 +9757,8 @@ class Layout(pro.PyLayers):
         dz_seg= {z:[] for z in range(llz)}
         dz_sl= {z:[] for z in range(llz)}
 
-        for cy in lcy: 
-            vn = set(self.Gt.node[cy]['polyg'].vnodes)   
+        for cy in lcy:
+            vn = set(self.Gt.node[cy]['polyg'].vnodes)
             # v1.1 lneig_pt = set(nx.neighbors(self.Gs,npt))
             lneig_pt = set(self.Gs[npt])
             lseg = lneig_pt.intersection(vn)

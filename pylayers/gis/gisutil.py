@@ -45,7 +45,7 @@ def ent(lL,lL0):
     # offset from the lower left corner
     d = lL-lL0
     dui8 = np.floor(d*255).astype('uint8')
-    lab = map(lambda x:'i'+str(x[0])+'-'+str(x[1]),dui8)
+    lab = [ 'i'+str(x[0])+'-'+str(x[1]) for x in dui8 ] 
     return(lab)
 
 
@@ -176,23 +176,23 @@ def ctrad2qt(extent):
 if __name__=='__main__':
     lL0 = np.array([-2,48])
     lL = lL0[:,None] + np.random.rand(2,5)
-    print lL
+    print(lL)
     ud16 = eqt(lL,lL0)
     un8  = ent(lL,lL0)
     lLb  = dqt(ud16,lL0)
 
 
 def minsec2dec(old):
-    """ 
+    """
     convert latlon from DMS (minute second) to DD (decimal)
 
     Parameters
     ----------
 
-    old : string 
+    old : string
         format : DMS format
 
-    Example 
+    Example
     -------
 
         >>> from pylayers.gis.gisutil import minsec2dec
