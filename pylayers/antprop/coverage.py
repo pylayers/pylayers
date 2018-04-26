@@ -887,7 +887,7 @@ class Coverage(PyLayers):
                      'best':True
                    }
 
-        title = self.dap[self.dap.keys()[0]].s.name+ ' : '
+        title = self.dap[list(self.dap.keys())[0]].s.name+ ' : '
 
         for k in defaults:
             if k not in kwargs:

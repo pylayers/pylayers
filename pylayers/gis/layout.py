@@ -3914,9 +3914,8 @@ class Layout(pro.PyLayers):
         #
         #
 
-        seglist  = np.unique(self.seginframe2(p1[0:2], p2[0:2]))
+        seglist  = np.unique(self.seginframe2(p1[0:2], p2[0:2])).astype(int)
         #seglist  = np.unique(self.seginframe(p1[0:2], p2[0:2]))
-
 
         upos = np.nonzero(seglist >= 0)[0]
         uneg = np.nonzero(seglist < 0)[0]
@@ -4371,13 +4370,18 @@ class Layout(pro.PyLayers):
         # 2 x Np
         pt = self.pt
         # tahe 2 x Nseg
-        th = zip(self.tahe[0, :], self.tahe[1, :])
+        #th = zip(self.tahe[0, :], self.tahe[1, :])
+        ta = self.tahe[0,:]
+        he = self.tahe[1,:]
 
-        pdb.set_trace()
-        self.max_sx = np.array([ np.maximum(pt[0, x[0]], pt[0, x[1]]) for x in th ])
-        self.min_sx = np.array([ np.minimum(pt[0, x[0]], pt[0, x[1]]) for x in th ])
-        self.max_sy = np.array([ np.maximum(pt[1, x[0]], pt[1, x[1]]) for x in th ])
-        self.min_sy = np.array([ np.minnimum(pt[1, x[0]], pt[1, x[1]]) for x in th ])
+        self.max_sx = np.maximum(pt[0,ta],pt[0,he])
+        self.min_sx = np.minimum(pt[0,ta],pt[0,he])
+        self.max_sy = np.maximum(pt[1,ta],pt[1,he])
+        self.min_sy = np.minimum(pt[1,ta],pt[1,he])
+        #self.max_sx = np.array([ np.maximum(pt[0, x[0]], pt[0, x[1]]) for x in th ])
+        #self.min_sx = np.array([ np.minimum(pt[0, x[0]], pt[0, x[1]]) for x in th ])
+        #self.max_sy = np.array([ np.maximum(pt[1, x[0]], pt[1, x[1]]) for x in th ])
+        #self.min_sy = np.array([ np.minnimum(pt[1, x[0]], pt[1, x[1]]) for x in th ])
 
     def seginframe2(self, p1, p2):
         """ returns the seg list of a given zone defined by two points
@@ -4461,7 +4465,7 @@ class Layout(pro.PyLayers):
         # seglist = reduce(lambda x, y: np.hstack((x, array([-1]), y)), seglist)
         x = np.array([])
         for y in seglist:
-            x = np.hstack((n, np.array([-1]), y))
+            x = np.hstack((x, np.array([-1]), y))
 
         return(x)
 
