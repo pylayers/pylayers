@@ -643,15 +643,15 @@ class Pattern(PyLayers):
 
         if self.grid:
             # X,Y aperture points (t,p,x,y,f)
-            X = np.arange(-a1/2,a1/2,a1/(Nx-1))[None,None,:,None,None]
-            Y = np.arange(-b1/2,b1/2,b1/(Ny-1))[None,None,None,:,None]
+            X = np.arange(-int(a1/2),int(a1/2),int(a1/(Nx-1)))[None,None,:,None,None]
+            Y = np.arange(-int(b1/2),int(b1/2),int(b1/(Ny-1)))[None,None,None,:,None]
             # angular domain (theta,phi)
             Theta= self.theta[:,None,None,None,None]
             Phi = self.phi[None,:,None,None,None]
         else:
             # X,Y aperture points (r,x,y,f)
-            X = np.arange(-a1/2,a1/2,a1/(Nx-1))[None,:,None,None]
-            Y = np.arange(-b1/2,b1/2,b1/(Ny-1))[None,None,:,None]
+            X = np.arange(-int(a1/2),int(a1/2),int(a1/(Nx-1)))[None,:,None,None]
+            Y = np.arange(-int(b1/2),int(b1/2),int(b1/(Ny-1)))[None,None,:,None]
             # angular domain (theta,phi)
             Theta= self.theta[:,None,None,None]
             Phi= self.phi[:,None,None,None]
@@ -747,7 +747,7 @@ class Pattern(PyLayers):
         Nhor = Ghor.shape[0]
         Nver = Gver.shape[0]
         # grid mode (180,360,Nf)
-        rmax = (Nver/2)
+        rmax = int(Nver/2)
         self.theta = np.linspace(0,np.pi,rmax+1)
         self.phi = np.linspace(0,2*np.pi-2*np.pi/Nhor,Nhor)
         #self.nth = len(self.theta)
@@ -1000,7 +1000,8 @@ class Pattern(PyLayers):
         e1 = np.mod(self.phi-p0,2*np.pi)
         e2 = np.mod(p0-self.phi,2*np.pi)
 
-        e = np.array(map(lambda x: min(x[0],x[1]),zip(e1,e2)))
+        e = np.minimum(e1,e2)
+
         argphi = (e**2)/p3
         Nf = len(self.fGHz)
 
@@ -3441,7 +3442,7 @@ class Antenna(Pattern):
         else:
             f = mlab.gcf()
 
-        if kwargs.has_key('opacity'):
+        if 'opacity' in kwargs:
             opacity = kwargs['opacity']
         else: 
             opacity = 1
@@ -3566,7 +3567,7 @@ class Antenna(Pattern):
         if fGHz == []:
             # self.ext == '' <=> mathematically generated => nf = 1
             if self.ext != '':
-                k = len(self.fGHz)/2
+                k = int(len(self.fGHz)/2)
             else:
                 k = 0
         else :

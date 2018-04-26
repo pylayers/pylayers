@@ -132,13 +132,14 @@ def gidl(g):
         if len(n)>1:
             edlist.append(n)
     gr = g.subgraph(edlist)
-    for k in gr.edge:
-        for k1 in gr.edge[k]:
-            ke = gr.edge[k][k1]['output'].keys()
-            va = gr.edge[k][k1]['output'].values()
-            keva = zip(ke,va)
-            keva_valid = [ x for x in keva if len(x[0])>1]
-            gr.edge[k][k1]['output']=dict(keva_valid)
+    for k in gr.edges():
+        print(k)
+        di = gr[k[0]][k[1]]
+        ke = di['output'].keys()
+        va = di['output'].values()
+        keva = zip(ke,va)
+        keva_valid = [ x for x in keva if len(x[0])>1]
+        gr[k[0]][k[1]]['output'] = dict(keva_valid)
 
     dpos = {k:g.pos[k] for k in edlist}
     gr.pos=dpos
@@ -1495,6 +1496,7 @@ class Signatures(PyLayers,dict):
                                 v0 = pta0 - apex
                                 v_ = pta_ - apex
 
+                            pdb.set_trace()
                             if ((np.linalg.norm(v0)==0) or (np.linalg.norm(v_)==0)):
                                 logger.debug("pta0 : %g,%g", pta0[0], pta0[1])
                                 logger.debug("pta_ : %g,%g", pta_[0], pta_[1])

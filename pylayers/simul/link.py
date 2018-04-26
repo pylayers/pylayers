@@ -1258,7 +1258,7 @@ class DLink(Link):
 
 
     def get_idx(self,key,array,tol=1e-3):
-        """ try to get the index of the requested array in the group key
+        """ get the index of the requested array in the group key
             of the hdf5 file.
             If array doesn't exist, the hdf5file[key] array is stacked
 
