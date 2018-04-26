@@ -10241,8 +10241,8 @@ class Layout(pro.PyLayers):
 
         ta  : int <0
         he  : int <0
-        first : Boolean 
-            if True returns only one among the several iso segments 
+        first : Boolean
+            if True returns only one among the several iso segments
             else returns a np.array of iso segments
 
         Returns
@@ -10254,8 +10254,8 @@ class Layout(pro.PyLayers):
         """
         # v1.1 nta = np.array(nx.neighbors(self.Gs, ta))
         # v1.1 nhe = np.array(nx.neighbors(self.Gs, he))
-        nta = np.array(self.Gs[ta])
-        nhe = np.array(self.Gs[he])
+        nta = np.array(list(dict(self.Gs[ta]).keys()))
+        nhe = np.array(list(dict(self.Gs[he]).keys()))
         nseg = np.intersect1d(nta, nhe)
         if len(nseg > 0):
             if first:

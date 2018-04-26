@@ -133,7 +133,7 @@ def gidl(g):
             edlist.append(n)
     gr = g.subgraph(edlist)
     for k in gr.edges():
-        print(k)
+        #print(k)
         di = gr[k[0]][k[1]]
         ke = di['output'].keys()
         va = di['output'].values()
@@ -521,7 +521,7 @@ class Signatures(PyLayers,dict):
                     if b1:
                         sig = Si[2*l:2*l+2,:]
                         sigi = self.sig2inter(L,sig)
-                        print(k,l,' :',sigi)
+                        #print(k,l,' :',sigi)
                         # all 
 
     def sig2inter(self,L,lsi=[]):
@@ -1042,12 +1042,12 @@ class Signatures(PyLayers,dict):
         Parameters
         ----------
 
-        seq : list of tuple 
+        seq : list of tuple
                [(2,2),(5,3),(7,2)]
-        
-        1 : Diffraction 
+
+        1 : Diffraction
         2 : Reflexion
-        3 : Diffraction 
+        3 : Diffraction
 
         Returns
         -------
@@ -1057,16 +1057,16 @@ class Signatures(PyLayers,dict):
 
         >>> DL=DLink()
         >>> DL.eval()
-        >>> seq = [(2,3)] # transmission through segment 2 
+        >>> seq = [(2,3)] # transmission through segment 2
         >>> DL.Si.exist(seq)
 
         """
-        # Number of interactions 
+        # Number of interactions
         N = len(seq)
         # signatures with N interaction
         sig = self[N]
         # Number signature with N interaction
-        Nsig = sig.shape[0]/2
+        Nsig = int(sig.shape[0]/2)
         nstr = sig[::2,:]
         typ  = sig[1::2,:]
         # List of signat
@@ -1135,7 +1135,6 @@ class Signatures(PyLayers,dict):
             kwargs['threshold'] = self.threshold
         else:
             self.threshold=kwargs['threshold']
-
         nD = kwargs['nD']
         nT = kwargs['nT']
         nR = kwargs['nR']
@@ -1294,7 +1293,7 @@ class Signatures(PyLayers,dict):
                 interaction = next(iter_on_interactions, None)
                 #print visited
                 #if ((visited ==[(6236,74,91),(-213,)]) and (interaction==(-1002,))):
-                #    print interaction 
+                #    print(interaction)
                 #    pdb.set_trace()
                 #if (visited ==[(6236,74,91),(-213,),(6248,99,111)]):
                 #if (visited ==[(6236,74,91),(-213,),(6248,99,111),(6287,111,118)]):
@@ -1304,11 +1303,11 @@ class Signatures(PyLayers,dict):
                 # continue if True
                 cond1 = not(interaction is None)
                 # cond2 : enable reverberation
-                #     interaction has not been visited yet 
+                #     interaction has not been visited yet
                 #     or 
-                #     bt : True (allow reentrance) (unconditionnaly)  
+                #     bt : True (allow reentrance) (unconditionnaly)
                 # continue if True
-                #cond2 = (interaction in visited) and bt (old) 
+                #cond2 = (interaction in visited) and bt (old)
                 cond2 = not (interaction in visited) or bt
                 # cond3 : test the cutoff condition not get to the limit
                 # continue if True
@@ -1373,9 +1372,9 @@ class Signatures(PyLayers,dict):
                         #
                         #
                         #
-                        # Testing the type of interaction at rank -2 
-                        # R is a list which contains a rotation matrix 
-                        # and a translation vector for doing the mirroring 
+                        # Testing the type of interaction at rank -2
+                        # R is a list which contains a rotation matrix
+                        # and a translation vector for doing the mirroring
                         # operation
 
                         # diffraction (retrieve a point)
@@ -1383,8 +1382,8 @@ class Signatures(PyLayers,dict):
                             #th = self.L.Gs.pos[nstr]
                             R.append((np.eye(2),np.array([0,0])))
                         elif len(visited[-2])==2:
-                            # 
-                            # l'avant dernier point est une reflection 
+                            #
+                            # l'avant dernier point est une reflection
                             #
                             nseg_points = list(dict(self.L.Gs[visited[-2][0]]).keys())
                             ta_seg = np.array(self.L.Gs.pos[nseg_points[0]])
@@ -1460,6 +1459,7 @@ class Signatures(PyLayers,dict):
                             # TODO : it would be better to replace pta_ and phe_ with the intersection
                             # of the previous cone with tahe[-1]
                             #
+
                             pta_ = tahe[-1][0]  # tail last segment
                             phe_ = tahe[-1][1]  # head last segment
 
@@ -1583,14 +1583,14 @@ class Signatures(PyLayers,dict):
                             #
 
                             if ( (not np.isclose(angle_cone,0,atol=1e-6) )
-                             and ( not np.isclose(angle_cone,np.pi)) ) : 
+                             and ( not np.isclose(angle_cone,np.pi)) ) :
                                 #if self.cpt==16176:
                                 #    pdb.set_trace()
                                 seg,ratio2 = geu.intersect_cone_seg((apex,vl_n),(apex,vr_n),(th_mirror[0],th_mirror[1]),bvis=False)
                             elif ( not np.isclose(angle_cone,0) ):
-                                ratio2 = 1           
+                                ratio2 = 1
                             else:
-                                ratio2 = 0 
+                                ratio2 = 0
                             #print ratio
                             if len(seg)==2:
                                 th_mirror=np.vstack((seg[0],seg[1]))
@@ -1601,17 +1601,17 @@ class Signatures(PyLayers,dict):
                             ar = np.arctan2(vr_n[1],vr_n[0])
                             if np.allclose(th_mirror[0],apex) or np.allclose(th_mirror[1],apex):
                                 ratio2 = 1.
-                            
+
                             # On connecte l'apex du cone courant aux extrémités du segment courant mirroré
-                            
+
                             # Dans certaines circonstances par example un cone emanant d'un point colinéaire 
                             # avec le segment d'arrivé" (-4) (6,4) le point -4 est aligné avec le segment 6
                             # l'ouverture du cone est nul => arret. Cela pourrait être géré dans Gi en interdisant 
                             # la visibilité (-4) (6,4) 
-                            
+
 #                            if angle_cone ==0:
 #                                ratio = 0
-#                            else:    
+#                            else:
 #                                if np.allclose(th_mirror[0],apex) or np.allclose(th_mirror[1],apex):
 #                                    ratio = 1.
 #                                else:
@@ -1704,7 +1704,7 @@ class Signatures(PyLayers,dict):
                                 tahe.append(th)
                             else:
                                 tahe.append(th_mirror)
-                            
+
                             # 
                             # Check if the target has been reached
                             # sequence is valid and last interaction is in the list of targets   
@@ -1716,14 +1716,14 @@ class Signatures(PyLayers,dict):
                                 # lawp_tmp = [0]+lawp
                                 # lll = [x[0] for ix,x in enumerate(visited) if lawp_tmp[ix]==1]
                                 # print([self.L.Gs.node[x]['name'] for x in lll])
-                            
+
                                 #anstr = np.array([x[0] for ix,x in enumerate(visited) 
                                 #                                  if ((lawp[ix]!=1) or (x[0] in self.L.name['AIR']) or (x in (lit+lis)))] )
                                 #typ  = np.array([len(x) for ix,x in enumerate(visited) 
                                 #                                  if ((lawp[ix]!=1) or (x[0] in self.L.name['AIR']) or (x in (lit+lis)))] )
                                 #sig = np.array([anstr,typ])
                                 #sighash = hash(str(sig))
-                                
+
 
                                 # if len(anstr) == 2:
                                 #     if (anstr == np.array([323,351])).all():
@@ -1802,10 +1802,6 @@ class Signatures(PyLayers,dict):
                         pass
                     stack.pop()
                     #stack.pop()
-
-
-            
-             
 
     def plot_cones(self,L,i=0,s=0,fig=[],ax=[],figsize=(10,10)):
         """ display cones of an unfolded signature
@@ -3585,12 +3581,12 @@ class Signature(PyLayers,object):
 
         Y : ndarray (2x(N+2))
 
-        See Also 
+        See Also
         --------
 
         Signature.image
         Signature.backtrace
-            
+
         """
 
         # ev transforms a sequence of segment into numpy arrays (points)
@@ -3604,7 +3600,7 @@ class Signature(PyLayers,object):
         #    pdb.set_trace()
         isvalid,Y,u = self.backtrace(pTx, pRx, M)
         #print isvalid,Y
-        # 
+        #
         # If incremental mode this function returns an alternative signature
         # in case the signature do not yield a valid ray.
         #

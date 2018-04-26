@@ -1491,15 +1491,15 @@ class DLink(Link):
                    'ra_vectorized': True,
                    'ra_ceil_H': [],
                    'ra_number_mirror_cf': 1,
-                   'force':True,
-                   'bt':True,
-                   'si_reverb':4,
-                   'nD':2,
-                   'nR':10,
-                   'nT':10,
-                   'debug':False,
-                   'progressbar':None,
-                   'rm_aw':True
+                   'force': True,
+                   'bt': True,
+                   'si_reverb': 4,
+                   'nD': 2,
+                   'nR': 10,
+                   'nT': 10,
+                   'debug': False,
+                   'progressbar': None,
+                   'rm_aw': True
                    }
         # check antenna frequency range compatibility
         if (self.Aa.fGHz!=self.Ab.fGHz).all():

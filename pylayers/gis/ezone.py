@@ -1179,7 +1179,8 @@ class Ezone(PyLayers):
         #u = np.argsort(np.array(keys))
 
         var  = Rennes['ALT_FAITAG'].values-Rennes['ALT_SOL'].values
-        pg   = np.array(map(lambda x : np.array(Polygon(x).centroid.xy).T[0],lpoly)).T
+        #pg   = np.array(map(lambda x : np.array(Polygon(x).centroid.xy).T[0],lpoly)).T
+        pg = np.array([ np.array(Polygon(x).centroid.xy).T[0]] for x in lpoly]).T
         lL0  = np.array([-2,48])
         # ent : encode in integer
         ibd  = np.array(ent(pg,lL0))
@@ -1194,12 +1195,16 @@ class Ezone(PyLayers):
             #group = 'i'+str(k)
             #store[group+'/df']=df0
             #store.close()
-            lp0 = [dpoly[k] for k in k0]
+            lp0 = [ dpoly[k] for k in k0 ]
             #f = h5py.File("Rennesb.h5",'a')
             z2   = np.zeros((2,))[None,:]
             # add zeros as a delimiter between polygons
-            lp0z = map(lambda x:np.vstack((x,z2)),lp0)
-            alp0 = reduce(lambda x,y:np.vstack((x,y)),lp0z)
+            #lp0z = map(lambda x:np.vstack((x,z2)),lp0)
+            #lp0z = [ np.vstack((x,z2)) for x in lp0 ]
+            #for y in lp0z:
+            #    x = np.vstack((x,y))
+            #alp0 = x
+            #alp0 = reduce(lambda x,y:np.vstack((x,y)),lp0z)
             #self.dbldg[kbld].append(alp0)
             self.dbldg[kbld].append(lp0)
             #f[group+'/poly']=alp0

@@ -356,12 +356,12 @@ class Pattern(PyLayers):
         Dy = 0.886*ld_c/(self.param['HPBW_y_deg']*deg_to_rad)
         Dx_n = Dx/ld
         Dy_n = Dy/ld
-        if self.grid: 
+        if self.grid:
             # Nth x Nph x Nf
             theta = self.theta[:,None,None]
             phi = self.phi[None,:,None]
         else:
-            # Ndir x Nf 
+            # Ndir x Nf
             theta = self.theta[:,None]
             phi = self.phi[:,None]
 
@@ -372,16 +372,16 @@ class Pattern(PyLayers):
         HPBW_x = (0.886*ld/Dx)/deg_to_rad
         HPBW_y = (0.886*ld/Dy)/deg_to_rad
         Gmax = self.param['Gfactor']/(HPBW_x*HPBW_y)
-        F  = np.sqrt(Gmax[...,:])*F_nor # Ndir x Nf 
+        F  = np.sqrt(Gmax[...,:])*F_nor # Ndir x Nf
 
         # Handling repartition on both vector components
-        # enforce E.y = 0 
+        # enforce E.y = 0
         if self.param['polar']=='x':
             Ft = F/np.sqrt(1+(np.cos(theta)*np.sin(phi)/np.cos(phi))**2)
             Fp = (-np.cos(theta)*np.sin(phi)/np.cos(phi))*Ft
             nan_bool = np.isnan(Fp)
-            Fp[nan_bool] = F[nan_bool] 
-        # enforce E.x = 0 
+            Fp[nan_bool] = F[nan_bool]
+        # enforce E.x = 0
         if self.param['polar']=='y':
             Ft = F/np.sqrt(1+(np.cos(theta)*np.cos(phi)/np.sin(phi))**2)
             Fp = (np.cos(theta)*np.cos(phi)/np.sin(phi))*Ft
@@ -537,12 +537,12 @@ class Pattern(PyLayers):
         b = 0.886*ld_c/(self.param['HPBW_b_deg']*deg_to_rad)
         a_n = a/ld
         b_n = b/ld
-        if self.grid: 
+        if self.grid:
             # Nth x Nph x Nf
             theta = self.theta[:,None,None]
             phi = self.phi[None,:,None]
         else:
-            # Ndir x Nf 
+            # Ndir x Nf
             theta = self.theta[:,None]
             phi = self.phi[:,None]
 
@@ -555,10 +555,10 @@ class Pattern(PyLayers):
         HPBW_a = (1.189*ld/a)/deg_to_rad
         HPBW_b = (0.886*ld/b)/deg_to_rad
         Gmax = self.param['Gfactor']/(HPBW_a*HPBW_b)
-        F  = np.sqrt(Gmax[...,:])*F_nor # Ndir x Nf 
+        F  = np.sqrt(Gmax[...,:])*F_nor # Ndir x Nf
 
         # Handling repartition on both vector components
-        # enforce E.y = 0 
+        # enforce E.y = 0
         if self.param['polar']=='x':
             Ft = F/np.sqrt(1+(np.cos(theta)*np.sin(phi)/np.cos(phi))**2)
             Fp = (-np.cos(theta)*np.sin(phi)/np.cos(phi))*Ft
@@ -736,7 +736,7 @@ class Pattern(PyLayers):
         polar = param.pop('polar')
         tilt = param.pop('tilt')
         # TODO check tilt value is compatible
-        lbands = self.atoll.keys()
+        lbands = list(dict(self.atoll).keys())
         # Gver : 360,Nf
         # Ghor : 360,Nf
         Gver = self.atoll[lbands[iband]][polar]['ver'][:,tilt,:]
@@ -1988,9 +1988,9 @@ class Pattern(PyLayers):
 
                 # handle parity
                 if np.mod(Np, 2) == 0:
-                    iphi2 = np.mod(iphi1 + Np / 2, Np)
+                    iphi2 = np.mod(iphi1 + int(Np / 2), Np)
                 else:
-                    iphi2 = np.mod(iphi1 + (Np - 1) / 2, Np)
+                    iphi2 = np.mod(iphi1 + int((Np - 1) / 2), Np)
 
                 if len(shsqG)==3:
                     arg1 = (u1,iphi1,ik)
@@ -2270,7 +2270,7 @@ class Antenna(Pattern):
             for k in self.param:
                 st = st + ' ' + k + ' : ' + str(self.param[k])+'\n'
         if hasattr(self,'atoll'):
-            for k1 in self.atoll.keys():
+            for k1 in list(dict(self.atoll).keys()):
                 st = st + str(k1)+'\n'
                 for k2 in self.atoll[k1]:
                     st = st + ' '+ str(k2)+'\n'
@@ -5859,11 +5859,11 @@ def F0(nu,sigma):
     Fm = cm-1j*sm
 
     F = sf*expf*(Fp -Fm)
-    return F 
+    return F
 
 def F1(nu,sigma):
-    """ F1 function for horn antenna pattern 
-   
+    """ F1 function for horn antenna pattern
+
     http://www.ece.rutgers.edu/~orfanidi/ewa/ch18.pdf
 
     18.3.3
