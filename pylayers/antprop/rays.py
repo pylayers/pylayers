@@ -1594,7 +1594,7 @@ class Rays(PyLayers, dict):
                         P = shg.MultiPoint(ptc[:2,:].T)
                         # to determine the cycle where ceil reflexions append
                         # uinter(nb pt x nb cycles)
-                        mapnode=L.Gt.nodes()
+                        mapnode = list(L.Gt.nodes())
                         uinter = np.array([[L.Gt.node[x]['polyg'].contains(p) for x in mapnode if x>0] for p in P])
                         # import ipdb
                         # ipdb.set_trace()
@@ -2090,7 +2090,6 @@ class Rays(PyLayers, dict):
                     nw = np.sqrt(np.sum(w*w, axis=0))
                     u = np.where(nw==0)
                     if len(u[0])!=0:
-                        pdb.set_trace()
                         logger.debug('colinear situation detected')
                         if (u[0].any() or u[1].any()) \
                             or (u[0].any()==0 or u[1].any()==0):
