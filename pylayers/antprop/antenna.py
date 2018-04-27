@@ -643,15 +643,15 @@ class Pattern(PyLayers):
 
         if self.grid:
             # X,Y aperture points (t,p,x,y,f)
-            X = np.arange(-int(a1/2),int(a1/2),int(a1/(Nx-1)))[None,None,:,None,None]
-            Y = np.arange(-int(b1/2),int(b1/2),int(b1/(Ny-1)))[None,None,None,:,None]
+            X = np.arange(-a1/2,a1/2,a1/(Nx-1))[None,None,:,None,None]
+            Y = np.arange(-b1/2,b1/2,b1/(Ny-1))[None,None,None,:,None]
             # angular domain (theta,phi)
             Theta= self.theta[:,None,None,None,None]
             Phi = self.phi[None,:,None,None,None]
         else:
             # X,Y aperture points (r,x,y,f)
-            X = np.arange(-int(a1/2),int(a1/2),int(a1/(Nx-1)))[None,:,None,None]
-            Y = np.arange(-int(b1/2),int(b1/2),int(b1/(Ny-1)))[None,None,:,None]
+            X = np.arange(-a1/2,a1/2,a1/(Nx-1))[None,:,None,None]
+            Y = np.arange(-b1/2,b1/2,b1/(Ny-1))[None,None,:,None]
             # angular domain (theta,phi)
             Theta= self.theta[:,None,None,None]
             Phi= self.phi[:,None,None,None]

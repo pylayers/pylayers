@@ -16,7 +16,7 @@ import pdb
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import matplotlib.tri as tri
-from osgeo import gdal
+#from osgeo import gdal
 # from imposm.parser import OSMParser
 # from geomutil import *
 # from pylayers.util.project import *
@@ -333,8 +333,8 @@ class DEM(PyLayers):
 
         #
         # Commented while gdal is broken in anaconda
-        f = gdal.Open(fileaster)
-        self.hgta = f.ReadAsArray()
+        #f = gdal.Open(fileaster)
+        #self.hgta = f.ReadAsArray()
 
     def show(self,**kwargs):
         """ DEM vizualisation

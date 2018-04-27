@@ -1051,10 +1051,14 @@ class DLink(Link):
         try :
             lfilename=pyu.getlong(self.filename,pstruc['DIRLNK'])
             f=h5py.File(lfilename,'a')
+
+            if type(array)==str:
+                array = array.encode('utf-8')
+
             if key != 'T_map':
                 sc = f[key].shape
                 f[key].resize((sc[0]+1,sc[1]))
-                f[key][-1,:]=array
+                f[key][-1,:]= array
             else:
                 sc = f[key].shape
                 f[key].resize((sc[0]+1,sc[1],sc[2]))
@@ -1972,7 +1976,7 @@ class DLink(Link):
         if kwargs['fig']==[]:
             fig = plt.figure(figsize=kwargs['figsize'])
         else:
-            fig = kwargs['fig'] 
+            fig = kwargs['fig']
 
         if kwargs['ax']==[]:
             ax = plt.gca()
@@ -1982,14 +1986,14 @@ class DLink(Link):
         #
         # Layout
         #
-       
+
         fig,ax = self.L.showG('s',
-                              nodes=False,
+                              nodes = False,
                               fig = fig,
                               ax = ax,
-                              labels=kwargs['labels'],
-                              aw=kwargs['aw'],
-                              axis=kwargs['axis'])
+                              labels = kwargs['labels'],
+                              aw = kwargs['aw'],
+                              axis = kwargs['axis'])
         #
         # Point A
         #

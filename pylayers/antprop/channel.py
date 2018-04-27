@@ -1579,6 +1579,7 @@ class TBchannel(bs.TBsignal):
         .. math::
 
             \sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)} (\tau-\tau_m)^{2} PDP(\tau) d\tau} {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}}
+
         See Also
         --------
 

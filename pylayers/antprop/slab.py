@@ -37,15 +37,13 @@ import glob
 class Interface(PyLayers):
     """ Interface between 2 medium
 
-    Notes
-    -----
-
     The adopted axis convention is the following
 
     + nf : axis = 0 frequency axis
     + nt : axis = 1 angular axis
     + p  : axis = 2 parallel polarization axis
     + o  : axis = 3 orhogonal polarization axis
+
     Attributes
     ----------
 
@@ -123,7 +121,6 @@ class Interface(PyLayers):
         if 'T' in RT:
             self.T = np.array(np.zeros([nf, nt, 2, 2]), dtype=complex)
 
-        
         if 'R' in RT:
             #self.R[:, :, 0, 0] = self.Io[:, :, 0, 1] / self.Io[:, :, 0, 0]
             #self.R[:, :, 1, 1] = self.Ip[:, :, 0, 1] / self.Ip[:, :, 0, 0]
@@ -498,8 +495,6 @@ class MatInterface(Interface):
 
     l distance from the next Interface
 
-    Notes
-    -----
 
     This is required for recursive utilization of this function when the
     output angle of an interface happens to be the input angle of the
@@ -507,15 +502,21 @@ class MatInterface(Interface):
     depends on frequency THETA is becoming a full matrix without redundancy
     between lines.
 
-    >>> theta = np.arange(0,np.pi/2,0.01)
-    >>> fGHz = np.arange(3.1,10.6,0.2)
-    >>> Nf = len(fGHz)
-    >>> Nt = len(theta)
-    >>> sl = SlabDB('matDB.ini','slabDB.ini')
-    >>> mat = sl.mat
-    >>> m1 = mat['AIR']
-    >>> m2 = mat['PLASTER']
-    >>> II = MatInterface([m1,m2],0,fGHz,theta)
+    Examples
+    --------
+
+        >>> theta = np.arange(0,np.pi/2,0.01)
+        >>> fGHz = np.arange(3.1,10.6,0.2)
+        >>> Nf = len(fGHz)
+        >>> Nt = len(theta)
+        >>> sl = SlabDB('matDB.ini','slabDB.ini')
+        >>> mat = sl.mat
+        >>> m1 = mat['AIR']
+        >>> m2 = mat['PLASTER']
+        >>> II = MatInterface([m1,m2],0,fGHz,theta)
+
+    Notes
+    -----
 
     .. math::
 
@@ -523,9 +524,6 @@ class MatInterface(Interface):
 
     I_o = \left| \begin{array}{cc} \frac{1}{T_o} & \frac{R_o}{T_o} \\ \frac{R_o}{T_o} & \frac{1}{T_o} \end{array}\right|
 
-
-    .. todo::
-    MatIinterface fix the np.pi/2 NaN problem
 
 
     """
@@ -941,12 +939,12 @@ class MatDB(PyLayers,dict):
         Examples
         --------
 
-        >>> from pylayers.antprop.slab import *
-        >>> m = MatDB()
-        >>> m.load('matDB.ini')
-        >>> m.add(name='ConcreteJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
-        >>> m.add(name='GlassJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
-        >>> out = m.save('Jacob.ini')
+            >>> from pylayers.antprop.slab import *
+            >>> m = MatDB()
+            >>> m.load('matDB.ini')
+            >>> m.add(name='ConcreteJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
+            >>> m.add(name='GlassJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
+            >>> out = m.save('Jacob.ini')
 
         """
         defaults = {'name':'MAT',
@@ -1153,7 +1151,7 @@ class Slab(Interface,dict):
             slab name
         matDB : MatDB
             material database
-        ds  : dict 
+        ds  : dict
 
         """
         # if not specified choose default material database
@@ -1694,20 +1692,18 @@ class SlabDB(dict):
 
         filemat : string
         fileslab : string
-        ds : dict 
+        ds : dict
             slab dict read from layout file. if ds == {}   load from files
-        dm : dict 
-            mat dict read from layout file. 
+        dm : dict
+            mat dict read from layout file.
 
         Notes
         -----
 
-        There are two ways to initialize a SlabDB either from dict ds and dm usually read 
-        in  the 
-        Layout file .ini or from 2 specified file
+        There are two ways to initialize a SlabDB either from dict ds and dm usually read
+        in  the Layout file .ini or from 2 specified file
 
         """
-        
         # Load from file
         if (fileslab != ''):
             self.fileslab = fileslab

@@ -202,8 +202,8 @@ class Coverage(PyLayers):
             self.grid =self.RN.position[0:2,:].T
         else:
             if mode=="full":
-                mi=np.min(self.L.Gs.pos.values(),axis=0)+0.01
-                ma=np.max(self.L.Gs.pos.values(),axis=0)-0.01
+                mi=np.min(np.array(list(self.L.Gs.pos.values())),axis=0)+0.01
+                ma=np.max(np.array(list(self.L.Gs.pos.values())),axis=0)-0.01
             if mode=="zone":
                 assert boundary!=[]
                 mi = np.array([boundary[0],boundary[1]])

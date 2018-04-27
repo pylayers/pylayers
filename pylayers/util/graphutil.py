@@ -141,23 +141,22 @@ def draw(G,**kwargs):
         edgelist = [x for k,x in enumerate(G.edges()) if k in kwargs['edgelist'] ] # for nx an edge list is a list of tuple
     # remove airwalls
         #pno = filter(lambda x : G.nodes()[x]>0,nodelist)
-    pno = filter(lambda x: x>0, nodelist)
-    # node == air
-    try:
-        na1 = filter(lambda x: G.node[x]['name']=='AIR',pno)
-        na2 = filter(lambda x: G.node[x]['name']=='_AIR',pno)
-        na = na1 + na2
-        # edge == air
-        ea=[]
-        [[ea.append((n1,n2)) for n2 in G[n1].keys()] for n1 in na]
-        [[ea.append((n2,n1)) for n2 in G[n1].keys()] for n1 in na]
 
-        nodelista = [ x for x in nodelist if x in na ]
-        edgelista = [ x for x in edgelist if x in ea ]
-        nodelist = [ x for x in nodelist if x not in na ]
-        edgelist = [ x for x in edgelist if x not in ea ]
-    except:
-        pass
+    pno = [x for x in nodelist if  x>0 ]
+    # node == air
+
+    na1 = [x for x in pno if  G.node[x]['name']=='AIR' ]
+    na2 = [x for x in pno if  G.node[x]['name']=='_AIR' ]
+    na = na1 + na2
+    # edge == air
+    ea=[]
+    [[ea.append((n1,n2)) for n2 in G[n1].keys()] for n1 in na]
+    [[ea.append((n2,n1)) for n2 in G[n1].keys()] for n1 in na]
+
+    nodelista = [ x for x in nodelist if x in na ]
+    edgelista = [ x for x in edgelist if x in ea ]
+    nodelist = [ x for x in nodelist if x not in na ]
+    edgelist = [ x for x in edgelist if x not in ea ]
 
     if kwargs['nodes']:
         ## TODO This does not work
@@ -204,7 +203,7 @@ def draw(G,**kwargs):
                                                 labels={n:n for n in nodelista},
                                                 font_color=kwargs['posnode_color'],
                                                 font_size=kwargs['font_size'],ax=ax)
-            
+
     if kwargs['show']:
         plt.show()
 

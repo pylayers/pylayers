@@ -396,18 +396,20 @@ class Rays(PyLayers, dict):
                     print('ray/'+grpname +'already exists in '+filenameh5)
                 f = fh5['ray/'+grpname]
 
-                
+
             else:
                 if not grpname in fh5['ray2'].keys():
                     fh5['ray2'].create_group(grpname)
                 else :
                     print('ray2/'+grpname +'already exists in '+filenameh5)
                 f = fh5['ray2/'+grpname]
-             # keys not saved as attribute of h5py file
+            # keys not saved as attribute of h5py file
             notattr = ['I','B','B0','dis']
             for a in self.__dict__.keys():
                 if a not in notattr:
-                    f.attrs[a]=getattr(self,a)  
+                    if type(a)==str:
+                        a.encode('utf-8')
+                        f.attrs[a] = getattr(self,a)
 
             for k in self.keys():
                 f.create_group(str(k))
@@ -994,7 +996,7 @@ class Rays(PyLayers, dict):
                         widthray = 3*vscale
                         alpharay = vscale
                         pdb.set_trace()
-                        cmap = cm.hot 
+                        cmap = cm.hot
                         colorray = cmap(vscale)
                         ax.plot(ray[0, :], ray[1, :],
                                 alpha = alpharay,
@@ -2257,14 +2259,17 @@ class Rays(PyLayers, dict):
                     self[k]['diffidx'] = idx[udiff[0],udiff[1]]
                     # get tail head position of seg associated to diff point
                     lair = L.name['AIR'] + L.name['_AIR']
-                    aseg = map(lambda x : filter(lambda y : y not in lair,
-                                         nx.neighbors(L.Gs,x)),
-                                         diffupt)
+                    #aseg = map(lambda x : filter(lambda y : y not in lair,
+                    #                     nx.neighbors(L.Gs,x)),
+                    #                     diffupt)
+
+                    aseg = [ [ y for y in nx.neighbors(L.Gs,x) if y not in lair ] for x in diffupt ]
+
                     #manage flat angle : diffraction by flat segment e.g. door limitation)
                     [aseg[ix].extend(x) for ix,x in enumerate(aseg) if len(x)==1]
                     # get points positions
                     #pdb.set_trace()
-                    pts = np.array(map(lambda x : L.seg2pts([x[0],x[1]]),aseg))
+                    pts = np.array([ L.seg2pts([x[0],x[1]]) for x in aseg ])
 
                     #self[k]['diffslabs']=[str(L.sl[L.Gs.node[x[0]]['name']])+'_'
                     #                    + str(L.sl[L.Gs.node[x[1]]['name']]]) for x in aseg]

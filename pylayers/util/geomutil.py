@@ -760,7 +760,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
         """
         # get the sequence of segments
         # handle subsegments
-        lseg = filter(lambda x: x > 0, self.vnodes)
+        lseg = [x for x in self.vnodes if x > 0 ]
         S1 = []
         S2 = []
         AS2 = []
@@ -888,7 +888,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
             ax = kwargs['ax']
 
         x, y = self.exterior.xy
-        numpt = filter(lambda z: z < 0, self.vnodes)
+        numpt = [ z for z in self.vnodes if z <0 ]
 
         ax.fill(x, y,
                 color=kwargs['color'],
@@ -1038,8 +1038,8 @@ class Polygon(pro.PyLayers, shg.Polygon):
         # vnodes do not necessarily start with a point
         #
 
-        npt = filter(lambda x: x < 0, self.vnodes)
-        nseg = filter(lambda x: x > 0, self.vnodes)
+        npt = [ x for x in self.vnodes if x < 0 ]
+        nseg = [ x for x in self.vnodes if x < 0 ]
 
         #
         # in convex case all segments see all segments
@@ -1729,7 +1729,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
         if not hasattr(self, 'xy'):
             self.coorddeter()
 
-        pts = filter(lambda x: x < 0, self.vnodes)
+        pts = [ x for x in self.vnodes if x < 0 ]
         A = self.xy[:, :-1]
         B = np.roll(A, -1)
         C = np.roll(B, -1)

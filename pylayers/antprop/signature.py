@@ -1997,11 +1997,11 @@ class Signatures(PyLayers,dict):
 
         for i in lgrint:
             if kwargs['s']==-1:
-                lsig = range(len(self[i])/2)
+                lsig = range(int(len(self[i])/2))
             else:
                 lsig = [kwargs['s']]
             for j in lsig:
-                sig = map(lambda x: self.L.Gs.pos[x],self[i][2*j])
+                sig = [ self.L.Gs.pos[x] for x in self[i][2*j] ]
                 siga = np.array(sig)
                 # sig = np.hstack((self.pTx[0:2].reshape((2, 1)),
                 #                  np.hstack((self[i]['pt'][0:2, :, j],
@@ -3027,11 +3027,11 @@ class Signature(PyLayers,object):
                 pass
             return l[0]
 
-        if type(sig)==np.ndarray:
+        if type(sig) == np.ndarray:
             self.seq = sig[0, :]
             self.typ = sig[1, :]
 
-        if type(sig)==list:
+        if type(sig) == list:
             self.seq = map(seginter,sig)
             self.typ = map(typinter,sig)
 
@@ -3090,12 +3090,12 @@ class Signature(PyLayers,object):
                 norm = np.array([0, 0]).reshape(2,1)
             return(np.vstack((pa,pb,pc,norm)))
 
-        v = np.array(map(seqpointa,self.seq))
+            v = np.array(map(seqpointa,self.seq))
 
-        self.pa = v[:,0:2,:]
-        self.pb = v[:,2:4,:]
-        self.pc = v[:,4:6,:]
-        self.norm = v[:,6:,:]
+            self.pa = v[:,0:2,:]
+            self.pb = v[:,2:4,:]
+            self.pc = v[:,4:6,:]
+            self.norm = v[:,6:,:]
 
 
     def evf(self, L):
