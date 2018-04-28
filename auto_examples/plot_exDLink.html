@@ -213,9 +213,13 @@
 <p>Load a Layout, set the transmitter and receiver
 position and evaluates the link</p>
 <ul class="sphx-glr-horizontal">
-<li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_exDLink_001.png"><img alt="../_images/sphx_glr_plot_exDLink_001.png" src="../_images/sphx_glr_plot_exDLink_001.png" style="width: 300.79999999999995px; height: 225.6px;" /></a>
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_exDLink_001.png"><img alt="../_images/sphx_glr_plot_exDLink_001.png" src="../_images/sphx_glr_plot_exDLink_001.png" style="width: 940.0px; height: 470.0px;" /></a>
 </li>
 <li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_exDLink_002.png"><img alt="../_images/sphx_glr_plot_exDLink_002.png" src="../_images/sphx_glr_plot_exDLink_002.png" style="width: 300.79999999999995px; height: 225.6px;" /></a>
+</li>
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_exDLink_003.png"><img alt="../_images/sphx_glr_plot_exDLink_003.png" src="../_images/sphx_glr_plot_exDLink_003.png" style="width: 300.79999999999995px; height: 225.6px;" /></a>
+</li>
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_exDLink_004.png"><img alt="../_images/sphx_glr_plot_exDLink_004.png" src="../_images/sphx_glr_plot_exDLink_004.png" style="width: 300.79999999999995px; height: 225.6px;" /></a>
 </li>
 </ul>
 <p class="sphx-glr-script-out">Out:</p>
@@ -231,14 +235,14 @@ Layout Graph loaded
 <span class="kn">import</span> <span class="nn">pylayers.signal.waveform</span> <span class="kn">as</span> <span class="nn">wvf</span>
 
 <span class="c1"># set the frequency range from 2.4GHz to 10GHz</span>
-<span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">2.4</span><span class="p">,</span><span class="mf">10.</span><span class="p">,</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">2.4</span><span class="p">,</span><span class="mf">10.</span><span class="p">,</span><span class="mf">0.05</span><span class="p">)</span>
 <span class="c1"># set the layout from its filename</span>
-<span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;defstr.lay&#39;</span><span class="p">)</span>
+<span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;defstr.lay&#39;</span><span class="p">)</span>
 <span class="c1"># set the link</span>
-<span class="n">DL</span><span class="o">=</span><span class="n">DLink</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span><span class="p">)</span>
+<span class="n">DL</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span><span class="p">)</span>
 <span class="c1"># set the b point position</span>
-<span class="n">DL</span><span class="o">.</span><span class="n">a</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mf">1.2</span><span class="p">])</span>
-<span class="n">DL</span><span class="o">.</span><span class="n">b</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span><span class="mf">3.5</span><span class="p">,</span><span class="mf">2.</span><span class="p">])</span>
+<span class="n">DL</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mf">1.2</span><span class="p">])</span>
+<span class="n">DL</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span><span class="mf">3.5</span><span class="p">,</span><span class="mf">2.</span><span class="p">])</span>
 <span class="c1"># evaluate the link in forcing re-calculation of</span>
 <span class="c1">#</span>
 <span class="c1">#   + signatures</span>
@@ -249,7 +253,10 @@ Layout Graph loaded
 <span class="c1"># Diffraction : enabled</span>
 <span class="c1"># Vectorization : enabled</span>
 <span class="c1">#</span>
-<span class="n">DL</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">ra_vectorized</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">diffraction</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">DL</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">ra_vectorized</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">diffraction</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">DL</span>
+<span class="n">DL</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">DL</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Ray transfer funtion w.r.t frequency Modulus and Phase&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -258,7 +265,7 @@ Layout Graph loaded
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  31.909 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  9.032 seconds)</p>
 <div class="sphx-glr-footer docutils container">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../_downloads/plot_exDLink.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_exDLink.py</span></code></a></div>
