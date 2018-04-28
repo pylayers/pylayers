@@ -8,11 +8,11 @@
 
 .. currentmodule:: pylayers.antprop.
 
-This module handles electromagnetic solver 
+This module handles electromagnetic solver
 
 Class EMsolver
 --------------
-    
+
 .. autoclass:: EMsolver
     :member:
 
@@ -23,7 +23,12 @@ import pkgutil
 
 import numpy as np
 import scipy as sp
-import ConfigParser
+import sys
+
+if sys.version_info.major==2:
+    import ConfigParser
+else:
+    import configparser as ConfigParser
 import itertools
 
 import pylayers.util.pyutil as pyu
@@ -301,7 +306,7 @@ class EMSolver(object):
 
 
         elif self.method == 'raytracing':
-            print 'Okay, I think we\'ve got something to append in the TODO list'
+            print('Okay, I think we\'ve got something to append in the TODO list')
 
 
         else :

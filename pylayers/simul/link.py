@@ -1058,11 +1058,11 @@ class DLink(Link):
             if key != 'T_map':
                 sc = f[key].shape
                 f[key].resize((sc[0]+1,sc[1]))
-                f[key][-1,:]= array
+                f[key][-1,:] = array
             else:
                 sc = f[key].shape
                 f[key].resize((sc[0]+1,sc[1],sc[2]))
-                f[key][-1,:,:]=array
+                f[key][-1,:,:] = array
             f.close()
             return np.array([sc[0]])
         except:
@@ -1119,7 +1119,12 @@ class DLink(Link):
             if self.dexist[key]['exist']:
                 self._delete(key,grpname)
 
-            obj._saveh5(self.filename,grpname)
+            #if type(grpname)==str:
+            #    grpname.encode('utf-8')
+            try:
+                obj._saveh5(self.filename,grpname)
+            except:
+                pdb.set_trace()
 
         logger.debug(str(obj.__class__).split('.')[-1] + ' from '+ grpname + ' saved')
 

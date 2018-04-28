@@ -2,7 +2,7 @@ from __future__ import print_function
 import pdb
 import doctest
 from pylayers.antprop.spharm import *
-from sphere import spherepack, Wrapec, mathtogeo
+#from sphere import spherepack, Wrapec, mathtogeo
 import numpy as np
 import doctest
 import os

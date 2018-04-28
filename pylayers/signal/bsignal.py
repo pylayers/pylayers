@@ -3502,12 +3502,13 @@ class Noise(TUsignal):
     """ Create noise
     """
     def __init__(self,
-                 ti=0,
+                 ti = 0,
                  tf = 100,
                  fsGHz = 50,
                  PSDdBmpHz = -174,
                  NF = 0,
-                 R = 50, seed=1):
+                 R = 50,
+                 seed = 1):
         """ object constructor
 
         Parameters
@@ -3639,19 +3640,19 @@ class Noise(TUsignal):
     def __repr__(self):
         st = ''
         st = st+ 'Sampling frequency : '+ str(self.fsGHz)+' GHz\n'
-        st = st+ 'ti  : '+ str(self.ti)+'ns \n'
-        st = st+ 'tf  : '+ str(self.tf)+'ns \n'
-        st = st+ 'ts  : '+ str(self.tsns)+'ns \n'
-        st = st+ 'N   : '+ str(len(self.x))+'\n'
+        st = st+ 'ti  : %.2f' % self.ti+'ns \n'
+        st = st+ 'tf  : %.2f' % self.tf+'ns \n'
+        st = st+ 'ts  : %.2f' % self.tsns+'ns \n'
+        st = st+ 'N   : %i '  % len(self.x)+'\n'
         st = st + '-------------\n'
-        st = st+ 'DSP : ' + str(self.PSDdBmpHz)+ ' dBm/Hz\n'
-        st = st+ '    : ' + str(10**(self.PSDdBmpHz/10.)*1e-3)+ ' Joules\n'
+        st = st+ 'DSP : %.2f' % self.PSDdBmpHz+ ' dBm/Hz\n'
+        st = st+ '    : %.2e' % 10**(self.PSDdBmpHz/10.)*1e-3+ ' Joules\n'
         st = st + '-------------\n'
-        st = st+ 'Noise Figure : ' + str(self.NF)+ ' dB\n'
-        st = st+ 'Vrms : '+ str(self.vrms)+ ' Volts\n'
-        st = st+ 'Variance : '+ str(self.var)+ ' V^2\n'
-        st = st+ 'Power (dBm) /'+str(self.R)+' Ohms : '+ str(10*np.log10(self.PW)-60)+ ' dBm\n'
-        st = st+ 'Power realized /'+str(self.R)+' Ohms : '+ str(10*np.log10(self.Pr)-60)+ ' dBm\n'
+        st = st+ 'Noise Figure : %.2f ' % self.NF+ ' dB\n'
+        st = st+ 'Vrms : %.2e' % self.vrms+ ' Volts\n'
+        st = st+ 'Variance :%.2e ' % self.var +  ' V^2\n'
+        st = st+ 'Power (dBm) / %.2f' % self.R + ' Ohms : '+ str(10*np.log10(self.PW)-60)+ ' dBm\n'
+        st = st+ 'Power realized / %.2f'  % self.R + ' Ohms : '+ str(10*np.log10(self.Pr)-60)+ ' dBm\n'
         return(st)
 
     def ppsd(self,mask=True):

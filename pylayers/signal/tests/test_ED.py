@@ -13,13 +13,11 @@ Tns = 20
 #
 # creates the energy detector
 #
-ed= ED(fsGHz=fsGHz,
-                    fcGHz=fcGHz,
-                    BGHz=BGHz,
-                    Tns=Tns)
+ed= ED(fsGHz=fsGHz, fcGHz=fcGHz, BGHz=BGHz, Tns=Tns)
 
-w = bs.Noise(fsGHz=fsGHz,tf=1000)
+w = bs.Noise(fsGHz=fsGHz, tf=1000)
 
+pdb.set_trace()
 y  = ed.apply(w)
 
 # band limitation
@@ -58,15 +56,15 @@ plot(fft.fftshift(Phiy))
 title(u'$\Phi_y(f)$')
 
 
-print 'empirical :', mean(y.y)
-print ' mean xQ : ', mean(ED.xq)
-print 'theoretical :',Rn.max()[0]*ED.beta*ED.beta
+print( 'empirical :', mean(y.y))
+print( ' mean xQ : ', mean(ED.xq))
+print( 'theoretical :',Rn.max()[0]*ED.beta*ED.bet)
 
 
 
-print 'theoretical : ',mean(Phiy)
-print 'empirical : ', np.var(y.y)
-print 'std : ', np.sqrt(np.var(y.y))
+print( 'theoretical : ',mean(Phiy))
+print( 'empirical : ', np.var(y.y))
+print( 'std : ', np.sqrt(np.var(y.y)))
 
 
 
@@ -74,10 +72,10 @@ order_e = (2*mean(y.y)**2)/np.var(y.y)
 order_t = (2*(Rn.max()[0]*ED.beta*ED.beta)**2)/mean(Phiy)
 scale_e = np.sqrt(np.var(y.y)/(2*order_e))
 scale_t = np.sqrt(mean(Phiy)/(2*order_t))
-print "ordre empirical : ",order_e
-print "ordre theoretical : ",order_t
-print scale_e
-print scale_t
+print( "ordre empirical : ",order_e)
+print( "ordre theoretical : ",order_t)
+print( scale_e)
+print (scale_t)
 
 
 lchi2_e = st.chi2(df=order_e,loc=0,scale=scale_e)
@@ -96,27 +94,27 @@ plt.legend()
 
 
 order = (2*BGHz*Tns+1)/2
-print order
+print( order)
 
 
 ip=bs.EnImpulse(fe=fsGHz)
 ip.translate(10)
 ip.help(typ='mb')
-print ip.energy()
+print( ip.energy())
 
 
-# In[34]:
+
 
 IP = ip.psd(Tpns=500)
 IP.plotdB(mask=True)
 
 
-# In[35]:
+
 
 IP = ip.psd
 
 
-# In[36]:
+
 
 flt=DF()
 fc = 4 
@@ -131,7 +129,7 @@ flt.freqz()
 
 ### Creating a simple channel
 
-# In[37]:
+
 
 #fig = plt.figure(figsize=(10,3))
 #f,a=ip.plot(typ=['v'],fig=fig)
@@ -151,97 +149,97 @@ for k in range(len(ak)):
     except:
         v = ak[k]
         s = ip*v
-s2 = bs.TUsignal(s.x,s.y)    
+s2 = bs.TUsignal(s.x,s.y)
 Etx= ys.y[-1]
 EtxdB = 10*np.log10(Etx)
-print EtxdB
+print( EtxdB)
 dm = 4
 PL = 32.4+20*np.log10(dm)+20*np.log10(fcGHz)
 ErxdB = EtxdB-PL
-print ErxdB
+print( ErxdB)
 Erx = 10**(ErxdB/10)
-print Erx
+print( Erx)
 s = s*(10**(-PL/10))
 
 
-# In[ ]:
+
 
 s.plot(typ='v')
 
 
-# In[ ]:
+
 
 s.energy()
 
 
-# In[ ]:
+
 
 ys = ED.apply(s)
 
 
-# In[ ]:
+
 
 s3=bs.TUsignal(s.x,ED.xq)
 
 
-# In[ ]:
+
 
 s3.plot(typ='v')
 
 
-# In[ ]:
+
 
 ys.plot(typ=['v'])
 
 
-# In[ ]:
 
 
 
 
-# In[ ]:
 
 
 
 
-# In[ ]:
+
+
+
 
 s.y.shape
 
 
-# In[ ]:
+
 
 s.plot(typ='v')
 w.plot(typ='v',c='r')
 
 
-# In[ ]:
+
 
 sw = s + w
 sw.plot(typ='v')
 
 
-# In[ ]:
+
 
 ysw = ED.apply(sw)
 
 
-# In[ ]:
+
 
 y.plot(typ='v')
 
 
-# In[ ]:
+
 
 ysw.plot(typ='v')
 
 
-# In[ ]:
+
 
 #h1 = hist(y.y,200,normed=True)
 #h2 = hist(ysw.y,200,normed=True)
 #t = h2[1]
-print Erx
+printi( Erx)
 lchi2_e = st.chi2(df=order_e,loc=0,scale=scale_e)
 lchi2_t = st.chi2(df=order_t,loc=0,scale=scale_t)
 chi2nc_e = st.ncx2(df=order_e,nc=100.4,scale=scale_e,)
@@ -258,17 +256,17 @@ plot(thlc_t,'m',label='theoretical')
 plt.legend()
 
 
-# In[ ]:
+
 
 chi2nc_t = st.ncx2
 
 
-# In[ ]:
+
 
 chi2nc_t = st.ncx2
 
 
-# In[ ]:
+
 
 
 

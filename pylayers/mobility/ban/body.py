@@ -18,11 +18,17 @@ Cylinder Class
 
 """
 #import mayavi.mlab as mlab
+import os
+import sys
+import copy
 import numpy as np
 import scipy.stats as sp
-import ConfigParser
-import os
-import copy
+
+if sys.version_info.major==2:
+    import ConfigParser
+else:
+    import configparser as ConfigParser
+
 from pylayers.mobility.ban import c3d
 import pylayers.mobility.trajectory as tr
 import matplotlib.pyplot as plt
@@ -45,9 +51,8 @@ from pylayers.util.project import *
 try:
     from mayavi import mlab
     from tvtk.tools import visual
-
 except:
-    print 'mayavi not installed'
+    print ('mayavi not installed')
 
 
 class Body(PyLayers):
@@ -2787,7 +2792,7 @@ def Global_Trajectory(cycle, traj):
 
     for i in range(1, traj.shape[1]):
 
-        print 'i = ', i
+        print( 'i = ', i)
 
         vect_depl = traj.T[i] - traj.T[i - 1]
         vect_depl = vect_depl / np.linalg.norm(vect_depl)

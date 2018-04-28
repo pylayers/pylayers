@@ -31,7 +31,12 @@
 import numpy as np
 import scipy as sp
 from copy import copy
-import ConfigParser
+import sys
+if sys.version_info.major==2:
+    import ConfigParser
+else:
+    import configparser as ConfigParser
+
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 

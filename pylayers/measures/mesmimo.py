@@ -103,7 +103,7 @@ class MIMO(object):
         self.Nr = Nr
 
         #pdb.set_trace()
-        if _filename <> '':
+        if _filename != '':
             self.filename = mesdir + rep + _filename
             # load file
             self.loadraw()
@@ -1017,11 +1017,11 @@ class MIMO(object):
 
         # plot target
 
-        if kwargs['target']<>[]:
+        if kwargs['target']!=[]:
             target = ax.scatter(kwargs['target'][0],kwargs['target'][1],c='black',s=100)
 
         # display layout
-        if kwargs['layout'] <> []:
+        if kwargs['layout'] != []:
             L = kwargs['layout']
             #fig,ax = L.showG('s',fig=fig,ax=ax,nodes=False)
             L.display['ednodes']=False
@@ -1061,7 +1061,7 @@ class MIMO(object):
             fig = plt.figure(figsize=(20,20))
             ax  = fig.add_subplot(111)
 
-        if kwargs['layout']<>[]:
+        if kwargs['layout'] != []:
             L = kwargs['layout']
             fig,ax = L.showG('s',fig=fig,ax=ax,nodes=False)
 

@@ -412,7 +412,7 @@ def show(dico):
         if key != 'name':
             plt.plot(dico[key]['coord'][:, 0], dico[key]['coord'][:, 2])
         else:
-            print dico[key]
+            print(dico[key])
     plt.show()
 
 
@@ -761,11 +761,11 @@ class VLayout(PyLayers):
             i = te[ID]['index']
             tt = []
             ltt = []
-            print i
+            print(i)
             for u in i:
                 ltt.append(i[u])
             # build a geomview list of polygons
-            print ltt
+            print(ltt)
             G.polygons(c, ltt)
         GL.show3()
 
@@ -792,4 +792,4 @@ if __name__ == "__main__":
         seg = dwall[k]['seg'].xy
         pta = np.r_[seg[0][0],seg[1][0]]
         phe = np.r_[seg[0][1],seg[1][1]]
-        print pta,phe
+        print(pta,phe)

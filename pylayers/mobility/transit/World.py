@@ -1,12 +1,15 @@
-from SimPy.SimulationRT import *
 # from Tkinter import *
 from math import pi, sin, cos
 import os
+import pdb
 from pylayers.mobility.transit.vec3 import vec3
 import pylayers.util.plotutil as plu
 import numpy as np
-
-import pdb
+import sys
+if sys.version_info.major==2:
+    from SimPy.SimulationRT import *
+else:
+    import simpy
 # This has to be 50% more than influence radius for the sub-tiling to work
 # 1.71 from Pascal Stucki, Obstacles in Pedestrian Simulations
 tile_size = 1.5
@@ -20,7 +23,7 @@ def world(**args):
 
     Notes
     -----
-   
+
     `Obstacles in pedestrian simulations <http://e-collection.library.ethz.ch/eserv/eth:27090/eth-27090-01.pdf>`_
 
     """
@@ -42,8 +45,8 @@ def near(boid, items, distance):
 
 
 class World:
-    """ Class World 
-    
+    """ Class World
+
     Methods
     -------
 

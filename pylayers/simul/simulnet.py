@@ -18,10 +18,6 @@ import glob
 import pkgutil
 import warnings
 warnings.filterwarnings('ignore')
-
-#import SimPy.Simulation
-from SimPy.SimulationRT import SimulationRT, Process, hold
-# import simpy # simpy 3
 import numpy as np
 import scipy as sp
 import networkx as nx
@@ -31,7 +27,13 @@ from random import seed
 
 import time
 import matplotlib.pyplot as plt
-import ConfigParser
+import sys
+if sys.version_info.major==2:
+    import ConfigParser
+    from simpy.SimulationRT import SimulationRT, Process, hold
+else:
+    import configparser as ConfigParser
+    import simpy
 
 import pylayers.util.pyutil as pyu
 
@@ -54,7 +56,8 @@ import pdb
 import os
 
 
-class Simul(SimulationRT):  # Sympy 2
+#~class Simul(SimulationRT):  # Sympy 2
+class Simul(object):  # Sympy 3
     """
 
     Attributes
@@ -89,8 +92,8 @@ class Simul(SimulationRT):  # Sympy 2
 
     def __init__(self):
 
-        SimulationRT.__init__(self)  # Sympy 2
-        # sympy.RealtimeEnvironment.__init__(self)  #simpy 3
+        #SimulationRT.__init__(self)  # Sympy 2
+        sympy.RealtimeEnvironment.__init__(self)  #simpy 3
         self.initialize()
 
         self.config = ConfigParser.ConfigParser()

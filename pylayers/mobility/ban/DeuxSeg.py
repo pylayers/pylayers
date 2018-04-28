@@ -433,11 +433,11 @@ if (__name__=="__main__"):
 
     f, g   = dist_nonvectorized(A,B,C,D,a,b)
 
-    print a,b,d
+    print(a,b,d)
 
-    print f,g
+    print(f,g)
 
-    print 'sqrt ' ,  np.sqrt(f), np.sqrt(g)
+    print('sqrt ' ,  np.sqrt(f), np.sqrt(g))
 
 
 

@@ -22,17 +22,23 @@
 #####################################################################
 
 from IPython.display import clear_output, display
-from SimPy.SimulationRT import Process, hold  # sympy 2
 #import simpy # simpy 3
 import numpy as np
 import scipy as sp
 import networkx as nx
 import random
+import sys
 from random import seed
-
 import time
 import matplotlib.pyplot as plt
-import ConfigParser
+
+if sys.version_info.major==2:
+    import ConfigParser
+    from SimPy.SimulationRT import Process, hold  # sympy 2
+else:
+    import configparser as ConfigParser
+    from  simpy import Process
+
 import pkgutil
 
 from pylayers.gis.layout import Layout

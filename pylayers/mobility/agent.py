@@ -9,17 +9,23 @@ Agent Class
     :members:
 
 """
-from SimPy.SimulationRT import Simulation
-#from simpy.simulation import *
+import sys
+import time
+import pdb
+
+if sys.version_info.major==2:
+    import ConfigParser
+    from SimPy.SimulationRT import Simulation
+else:
+    import configparser as ConfigParser
+    import simpy
+
 from pylayers.mobility.transit.Person import Person
 from pylayers.mobility.transit.World import world
 from pylayers.mobility.transit.SteeringBehavior import Seek, Separation, Containment, InterpenetrationConstraint, queue_steering_mind
 
-
 import numpy as np
 import networkx as nx
-import time
-import ConfigParser
 import pandas as pd
 import pylayers.util.pyutil as pyu
 from pylayers.network.network import Node, Network
@@ -28,7 +34,6 @@ from pylayers.location.localization import Localization, PLocalization
 from pylayers.gis.layout import Layout
 from pylayers.util.utilnet import *
 #from pylayers.util.pymysqldb import Database
-import pdb
 """"
 
 .. currentmodule:: pylayers.mobility.agent
