@@ -409,8 +409,10 @@ logger = logging.getLogger(__name__)
     plt.axis(&#39;auto&#39;)
     plt.legend()</div>
 #@profile
+
 <div class="viewcode-block" id="valid"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.valid.html#pylayers.antprop.signature.valid">[docs]</a>def valid(lsig,L,tahe=[]):
-    &quot;&quot;&quot; 
+    &quot;&quot;&quot;
+
     Check if a signature is valid.
     if a segment of a given signature is not in or touches the polygon
     described by the 1st and last segment, the signature is not valid
@@ -421,7 +423,7 @@ logger = logging.getLogger(__name__)
 
     lsig : list of tuple from run  |signatures
     L : layout
-    tahe : 
+    tahe :
         lensig , ta|he , x,y
 
     Returns
@@ -455,7 +457,7 @@ logger = logging.getLogger(__name__)
     seq = lsig[:,0]
     # upos = np.where(seq&gt;0)[0]
     # uneg = np.where(seq&lt;0)[0]
-    
+
     # tahep = L.seg2pts(seq[upos])
     # tahen = np.array([L.Gs.pos[i] for i in seq[uneg]]).T
     # tahen = np.vstack((tahen,tahen))
@@ -504,6 +506,7 @@ logger = logging.getLogger(__name__)
     # else:
 
     tahe = np.array(tahe) # Nseg x tahe x xy 
+    pdb.set_trace()
     pta = tahe[:,0,:].T  #2 x Nseg
     phe = tahe[:,1,:].T  # 2 x Nseg 
 
@@ -548,7 +551,7 @@ logger = logging.getLogger(__name__)
     # if np.sum(tahe-tahetest) != 0:
     #     import ipdb
     #     ipdb.set_trace()
-    
+
     # determine the 2 side of the polygon ( top/bottom = tahe[0]/tahe[-1])
     #vl and vr are 2 director vector lying on the polygon side.
     if not (geu.ccw(pta[:,0],phe[:,0],phe[:,-1]) ^
@@ -560,7 +563,7 @@ logger = logging.getLogger(__name__)
         # twisted = True
         #lef = sh.LineString((pta[:,0],pta[:,-1]))
         #rig = sh.LineString((phe[:,0],phe[:,-1]))
-    else:    
+    else:
         vr = ( pta[:,0], phe[:,-1])
         vl = ( phe[:,0],pta[:,-1])
         # vr = ( pta[:,0],pta[:,-1])
@@ -568,8 +571,8 @@ logger = logging.getLogger(__name__)
         # twisted = False
         #lef = sh.LineString((pta[:,0],phe[:,-1]))
         #rig = sh.LineString((pta[:,-1],phe[:,0]))
-        
-       
+
+
 
 
     # looking situation where Tail and head are not inside the polygon
@@ -663,17 +666,18 @@ logger = logging.getLogger(__name__)
         s = self.__class__.__name__ + &#39;\n&#39; + &#39;----------&#39;+&#39;\n&#39;
         #s = s + str(self.__sizeof__())+&#39;\n&#39;
         for k in self:
-            size[k] = len(self[k])/2
+            size[k] = int(len(self[k])/2)
         s = s + &#39;from cycle : &#39;+ str(self.source) + &#39; to cycle &#39; + str(self.target)+&#39;\n&#39;
         if self.dump==-1:
             ldump = self.keys()
         else:
             ldump = self.dump
+
         for k in ldump:
             s = s + str(k) + &#39; : &#39; + str(size[k]) + &#39;\n&#39;
             a = np.swapaxes(self[k].reshape(size[k],2,k),0,2)
             # nl x 2 x nsig
-            
+
             for l in np.arange(a.shape[2]):
                 for i in range(k):
                     if i==k-1:
@@ -681,24 +685,24 @@ logger = logging.getLogger(__name__)
                     else:
                         s = s + &#39;(&#39;+str(a[i,0,l])+&#39;,&#39;+str(a[i,1,l])+&#39;),&#39;
                 s = s+&#39;\n&#39;
-                
+
 
         return(s)
 
     def __len__(self):
         nsig = 0
         for k in self:
-            size = len(self[k])/2
+            size = int(len(self[k])/2)
             nsig += size
         return(nsig)
 
 <div class="viewcode-block" id="Signatures.compl"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.Signatures.html#pylayers.antprop.signature.Signatures.compl">[docs]</a>    def compl(self,lint,L):
-        &quot;&quot;&quot; completion from lint 
+        &quot;&quot;&quot; completion from lint
 
         Parameters
         ----------
 
-        lint : list 
+        lint : list
             list of interactions
 
         Examples
@@ -711,14 +715,14 @@ logger = logging.getLogger(__name__)
         # all group of interactions
         for k in self:
             if k &gt; len(lint):
-                Si = self[k] 
+                Si = self[k]
                 Ns,Nb = Si.shape
                 # all signatures form a group of interactions
-                for l in range(Ns/2):
+                for l in range(int(Ns/2)):
                     # all interactions
                     b1 = True
-                    for i1,it in enumerate(lint): 
-                        if ((Si[2*l,i1] == it[0]) and 
+                    for i1,it in enumerate(lint):
+                        if ((Si[2*l,i1] == it[0]) and
                            (Si[2*l+1,i1] == it[1])):
                             pass 
                         else:
@@ -845,7 +849,7 @@ logger = logging.getLogger(__name__)
         self.nsig = 0
         self.nint = 0
         for k in self:
-            size = len(self[k])/2
+            size = int(len(self[k])/2)
             self.nsig += size
             self.nint += size*k</div>
 
@@ -861,7 +865,7 @@ logger = logging.getLogger(__name__)
         print(self.__class__.__name__ + &#39;\n&#39; + &#39;----------&#39;+&#39;\n&#39;)
         #s = s + str(self.__sizeof__())+&#39;\n&#39;
         for k in self:
-            size[k] = len(self[k])/2
+            size[k] = int(len(self[k])/2)
         print(&#39;from cycle : &#39;+ str(self.source) + &#39; to cycle &#39; + str(self.target)+&#39;\n&#39;)
         pyu.printout(&#39;Reflection&#39;,pyu.BLUE)
         print(&#39;  &#39;)
@@ -907,7 +911,7 @@ logger = logging.getLogger(__name__)
         for i in self:
 
             sigs = self[i]
-            for s in range(len(sigs)/2):
+            for s in range(int(len(sigs)/2)):
                 sig = sigs[2*s:2*s+2,:]
 
                 ok = valid(sig.T,self.L)
@@ -1485,7 +1489,7 @@ logger = logging.getLogger(__name__)
             #
             if len(s)==3:
                 nseg = s[0]
-                if ((self.L.Gs.node[nseg][&#39;name&#39;]==&#39;_AIR&#39;) or 
+                if ((self.L.Gs.node[nseg][&#39;name&#39;]==&#39;_AIR&#39;) or
                    (self.L.Gs.node[nseg][&#39;name&#39;]==&#39;AIR&#39;)):
                     lawp = [1]
                 else:
@@ -1635,7 +1639,8 @@ logger = logging.getLogger(__name__)
                         # mirroring th until the previous point
                         #
                         th_mirror = copy.copy(th)
-                        while np.any(r[0]!=np.eye(2)):
+
+                        while np.any(r[0] != np.eye(2)):
                             th_mirror = np.einsum(&#39;ki,ij-&gt;kj&#39;,th_mirror,r[0])+r[1]
                             ik = ik + 1
                             r  = R[-ik]
@@ -1660,6 +1665,7 @@ logger = logging.getLogger(__name__)
                             else:
                                 ilast=udiff[-1]
 
+                            #print(tahe)
                             pta0 = tahe[ilast][0]   # tail first segment  (last difraction)
                             phe0 = tahe[ilast][1]   # head first segment
 
@@ -1801,7 +1807,7 @@ logger = logging.getLogger(__name__)
                                 ratio2 = 0
                             #print ratio
                             if len(seg)==2:
-                                th_mirror=np.vstack((seg[0],seg[1]))
+                                th_mirror = np.vstack((seg[0],seg[1]))
                             else:
                                 pass
 
@@ -1912,7 +1918,8 @@ logger = logging.getLogger(__name__)
                                 tahe.append(th)
                             else:
                                 tahe.append(th_mirror)
-
+                            if (tahe[-1][0]==tahe[-1][1]).all():
+                                pdb.set_trace()
                             # 
                             # Check if the target has been reached
                             # sequence is valid and last interaction is in the list of targets   
@@ -2003,6 +2010,8 @@ logger = logging.getLogger(__name__)
                     #      tahe 
                     #      lawp
                     #      stack
+                    if (tahe[-1][0]==tahe[-1][1]).all():
+                        pdb.set_trace()
                     tahe.pop()
                     try:
                         lawp.pop()
@@ -2137,7 +2146,7 @@ logger = logging.getLogger(__name__)
         ax = plot_poly(ax,poly)</div>
 
 <div class="viewcode-block" id="Signatures.show"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.Signatures.html#pylayers.antprop.signature.Signatures.show">[docs]</a>    def show(self,L,**kwargs):
-        &quot;&quot;&quot;  plot signatures within the simulated environment
+        &quot;&quot;&quot;  plot signatures in the simulated environment
 
         Parameters
         ----------
@@ -2162,10 +2171,10 @@ logger = logging.getLogger(__name__)
 
         &quot;&quot;&quot;
         defaults = {&#39;i&#39;:-1,
-                   &#39;s&#39;:-1,
-                   &#39;fig&#39;:[],
-                   &#39;ax&#39;:[],
-                   &#39;graph&#39;:&#39;s&#39;,
+                    &#39;s&#39;:-1,
+                    &#39;fig&#39;:[],
+                    &#39;ax&#39;:[],
+                    &#39;graph&#39;:&#39;s&#39;,
                     &#39;color&#39;:&#39;black&#39;,
                     &#39;alphasig&#39;:1,
                     &#39;widthsig&#39;:0.1,
@@ -2200,21 +2209,28 @@ logger = logging.getLogger(__name__)
             lgrint = [kwargs[&#39;i&#39;]]
 
 
-        for i in lgrint:
-            if kwargs[&#39;s&#39;]==-1:
+        if kwargs[&#39;s&#39;] == -1:
+            for i in lgrint:
                 lsig = range(int(len(self[i])/2))
-            else:
-                lsig = [kwargs[&#39;s&#39;]]
-            for j in lsig:
-                sig = [ self.L.Gs.pos[x] for x in self[i][2*j] ]
+                for j in lsig:
+                    sig = [ self.L.Gs.pos[x] for x in self[i][2*j] ]
+                    siga = np.array(sig)
+                    ax.plot(siga[:,0], siga[:,1],
+                            alpha = kwargs[&#39;alphasig&#39;],
+                            color = kwargs[&#39;colsig&#39;],
+                            linewidth = kwargs[&#39;widthsig&#39;])
+                    ax.axis(&#39;off&#39;)
+        else:
+            lsig = [kwargs[&#39;s&#39;]]
+            for s1 in lsig:
+                sig = [ self.L.Gs.pos[x[0]]  for x in s1]
                 siga = np.array(sig)
-                # sig = np.hstack((self.pTx[0:2].reshape((2, 1)),
-                #                  np.hstack((self[i][&#39;pt&#39;][0:2, :, j],
-                #                  self.pRx[0:2].reshape((2, 1))))
-                #                  ))
                 ax.plot(siga[:,0], siga[:,1],
-                        alpha=kwargs[&#39;alphasig&#39;],color=kwargs[&#39;colsig&#39;],linewidth=kwargs[&#39;widthsig&#39;])
+                        alpha = kwargs[&#39;alphasig&#39;],
+                        color = kwargs[&#39;colsig&#39;],
+                        linewidth = kwargs[&#39;widthsig&#39;])
                 ax.axis(&#39;off&#39;)
+
         return(fig,ax)</div>
 
 <div class="viewcode-block" id="Signatures.showi"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.Signatures.html#pylayers.antprop.signature.Signatures.showi">[docs]</a>    def showi(self,uni=0,us=0):

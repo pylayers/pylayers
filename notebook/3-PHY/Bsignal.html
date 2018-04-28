@@ -234,7 +234,7 @@
   <div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>!date
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mardi 7 novembre 2017, 21:49:58 (UTC+0100)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>samedi 28 avril 2018, 14:09:27 (UTC+0200)
 </pre></div>
 </div>
 <div class="section" id="handling-time-and-frequency-domain-signals-bsignal-class">
@@ -261,8 +261,8 @@ E.EnImpulse(feGHz=40)
 <div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>E.plot(typ=&#39;v&#39;)
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fdf420b63d0&gt;,
- array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7fdf2eba5290&gt;]], dtype=object))
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f1cd4a2db70&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7f1cd4a3d470&gt;]], dtype=object))
 </pre></div>
 </div>
 <img alt="../../_images/Bsignal_7_1.png" src="../../_images/Bsignal_7_1.png" />
@@ -277,8 +277,8 @@ E.EnImpulse(feGHz=40)
 F.plot(typ=&#39;m&#39;)
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fdf2b3da1d0&gt;,
- array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7fdf2b4434d0&gt;]], dtype=object))
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f1cd29faa58&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7f1cd4a61588&gt;]], dtype=object))
 </pre></div>
 </div>
 <img alt="../../_images/Bsignal_10_1.png" src="../../_images/Bsignal_10_1.png" />
@@ -290,8 +290,8 @@ method</p>
 <div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>GH=G.symHz(100,scale=&#39;extract&#39;)
 </pre></div>
 </div>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>print GH.y[0,1]
-print GH.y[0,-1]
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>print(GH.y[0,1])
+print(GH.y[0,-1])
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(-0.0014441784194-4.88037298122e-05j)
@@ -308,7 +308,7 @@ f,a=ip2.plot(typ=&#39;v&#39;,fig=f,ax=a[0][0],labels=[&#39;zero padding&#39;])
 title(&#39;extract mode&#39;)
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7fdf2b243890&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7f1cd28bd080&gt;
 </pre></div>
 </div>
 <img alt="../../_images/Bsignal_16_1.png" src="../../_images/Bsignal_16_1.png" />
@@ -344,8 +344,8 @@ Hu = FUsignal(fGHz,y)
 Hu.plot(typ=&#39;r&#39;)
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fdf2b2cf3d0&gt;,
- array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7fdf2b15fb10&gt;]], dtype=object))
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f1cd286e128&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7f1cd27f02b0&gt;]], dtype=object))
 </pre></div>
 </div>
 <img alt="../../_images/Bsignal_22_1.png" src="../../_images/Bsignal_22_1.png" />
@@ -358,8 +358,8 @@ Hu.plot(typ=&#39;r&#39;)
 <div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>hu.plot(typ=&#39;m&#39;)
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fdf2b344c10&gt;,
- array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7fdf2b039490&gt;]], dtype=object))
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f1cd2789320&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7f1cd27e88d0&gt;]], dtype=object))
 </pre></div>
 </div>
 <img alt="../../_images/Bsignal_25_1.png" src="../../_images/Bsignal_25_1.png" />
@@ -375,8 +375,8 @@ alpha = abs(hu.y[u])
 <div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>H.plot(typ=&#39;m&#39;)
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fdf2b01b1d0&gt;,
- array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7fdf2af74810&gt;]], dtype=object))
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f1cd2734400&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7f1cd2797128&gt;]], dtype=object))
 </pre></div>
 </div>
 <img alt="../../_images/Bsignal_28_1.png" src="../../_images/Bsignal_28_1.png" />
@@ -386,8 +386,8 @@ alpha = abs(hu.y[u])
 <div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>h.plot(typ=&#39;v&#39;)
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fdf2aec3990&gt;,
- array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7fdf2af3b310&gt;]], dtype=object))
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f1cd0e6b898&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7f1cd0f17cc0&gt;]], dtype=object))
 </pre></div>
 </div>
 <img alt="../../_images/Bsignal_30_1.png" src="../../_images/Bsignal_30_1.png" />
@@ -408,8 +408,8 @@ alpha = abs(h.y[u])
           8.17123442e-05 +3.02799103e-19j]])
 </pre></div>
 </div>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>print H.y[...,203]
-print H.y[...,-203]
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>print(H.y[...,203])
+print(H.y[...,-203])
 len(H.y)
 </pre></div>
 </div>
@@ -426,8 +426,8 @@ len(H.y)
 <div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>Y.plot(typ=&#39;m&#39;)
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fdf2ae642d0&gt;,
- array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7fdf2ae6b390&gt;]], dtype=object))
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f1cd0e7c080&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7f1cd0ec2668&gt;]], dtype=object))
 </pre></div>
 </div>
 <img alt="../../_images/Bsignal_35_1.png" src="../../_images/Bsignal_35_1.png" />

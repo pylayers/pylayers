@@ -761,18 +761,18 @@ import scipy.stats as st
         interpolation : string
             &#39;none&#39;|&#39;nearest&#39;|&#39;bilinear&#39;
         cmap : colormap
-            plt.cm.BrBG
+            plt.cm.jet
         aspect : string
             &#39;auto&#39; (default) ,&#39;equal&#39;,&#39;scalar&#39;
         function : string
             {&#39;imshow&#39;|&#39;pcolormesh&#39;}
-        typ : string 
+        typ : string
             &#39;l20&#39;,&#39;l10&#39;
         vmin : min value
-        vmax : max value 
-        sax  : list 
-            selct axe
-        bindex 
+        vmax : max value
+        sax  : list
+            select axe
+        bindex
 
         Examples
         --------
@@ -784,7 +784,7 @@ import scipy.stats as st
 
         &quot;&quot;&quot;
         defaults = {&#39;interpolation&#39;:&#39;none&#39;,
-                    &#39;cmap&#39;:plt.cm.BrBG,
+                    &#39;cmap&#39;:plt.cm.jet,
                     &#39;aspect&#39;:&#39;auto&#39;,
                     &#39;fontsize&#39;:20,
                     &#39;typ&#39;:&#39;l20&#39;,
@@ -3498,6 +3498,7 @@ import scipy.stats as st
         ax1 = fig.add_subplot(121)
         fig,ax1 = self.imshow(typ=&#39;l20&#39;,fig=fig,ax=ax1,**kwargs)
         ax2 = fig.add_subplot(122)
+
         if &#39;vmin&#39; in kwargs:
             del kwargs[&#39;vmin&#39;]
         if &#39;vmax&#39; in kwargs:

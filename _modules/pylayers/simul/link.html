@@ -472,9 +472,16 @@ logger = logging.getLogger(__name__)
         Examples
         --------
 
-        &gt;&gt;&gt; from pylayers.simul.link import *
-        &gt;&gt;&gt; DL = DLink(L=Layout(&#39;DLR.lay&#39;))
-        &gt;&gt;&gt; DL.eval()
+            &gt;&gt;&gt; from pylayers.simul.link import *
+            &gt;&gt;&gt; DL = DLink(L=Layout(&#39;DLR.lay&#39;))
+            &gt;&gt;&gt; DL.eval()
+
+        Notes
+        -----
+
+        When modifying the coordinates of the link it is important to modify
+        the array and not one of its component. In that case the cycle will not
+        be updated.
 
 
         &quot;&quot;&quot;
@@ -715,14 +722,15 @@ logger = logging.getLogger(__name__)
     @a.setter
     def a(self,position):
         if not self.L.ptin(position):
-            if position[0]&lt;self.L.ax[0]:
-                position[0]=self.L.ax[0]
-            if position[0]&gt;self.L.ax[1]:
-                position[0]=self.L.ax[1]
-            if position[1]&lt;self.L.ax[2]:
-                position[1]=self.L.ax[2]
-            if position[1]&gt;self.L.ax[3]:
-                position[1]=self.L.ax[3]
+            # limit position in the visible region L.ax
+            if position[0] &lt; self.L.ax[0]:
+                position[0] = self.L.ax[0]
+            if position[0] &gt; self.L.ax[1]:
+                position[0] = self.L.ax[1]
+            if position[1] &lt; self.L.ax[2]:
+                position[1] = self.L.ax[2]
+            if position[1] &gt; self.L.ax[3]:
+                position[1] = self.L.ax[3]
             # raise NameError (&#39;Warning : point a is not inside the Layout&#39;)
             # raise NameError (&#39;Warning : point a is not inside the Layout&#39;)
         if not self.L.pt2cy(position) == self.ca:
@@ -807,8 +815,6 @@ logger = logging.getLogger(__name__)
     def Ab(self,Ant):
         if hasattr(self.Ab,&#39;_mayamesh&#39;):
            self.Ab._mayamesh.remove()
-
-
 
         #save rot
         rot = self.Tb
@@ -943,22 +949,20 @@ logger = logging.getLogger(__name__)
 
         if hasattr(self,&#39;filename&#39;):
             s = &#39;filename: &#39; + self.filename +&#39;\n&#39;
-
-            s = s + &#39;Link Parameters :\n&#39;
-            s = s + &#39;------- --------\n&#39;
             s = s + &#39;Layout : &#39; + self.Lname + &#39;\n\n&#39;
             s = s + &#39;Node a   \n&#39;
             s = s + &#39;------  \n&#39;
-            s = s + &#39;position : &#39; + str (self.a) + &quot;  in cycle &quot; + str(self.ca) + &#39;\n&#39;
-            s = s + &#39;Antenna : &#39; + str (self.Aa.typ) + &#39;\n&#39;
-            s = s + &#39;Rotation matrice : \n &#39; + str (self.Ta) + &#39;\n\n&#39;
+            s = s + &#39;\tcoord : &#39; + str (self.a) + &quot;  in cycle &quot; + str(self.ca) + &#39;\n&#39;
+            s = s + &#39;\tantenna : &#39; + str (self.Aa.typ) + &#39;\n&#39;
+            if (self.Ta!=np.eye(3)).any():
+                s = s + &#39;\trotation matrice : \n &#39; + str (self.Ta) + &#39;\n\n&#39;
             s = s + &#39;Node b   \n&#39;
             s = s + &#39;------  \n&#39;
-            s = s + &#39;position : &#39; + str (self.b) + &quot; in cycle &quot; + str(self.cb) + &#39;\n&#39;
-            s = s + &#39;Antenna : &#39; + str (self.Ab.typ) + &#39;\n&#39;
-            s = s + &#39;Rotation matrice : \n &#39; + str (self.Tb) + &#39;\n\n&#39;
-            s = s + &#39;Link evaluation information : \n&#39;
-            s = s + &#39;----------------------------- \n&#39;
+            s = s + &#39;\tcoord : &#39; + str (self.b) + &quot; in cycle &quot; + str(self.cb) + &#39;\n&#39;
+            s = s + &#39;\tantenna : &#39; + str (self.Ab.typ) + &#39;\n&#39;
+            if (self.Ta!=np.eye(3)).any():
+                s = s + &#39;rotation matrice : \n &#39; + str (self.Tb) + &#39;\n\n&#39;
+            s = s + &#39;\n---------------- \n&#39;
             s = s + &#39;distance : &#39; + str(&quot;%6.3f&quot; % np.sqrt(np.sum((self.a-self.b)**2))) + &#39; m \n&#39;
             s = s + &#39;delay : &#39; + str(&quot;%6.3f&quot; % (np.sqrt(np.sum((self.a-self.b)**2))/0.3)) + &#39; ns\n&#39;
             rd2deg = 180/np.pi
@@ -966,30 +970,23 @@ logger = logging.getLogger(__name__)
                 vsba = self.b-self.a
                 a1 = geu.angledir(vsba[None,:])
                 a2 = geu.angledir(-vsba[None,:])
-                s = s + &#39;azimuth (a | b ) : &#39;+str(a1[0,1]*rd2deg)+&#39; deg  | &#39;+str(a2[0,1]*rd2deg)+ &#39; deg\n&#39;
-                s = s + &#39;elevation (a | b ) : &#39;+str(a1[0,0]*rd2deg)+ &#39; deg |  &#39;+str(a2[0,0]*rd2deg)+ &#39; deg\n&#39;
+                s = s + &#39;azimuth (a | b ) : %.2f &#39; % (a1[0,1]*rd2deg) +&#39; deg  | %.2f&#39; % (a2[0,1]*rd2deg) + &#39; deg\n&#39;
+                s = s + &#39;elevation (a | b ) : %.2f&#39; % (a1[0,0]*rd2deg) + &#39; deg | %.2f &#39; % (a2[0,0]*rd2deg) + &#39; deg\n&#39;
                 s = s + &#39;tilt (a |  b ) : &#39;+str((a1[0,0]-np.pi/2)*rd2deg)+ &#39; deg  | &#39;+ str((a2[0,0]-np.pi/2)*rd2deg)+ &#39; deg\n&#39;
             #s = s + &#39;Frequency range :  \n&#39;
-            s = s + &#39;fmin (fGHz) : &#39; + str(self.fGHz[0]) +&#39;\n&#39;
-            s = s + &#39;fmax (fGHz) : &#39; + str(self.fGHz[-1]) +&#39;\n&#39;
             Nf = len(self.fGHz)
+            s = s + &#39;fGHz : %.2f, %.2f, %g &#39; %(self.fGHz[0],self.fGHz[-1],Nf) +&#39;\n&#39;
             if Nf&gt;1:
-                s = s + &#39;fstep (fGHz) : &#39; + str(self.fGHz[1]-self.fGHz[0]) +&#39;\n&#39;
-            else:
-                s = s + &#39;fstep (fGHz) : &#39; + str(self.fGHz[0]-self.fGHz[0]) +&#39;\n&#39;
-            s = s + &#39;Nf : &#39; + str(Nf) +&#39;\n &#39;
+                s = s + &#39;fstep (GHz) : &#39; + str(self.fGHz[1]-self.fGHz[0]) +&#39;\n&#39;
             d =  np.sqrt(np.sum((self.a-self.b)**2))
             if Nf&gt;1:
                 fcGHz = (self.fGHz[-1]+self.fGHz[0])/2.
             else:
                 fcGHz = self.fGHz[0]
             L  = 32.4+20*np.log(d)+20*np.log10(fcGHz)
-            s = s + &#39;Algorithm information : \n&#39;
-            s = s + &#39;----------------------------- \n&#39;
-            s = s + &#39;cutoff : &#39;+ str(self.cutoff)+&#39;\n&#39;
-            s = s + &#39;threshold :&#39;+ str(self.threshold)+&#39;\n&#39;
-            s = s + &#39;delay_excess_max : &#39;+ str(self.delay_excess_max_ns)+&#39; ns \n&#39;
-            s = s + &#39;dist_excess_max : &#39;+ str(self.delay_excess_max_ns*0.3)+&#39; m \n&#39;
+            s = s + &#39;\n------------- \n&#39;
+            s = s + &#39;cutoff/threshold : %g / %.2f&#39; %(self.cutoff, self.threshold)+&#39;\n&#39;
+            s = s + &#39;max delay /dist: %.2f ns / %.2f m&#39; %(self.delay_excess_max_ns,self.delay_excess_max_ns*0.3)+&#39;\n&#39;
         else:
             s = &#39;No Layout specified&#39;
         return s
