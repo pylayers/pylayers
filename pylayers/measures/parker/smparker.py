@@ -104,7 +104,7 @@ def gettty():
             port = '/dev/ttyUSB'+num
         else:
             port = None
-            print 'not connected to a serial port'
+            print( 'not connected to a serial port')
     else:
         port = "not connected"
 
@@ -421,7 +421,7 @@ class Axes(PyLayers):
         """
         for k in self.dvar:
             st = self.com('R('+k+')')
-            print self.dvar[k],st[1].replace('\n','')
+            print( self.dvar[k],st[1].replace('\n',''))
 
     def __repr__(self):
         """
@@ -488,11 +488,11 @@ class Axes(PyLayers):
             st = self.com('R('+var+')')[1].replace('*','').replace('/n','')
             if var == 'MV':
                 if '1' in st[1]:
-                    print "I'm moving"
+                    print("I'm moving")
                 else:
-                    print "I'm stationnary"
+                    print("I'm stationnary")
 
-            print Axes.dvar[var],st
+            print(Axes.dvar[var],st)
 
 
     def com(self,command='R(SN)',verbose=False):
@@ -524,7 +524,7 @@ class Axes(PyLayers):
         self.ser.write(cst)
         st = self.ser.readlines()
         if verbose:
-            print cst
+            print(cst)
         return(st)
 
 
@@ -570,25 +570,25 @@ class Axes(PyLayers):
             ans = st[1].split(' ')
 
             if '0' in ans[0]:
-                print "Enable limits (default setting), "
+                print("Enable limits (default setting), ")
             if '1' in ans[0]:
-                print "Disable limit +, "
+                print("Disable limit +, ")
             if '2' in ans[0]:
-                print "Disable limit -, "
+                print("Disable limit -, ")
             if '3' in ans[0]:
-                print "Disable limit + & -, "
+                print("Disable limit + & -, ")
 
             if '0' in ans[1]:
-                print "Limits normally closed (default setting), "
+                print("Limits normally closed (default setting), ")
             else:
-                print "Limits normally open, "
+                print("Limits normally open, ")
 
             if '0' in ans[2]:
-                print "Stop motion when a limit is hit and abort the program (default setting), "
+                print("Stop motion when a limit is hit and abort the program (default setting), ")
             else:
-                print "Stop motion when a limit is hit but continue the program, "
+                print("Stop motion when a limit is hit but continue the program, ")
 
-            print 'deceleration : ',eval(ans[3].split('D')[1]), "rps"
+            print('deceleration : ',eval(ans[3].split('D')[1]), "rps")
 
         if not self.emulated:
             if cmd=='set':
@@ -697,66 +697,66 @@ class Axes(PyLayers):
             st = self.com('LSEL')
             ans = st[1].split(' ')
 
-            print "-------------------"
-            print " arguments of LSEL "
-            print "-------------------"
+            print("-------------------")
+            print(" arguments of LSEL ")
+            print("-------------------")
 
             ##########
             #### ARM
             ##########
             if '1' in ans[0]:
-                print "armed "
+                print("armed ")
             else:
-                print "not armed "
+                print("not armed ")
 
             ############
             ##### CODE
             ############
 
             if '1' in ans[1]:
-                print "Binary (default setting) "
+                print("Binary (default setting) ")
             else:
-                print "BCD code (Binary Coded Decimal) "
+                print("BCD code (Binary Coded Decimal) ")
 
             ###############
             ##### INPUTS
             ################
 
             if '5' in ans[2]:
-                print "5 inputs "
+                print("5 inputs ")
             if '4' in ans[2]:
-                print "4 inputs "
+                print("4 inputs ")
             if '3' in ans[2]:
-                print "3 inputs "
+                print("3 inputs ")
             if '2' in ans[2]:
-                print "2 inputs "
+                print("2 inputs ")
             if '1' in ans[2]:
-                print "1 inputs "
+                print("1 inputs ")
 
             ##############
             #### EXECUTION
             ##############
 
             if '0' in ans[3]:
-                print "continuously repeated (default set.) "
+                print("continuously repeated (default set.) ")
             else:
-                print "re-triggered "
+                print("re-triggered ")
 
         if cmd=='HOME':
             st = self.com('HOME')
             ans = st[1].split(' ')
 
-            print "-------------------"
-            print " arguments of HOME "
-            print "-------------------"
+            print("-------------------")
+            print(" arguments of HOME ")
+            print("-------------------")
 
             ##############
             #### ARM
             ##############
             if '1' in ans[0]:
-                print "armed "
+                print("armed ")
             else:
-                print "not armed "
+                print("not armed ")
 
 
             ##################
@@ -764,9 +764,9 @@ class Axes(PyLayers):
             ##################
 
             if '-' in ans[1]:
-                print "reference edge is negative "
+                print("reference edge is negative ")
             else:
-                print "reference edge is positive "
+                print("reference edge is positive ")
 
 
 
@@ -775,19 +775,19 @@ class Axes(PyLayers):
             ##############
 
             if '1' in ans[2]:
-                print "home switch normally closed 1 "
+                print("home switch normally closed 1 ")
             else:
-                print "home switch normally open 0 (default) "
+                print("home switch normally open 0 (default) ")
 
 
             ##############################
             #### VELOCITY AND ACCELERATION
             ##############################
             if '+' in ans[3]:
-                print 'velocity : +',eval(ans[3].split('V+')[1]), "rps"
+                print('velocity : +',eval(ans[3].split('V+')[1]), "rps")
             else:
-                print 'velocity : -',eval(ans[3].split('V-')[1]), "rps"
-                print 'acceleration : ',eval(ans[4].split('A')[1]), "rps"
+                print('velocity : -',eval(ans[3].split('V-')[1]), "rps")
+                print('acceleration : ',eval(ans[4].split('A')[1]), "rps")
 
 
 
@@ -796,19 +796,19 @@ class Axes(PyLayers):
             ##############
 
             if '0' in ans[5]:
-                print 'Mode 0: Motor in the active window of the switch (default)'
+                print('Mode 0: Motor in the active window of the switch (default)')
             if '1' in ans[5]:
-                print 'Mode 1: Motor in the position to the edge + or -'
+                print('Mode 1: Motor in the position to the edge + or -')
             if '2' in ans[5]:
-                print 'Mode 2: Improve homing repeatability'
+                print('Mode 2: Improve homing repeatability')
 
         if cmd=='LIMITS':
             st = self.com('LIMITS')
             ans = st[1].split(' ')
 
-            print "-------------------"
-            print " arguments of LIMITS "
-            print "-------------------"
+            print("-------------------")
+            print(" arguments of LIMITS ")
+            print("-------------------")
 
 
             ##############
@@ -817,33 +817,33 @@ class Axes(PyLayers):
 
 
             if '0' in ans[0]:
-                print "Enable limits (default setting), "
+                print("Enable limits (default setting), ")
             if '1' in ans[0]:
-                print "Disable limit +, "
+                print("Disable limit +, ")
             if '2' in ans[0]:
-                print "Disable limit -, "
+                print("Disable limit -, ")
             if '3' in ans[0]:
-                print "Disable limit + & -, "
+                print("Disable limit + & -, ")
 
             ##############
             #### TYPE
             ##############
 
             if '0' in ans[1]:
-                print "Limits normally closed (default setting), "
+                print("Limits normally closed (default setting), ")
             else:
-                print  "Limits normally open, "
+                print( "Limits normally open, ")
 
             ##########################
             #### MODE AND DECELERATION
             ##########################
 
             if '0' in ans[2]:
-                print "Stop motion when a limit is hit and abort the program (default setting), "
+                print("Stop motion when a limit is hit and abort the program (default setting), ")
             else:
-                print "Stop motion when a limit is hit but continue the program, "
+                print("Stop motion when a limit is hit but continue the program, ")
 
-            print 'deceleration : ',eval(ans[3].split('D')[1]), "rps"
+            print('deceleration : ',eval(ans[3].split('D')[1]), "rps")
 
     def add_profile(self,**kwargs):
         """ add a new profile to lprofile
@@ -1180,7 +1180,7 @@ class Axes(PyLayers):
         lis = fd.readlines()
         for li in lis:
             li=li.replace("\n","\r\n")
-            print li
+            print(li)
             self.ser.write(li)
         st = self.ser.read(100)
         #while self.ser.inWaiting()>0:
@@ -1282,7 +1282,7 @@ class Scanner(PyLayers):
         # Limits desactivated on axes Z and R (mask =3 )
 
         #if not self.emulated:
-        print "setting limits"
+        print("setting limits")
         self.a[1].limits(mask=0,typ=1,mode=1,cmd='set')
         self.a[2].limits(mask=0,typ=1,mode=1,cmd='set')
         self.a[3].limits(mask=3,typ=1,mode=1,cmd='set')
@@ -1293,19 +1293,19 @@ class Scanner(PyLayers):
     #    self.reset()
 
 
-        print "setting step"
+        print("setting step")
         self.a[1].step(0,cmd='set')
         self.a[2].step(0,cmd='set')
         self.a[3].step(0,cmd='set')
         self.a[4].step(0,cmd='set')
 
-        print "setting velocity"
+        print("setting velocity")
         self.a[1].velocity(vel,cmd='set')
         self.a[2].velocity(vel,cmd='set')
         self.a[3].velocity(vel,cmd='set')
         self.a[4].velocity(vel,cmd='set')
 
-        print "setting acceleration"
+        print("setting acceleration")
         self.a[1].acceleration(acc,cmd='set')
         self.a[2].acceleration(acc,cmd='set')
         self.a[3].acceleration(acc,cmd='set')
@@ -1378,7 +1378,7 @@ class Scanner(PyLayers):
         for k in range(1,len(self.a)):
             com = self.a[k].reset()
         toc = time.time()
-        print "time reset (s) :",toc-tic
+        print("time reset (s) :",toc-tic)
 
 
     def home(self,cmd='set',init=True,vel=10):

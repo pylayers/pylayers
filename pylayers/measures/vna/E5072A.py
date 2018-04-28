@@ -1,4 +1,6 @@
 #-*- coding:Utf-8 -*-
+import os
+import sys
 import socket
 import doctest
 import time
@@ -8,7 +10,6 @@ import sqlite3
 import matplotlib.pyplot as plt
 from types import *
 from numpy import array
-import ipdb
 import h5py
 import select
 from pylayers.util.project import  *
@@ -20,8 +21,12 @@ from pylayers.measures.exploith5 import Mesh5
 #from  pylayers.measures.parker.smparker import *
 from time import sleep
 import seaborn as sns
-import os
-import ConfigParser
+
+if sys.version_info.major==2:
+    import ConfigParser
+else:
+    import configparser as ConfigParser
+
 
 """
 Module to drive the network analyzer E5072A

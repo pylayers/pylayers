@@ -15,17 +15,16 @@ import numpy.linalg as la
 from time import sleep
 import math as mt
 from pylayers.measures.vna.E5072A import *
-import ipdb
 """
 .. curentmodule:: pylayers.antprop.mesmimo
 
 .. autosummary::
-    :members: 
+    :members:
 
 """
 
 class MIMO(object):
-    """ This class handles the data coming from a MIMO Channel Sounder 
+    """ This class handles the data coming from a MIMO Channel Sounder
 
     Parameters
     ----------

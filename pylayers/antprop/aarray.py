@@ -223,8 +223,8 @@ class AntArray(Array, ant.Antenna):
         ... plot::
             :include-source:
 
-        >>> A = AntArray()
-        >>> A.plotG()
+            >>> A = AntArray()
+            >>> A.plotG()
 
         """
         defaults = {'tarr': 'UA',
