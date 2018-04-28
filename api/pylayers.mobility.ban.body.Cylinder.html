@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,31 +25,22 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/>
-        <link rel="prev" title="Body" href="pylayers.mobility.ban.body.Body.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Body" href="pylayers.mobility.ban.body.Body.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -62,7 +55,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -91,7 +84,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -102,6 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -145,18 +142,16 @@
 <li class="toctree-l1 current"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="references.html#body-class">40.1&nbsp;&nbsp;&nbsp;Body Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="references.html#cylinder-class">40.2&nbsp;&nbsp;&nbsp;Cylinder Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="references.html#id133">40.3&nbsp;&nbsp;&nbsp;Functions</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="references.html#id134">40.4&nbsp;&nbsp;&nbsp;Classes</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="references.html#id135">40.3&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="references.html#id136">40.4&nbsp;&nbsp;&nbsp;Classes</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="pylayers.mobility.ban.body.Body.html">Body</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Cylinder</a><ul class="simple">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Cylinder</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#id137">40.5&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="references.html#id135">40.5&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -168,36 +163,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>Cylinder</li>
+        
+      <li>Cylinder</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.mobility.ban.body.Cylinder.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -208,30 +223,9 @@
 <dl class="class">
 <dt id="pylayers.mobility.ban.body.Cylinder">
 <em class="property">class </em><code class="descclassname">pylayers.mobility.ban.body.</code><code class="descname">Cylinder</code><span class="sig-paren">(</span><em>name='Meriem_Cylindre:'</em>, <em>_filemocap='Nav_serie_006.c3d'</em>, <em>unit='mm'</em>, <em>color='white'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Cylinder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Cylinder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class for handling interfering bodies in CORMORAN measurement data
 navigation series day 12/06/2014</p>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Cylinder.anim" title="pylayers.mobility.ban.body.Cylinder.anim"><code class="xref py py-obj docutils literal"><span class="pre">anim</span></code></a>()</td>
-<td>animate cylinder</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Cylinder.init_traj" title="pylayers.mobility.ban.body.Cylinder.init_traj"><code class="xref py py-obj docutils literal"><span class="pre">init_traj</span></code></a>()</td>
-<td>create trajectory object from given trajectory or mocap</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Cylinder.loadC3D" title="pylayers.mobility.ban.body.Cylinder.loadC3D"><code class="xref py py-obj docutils literal"><span class="pre">loadC3D</span></code></a>([filename,&nbsp;nframes,&nbsp;unit])</td>
-<td>load nframes of motion capture C3D file</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.mobility.ban.body.Cylinder.settopos" title="pylayers.mobility.ban.body.Cylinder.settopos"><code class="xref py py-obj docutils literal"><span class="pre">settopos</span></code></a>(t,&nbsp;**kwargs)</td>
-<td></td>
-</tr>
-</tbody>
-</table>
 <p class="rubric">Methods Summary</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -239,16 +233,16 @@ navigation series day 12/06/2014</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Cylinder.anim" title="pylayers.mobility.ban.body.Cylinder.anim"><code class="xref py py-obj docutils literal"><span class="pre">anim</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Cylinder.anim" title="pylayers.mobility.ban.body.Cylinder.anim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">anim</span></code></a>()</td>
 <td>animate cylinder</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Cylinder.init_traj" title="pylayers.mobility.ban.body.Cylinder.init_traj"><code class="xref py py-obj docutils literal"><span class="pre">init_traj</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Cylinder.init_traj" title="pylayers.mobility.ban.body.Cylinder.init_traj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_traj</span></code></a>()</td>
 <td>create trajectory object from given trajectory or mocap</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Cylinder.loadC3D" title="pylayers.mobility.ban.body.Cylinder.loadC3D"><code class="xref py py-obj docutils literal"><span class="pre">loadC3D</span></code></a>([filename,&nbsp;nframes,&nbsp;unit])</td>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Cylinder.loadC3D" title="pylayers.mobility.ban.body.Cylinder.loadC3D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadC3D</span></code></a>([filename,&nbsp;nframes,&nbsp;unit])</td>
 <td>load nframes of motion capture C3D file</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.mobility.ban.body.Cylinder.settopos" title="pylayers.mobility.ban.body.Cylinder.settopos"><code class="xref py py-obj docutils literal"><span class="pre">settopos</span></code></a>(t,&nbsp;**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.mobility.ban.body.Cylinder.settopos" title="pylayers.mobility.ban.body.Cylinder.settopos"><code class="xref py py-obj docutils literal notranslate"><span class="pre">settopos</span></code></a>(t,&nbsp;**kwargs)</td>
 <td></td>
 </tr>
 </tbody>
@@ -258,6 +252,18 @@ navigation series day 12/06/2014</p>
 <dt id="pylayers.mobility.ban.body.Cylinder.anim">
 <code class="descname">anim</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Cylinder.anim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Cylinder.anim" title="Permalink to this definition">¶</a></dt>
 <dd><p>animate cylinder</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.mobility.trajectory import *
+&gt;&gt;&gt; from pylayers.mobility.ban.body import *
+&gt;&gt;&gt; from pylayers.gis.layout import *
+&gt;&gt;&gt; T=Trajectories()
+&gt;&gt;&gt; T.loadh5()
+&gt;&gt;&gt; L=Layout(T.Lfilename)
+&gt;&gt;&gt; B = Body()
+&gt;&gt;&gt; B.settopos(T[0],t=0,cs=True) 
+&gt;&gt;&gt; L._show3()
+&gt;&gt;&gt; B.anim(B)
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -270,30 +276,16 @@ navigation series day 12/06/2014</p>
 <dt id="pylayers.mobility.ban.body.Cylinder.loadC3D">
 <code class="descname">loadC3D</code><span class="sig-paren">(</span><em>filename='Nav_serie_006.c3d'</em>, <em>nframes=-1</em>, <em>unit='cm'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Cylinder.loadC3D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Cylinder.loadC3D" title="Permalink to this definition">¶</a></dt>
 <dd><p>load nframes of motion capture C3D file</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : string</p>
-<blockquote>
-<div><p>file name</p>
-</div></blockquote>
-<p><strong>nframes</strong> : int</p>
-<blockquote>
-<div><p>number of frames</p>
-</div></blockquote>
-<p><strong>unit</strong> : str (mm|cm|mm</p>
-<blockquote>
-<div><p>unit of c3d file</p>
-</div></blockquote>
-<p><strong>rot</strong> : list [‘x’,’y’,’z’]</p>
-<blockquote class="last">
-<div><p>swap axes of the c3d file</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>filename <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>file name</dd>
+<dt>nframes <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>number of frames</dd>
+<dt>unit <span class="classifier-delimiter">:</span> <span class="classifier">str (mm|cm|mm</span></dt>
+<dd>unit of c3d file</dd>
+<dt>rot <span class="classifier-delimiter">:</span> <span class="classifier">list [‘x’,’y’,’z’]</span></dt>
+<dd>swap axes of the c3d file</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -307,13 +299,14 @@ navigation series day 12/06/2014</p>
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="pylayers.mobility.ban.body.Body.html" class="btn btn-neutral" title="Body" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pylayers.mobility.ban.body.Body.html" class="btn btn-neutral" title="Body" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -323,11 +316,11 @@ navigation series day 12/06/2014</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -346,9 +339,11 @@ navigation series day 12/06/2014</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -363,14 +358,13 @@ navigation series day 12/06/2014</p>
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

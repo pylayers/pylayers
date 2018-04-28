@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,21 @@
   
 
   
-  
     <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../../../about.html"/>
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="PyLayers" href="../../../index.html"/>
-        <link rel="up" title="Module code" href="../../index.html"/> 
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
 
   
   <script src="../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +54,7 @@
 
           
             
-            <img src="../../../_static/pylayers.png" class="logo" />
+            <img src="../../../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +83,10 @@
           
             
             
-                <ul>
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +97,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -142,7 +139,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -154,34 +151,52 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-      
-    <li>pylayers.antprop.channel</li>
+        
+      <li>pylayers.antprop.channel</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -190,7 +205,7 @@
   <h1>Source code for pylayers.antprop.channel</h1><div class="highlight"><pre>
 <span></span># -*t coding:Utf-8 -*-
 &quot;&quot;&quot;
-.. currentmodule:: pylaydoers.antprop.channel 
+.. currentmodule:: pylayers.antprop.channel
 
 .. autosummary::
     :members:
@@ -207,6 +222,7 @@ import scipy.signal as si
 import pylab as plt
 import struct as stru
 import scipy.stats as st
+import scipy.optimize as optimize
 import numpy.fft as fft
 from scipy.io import loadmat
 import pylayers.util.pyutil as pyu
@@ -238,10 +254,10 @@ except:
         rx coordinates (,3)
     az : np.array (,Na)
         AFP azimutal range in radians
-    theta : link elevation angle 
+    theta : link elevation angle
     phi : link (txrx) azimuth angle (with offset)
-    tau : link delay (ns) 
-        
+    tau : link delay (ns)
+
     offset : float angle in radians
         azimuth offset w.r.t global frame
 
@@ -250,31 +266,63 @@ except:
                       y = np.array([]),
                       tx = np.array([]),
                       rx = np.array([]),
-                      az = np.array([]) 
+                      az = np.array([])
                       ):
         bs.FUsignal.__init__(self,x=x,y=y,label=&#39;AFP&#39;)
         if len(self.x)!=0:
             self.fcGHz = self.x[len(self.x)/2]
-        self.tx = tx 
+        self.tx = tx
         self.rx = rx
         self.ang_offset = 0
         self.refinement = False
         self.az = az
         self._filename = &#39;&#39;
 
+    def __add__(self,other):
+        assert(self.y.shape == other.y.shape)
+        assert((self.x == other.x).all())
+        assert((self.az == other.az).all())
+        A = AFPchannel()
+        A.x = self.x
+        A.fcGHz = A.x[len(A.x)/2]
+        A.az = self.az
+        A.y = self.y + other.y
+        return A
+
+    def __sub__(self,other):
+        assert(self.y.shape == other.y.shape)
+        assert((self.x == other.x).all())
+        assert((self.az == other.az).all())
+        A = AFPchannel()
+        A.x = self.x
+        A.fcGHz = A.x[len(A.x)/2]
+        A.az = self.az
+        Amod = np.abs(self.y)-np.abs(other.y)
+        A.y = Amod*np.exp(1j*np.angle(self.y))
+        return A
+
     def __repr__(self):
         cv = 180/np.pi
         s = &#39;Angular Frequency Profile object \n&#39;
         s = s + &#39;Tx : &#39;+str(self.tx)+&#39;\n&#39;
         s = s + &#39;Rx : &#39;+str(self.rx)+&#39;\n&#39;
+        return s
 
-        
-        return(s)
+<div class="viewcode-block" id="AFPchannel.norm2"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.AFPchannel.html#pylayers.antprop.channel.AFPchannel.norm2">[docs]</a>    def norm2(self):
+        return np.real(np.sum(self.y*np.conj(self.y)))</div>
+
+<div class="viewcode-block" id="AFPchannel.construct"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.AFPchannel.html#pylayers.antprop.channel.AFPchannel.construct">[docs]</a>    def construct(self,tx):
+        S = AFPchannel(x=self.x,y=np.zeros(self.y.shape),az=self.az)
+        for k in range(tx.shape[0]):
+            C = AFPchannel()
+            C.specular_model(tx[k],self.x,self.az)
+            S = S + C
+        return S</div>
 
 <div class="viewcode-block" id="AFPchannel.loadmes"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.AFPchannel.html#pylayers.antprop.channel.AFPchannel.loadmes">[docs]</a>    def loadmes(self,_filename,_filecal,fcGHz=32.6,BW=1.6,win=&#39;rect&#39;,ang_offset=0.37,ext=&#39;txt&#39;,dirmeas=&#39;meas/Espoo&#39;,refinement=False):
-        &quot;&quot;&quot; Load measurement file 
+        &quot;&quot;&quot; Load measurement file
 
-        Measurement files and the associated back to back calibration files 
+        Measurement files and the associated back to back calibration files
         are placed in the mes directory of the project.
 
         Parameters
@@ -282,35 +330,35 @@ except:
 
         _filename : string
             data matfile name
-        _filecal : string 
+        _filecal : string
             calibration matfile name
-        fcGHz : float 
-            center frequency 
-        BW : float 
-            measurement bandwidth 
-        win : string 
+        fcGHz : float
+            center frequency
+        BW : float
+            measurement bandwidth
+        win : string
             window type in [&#39;rect&#39;,&#39;hamming&#39;,&#39;blackman&#39;]
-        ang_offset : float 
+        ang_offset : float
             angle in radian
         ext : string
             file extension &#39;txt&#39; | &#39;.mat&#39;
-        diremeas : string 
+        diremeas : string
 
-        Notes 
+        Notes
         -----
 
-        This function updates : 
+        This function updates :
         + self.x (frequency GHz)
-        + self.y 
-        + self.az azimuth radians 
+        + self.y
+        + self.az azimuth radians
 
         The calibration file _filecal (.mat file) should be added in the data directory
         In practice for Espoo B2B.mat
 
-        See Also 
+        See Also
         --------
 
-        pylayers.util.pyutil.getlong 
+        pylayers.util.pyutil.getlong
 
 
         &quot;&quot;&quot;
@@ -325,7 +373,7 @@ except:
         filecal = pyu.getlong(_filecal,dirmeas)
         U = loadmat(filecal)
         cal_trf = U[&#39;cal_trf&#39;][:,0]
-        # read measurement file (.txt or Mat file) 
+        # read measurement file (.txt or Mat file)
         filename = pyu.getlong(_filename,dirmeas)
         if ext==&#39;txt&#39;:
             D = np.loadtxt(filename,skiprows=2)# load Back 2 Back calibration file
@@ -334,19 +382,19 @@ except:
         else:
             D = loadmat(filename)
             amp = D[&#39;amp&#39;]
-            ang = D[&#39;ang&#39;] 
+            ang = D[&#39;ang&#39;]
             rotationangle = D[&#39;rotationangle&#39;].squeeze()
 
         # load Back 2 Back calibration file
-        
+
         #
-        # Transfer function reconstruction 
+        # Transfer function reconstruction
         #
 
         self.Na  = amp.shape[0]
         self.Nf  = amp.shape[1]
         #
-        # select apodisation window 
+        # select apodisation window
         #
         if win==&#39;hamming&#39;:
             window = np.hamming(self.Nf)
@@ -355,7 +403,7 @@ except:
         else:
             window = np.ones(self.Nf)
         #
-        # complex transfer function 
+        # complex transfer function
         #
 
         self.x = np.linspace(self.fmin,self.fmax,self.Nf)
@@ -364,7 +412,7 @@ except:
         #
         # if extension is txt file comes from ESPOO measurement
         #
-        # self.az : 5.86 -&gt; 1.94   
+        # self.az : 5.86 -&gt; 1.94
         if ext==&#39;txt&#39;:
             self.azmes = (360-D[:,0])*np.pi/180.
             self.az = self.azmes + ang_offset - 2*np.pi
@@ -372,21 +420,36 @@ except:
             self.az[u] = self.az[u] + 2*np.pi
         else:
             self.azmes = rotationangle*np.pi/180.
-            self.az = ang_offset - self.azmes 
+            self.az = ang_offset - self.azmes
             u = np.where(self.az&lt;0)
             self.az[u] = self.az[u] + 2*np.pi</div>
 
-<div class="viewcode-block" id="AFPchannel.toadp"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.AFPchannel.html#pylayers.antprop.channel.AFPchannel.toadp">[docs]</a>    def toadp(self,imax=-1):
-        &quot;&quot;&quot; convert afp into adp (frequency-&gt;delay) 
+<div class="viewcode-block" id="AFPchannel.electrical_delay"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.AFPchannel.html#pylayers.antprop.channel.AFPchannel.electrical_delay">[docs]</a>    def  electrical_delay(self,tauns=0):
+        &quot;&quot;&quot; electrical delay 
+
+        Parameters
+        ----------
+        tauns : float 
 
         &quot;&quot;&quot;
-        # x : delay (starting at 0 ns) 
-        # y : ifft axis 1 (frequency) 
+        self.y = self.y * np.exp(-2*1j*np.pi*self.x*tauns)</div>
+
+<div class="viewcode-block" id="AFPchannel.toadp"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.AFPchannel.html#pylayers.antprop.channel.AFPchannel.toadp">[docs]</a>    def toadp(self,imax=-1):
+        &quot;&quot;&quot; convert afp into adp (frequency-&gt;delay)
+
+        Notes
+        -----
+
+        tx and rx need to be defined
+
+        &quot;&quot;&quot;
+        # x : delay (starting at 0 ns)
+        # y : ifft axis 1 (frequency)
         x = np.linspace(0,(len(self.x)-1)/(self.x[-1]-self.x[0]),len(self.x))
         y = np.fft.ifft(self.y,axis=1)
         if imax!=-1:
             y = y[:,0:imax]
-            x = x[0:imax] 
+            x = x[0:imax]
         adp = ADPchannel(x=x,
                          y=y,
                          az=self.az,
@@ -396,7 +459,77 @@ except:
                          _filename=self._filename,
                          refinement=self.refinement,
                          ang_offset = self.ang_offset)
-        return adp </div></div>
+        return adp</div>
+
+<div class="viewcode-block" id="AFPchannel.estimate"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.AFPchannel.html#pylayers.antprop.channel.AFPchannel.estimate">[docs]</a>    def estimate(self,taumax=200,phimax=2*np.pi):
+        def cost(xk,f,phi):
+            B = AFPchannel()
+            B.specular_model(xk,f,phi)
+            C = self - B
+            return C.norm2()
+        x_0 = self.peak()
+        x_est = optimize.fmin_l_bfgs_b(cost,x_0,args=(self.x,self.az),disp=0,approx_grad=1,bounds=((0,2*x_0[0]),(0,taumax),(0,phimax)))[0]
+        #x_est = optimize.fmin(cost,x_0,args=(self.x,self.az))
+        Ck = AFPchannel()
+        Ck.specular_model(x_est,self.x,self.az)
+        D = self - Ck
+        return x_est,Ck, D</div>
+
+<div class="viewcode-block" id="AFPchannel.peak"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.AFPchannel.html#pylayers.antprop.channel.AFPchannel.peak">[docs]</a>    def peak(self):
+        adpself = self.toadp()
+        ak,tauk,phik = adpself.peak()
+        x = np.array([ak,tauk,phik])
+        return(x)</div>
+
+<div class="viewcode-block" id="AFPchannel.specular_model"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.AFPchannel.html#pylayers.antprop.channel.AFPchannel.specular_model">[docs]</a>    def specular_model(self,x,fGHz,phi,wH=[],HPBW=10*np.pi/180,GmaxdB=21):
+        &quot;&quot;&quot; Creates an AFP from a discrete specular model
+
+        Parameters
+        ----------
+        x : [a0,a1,..,aK,tau0,tau1,...,tauk,phi0,...,phiK]
+        fGHz :
+        phi :
+        wH : windowing on frequency axis
+        HPBW : Half Power Beamwidth
+
+        Examples
+        --------
+        &gt;&gt;&gt; import numpy as np
+        &gt;&gt;&gt; rs = np.random.seed(1)
+        &gt;&gt;&gt; E = st.expon(0.5)
+        &gt;&gt;&gt; K = 5
+        &gt;&gt;&gt; tauk = 250*np.random.rand(K)
+        &gt;&gt;&gt; alphak = E.rvs(K)
+        &gt;&gt;&gt; phik  = 2*np.pi*np.random.rand(K)
+        &gt;&gt;&gt; xk   = np.hstack((alphak,tauk,phik))
+        &gt;&gt;&gt; A = AFPchannel()
+        &gt;&gt;&gt; fGHz = np.linspace(27,29,2001)
+        &gt;&gt;&gt; wH = np.ones(len(fGHz))
+        &gt;&gt;&gt; phi = np.linspace(0,2*np.pi,73)
+        &gt;&gt;&gt; A.specular_model(xk,fGHz,phi,wH)
+
+
+        &quot;&quot;&quot;
+        K = len(x)/3
+        assert(len(x)==3*K)
+        ak = x[0:K][:,None,None]
+        tk = x[K:2*K][:,None,None]
+        pk = x[2*K:3*K][:,None,None]
+        # tf : paths (0) , freq (1), angle (2)
+        if wH ==[]:
+            wH = np.ones(len(fGHz))
+        tf  = ak*np.exp(-2*1j*np.pi*fGHz[None,:,None]*tk)*wH[None,:,None]
+        dphi = pk-phi[None,None,:]
+        Gmax = 10**(GmaxdB/10.)
+        g = np.exp(-(2*np.sqrt(np.log(2))*dphi/HPBW)**2)
+        tfg = tf*g
+        self.x = fGHz
+        self.fcGHz = self.x[len(self.x)/2]
+        # self.y : angle(0) fGHz(1)
+        self.y = np.sum(tfg,axis=0).T
+        self.az = phi</div></div>
+        #h    = np.fft.ifft(H)
+
 
 <div class="viewcode-block" id="ADPchannel"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.ADPchannel.html#pylayers.antprop.channel.ADPchannel">[docs]</a>class ADPchannel(bs.TUsignal):
     &quot;&quot;&quot; Angular Delay Profile channel
@@ -405,13 +538,13 @@ except:
     ----------
 
     az : array
-        azimuth in radian 
+        azimuth in radian
     ang_offset :
-    theta :  float 
-    phi : float 
-    tau : float 
+    theta :  float
+    phi : float
+    tau : float
     _filename : string
-        short filename for saving     
+        short filename for saving
 
 
     &quot;&quot;&quot;
@@ -431,9 +564,9 @@ except:
         ----------
 
         x : np.array
-            delay  
+            delay
         y : np.array
-            angle x delay  
+            angle x delay
         az : np.array
             azimuth angle
         tx : np.array
@@ -441,25 +574,28 @@ except:
         rx : np.array
             rx coordinates
         _filename :
-        offset  : 
+        refinement : boolean
+            False
+        offset  :
 
         &quot;&quot;&quot;
-        bs.TUsignal.__init__(self,x=x,y=y,label=&#39;ADP&#39;)
+        bs.TUsignal.__init__(self, x=x, y=y,label=&#39;ADP&#39;)
         self.az = az
         self.tx = tx
-        self.rx = rx 
-        self._filename = _filename 
+        self.rx = rx
+        self._filename = _filename
         self.fcGHz = fcGHz
         self.ang_offset = ang_offset
-        v = self.tx - self.rx 
-        distLOS = np.linalg.norm(v)
-        self.taulos_geo = distLOS/0.3
-        self.anglos_geo = np.arctan2(v[1],v[0])*180/np.pi
-        LFS = -(32.4+20*np.log10(fcGHz)+20*np.log10(distLOS))
-        self.alphalos_geo = 10**(LFS/10.)
+        if ((len(self.tx) !=0 ) and (len(self.rx)!= 0)):
+            v = self.tx - self.rx
+            distLOS = np.linalg.norm(v)
+            self.taulos_geo = distLOS/0.3
+            self.anglos_geo = np.arctan2(v[1],v[0])*180/np.pi
+            LFS = -(32.4+20*np.log10(fcGHz)+20*np.log10(distLOS))
+            self.alphalos_geo = 10**(LFS/10.)
 
-        if self.anglos_geo&lt;0:
-            self.anglos_geo = 2*np.pi+self.anglos_geo
+            if self.anglos_geo&lt;0:
+                self.anglos_geo = 2*np.pi+self.anglos_geo
 
         alphapeak,taupeak,angpeak = self.peak(refinement=refinement)
         self.angpeak_est = angpeak*180/np.pi
@@ -468,43 +604,46 @@ except:
 
 
         self._filename = _filename
-     
+
     def __repr__(self):
         cv = 180/np.pi
         s = &#39;Angular Delay Profile object \n&#39;
         s = s + &#39;Angular offset (degrees) : &#39;+str(cv*self.ang_offset)+&#39;\n&#39;
         s = s + &#39;agmin : &#39;+str(self.az[0]*cv)+&#39; agmax : &#39;+str(self.az[-1]*cv)+&#39;\n&#39;
-        s = s + &#39;alpha (geo): &#39;+ str(self.alphalos_geo)+&#39; (est): &#39;+str(self.alphapeak_est**2)+ &#39; GdB : &#39;+str(10*np.log10(self.alphapeak_est**2/self.alphalos_geo))+&#39; \n&#39;
-        s = s + &#39;tau (geo): &#39;+ str(self.taulos_geo)+&#39; (est): &#39;+str(self.taupeak_est)+&#39; \n&#39;
-        s = s + &#39;ang (geo): &#39;+ str(self.anglos_geo)+&#39; (est): &#39;+str(self.angpeak_est)+&#39;\n&#39;
+        if hasattr(self,&#39;alphalos_geo&#39;):
+            s = s + &#39;alpha (geo): &#39;+ str(self.alphalos_geo)+&#39; (est): &#39;+str(self.alphapeak_est**2)+ &#39; GdB : &#39;+str(10*np.log10(self.alphapeak_est**2/self.alphalos_geo))+&#39; \n&#39;
+            s = s + &#39;tau (geo): &#39;+ str(self.taulos_geo)+&#39; (est): &#39;+str(self.taupeak_est)+&#39; \n&#39;
+            s = s + &#39;ang (geo): &#39;+ str(self.anglos_geo)+&#39; (est): &#39;+str(self.angpeak_est)+&#39;\n&#39;
         return(s)
-    
-<div class="viewcode-block" id="ADPchannel.peak"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.ADPchannel.html#pylayers.antprop.channel.ADPchannel.peak">[docs]</a>    def peak(self,refinement=False):
+
+<div class="viewcode-block" id="ADPchannel.peak"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.ADPchannel.html#pylayers.antprop.channel.ADPchannel.peak">[docs]</a>    def peak(self, refinement=False):
         &quot;&quot;&quot; evaluate peak of PADP
 
         Parameters
         ----------
-        refinment : boolean 
+        refinment : boolean
             provide a refined version of angular estimation
 
         Returns
         -------
+
         alphapeak, taupeak , phipeak
 
         &quot;&quot;&quot;
         alphapeak = np.max(np.abs(self.y))
-        iphi,itau = np.where(np.abs(self.y)==alphapeak)
+        iphi, itau = np.where(np.abs(self.y)==alphapeak)
         taupeak = self.x[itau][0]
         if refinement:
             pr = np.abs(self.y)[iphi-1:iphi+2,itau].squeeze()
             azr = self.az[iphi-1:iphi+2]
-            Id  = np.sum(pr)
-            In  = np.sum(pr*azr)
+            Id = np.sum(pr)
+            In = np.sum(pr*azr)
             phipeak = In/Id
         else:
-            phipeak = self.az[iphi]        
-        return alphapeak,taupeak,phipeak</div>
-   
+            phipeak = self.az[iphi]
+
+        return alphapeak, taupeak, phipeak[0]</div>
+
 <div class="viewcode-block" id="ADPchannel.cut"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.ADPchannel.html#pylayers.antprop.channel.ADPchannel.cut">[docs]</a>    def cut(self,imin=0,imax=1000):
         self.y = self.y[:,imin:imax]
         self.x = self.x[imin:imax]</div>
@@ -534,7 +673,7 @@ except:
         #import ipdb
         #ipdb.set_trace()
         #
-        # apply the min dB level thresholding 
+        # apply the min dB level thresholding
         #
         tmp_self = np.abs(self.y)
         tmp_adp  = np.abs(adp.y)
@@ -571,9 +710,15 @@ except:
         rhon = np.max(si.correlate2d(padpcn_self,padpcn_adp,mode=&#39;same&#39;))
 
         return rhoE,rhoEc,rho,rhoc,rhon</div>
-    
+
 <div class="viewcode-block" id="ADPchannel.svd"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.ADPchannel.html#pylayers.antprop.channel.ADPchannel.svd">[docs]</a>    def svd(self):
         &quot;&quot;&quot; perform singular value decomposition of the PADP
+
+        Notes
+        -----
+        It creates a dictionnay
+            {&#39;sv&#39;:sv,&#39;b&#39;:b}
+
         &quot;&quot;&quot;
         [U,S,V]=la.svd(self.y)
         self.d = {}
@@ -588,35 +733,24 @@ except:
                     &#39;vmax&#39; : -65,
                     &#39;vmin&#39; : -120,
                     &#39;interpolation&#39; : &#39;nearest&#39;,
-                    &#39;imin&#39;:0,
-                    &#39;imax&#39;:-1,
-                    &#39;dB&#39; : True,
-                    &#39;fonts&#39;:18,
-                    &#39;colorbar&#39;:False,
-                    &#39;fig&#39; :[],
-                    &#39;ax&#39; : [],
-                    &#39;label&#39;:&#39;&#39;,
-                    &#39;ang_offset&#39;:450,
-                    &#39;orientation&#39;:-1,
                     &#39;alpha&#39;:1,
-                    &#39;blos&#39;:True
                     }
 
         for k in defaults:
             if k not in kwargs:
-                kwargs[k] = defaults[k] 
+                kwargs[k] = defaults[k]
 
-        imin = kwargs.pop(&#39;imin&#39;)
-        imax = kwargs.pop(&#39;imax&#39;)
-        dB   = kwargs.pop(&#39;dB&#39;)
-        fig  = kwargs.pop(&#39;fig&#39;)
-        ax   = kwargs.pop(&#39;ax&#39;)
-        fonts = kwargs.pop(&#39;fonts&#39;)
-        label = kwargs.pop(&#39;label&#39;)
-        blos = kwargs.pop(&#39;blos&#39;)
-        orientation = kwargs.pop(&#39;orientation&#39;)
-        bcolorbar = kwargs.pop(&#39;colorbar&#39;)
-        ang_offset = kwargs.pop(&#39;ang_offset&#39;)
+        imin = kwargs.pop(&#39;imin&#39;,0)
+        imax = kwargs.pop(&#39;imax&#39;,-1)
+        dB   = kwargs.pop(&#39;dB&#39;,True)
+        fig  = kwargs.pop(&#39;fig&#39;,[])
+        ax   = kwargs.pop(&#39;ax&#39;,[])
+        fonts = kwargs.pop(&#39;fontsize&#39;,18)
+        label = kwargs.pop(&#39;label&#39;,&#39;&#39;)
+        blos = kwargs.pop(&#39;blos&#39;,True)
+        orientation = kwargs.pop(&#39;orientation&#39;,-1)
+        bcolorbar = kwargs.pop(&#39;colorbar&#39;,False)
+        ang_offset = kwargs.pop(&#39;ang_offset&#39;,450)
 
         if fig==[]:
             fig = plt.figure()
@@ -635,13 +769,14 @@ except:
         if dB:
             padp  = 20*np.log10(padp)
             im = ax.imshow(padp,extent=extent,aspect=&#39;auto&#39;,**kwargs)
-            plt.axis(&#39;equal&#39;)
+            #plt.axis(&#39;equal&#39;)
 
-        if blos: 
+        if blos:
             a1 = ang_offset + orientation*self.angpeak_est
-            a2 = ang_offset + orientation*self.anglos_geo
             ax.scatter(a1,self.taupeak_est,marker=&#39;*&#39;,s=70,color=&#39;k&#39;)
-            ax.scatter(a2,self.taulos_geo,marker=&#39;D&#39;,s=70,color=&#39;k&#39;)
+            if hasattr(self,&#39;anglos_geo&#39;):
+                a2 = ang_offset + orientation*self.anglos_geo
+                ax.scatter(a2,self.taulos_geo,marker=&#39;D&#39;,s=70,color=&#39;k&#39;)
 
         if bcolorbar:
             cbar = plt.colorbar(im)
@@ -667,12 +802,12 @@ except:
         return fig,ax</div>
 
 <div class="viewcode-block" id="ADPchannel.clean"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.ADPchannel.html#pylayers.antprop.channel.ADPchannel.clean">[docs]</a>    def clean(self,threshold_dB=20):
-        &quot;&quot;&quot;  clean ADP 
+        &quot;&quot;&quot;  clean ADP
 
-        Parameters 
-        -----------
+        Parameters
+        ----------
 
-        threshold_dB : float 
+        threshold_dB : float
 
         Notes
         -----
@@ -684,7 +819,7 @@ except:
         P = np.real(self.y*np.conj(self.y))
         MaxdB = 10*np.log10(np.max(P))
         u = np.where(10*np.log10(P) &lt; MaxdB-threshold_dB)
-        
+
         self.y[u] = 0+0j</div>
 
 <div class="viewcode-block" id="ADPchannel.pap"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.ADPchannel.html#pylayers.antprop.channel.ADPchannel.pap">[docs]</a>    def pap(self,
@@ -701,18 +836,18 @@ except:
             xlabel=True,
             ylabel=True,
             legend=True):
-        &quot;&quot;&quot; Calculate Power Angular Profile 
+        &quot;&quot;&quot; Calculate Power Angular Profile
 
         Parameters
         ----------
 
         fcGHz : float
-        fontsize : int 
+        fontsize : int
         figsize : tuple
-        fig : 
-        ax  : 
-        xlabel : boolean  
-        ylabel : boolean 
+        fig :
+        ax  :
+        xlabel : boolean
+        ylabel : boolean
         legen : boolean
 
         Returns
@@ -724,7 +859,7 @@ except:
 
 
         Na = self.y.shape[0]
-        # integration over frequency 
+        # integration over frequency
         # adp (angle) 
         Gtyp = (Gmax+Gmin)/2.
         Py   = np.real(self.y*np.conj(self.y))
@@ -756,13 +891,13 @@ except:
         ax.hlines(-120,xmin=45,xmax=260,linestyles=&#39;dashed&#39;,color=&#39;black&#39;)
         #ax.set_ylim(-80,-60)
         if xlabel:
-            ax.set_xlabel(&#39;Angle [deg]&#39;,fontsize=fontsize) 
+            ax.set_xlabel(&#39;Angle [deg]&#39;,fontsize=fontsize)
         if ylabel:
-            ax.set_ylabel(&#39;level (dB)&#39;,fontsize=fontsize) 
+            ax.set_ylabel(&#39;level (dB)&#39;,fontsize=fontsize)
 
         #ax.set_title(self._filename,fontsize=fontsize)
         if legend:
-            plt.legend(loc=&#39;best&#39;) 
+            plt.legend(loc=&#39;best&#39;)
         return fig,ax</div>
 
 <div class="viewcode-block" id="ADPchannel.app"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.ADPchannel.html#pylayers.antprop.channel.ADPchannel.app">[docs]</a>    def app(self,**kwargs):
@@ -824,7 +959,7 @@ except:
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]
-        
+
         Gmax = kwargs.pop(&#39;Gmax&#39;)
         Gmin = kwargs.pop(&#39;Gmin&#39;)
         imax = kwargs.pop(&#39;imax&#39;)
@@ -865,7 +1000,7 @@ except:
         if kwargs[&#39;fig&#39;]==[]:
             fig = plt.figure(figsize=kwargs[&#39;figsize&#39;])
         else:
-            fig = kwargs[&#39;fig&#39;] 
+            fig = kwargs[&#39;fig&#39;]
         if kwargs[&#39;ax&#39;] == []:
             ax  = fig.add_subplot(111)
         else:
@@ -900,7 +1035,7 @@ except:
             #ax.set_xlim(10,1000)
             if kwargs[&#39;xlabel&#39;]:
                 ax.set_ylabel(&#39;Delay (ns) log scale&#39;,fontsize=kwargs[&#39;fontsize&#39;]) 
-            
+
             if kwargs[&#39;bcir&#39;]:
                 phi = self.angpeak_est*np.pi/180.
                 dang = np.abs(self.az - phi)
@@ -937,7 +1072,7 @@ except:
             #ax.set_xlim(0,1000)
             if kwargs[&#39;xlabel&#39;]:
                 ax.set_ylabel(&#39;Delay (ns)&#39;,fontsize=kwargs[&#39;fontsize&#39;]) 
-            
+
             if kwargs[&#39;bcir&#39;]:
                 phi = self.angpeak_est*np.pi/180.
                 dang = np.abs(self.az - phi)
@@ -955,12 +1090,36 @@ except:
         return fig,ax</div>
 
 <div class="viewcode-block" id="ADPchannel.pdp"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.ADPchannel.html#pylayers.antprop.channel.ADPchannel.pdp">[docs]</a>    def pdp(self,**kwargs):
-        &quot;&quot;&quot; Calculate and plot Power Delay Profile
+        &quot;&quot;&quot; Calculate the Power Delay Profile
 
         Parameters
         ----------
 
         fcGHz : float
+        figsize&#39;:(1010)
+        fontsize&#39;:18
+        fig&#39; : []
+        ax&#39;: []
+        xlabel&#39;: True
+        ylabel&#39;: True
+        legend&#39;: True
+        losdelay&#39;: True
+        freespace&#39;: True
+        desembeded&#39;: False
+        typic&#39;:True
+        semilogx&#39;:True
+        bcir&#39;:False
+        raw&#39;: False
+        Gmax&#39;:22.68
+        Gmin&#39;:19
+        Tilt&#39;:10
+        HPBW&#39;:10
+
+        Returns
+        -------
+
+        tau
+        pdp
 
         &quot;&quot;&quot;
 
@@ -978,6 +1137,7 @@ except:
                      &#39;semilogx&#39;:True,
                      &#39;bcir&#39;:False,
                      &#39;raw&#39;: False,
+                     &#39;bplot&#39;:True,
                      &#39;Gmax&#39;:22.68,
                      &#39;Gmin&#39;:19,
                      &#39;Tilt&#39;:10,
@@ -991,125 +1151,222 @@ except:
 
         for k in defaults:
             if k not in kwargs:
-                kwargs[k]=defaults[k]
-        
+                kwargs[k] = defaults[k]
+        # get antenna gain extremum
+        # typical value is chosen as the mean value
         Gmax = kwargs.pop(&#39;Gmax&#39;)
         Gmin = kwargs.pop(&#39;Gmin&#39;)
         Gtyp = (Gmax+Gmin)/2.
         # get peak value of the PADP
-        alpha,tau,phi = self.peak()
+        # it is assume that this retreave the LOS component
+        alpha, tau, phi = self.peak()
+        # Na : number of angular steps
         Na = self.y.shape[0]
-        # pdp : power delay profie 
+        # pdp : power delay profile
         pdp = np.real(np.sum(self.y*np.conj(self.y),axis=0))
-        # spdp : square root of power delay profie 
+        # delay index of pdp maximum
+        u = np.where(pdp==max(pdp))[0]
+        # omnidirectional free space path loss
+        # spdp : square root of power delay profile
         spdp = TUchannel(x=self.x,y=np.sqrt(pdp))
         u  = np.where(pdp==max(pdp))[0]
         FS = -(32.4+20*np.log10(self.x*0.3)+20*np.log10(self.fcGHz))
         AttmaxdB = 20*np.log10(alpha)
-        #Gmax = AttmaxdB-FS[u] 
+        #Gmax = AttmaxdB-FS[u]
         #Gmax_r = np.round(Gmax[0]*100)/100.
         #
         # The -3dB is specific to the Aalto measurement and desembeding (1/2)
         #
-        pdp_min = 10*np.log10(pdp)-Gmax-1
-        pdp_max = 10*np.log10(pdp)-Gmin-1
-        pdp_typ = 10*np.log10(pdp)-Gtyp-1
+        pdpdB = 10*np.log10(pdp)
+        pdp_min = pdpdB-Gmax-1
+        pdp_max = pdpdB-Gmin-1
+        pdp_typ = pdpdB-Gtyp-1
+
         umin = np.where(pdp_min&gt;-118)
-        pdp_min_thr = pdp_min[umin] 
+        pdp_min_thr = pdp_min[umin]
         umax = np.where(pdp_max&gt;-118)
-        pdp_max_thr = pdp_max[umax] 
+        pdp_max_thr = pdp_max[umax]
+
         PL = -10*np.log10(np.sum(10**(pdp_min_thr/10.)))
 
-        if kwargs[&#39;fig&#39;]==[]:
-            fig = plt.figure(figsize=kwargs[&#39;figsize&#39;])
-        else:
-            fig = kwargs[&#39;fig&#39;] 
-        if kwargs[&#39;ax&#39;] == []:
-            ax  = fig.add_subplot(111)
-        else:
-            ax = kwargs[&#39;ax&#39;]
+        if kwargs[&#39;bplot&#39;]:
+            if kwargs[&#39;fig&#39;]==[]:
+                fig = plt.figure(figsize=kwargs[&#39;figsize&#39;])
+            else:
+                fig = kwargs[&#39;fig&#39;]
+            if kwargs[&#39;ax&#39;] == []:
+                ax  = fig.add_subplot(111)
+            else:
+                ax = kwargs[&#39;ax&#39;]
 
-        if kwargs[&#39;semilogx&#39;]:
-            if kwargs[&#39;raw&#39;]:
-                ax.semilogx(self.x,10*np.log10(pdp),color=&#39;r&#39;,label=r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi))$&#39;,linewidth=0.5)
-            #ax.semilogx(np.array([tau]),np.array([AttmaxdB]),color=&#39;k&#39;)
+            if kwargs[&#39;semilogx&#39;]:
+                if kwargs[&#39;raw&#39;]:
+                    ax.semilogx(self.x,10*np.log10(pdp),color=&#39;r&#39;,label=r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi))$&#39;,linewidth=0.5)
+                #ax.semilogx(np.array([tau]),np.array([AttmaxdB]),color=&#39;k&#39;)
 
-            if kwargs[&#39;desembeded&#39;]:
-                ax.semilogx(self.x,pdp_min,label=r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi)) - $&#39;+str(Gmax),color=&#39;green&#39;)
-                ax.semilogx(self.x,pdp_max,label=r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi)) - $&#39;+str(Gmin),color=&#39;red&#39;)
+                if kwargs[&#39;desembeded&#39;]:
+                    ax.semilogx(self.x,pdp_min,label=r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi)) - $&#39;+str(Gmax),color=&#39;green&#39;)
+                    ax.semilogx(self.x,pdp_max,label=r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi)) - $&#39;+str(Gmin),color=&#39;red&#39;)
 
-            if kwargs[&#39;typic&#39;]:
-                ax.semilogx(self.x,pdp_typ,label=kwargs[&#39;label&#39;],color=kwargs[&#39;color&#39;],linewidth=kwargs[&#39;linewidth&#39;])
-
-            if kwargs[&#39;freespace&#39;]:
                 if kwargs[&#39;typic&#39;]:
-                    ax.semilogx(self.x,FS,color=kwargs[&#39;color&#39;],linewidth=kwargs[&#39;linewidth&#39;]+1,label=&#39;Free Space path profile&#39;)
-                else:
-                    ax.semilogx(self.x,FS,color=&#39;k&#39;,linewidth=2,label=&#39;Free Space path profile&#39;)
+                    ax.semilogx(self.x,pdp_typ,label=kwargs[&#39;label&#39;],color=kwargs[&#39;color&#39;],linewidth=kwargs[&#39;linewidth&#39;])
 
-            if kwargs[&#39;losdelay&#39;]:
-                ax.vlines(self.taupeak_est,ymin=-130,ymax=-40,linestyles=&#39;dashed&#39;,color=&#39;blue&#39;)
-                ax.vlines(self.taulos_geo,ymin=-130,ymax=-40,linestyles=&#39;dashed&#39;,color=&#39;red&#39;)
+                if kwargs[&#39;freespace&#39;]:
+                    if kwargs[&#39;typic&#39;]:
+                        ax.semilogx(self.x,FS,color=kwargs[&#39;color&#39;],linewidth=kwargs[&#39;linewidth&#39;]+1,label=&#39;Free Space path profile&#39;)
+                    else:
+                        ax.semilogx(self.x,FS,color=&#39;k&#39;,linewidth=2,label=&#39;Free Space path profile&#39;)
 
-            #ax.set_xlim(10,1000)
-            if kwargs[&#39;xlabel&#39;]:
-                ax.set_xlabel(&#39;Delay (ns) log scale&#39;,fontsize=kwargs[&#39;fontsize&#39;]) 
-            
-            if kwargs[&#39;bcir&#39;]:
-                phi = self.angpeak_est*np.pi/180.
-                dang = np.abs(self.az - phi)
-                u = np.where(dang==np.min(dang))[0][0]
-                ax.semilogx(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmax,color=&#39;r&#39;)
-                ax.semilogx(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmin,color=&#39;g&#39;)
-        else:
-            if kwargs[&#39;raw&#39;]:
-                ax.plot(self.x,10*np.log10(pdp),color=&#39;r&#39;,label=r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi))$&#39;,linewidth=0.5)
-            ax.plot(np.array([tau]),np.array([AttmaxdB]),color=&#39;k&#39;)
+                if kwargs[&#39;losdelay&#39;]:
+                    ax.vlines(self.taupeak_est,ymin=-130,ymax=-40,linestyles=&#39;dashed&#39;,color=&#39;blue&#39;)
+                    ax.vlines(self.taulos_geo,ymin=-130,ymax=-40,linestyles=&#39;dashed&#39;,color=&#39;red&#39;)
 
-            if kwargs[&#39;desembeded&#39;]:
-                ax.plot(self.x,pdp_min,label=r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi)) - $&#39;+str(Gmax))
-                ax.plot(self.x,pdp_max,label=r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi)) - $&#39;+str(Gmin))
+                #ax.set_xlim(10,1000)
+                if kwargs[&#39;xlabel&#39;]:
+                    ax.set_xlabel(&#39;Delay (ns) log scale&#39;,fontsize=kwargs[&#39;fontsize&#39;])
 
-            if kwargs[&#39;typic&#39;]:
-                ax.plot(self.x,pdp_typ,label=kwargs[&#39;label&#39;],color=kwargs[&#39;color&#39;])
+                if kwargs[&#39;bcir&#39;]:
+                    phi = self.angpeak_est*np.pi/180.
+                    dang = np.abs(self.az - phi)
+                    u = np.where(dang==np.min(dang))[0][0]
+                    ax.semilogx(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmax,color=&#39;r&#39;)
+                    ax.semilogx(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmin,color=&#39;g&#39;)
+            else:
+                if kwargs[&#39;raw&#39;]:
+                    ax.plot(self.x,10*np.log10(pdp),color=&#39;r&#39;,label=r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi))$&#39;,linewidth=0.5)
+                ax.plot(np.array([tau]),np.array([AttmaxdB]),color=&#39;k&#39;)
 
-            if kwargs[&#39;freespace&#39;]:
+                if kwargs[&#39;desembeded&#39;]:
+                    ax.plot(self.x,pdp_min,label=r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi)) - $&#39;+str(Gmax))
+                    ax.plot(self.x,pdp_max,label=r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi)) - $&#39;+str(Gmin))
+
                 if kwargs[&#39;typic&#39;]:
-                    ax.plot(self.x,FS,color=kwargs[&#39;color&#39;],linewidth=kwargs[&#39;linewidth&#39;]+1,label=&#39;Free Space path profile&#39;)
-                else:
-                    ax.plot(self.x,FS,color=&#39;k&#39;,linewidth=2,label=&#39;Free Space path profile&#39;)
+                    ax.plot(self.x,pdp_typ,label=kwargs[&#39;label&#39;],color=kwargs[&#39;color&#39;])
 
-            if kwargs[&#39;losdelay&#39;]:
-                ax.vlines(self.taupeak_est,ymin=-130,ymax=-40,linestyles=&#39;dashed&#39;,color=&#39;blue&#39;)
-                ax.vlines(self.taulos_geo,ymin=-130,ymax=-40,linestyles=&#39;dashed&#39;,color=&#39;red&#39;)
+                if kwargs[&#39;freespace&#39;]:
+                    if kwargs[&#39;typic&#39;]:
+                        ax.plot(self.x,FS,color=kwargs[&#39;color&#39;],linewidth=kwargs[&#39;linewidth&#39;]+1,label=&#39;Free Space path profile&#39;)
+                    else:
+                        ax.plot(self.x,FS,color=&#39;k&#39;,linewidth=2,label=&#39;Free Space path profile&#39;)
 
-            #ax.set_xlim(0,1000)
-            if kwargs[&#39;xlabel&#39;]:
-                ax.set_xlabel(&#39;Delay (ns)&#39;,fontsize=kwargs[&#39;fontsize&#39;]) 
-            
-            if kwargs[&#39;bcir&#39;]:
-                phi = self.angpeak_est*np.pi/180.
-                dang = np.abs(self.az - phi)
-                u = np.where(dang==np.min(dang))[0][0]
-                ax.plot(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmax,&#39;r&#39;)
-                ax.plot(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmin,&#39;g&#39;)
+                if kwargs[&#39;losdelay&#39;]:
+                    ax.vlines(self.taupeak_est,ymin=-130,ymax=-40,linestyles=&#39;dashed&#39;,color=&#39;blue&#39;)
+                    ax.vlines(self.taulos_geo,ymin=-130,ymax=-40,linestyles=&#39;dashed&#39;,color=&#39;red&#39;)
 
-        if kwargs[&#39;ylabel&#39;]:
-            ax.set_ylabel(&#39;level (dB)&#39;,fontsize=kwargs[&#39;fontsize&#39;]) 
-        ax.set_title(self._filename+&#39; &#39;+str(PL))
-        if kwargs[&#39;legend&#39;]:
-            plt.legend(loc=&#39;best&#39;) 
+                #ax.set_xlim(0,1000)
+                if kwargs[&#39;xlabel&#39;]:
+                    ax.set_xlabel(&#39;Delay (ns)&#39;,fontsize=kwargs[&#39;fontsize&#39;]) 
 
-        return fig,ax</div>
+                if kwargs[&#39;bcir&#39;]:
+                    phi = self.angpeak_est*np.pi/180.
+                    dang = np.abs(self.az - phi)
+                    u = np.where(dang==np.min(dang))[0][0]
+                    ax.plot(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmax,&#39;r&#39;)
+                    ax.plot(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmin,&#39;g&#39;)
+
+            if kwargs[&#39;ylabel&#39;]:
+                ax.set_ylabel(&#39;level (dB)&#39;,fontsize=kwargs[&#39;fontsize&#39;]) 
+            ax.set_title(self._filename+&#39; &#39;+str(PL))
+            if kwargs[&#39;legend&#39;]:
+                plt.legend(loc=&#39;best&#39;)
+
+            return fig,ax
+        else:
+            return (self.x,pdp)</div>
+
+#        PL = -10*np.log10(np.sum(10**(pdp_min_thr/10.)))
+#        return self.x,pdp
+
+#        if kwargs[&#39;fig&#39;]==[]:
+#            fig = plt.figure(figsize=kwargs[&#39;figsize&#39;])
+#        else:
+#            fig = kwargs[&#39;fig&#39;]
+#        if kwargs[&#39;ax&#39;] == []:
+#            ax  = fig.add_subplot(111)
+#        else:
+#            ax = kwargs[&#39;ax&#39;]
+#
+#        if kwargs[&#39;semilogx&#39;]:
+#            if kwargs[&#39;raw&#39;]:
+#                ax.semilogx(self.x,10*np.log10(pdp),color=&#39;r&#39;,label=r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi))$&#39;,linewidth=0.5)
+#            #ax.semilogx(np.array([tau]),np.array([AttmaxdB]),color=&#39;k&#39;)
+#
+#            if kwargs[&#39;desembeded&#39;]:
+#                ax.semilogx(self.x,pdp_min,label=r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi)) - $&#39;+str(Gmax),color=&#39;green&#39;)
+#                ax.semilogx(self.x,pdp_max,label=r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi)) - $&#39;+str(Gmin),color=&#39;red&#39;)
+#
+#            if kwargs[&#39;typic&#39;]:
+#                ax.semilogx(self.x,pdp_typ,label=kwargs[&#39;label&#39;],color=kwargs[&#39;color&#39;],linewidth=kwargs[&#39;linewidth&#39;])
+#
+#            if kwargs[&#39;freespace&#39;]:
+#                if kwargs[&#39;typic&#39;]:
+#                    ax.semilogx(self.x,FS,color=kwargs[&#39;color&#39;],linewidth=kwargs[&#39;linewidth&#39;]+1,label=&#39;Free Space path profile&#39;)
+#                else:
+#                    ax.semilogx(self.x,FS,color=&#39;k&#39;,linewidth=2,label=&#39;Free Space path profile&#39;)
+#
+#            if kwargs[&#39;losdelay&#39;]:
+#                ax.vlines(self.taupeak_est,ymin=-130,ymax=-40,linestyles=&#39;dashed&#39;,color=&#39;blue&#39;)
+#                ax.vlines(self.taulos_geo,ymin=-130,ymax=-40,linestyles=&#39;dashed&#39;,color=&#39;red&#39;)
+#
+#            #ax.set_xlim(10,1000)
+#            if kwargs[&#39;xlabel&#39;]:
+#                ax.set_xlabel(&#39;Delay (ns) log scale&#39;,fontsize=kwargs[&#39;fontsize&#39;]) 
+#
+#            if kwargs[&#39;bcir&#39;]:
+#                phi = self.angpeak_est*np.pi/180.
+#                dang = np.abs(self.az - phi)
+#                u = np.where(dang==np.min(dang))[0][0]
+#                ax.semilogx(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmax,color=&#39;r&#39;)
+#                ax.semilogx(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmin,color=&#39;g&#39;)
+#        else:
+#            if kwargs[&#39;raw&#39;]:
+#                ax.plot(self.x,10*np.log10(pdp),color=&#39;r&#39;,label=r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi))$&#39;,linewidth=0.5)
+#            ax.plot(np.array([tau]),np.array([AttmaxdB]),color=&#39;k&#39;)
+#
+#            if kwargs[&#39;desembeded&#39;]:
+#                ax.plot(self.x,pdp_min,label=r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi)) - $&#39;+str(Gmax))
+#                ax.plot(self.x,pdp_max,label=r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi)) - $&#39;+str(Gmin))
+#
+#            if kwargs[&#39;typic&#39;]:
+#                ax.plot(self.x,pdp_typ,label=kwargs[&#39;label&#39;],color=kwargs[&#39;color&#39;])
+#
+#            if kwargs[&#39;freespace&#39;]:
+#                if kwargs[&#39;typic&#39;]:
+#                    ax.plot(self.x,FS,color=kwargs[&#39;color&#39;],linewidth=kwargs[&#39;linewidth&#39;]+1,label=&#39;Free Space path profile&#39;)
+#                else:
+#                    ax.plot(self.x,FS,color=&#39;k&#39;,linewidth=2,label=&#39;Free Space path profile&#39;)
+#
+#            if kwargs[&#39;losdelay&#39;]:
+#                ax.vlines(self.taupeak_est,ymin=-130,ymax=-40,linestyles=&#39;dashed&#39;,color=&#39;blue&#39;)
+#                ax.vlines(self.taulos_geo,ymin=-130,ymax=-40,linestyles=&#39;dashed&#39;,color=&#39;red&#39;)
+#
+#            #ax.set_xlim(0,1000)
+#            if kwargs[&#39;xlabel&#39;]:
+#                ax.set_xlabel(&#39;Delay (ns)&#39;,fontsize=kwargs[&#39;fontsize&#39;]) 
+#
+#            if kwargs[&#39;bcir&#39;]:
+#                phi = self.angpeak_est*np.pi/180.
+#                dang = np.abs(self.az - phi)
+#                u = np.where(dang==np.min(dang))[0][0]
+#                ax.plot(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmax,&#39;r&#39;)
+#                ax.plot(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmin,&#39;g&#39;)
+#
+#        if kwargs[&#39;ylabel&#39;]:
+#            ax.set_ylabel(&#39;level (dB)&#39;,fontsize=kwargs[&#39;fontsize&#39;]) 
+#        ax.set_title(self._filename+&#39; &#39;+str(PL))
+#        if kwargs[&#39;legend&#39;]:
+#            plt.legend(loc=&#39;best&#39;)
+#
+#        return fig,ax
 
 <div class="viewcode-block" id="ADPchannel.tomap"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.ADPchannel.html#pylayers.antprop.channel.ADPchannel.tomap">[docs]</a>    def tomap(self,L,**kwargs):
-        &quot;&quot;&quot; surimpose PADP on the Layout 
+        &quot;&quot;&quot; surimpose PADP on the Layout
 
         Parameters
         ----------
 
         L : Layout
-        xmin : 10 
+        xmin : 10
         xmax : 400
         ymin : 10
         ymax : 400,
@@ -1130,73 +1387,57 @@ except:
 
 
         &quot;&quot;&quot;
-        defaults = {&#39;xmin&#39;:10,
-                    &#39;xmax&#39;:400,
-                    &#39;ymin&#39;:10,
-                    &#39;ymax&#39;:400,
-                    &#39;Nx&#39;:3000,
-                    &#39;Ny&#39;:3000,
-                    &#39;cmap&#39;:&#39;jet&#39;,
-                    &#39;mode&#39;:&#39;sbounce&#39;,
-                    &#39;excess&#39;:&#39;los&#39;,
-                    &#39;figsize&#39;:(20,20),
-                    &#39;thmindB&#39;:-110,
-                    &#39;thmaxdB&#39;:-108,
-                    &#39;vmindB&#39;:-110,
-                    &#39;vmaxdB&#39;:-60,
-                    &#39;offset&#39;:0,
-                    &#39;display&#39;:True,
-                    &#39;compensated&#39;:False,
-                    &#39;tauns_excess&#39;:0}
-        for k in defaults:
-            if k not in kwargs:
-                kwargs[k]=defaults[k] 
-        
-        xmin = kwargs.pop(&#39;xmin&#39;)
-        ymin = kwargs.pop(&#39;ymin&#39;)
-        xmax = kwargs.pop(&#39;xmax&#39;)
-        ymax = kwargs.pop(&#39;ymax&#39;)
-        mode = kwargs.pop(&#39;mode&#39;)
-        vmindB = kwargs.pop(&#39;vmindB&#39;)
-        vmaxdB = kwargs.pop(&#39;vmaxdB&#39;)
-        thmindB = kwargs.pop(&#39;thmindB&#39;)
-        thmaxdB = kwargs.pop(&#39;thmaxdB&#39;)
-        Nx = kwargs.pop(&#39;Nx&#39;)
-        Ny = kwargs.pop(&#39;Ny&#39;)
-        cmap = kwargs.pop(&#39;cmap&#39;)
-        offset = kwargs.pop(&#39;offset&#39;)
-        excess = kwargs.pop(&#39;excess&#39;)
-        display = kwargs.pop(&#39;display&#39;)
-        compensated = kwargs.pop(&#39;compensated&#39;)
-        tauns_excess = kwargs.pop(&#39;tauns_excess&#39;)
-        figsize = kwargs.pop(&#39;figsize&#39;)
+        xmin = kwargs.pop(&#39;xmin&#39;,0)
+        ymin = kwargs.pop(&#39;ymin&#39;,0)
+        xmax = kwargs.pop(&#39;xmax&#39;,20)
+        ymax = kwargs.pop(&#39;ymax&#39;,20)
+        mode = kwargs.pop(&#39;mode&#39;,&#39;sbounce&#39;)
+        vmindB = kwargs.pop(&#39;vmindB&#39;,-110)
+        vmaxdB = kwargs.pop(&#39;vmaxdB&#39;,-60)
+        thmindB = kwargs.pop(&#39;thmindB&#39;,-110)
+        thmaxdB = kwargs.pop(&#39;thmaxdB&#39;,-108)
+        Nx = kwargs.pop(&#39;Nx&#39;,3000)
+        Ny = kwargs.pop(&#39;Ny&#39;,3000)
+        cmap = kwargs.pop(&#39;cmap&#39;,&#39;jet&#39;)
+        offset = kwargs.pop(&#39;offset&#39;,0)
+        excess = kwargs.pop(&#39;excess&#39;,&#39;los&#39;)
+        display = kwargs.pop(&#39;display&#39;,True)
+        compensated = kwargs.pop(&#39;compensated&#39;,False)
+        tauns_excess = kwargs.pop(&#39;tauns_excess&#39;,0)
+        figsize = kwargs.pop(&#39;figsize&#39;,(20,20))
+
         if &#39;fig&#39; not in kwargs:
             fig = plt.figure(figsize=figsize)
         else:
-            fig = kwargs[&#39;fig&#39;] 
-        
+            fig = kwargs[&#39;fig&#39;]
+
+        if &#39;ax&#39; not in kwargs:
+            ax = fig.add_subplot(111)
+        else:
+            ax = kwargs[&#39;ax&#39;]
+
         #
         # Prepare the array for spatial information in horizontal plane x,y
         # Nx and Ny should be large enough
         #
         Z  = np.zeros((Nx,Ny),dtype=complex)
 
-        # 
+        #
         # spatial indexation in x and  y
         #
         xr = np.linspace(xmin,xmax,Nx)
         yr = np.linspace(xmin,xmax,Ny)
 
-        # distance Tx Rx in the horizontal plane (2D) 
+        # distance Tx Rx in the horizontal plane (2D)
         dtx_rx_2D = np.sqrt((self.tx[0]-self.rx[0])**2+(self.tx[1]-self.rx[1])**2)
-        # distance Tx Rx in the horizontal plane (3D) 
+        # distance Tx Rx in the horizontal plane (3D)
         dtx_rx = np.sqrt((self.tx[0]-self.rx[0])**2+(self.tx[1]-self.rx[1])**2+(self.tx[2]-self.rx[2])**2)
-        # distance  Tx ground Rx (3D) 
+        # distance  Tx ground Rx (3D)
         dtx_gr_rx = np.sqrt(dtx_rx_2D**2+(self.tx[2]+self.rx[2])**2)
-        assert(dtx_gr_rx&gt;dtx_rx)
-        # difference of heights beween Tx and Rx 
+        assert(dtx_gr_rx &gt; dtx_rx)
+        # difference of heights beween Tx and Rx
         deltah = np.abs(self.tx[2]-self.rx[2])
-        
+
         #
         # Dt = vec(P,Tx)
         # Dr = vec(Rx,P)
@@ -1204,37 +1445,38 @@ except:
         dxt =(self.tx[0]-xr)[:,None]
         dyt =(self.tx[1]-yr)[None,:]
         #
-        # nwt : distance between Tx and each point of the plane 
-        # nwr : distance between Rx and each point of the plane 
+        # nwt : distance between Tx and each point of the plane
+        # nwr : distance between Rx and each point of the plane
         #
         nwt = np.sqrt(dxt*dxt+dyt*dyt)
 
         dxr =(xr-self.rx[0])[:,None]
         dyr =(yr-self.rx[1])[None,:]
         nwr = np.sqrt(dxr*dxr+dyr*dyr)
-        
-        # dsbounce : elliposidal distance (single bounce hypothesis) 
+
+        # dsbounce : elliposidal distance (single bounce hypothesis)
         dsbounce = nwt+nwr
 
-        # maximal ellipsoidal distance on the Z selected region 
+        # maximal ellipsoidal distance on the Z selected region
         dmax = dsbounce.max()
         taumax = dmax/0.3
 
-        # determine index of maximal distance 
+        # determine index of maximal distance
         if self.x.max()&gt;taumax:
             itaumax = np.where(self.x&gt;taumax)[0][0]
         else:
             itaumax=len(self.x)-1
-        # convert maximal distance into maximal delay (self.x is delay) 
+        # convert maximal distance into maximal delay (self.x is delay)
         taumax = self.x[itaumax]
-        # determine coefficient  between delay and index ( ns --&gt; integer) 
+        # determine coefficient  between delay and index ( ns --&gt; integer)
         tau2idx = taumax/itaumax
-        
-        # Determine the angle of arraival 
-        # direction of arrival normalization of the vector 
+
+        # Determine the angle of arrival
+        # direction of arrival normalization of the vector
+
         dxrn = dxr/nwr
         dyrn = dyr/nwr
-        
+
         # angle of arrival in [-pi,pi]
         phi = np.arctan2(dyrn,dxrn)-offset*np.pi/180
         # back in [0-2pi]
@@ -1242,7 +1484,7 @@ except:
 
         #iphi=((315-phi*180/np.pi)/5).astype(int)
         iphi=((360-phi*180/np.pi)/5).astype(int)
-        
+
         drpt = np.sqrt(dxr*dxr+dyr*dyr+dxt*dxt+dyt*dyt)
         dpr = np.sqrt(dxr*dxr+dyr*dyr)
 
@@ -1255,48 +1497,52 @@ except:
             dv = dpr/np.cos(alpha)
             iid = np.round(dv/(0.3*tau2idx)).astype(&#39;int&#39;)
             #pdb.set_trace()
-        
+
         #
         # create indexation for spatial region Z
         #
         ix = np.arange(Nx)[:,None]
         iy = np.arange(Ny)[None,:]
-        
-        # ird : index for delays (d for delays) 
+
+        # ird : index for delays (d for delays)
         ird = iid[ix,iy].ravel()
-        # irp : index for directio of arrival (p for phi)  
+        # irp : index for directio of arrival (p for phi)
         irp = iphi[ix,iy].ravel()
         #
-        #  (d &lt; dmax ) and (d&gt;dlos+tauns_excess) 
+        #  (d &lt; dmax ) and (d&gt;dlos+tauns_excess)
         #  iphi &gt;= 0 and iphi &lt; Nphimax
         ilos    = np.round((dtx_rx/(0.3*tau2idx))).astype(int)
         iground = np.round((dtx_gr_rx/(0.3*tau2idx))).astype(int)
         iexcess = np.round(tauns_excess/tau2idx).astype(int)
-        
+
         if excess==&#39;los&#39;:
             ud = np.where((ird&lt;itaumax) &amp; (ird&gt;ilos+iexcess))
+
         if excess==&#39;ground&#39;:
             ud = np.where((ird&lt;itaumax) &amp; (ird&gt;iground+iexcess))
 
         up = np.where((irp&gt;=0) &amp; (irp&lt;len(self.az)))
 
-        # determine the index of points in a corona wich satisfy jointly the 
+        # determine the index of points in a corona wich satisfy jointly the
         # condition on delays and angles
         #
-        u  = np.intersect1d(ud,up)
-        
-        # rebvelize Z (2D -&gt; 1D) 
+        u = np.intersect1d(ud,up)
+
+        # ravelize Z (2D -&gt; 1D)
         rz = Z.ravel()
         # filling rz with self.y nphi,Ntau
         rz[u] = self.y[irp[u],ird[u]]
+
         #
         # back to matrix form
         #
+
         Z = rz.reshape(Nx,Ny)
-        pdb.set_trace()
         lmbda = 0.3/self.fcGHz
         sqG = 10
+
         Z_compensated = Z*(4*np.pi*dtx_rx)/(sqG*lmbda)
+
         if compensated:
             ZdB = 20*np.log10(np.abs(Z_compensated.T))
         else:
@@ -1312,18 +1558,18 @@ except:
         #
         if display:
             #fig=plt.figure(figsize=figsize)
-            fig,ax = L.showG(&#39;s&#39;,fig=fig,labels=0)
-            plt.axis(&#39;on&#39;)
-            ax.imshow(ZdB,extent=(xr[0],xr[-1],yr[0],yr[-1]),
-                    cmap=cmap,
-                    origin=&#39;lower&#39;,
-                    alpha=0.9,
-                    vmin=ZdBmax-25,
-                    vmax=ZdBmax,interpolation=&#39;nearest&#39;)
+            fig,ax = L.showG(&#39;s&#39;, fig=fig, ax=ax, labels=0)
+            #plt.axis(&#39;on&#39;)
+            ax.imshow(ZdB, extent=(xr[0],xr[-1],yr[0],yr[-1]),
+                    cmap = cmap,
+                    origin = &#39;lower&#39;,
+                    alpha = 0.9,
+                    vmin = ZdBmax - 60,
+                    vmax = ZdBmax, interpolation = &#39;nearest&#39;)
             #plt.imshow(mzdB,alpha=0.9,origin=&#39;lower&#39;)
-            ax.plot(self.tx[0],self.tx[1],&#39;or&#39;)
+            ax.plot(self.tx[0],self.tx[1],&#39;og&#39;)
             ax.plot(self.rx[0],self.rx[1],&#39;ob&#39;)
-            plt.colorbar()
+            #plt.colorbar()
             ax.set_title(self._filename)
             #plt.savefig(self._filename+&#39;.png&#39;)
 
@@ -1331,38 +1577,44 @@ except:
         return fig,ax</div>
 
 <div class="viewcode-block" id="ADPchannel.polarplot"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.ADPchannel.html#pylayers.antprop.channel.ADPchannel.polarplot">[docs]</a>    def polarplot(self,**kwargs):
-        &quot;&quot;&quot;  polar plot of PADP 
+        &quot;&quot;&quot;  polar plot of PADP
 
         Parameters
         -----------
 
         fig
-        ax 
+        ax
         figsize
-        typ : string 
-        Ndec : int 
+        typ : string
+        Ndec : int
             decimation factor
-        imax : int 
-            max value 
-        vmin : float 
-        vmax : float 
+        imax : int
+            max value
+        vmin : float
+        vmax : float
         cmap : colormap
         title : PADP
+
+        Returns
+        -------
+        fig , ax , pc (colormash) 
 
 
         &quot;&quot;&quot;
         defaults = { &#39;fig&#39;:[],
                      &#39;ax&#39;:[],
-                     &#39;figsize&#39;:(10,10), 
+                     &#39;figsize&#39;:(10,10),
                      &#39;typ&#39;:&#39;l20&#39;,
                      &#39;Ndec&#39;:1,
-                     &#39;vmin&#39;:-110,
+                     &#39;vmin&#39;:-120,
                      &#39;vmax&#39;:-50,
                      &#39;imax&#39;:150,
+                     &#39;alpha&#39;:1.,
+                     &#39;bcolorbar&#39;:True,
                      &#39;cmap&#39;: plt.cm.jet,
                      &#39;title&#39;:&#39;PADP&#39;
                    }
-        
+
         cvel = 0.3
         for k in defaults:
             if k not in kwargs:
@@ -1376,12 +1628,13 @@ except:
             ax = fig.add_subplot(111,polar=True)
         else:
             ax = kwargs.pop(&#39;ax&#39;)
-        
+
         imax = kwargs.pop(&#39;imax&#39;)
         Ndec = kwargs.pop(&#39;Ndec&#39;)
         vmin = kwargs.pop(&#39;vmin&#39;)
         vmax = kwargs.pop(&#39;vmax&#39;)
         cmap = kwargs.pop(&#39;cmap&#39;)
+        alpha = kwargs.pop(&#39;alpha&#39;)
         title = kwargs.pop(&#39;title&#39;)
 
         rho,theta = np.meshgrid(self.x*cvel,self.az)
@@ -1391,13 +1644,16 @@ except:
         th  = theta[:,0::Ndec][:,0:imax/Ndec]
         rh  = rho[:,0::Ndec][:,0:imax/Ndec]
         #vmin = np.min(val)
-        vmax = np.max(val)
-        #Dynamic = max_val-vmin 
-        pc  = ax.pcolormesh(th,rh,val,cmap=cmap,vmin=vmin,vmax=vmax)
-        ptx = ax.plot(self.az,self.tau*cvel,&#39;or&#39;)
-        fig.colorbar(pc,orientation=&#39;vertical&#39;)
+        #vmax = np.max(val)
+        #Dynamic = max_val-vmin
+        pc  = ax.pcolormesh(th,rh,val,cmap=cmap,vmin=vmin, vmax=vmax, alpha=alpha)
+        #ptx = ax.plot(self.az,self.x*cvel,&#39;or&#39;)
+        if kwargs[&#39;bcolorbar&#39;]:
+            fig.colorbar(pc,orientation=&#39;horizontal&#39;)
         ax.set_title(title)
-        ax.axis(&#39;equal&#39;)</div>
+        return fig,ax,pc</div>
+        #ax.axis(&#39;equal&#39;)
+        #ax.axis(&#39;equal&#39;)
 
 
 <div class="viewcode-block" id="ADPchannel.toafp"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.ADPchannel.html#pylayers.antprop.channel.ADPchannel.toafp">[docs]</a>    def toafp(self):
@@ -1528,6 +1784,7 @@ except:
         .. math::
 
             \sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)} (\tau-\tau_m)^{2} PDP(\tau) d\tau} {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}}
+
         See Also
         --------
 
@@ -3743,8 +4000,8 @@ except:
         edgecolors: bool
         colorbar bool
 
-        Summary
-        --------
+        Notes
+        -----
 
         scatter plot of the DoA-DoD channel structure
         the energy is colorcoded over all couples of DoA-DoD
@@ -5285,8 +5542,8 @@ except:
         xa :
         xb :
 
-        Summary
-        --------
+        Notes
+        -----
 
         scatter plot of the DoA-DoD channel structure
         the energy is color coded over all couples of DoA-DoD
@@ -5815,11 +6072,12 @@ except:
         if b ==[]:
             b = ant.Antenna(&#39;Omni&#39;,param={&#39;pol&#39;:&#39;t&#39;,&#39;GmaxdB&#39;:0},fGHz=self.fGHz)
 
-        a.eval(th=self.tangl[:, 0], ph=self.tangl[:, 1], grid=False)
+        a.eval(th = self.tangl[:, 0], ph = self.tangl[:, 1])
         Fat = bs.FUsignal(a.fGHz, a.Ft)
         Fap = bs.FUsignal(a.fGHz, a.Fp)
         #b.eval(th=self.rangl[:, 0], ph=self.rangl[:, 1], grid=False)
-        b.eval(th=self.rangl[:, 0], ph=self.rangl[:, 1], grid=False)
+        b.eval(th = self.rangl[:, 0], ph = self.rangl[:, 1])
+
         Fbt = bs.FUsignal(b.fGHz, b.Ft)
         Fbp = bs.FUsignal(b.fGHz, b.Fp)
 
@@ -5916,6 +6174,7 @@ if __name__ == &quot;__main__&quot;:
 </pre></div>
 
            </div>
+           
           </div>
           <footer>
   
@@ -5925,11 +6184,11 @@ if __name__ == &quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -5948,9 +6207,11 @@ if __name__ == &quot;__main__&quot;:
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -5965,14 +6226,13 @@ if __name__ == &quot;__main__&quot;:
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

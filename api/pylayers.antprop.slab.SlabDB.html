@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,22 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Slab" href="pylayers.antprop.slab.Slab.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +55,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +84,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -121,9 +119,7 @@
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.slab.MatDB.html">MatDB</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.slab.MatInterface.html">MatInterface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.slab.Slab.html">Slab</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">SlabDB</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">SlabDB</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="references.html#id26">12.3&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
@@ -157,7 +153,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -169,36 +165,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>SlabDB</li>
+        
+      <li>SlabDB</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.antprop.slab.SlabDB.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -208,108 +224,10 @@
 <h1>SlabDB<a class="headerlink" href="#slabdb" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pylayers.antprop.slab.SlabDB">
-<em class="property">class </em><code class="descclassname">pylayers.antprop.slab.</code><code class="descname">SlabDB</code><span class="sig-paren">(</span><em>fileslab=''</em>, <em>filemat=''</em>, <em>ds={}</em>, <em>dm={'_AIR': {'sigma': 0.0</em>, <em>'roughness': 0.0</em>, <em>'epr': (1+0j)</em>, <em>'mur': (1+0j)}</em>, <em>'METAL': {'sigma': 10000000</em>, <em>'roughness': 0.0</em>, <em>'epr': (1+0j)</em>, <em>'mur': (1+0j)}</em>, <em>'AIR': {'sigma': 0.0</em>, <em>'roughness': 0.0</em>, <em>'epr': (1+0j)</em>, <em>'mur': (1+0j)}}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#SlabDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></p>
+<em class="property">class </em><code class="descclassname">pylayers.antprop.slab.</code><code class="descname">SlabDB</code><span class="sig-paren">(</span><em>fileslab=''</em>, <em>filemat=''</em>, <em>ds={}</em>, <em>dm={'AIR': {'roughness': 0.0</em>, <em>'epr': (1+0j)</em>, <em>'mur': (1+0j)</em>, <em>'sigma': 0.0}</em>, <em>'METAL': {'roughness': 0.0</em>, <em>'epr': (1+0j)</em>, <em>'mur': (1+0j)</em>, <em>'sigma': 10000000}</em>, <em>'_AIR': {'roughness': 0.0</em>, <em>'epr': (1+0j)</em>, <em>'mur': (1+0j)</em>, <em>'sigma': 0.0}}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#SlabDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
 <p>Slab data base</p>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="14%" />
-<col width="86%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>DB</td>
-<td>(slab dictionnary)</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.add" title="pylayers.antprop.slab.SlabDB.add"><code class="xref py py-obj docutils literal"><span class="pre">add</span></code></a>(name,&nbsp;lmatname,&nbsp;lthick[,&nbsp;color])</td>
-<td>add a slab from its properties</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.addgui" title="pylayers.antprop.slab.SlabDB.addgui"><code class="xref py py-obj docutils literal"><span class="pre">addgui</span></code></a>(name)</td>
-<td>add a slab in the DB</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">clear</span></code>(()&nbsp;-&gt;&nbsp;None.&nbsp;&nbsp;Remove&nbsp;all&nbsp;items&nbsp;from&nbsp;D.)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">copy</span></code>(()&nbsp;-&gt;&nbsp;a&nbsp;shallow&nbsp;copy&nbsp;of&nbsp;D)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.delete" title="pylayers.antprop.slab.SlabDB.delete"><code class="xref py py-obj docutils literal"><span class="pre">delete</span></code></a>(name)</td>
-<td>delete an element from the database</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.edit" title="pylayers.antprop.slab.SlabDB.edit"><code class="xref py py-obj docutils literal"><span class="pre">edit</span></code></a>(name)</td>
-<td>edit a Slab in the DB</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">fromkeys</span></code>(…)</td>
-<td>v defaults to None.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get</span></code>((k[,d])&nbsp;-&gt;&nbsp;D[k]&nbsp;if&nbsp;k&nbsp;in&nbsp;D,&nbsp;…)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">has_key</span></code>((k)&nbsp;-&gt;&nbsp;True&nbsp;if&nbsp;D&nbsp;has&nbsp;a&nbsp;key&nbsp;k,&nbsp;else&nbsp;False)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">items</span></code>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D’s&nbsp;(key,&nbsp;value)&nbsp;pairs,&nbsp;…)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">iteritems</span></code>(()&nbsp;-&gt;&nbsp;an&nbsp;iterator&nbsp;over&nbsp;the&nbsp;(key,&nbsp;…)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">iterkeys</span></code>(()&nbsp;-&gt;&nbsp;an&nbsp;iterator&nbsp;over&nbsp;the&nbsp;keys&nbsp;of&nbsp;D)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">itervalues</span></code>(…)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">keys</span></code>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D’s&nbsp;keys)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.load" title="pylayers.antprop.slab.SlabDB.load"><code class="xref py py-obj docutils literal"><span class="pre">load</span></code></a>([_fileini])</td>
-<td>Load a Material from a .ini file</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">pop</span></code>((k[,d])&nbsp;-&gt;&nbsp;v,&nbsp;…)</td>
-<td>If key is not found, d is returned if given, otherwise KeyError is raised</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">popitem</span></code>(()&nbsp;-&gt;&nbsp;(k,&nbsp;v),&nbsp;…)</td>
-<td>2-tuple; but raise KeyError if D is empty.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.save" title="pylayers.antprop.slab.SlabDB.save"><code class="xref py py-obj docutils literal"><span class="pre">save</span></code></a>([_fileini])</td>
-<td>save SlabDB in a .ini file</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">setdefault</span></code>((k[,d])&nbsp;-&gt;&nbsp;D.get(k,d),&nbsp;…)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.show" title="pylayers.antprop.slab.SlabDB.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>([name,&nbsp;fGHz])</td>
-<td>evaluate and show a given slab</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.showall" title="pylayers.antprop.slab.SlabDB.showall"><code class="xref py py-obj docutils literal"><span class="pre">showall</span></code></a>()</td>
-<td>show all slabs</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code>(([E,&nbsp;…)</td>
-<td>If E present and has a .keys() method, does:     for k in E: D[k] = E[k]</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">values</span></code>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D’s&nbsp;values)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">viewitems</span></code>(…)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">viewkeys</span></code>(…)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">viewvalues</span></code>(…)</td>
-<td></td>
-</tr>
-</tbody>
-</table>
+<p>DB : slab dictionnary</p>
 <p class="rubric">Methods Summary</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -317,28 +235,28 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.add" title="pylayers.antprop.slab.SlabDB.add"><code class="xref py py-obj docutils literal"><span class="pre">add</span></code></a>(name,&nbsp;lmatname,&nbsp;lthick[,&nbsp;color])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.add" title="pylayers.antprop.slab.SlabDB.add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add</span></code></a>(name,&nbsp;lmatname,&nbsp;lthick[,&nbsp;color])</td>
 <td>add a slab from its properties</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.addgui" title="pylayers.antprop.slab.SlabDB.addgui"><code class="xref py py-obj docutils literal"><span class="pre">addgui</span></code></a>(name)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.addgui" title="pylayers.antprop.slab.SlabDB.addgui"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addgui</span></code></a>(name)</td>
 <td>add a slab in the DB</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.delete" title="pylayers.antprop.slab.SlabDB.delete"><code class="xref py py-obj docutils literal"><span class="pre">delete</span></code></a>(name)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.delete" title="pylayers.antprop.slab.SlabDB.delete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete</span></code></a>(name)</td>
 <td>delete an element from the database</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.edit" title="pylayers.antprop.slab.SlabDB.edit"><code class="xref py py-obj docutils literal"><span class="pre">edit</span></code></a>(name)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.edit" title="pylayers.antprop.slab.SlabDB.edit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edit</span></code></a>(name)</td>
 <td>edit a Slab in the DB</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.load" title="pylayers.antprop.slab.SlabDB.load"><code class="xref py py-obj docutils literal"><span class="pre">load</span></code></a>([_fileini])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.load" title="pylayers.antprop.slab.SlabDB.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>([_fileini])</td>
 <td>Load a Material from a .ini file</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.save" title="pylayers.antprop.slab.SlabDB.save"><code class="xref py py-obj docutils literal"><span class="pre">save</span></code></a>([_fileini])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.save" title="pylayers.antprop.slab.SlabDB.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>([_fileini])</td>
 <td>save SlabDB in a .ini file</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.show" title="pylayers.antprop.slab.SlabDB.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>([name,&nbsp;fGHz])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.show" title="pylayers.antprop.slab.SlabDB.show"><code class="xref py py-obj docutils literal notranslate"><span class="pre">show</span></code></a>([name,&nbsp;fGHz])</td>
 <td>evaluate and show a given slab</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.showall" title="pylayers.antprop.slab.SlabDB.showall"><code class="xref py py-obj docutils literal"><span class="pre">showall</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.SlabDB.showall" title="pylayers.antprop.slab.SlabDB.showall"><code class="xref py py-obj docutils literal notranslate"><span class="pre">showall</span></code></a>()</td>
 <td>show all slabs</td>
 </tr>
 </tbody>
@@ -348,27 +266,17 @@
 <dt id="pylayers.antprop.slab.SlabDB.add">
 <code class="descname">add</code><span class="sig-paren">(</span><em>name</em>, <em>lmatname</em>, <em>lthick</em>, <em>color='black'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#SlabDB.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>add a slab from its properties</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
-<p><strong>lmatname</strong> : list of mat name</p>
-<p><strong>lthick</strong> : list ot float</p>
-<blockquote class="last">
-<div><p>list of layer thickness in meters</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
+<p>name       : string
+lmatname   : list of mat name
+lthick     : list ot float</p>
+<blockquote>
+<div>list of layer thickness in meters</div></blockquote>
 <p>Examples from the paper:</p>
 <p>“Reflection and Transmission Properties of Building Materials in D-Band
 for Modeling Future mm-Wave Communication Systems ”
 Martin Jacob and Thomas Kurner and Robert Geise and Radoslaw Piesiewicz
 EUCAP 2010</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.slab import *
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.slab import *
 &gt;&gt;&gt; import numpy as np
 &gt;&gt;&gt; import matplotlib.pylab as plt
 &gt;&gt;&gt; sl = SlabDB(filemat=&#39;matDB.ini&#39;,fileslab=&#39;slabDB.ini&#39;)
@@ -408,12 +316,12 @@ EUCAP 2010</p>
 <p>Exemple from paper <a class="reference external" href="http://ieeexplore.ieee.org/xpl/login.jsp?tp=&amp;arnumber=4554974&amp;url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D4554974">“[Kiani2007] Glass Characterization for Designing
 Frequency Selective Surfaces to Improve Transmission through Energy saving
 glass windows  Kiani 2007”</a>
-The surface impedance is <span class="math">\(R = 4 \Omega\)</span>, the thicknesss is <span class="math">\(d = 100 nm\)</span></p>
+The surface impedance is <span class="math notranslate nohighlight">\(R = 4 \Omega\)</span>, the thicknesss is <span class="math notranslate nohighlight">\(d = 100 nm\)</span></p>
 <p><a class="reference external" href="http://www.pilkington.com/spectrum2/default.aspx?country_code=FR">Pilkington Spectrum OnLine applet</a></p>
 <p><a class="reference external" href="http://lup.lub.lu.se/luur/download?func=downloadFile&amp;recordOId=530536&amp;fileOId=624944">Design of Energy Saving Windows with high Transmission at 900MHz and 1800 MHz</a></p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\sigma =  \frac{1}{Rd} = 2.5 10^{6} S/m\]</div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.slab import *
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.slab import *
 &gt;&gt;&gt; import numpy as np
 &gt;&gt;&gt; import matplotlib.pylab as plt
 &gt;&gt;&gt; sl = SlabDB(filemat=&#39;matDB.ini&#39;,fileslab=&#39;slabDB.ini&#39;)
@@ -436,86 +344,43 @@ The surface impedance is <span class="math">\(R = 4 \Omega\)</span>, the thickne
 <dt id="pylayers.antprop.slab.SlabDB.addgui">
 <code class="descname">addgui</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#SlabDB.addgui"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB.addgui" title="Permalink to this definition">¶</a></dt>
 <dd><p>add a slab in the DB</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong></td>
-</tr>
-</tbody>
-</table>
+<p>name</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.slab.SlabDB.delete">
 <code class="descname">delete</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#SlabDB.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB.delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>delete an element from the database</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> : string</td>
-</tr>
-</tbody>
-</table>
+<p>name : string</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.slab.SlabDB.edit">
 <code class="descname">edit</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#SlabDB.edit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB.edit" title="Permalink to this definition">¶</a></dt>
 <dd><p>edit a Slab in the DB</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> : string</td>
-</tr>
-</tbody>
-</table>
+<p>name : string</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.slab.SlabDB.load">
 <code class="descname">load</code><span class="sig-paren">(</span><em>_fileini='slabDB.ini'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#SlabDB.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load a Material from a .ini file</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>_fileini</strong> : string</td>
-</tr>
-</tbody>
-</table>
+<p>_fileini : string</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.slab.SlabDB.save">
 <code class="descname">save</code><span class="sig-paren">(</span><em>_fileini='slabDB.ini'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#SlabDB.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>save SlabDB in a .ini file</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>_fileini</strong> : string</td>
-</tr>
-</tbody>
-</table>
+<p>_fileini : string</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.slab.SlabDB.show">
 <code class="descname">show</code><span class="sig-paren">(</span><em>name='WOOD'</em>, <em>fGHz=array([ 2.4])</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#SlabDB.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>evaluate and show a given slab</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
-<p class="last"><strong>fGHz</strong> : np.array</p>
-</td>
-</tr>
-</tbody>
-</table>
+<p>name : string
+fGHz : np.array</p>
 </dd></dl>
 
 <dl class="method">
@@ -530,8 +395,16 @@ The surface impedance is <span class="math">\(R = 4 \Omega\)</span>, the thickne
 
 
            </div>
+           
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="pylayers.antprop.slab.Slab.html" class="btn btn-neutral" title="Slab" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -539,11 +412,11 @@ The surface impedance is <span class="math">\(R = 4 \Omega\)</span>, the thickne
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -562,9 +435,11 @@ The surface impedance is <span class="math">\(R = 4 \Omega\)</span>, the thickne
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -579,14 +454,13 @@ The surface impedance is <span class="math">\(R = 4 \Omega\)</span>, the thickne
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

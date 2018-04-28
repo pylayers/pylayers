@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,32 +25,23 @@
   
 
   
-  
     <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../../about.html"/>
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="PyLayers" href="../../index.html"/>
-        <link rel="up" title="1   Overview" href="../TOC.html"/>
-        <link rel="next" title="Sorting and Cutting" href="CIR.html"/>
-        <link rel="prev" title="Ray Signatures" href="Signatures.html"/> 
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Sorting and Cutting" href="CIR.html" />
+    <link rel="prev" title="Ray Signatures" href="Signatures.html" /> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -63,7 +56,7 @@
 
           
             
-            <img src="../../_static/pylayers.png" class="logo" />
+            <img src="../../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -92,7 +85,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">User Manual</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html#basic-usage">2&nbsp;&nbsp;&nbsp;Basic Usage</a></li>
@@ -127,6 +123,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -168,7 +165,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -180,38 +177,58 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../index.html">User Manual</a> &raquo;</li>
-      
+        
           <li><a href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
-      
-    <li>The transmission channel</li>
+        
+      <li>The transmission channel</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../../_sources/notebook/2-AP/Channel.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -219,10 +236,10 @@
             
   <div class="section" id="the-transmission-channel">
 <h1>The transmission channel<a class="headerlink" href="#the-transmission-channel" title="Permalink to this headline">¶</a></h1>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>%matplotlib inline
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>%matplotlib inline
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>from pylayers.antprop.rays import *
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>from pylayers.antprop.rays import *
 import scipy.fftpack as fft
 from pylayers.gis.layout import *
 from pylayers.antprop.signature import *
@@ -235,10 +252,10 @@ import time
 </pre></div>
 </div>
 <p>We start by constructing a propagation channel with the dedicated class
-<code class="docutils literal"><span class="pre">DLink</span></code>. We specify a Layout as well as the two extremities of the
+<code class="docutils literal notranslate"><span class="pre">DLink</span></code>. We specify a Layout as well as the two extremities of the
 link. Antennas are also specified. The frequency range is determined by
 the frequency range of antennas.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>L = Layout(&#39;defstr.ini&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>L = Layout(&#39;defstr.ini&#39;)
 L.Gs.node[1][&#39;ss_name&#39;]=[&#39;WOOD&#39;,&#39;AIR&#39;,&#39;METAL&#39;]
 L.build()
 tx=array([759,1114,1.0])
@@ -249,26 +266,26 @@ Ab = Antenna(&#39;Omni&#39;,fGHz=fGHz)
 Lk = DLink(L=L,a=tx,b=rx,Aa=Aa,Ab=Ab)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>building Layout ...
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>building Layout ...
 check len(ncycles) == 2 passed
 </pre></div>
 </div>
 <p>The full evaluation and hdf5 storage of the channel is done with the
-<code class="docutils literal"><span class="pre">eval</span></code> function. The <code class="docutils literal"><span class="pre">force</span></code> option is for forcing a full
+<code class="docutils literal notranslate"><span class="pre">eval</span></code> function. The <code class="docutils literal notranslate"><span class="pre">force</span></code> option is for forcing a full
 reevaluation.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>ak,tauk=Lk.eval(force=True)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>ak,tauk=Lk.eval(force=True)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(15,15))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(15,15))
 f,a=Lk.C.show(cmap=&#39;jet&#39;,typ=&#39;l20&#39;,fig=f,vmin=-100,vmax=-20,fontsize=22)
 </pre></div>
 </div>
 <img alt="../../_images/Channel_7_0.png" src="../../_images/Channel_7_0.png" />
-<p>The transmission channel is stored in <code class="docutils literal"><span class="pre">H</span></code></p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>Lk.H
+<p>The transmission channel is stored in <code class="docutils literal notranslate"><span class="pre">H</span></code></p>
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>Lk.H
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>Tchannel : Ray transfer function (Nray x Nr x Nt x Nf)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Tchannel : Ray transfer function (Nray x Nr x Nt x Nf)
 -----------------------------------------------------
 freq : 2.0 6.0 401
 shape  : (206, 1, 1, 401)
@@ -281,25 +298,25 @@ Friis factor -j c/(4 pi f) has been applied
 </div>
 <p>Once the channel has been calculated, we define an Impulse Radio
 Waveform.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>fGHz=np.arange(2,12,.1)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>fGHz=np.arange(2,12,.1)
 wav = wvf.Waveform(fcGHz=5,bandGHz=3)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>wav.show()
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>wav.show()
 </pre></div>
 </div>
 <img alt="../../_images/Channel_12_0.png" src="../../_images/Channel_12_0.png" />
 <p>is an object which contains all the information about the propagation
 channel.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>f,a=Lk.show()
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>f,a=Lk.show()
 </pre></div>
 </div>
 <img alt="../../_images/Channel_14_0.png" src="../../_images/Channel_14_0.png" />
-<p>The <code class="docutils literal"><span class="pre">Ctilde</span></code> channel can be sorted with respect to delay</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>Lk.H
+<p>The <code class="docutils literal notranslate"><span class="pre">Ctilde</span></code> channel can be sorted with respect to delay</p>
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>Lk.H
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>Tchannel : Ray transfer function (Nray x Nr x Nt x Nf)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Tchannel : Ray transfer function (Nray x Nr x Nt x Nf)
 -----------------------------------------------------
 freq : 2.0 6.0 401
 shape  : (206, 1, 1, 401)
@@ -310,13 +327,13 @@ Friis factor -j c/(4 pi f) has been applied
  windowed : No
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>len(Lk.fGHz)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>len(Lk.fGHz)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>402
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>402
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(20,10))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(20,10))
 f,a =Lk.H.show(fig=f,cmap=&#39;jet&#39;)
 </pre></div>
 </div>
@@ -324,15 +341,15 @@ f,a =Lk.H.show(fig=f,cmap=&#39;jet&#39;)
 <div class="section" id="the-friis-factor">
 <h2>The Friis factor<a class="headerlink" href="#the-friis-factor" title="Permalink to this headline">¶</a></h2>
 <p>The Friis factor is :</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\alpha=\frac{-jc}{4\pi f}\]</div>
 <p>This factor is fundamental and has to be applied only once. By default
-the link is evaluated with the Friis factor : <code class="docutils literal"><span class="pre">isFriis=True</span></code>. This
-can be checked at the end of the <strong>repr</strong> of <code class="docutils literal"><span class="pre">H</span></code>.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>Lk.H
+the link is evaluated with the Friis factor : <code class="docutils literal notranslate"><span class="pre">isFriis=True</span></code>. This
+can be checked at the end of the <strong>repr</strong> of <code class="docutils literal notranslate"><span class="pre">H</span></code>.</p>
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>Lk.H
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>Tchannel : Ray transfer function (Nray x Nr x Nt x Nf)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Tchannel : Ray transfer function (Nray x Nr x Nt x Nf)
 -----------------------------------------------------
 freq : 2.0 6.0 401
 shape  : (206, 1, 1, 401)
@@ -343,17 +360,17 @@ Friis factor -j c/(4 pi f) has been applied
  windowed : No
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>Emean=Lk.H.energy(mode=&#39;mean&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>Emean=Lk.H.energy(mode=&#39;mean&#39;)
 Eint=Lk.H.energy(mode=&#39;integ&#39;)
 Ecenter=Lk.H.energy(mode=&#39;center&#39;)
 Efirst=Lk.H.energy(mode=&#39;first&#39;)
 Elast=Lk.H.energy(mode=&#39;last&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>print Efirst[0],Elast[0]
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>print Efirst[0],Elast[0]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[[  3.35253916e-05]] [[  3.72504352e-06]]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[[  3.35253916e-05]] [[  3.72504352e-06]]
 </pre></div>
 </div>
 <p>On the figure below we have selected a LOS situation and we compare the
@@ -362,13 +379,13 @@ straight lines coresponds to the Free space path loss formula for 3
 frequencies (f = 2GHz,f=6GHz,f=10GHz). For those 3 frequencies the first
 path is perfectly on the curve, which is a validation the observed
 level.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>Lk.H.y.shape
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>Lk.H.y.shape
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(206, 1, 1, 401)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(206, 1, 1, 401)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>f1 = 2
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>f1 = 2
 f2 = 10
 f3 = 6
 fig = plt.figure(figsize=(10,5))
@@ -390,49 +407,49 @@ plt.ylim([-120,0])
 plt.legend()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f5539cb78d0&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f5539cb78d0&gt;
 </pre></div>
 </div>
 <img alt="../../_images/Channel_25_1.png" src="../../_images/Channel_25_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>a = plt.semilogx(Lk.H.taud,10*np.log10(Emean[:,0,0]),&#39;.b&#39;,label=&#39;mean&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>a = plt.semilogx(Lk.H.taud,10*np.log10(Emean[:,0,0]),&#39;.b&#39;,label=&#39;mean&#39;)
 plt.semilogx(tauk,20*np.log10(np.sum(np.sum(ak,axis=2),axis=1)),&#39;+&#39;)
 plt.ylim([-120,0])
 plt.legend()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f553b979090&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f553b979090&gt;
 </pre></div>
 </div>
 <img alt="../../_images/Channel_26_1.png" src="../../_images/Channel_26_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>CIR=TUchannel(tauk,np.zeros(len(tauk)))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>CIR=TUchannel(tauk,np.zeros(len(tauk)))
 CIR.aggcir(ak,tauk)
 CIR.stem()
 plt.title(&#39;Infinite bandwidth CIR&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7f553bb7c650&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7f553bb7c650&gt;
 </pre></div>
 </div>
 <img alt="../../_images/Channel_27_1.png" src="../../_images/Channel_27_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>MeanDelay = CIR.tau_moy()
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>MeanDelay = CIR.tau_moy()
 DelaySpread = CIR.tau_rms()
 print MeanDelay,DelaySpread
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>36.619045782 13.4093554011
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>36.619045782 13.4093554011
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(20,10))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(20,10))
 f=Lk.H.show(cmap=&#39;jet&#39;,fig=f)
 </pre></div>
 </div>
 <img alt="../../_images/Channel_29_0.png" src="../../_images/Channel_29_0.png" />
 <p>The cut method applies an energy thresholding on the transmission
 channel.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>Lk.H.cut()
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>Lk.H.cut()
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(20,10))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(20,10))
 f=Lk.H.show(cmap=&#39;jet&#39;,fig=f)
 </pre></div>
 </div>
@@ -440,12 +457,12 @@ f=Lk.H.show(cmap=&#39;jet&#39;,fig=f)
 </div>
 <div class="section" id="the-tap-method">
 <h2>The tap method<a class="headerlink" href="#the-tap-method" title="Permalink to this headline">¶</a></h2>
-<p>The tap methods takes as parameters : + The system bandwidth <span class="math">\(W\)</span>
-expressed in MHz + The two extremities velocities <span class="math">\(V_a\)</span> and
-<span class="math">\(V_b\)</span> + The number of taps to be evaluted <span class="math">\(N_{tap}\)</span> + The
-number of time samples <span class="math">\(N_m\)</span> + The number of spatial realizations
-<span class="math">\(N_s\)</span></p>
-<p>This method returns a Multi Dimensional Array <span class="math">\(htap(f,s,m,tap)\)</span></p>
+<p>The tap methods takes as parameters : + The system bandwidth <span class="math notranslate nohighlight">\(W\)</span>
+expressed in MHz + The two extremities velocities <span class="math notranslate nohighlight">\(V_a\)</span> and
+<span class="math notranslate nohighlight">\(V_b\)</span> + The number of taps to be evaluted <span class="math notranslate nohighlight">\(N_{tap}\)</span> + The
+number of time samples <span class="math notranslate nohighlight">\(N_m\)</span> + The number of spatial realizations
+<span class="math notranslate nohighlight">\(N_s\)</span></p>
+<p>This method returns a Multi Dimensional Array <span class="math notranslate nohighlight">\(htap(f,s,m,tap)\)</span></p>
 <p>htap has 4 axes.</p>
 <ul class="simple">
 <li>axis 0 is frequency,</li>
@@ -453,7 +470,7 @@ number of time samples <span class="math">\(N_m\)</span> + The number of spatial
 <li>axis 2 is discrete time</li>
 <li>axis 3 is tap index</li>
 </ul>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>Va = 10
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>Va = 10
 Vb = 10
 fcGHz = 4.5
 Nm = 50
@@ -462,10 +479,10 @@ WMHz = 20
 Ntap = 10
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span># htap,b,c,d = Lk.H.tap(WMHz=WMHz,Ns=Ns,Nm=Nm,Va=Va,Vb=Vb,Ntap=Ntap)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span># htap,b,c,d = Lk.H.tap(WMHz=WMHz,Ns=Ns,Nm=Nm,Va=Va,Vb=Vb,Ntap=Ntap)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>#np.shape(htap)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>#np.shape(htap)
 </pre></div>
 </div>
 <p>The second parameter is the time integration of htap</p>
@@ -474,29 +491,29 @@ Ntap = 10
 <li>axis 2 is spatial (realization)</li>
 <li>axis 2 is tap</li>
 </ul>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span># b.shape
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span># b.shape
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span># np.shape(c)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span># np.shape(c)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span># d.shape
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span># d.shape
 </pre></div>
 </div>
 <p>The figure below illustrates the joint frequency and spatial fluctuation
 for the first channel tap. :exit</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>#img = plt.imshow(abs(b[:,:,0]),interpolation=&#39;nearest&#39;,extent=(0,1000,fGHz[-1],fGHz[0]))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>#img = plt.imshow(abs(b[:,:,0]),interpolation=&#39;nearest&#39;,extent=(0,1000,fGHz[-1],fGHz[0]))
 #plt.axis(&#39;tight&#39;)
 #plt.colorbar()
 #plt.xlabel(&#39;spatial realizations&#39;)
 #plt.ylabel(&#39;Frequency GHz&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>#f = plt.figure(figsize=(10,4))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>#f = plt.figure(figsize=(10,4))
 #h = plt.hist(np.real(b[0,:,0])*1e5,40,normed=True)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>#mmax = 0.3*WMHz*1e6/(2*fcGHz*(Va+Vb))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>#mmax = 0.3*WMHz*1e6/(2*fcGHz*(Va+Vb))
 #tmaxms = 1000*mmax/(WMHz*1e6)
 #plt.imshow(abs(c[:,:,1]),interpolation=&#39;nearest&#39;,extent=(0,tmaxms,fGHz[-1],fGHz[0]))
 #plt.axis(&#39;tight&#39;)
@@ -505,13 +522,13 @@ for the first channel tap. :exit</p>
 #plt.ylabel(&#39;frequency (GHz)&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>#plt.plot(abs(c[0,:,0]))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>#plt.plot(abs(c[0,:,0]))
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>#h = c[:,:,2]
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>#h = c[:,:,2]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>#from pylayers.util.mayautil import *
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>#from pylayers.util.mayautil import *
 #m=VolumeSlicer(data=abs(htap[:,0,:,:]))
 #m.configure_traits()
 </pre></div>
@@ -521,15 +538,16 @@ for the first channel tap. :exit</p>
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="CIR.html" class="btn btn-neutral float-right" title="Sorting and Cutting" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="CIR.html" class="btn btn-neutral float-right" title="Sorting and Cutting" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="Signatures.html" class="btn btn-neutral" title="Ray Signatures" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="Signatures.html" class="btn btn-neutral" title="Ray Signatures" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -539,11 +557,11 @@ for the first channel tap. :exit</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -562,9 +580,11 @@ for the first channel tap. :exit</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -579,14 +599,13 @@ for the first channel tap. :exit</p>
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

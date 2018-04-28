@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,21 @@
   
 
   
-  
     <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../../../about.html"/>
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="PyLayers" href="../../../index.html"/>
-        <link rel="up" title="Module code" href="../../index.html"/> 
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
 
   
   <script src="../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +54,7 @@
 
           
             
-            <img src="../../../_static/pylayers.png" class="logo" />
+            <img src="../../../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +83,10 @@
           
             
             
-                <ul>
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +97,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -142,7 +139,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -154,34 +151,52 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-      
-    <li>pylayers.signal.bsignal</li>
+        
+      <li>pylayers.signal.bsignal</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -198,7 +213,7 @@ r&quot;&quot;&quot;
 Bsignal Class
 =============
 
-.. autoclass:: Bsignal 
+.. autoclass:: Bsignal
     :members:
 
 Usignal Class
@@ -229,7 +244,7 @@ FBsignal Class
 FUsignal Class
 ==============
 
-.. autoclass:: FUsignal 
+.. autoclass:: FUsignal
     :members:
 
 FHsignal Class
@@ -486,8 +501,6 @@ import scipy.stats as st
         y is set to a zero vector
 
         Use __set__ instead
-
-        .. todo:: check coherence of support internally
 
         &quot;&quot;&quot;
         self.x = x
@@ -782,15 +795,15 @@ import scipy.stats as st
                     &#39;ylabel&#39;:&#39;&#39;}
 
         for k in defaults.keys():
-            if not kwargs.has_key(k):
+            if not k in kwargs:
                 kwargs[k]=defaults[k]
 
-        if not kwargs.has_key(&#39;fig&#39;):
+        if not &#39;fig&#39; in kwargs:
             fig = plt.figure()
         else:
             fig = kwargs[&#39;fig&#39;]
 
-        if not kwargs.has_key(&#39;ax&#39;):
+        if not &#39;ax&#39; in kwargs:
             ax = fig.add_subplot(111)
         else:
             ax = kwargs[&#39;ax&#39;]
@@ -1292,7 +1305,7 @@ import scipy.stats as st
             #pstart2 = findpos(u2.x, xnew[0])
             pstart2 = np.where(u2.x==xnew[0])[0]
             #pstop2 = pstart2 + findpos(u2.x[pstart2:dim2], xnew[-1])
-            pstop2 = pstart2 + np.where(u2.x[pstart2:dim2]==xnew[-1])[0]
+            pstop2 = pstart2 + np.where(u2.x[pstart2:dim2] == xnew[-1])[0]
 
             u2 = u2.truncate(pstart2, pstop2 + 1)
             u1 = u1.resample(xnew)
@@ -1392,8 +1405,8 @@ import scipy.stats as st
         Parameters
         ----------
 
-        imin  : int 
-        imax  : int 
+        imin  : int
+        imax  : int
         axis  : axis to truncate (default -1)
 
         Returns
@@ -1410,7 +1423,7 @@ import scipy.stats as st
             x_new = self.x[imin:imax]
         else:
             x_new = self.x
-        
+
         if (axis==-1):
             y_new = self.y[..., imin:imax]
         if (axis==0):
@@ -1531,8 +1544,8 @@ import scipy.stats as st
         xmax : float
             add zeros after xmax
 
-        Summary
-        --------
+        Notes
+        -----
 
         This corresponds to a gating between xmin and xmax
 
@@ -1858,36 +1871,36 @@ import scipy.stats as st
         return U</div>
 
 <div class="viewcode-block" id="TBsignal.tap"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.bsignal.TBsignal.tap">[docs]</a>    def tap(self,fcGHz,WGHz,Ntap):
-        &quot;&quot;&quot; Back to baseband 
+        &quot;&quot;&quot; Back to baseband
 
         Parameters
         ----------
-        fcGHz : float 
-            center frequency 
-        WGHz : float 
-            bandwidth 
-        Ntap : int 
-            Number of tap 
-        
-        Notes 
+        fcGHz : float
+            center frequency
+        WGHz : float
+            bandwidth
+        Ntap : int
+            Number of tap
+
+        Notes
         -----
 
         Implement formula (2.52) from D.Tse book page 50
-            
+
         &quot;&quot;&quot;
         # self.x : tauk   (,Nx)
         # self.y : alphak (1,Nx)
-        # yb : 1 x delay x 1 
+        # yb : 1 x delay x 1
         yb = self.y[...,None]*np.exp(-2 * 1j * np.pi *self.x[None,:,None] * fcGHz )
-        # create a tap axis index l 
-        # l : 1 x 1 x tap 
+        # create a tap axis index l
+        # l : 1 x 1 x tap
         l   = np.arange(Ntap)[None,None,:]
-        # get delay 
-        # tau : 1 x delay x 1 
+        # get delay
+        # tau : 1 x delay x 1
         tau = self.x[None,:,None]
-        # S : 1 x delay x tap 
+        # S : 1 x delay x tap
         S   = np.sinc(l-tau*WGHz)
-        # htap : 1 x delay x tap 
+        # htap : 1 x delay x tap
         htap  = np.sum(yb*S,axis=0)
         # htapi : integrates over delays
         # 1 x tap 
@@ -2253,24 +2266,24 @@ import scipy.stats as st
         O.x = self.x
         return(O)</div>
 
-    # def ftshift(self):
-    #     &quot;&quot;&quot; return the associated FUsignal
+<div class="viewcode-block" id="TUsignal.ftshift"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.bsignal.TUsignal.ftshift">[docs]</a>    def ftshift(self):
+         &quot;&quot;&quot; return the associated FUsignal
 
-    #     Returns
-    #     -------
+         Returns
+         -------
 
-    #     H : FUsignal
+         H : FUsignal
 
-    #     See Also
-    #     --------
+         See Also
+         --------
 
-    #     pylayers.signal.bsignal.TUsignal.fftsh
-    #     pylayers.signal.waveform.ip_generic
+         pylayers.signal.bsignal.TUsignal.fftsh
+         pylayers.signal.waveform.ip_generic
 
-    #     &quot;&quot;&quot;
-    #     A  = self.fftsh()
-    #     AU = A.unrex()
-    #     return(AU)
+         &quot;&quot;&quot;
+         A  = self.fftsh()
+         AU = A.unrex()
+         return(AU)</div>
 
 
 <div class="viewcode-block" id="TUsignal.psd"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.bsignal.TUsignal.psd">[docs]</a>    def psd(self, Tpns=100, R=50,periodic=True):
@@ -2416,8 +2429,8 @@ import scipy.stats as st
         normalized : boolean
             default True
 
-        Summary
-        -------
+        Notes
+        -----
             The time step dx should be the same
 
             The chosen time reference is the one of the self signal
@@ -2987,7 +3000,8 @@ import scipy.stats as st
             self.y = self.y*factor
             self.isFriis = True</div>
 
-
+<div class="viewcode-block" id="FUsignal.electrical_delay"><a class="viewcode-back" href="../../../api/pylayers.signal.bsignal.FUsignal.html#pylayers.signal.bsignal.FUsignal.electrical_delay">[docs]</a>    def electrical_delay(self,tauns):
+        self.y = self.y * np.exp(-2*1j*np.pi*self.x[None,:]*tauns)</div>
 
 <div class="viewcode-block" id="FUsignal.get"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.bsignal.FUsignal.get">[docs]</a>    def get(self, k):
         &quot;&quot;&quot;
@@ -3449,8 +3463,8 @@ import scipy.stats as st
 <div class="viewcode-block" id="FUsignal.iftshift"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.bsignal.FUsignal.iftshift">[docs]</a>    def iftshift(self, Nz=1):
         &quot;&quot;&quot; Return the associated TUsignal
 
-        Summary
-        -------
+        Notes
+        -----
 
         apply the inverse fftshift operator to come back in time
 
@@ -3469,9 +3483,9 @@ import scipy.stats as st
 <div class="viewcode-block" id="FUsignal.show"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.bsignal.FUsignal.show">[docs]</a>    def show(self,**kwargs):
         &quot;&quot;&quot; imshow visualization of Modulus and Phase
 
-        vmin : 
-        vmax : 
-        cmap : colormap 
+        vmin :
+        vmax :
+        cmap : colormap
 
         &quot;&quot;&quot;
 
@@ -3484,10 +3498,11 @@ import scipy.stats as st
         ax1 = fig.add_subplot(121)
         fig,ax1 = self.imshow(typ=&#39;l20&#39;,fig=fig,ax=ax1,**kwargs)
         ax2 = fig.add_subplot(122)
-        if &#39;vmin&#39; in kwargs: 
+        if &#39;vmin&#39; in kwargs:
             del kwargs[&#39;vmin&#39;]
-        if &#39;vmax&#39; in kwargs: 
+        if &#39;vmax&#39; in kwargs:
             del kwargs[&#39;vmax&#39;]
+
         fig,ax2= self.imshow(typ=&#39;d&#39;,fig=fig,ax=ax2,**kwargs)
 
         return fig,[ax1,ax2]</div>
@@ -3670,12 +3685,12 @@ import scipy.stats as st
         N = len(self.x)
         # even case
         if np.mod(N, 2) == 0:
-            xu = self.x[1:(N + 2) / 2]
-            yu = self.y[...,1:(N + 2) / 2]
+            xu = self.x[1:int((N + 2) / 2)]
+            yu = self.y[...,1:int((N + 2) / 2)]
         # odd case
         else:
-            xu = self.x[1:(N + 1) / 2]
-            yu = self.y[...,1:(N + 1) / 2]
+            xu = self.x[1:int((N + 1) / 2)]
+            yu = self.y[...,1:int((N + 1) / 2)]
 
         O = FUsignal(x=xu, y=yu)
 
@@ -3692,12 +3707,13 @@ import scipy.stats as st
     &quot;&quot;&quot; Create noise
     &quot;&quot;&quot;
     def __init__(self,
-                 ti=0,
+                 ti = 0,
                  tf = 100,
                  fsGHz = 50,
                  PSDdBmpHz = -174,
                  NF = 0,
-                 R = 50, seed=1):
+                 R = 50,
+                 seed = 1):
         &quot;&quot;&quot; object constructor
 
         Parameters
@@ -3829,19 +3845,19 @@ import scipy.stats as st
     def __repr__(self):
         st = &#39;&#39;
         st = st+ &#39;Sampling frequency : &#39;+ str(self.fsGHz)+&#39; GHz\n&#39;
-        st = st+ &#39;ti  : &#39;+ str(self.ti)+&#39;ns \n&#39;
-        st = st+ &#39;tf  : &#39;+ str(self.tf)+&#39;ns \n&#39;
-        st = st+ &#39;ts  : &#39;+ str(self.tsns)+&#39;ns \n&#39;
-        st = st+ &#39;N   : &#39;+ str(len(self.x))+&#39;\n&#39;
+        st = st+ &#39;ti  : %.2f&#39; % self.ti+&#39;ns \n&#39;
+        st = st+ &#39;tf  : %.2f&#39; % self.tf+&#39;ns \n&#39;
+        st = st+ &#39;ts  : %.2f&#39; % self.tsns+&#39;ns \n&#39;
+        st = st+ &#39;N   : %i &#39;  % len(self.x)+&#39;\n&#39;
         st = st + &#39;-------------\n&#39;
-        st = st+ &#39;DSP : &#39; + str(self.PSDdBmpHz)+ &#39; dBm/Hz\n&#39;
-        st = st+ &#39;    : &#39; + str(10**(self.PSDdBmpHz/10.)*1e-3)+ &#39; Joules\n&#39;
+        st = st+ &#39;DSP : %.2f&#39; % self.PSDdBmpHz+ &#39; dBm/Hz\n&#39;
+        st = st+ &#39;    : %.2e&#39; % 10**(self.PSDdBmpHz/10.)*1e-3+ &#39; Joules\n&#39;
         st = st + &#39;-------------\n&#39;
-        st = st+ &#39;Noise Figure : &#39; + str(self.NF)+ &#39; dB\n&#39;
-        st = st+ &#39;Vrms : &#39;+ str(self.vrms)+ &#39; Volts\n&#39;
-        st = st+ &#39;Variance : &#39;+ str(self.var)+ &#39; V^2\n&#39;
-        st = st+ &#39;Power (dBm) /&#39;+str(self.R)+&#39; Ohms : &#39;+ str(10*np.log10(self.PW)-60)+ &#39; dBm\n&#39;
-        st = st+ &#39;Power realized /&#39;+str(self.R)+&#39; Ohms : &#39;+ str(10*np.log10(self.Pr)-60)+ &#39; dBm\n&#39;
+        st = st+ &#39;Noise Figure : %.2f &#39; % self.NF+ &#39; dB\n&#39;
+        st = st+ &#39;Vrms : %.2e&#39; % self.vrms+ &#39; Volts\n&#39;
+        st = st+ &#39;Variance :%.2e &#39; % self.var +  &#39; V^2\n&#39;
+        st = st+ &#39;Power (dBm) / %.2f&#39; % self.R + &#39; Ohms : &#39;+ str(10*np.log10(self.PW)-60)+ &#39; dBm\n&#39;
+        st = st+ &#39;Power realized / %.2f&#39;  % self.R + &#39; Ohms : &#39;+ str(10*np.log10(self.Pr)-60)+ &#39; dBm\n&#39;
         return(st)
 
 <div class="viewcode-block" id="Noise.ppsd"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.bsignal.Noise.ppsd">[docs]</a>    def ppsd(self,mask=True):
@@ -4033,6 +4049,7 @@ if __name__ == &quot;__main__&quot;:
 </pre></div>
 
            </div>
+           
           </div>
           <footer>
   
@@ -4042,11 +4059,11 @@ if __name__ == &quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -4065,9 +4082,11 @@ if __name__ == &quot;__main__&quot;:
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -4082,14 +4101,13 @@ if __name__ == &quot;__main__&quot;:
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

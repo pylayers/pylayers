@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,22 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FloorPlan" href="pylayers.gis.osmparser.FloorPlan.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +55,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +84,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -109,9 +107,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="references.html#module-pylayers.gis.osmparser">5&nbsp;&nbsp;&nbsp;pylayers.gis.osmparser Module</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="references.html#id7">5.1&nbsp;&nbsp;&nbsp;Functions</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="references.html#id8">5.2&nbsp;&nbsp;&nbsp;Classes</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Coords</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Coords</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.gis.osmparser.FloorPlan.html">FloorPlan</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.gis.osmparser.Nodes.html">Nodes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.gis.osmparser.Relations.html">Relations</a></li>
@@ -157,7 +153,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -169,36 +165,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>Coords</li>
+        
+      <li>Coords</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.gis.osmparser.Coords.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -209,65 +225,18 @@
 <dl class="class">
 <dt id="pylayers.gis.osmparser.Coords">
 <em class="property">class </em><code class="descclassname">pylayers.gis.osmparser.</code><code class="descname">Coords</code><span class="sig-paren">(</span><em>idx=[]</em>, <em>latlon=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#Coords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.Coords" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Coords describes a set of points in OSM</p>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="17%" />
-<col width="83%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>xy :</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-even"><td>latlon :</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-odd"><td>cpt :</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-even"><td>minlon :</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-odd"><td>maxlon :</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-even"><td>minlat :</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-odd"><td>maxlat :</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-even"><td>boundary</td>
-<td>(np.array) (minlon,minlat,maxlon,maxlat)</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.cartesian" title="pylayers.gis.osmparser.Coords.cartesian"><code class="xref py py-obj docutils literal"><span class="pre">cartesian</span></code></a>([cart,&nbsp;delta])</td>
-<td>convert Latitude/Longitude in cartesian</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.clean" title="pylayers.gis.osmparser.Coords.clean"><code class="xref py py-obj docutils literal"><span class="pre">clean</span></code></a>()</td>
-<td>reset coordinates</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.coords" title="pylayers.gis.osmparser.Coords.coords"><code class="xref py py-obj docutils literal"><span class="pre">coords</span></code></a>(coords)</td>
-<td>calculates extrema of coords</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.filter" title="pylayers.gis.osmparser.Coords.filter"><code class="xref py py-obj docutils literal"><span class="pre">filter</span></code></a>(lexcluded)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.from_nodes" title="pylayers.gis.osmparser.Coords.from_nodes"><code class="xref py py-obj docutils literal"><span class="pre">from_nodes</span></code></a>(nodes)</td>
-<td>read coordinates from nodes</td>
-</tr>
-</tbody>
-</table>
+<p>xy :
+latlon :
+cpt :
+minlon :
+maxlon :
+minlat :
+maxlat :
+boundary : np.array</p>
+<blockquote>
+<div>(minlon,minlat,maxlon,maxlat)</div></blockquote>
 <p class="rubric">Attributes Summary</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -275,25 +244,25 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.cpt" title="pylayers.gis.osmparser.Coords.cpt"><code class="xref py py-obj docutils literal"><span class="pre">cpt</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.cpt" title="pylayers.gis.osmparser.Coords.cpt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cpt</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.latlon" title="pylayers.gis.osmparser.Coords.latlon"><code class="xref py py-obj docutils literal"><span class="pre">latlon</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.latlon" title="pylayers.gis.osmparser.Coords.latlon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">latlon</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.maxlat" title="pylayers.gis.osmparser.Coords.maxlat"><code class="xref py py-obj docutils literal"><span class="pre">maxlat</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.maxlat" title="pylayers.gis.osmparser.Coords.maxlat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maxlat</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.maxlon" title="pylayers.gis.osmparser.Coords.maxlon"><code class="xref py py-obj docutils literal"><span class="pre">maxlon</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.maxlon" title="pylayers.gis.osmparser.Coords.maxlon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maxlon</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.minlat" title="pylayers.gis.osmparser.Coords.minlat"><code class="xref py py-obj docutils literal"><span class="pre">minlat</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.minlat" title="pylayers.gis.osmparser.Coords.minlat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">minlat</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.minlon" title="pylayers.gis.osmparser.Coords.minlon"><code class="xref py py-obj docutils literal"><span class="pre">minlon</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.minlon" title="pylayers.gis.osmparser.Coords.minlon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">minlon</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.xy" title="pylayers.gis.osmparser.Coords.xy"><code class="xref py py-obj docutils literal"><span class="pre">xy</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.xy" title="pylayers.gis.osmparser.Coords.xy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">xy</span></code></a></td>
 <td></td>
 </tr>
 </tbody>
@@ -305,19 +274,19 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.cartesian" title="pylayers.gis.osmparser.Coords.cartesian"><code class="xref py py-obj docutils literal"><span class="pre">cartesian</span></code></a>([cart,&nbsp;delta])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.cartesian" title="pylayers.gis.osmparser.Coords.cartesian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cartesian</span></code></a>([cart,&nbsp;delta])</td>
 <td>convert Latitude/Longitude in cartesian</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.clean" title="pylayers.gis.osmparser.Coords.clean"><code class="xref py py-obj docutils literal"><span class="pre">clean</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.clean" title="pylayers.gis.osmparser.Coords.clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clean</span></code></a>()</td>
 <td>reset coordinates</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.coords" title="pylayers.gis.osmparser.Coords.coords"><code class="xref py py-obj docutils literal"><span class="pre">coords</span></code></a>(coords)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.coords" title="pylayers.gis.osmparser.Coords.coords"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coords</span></code></a>(coords)</td>
 <td>calculates extrema of coords</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.filter" title="pylayers.gis.osmparser.Coords.filter"><code class="xref py py-obj docutils literal"><span class="pre">filter</span></code></a>(lexcluded)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.filter" title="pylayers.gis.osmparser.Coords.filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter</span></code></a>(lexcluded)</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.from_nodes" title="pylayers.gis.osmparser.Coords.from_nodes"><code class="xref py py-obj docutils literal"><span class="pre">from_nodes</span></code></a>(nodes)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.from_nodes" title="pylayers.gis.osmparser.Coords.from_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_nodes</span></code></a>(nodes)</td>
 <td>read coordinates from nodes</td>
 </tr>
 </tbody>
@@ -363,31 +332,19 @@
 <dt id="pylayers.gis.osmparser.Coords.cartesian">
 <code class="descname">cartesian</code><span class="sig-paren">(</span><em>cart=False</em>, <em>delta=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#Coords.cartesian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.Coords.cartesian" title="Permalink to this definition">¶</a></dt>
 <dd><p>convert Latitude/Longitude in cartesian</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cart</strong> : Boolean</p>
-<blockquote>
-<div><p>conversion to cartesian</p>
-</div></blockquote>
-<p><strong>delta</strong> : offset</p>
-<blockquote>
-<div><p>default 0 : in this case the origin corresponds to the lower left point</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>m</strong> : Basemap converter</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>cart <span class="classifier-delimiter">:</span> <span class="classifier">Boolean </span></dt>
+<dd>conversion to cartesian</dd>
+<dt>delta <span class="classifier-delimiter">:</span> <span class="classifier">offset </span></dt>
+<dd>default 0 : in this case the origin corresponds to the lower left point</dd>
+</dl>
 <p>This method converts latlon coordinates into cartesian x,y coordinates in
 Cassini projection relatively to specified latlon boundary 
 The basemap objet for back and forth coordinates conversion is returned.</p>
 <p>The transformation is centered on the mean of latitude and longitude. 
 The cartesian origin (0,0) correspond to the lower left corner (lonmin,latmin)</p>
+<p>m : Basemap converter</p>
+<p>If boundary is modified cartesian coordinates change.</p>
 </dd></dl>
 
 <dl class="method">
@@ -400,14 +357,7 @@ The cartesian origin (0,0) correspond to the lower left corner (lonmin,latmin)</
 <dt id="pylayers.gis.osmparser.Coords.coords">
 <code class="descname">coords</code><span class="sig-paren">(</span><em>coords</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#Coords.coords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.Coords.coords" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates extrema of coords</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>coords</strong></td>
-</tr>
-</tbody>
-</table>
+<p>coords</p>
 </dd></dl>
 
 <dl class="method">
@@ -419,14 +369,7 @@ The cartesian origin (0,0) correspond to the lower left corner (lonmin,latmin)</
 <dt id="pylayers.gis.osmparser.Coords.from_nodes">
 <code class="descname">from_nodes</code><span class="sig-paren">(</span><em>nodes</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#Coords.from_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.Coords.from_nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>read coordinates from nodes</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nodes</strong> : Nodes</td>
-</tr>
-</tbody>
-</table>
+<p>nodes : Nodes</p>
 </dd></dl>
 
 </dd></dl>
@@ -435,8 +378,16 @@ The cartesian origin (0,0) correspond to the lower left corner (lonmin,latmin)</
 
 
            </div>
+           
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pylayers.gis.osmparser.FloorPlan.html" class="btn btn-neutral float-right" title="FloorPlan" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
   
 
   <hr/>
@@ -444,11 +395,11 @@ The cartesian origin (0,0) correspond to the lower left corner (lonmin,latmin)</
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -467,9 +418,11 @@ The cartesian origin (0,0) correspond to the lower left corner (lonmin,latmin)</
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -484,14 +437,13 @@ The cartesian origin (0,0) correspond to the lower left corner (lonmin,latmin)</
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,32 +25,23 @@
   
 
   
-  
     <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../../about.html"/>
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="PyLayers" href="../../index.html"/>
-        <link rel="up" title="1   Overview" href="../TOC.html"/>
-        <link rel="next" title="Ray Signatures" href="Signatures.html"/>
-        <link rel="prev" title="Multi-wall model" href="MultiWall.html"/> 
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Ray Signatures" href="Signatures.html" />
+    <link rel="prev" title="Multi-wall model" href="MultiWall.html" /> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -63,7 +56,7 @@
 
           
             
-            <img src="../../_static/pylayers.png" class="logo" />
+            <img src="../../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -92,7 +85,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">User Manual</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html#basic-usage">2&nbsp;&nbsp;&nbsp;Basic Usage</a></li>
@@ -155,6 +151,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -196,7 +193,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -208,44 +205,64 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../index.html">User Manual</a> &raquo;</li>
-      
+        
           <li><a href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
-      
-    <li>Coverage Motley Kennan</li>
+        
+      <li>Coverage Motley Kennan</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../../_sources/notebook/2-AP/CoverageMetis.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="code python highlight-none"><div class="highlight"><pre><span></span>from pylayers.antprop.coverage import *
+  <div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>from pylayers.antprop.coverage import *
 import pandas as pd
 %matplotlib inline
 </pre></div>
@@ -259,10 +276,10 @@ Hence, the map of the received power for all APs at the central
 frequency of 59.405 GHz is represented as follows:</p>
 <div class="section" id="coverage-ap1">
 <h2>Coverage AP1<a class="headerlink" href="#coverage-ap1" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>!cat $BASENAME/ini/TC1_METIS_coverage_AP1.ini
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>!cat $BASENAME/ini/TC1_METIS_coverage_AP1.ini
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[grid]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[grid]
 nx = 40
 ny = 20
 boundary = [0,0,25,12.5]
@@ -287,13 +304,13 @@ noisefactordb = 0
 show = True
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>C1 = Coverage(&#39;coverage/TC1_METIS_coverage_AP1.ini&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>C1 = Coverage(&#39;coverage/TC1_METIS_coverage_AP1.ini&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>C1.dap[1].s
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>C1.dap[1].s
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>generic
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>generic
 -------------------------
 0 :  59.0 : [58.9999975,59.0000025]
 1 :  59.005 : [59.0049975,59.0050025]
@@ -1098,10 +1115,10 @@ show = True
 800 :  63.0 : [62.9999975,63.0000025]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>C1.grid
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>C1.grid
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>array([[  0.5,   0.5],
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>array([[  0.5,   0.5],
        [  0.5,   1. ],
        [  0.5,   1.5],
        ...,
@@ -1110,24 +1127,24 @@ show = True
        [ 24.5,  12. ]])
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>C1.cover(snr=False,sinr=False)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>C1.cover(snr=False,sinr=False)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>f,a=C1.show(figsize=(10,10),typ=&#39;pr&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>f,a=C1.show(figsize=(10,10),typ=&#39;pr&#39;)
 a.axis(&quot;on&quot;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(-5.0, 30.0, -2.0, 14.0)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(-5.0, 30.0, -2.0, 14.0)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_7_1.png" src="../../_images/CoverageMetis_7_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>C1.grid
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>C1.grid
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>The history saving thread hit an unexpected error (OperationalError(&#39;database is locked&#39;,)).History will not be written to the database.
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The history saving thread hit an unexpected error (OperationalError(&#39;database is locked&#39;,)).History will not be written to the database.
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>array([[  0.5,   0.5],
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>array([[  0.5,   0.5],
        [  0.5,   1. ],
        [  0.5,   1.5],
        ...,
@@ -1136,48 +1153,48 @@ a.axis(&quot;on&quot;)
        [ 24.5,  12. ]])
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>C1.dap[1][&#39;p&#39;]
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>C1.dap[1][&#39;p&#39;]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(2.5, 2.5, 2.85)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(2.5, 2.5, 2.85)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>p1 = np.array([2.5,2.5])
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>p1 = np.array([2.5,2.5])
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>ptr=p1-C1.grid
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>ptr=p1-C1.grid
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>d1=np.sqrt(np.sum(ptr*ptr,axis=1))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>d1=np.sqrt(np.sum(ptr*ptr,axis=1))
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>C1.fGHz.shape
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>C1.fGHz.shape
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(801,)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(801,)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>C1.CmWo.shape
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>C1.CmWo.shape
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(801, 1176, 1)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(801, 1176, 1)
 </pre></div>
 </div>
 <p>The following figure shows the representation of full coverage w.r.t
 range in a log/log scale.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.semilogx(d1,10*np.log10(C1.CmWp[208,:,0]),&#39;.b&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>plt.semilogx(d1,10*np.log10(C1.CmWp[208,:,0]),&#39;.b&#39;)
 plt.ylim(-200,-60)
 plt.xlim(1,100)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(1, 100)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(1, 100)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_16_1.png" src="../../_images/CoverageMetis_16_1.png" />
 </div>
 <div class="section" id="benchmarking-ap1">
 <h2>Benchmarking AP1<a class="headerlink" href="#benchmarking-ap1" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>def readdata(filename):
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>def readdata(filename):
     with open(filename) as fd:
         lis = fd.readlines()
     data = lis[8:-1]
@@ -1193,7 +1210,7 @@ plt.xlim(1,100)
     return(df)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>fap1 = basename+&#39;/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap1_raytrace.txt&#39;
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>fap1 = basename+&#39;/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap1_raytrace.txt&#39;
 fap2 = basename+&#39;/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap2_raytrace.txt&#39;
 fap3 = basename+&#39;/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap3_raytrace.txt&#39;
 fap4 = basename+&#39;/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap4_raytrace.txt&#39;
@@ -1205,7 +1222,7 @@ for k,f in enumerate(lfile):
 data1=C1.CmWp[208,:,0]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(10,10))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>plt.figure(figsize=(10,10))
 plt.semilogx(d1,10*np.log10(data1),&#39;.b&#39;, label=&#39;PyLayers Simulation&#39;)
 plt.semilogx(d1,df[&#39;pg&#39;].values,&#39;.r&#39;, label=&#39;Metis Simulation AP1&#39;)
 plt.xlabel(&#39;Distance (meters)&#39;,fontsize=14)
@@ -1216,39 +1233,39 @@ plt.semilogx(d1,-L,&#39;g&#39;,label=&#39;Free Space&#39;)
 plt.legend()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7ffa4ad9a790&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7ffa4ad9a790&gt;
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_20_1.png" src="../../_images/CoverageMetis_20_1.png" />
 </div>
 <div class="section" id="plotting-the-error-ap1">
 <h2>Plotting the error AP1<a class="headerlink" href="#plotting-the-error-ap1" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>err1 = df[&#39;pg&#39;].values-10*np.log10(data1)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>err1 = df[&#39;pg&#39;].values-10*np.log10(data1)
 plt.plot(d1,err1,&#39;ob&#39;)
 plt.xlabel(&#39;Distance (meters)&#39;,fontsize=14)
 plt.ylabel(&#39;err (dB)&#39;)
 plt.title(&#39;err&#39;,fontsize=18)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7ffa4ae1c150&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7ffa4ae1c150&gt;
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_22_1.png" src="../../_images/CoverageMetis_22_1.png" />
 </div>
 <div class="section" id="coverage-ap2">
 <h2>Coverage AP2<a class="headerlink" href="#coverage-ap2" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>#!cat $BASENAME/ini/TC1_METIS_coverage_2.ini
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>#!cat $BASENAME/ini/TC1_METIS_coverage_2.ini
 C2 = Coverage(&#39;coverage/TC1_METIS_coverage_AP2.ini&#39;)
 C2.cover(snr=False,sinr=False)
 f,a=C2.show(figsize=(10,10),typ=&#39;pr&#39;)
 a.axis(&quot;on&quot;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(-5.0, 30.0, -2.0, 14.0)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(-5.0, 30.0, -2.0, 14.0)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_24_1.png" src="../../_images/CoverageMetis_24_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>C2.grid
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>C2.grid
 p2 = np.array([2.5,10])
 ptr=p2-C2.grid
 d2=np.sqrt(np.sum(ptr*ptr,axis=1))
@@ -1257,22 +1274,22 @@ plt.ylim(-200,-60)
 plt.xlim(1,100)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(1, 100)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(1, 100)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_25_1.png" src="../../_images/CoverageMetis_25_1.png" />
 </div>
 <div class="section" id="benchmarking-ap2">
 <h2>Benchmarking AP2<a class="headerlink" href="#benchmarking-ap2" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>lfile=[fap2]
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>lfile=[fap2]
 for k,f in enumerate(lfile):
     df = readdata(f)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>data2=C2.CmWp[208,:,0]
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>data2=C2.CmWp[208,:,0]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(10,10))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>plt.figure(figsize=(10,10))
 plt.semilogx(d2,10*np.log10(data2),&#39;.b&#39;, label=&#39;PyLayers Simulation&#39;)
 plt.semilogx(d2,df[&#39;pg&#39;].values,&#39;.r&#39;, label=&#39;Metis Simulation AP2&#39;)
 plt.xlabel(&#39;Distance (meters)&#39;,fontsize=14)
@@ -1283,39 +1300,39 @@ plt.semilogx(d2,-L,&#39;g&#39;,label=&#39;Free Space&#39;)
 plt.legend()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7ffa4b256ed0&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7ffa4b256ed0&gt;
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_29_1.png" src="../../_images/CoverageMetis_29_1.png" />
 </div>
 <div class="section" id="plotting-the-error-ap2">
 <h2>Plotting the error AP2<a class="headerlink" href="#plotting-the-error-ap2" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>err2 = df[&#39;pg&#39;].values-10*np.log10(data2)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>err2 = df[&#39;pg&#39;].values-10*np.log10(data2)
 plt.plot(d2,err2,&#39;ob&#39;)
 plt.xlabel(&#39;Distance (meters)&#39;,fontsize=14)
 plt.ylabel(&#39;err (dB)&#39;)
 plt.title(&#39;err&#39;,fontsize=18)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7ffa4b227250&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7ffa4b227250&gt;
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_31_1.png" src="../../_images/CoverageMetis_31_1.png" />
 </div>
 <div class="section" id="coverage-ap3">
 <h2>Coverage AP3<a class="headerlink" href="#coverage-ap3" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>#!cat $BASENAME/ini/TC1_METIS_coverage_3.ini
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>#!cat $BASENAME/ini/TC1_METIS_coverage_3.ini
 C3 = Coverage(&#39;coverage/TC1_METIS_coverage_AP3.ini&#39;)
 C3.cover(snr=False,sinr=False)
 f,a=C3.show(figsize=(10,10),typ=&#39;pr&#39;)
 a.axis(&quot;on&quot;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(-5.0, 30.0, -2.0, 14.0)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(-5.0, 30.0, -2.0, 14.0)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_33_1.png" src="../../_images/CoverageMetis_33_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>C3.grid
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>C3.grid
 p3 = np.array([22.5,10])
 ptr=p3-C3.grid
 d3=np.sqrt(np.sum(ptr*ptr,axis=1))
@@ -1324,34 +1341,34 @@ plt.ylim(-180,-60)
 plt.xlim(1,100)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(1, 100)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(1, 100)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_34_1.png" src="../../_images/CoverageMetis_34_1.png" />
 </div>
 <div class="section" id="benchmarking-ap3">
 <h2>Benchmarking AP3<a class="headerlink" href="#benchmarking-ap3" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>lfile=[fap3]
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>lfile=[fap3]
 for k,f in enumerate(lfile):
     df = readdata(f)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>df[&#39;dp&#39;]= np.sqrt((df[&#39;xap&#39;].values-df[&#39;xue&#39;].values)**2+(df[&#39;yap&#39;].values-df[&#39;yue&#39;].values)**2)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>df[&#39;dp&#39;]= np.sqrt((df[&#39;xap&#39;].values-df[&#39;xue&#39;].values)**2+(df[&#39;yap&#39;].values-df[&#39;yue&#39;].values)**2)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>#df
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>#df
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>d3-df[&#39;dp&#39;].values
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>d3-df[&#39;dp&#39;].values
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>array([ 0.,  0.,  0., ...,  0.,  0.,  0.])
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>array([ 0.,  0.,  0., ...,  0.,  0.,  0.])
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>data3=C3.CmWp[208,:,0]
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>data3=C3.CmWp[208,:,0]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(10,10))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>plt.figure(figsize=(10,10))
 plt.semilogx(d3,10*np.log10(data3),&#39;.b&#39;, label=&#39;PyLayers Simulation&#39;)
 plt.semilogx(d3,df[&#39;pg&#39;].values,&#39;.r&#39;, label=&#39;Metis Simulation AP3&#39;)
 plt.xlabel(&#39;Distance (meters)&#39;,fontsize=14)
@@ -1362,39 +1379,39 @@ plt.semilogx(d3,-L,&#39;g&#39;,label=&#39;Free Space&#39;)
 plt.legend()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7ffa493e3950&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7ffa493e3950&gt;
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_41_1.png" src="../../_images/CoverageMetis_41_1.png" />
 </div>
 <div class="section" id="plotting-the-error-ap3">
 <h2>Plotting the Error AP3<a class="headerlink" href="#plotting-the-error-ap3" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>err3 = df[&#39;pg&#39;].values-10*np.log10(data3)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>err3 = df[&#39;pg&#39;].values-10*np.log10(data3)
 plt.plot(d3,err3,&#39;ob&#39;)
 plt.xlabel(&#39;Distance (meters)&#39;,fontsize=14)
 plt.ylabel(&#39;err (dB)&#39;)
 plt.title(&#39;err&#39;,fontsize=18)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7ffa48315210&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7ffa48315210&gt;
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_43_1.png" src="../../_images/CoverageMetis_43_1.png" />
 </div>
 <div class="section" id="coverage-ap4">
 <h2>Coverage AP4<a class="headerlink" href="#coverage-ap4" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>#!cat $BASENAME/ini/TC1_METIS_coverage_4.ini
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>#!cat $BASENAME/ini/TC1_METIS_coverage_4.ini
 C4 = Coverage(&#39;coverage/TC1_METIS_coverage_AP4.ini&#39;)
 C4.cover(snr=False,sinr=False)
 f,a=C4.show(figsize=(10,10),typ=&#39;pr&#39;)
 a.axis(&quot;on&quot;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(-5.0, 30.0, -2.0, 14.0)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(-5.0, 30.0, -2.0, 14.0)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_45_1.png" src="../../_images/CoverageMetis_45_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>C4.grid
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>C4.grid
 p4 = np.array([22.5,2.5])
 ptr=p4-C4.grid
 d4=np.sqrt(np.sum(ptr*ptr,axis=1))
@@ -1403,22 +1420,22 @@ plt.ylim(-200,-60)
 plt.xlim(1,100)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(1, 100)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(1, 100)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_46_1.png" src="../../_images/CoverageMetis_46_1.png" />
 </div>
 <div class="section" id="benchmarking-ap4">
 <h2>Benchmarking AP4<a class="headerlink" href="#benchmarking-ap4" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>lfile=[fap4]
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>lfile=[fap4]
 for k,f in enumerate(lfile):
     df = readdata(f)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>C4.grid
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>C4.grid
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>array([[  0.5,   0.5],
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>array([[  0.5,   0.5],
        [  0.5,   1. ],
        [  0.5,   1.5],
        ...,
@@ -1427,19 +1444,19 @@ for k,f in enumerate(lfile):
        [ 24.5,  12. ]])
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>df[&#39;dp&#39;]= np.sqrt((df[&#39;xap&#39;].values-df[&#39;xue&#39;].values)**2+(df[&#39;yap&#39;].values-df[&#39;yue&#39;].values)**2)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>df[&#39;dp&#39;]= np.sqrt((df[&#39;xap&#39;].values-df[&#39;xue&#39;].values)**2+(df[&#39;yap&#39;].values-df[&#39;yue&#39;].values)**2)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>d4-df[&#39;dp&#39;].values
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>d4-df[&#39;dp&#39;].values
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>array([ 0.,  0.,  0., ...,  0.,  0.,  0.])
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>array([ 0.,  0.,  0., ...,  0.,  0.,  0.])
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>data4=C4.CmWp[208,:,0]
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>data4=C4.CmWp[208,:,0]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(10,10))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>plt.figure(figsize=(10,10))
 plt.semilogx(d4,10*np.log10(data4),&#39;.b&#39;, label=&#39;PyLayers Simulation&#39;)
 plt.semilogx(d4,df[&#39;pg&#39;].values,&#39;.r&#39;, label=&#39;Metis Simulation&#39;)
 plt.xlabel(&#39;Distance (meters)&#39;,fontsize=14)
@@ -1450,42 +1467,42 @@ plt.semilogx(d4,-L,&#39;g&#39;,label=&#39;Free Space&#39;)
 plt.legend()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7ffa41b5d6d0&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7ffa41b5d6d0&gt;
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_53_1.png" src="../../_images/CoverageMetis_53_1.png" />
 </div>
 <div class="section" id="plotting-the-error-ap4">
 <h2>Plotting the error (AP4)<a class="headerlink" href="#plotting-the-error-ap4" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>err4 = df[&#39;pg&#39;].values-10*np.log10(data4)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>err4 = df[&#39;pg&#39;].values-10*np.log10(data4)
 plt.plot(d4,err4,&#39;ob&#39;)
 plt.xlabel(&#39;Distance (meters)&#39;,fontsize=14)
 plt.ylabel(&#39;err (dB)&#39;)
 plt.title(&#39;err&#39;,fontsize=18)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7ffa419e63d0&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7ffa419e63d0&gt;
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_55_1.png" src="../../_images/CoverageMetis_55_1.png" />
 </div>
 <div class="section" id="coverage-ap5">
 <h2>Coverage AP5<a class="headerlink" href="#coverage-ap5" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>!cat $BASENAME/ini/TC1_METIS_coverage_AP5.ini
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>!cat $BASENAME/ini/TC1_METIS_coverage_AP5.ini
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>cat: /home/uguen/Bureau/P1/ini/TC1_METIS_coverage_AP5.ini: Aucun fichier ou dossier de ce type
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cat: /home/uguen/Bureau/P1/ini/TC1_METIS_coverage_AP5.ini: Aucun fichier ou dossier de ce type
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>C5 = Coverage(&#39;coverage/TC1_METIS_coverage_AP5.ini&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>C5 = Coverage(&#39;coverage/TC1_METIS_coverage_AP5.ini&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>C5.cover(snr=False,sinr=False)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>C5.cover(snr=False,sinr=False)
 f,a=C5.show(figsize=(10,10),typ=&#39;pr&#39;)
 a.axis(&quot;on&quot;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(-5.0, 30.0, -2.0, 14.0)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(-5.0, 30.0, -2.0, 14.0)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_59_1.png" src="../../_images/CoverageMetis_59_1.png" />
@@ -1503,7 +1520,7 @@ This is totally normal because the signal crosses an air wall. Finally,
 it is noticeable that the signal strength drops as soon as it hits a
 wood wall.</p>
 <p>The following figure plots the coverage in semilog.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>C5.grid
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>C5.grid
 p5 = np.array([12.5,6.25])
 ptr=p5-C5.grid
 d5=np.sqrt(np.sum(ptr*ptr,axis=1))
@@ -1512,7 +1529,7 @@ plt.ylim(-140,-60)
 plt.xlim(1,100)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(1, 100)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(1, 100)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_61_1.png" src="../../_images/CoverageMetis_61_1.png" />
@@ -1529,59 +1546,59 @@ error is plotted following by an analysis.</p>
 <p>In order to perform the benchmarking, the path gain and the coverage
 Motley Kennan of each AP is represented as a function of the distance as
 shown in the following figure.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>lfile=[fap5]
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>lfile=[fap5]
 for k,f in enumerate(lfile):
     df = readdata(f)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>df[&#39;dp&#39;]= np.sqrt((df[&#39;xap&#39;].values-df[&#39;xue&#39;].values)**2+(df[&#39;yap&#39;].values-df[&#39;yue&#39;].values)**2)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>df[&#39;dp&#39;]= np.sqrt((df[&#39;xap&#39;].values-df[&#39;xue&#39;].values)**2+(df[&#39;yap&#39;].values-df[&#39;yue&#39;].values)**2)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>C5.grid.shape
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>C5.grid.shape
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(1176, 2)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(1176, 2)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>d5-df[&#39;dp&#39;].values
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>d5-df[&#39;dp&#39;].values
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>array([ 0.,  0.,  0., ...,  0.,  0.,  0.])
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>array([ 0.,  0.,  0., ...,  0.,  0.,  0.])
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>data5=C5.CmWp[208,:,0]
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>data5=C5.CmWp[208,:,0]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>C5.fGHz[208]
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>C5.fGHz[208]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>60.039999999999999
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>60.039999999999999
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>data5.shape
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>data5.shape
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(1176,)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(1176,)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>#df
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>#df
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>df[&#39;pg&#39;].values
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>df[&#39;pg&#39;].values
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>array([-106.461332, -109.480902, -105.198185, ...,  -97.151961,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>array([-106.461332, -109.480902, -105.198185, ...,  -97.151961,
         -88.095786, -108.903805])
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>data5
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>data5
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>array([  1.67482668e-20,   5.88236100e-23,   6.30062993e-23, ...,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>array([  1.67482668e-20,   5.88236100e-23,   6.30062993e-23, ...,
          1.51484931e-16,   1.97766539e-16,   8.08957306e-19])
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(10,10))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>plt.figure(figsize=(10,10))
 plt.semilogx(d5,10*np.log10(data5),&#39;.b&#39;, label=&#39;PyLayers Simulation&#39;)
 plt.semilogx(d5,df[&#39;pg&#39;].values,&#39;.r&#39;, label=&#39;Metis Simulation&#39;)
 plt.xlabel(&#39;Distance (meters)&#39;,fontsize=14)
@@ -1592,7 +1609,7 @@ plt.semilogx(d5,-L,&#39;g&#39;,label=&#39;Free Space&#39;)
 plt.legend()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7ffa40e741d0&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7ffa40e741d0&gt;
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_73_1.png" src="../../_images/CoverageMetis_73_1.png" />
@@ -1609,14 +1626,14 @@ following.</p>
 the above graph. This error represents the difference between the
 simulation of the Metis??? ray tracing data and the coverage Motley Kennan
 of the indoor office in PyLayers.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>err = df[&#39;pg&#39;].values-10*np.log10(data5)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>err = df[&#39;pg&#39;].values-10*np.log10(data5)
 plt.plot(d5,err,&#39;ob&#39;)
 plt.xlabel(&#39;Distance (meters)&#39;,fontsize=14)
 plt.ylabel(&#39;err (dB)&#39;)
 plt.title(&#39;err&#39;,fontsize=18)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7ffa482863d0&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7ffa482863d0&gt;
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_75_1.png" src="../../_images/CoverageMetis_75_1.png" />
@@ -1634,16 +1651,16 @@ tracing data and the coverage Motley Kennan.</p>
 <p>A linear model is introduced to the error obtained in AP5 as shown
 below. This linear model is obtained by using ???polyfit function??? which
 serves to fit the data (the error in this case).</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>from numpy import polyfit
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>from numpy import polyfit
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>u = polyfit(d5,err,1)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>u = polyfit(d5,err,1)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>modelL = u[0]*d5+u[1]
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>modelL = u[0]*d5+u[1]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>err = df[&#39;pg&#39;].values-10*np.log10(data5)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>err = df[&#39;pg&#39;].values-10*np.log10(data5)
 plt.plot(d5,err,&#39;ob&#39;, label=&#39;err&#39;)
 plt.xlabel(&#39;Distance (meters)&#39;,fontsize=14)
 plt.ylabel(&#39;err (dB)&#39;)
@@ -1660,13 +1677,13 @@ legend = plt.legend(loc=&#39;upper left&#39;,shadow=True, fontsize=&#39;10&#39;)
 <h2>Plotting the central error<a class="headerlink" href="#plotting-the-central-error" title="Permalink to this headline">¶</a></h2>
 <p>The central error: Now the central error which is the difference between
 the error and the linear model can be plotted as following.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>errc=err-modelL
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>errc=err-modelL
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.plot(d5,errc,&#39;ob&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>plt.plot(d5,errc,&#39;ob&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7ffa41874890&gt;]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7ffa41874890&gt;]
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_83_1.png" src="../../_images/CoverageMetis_83_1.png" />
@@ -1684,7 +1701,7 @@ using scatter plot, and then the error is shown.</p>
 <div class="section" id="metis-ray-tracing-ap5">
 <h2>METIS Ray Tracing AP5<a class="headerlink" href="#metis-ray-tracing-ap5" title="Permalink to this headline">¶</a></h2>
 <p>The ray tracing data from METIS is represented as follows.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>L=Layout(&#39;TC1_METIS.ini&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>L=Layout(&#39;TC1_METIS.ini&#39;)
 a.axis(&#39;on&#39;)
 plt.figure(figsize=(15,10))
 plt.scatter(x=df[&#39;xue&#39;].values,y=df[&#39;yue&#39;].values,c=df[&#39;pg&#39;].values,s=2*(160+df[&#39;pg&#39;].values),cmap=cm.jet,linewidth=0,vmin=-130,vmax=-70)
@@ -1697,10 +1714,10 @@ f,a=L.showG(&#39;s&#39;,ax=ax)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_85_0.png" src="../../_images/CoverageMetis_85_0.png" />
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7ffa4dfdfd10&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7ffa4dfdfd10&gt;
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>L=Layout(&#39;TC1_METIS.ini&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>L=Layout(&#39;TC1_METIS.ini&#39;)
 a.axis(&#39;on&#39;)
 plt.figure(figsize=(15,10))
 plt.scatter(x=df[&#39;xue&#39;].values,y=df[&#39;yue&#39;].values,c=df[&#39;pg&#39;].values,s=2*(160+df[&#39;pg&#39;].values),cmap=cm.jet,linewidth=0,vmin=-130,vmax=-70)
@@ -1713,14 +1730,14 @@ f,a=L.showG(&#39;s&#39;,ax=ax)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_86_0.png" src="../../_images/CoverageMetis_86_0.png" />
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7ffa41560c50&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7ffa41560c50&gt;
 </pre></div>
 </div>
 </div>
 <div class="section" id="ap5-coverage-from-pylayers">
 <h2>AP5 Coverage from PyLayers<a class="headerlink" href="#ap5-coverage-from-pylayers" title="Permalink to this headline">¶</a></h2>
 <p>The coverage Motley Kennan is also represented as following:</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>L=Layout(&#39;TC1_METIS.ini&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>L=Layout(&#39;TC1_METIS.ini&#39;)
 a.axis(&#39;on&#39;)
 val = 10*np.log10(data5)
 plt.figure(figsize=(15,10))
@@ -1733,10 +1750,10 @@ f,a=L.showG(&#39;s&#39;,ax=ax)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_88_0.png" src="../../_images/CoverageMetis_88_0.png" />
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7ffa3ac43610&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7ffa3ac43610&gt;
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>L=Layout(&#39;TC1_METIS.ini&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>L=Layout(&#39;TC1_METIS.ini&#39;)
 a.axis(&#39;on&#39;)
 val = 10*np.log10(data5)
 plt.figure(figsize=(15,10))
@@ -1749,7 +1766,7 @@ f,a=L.showG(&#39;s&#39;,ax=ax)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_89_0.png" src="../../_images/CoverageMetis_89_0.png" />
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7ffa40a48950&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7ffa40a48950&gt;
 </pre></div>
 </div>
 <p>In the above figures, AP5 is represented by the black triangle located
@@ -1770,7 +1787,7 @@ the ray tracing data because of the fluctuation.</p>
 </div>
 <div class="section" id="plotting-the-error">
 <h2>Plotting the error<a class="headerlink" href="#plotting-the-error" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>L=Layout(&#39;TC1_METIS.ini&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>L=Layout(&#39;TC1_METIS.ini&#39;)
 a.axis(&#39;on&#39;)
 plt.figure(figsize=(15,10))
 plt.scatter(x=C5.grid[:,0],y=C5.grid[:,1],c=abs(err),s=60,cmap=cm.jet)
@@ -1783,7 +1800,7 @@ f,a=L.showG(&#39;s&#39;,ax=ax)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_91_0.png" src="../../_images/CoverageMetis_91_0.png" />
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7ffa3b251bd0&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7ffa3b251bd0&gt;
 </pre></div>
 </div>
 <p>This representation of the error shows a mismatch mainly in the left and
@@ -1797,7 +1814,7 @@ be added to the coverage from PyLayers.</p>
 <h2>Linear Model added to Coverage from PyLayers<a class="headerlink" href="#linear-model-added-to-coverage-from-pylayers" title="Permalink to this headline">¶</a></h2>
 <p>From the above PyLayers simulation, a linear model is added in order to
 improve the coverage in the office.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>L=Layout(&#39;TC1_METIS.ini&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>L=Layout(&#39;TC1_METIS.ini&#39;)
 a.axis(&#39;on&#39;)
 val = 10*np.log10(data5)+modelL
 plt.figure(figsize=(15,10))
@@ -1811,10 +1828,10 @@ f,a=L.showG(&#39;s&#39;,ax=ax)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_93_0.png" src="../../_images/CoverageMetis_93_0.png" />
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7ffa3b4610d0&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7ffa3b4610d0&gt;
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>L=Layout(&#39;TC1_METIS.ini&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>L=Layout(&#39;TC1_METIS.ini&#39;)
 a.axis(&#39;on&#39;)
 val = 10*np.log10(data5)+modelL
 plt.figure(figsize=(15,10))
@@ -1828,7 +1845,7 @@ f,a=L.showG(&#39;s&#39;,ax=ax)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_94_0.png" src="../../_images/CoverageMetis_94_0.png" />
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7ffa49363f10&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7ffa49363f10&gt;
 </pre></div>
 </div>
 <p>In this new simulation, it can be seen that the coverage Motley Kennan
@@ -1843,16 +1860,16 @@ material.</p>
 <h2>Plotting the error after adding the linear model<a class="headerlink" href="#plotting-the-error-after-adding-the-linear-model" title="Permalink to this headline">¶</a></h2>
 <p>After improving the coverage Motley Kennan in the indoor office we
 simulate the new error as follows:</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>modelL = u[0]*d5+u[1]
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>modelL = u[0]*d5+u[1]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>val = 10*np.log10(data5)+modelL
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>val = 10*np.log10(data5)+modelL
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>err1=df[&#39;pg&#39;].values-val
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>err1=df[&#39;pg&#39;].values-val
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>L=Layout(&#39;TC1_METIS.ini&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>L=Layout(&#39;TC1_METIS.ini&#39;)
 a.axis(&#39;on&#39;)
 plt.figure(figsize=(15,10))
 plt.scatter(x=C5.grid[:,0],y=C5.grid[:,1],c=abs(err1),s=60,cmap=cm.jet)
@@ -1865,7 +1882,7 @@ f,a=L.showG(&#39;s&#39;,ax=ax)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_99_0.png" src="../../_images/CoverageMetis_99_0.png" />
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7ffa4a4eb090&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7ffa4a4eb090&gt;
 </pre></div>
 </div>
 <p>From this result, it is noticed that the error observed previously has
@@ -1879,15 +1896,16 @@ coverage Motley Kennan.</p>
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="Signatures.html" class="btn btn-neutral float-right" title="Ray Signatures" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="Signatures.html" class="btn btn-neutral float-right" title="Ray Signatures" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="MultiWall.html" class="btn btn-neutral" title="Multi-wall model" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="MultiWall.html" class="btn btn-neutral" title="Multi-wall model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -1897,11 +1915,11 @@ coverage Motley Kennan.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1920,9 +1938,11 @@ coverage Motley Kennan.</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -1937,14 +1957,13 @@ coverage Motley Kennan.</p>
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,21 @@
   
 
   
-  
     <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../../../about.html"/>
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="PyLayers" href="../../../index.html"/>
-        <link rel="up" title="Module code" href="../../index.html"/> 
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
 
   
   <script src="../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +54,7 @@
 
           
             
-            <img src="../../../_static/pylayers.png" class="logo" />
+            <img src="../../../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +83,10 @@
           
             
             
-                <ul>
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +97,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -142,7 +139,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -154,34 +151,52 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-      
-    <li>pylayers.antprop.coverage</li>
+        
+      <li>pylayers.antprop.coverage</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -192,8 +207,8 @@
 .. currentmodule:: pylayers.antprop.coverage
 
 .. autosummary::
-    :members:
-    
+   :members:
+
 &quot;&quot;&quot;
 from pylayers.util.project import *
 #from pylayers.measures.mesuwb import *
@@ -202,26 +217,30 @@ import pylayers.util.pyutil as pyu
 from pylayers.util.utilnet import str2bool
 from pylayers.gis.layout import Layout
 import pylayers.antprop.loss as loss
-import pylayers.antprop.deygout as dg
 import pylayers.gis.ezone as ez
 import pylayers.signal.standard as std
 
 import matplotlib.cm  as cm
-
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as m
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-import ConfigParser
+
+if sys.version_info.major==2:
+    import ConfigParser
+else:
+    import configparser as ConfigParser
+
 import pdb
 import doctest
 from itertools import product
+
 try:
     from mayavi import mlab
     from tvtk.tools import visual
-
 except:
-    print &#39;mayavi not installed&#39;
+    print(&#39;mayavi not installed&#39;)
 
 
 <div class="viewcode-block" id="Coverage"><a class="viewcode-back" href="../../../api/pylayers.antprop.coverage.Coverage.html#pylayers.antprop.coverage.Coverage">[docs]</a>class Coverage(PyLayers):
@@ -278,7 +297,7 @@ except:
         &quot;&quot;&quot;
 
 
-        self.config = ConfigParser.ConfigParser()
+        self.config = ConfigParser.ConfigParser(allow_no_value=True)
         self.config.read(pyu.getlong(_fileini,pstruc[&#39;DIRSIMUL&#39;]))
 
         self.layoutopt = dict(self.config.items(&#39;layout&#39;))
@@ -286,7 +305,7 @@ except:
         self.apopt     = dict(self.config.items(&#39;ap&#39;))
         self.rxopt     = dict(self.config.items(&#39;rx&#39;))
         self.showopt   = dict(self.config.items(&#39;show&#39;))
-        
+
         # get the Layout
         filename = self.layoutopt[&#39;filename&#39;]
         if filename.endswith(&#39;lay&#39;):
@@ -308,7 +327,7 @@ except:
             # create grid
             #
             self.creategrid(mode=self.mode,boundary=self.boundary,_fileini=self.filespa)
-            
+
             self.dap = {}
             for k in self.apopt:
                 kwargs  = eval(self.apopt[k])
@@ -323,7 +342,6 @@ except:
             except:
                 self.L.build()
                 self.L.dumpw()
-
 
         else:
             self.typ=&#39;outdoor&#39;
@@ -389,8 +407,8 @@ except:
             self.grid =self.RN.position[0:2,:].T
         else:
             if mode==&quot;full&quot;:
-                mi=np.min(self.L.Gs.pos.values(),axis=0)+0.01
-                ma=np.max(self.L.Gs.pos.values(),axis=0)-0.01
+                mi=np.min(np.array(list(self.L.Gs.pos.values())),axis=0)+0.01
+                ma=np.max(np.array(list(self.L.Gs.pos.values())),axis=0)-0.01
             if mode==&quot;zone&quot;:
                 assert boundary!=[]
                 mi = np.array([boundary[0],boundary[1]])
@@ -568,7 +586,7 @@ except:
         for k in p:
             pg = self.grid[k[0],:]
             pa = np.array(self.dap[k[1]][&#39;p&#39;])
-            # exemple with 3 AP 
+            # exemple with 3 AP
             # 321 0
             # 321 1
             # 321 2
@@ -590,7 +608,7 @@ except:
             self.pa = np.vstack((self.pa,np.ones(shpa[1])))
         self.pg = self.pg.T
         self.pg = np.vstack((self.pg,self.zgrid*np.ones(shpg[0])))
-        
+
         self.nf = len(self.fGHz)
 
         # retrieving dimensions along the 3 axis
@@ -598,7 +616,7 @@ except:
         self.na = na
         ng = self.ng
         nf = self.nf
-        
+
         for k,iap in enumerate(self.dap):
             # select only one access point
             u = na*np.arange(0,ng,1).astype(&#39;int&#39;)+k
@@ -606,8 +624,8 @@ except:
                 pt = self.pa[:,u]
                 pr = self.pg[:,u]
                 azoffset = self.dap[iap][&#39;phideg&#39;]*np.pi/180.
-                self.dap[iap].A.eval(fGHz=self.fGHz,pt=pt,pr=pr,azoffset=azoffset)
-                
+                self.dap[iap].A.eval(fGHz=self.fGHz, pt=pt, pr=pr, azoffset=azoffset)
+
                 gain = (self.dap[iap].A.G).T
                 #pdb.set_trace()
                 # to handle omnidirectional antenna (nf,1,1)
@@ -617,10 +635,10 @@ except:
                     tgain = np.dstack((tgain,gain[:,:,None]))
                 except:
                     tgain = gain[:,:,None]
-        
+
         #Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
         Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
-        
+
         self.Lwo = Lwo.reshape(nf,ng,na)
         self.Edo = Edo.reshape(nf,ng,na)
         self.Lwp = Lwp.reshape(nf,ng,na)
@@ -1074,7 +1092,7 @@ except:
                      &#39;best&#39;:True
                    }
 
-        title = self.dap[self.dap.keys()[0]].s.name+ &#39; : &#39;
+        title = self.dap[list(self.dap.keys())[0]].s.name+ &#39; : &#39;
 
         for k in defaults:
             if k not in kwargs:
@@ -1325,6 +1343,7 @@ if (__name__ == &quot;__main__&quot;):
 </pre></div>
 
            </div>
+           
           </div>
           <footer>
   
@@ -1334,11 +1353,11 @@ if (__name__ == &quot;__main__&quot;):
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1357,9 +1376,11 @@ if (__name__ == &quot;__main__&quot;):
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -1374,14 +1395,13 @@ if (__name__ == &quot;__main__&quot;):
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

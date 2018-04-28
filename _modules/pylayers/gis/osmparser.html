@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,21 @@
   
 
   
-  
     <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../../../about.html"/>
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="PyLayers" href="../../../index.html"/>
-        <link rel="up" title="Module code" href="../../index.html"/> 
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
 
   
   <script src="../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +54,7 @@
 
           
             
-            <img src="../../../_static/pylayers.png" class="logo" />
+            <img src="../../../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +83,10 @@
           
             
             
-                <ul>
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +97,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -142,7 +139,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -154,34 +151,52 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-      
-    <li>pylayers.gis.osmparser</li>
+        
+      <li>pylayers.gis.osmparser</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -199,8 +214,12 @@ Module OSMParser
 &quot;&quot;&quot;
 from osmapi import OsmApi
 import geocoder as geo
+import sys
 import urllib
-import urllib2 as url
+if sys.version_info.major==2:
+    from  urllib2 import urlopen
+else:
+    from  urllib.request import urlopen
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 import pylayers.util.geomutil as geu
@@ -212,14 +231,14 @@ import matplotlib.pyplot as plt
 try:
     from imposm.parser import OSMParser
 except:
-    print &quot;Warning : imposm seems not to be installed&quot;
+    print(&quot;Warning : imposm seems not to be installed&quot;)
 import networkx as nx
 import numpy as np
 import pdb
 
 # classes that handle the OSM data file format.
 <div class="viewcode-block" id="Way"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Way.html#pylayers.gis.osmparser.Way">[docs]</a>class Way(object):
-    &quot;&quot;&quot;  
+    &quot;&quot;&quot;
 
     A Way is a polyline or a Polygon (if closed)
 
@@ -528,24 +547,44 @@ import pdb
         self.way = {}
         self.cpt = 0</div>
 
-<div class="viewcode-block" id="Ways.building"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.building">[docs]</a>    def building(self, ways , height=8.5):
+<div class="viewcode-block" id="Ways.building"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.building">[docs]</a>    def building(self, ways , height=8.5,min_heigh=0):
         &quot;&quot;&quot; building callback function
 
         Parameters
         ----------
 
         ways : Ways
-        height : float 
+        height : float
 
         &quot;&quot;&quot;
         for osmid, tags, refs in ways:
             if &#39;building&#39; in tags:
+                ntags ={}
+                # height : from ground to roof top
                 if &#39;height&#39; in tags:
-                    tags = {&#39;height&#39;:tags[&#39;height&#39;]}
+                    ntags[&#39;height&#39;] = tags[&#39;height&#39;]
+                elif &#39;building:height&#39; in tags:
+                    ntags[&#39;height&#39;]  = tags[&#39;building:height&#39;]
                 else:
-                    tags = {&#39;height&#39;: height}
+                    ntags[&#39;height&#39;] = height
 
-                self.w[osmid] = [refs,tags]
+                # min_height : from ground to roof top
+                if &#39;building:min_height&#39; in tags:
+                    ntags[&#39;min_height&#39;] = tags[&#39;building:min_height&#39;]
+                elif &#39;min_height&#39; in tags:
+                    ntags[&#39;min_height&#39;] = tags[&#39;min_height&#39;]
+                else:
+                    ntags[&#39;min_height&#39;] = min_height
+
+                # material : from ground to roof top
+                if &#39;building:material&#39; in tags:
+                    ntags[&#39;material&#39;] = tags[&#39;building:material&#39;]
+                elif &#39;material&#39; in tags:
+                    ntags[&#39;material&#39;] = tags[&#39;material&#39;]
+                else:
+                    ntags[&#39;material&#39;] = &#39;WALL&#39;
+
+                self.w[osmid] = [refs,ntags]
                 self.cpt += 1</div>
 
 <div class="viewcode-block" id="Ways.eval"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.eval">[docs]</a>    def eval(self,coords):
@@ -639,7 +678,7 @@ import pdb
             # retrieve PolyGon or LineString
             # progress bar
             if k%1000==0:
-                print k,N
+                print(k,N)
             shp = self.way[b].shp
             if type(shp)==geu.Polygon:
                 pa = self.way[b].shp.ndarray()
@@ -676,7 +715,7 @@ import pdb
         for b in self.way:
             tags  = self.way[b].tags
             if (&#39;building&#39; in tags) | (&#39;buildingpart&#39; in tags):
-                print &quot;buildingpart found&quot;
+                print(&quot;buildingpart found&quot;)
                 try:
                     poly  = self.way[b].shp
                     if &#39;building:roof:colour&#39; in tags:
@@ -685,7 +724,7 @@ import pdb
                         col = &#39;#abcdef&#39;
                     fig, ax = poly.plot(fig=fig, ax=ax,color=col)
                 except:
-                    print &quot;building: &quot;,b,&quot; is not a polygon&quot;
+                    print(&quot;building: &quot;,b,&quot; is not a polygon&quot;)
         plt.axis(&#39;scaled&#39;)
         return(fig,ax)</div>
 
@@ -837,25 +876,30 @@ import pdb
 #     getbdg
 #
 #
-<div class="viewcode-block" id="getosm"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.getosm.html#pylayers.gis.osmparser.getosm">[docs]</a>def getosm(address=&#39;Rennes&#39;,latlon=0,dist_m=400,cart=False):
+<div class="viewcode-block" id="getosm"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.getosm.html#pylayers.gis.osmparser.getosm">[docs]</a>def getosm(address=&#39;Rennes&#39;, latlon=0, dist_m=400,
+           cart=False,
+           level_height = 3.45, typical_height = 10):
     &quot;&quot;&quot; get osm region from osmapi
 
     Parameters
     ----------
 
-    address : string 
-    latlon : tuple or 0 
-    dist_m : float 
-    cart : boolean 
+    address : string
+    latlon : tuple or 0
+    dist_m : float
+    cart : boolean
+    level_height :  float
+        typical level height for deriving building height from # levels
+    typical_height : float
+        typical height for building when no information
 
     Notes
     -----
 
-    if latlon tuple is precised it has priority over the string 
+    if latlon tuple is precised it has priority over the string
 
     &quot;&quot;&quot;
 
-    level_height = 3.45
     rad_to_deg = (180/np.pi)
     deg_to_rad = (np.pi/180)
 
@@ -864,7 +908,7 @@ import pdb
         try:
             lat,lon = place.latlng
         except:
-            print place
+            print(place)
     else:
         lat = latlon[0]
         lon = latlon[1]
@@ -874,17 +918,17 @@ import pdb
     Osm = OsmApi()
 
     #
-    # Get Map around the specified coordinates 
+    # Get Map around the specified coordinates
     #
 
     osmmap  = Osm.Map(lon-alpha,lat-alpha,lon+alpha,lat+alpha)
 
     #print(osmmap)
-    
+
     nodes = Nodes()
     nodes.clean()
     nodes.readmap(osmmap)
-   
+
     coords = Coords()
     coords.clean()
     coords.from_nodes(nodes)
@@ -894,7 +938,7 @@ import pdb
     ways = Ways()
     ways.clean()
     ways.readmap(osmmap,coords)
-    
+
     # list of nodes involved in buildings
     lnodes_id=[]
     for iw in ways.w:
@@ -909,26 +953,32 @@ import pdb
     dpoly={}
     for iw in ways.w:
         ways.way[iw].tags = {}
-        # material 
+        # material
         if ways.w[iw][1].has_key(&#39;material&#39;):
             ways.way[iw].tags[&#39;name&#39;]=ways.w[iw][1][&#39;material&#39;]
         elif ways.w[iw][1].has_key(&#39;building:material&#39;):
             ways.way[iw].tags[&#39;name&#39;]=ways.w[iw][1][&#39;building:material&#39;]
         else:
             ways.way[iw].tags[&#39;name&#39;]=&#39;WALL&#39;
-        # height 
+
+        # min_height
+        if ways.w[iw][1].has_key(&#39;building:min_height&#39;):
+            min_height = eval(ways.w[iw][1][&#39;building:min_height&#39;])
+        else:
+            min_height = 0
+        # height
         if ways.w[iw][1].has_key(&#39;height&#39;):
-            ways.way[iw].tags[&#39;z&#39;]=(0,eval(ways.w[iw][1][&#39;height&#39;]))
+            ways.way[iw].tags[&#39;z&#39;] = (min_height, eval(ways.w[iw][1][&#39;height&#39;]))
         elif ways.w[iw][1].has_key(&#39;building:height&#39;):
-            ways.way[iw].tags[&#39;z&#39;]=(0,eval(ways.w[iw][1][&#39;building:height&#39;]))
+            ways.way[iw].tags[&#39;z&#39;] = (min_height, eval(ways.w[iw][1][&#39;building:height&#39;]))
         elif ways.w[iw][1].has_key(&#39;building:levels&#39;):
             nb_levels = eval(ways.w[iw][1][&#39;building:levels&#39;])
             if type(nb_levels)!=int:
                 try:
-                    nb_levels=max(nb_levels)
+                    nb_levels = max(nb_levels)
                 except:
                     nb_levels=2
-            ways.way[iw].tags[&#39;z&#39;]=(0,nb_levels*level_height)
+            ways.way[iw].tags[&#39;z&#39;]=(min_height,nb_levels*level_height)
         elif ways.w[iw][1].has_key(&#39;levels&#39;):
             nb_levels = eval(ways.w[iw][1][&#39;levels&#39;])
             if type(nb_levels)!=int:
@@ -936,13 +986,14 @@ import pdb
                     nb_levels=max(nb_levels)
                 except:
                     nb_levels=2
-            ways.way[iw].tags[&#39;z&#39;]=(0,nb_levels*level_height)
+            ways.way[iw].tags[&#39;z&#39;]=(min_height,nb_levels*level_height)
         else:
-            ways.way[iw].tags[&#39;z&#39;]=(0,12)
-                          
-        ptpoly=[coords.xy[x] for x in ways.w[iw][0]]
-        dpoly[iw]=geu.Polygon(ptpoly,vnodes=ways.w[iw][0])
+            ways.way[iw].tags[&#39;z&#39;] = (0,typical_height)
+
+        ptpoly = [coords.xy[x] for x in ways.w[iw][0]]
+        dpoly[iw] = geu.Polygon(ptpoly,vnodes=ways.w[iw][0])
         dpoly[iw].coorddeter()
+
     return coords,nodes,ways,dpoly,m</div>
 
 
@@ -953,7 +1004,7 @@ import pdb
     ----------
 
     typ : string
-        indoor | outdoor 
+        indoor | outdoor
     verbose : boolean
         default : False
     c : boolean
@@ -962,10 +1013,11 @@ import pdb
         read nodes
     w : boolean
         read  ways
-    r : booleanif c:
+    r : boolean
+        read relations
+    if c:
         coords = Coords()
         coords.clean()
-        read relations
 
     Returns
     -------
@@ -989,14 +1041,14 @@ import pdb
         coords.clean()
         coords_parser = OSMParser(concurrency=4, coords_callback=coords.coords)
         if verbose:
-            print &quot;parsing coords&quot;
+            print(&quot;parsing coords&quot;)
 
         coords_parser.parse(filename)
 
         m = coords.cartesian(cart=cart)
 
         if verbose:
-            print str(coords.cpt)
+            print(str(coords.cpt))
     else:
         coords = None
     #
@@ -1008,12 +1060,12 @@ import pdb
         nodes_parser = OSMParser(concurrency=4, nodes_callback=nodes.nodes)
 
         if verbose:
-            print &quot;parsing nodes&quot;
+            print(&quot;parsing nodes&quot;)
 
         nodes_parser.parse(filename)
 
         if verbose:
-            print str(nodes.cpt)
+            print(str(nodes.cpt))
     else:
         nodes = None
 
@@ -1028,11 +1080,11 @@ import pdb
         if typ==&#39;indoor&#39;:
             ways_parser = OSMParser(concurrency=4, ways_callback=ways.ways)
         if verbose:
-            print &quot;parsing ways&quot;
+            print(&quot;parsing ways&quot;)
         ways_parser.parse(filename)
 
         if verbose:
-            print str(ways.cpt)
+            print(str(ways.cpt))
 
         # convert lat,lon in cartesian
         ways.eval(coords)
@@ -1048,11 +1100,11 @@ import pdb
         relations_parser = OSMParser(concurrency=4,relations_callback=relations.relations)
 
         if verbose:
-            print &quot;parsing relations&quot;
+            print(&quot;parsing relations&quot;)
         relations_parser.parse(filename)
 
         if verbose:
-            print str(relations.cpt)
+            print(str(relations.cpt))
     else:
         relations = None
 
@@ -1101,7 +1153,7 @@ import pdb
     command = &#39;osmconvert -b=&#39;+str(lonmin)+&#39;,&#39;\
             + str(latmin)+&#39;,&#39;+str(lonmax)+&#39;,&#39;\
             + str(latmax)+&#39; &#39;+fileosm +&#39; &gt; &#39;+ fileout+&#39;.osm&#39;
-    print command
+    print(command)
     os.system(command)
 
     m = Basemap(llcrnrlon=lonmin,llcrnrlat=latmin,urcrnrlon=lonmax,urcrnrlat=latmax,
@@ -1143,7 +1195,7 @@ import pdb
     for bid in relations.relation:
         tags = relations.relation[bid][&#39;tags&#39;]
         if tags[&#39;type&#39;]==&#39;outdoor&#39;:
-            print &quot;Constructing Indoor building &quot;, bid
+            print(&quot;Constructing Indoor building &quot;, bid)
             bdg = FloorPlan(bid,coords,nodes,ways,relations)
             bdg.build(typ=&#39;relation&#39;,eid=bid)
     return bdg,m</div>
@@ -1151,6 +1203,7 @@ import pdb
 </pre></div>
 
            </div>
+           
           </div>
           <footer>
   
@@ -1160,11 +1213,11 @@ import pdb
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1183,9 +1236,11 @@ import pdb
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -1200,14 +1255,13 @@ import pdb
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

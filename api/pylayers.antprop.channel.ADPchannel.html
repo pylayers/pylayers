@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,31 +25,23 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/>
-        <link rel="prev" title="visuPts" href="pylayers.antprop.loss.visuPts.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="AFPchannel" href="pylayers.antprop.channel.AFPchannel.html" />
+    <link rel="prev" title="visuPts" href="pylayers.antprop.loss.visuPts.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -62,7 +56,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -91,7 +85,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -102,6 +99,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -123,9 +121,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.loss">18&nbsp;&nbsp;&nbsp;pylayers.antprop.loss Module</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="references.html#module-pylayers.antprop.channel">19&nbsp;&nbsp;&nbsp;pylayers.antprop.channel Module</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="references.html#id37">19.1&nbsp;&nbsp;&nbsp;Classes</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">ADPchannel</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">ADPchannel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.AFPchannel.html">AFPchannel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.Ctilde.html">Ctilde</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.Mchannel.html">Mchannel</a></li>
@@ -159,7 +155,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -171,36 +167,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>ADPchannel</li>
+        
+      <li>ADPchannel</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.antprop.channel.ADPchannel.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -211,248 +227,19 @@
 <dl class="class">
 <dt id="pylayers.antprop.channel.ADPchannel">
 <em class="property">class </em><code class="descclassname">pylayers.antprop.channel.</code><code class="descname">ADPchannel</code><span class="sig-paren">(</span><em>x=array([]</em>, <em>dtype=float64)</em>, <em>y=array([]</em>, <em>dtype=float64)</em>, <em>az=array([]</em>, <em>dtype=float64)</em>, <em>tx=array([]</em>, <em>dtype=float64)</em>, <em>rx=array([]</em>, <em>dtype=float64)</em>, <em>fcGHz=28</em>, <em>_filename=''</em>, <em>refinement=False</em>, <em>ang_offset=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#ADPchannel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ADPchannel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="references.html#pylayers.signal.bsignal.TUsignal" title="pylayers.signal.bsignal.TUsignal"><code class="xref py py-class docutils literal"><span class="pre">pylayers.signal.bsignal.TUsignal</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="references.html#pylayers.signal.bsignal.TUsignal" title="pylayers.signal.bsignal.TUsignal"><code class="xref py py-class docutils literal notranslate"><span class="pre">pylayers.signal.bsignal.TUsignal</span></code></a></p>
 <p>Angular Delay Profile channel</p>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="26%" />
-<col width="74%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>az</td>
-<td>(array) azimuth in radian</td>
-</tr>
-<tr class="row-even"><td>ang_offset :</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-odd"><td>theta</td>
-<td>( float)</td>
-</tr>
-<tr class="row-even"><td>phi</td>
-<td>(float)</td>
-</tr>
-<tr class="row-odd"><td>tau</td>
-<td>(float)</td>
-</tr>
-<tr class="row-even"><td>_filename</td>
-<td>(string) short filename for saving</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Efirst_loc</span></code>(nint,&nbsp;E0)</td>
-<td>find the Efirst using the mean like</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">EnImpulse</span></code>(**kwargs)</td>
-<td>Create an energy normalized Gaussian impulse (Usignal)</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">MaskImpulse</span></code>(**kwargs)</td>
-<td>MaskImpulse : Create an Energy normalized Gaussian impulse (Usignal)</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Yadd_zeros2l</span></code>(N)</td>
-<td>time domain extension on the left with N zeros</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Yadd_zeros2r</span></code>(N)</td>
-<td>time domain extension on right with N zeros</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">abs</span></code>()</td>
-<td>return the absolute value of an Usignal</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">align</span></code>(u2)</td>
-<td>align two TUsignal on a same base</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">alignc</span></code>(u2)</td>
-<td>align 2 Usignal</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.app" title="pylayers.antprop.channel.ADPchannel.app"><code class="xref py py-obj docutils literal"><span class="pre">app</span></code></a>(**kwargs)</td>
-<td>Calculate Angular Power Profile</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">append</span></code>(bs)</td>
-<td>append bs to Bsignal</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">b2tu</span></code>(N)</td>
-<td>conversion from TBsignal to TUsignal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">b2tu2</span></code>(fsGHz,&nbsp;Tobsns)</td>
-<td>conversion from TBsignal to TUsignal</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">cformat</span></code>(**kwargs)</td>
-<td>complex format</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.clean" title="pylayers.antprop.channel.ADPchannel.clean"><code class="xref py py-obj docutils literal"><span class="pre">clean</span></code></a>([threshold_dB])</td>
-<td>clean ADP</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">convolve</span></code>(u)</td>
-<td>time domain convolution</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.correlate" title="pylayers.antprop.channel.ADPchannel.correlate"><code class="xref py py-obj docutils literal"><span class="pre">correlate</span></code></a>(adp[,&nbsp;thresholddB])</td>
-<td>correlate ADP with an other ADP</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">corrgauss</span></code>(sigma)</td>
-<td>Correlate TUsignal with a normalized gaussian of standard deviation sigma</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.cut" title="pylayers.antprop.channel.ADPchannel.cut"><code class="xref py py-obj docutils literal"><span class="pre">cut</span></code></a>([imin,&nbsp;imax])</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">diff</span></code>()</td>
-<td>numerical differentiation TUsignal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">dx</span></code>()</td>
-<td>get the time step of Usignal.x</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">energy</span></code>([axis])</td>
-<td>calculate the energy of an Usignal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">eprfl</span></code>([axis])</td>
-<td>Energy profile</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">esd</span></code>([mode])</td>
-<td>Calculate the energy spectral density of the U signal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">expand</span></code>(a)</td>
-<td>expand the time support by a scale factor a</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">extract</span></code>(u)</td>
-<td>extract a subset of signal from index</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">fft</span></code>([shift])</td>
-<td>forward fast Fourier transform of TUsignal</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">fftsh</span></code>()</td>
-<td>return an FHsignal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">fftshift</span></code>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">filter</span></code>([order,&nbsp;wp,&nbsp;ws,&nbsp;ftype])</td>
-<td>TUsignal filtering</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">flatteny</span></code>([yrange,&nbsp;reversible])</td>
-<td>flatten y array</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">ft</span></code>()</td>
-<td>return the associated FUsignal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">gating</span></code>(xmin,&nbsp;xmax)</td>
-<td>gating between xmin and xmax</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
-<td>generic help</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.imshow" title="pylayers.antprop.channel.ADPchannel.imshow"><code class="xref py py-obj docutils literal"><span class="pre">imshow</span></code></a>(**kwargs)</td>
-<td>show Angular Delay Profile</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">info</span></code>()</td>
-<td>display information about TUsignal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">integ</span></code>(Tns[,&nbsp;Tsns])</td>
-<td>integation of alphak tauk of TBsignal</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">len</span></code>()</td>
-<td>returm length of x axis</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">load</span></code>(filename)</td>
-<td>load a Bsignal from a Matlab File</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">max</span></code>()</td>
-<td>maximum of Usignal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">mean</span></code>()</td>
-<td>mean value of the signal</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">min</span></code>()</td>
-<td>minimum of Usignal</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.pap" title="pylayers.antprop.channel.ADPchannel.pap"><code class="xref py py-obj docutils literal"><span class="pre">pap</span></code></a>([fcGHz,&nbsp;fontsize,&nbsp;figsize,&nbsp;Gmax,&nbsp;Gmin,&nbsp;…])</td>
-<td>Calculate Power Angular Profile</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.pdp" title="pylayers.antprop.channel.ADPchannel.pdp"><code class="xref py py-obj docutils literal"><span class="pre">pdp</span></code></a>(**kwargs)</td>
-<td>Calculate and plot Power Delay Profile</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.pdp_v" title="pylayers.antprop.channel.ADPchannel.pdp_v"><code class="xref py py-obj docutils literal"><span class="pre">pdp_v</span></code></a>(**kwargs)</td>
-<td>Calculate and plot Power Delay Profile</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.peak" title="pylayers.antprop.channel.ADPchannel.peak"><code class="xref py py-obj docutils literal"><span class="pre">peak</span></code></a>([refinement])</td>
-<td>evaluate peak of PADP</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>(**kwargs)</td>
-<td>plot TBsignal</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.pltcir" title="pylayers.antprop.channel.ADPchannel.pltcir"><code class="xref py py-obj docutils literal"><span class="pre">pltcir</span></code></a>(phideg[,&nbsp;Gain])</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.polarplot" title="pylayers.antprop.channel.ADPchannel.polarplot"><code class="xref py py-obj docutils literal"><span class="pre">polarplot</span></code></a>(**kwargs)</td>
-<td>polar plot of PADP</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">psd</span></code>([Tpns,&nbsp;R,&nbsp;periodic])</td>
-<td>calculate TUsignal power spectral density</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">resample</span></code>(x_new[,&nbsp;kind])</td>
-<td>resample the Usignal with a new x base</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">save</span></code>(filename)</td>
-<td>save Bsignal in Matlab File Format</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">setx</span></code>(start,&nbsp;stop,&nbsp;dx)</td>
-<td>set the x array of the Usignal (y=0)</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">sety</span></code>(fun)</td>
-<td>sety : set y vector</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">shift</span></code>(tau)</td>
-<td>shift the Usignal by tau (expressed in the same unit as Bsignal.x)</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">showpsd</span></code>([fig,&nbsp;ax,&nbsp;display,&nbsp;PRPns])</td>
-<td>show psd</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">stem</span></code>(**kwargs)</td>
-<td>stem display</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">step</span></code>([color])</td>
-<td>plot steps display</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.svd" title="pylayers.antprop.channel.ADPchannel.svd"><code class="xref py py-obj docutils literal"><span class="pre">svd</span></code></a>()</td>
-<td>perform singular value decomposition of the PADP</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">tap</span></code>(fcGHz,&nbsp;WGHz,&nbsp;Ntap)</td>
-<td>Back to baseband</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.toafp" title="pylayers.antprop.channel.ADPchannel.toafp"><code class="xref py py-obj docutils literal"><span class="pre">toafp</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.tomap" title="pylayers.antprop.channel.ADPchannel.tomap"><code class="xref py py-obj docutils literal"><span class="pre">tomap</span></code></a>(L,&nbsp;**kwargs)</td>
-<td>surimpose PADP on the Layout</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">translate</span></code>(tau)</td>
-<td>translate TBsignal signal by tau</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">truncate</span></code>(imin,&nbsp;imax[,&nbsp;axis])</td>
-<td>truncate USignal in range [posmin, posmax]</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">width</span></code>()</td>
-<td>get the extension support of the Usignal</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">window</span></code>([win])</td>
-<td>windowing Usignal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">zleft</span></code>(xmin)</td>
-<td>add zeros on the left  until xmin</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">zlr</span></code>(xmin,&nbsp;xmax)</td>
-<td>This corresponds to a gating between xmin and xmax</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">zright</span></code>(xmax)</td>
-<td>add zeros on the right until xmax</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>az <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd>azimuth in radian</dd>
+</dl>
+<p>ang_offset :
+theta :  float
+phi : float
+tau : float
+_filename : string</p>
+<blockquote>
+<div>short filename for saving</div></blockquote>
 <p class="rubric">Methods Summary</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -460,46 +247,46 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.app" title="pylayers.antprop.channel.ADPchannel.app"><code class="xref py py-obj docutils literal"><span class="pre">app</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.app" title="pylayers.antprop.channel.ADPchannel.app"><code class="xref py py-obj docutils literal notranslate"><span class="pre">app</span></code></a>(**kwargs)</td>
 <td>Calculate Angular Power Profile</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.clean" title="pylayers.antprop.channel.ADPchannel.clean"><code class="xref py py-obj docutils literal"><span class="pre">clean</span></code></a>([threshold_dB])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.clean" title="pylayers.antprop.channel.ADPchannel.clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clean</span></code></a>([threshold_dB])</td>
 <td>clean ADP</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.correlate" title="pylayers.antprop.channel.ADPchannel.correlate"><code class="xref py py-obj docutils literal"><span class="pre">correlate</span></code></a>(adp[,&nbsp;thresholddB])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.correlate" title="pylayers.antprop.channel.ADPchannel.correlate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">correlate</span></code></a>(adp[,&nbsp;thresholddB])</td>
 <td>correlate ADP with an other ADP</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.cut" title="pylayers.antprop.channel.ADPchannel.cut"><code class="xref py py-obj docutils literal"><span class="pre">cut</span></code></a>([imin,&nbsp;imax])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.cut" title="pylayers.antprop.channel.ADPchannel.cut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cut</span></code></a>([imin,&nbsp;imax])</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.imshow" title="pylayers.antprop.channel.ADPchannel.imshow"><code class="xref py py-obj docutils literal"><span class="pre">imshow</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.imshow" title="pylayers.antprop.channel.ADPchannel.imshow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">imshow</span></code></a>(**kwargs)</td>
 <td>show Angular Delay Profile</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.pap" title="pylayers.antprop.channel.ADPchannel.pap"><code class="xref py py-obj docutils literal"><span class="pre">pap</span></code></a>([fcGHz,&nbsp;fontsize,&nbsp;figsize,&nbsp;Gmax,&nbsp;Gmin,&nbsp;…])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.pap" title="pylayers.antprop.channel.ADPchannel.pap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pap</span></code></a>([fcGHz,&nbsp;fontsize,&nbsp;figsize,&nbsp;Gmax,&nbsp;Gmin,&nbsp;…])</td>
 <td>Calculate Power Angular Profile</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.pdp" title="pylayers.antprop.channel.ADPchannel.pdp"><code class="xref py py-obj docutils literal"><span class="pre">pdp</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.pdp" title="pylayers.antprop.channel.ADPchannel.pdp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pdp</span></code></a>(**kwargs)</td>
+<td>Calculate the Power Delay Profile</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.pdp_v" title="pylayers.antprop.channel.ADPchannel.pdp_v"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pdp_v</span></code></a>(**kwargs)</td>
 <td>Calculate and plot Power Delay Profile</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.pdp_v" title="pylayers.antprop.channel.ADPchannel.pdp_v"><code class="xref py py-obj docutils literal"><span class="pre">pdp_v</span></code></a>(**kwargs)</td>
-<td>Calculate and plot Power Delay Profile</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.peak" title="pylayers.antprop.channel.ADPchannel.peak"><code class="xref py py-obj docutils literal"><span class="pre">peak</span></code></a>([refinement])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.peak" title="pylayers.antprop.channel.ADPchannel.peak"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peak</span></code></a>([refinement])</td>
 <td>evaluate peak of PADP</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.pltcir" title="pylayers.antprop.channel.ADPchannel.pltcir"><code class="xref py py-obj docutils literal"><span class="pre">pltcir</span></code></a>(phideg[,&nbsp;Gain])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.pltcir" title="pylayers.antprop.channel.ADPchannel.pltcir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pltcir</span></code></a>(phideg[,&nbsp;Gain])</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.polarplot" title="pylayers.antprop.channel.ADPchannel.polarplot"><code class="xref py py-obj docutils literal"><span class="pre">polarplot</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.polarplot" title="pylayers.antprop.channel.ADPchannel.polarplot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">polarplot</span></code></a>(**kwargs)</td>
 <td>polar plot of PADP</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.svd" title="pylayers.antprop.channel.ADPchannel.svd"><code class="xref py py-obj docutils literal"><span class="pre">svd</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.svd" title="pylayers.antprop.channel.ADPchannel.svd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">svd</span></code></a>()</td>
 <td>perform singular value decomposition of the PADP</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.toafp" title="pylayers.antprop.channel.ADPchannel.toafp"><code class="xref py py-obj docutils literal"><span class="pre">toafp</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.toafp" title="pylayers.antprop.channel.ADPchannel.toafp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toafp</span></code></a>()</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.tomap" title="pylayers.antprop.channel.ADPchannel.tomap"><code class="xref py py-obj docutils literal"><span class="pre">tomap</span></code></a>(L,&nbsp;**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.tomap" title="pylayers.antprop.channel.ADPchannel.tomap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tomap</span></code></a>(L,&nbsp;**kwargs)</td>
 <td>surimpose PADP on the Layout</td>
 </tr>
 </tbody>
@@ -515,15 +302,7 @@
 <dt id="pylayers.antprop.channel.ADPchannel.clean">
 <code class="descname">clean</code><span class="sig-paren">(</span><em>threshold_dB=20</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#ADPchannel.clean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ADPchannel.clean" title="Permalink to this definition">¶</a></dt>
 <dd><p>clean ADP</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>threshold_dB</strong> : float</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
+<p>threshold_dB : float</p>
 <p>All values below Max -threshold are set to zero</p>
 </dd></dl>
 
@@ -531,22 +310,11 @@
 <dt id="pylayers.antprop.channel.ADPchannel.correlate">
 <code class="descname">correlate</code><span class="sig-paren">(</span><em>adp</em>, <em>thresholddB=-105</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#ADPchannel.correlate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ADPchannel.correlate" title="Permalink to this definition">¶</a></dt>
 <dd><p>correlate ADP with an other ADP</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>adp</strong> : ADPchannel</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>rhoE</strong> : energy ratio of padp Eadp/Eself</p>
-<p><strong>rhoEc</strong> : energy ratio of centered padp Ecadp/Ecself</p>
-<p><strong>rho</strong> : normalized intercorrelation</p>
-<p class="last"><strong>rhon</strong> : intercorrelation of normalized padp   &lt;self_normalized,adp_normalized&gt;</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
+<p>adp : ADPchannel</p>
+<p>rhoE  : energy ratio of padp Eadp/Eself
+rhoEc : energy ratio of centered padp Ecadp/Ecself
+rho   : normalized intercorrelation  :  &lt;self-mean(self),adp-mean(adp)&gt;/Eself 
+rhon  : intercorrelation of normalized padp   &lt;self_normalized,adp_normalized&gt;</p>
 <p>This can be used to compare a measured PADP with a Ray tracing PADP</p>
 </dd></dl>
 
@@ -565,74 +333,60 @@
 <dt id="pylayers.antprop.channel.ADPchannel.pap">
 <code class="descname">pap</code><span class="sig-paren">(</span><em>fcGHz=28</em>, <em>fontsize=18</em>, <em>figsize=(10</em>, <em>10)</em>, <em>Gmax=22.68</em>, <em>Gmin=19</em>, <em>threshdB=-95</em>, <em>label=''</em>, <em>color='k'</em>, <em>fig=[]</em>, <em>ax=[]</em>, <em>xlabel=True</em>, <em>ylabel=True</em>, <em>legend=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#ADPchannel.pap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ADPchannel.pap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate Power Angular Profile</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fcGHz</strong> : float</p>
-<p><strong>fontsize</strong> : int</p>
-<p><strong>figsize</strong> : tuple</p>
-<p><strong>fig :</strong></p>
-<p><strong>ax  :</strong></p>
-<p><strong>xlabel</strong> : boolean</p>
-<p><strong>ylabel</strong> : boolean</p>
-<p><strong>legen</strong> : boolean</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">fig,ax</p>
-</td>
-</tr>
-</tbody>
-</table>
+<p>fcGHz : float
+fontsize : int
+figsize : tuple
+fig :
+ax  :
+xlabel : boolean
+ylabel : boolean
+legen : boolean</p>
+<p>fig,ax</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.channel.ADPchannel.pdp">
 <code class="descname">pdp</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#ADPchannel.pdp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ADPchannel.pdp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate and plot Power Delay Profile</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fcGHz</strong> : float</td>
-</tr>
-</tbody>
-</table>
+<dd><p>Calculate the Power Delay Profile</p>
+<p>fcGHz : float
+figsize’:(1010)
+fontsize’:18
+fig’ : []
+ax’: []
+xlabel’: True
+ylabel’: True
+legend’: True
+losdelay’: True
+freespace’: True
+desembeded’: False
+typic’:True
+semilogx’:True
+bcir’:False
+raw’: False
+Gmax’:22.68
+Gmin’:19
+Tilt’:10
+HPBW’:10</p>
+<p>tau
+pdp</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.channel.ADPchannel.pdp_v">
 <code class="descname">pdp_v</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#ADPchannel.pdp_v"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ADPchannel.pdp_v" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate and plot Power Delay Profile</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fcGHz</strong> : float</td>
-</tr>
-</tbody>
-</table>
+<p>fcGHz : float</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.channel.ADPchannel.peak">
 <code class="descname">peak</code><span class="sig-paren">(</span><em>refinement=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#ADPchannel.peak"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ADPchannel.peak" title="Permalink to this definition">¶</a></dt>
 <dd><p>evaluate peak of PADP</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>refinment</strong> : boolean</p>
-<blockquote>
-<div><p>provide a refined version of angular estimation</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">alphapeak, taupeak , phipeak</p>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>refinment <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
+<dd>provide a refined version of angular estimation</dd>
+</dl>
+<p>alphapeak, taupeak , phipeak</p>
 </dd></dl>
 
 <dl class="method">
@@ -644,36 +398,32 @@
 <dt id="pylayers.antprop.channel.ADPchannel.polarplot">
 <code class="descname">polarplot</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#ADPchannel.polarplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ADPchannel.polarplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>polar plot of PADP</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fig</strong></p>
-<p><strong>ax</strong></p>
-<p><strong>figsize</strong></p>
-<p><strong>typ</strong> : string</p>
-<p><strong>Ndec</strong> : int</p>
+<p>fig
+ax
+figsize
+typ : string
+Ndec : int</p>
 <blockquote>
-<div><p>decimation factor</p>
-</div></blockquote>
-<p><strong>imax</strong> : int</p>
-<blockquote>
-<div><p>max value</p>
-</div></blockquote>
-<p><strong>vmin</strong> : float</p>
-<p><strong>vmax</strong> : float</p>
-<p><strong>cmap</strong> : colormap</p>
-<p class="last"><strong>title</strong> : PADP</p>
-</td>
-</tr>
-</tbody>
-</table>
+<div>decimation factor</div></blockquote>
+<dl class="docutils">
+<dt>imax <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>max value</dd>
+</dl>
+<p>vmin : float
+vmax : float
+cmap : colormap
+title : PADP</p>
+<p>fig , ax , pc (colormash)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.channel.ADPchannel.svd">
 <code class="descname">svd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#ADPchannel.svd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ADPchannel.svd" title="Permalink to this definition">¶</a></dt>
 <dd><p>perform singular value decomposition of the PADP</p>
+<dl class="docutils">
+<dt>It creates a dictionnay</dt>
+<dd>{‘sv’:sv,’b’:b}</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -685,33 +435,25 @@
 <dt id="pylayers.antprop.channel.ADPchannel.tomap">
 <code class="descname">tomap</code><span class="sig-paren">(</span><em>L</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#ADPchannel.tomap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ADPchannel.tomap" title="Permalink to this definition">¶</a></dt>
 <dd><p>surimpose PADP on the Layout</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : Layout</p>
-<p><strong>xmin</strong> : 10</p>
-<p><strong>xmax</strong> : 400</p>
-<p><strong>ymin</strong> : 10</p>
-<p><strong>ymax</strong> : 400,</p>
-<p><strong>Nx  :3000,</strong></p>
-<p><strong>Ny  :3000,</strong></p>
-<p><strong>‘cmap’:’jet’,</strong></p>
-<p><strong>‘mode’:’image’,</strong></p>
-<p><strong>‘excess’:’los’,</strong></p>
-<p><strong>‘figsize’:(20,20),</strong></p>
-<p><strong>‘thmindB’:-110,</strong></p>
-<p><strong>‘thmaxdB’:-108,</strong></p>
-<p><strong>‘vmindB’:-110,</strong></p>
-<p><strong>‘vmaxdB’:-60,</strong></p>
-<p><strong>‘offset’:0,</strong></p>
-<p><strong>‘display’:True,</strong></p>
-<p><strong>‘compensated’:True,</strong></p>
-<p class="last"><strong>‘tauns_excess’:0</strong></p>
-</td>
-</tr>
-</tbody>
-</table>
+<p>L : Layout
+xmin : 10
+xmax : 400
+ymin : 10
+ymax : 400,
+Nx  :3000,
+Ny  :3000,
+‘cmap’:’jet’,
+‘mode’:’image’,
+‘excess’:’los’,
+‘figsize’:(20,20),
+‘thmindB’:-110,
+‘thmaxdB’:-108,
+‘vmindB’:-110,
+‘vmaxdB’:-60,
+‘offset’:0,
+‘display’:True,
+‘compensated’:True,
+‘tauns_excess’:0</p>
 </dd></dl>
 
 </dd></dl>
@@ -720,13 +462,16 @@
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="pylayers.antprop.channel.AFPchannel.html" class="btn btn-neutral float-right" title="AFPchannel" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="pylayers.antprop.loss.visuPts.html" class="btn btn-neutral" title="visuPts" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="pylayers.antprop.loss.visuPts.html" class="btn btn-neutral" title="visuPts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -736,11 +481,11 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -759,9 +504,11 @@
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -776,14 +523,13 @@
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

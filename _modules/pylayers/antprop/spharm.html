@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,21 @@
   
 
   
-  
     <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../../../about.html"/>
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="PyLayers" href="../../../index.html"/>
-        <link rel="up" title="Module code" href="../../index.html"/> 
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
 
   
   <script src="../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +54,7 @@
 
           
             
-            <img src="../../../_static/pylayers.png" class="logo" />
+            <img src="../../../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +83,10 @@
           
             
             
-                <ul>
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +97,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -142,7 +139,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -154,34 +151,52 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-      
-    <li>pylayers.antprop.spharm</li>
+        
+      <li>pylayers.antprop.spharm</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -228,7 +243,7 @@ from matplotlib import cm
     ----------
 
     L : maximum order
-    mirror : boolean 
+    mirror : boolean
         if True the output contains negative m indices
 
     Returns
@@ -379,12 +394,6 @@ from matplotlib import cm
         data : np.array
         ind : np.array
 
-        Notes
-        -----
-
-        .. warning::
-            seems deprecated
-
         &quot;&quot;&quot;
 
         self.s1 = np.array([])
@@ -455,7 +464,7 @@ from matplotlib import cm
         ----------
 
         threshold : float
-            default 1e-5
+            default (-1)
 
         Notes
         -----
@@ -463,7 +472,7 @@ from matplotlib import cm
         s3 corresponds to energy thresholded coefficients
 
         &quot;&quot;&quot;
-        
+
         if threshold!=-1:
             # integrates energy over frequency axis = 0
             Ex = np.sum(np.abs(self.Cx.s2) ** 2, axis=0)
@@ -553,7 +562,10 @@ from matplotlib import cm
          ind  : ndarray
          k    : ndarray
 
+         Notes
+         -----
          s2 , s3 containers are created
+
         &quot;&quot;&quot;
 
         #~ defaults = { &#39;typ&#39;: &#39;s2&#39;,
@@ -597,7 +609,7 @@ from matplotlib import cm
 
         return(st)
 
-<div class="viewcode-block" id="SCoeff.inits2"><a class="viewcode-back" href="../../../api/pylayers.antprop.spharm.SCoeff.html#pylayers.antprop.spharm.SCoeff.inits2">[docs]</a>    def inits2(self, data,ind):
+<div class="viewcode-block" id="SCoeff.inits2"><a class="viewcode-back" href="../../../api/pylayers.antprop.spharm.SCoeff.html#pylayers.antprop.spharm.SCoeff.inits2">[docs]</a>    def inits2(self, data, ind):
         &quot;&quot;&quot; initialize shape 2 format
 
         Parameters
@@ -781,14 +793,30 @@ from matplotlib import cm
         # retrieve Nf and Lmax to build a void s2 structure
         Nf   = np.shape(self.s3)[0]
         Lmax = max(self.ind3[:,0])
-        K2   = (Lmax+1)*(Lmax+2)/2
+        # -1 added due to an extra last element otherwise
+        # K2   = (Lmax+1)*(Lmax+2)/2
+        K2   = (Lmax+1)*(Lmax+2)/2 -1
         self.s2 = np.zeros((Nf,K2),dtype=complex)
-
         # fill s2 with s3 at proper coefficient location
         self.s2[:,self.k2] = self.s3
         self.L2 = Lmax
         self.M2 = Lmax
         self.ind2 = indexvsh(Lmax)</div>
+
+
+
+    # def s2tos1(self):
+    #     &quot;&quot;&quot; transform shape2 to shape 1
+
+    #     s2  shape 2   array [ Nf x (L+1)*(M+1) ]
+    #     s1  shape 1   array [ Nf , (L+1) , (M+1) ]
+
+    #     &quot;&quot;&quot;
+    #     Nf   = np.shape(self.s2)[0]
+    #     Lmax = max(self.ind2[:,0])
+    #     self.s1 = np.zeros((Nf,Lmax+1,Lmax+1),dtype=complex)
+    #     self.s1[:,self.ind2[:,0],self.ind2[:,1]]=self.s2
+
 
 <div class="viewcode-block" id="SCoeff.plot"><a class="viewcode-back" href="../../../api/pylayers.antprop.spharm.SCoeff.html#pylayers.antprop.spharm.SCoeff.plot">[docs]</a>    def plot(self,typ=&#39;s3&#39;,title=&#39;&#39;,xl=False,yl=False,log=False,stem=True,color=&#39;b&#39;):
         &quot;&quot;&quot; plot coeff
@@ -987,7 +1015,6 @@ from matplotlib import cm
         self.s3 = np.array([])
         self.fmin = fmin
         self.fmax = fmax
-
         if typ == &#39;s1&#39;:
             self.inits1(data)
         if typ == &#39;s2&#39;:
@@ -1248,14 +1275,27 @@ from matplotlib import cm
         # retrieve Nf and Lmax to build a void s2 structure
         Nf   = np.shape(self.s3)[0]
         Lmax = max(self.ind3[:,0])
-        K2   = (Lmax+1)*(Lmax+2)/2
+        # K2   = (Lmax+1)*(Lmax+2)/2
+        # -1 added due to an extra last element otherwise
+        K2   = (Lmax+1)*(Lmax+2)/2 
         self.s2 = np.zeros((Nf,K2),dtype=complex)
-
         # fill s2 with s3 at proper coefficient location
         self.s2[:,self.k2] = self.s3
         self.L2 = Lmax
         self.M2 = Lmax
         self.ind2 = indexvsh(Lmax)</div>
+
+    # def s2tos1(self):
+    #     &quot;&quot;&quot; transform shape2 to shape 1
+
+    #     s2  shape 2   array [ Nf x (L+1)*(M+1) ]
+    #     s1  shape 1   array [ Nf , (L+1) , (M+1) ]
+
+    #     &quot;&quot;&quot;
+    #     Nf   = np.shape(self.s2)[0]
+    #     Lmax = max(self.ind2[:,0])
+    #     self.s1 = np.zeros((Nf,Lmax+1,Lmax+1),dtype=complex)
+    #     self.s1[:,self.ind2[:,0],self.ind2[:,1]]=self.s2
 
 <div class="viewcode-block" id="VCoeff.plot"><a class="viewcode-back" href="../../../api/pylayers.antprop.spharm.VCoeff.html#pylayers.antprop.spharm.VCoeff.plot">[docs]</a>    def plot(self,typ=&#39;s3&#39;,title=&#39;&#39;,xl=False,yl=False,log=False,stem=True,color=&#39;b&#39;):
         &quot;&quot;&quot;
@@ -1405,26 +1445,6 @@ from matplotlib import cm
 <div class="viewcode-block" id="VSHCoeff"><a class="viewcode-back" href="../../../api/pylayers.antprop.spharm.VSHCoeff.html#pylayers.antprop.spharm.VSHCoeff">[docs]</a>class VSHCoeff(object):
     &quot;&quot;&quot; Vector Spherical Harmonics Coefficients class
 
-
-    Attributes
-    ----------
-
-    Bi
-    Br
-    Ci
-    Cr
-
-
-    Notes
-    ------
-
-    Br = VCoeff(br)
-    Bi = VCoeff(bi)
-    Cr = VCoeff(cr)
-    Ci = VCoeff(ci)
-
-    C  = VSHCoeff(Br,Bi,Cr,Ci)
-
     &quot;&quot;&quot;
     def __init__(self, Br, Bi, Cr, Ci):
         &quot;&quot;&quot; Init  VSHCoeff
@@ -1432,10 +1452,11 @@ from matplotlib import cm
         Parameters
         ----------
 
-        Br
-        Bi
-        Cr
-        Ci
+        Br :
+        Bi :
+        Cr :
+        Ci :
+
         &quot;&quot;&quot;
 
         self.Br = Br
@@ -1444,7 +1465,7 @@ from matplotlib import cm
         self.Ci = Ci
 
     def __repr__(self):
-        &quot;&quot;&quot; 
+        &quot;&quot;&quot;
         &quot;&quot;&quot;
         st = &quot;Br&quot;+&#39;\n&#39;
         st = st + &quot;-------------&quot;+&#39;\n&#39;
@@ -1458,9 +1479,9 @@ from matplotlib import cm
         st = st + &quot;Ci&quot;+&#39;\n&#39;
         st = st + &quot;-------------&quot;+&#39;\n&#39;
         st = st + self.Ci.__repr__()
-        return(st) 
+        return(st)
 
-<div class="viewcode-block" id="VSHCoeff.plot"><a class="viewcode-back" href="../../../api/pylayers.antprop.spharm.VSHCoeff.html#pylayers.antprop.spharm.VSHCoeff.plot">[docs]</a>    def plot(self,typ=&#39;s3&#39;,titre=&#39;titre&#39;,log=False,stem=True,subp=True):
+<div class="viewcode-block" id="VSHCoeff.plot"><a class="viewcode-back" href="../../../api/pylayers.antprop.spharm.VSHCoeff.html#pylayers.antprop.spharm.VSHCoeff.plot">[docs]</a>    def plot(self, typ=&#39;s3&#39;, titre=&#39;titre&#39;, log=False, stem=True, subp=True):
         &quot;&quot;&quot; plot coeff
 
         Parameters
@@ -1507,7 +1528,7 @@ from matplotlib import cm
                         &#39;$\sum_f \sum_m |Ci_{l}^{(m)}(f)|$&#39;))</div>
 
 <div class="viewcode-block" id="VSHCoeff.show"><a class="viewcode-back" href="../../../api/pylayers.antprop.spharm.VSHCoeff.html#pylayers.antprop.spharm.VSHCoeff.show">[docs]</a>    def show(self, typ=&#39;s1&#39;, k=1, N=-1, M=-1, kmax = 1000, seuildb=50,
-             animate=False,titre=&#39;&#39;):
+             animate=False,title=&#39;&#39;):
         &quot;&quot;&quot; show VSH coeff
 
         Parameters
@@ -1517,17 +1538,19 @@ from matplotlib import cm
             {&#39;s1&#39;,&#39;s2&#39;,&#39;s3&#39;}
         k  : int
             frequency index
-        kmax : int
-            maximum of the unfolded coefficient axes
         N  : int
         M  : int
+        kmax : int
+            maximum of the unfolded coefficient axes
         seuildB  : float
         animate : boolean
                 default False
+        title : string
+
         &quot;&quot;&quot;
         if not animate:
             fa = np.linspace(self.Br.fmin,self.Br.fmax,self.Br.Nf)
-            st = titre+&#39;  shape : &#39;+typ
+            st = title + &#39;  shape : &#39;+typ
             plt.suptitle(st,fontsize=14)
             plt.subplot(221)
             titre = &#39;$|Br_{n}^{(m)}|$&#39;
@@ -1667,13 +1690,10 @@ from matplotlib import cm
             self.Cr.ind3 = self.Cr.ind2
             self.Cr.s3 = self.Cr.s2
             self.Cr.k2 = np.arange(0,self.Cr.ind2.shape[0])
-            
+
             self.Ci.ind3 = self.Ci.ind2
             self.Ci.s3 = self.Ci.s2
             self.Ci.k2 = np.arange(0,self.Ci.ind2.shape[0])</div>
-
-
-
 
 <div class="viewcode-block" id="VSHCoeff.s3tos2"><a class="viewcode-back" href="../../../api/pylayers.antprop.spharm.VSHCoeff.html#pylayers.antprop.spharm.VSHCoeff.s3tos2">[docs]</a>    def s3tos2(self):
         &quot;&quot;&quot; shape 3 to shape 2
@@ -1683,6 +1703,15 @@ from matplotlib import cm
         self.Bi.s3tos2()
         self.Cr.s3tos2()
         self.Ci.s3tos2()</div>
+
+    # def s2tos1(self):
+    #     &quot;&quot;&quot; shape 2 to shape 1
+
+    #     &quot;&quot;&quot;
+    #     self.Br.s2tos1()
+    #     self.Bi.s2tos1()
+    #     self.Cr.s2tos1()
+    #     self.Ci.s2tos1()
 
 <div class="viewcode-block" id="VSHCoeff.strip3"><a class="viewcode-back" href="../../../api/pylayers.antprop.spharm.VSHCoeff.html#pylayers.antprop.spharm.VSHCoeff.strip3">[docs]</a>    def strip3(self):
         &quot;&quot;&quot; Thresholded coefficient conversion
@@ -2176,7 +2205,7 @@ from matplotlib import cm
     Pmm1l, Pmp1l = AFLegendre(L, L, x)
 
     K   = len(l)
-    Nr  = len(x)  
+    Nr  = len(x)
 
     l   = l.reshape(1,K)
     m   = m.reshape(1,K)
@@ -2365,6 +2394,7 @@ if (__name__ == &quot;__main__&quot;):
 </pre></div>
 
            </div>
+           
           </div>
           <footer>
   
@@ -2374,11 +2404,11 @@ if (__name__ == &quot;__main__&quot;):
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -2397,9 +2427,11 @@ if (__name__ == &quot;__main__&quot;):
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -2414,14 +2446,13 @@ if (__name__ == &quot;__main__&quot;):
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

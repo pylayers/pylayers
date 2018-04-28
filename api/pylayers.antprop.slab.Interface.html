@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,31 +25,23 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/>
-        <link rel="prev" title="calsig" href="pylayers.antprop.slab.calsig.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Mat" href="pylayers.antprop.slab.Mat.html" />
+    <link rel="prev" title="calsig" href="pylayers.antprop.slab.calsig.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -62,7 +56,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -91,7 +85,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -102,6 +99,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -117,9 +115,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="references.html#module-pylayers.antprop.slab">12&nbsp;&nbsp;&nbsp;pylayers.antprop.slab Module</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="references.html#id24">12.1&nbsp;&nbsp;&nbsp;Functions</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="references.html#id25">12.2&nbsp;&nbsp;&nbsp;Classes</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Interface</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Interface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.slab.Mat.html">Mat</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.slab.MatDB.html">MatDB</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.slab.MatInterface.html">MatInterface</a></li>
@@ -158,7 +154,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -170,36 +166,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>Interface</li>
+        
+      <li>Interface</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.antprop.slab.Interface.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -210,9 +226,8 @@
 <dl class="class">
 <dt id="pylayers.antprop.slab.Interface">
 <em class="property">class </em><code class="descclassname">pylayers.antprop.slab.</code><code class="descname">Interface</code><span class="sig-paren">(</span><em>fGHz=array([ 2.4])</em>, <em>theta=array([[ 0.+0.j]])</em>, <em>name=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Interface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Interface" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="pylayers.util.project.PyLayers.html#pylayers.util.project.PyLayers" title="pylayers.util.project.PyLayers"><code class="xref py py-class docutils literal"><span class="pre">pylayers.util.project.PyLayers</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="pylayers.util.project.PyLayers.html#pylayers.util.project.PyLayers" title="pylayers.util.project.PyLayers"><code class="xref py py-class docutils literal notranslate"><span class="pre">pylayers.util.project.PyLayers</span></code></a></p>
 <p>Interface between 2 medium</p>
-<p class="rubric">Notes</p>
 <p>The adopted axis convention is the following</p>
 <ul class="simple">
 <li>nf : axis = 0 frequency axis</li>
@@ -224,36 +239,6 @@
 theta np.array (1,nt)
 Ip np.array (nf,nt,2,2)
 Io np.array (nf,nt,2,2)</p>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Interface.RT" title="pylayers.antprop.slab.Interface.RT"><code class="xref py py-obj docutils literal"><span class="pre">RT</span></code></a>([metalic,&nbsp;RT])</td>
-<td>evaluate Reflection and Transmission matrix</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
-<td>generic help</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Interface.loss0" title="pylayers.antprop.slab.Interface.loss0"><code class="xref py py-obj docutils literal"><span class="pre">loss0</span></code></a>(fGHz[,&nbsp;display])</td>
-<td>evaluate Loss at normal incidence theta=0</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.Interface.losst" title="pylayers.antprop.slab.Interface.losst"><code class="xref py py-obj docutils literal"><span class="pre">losst</span></code></a>(fGHz[,&nbsp;display,&nbsp;dB])</td>
-<td>evaluate Loss</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Interface.pcolor" title="pylayers.antprop.slab.Interface.pcolor"><code class="xref py py-obj docutils literal"><span class="pre">pcolor</span></code></a>([dB])</td>
-<td>display of R &amp; T coefficients wrt frequency an angle</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.Interface.plotwrt" title="pylayers.antprop.slab.Interface.plotwrt"><code class="xref py py-obj docutils literal"><span class="pre">plotwrt</span></code></a>([var,&nbsp;kv])</td>
-<td>plot R &amp; T coefficients with respect to angle or frequency</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Interface.tocolor" title="pylayers.antprop.slab.Interface.tocolor"><code class="xref py py-obj docutils literal"><span class="pre">tocolor</span></code></a>(fGHz)</td>
-<td>convert transmission into color</td>
-</tr>
-</tbody>
-</table>
 <p class="rubric">Methods Summary</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -261,22 +246,22 @@ Io np.array (nf,nt,2,2)</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Interface.RT" title="pylayers.antprop.slab.Interface.RT"><code class="xref py py-obj docutils literal"><span class="pre">RT</span></code></a>([metalic,&nbsp;RT])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Interface.RT" title="pylayers.antprop.slab.Interface.RT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RT</span></code></a>([metalic,&nbsp;RT])</td>
 <td>evaluate Reflection and Transmission matrix</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.Interface.loss0" title="pylayers.antprop.slab.Interface.loss0"><code class="xref py py-obj docutils literal"><span class="pre">loss0</span></code></a>(fGHz[,&nbsp;display])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.Interface.loss0" title="pylayers.antprop.slab.Interface.loss0"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loss0</span></code></a>(fGHz[,&nbsp;display])</td>
 <td>evaluate Loss at normal incidence theta=0</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Interface.losst" title="pylayers.antprop.slab.Interface.losst"><code class="xref py py-obj docutils literal"><span class="pre">losst</span></code></a>(fGHz[,&nbsp;display,&nbsp;dB])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Interface.losst" title="pylayers.antprop.slab.Interface.losst"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losst</span></code></a>(fGHz[,&nbsp;display,&nbsp;dB])</td>
 <td>evaluate Loss</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.Interface.pcolor" title="pylayers.antprop.slab.Interface.pcolor"><code class="xref py py-obj docutils literal"><span class="pre">pcolor</span></code></a>([dB])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.Interface.pcolor" title="pylayers.antprop.slab.Interface.pcolor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pcolor</span></code></a>([dB])</td>
 <td>display of R &amp; T coefficients wrt frequency an angle</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Interface.plotwrt" title="pylayers.antprop.slab.Interface.plotwrt"><code class="xref py py-obj docutils literal"><span class="pre">plotwrt</span></code></a>([var,&nbsp;kv])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Interface.plotwrt" title="pylayers.antprop.slab.Interface.plotwrt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plotwrt</span></code></a>([var,&nbsp;kv])</td>
 <td>plot R &amp; T coefficients with respect to angle or frequency</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.Interface.tocolor" title="pylayers.antprop.slab.Interface.tocolor"><code class="xref py py-obj docutils literal"><span class="pre">tocolor</span></code></a>(fGHz)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.Interface.tocolor" title="pylayers.antprop.slab.Interface.tocolor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tocolor</span></code></a>(fGHz)</td>
 <td>convert transmission into color</td>
 </tr>
 </tbody>
@@ -286,21 +271,11 @@ Io np.array (nf,nt,2,2)</p>
 <dt id="pylayers.antprop.slab.Interface.RT">
 <code class="descname">RT</code><span class="sig-paren">(</span><em>metalic=False</em>, <em>RT='RT'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Interface.RT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Interface.RT" title="Permalink to this definition">¶</a></dt>
 <dd><p>evaluate Reflection and Transmission matrix</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>metalic</strong> : boolean</p>
-<p><strong>RT</strong> : string</p>
-<blockquote class="last">
-<div><p>choose R or T</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<div class="math">
+<p>metalic : boolean
+RT : string</p>
+<blockquote>
+<div>choose R or T</div></blockquote>
+<div class="math notranslate nohighlight">
 \[\begin{split}R = \left[\begin{array}[cc]R_{\perp} &amp; 0\\0 &amp; R_{\para}\end{array}\right]
 T = \left[\begin{array}[cc]T_{\perp} &amp; 0\\0 &amp; T_{\para}\end{array}\right]\end{split}\]</div>
 <p>R : np.array (f , th , 2, 2)
@@ -311,105 +286,62 @@ T : np.array (f , th , 2, 2)</p>
 <dt id="pylayers.antprop.slab.Interface.loss0">
 <code class="descname">loss0</code><span class="sig-paren">(</span><em>fGHz</em>, <em>display=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Interface.loss0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Interface.loss0" title="Permalink to this definition">¶</a></dt>
 <dd><p>evaluate Loss at normal incidence theta=0</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fGHz</strong> : np.array (nf,1)</p>
-<p><strong>display</strong> : boolean</p>
-<p><strong>default (False)</strong></p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Lo</strong> : loss in dB polarization orthogonal</p>
-<p class="last"><strong>Lp</strong> : loss in dB polarization parallel</p>
-</td>
-</tr>
-</tbody>
-</table>
+<p>fGHz : np.array (nf,1)
+display : boolean
+default (False)</p>
+<p>Lo : loss in dB polarization orthogonal
+Lp : loss in dB polarization parallel</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.slab.Interface.losst">
 <code class="descname">losst</code><span class="sig-paren">(</span><em>fGHz</em>, <em>display=False</em>, <em>dB=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Interface.losst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Interface.losst" title="Permalink to this definition">¶</a></dt>
 <dd><p>evaluate Loss</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fGHz</strong> : np.arrray (nf)</p>
-<p><strong>display</strong> : boolean</p>
+<p>fGHz : np.arrray (nf)
+display : boolean</p>
 <blockquote>
-<div><p>default False</p>
-</div></blockquote>
-<p><strong>dB</strong> : booean</p>
-<blockquote>
-<div><p>default True</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Lo</strong> : np.array</p>
-<blockquote>
-<div><p>Loss orthogonal polarization (dB)</p>
-</div></blockquote>
-<p><strong>Lp</strong> : np.array</p>
-<blockquote class="last">
-<div><p>Loss parallel polarization (dB)</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="references.html#module-pylayers.antprop.coverage" title="pylayers.antprop.coverage"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.coverage</span></code></a>, <a class="reference internal" href="references.html#module-pylayers.antprop.loss" title="pylayers.antprop.loss"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.loss</span></code></a></p>
-</div>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.slab import *
+<div>default False</div></blockquote>
+<dl class="docutils">
+<dt>dB <span class="classifier-delimiter">:</span> <span class="classifier">booean</span></dt>
+<dd>default True</dd>
+</dl>
+<dl class="docutils">
+<dt>Lo <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd>Loss orthogonal polarization (dB)</dd>
+<dt>Lp <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd>Loss parallel polarization (dB)</dd>
+</dl>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.slab import *
 </pre></div>
 </div>
+<p>pylayers.antprop.coverage
+pylayers.antprop.loss</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.slab.Interface.pcolor">
 <code class="descname">pcolor</code><span class="sig-paren">(</span><em>dB=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Interface.pcolor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Interface.pcolor" title="Permalink to this definition">¶</a></dt>
 <dd><p>display of R &amp; T coefficients wrt frequency an angle</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dB</strong> : boolean</p>
-<p class="last"><strong>default False</strong></p>
-</td>
-</tr>
-</tbody>
-</table>
+<p>dB : boolean
+default False</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.slab.Interface.plotwrt">
 <code class="descname">plotwrt</code><span class="sig-paren">(</span><em>var='a'</em>, <em>kv=0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Interface.plotwrt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Interface.plotwrt" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot R &amp; T coefficients with respect to angle or frequency</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>kv</strong> : int</p>
-<p><strong>variable index</strong></p>
-<p><strong>polar: string</strong></p>
-<p><strong>‘po’, # po | p | o (parallel+ortho | parallel | ortogonal)</strong></p>
-<p><strong>coeff: string</strong></p>
-<p><strong>‘RT’, # RT | R | T (Reflexion &amp; Transmission ) | Reflexion | Transmission</strong></p>
-<p><strong>var: string</strong></p>
-<p><strong>‘a’, # a | f angle | frequency</strong></p>
-<p><strong>typ</strong> : string</p>
-<p><strong>‘m’ | ‘r’ | ‘d’ | ‘l20’</strong></p>
-<p class="last"><strong>mod rad deg dB</strong></p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.slab import *
+<p>kv : int
+variable index
+polar: string
+‘po’, # po | p | o (parallel+ortho | parallel | ortogonal)
+coeff: string
+‘RT’, # RT | R | T (Reflexion &amp; Transmission ) | Reflexion | Transmission
+var: string
+‘a’, # a | f angle | frequency
+typ : string
+‘m’ | ‘r’ | ‘d’ | ‘l20’
+mod rad deg dB</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.slab import *
 &gt;&gt;&gt; import matplotlib.pylab as plt
 &gt;&gt;&gt; import numpy as np
 &gt;&gt;&gt; theta = np.arange(0,np.pi/2,0.01)
@@ -436,25 +368,12 @@ T : np.array (f , th , 2, 2)</p>
 <dt id="pylayers.antprop.slab.Interface.tocolor">
 <code class="descname">tocolor</code><span class="sig-paren">(</span><em>fGHz</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Interface.tocolor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Interface.tocolor" title="Permalink to this definition">¶</a></dt>
 <dd><p>convert transmission into color</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fGHz</strong> : np.array</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>col</strong> : string</p>
-<blockquote class="last">
-<div><p>hexadecimal color</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.gis.layout.showGs</span></code></p>
-</div>
+<p>fGHz : np.array</p>
+<dl class="docutils">
+<dt>col <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>hexadecimal color</dd>
+</dl>
+<p>pylayers.gis.layout.showGs</p>
 </dd></dl>
 
 </dd></dl>
@@ -463,13 +382,16 @@ T : np.array (f , th , 2, 2)</p>
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="pylayers.antprop.slab.Mat.html" class="btn btn-neutral float-right" title="Mat" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="pylayers.antprop.slab.calsig.html" class="btn btn-neutral" title="calsig" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="pylayers.antprop.slab.calsig.html" class="btn btn-neutral" title="calsig" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -479,11 +401,11 @@ T : np.array (f , th , 2, 2)</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -502,9 +424,11 @@ T : np.array (f , th , 2, 2)</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -519,14 +443,13 @@ T : np.array (f , th , 2, 2)</p>
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

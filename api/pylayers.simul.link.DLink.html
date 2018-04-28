@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,21 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +54,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +83,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +97,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -126,9 +123,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.coeffModel">22&nbsp;&nbsp;&nbsp;pylayers.antprop.coeffModel Module</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="references.html#module-pylayers.simul.link">23&nbsp;&nbsp;&nbsp;pylayers.simul.link Module</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="references.html#id46">23.1&nbsp;&nbsp;&nbsp;Classes</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">DLink</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">DLink</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.simul.link.Link.html">Link</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.simul.link.SLink.html">SLink</a></li>
 </ul>
@@ -153,7 +148,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -165,36 +160,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>DLink</li>
+        
+      <li>DLink</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.simul.link.DLink.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -205,104 +220,36 @@
 <dl class="class">
 <dt id="pylayers.simul.link.DLink">
 <em class="property">class </em><code class="descclassname">pylayers.simul.link.</code><code class="descname">DLink</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/simul/link.html#DLink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="pylayers.simul.link.Link.html#pylayers.simul.link.Link" title="pylayers.simul.link.Link"><code class="xref py py-class docutils literal"><span class="pre">pylayers.simul.link.Link</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="pylayers.simul.link.Link.html#pylayers.simul.link.Link" title="pylayers.simul.link.Link"><code class="xref py py-class docutils literal notranslate"><span class="pre">pylayers.simul.link.Link</span></code></a></p>
 <p>Deterministic Link Class</p>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="0%" />
-<col width="100%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>L</td>
-<td>(Layout) Layout to be used Aa : Antenna Antenna of device dev_a Ab : Antenna Antenna of device dev_b a : np.ndarray (3,) position of a device dev_a b : np.ndarray (3,) position of a device dev_b ca : int cycle a number cb : int cycle b number Ta : np.ndarray (3,3) Rotation matrice of Antenna of device dev_a relative to global Layout scene Tb : np.ndarray (3,3) Rotation matrice of Antenna of device dev_b relative to global Layout scene fGHz : np.ndarray (Nf,) frequency range of Nf points used for evaluation of channel wav : Waveform Waveform to be applied on the channel save_idx : int number to identify the h5 file generated</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.OnClick" title="pylayers.simul.link.DLink.OnClick"><code class="xref py py-obj docutils literal"><span class="pre">OnClick</span></code></a>(event)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.adp" title="pylayers.simul.link.DLink.adp"><code class="xref py py-obj docutils literal"><span class="pre">adp</span></code></a>([imax])</td>
-<td>construct the angular delay profile</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.afp" title="pylayers.simul.link.DLink.afp"><code class="xref py py-obj docutils literal"><span class="pre">afp</span></code></a>(**kwargs)</td>
-<td>Evaluate angular frequency profile</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.array_exist" title="pylayers.simul.link.DLink.array_exist"><code class="xref py py-obj docutils literal"><span class="pre">array_exist</span></code></a>(key,&nbsp;array[,&nbsp;tol])</td>
-<td>check an array key has already been stored in h5py file</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.check_grpname" title="pylayers.simul.link.DLink.check_grpname"><code class="xref py py-obj docutils literal"><span class="pre">check_grpname</span></code></a>(key,&nbsp;grpname)</td>
-<td>Check if the key’s data with a given groupname</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.checkh5" title="pylayers.simul.link.DLink.checkh5"><code class="xref py py-obj docutils literal"><span class="pre">checkh5</span></code></a>()</td>
-<td>check existence of previous simulations run with the same parameters.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.eval" title="pylayers.simul.link.DLink.eval"><code class="xref py py-obj docutils literal"><span class="pre">eval</span></code></a>(**kwargs)</td>
-<td>link evaluation</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.evalH" title="pylayers.simul.link.DLink.evalH"><code class="xref py py-obj docutils literal"><span class="pre">evalH</span></code></a>(**kwargs)</td>
-<td>evaluate channel transfer function</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.get_grpname" title="pylayers.simul.link.DLink.get_grpname"><code class="xref py py-obj docutils literal"><span class="pre">get_grpname</span></code></a>()</td>
-<td>Determine the data group name for the given configuration</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.get_idx" title="pylayers.simul.link.DLink.get_idx"><code class="xref py py-obj docutils literal"><span class="pre">get_idx</span></code></a>(key,&nbsp;array[,&nbsp;tol])</td>
-<td>try to get the index of the requested array in the group key</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
-<td>generic help</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.inforay" title="pylayers.simul.link.DLink.inforay"><code class="xref py py-obj docutils literal"><span class="pre">inforay</span></code></a>(iray)</td>
-<td>provide full information about a specified ray</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.init_positions" title="pylayers.simul.link.DLink.init_positions"><code class="xref py py-obj docutils literal"><span class="pre">init_positions</span></code></a>([force])</td>
-<td>initialize random positions for a link</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.load" title="pylayers.simul.link.DLink.load"><code class="xref py py-obj docutils literal"><span class="pre">load</span></code></a>(obj,&nbsp;grpname,&nbsp;**kwargs)</td>
-<td>Load a given object in the correct grp</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.plt_aspread" title="pylayers.simul.link.DLink.plt_aspread"><code class="xref py py-obj docutils literal"><span class="pre">plt_aspread</span></code></a>(**kwargs)</td>
-<td>plot angular spread</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.plt_cir" title="pylayers.simul.link.DLink.plt_cir"><code class="xref py py-obj docutils literal"><span class="pre">plt_cir</span></code></a>(**kwargs)</td>
-<td>plot link channel impulse response</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.plt_doa" title="pylayers.simul.link.DLink.plt_doa"><code class="xref py py-obj docutils literal"><span class="pre">plt_doa</span></code></a>(**kwargs)</td>
-<td>plot direction of arrival and departure</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.plt_dod" title="pylayers.simul.link.DLink.plt_dod"><code class="xref py py-obj docutils literal"><span class="pre">plt_dod</span></code></a>(**kwargs)</td>
-<td>plot direction of arrival and departure</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.plt_dspread" title="pylayers.simul.link.DLink.plt_dspread"><code class="xref py py-obj docutils literal"><span class="pre">plt_dspread</span></code></a>(**kwargs)</td>
-<td>plot delay spread</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.reset_config" title="pylayers.simul.link.DLink.reset_config"><code class="xref py py-obj docutils literal"><span class="pre">reset_config</span></code></a>()</td>
-<td>reset configuration when a new layout is loaded</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.save" title="pylayers.simul.link.DLink.save"><code class="xref py py-obj docutils literal"><span class="pre">save</span></code></a>(obj,&nbsp;key,&nbsp;grpname[,&nbsp;force])</td>
-<td>Save a given object in the correct group</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.save_init" title="pylayers.simul.link.DLink.save_init"><code class="xref py py-obj docutils literal"><span class="pre">save_init</span></code></a>(filename_long)</td>
-<td>initialize the hdf5 file for link saving</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.select" title="pylayers.simul.link.DLink.select"><code class="xref py py-obj docutils literal"><span class="pre">select</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.show" title="pylayers.simul.link.DLink.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>(**kwargs)</td>
-<td>show the link</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.stack" title="pylayers.simul.link.DLink.stack"><code class="xref py py-obj docutils literal"><span class="pre">stack</span></code></a>(key,&nbsp;array)</td>
-<td>stack new array in h5py file</td>
-</tr>
-</tbody>
-</table>
+<blockquote>
+<div><dl class="docutils">
+<dt>L <span class="classifier-delimiter">:</span> <span class="classifier">Layout</span></dt>
+<dd>Layout to be used</dd>
+<dt>Aa <span class="classifier-delimiter">:</span> <span class="classifier">Antenna</span></dt>
+<dd>Antenna of device dev_a</dd>
+<dt>Ab <span class="classifier-delimiter">:</span> <span class="classifier">Antenna</span></dt>
+<dd>Antenna of device dev_b</dd>
+<dt>a <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarray (3,)</span></dt>
+<dd>position of a device dev_a</dd>
+<dt>b <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarray (3,)</span></dt>
+<dd>position of a device dev_b</dd>
+<dt>ca <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>cycle a number</dd>
+<dt>cb <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>cycle b number</dd>
+<dt>Ta <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarray (3,3)</span></dt>
+<dd>Rotation matrice of Antenna of device dev_a relative to global Layout scene</dd>
+<dt>Tb <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarray (3,3)</span></dt>
+<dd>Rotation matrice of Antenna of device dev_b relative to global Layout scene</dd>
+<dt>fGHz <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarray (Nf,)</span></dt>
+<dd>frequency range of Nf points used for evaluation of channel</dd>
+<dt>wav <span class="classifier-delimiter">:</span> <span class="classifier">Waveform</span></dt>
+<dd>Waveform to be applied on the channel</dd>
+<dt>save_idx <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>number to identify the h5 file generated</dd>
+</dl>
+</div></blockquote>
 <p class="rubric">Attributes Summary</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -310,49 +257,49 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.Aa" title="pylayers.simul.link.DLink.Aa"><code class="xref py py-obj docutils literal"><span class="pre">Aa</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.Aa" title="pylayers.simul.link.DLink.Aa"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Aa</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.Ab" title="pylayers.simul.link.DLink.Ab"><code class="xref py py-obj docutils literal"><span class="pre">Ab</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.Ab" title="pylayers.simul.link.DLink.Ab"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ab</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.L" title="pylayers.simul.link.DLink.L"><code class="xref py py-obj docutils literal"><span class="pre">L</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.L" title="pylayers.simul.link.DLink.L"><code class="xref py py-obj docutils literal notranslate"><span class="pre">L</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.Lname" title="pylayers.simul.link.DLink.Lname"><code class="xref py py-obj docutils literal"><span class="pre">Lname</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.Lname" title="pylayers.simul.link.DLink.Lname"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Lname</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.Ta" title="pylayers.simul.link.DLink.Ta"><code class="xref py py-obj docutils literal"><span class="pre">Ta</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.Ta" title="pylayers.simul.link.DLink.Ta"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ta</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.Tb" title="pylayers.simul.link.DLink.Tb"><code class="xref py py-obj docutils literal"><span class="pre">Tb</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.Tb" title="pylayers.simul.link.DLink.Tb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tb</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.a" title="pylayers.simul.link.DLink.a"><code class="xref py py-obj docutils literal"><span class="pre">a</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.a" title="pylayers.simul.link.DLink.a"><code class="xref py py-obj docutils literal notranslate"><span class="pre">a</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.b" title="pylayers.simul.link.DLink.b"><code class="xref py py-obj docutils literal"><span class="pre">b</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.b" title="pylayers.simul.link.DLink.b"><code class="xref py py-obj docutils literal notranslate"><span class="pre">b</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.ca" title="pylayers.simul.link.DLink.ca"><code class="xref py py-obj docutils literal"><span class="pre">ca</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.ca" title="pylayers.simul.link.DLink.ca"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ca</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.cb" title="pylayers.simul.link.DLink.cb"><code class="xref py py-obj docutils literal"><span class="pre">cb</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.cb" title="pylayers.simul.link.DLink.cb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cb</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.cutoff" title="pylayers.simul.link.DLink.cutoff"><code class="xref py py-obj docutils literal"><span class="pre">cutoff</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.cutoff" title="pylayers.simul.link.DLink.cutoff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cutoff</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.delay_excess_max_ns" title="pylayers.simul.link.DLink.delay_excess_max_ns"><code class="xref py py-obj docutils literal"><span class="pre">delay_excess_max_ns</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.delay_excess_max_ns" title="pylayers.simul.link.DLink.delay_excess_max_ns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delay_excess_max_ns</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.fGHz" title="pylayers.simul.link.DLink.fGHz"><code class="xref py py-obj docutils literal"><span class="pre">fGHz</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.fGHz" title="pylayers.simul.link.DLink.fGHz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fGHz</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.threshold" title="pylayers.simul.link.DLink.threshold"><code class="xref py py-obj docutils literal"><span class="pre">threshold</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.threshold" title="pylayers.simul.link.DLink.threshold"><code class="xref py py-obj docutils literal notranslate"><span class="pre">threshold</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.wav" title="pylayers.simul.link.DLink.wav"><code class="xref py py-obj docutils literal"><span class="pre">wav</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.wav" title="pylayers.simul.link.DLink.wav"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wav</span></code></a></td>
 <td></td>
 </tr>
 </tbody>
@@ -364,77 +311,77 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.OnClick" title="pylayers.simul.link.DLink.OnClick"><code class="xref py py-obj docutils literal"><span class="pre">OnClick</span></code></a>(event)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.OnClick" title="pylayers.simul.link.DLink.OnClick"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OnClick</span></code></a>(event)</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.adp" title="pylayers.simul.link.DLink.adp"><code class="xref py py-obj docutils literal"><span class="pre">adp</span></code></a>([imax])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.adp" title="pylayers.simul.link.DLink.adp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">adp</span></code></a>([imax])</td>
 <td>construct the angular delay profile</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.afp" title="pylayers.simul.link.DLink.afp"><code class="xref py py-obj docutils literal"><span class="pre">afp</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.afp" title="pylayers.simul.link.DLink.afp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">afp</span></code></a>(**kwargs)</td>
 <td>Evaluate angular frequency profile</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.array_exist" title="pylayers.simul.link.DLink.array_exist"><code class="xref py py-obj docutils literal"><span class="pre">array_exist</span></code></a>(key,&nbsp;array[,&nbsp;tol])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.array_exist" title="pylayers.simul.link.DLink.array_exist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array_exist</span></code></a>(key,&nbsp;array[,&nbsp;tol])</td>
 <td>check an array key has already been stored in h5py file</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.check_grpname" title="pylayers.simul.link.DLink.check_grpname"><code class="xref py py-obj docutils literal"><span class="pre">check_grpname</span></code></a>(key,&nbsp;grpname)</td>
-<td>Check if the key’s data with a given groupname</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.check_grpname" title="pylayers.simul.link.DLink.check_grpname"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_grpname</span></code></a>(key,&nbsp;grpname)</td>
+<td>Check if the key’s data with a given groupname     already exists in the h5py file</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.checkh5" title="pylayers.simul.link.DLink.checkh5"><code class="xref py py-obj docutils literal"><span class="pre">checkh5</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.checkh5" title="pylayers.simul.link.DLink.checkh5"><code class="xref py py-obj docutils literal notranslate"><span class="pre">checkh5</span></code></a>()</td>
 <td>check existence of previous simulations run with the same parameters.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.eval" title="pylayers.simul.link.DLink.eval"><code class="xref py py-obj docutils literal"><span class="pre">eval</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.eval" title="pylayers.simul.link.DLink.eval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval</span></code></a>(**kwargs)</td>
 <td>link evaluation</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.evalH" title="pylayers.simul.link.DLink.evalH"><code class="xref py py-obj docutils literal"><span class="pre">evalH</span></code></a>(**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.evalH" title="pylayers.simul.link.DLink.evalH"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evalH</span></code></a>(**kwargs)</td>
 <td>evaluate channel transfer function</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.get_grpname" title="pylayers.simul.link.DLink.get_grpname"><code class="xref py py-obj docutils literal"><span class="pre">get_grpname</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.get_grpname" title="pylayers.simul.link.DLink.get_grpname"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_grpname</span></code></a>()</td>
 <td>Determine the data group name for the given configuration</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.get_idx" title="pylayers.simul.link.DLink.get_idx"><code class="xref py py-obj docutils literal"><span class="pre">get_idx</span></code></a>(key,&nbsp;array[,&nbsp;tol])</td>
-<td>try to get the index of the requested array in the group key</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.get_idx" title="pylayers.simul.link.DLink.get_idx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_idx</span></code></a>(key,&nbsp;array[,&nbsp;tol])</td>
+<td>get the index of the requested array in the group key     of the hdf5 file.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.inforay" title="pylayers.simul.link.DLink.inforay"><code class="xref py py-obj docutils literal"><span class="pre">inforay</span></code></a>(iray)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.inforay" title="pylayers.simul.link.DLink.inforay"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inforay</span></code></a>(iray)</td>
 <td>provide full information about a specified ray</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.init_positions" title="pylayers.simul.link.DLink.init_positions"><code class="xref py py-obj docutils literal"><span class="pre">init_positions</span></code></a>([force])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.init_positions" title="pylayers.simul.link.DLink.init_positions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_positions</span></code></a>([force])</td>
 <td>initialize random positions for a link</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.load" title="pylayers.simul.link.DLink.load"><code class="xref py py-obj docutils literal"><span class="pre">load</span></code></a>(obj,&nbsp;grpname,&nbsp;**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.load" title="pylayers.simul.link.DLink.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(obj,&nbsp;grpname,&nbsp;**kwargs)</td>
 <td>Load a given object in the correct grp</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.plt_aspread" title="pylayers.simul.link.DLink.plt_aspread"><code class="xref py py-obj docutils literal"><span class="pre">plt_aspread</span></code></a>(**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.plt_aspread" title="pylayers.simul.link.DLink.plt_aspread"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plt_aspread</span></code></a>(**kwargs)</td>
 <td>plot angular spread</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.plt_cir" title="pylayers.simul.link.DLink.plt_cir"><code class="xref py py-obj docutils literal"><span class="pre">plt_cir</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.plt_cir" title="pylayers.simul.link.DLink.plt_cir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plt_cir</span></code></a>(**kwargs)</td>
 <td>plot link channel impulse response</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.plt_doa" title="pylayers.simul.link.DLink.plt_doa"><code class="xref py py-obj docutils literal"><span class="pre">plt_doa</span></code></a>(**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.plt_doa" title="pylayers.simul.link.DLink.plt_doa"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plt_doa</span></code></a>(**kwargs)</td>
 <td>plot direction of arrival and departure</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.plt_dod" title="pylayers.simul.link.DLink.plt_dod"><code class="xref py py-obj docutils literal"><span class="pre">plt_dod</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.plt_dod" title="pylayers.simul.link.DLink.plt_dod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plt_dod</span></code></a>(**kwargs)</td>
 <td>plot direction of arrival and departure</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.plt_dspread" title="pylayers.simul.link.DLink.plt_dspread"><code class="xref py py-obj docutils literal"><span class="pre">plt_dspread</span></code></a>(**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.plt_dspread" title="pylayers.simul.link.DLink.plt_dspread"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plt_dspread</span></code></a>(**kwargs)</td>
 <td>plot delay spread</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.reset_config" title="pylayers.simul.link.DLink.reset_config"><code class="xref py py-obj docutils literal"><span class="pre">reset_config</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.reset_config" title="pylayers.simul.link.DLink.reset_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset_config</span></code></a>()</td>
 <td>reset configuration when a new layout is loaded</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.save" title="pylayers.simul.link.DLink.save"><code class="xref py py-obj docutils literal"><span class="pre">save</span></code></a>(obj,&nbsp;key,&nbsp;grpname[,&nbsp;force])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.save" title="pylayers.simul.link.DLink.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>(obj,&nbsp;key,&nbsp;grpname[,&nbsp;force])</td>
 <td>Save a given object in the correct group</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.save_init" title="pylayers.simul.link.DLink.save_init"><code class="xref py py-obj docutils literal"><span class="pre">save_init</span></code></a>(filename_long)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.save_init" title="pylayers.simul.link.DLink.save_init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_init</span></code></a>(filename_long)</td>
 <td>initialize the hdf5 file for link saving</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.select" title="pylayers.simul.link.DLink.select"><code class="xref py py-obj docutils literal"><span class="pre">select</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.select" title="pylayers.simul.link.DLink.select"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select</span></code></a>()</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.show" title="pylayers.simul.link.DLink.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.simul.link.DLink.show" title="pylayers.simul.link.DLink.show"><code class="xref py py-obj docutils literal notranslate"><span class="pre">show</span></code></a>(**kwargs)</td>
 <td>show the link</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.stack" title="pylayers.simul.link.DLink.stack"><code class="xref py py-obj docutils literal"><span class="pre">stack</span></code></a>(key,&nbsp;array)</td>
-<td>stack new array in h5py file</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.simul.link.DLink.stack" title="pylayers.simul.link.DLink.stack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stack</span></code></a>(key,&nbsp;array)</td>
+<td>stack new array in h5py file     for a given key (dataframe/group)</td>
 </tr>
 </tbody>
 </table>
@@ -524,52 +471,33 @@
 <dt id="pylayers.simul.link.DLink.adp">
 <code class="descname">adp</code><span class="sig-paren">(</span><em>imax=1000</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/simul/link.html#DLink.adp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink.adp" title="Permalink to this definition">¶</a></dt>
 <dd><p>construct the angular delay profile</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>imax</strong> : int</td>
-</tr>
-</tbody>
-</table>
+<p>imax : int</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.simul.link.DLink.afp">
 <code class="descname">afp</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/simul/link.html#DLink.afp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink.afp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate angular frequency profile</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fGHz</strong> : np.array</p>
+<dl class="docutils">
+<dt>fGHz <span class="classifier-delimiter">:</span> <span class="classifier">np.array </span></dt>
+<dd>frequency range</dd>
+</dl>
+<p>az : azimuth angle (radian)  
+tilt : tilt angle (-pi/2&lt;tilt&lt;pi/2) 
+polar : string
+win : string ‘rect’ | ‘hamming’
+_filemeas : string 
+_filecal : string 
+ang_offset : 
+BW : float</p>
 <blockquote>
-<div><p>frequency range</p>
-</div></blockquote>
-<p><strong>az</strong> : azimuth angle (radian)</p>
-<p><strong>tilt</strong> : tilt angle (-pi/2&lt;tilt&lt;pi/2)</p>
-<p><strong>polar</strong> : string</p>
-<p><strong>win</strong> : string ‘rect’ | ‘hamming’</p>
-<p><strong>_filemeas</strong> : string</p>
-<p><strong>_filecal</strong> : string</p>
-<p><strong>ang_offset :</strong></p>
-<p><strong>BW</strong> : float</p>
-<blockquote>
-<div><p>bandwidth</p>
-</div></blockquote>
-<p><strong>ext</strong> : string</p>
-<blockquote>
-<div><p>‘txt’ | ‘mat’</p>
-</div></blockquote>
-<p><strong>dirmeas</strong> : string</p>
-<blockquote class="last">
-<div><p>directory of the data in the project path</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
+<div>bandwidth</div></blockquote>
+<dl class="docutils">
+<dt>ext <span class="classifier-delimiter">:</span> <span class="classifier">string </span></dt>
+<dd>‘txt’ | ‘mat’</dd>
+<dt>dirmeas <span class="classifier-delimiter">:</span> <span class="classifier">string </span></dt>
+<dd>directory of the data in the project path</dd>
+</dl>
 <p>If a measurement file is given the angular range is obtained from the measurement
 otherwise the variable az is used.</p>
 </dd></dl>
@@ -578,34 +506,21 @@ otherwise the variable az is used.</p>
 <dt id="pylayers.simul.link.DLink.array_exist">
 <code class="descname">array_exist</code><span class="sig-paren">(</span><em>key</em>, <em>array</em>, <em>tol=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/simul/link.html#DLink.array_exist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink.array_exist" title="Permalink to this definition">¶</a></dt>
 <dd><p>check an array key has already been stored in h5py file</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>key: string</strong></p>
-<blockquote>
-<div><p>key of the h5py group</p>
-</div></blockquote>
-<p><strong>array</strong> : np.ndarray</p>
-<blockquote>
-<div><p>array type to check existency</p>
-</div></blockquote>
-<p><strong>tol</strong> : np.float64</p>
-<blockquote>
-<div><p>tolerance (in meter for key == ‘p_map’)</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">(ua)</p>
-<p><strong>ua</strong> : np.ndarray</p>
-<blockquote class="last">
-<div><p>the indice in the array of the file[key] group
-if the array is emtpy, value doesn’t exist</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>key: string</dt>
+<dd>key of the h5py group</dd>
+<dt>array <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarray</span></dt>
+<dd>array type to check existency</dd>
+<dt>tol <span class="classifier-delimiter">:</span> <span class="classifier">np.float64</span></dt>
+<dd>tolerance (in meter for key == ‘p_map’)</dd>
+</dl>
+<p>(ua)</p>
+<dl class="docutils">
+<dt>ua <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarray</span></dt>
+<dd>the indice in the array of the file[key] group
+if the array is emtpy, value doesn’t exist</dd>
+</dl>
+<p>Add a tolerance on the rotation angle (T_map)</p>
 </dd></dl>
 
 <dl class="method">
@@ -615,23 +530,12 @@ if the array is emtpy, value doesn’t exist</p>
 <dt>Check if the key’s data with a given groupname</dt>
 <dd>already exists in the h5py file</dd>
 </dl>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>key: string</strong></p>
-<blockquote>
-<div><p>key of the h5py group</p>
-</div></blockquote>
-<p><strong>grpname</strong> : string</p>
-<blockquote class="last">
-<div><p>groupe name of the h5py file</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>key: string</dt>
+<dd>key of the h5py group</dd>
+<dt>grpname <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>groupe name of the h5py file</dd>
+</dl>
 <p>update the key grpname of self.dexist[key] dictionnary</p>
 </dd></dl>
 
@@ -639,76 +543,40 @@ if the array is emtpy, value doesn’t exist</p>
 <dt id="pylayers.simul.link.DLink.checkh5">
 <code class="descname">checkh5</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/simul/link.html#DLink.checkh5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink.checkh5" title="Permalink to this definition">¶</a></dt>
 <dd><p>check existence of previous simulations run with the same parameters.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">update self.dexist dictionnary</td>
-</tr>
-</tbody>
-</table>
+<p>update self.dexist dictionnary</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.simul.link.DLink.eval">
 <code class="descname">eval</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/simul/link.html#DLink.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink.eval" title="Permalink to this definition">¶</a></dt>
 <dd><p>link evaluation</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>applywav :boolean</strong></p>
-<blockquote>
-<div><p>Apply waveform to H</p>
-</div></blockquote>
-<p><strong>force</strong> : list</p>
-<blockquote>
-<div><p>Force the computation ([‘sig’,’ray2’,’ray,’Ct’,’H’]) AND save (replace previous computations)</p>
-</div></blockquote>
-<p><strong>alg</strong> : 1|’old’|’exp’|’exp2’</p>
-<blockquote>
-<div><p>version of run for signature</p>
-</div></blockquote>
-<p><strong>si_progress: bollean ( False)</strong></p>
-<blockquote>
-<div><p>display progression bar for signatures</p>
-</div></blockquote>
-<p><strong>diffraction</strong> : boolean (False)</p>
-<blockquote>
-<div><p>takes into consideration diffraction points</p>
-</div></blockquote>
-<p><strong>ra_number_mirror_cf</strong> : int</p>
-<blockquote>
-<div><p>rays.to3D number of ceil/floor reflexions</p>
-</div></blockquote>
-<p><strong>ra_ceil_H: float, (default [])</strong></p>
-<blockquote>
-<div><dl class="docutils">
-<dt>ceil height . </dt>
-<dd><p class="first last">If [] : Layout max ceil height 
-If 0 : only floor reflection (outdoor case) 
-If -1 : neither ceil nor floor reflection (2D case)</p>
-</dd>
+<dl class="docutils">
+<dt>applywav :boolean</dt>
+<dd>Apply waveform to H</dd>
+<dt>force <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd>Force the computation ([‘sig’,’ray2’,’ray,’Ct’,’H’]) AND save (replace previous computations)</dd>
+<dt>alg <span class="classifier-delimiter">:</span> <span class="classifier">1|’old’|’exp’|’exp2’</span></dt>
+<dd>version of run for signature</dd>
+<dt>si_progress: bollean ( False)</dt>
+<dd>display progression bar for signatures</dd>
+<dt>diffraction <span class="classifier-delimiter">:</span> <span class="classifier">boolean (False)</span></dt>
+<dd>takes into consideration diffraction points</dd>
+<dt>ra_number_mirror_cf <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>rays.to3D number of ceil/floor reflexions</dd>
+<dt>ra_ceil_H: float, (default [])</dt>
+<dd><dl class="first last docutils">
+<dt>ceil height .</dt>
+<dd>If [] : Layout max ceil height
+If 0 : only floor reflection (outdoor case)
+If -1 : neither ceil nor floor reflection (2D case)</dd>
 </dl>
-</div></blockquote>
-<p><strong>ra_vectorized: boolean (True)</strong></p>
-<blockquote>
-<div><p>if True used the (2015 new) vectorized approach to determine 2drays</p>
-</div></blockquote>
-<p><strong>progressbar: str</strong></p>
-<blockquote class="last">
-<div><p>None: no progress bar
-python : progress bar in ipython</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="references.html#module-pylayers.antprop.signature" title="pylayers.antprop.signature"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.signature</span></code></a>, <a class="reference internal" href="references.html#module-pylayers.antprop.rays" title="pylayers.antprop.rays"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.rays</span></code></a></p>
-</div>
-<p class="rubric">Notes</p>
+</dd>
+<dt>ra_vectorized: boolean (True)</dt>
+<dd>if True used the (2015 new) vectorized approach to determine 2drays</dd>
+<dt>progressbar: str</dt>
+<dd>None: no progress bar
+python : progress bar in ipython</dd>
+</dl>
 <p>update self.ak and self.tk</p>
 <dl class="docutils">
 <dt>self.ak <span class="classifier-delimiter">:</span> <span class="classifier">ndarray</span></dt>
@@ -716,8 +584,7 @@ python : progress bar in ipython</p>
 <dt>self.tk <span class="classifier-delimiter">:</span> <span class="classifier">ndarray</span></dt>
 <dd>tau_k</dd>
 </dl>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.simul.link import *
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.simul.link import *
 &gt;&gt;&gt; DL=DLink(L=&quot;defstr.lay&quot;)
 &gt;&gt;&gt; DL.eval()
 &gt;&gt;&gt; DL.show()
@@ -729,16 +596,17 @@ python : progress bar in ipython</p>
 <div class="figure">
 <img alt="../_images/pylayers-simul-link-DLink-1.png" src="../_images/pylayers-simul-link-DLink-1.png" />
 </div>
+<p>pylayers.antprop.signature
+pylayers.antprop.rays</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.simul.link.DLink.evalH">
 <code class="descname">evalH</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/simul/link.html#DLink.evalH"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink.evalH" title="Permalink to this definition">¶</a></dt>
 <dd><p>evaluate channel transfer function</p>
-<p class="rubric">Notes</p>
 <p>This function modifies the orientation of the antenna at both sides
-via Ta and Tb 3x3 matrices and recalculates the channel transfer function 
-for those new orientations. 
+via Ta and Tb 3x3 matrices and recalculates the channel transfer function
+for those new orientations.
 The self.H variable is updated</p>
 </dd></dl>
 
@@ -746,7 +614,6 @@ The self.H variable is updated</p>
 <dt id="pylayers.simul.link.DLink.get_grpname">
 <code class="descname">get_grpname</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/simul/link.html#DLink.get_grpname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink.get_grpname" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determine the data group name for the given configuration</p>
-<p class="rubric">Notes</p>
 <p>Update the key grpname of self.dexist[key] dictionnary,
 where key  = ‘sig’|’ray’|’Ct’|’H’</p>
 </dd></dl>
@@ -755,100 +622,58 @@ where key  = ‘sig’|’ray’|’Ct’|’H’</p>
 <dt id="pylayers.simul.link.DLink.get_idx">
 <code class="descname">get_idx</code><span class="sig-paren">(</span><em>key</em>, <em>array</em>, <em>tol=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/simul/link.html#DLink.get_idx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink.get_idx" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
-<dt>try to get the index of the requested array in the group key</dt>
+<dt>get the index of the requested array in the group key</dt>
 <dd>of the hdf5 file.
 If array doesn’t exist, the hdf5file[key] array is stacked</dd>
 </dl>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>key: string</strong></p>
-<blockquote>
-<div><p>key of the h5py group</p>
-</div></blockquote>
-<p><strong>array</strong> : np.ndarray</p>
-<blockquote>
-<div><p>array to check existence</p>
-</div></blockquote>
-<p><strong>tol</strong> : np.float64</p>
-<blockquote>
-<div><p>tolerance (in meters for key == ‘p_map’)</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">(u_opt, u): tuple</p>
-<p><strong>u</strong> : np.ndarray</p>
-<blockquote>
-<div><p>the index in the array of the file[key] group</p>
-</div></blockquote>
-<p><strong>u_opt</strong> : string (‘r’|’s’)</p>
-<blockquote>
-<div><p>return ‘r’ if array has been read into h5py file
-return ‘s’ if array has been stacked into the array of group key</p>
-</div></blockquote>
-<p>See Also:</p>
-<p class="last">Links.array_exist</p>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>key: string</dt>
+<dd>key of the h5py group</dd>
+<dt>array <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarray</span></dt>
+<dd>array to check existence</dd>
+<dt>tol <span class="classifier-delimiter">:</span> <span class="classifier">np.float64</span></dt>
+<dd>tolerance (in meters for key == ‘p_map’)</dd>
+</dl>
+<p>(u_opt, u): tuple</p>
+<dl class="docutils">
+<dt>u <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarray</span></dt>
+<dd>the index in the array of the file[key] group</dd>
+<dt>u_opt <span class="classifier-delimiter">:</span> <span class="classifier">string (‘r’|’s’)</span></dt>
+<dd>return ‘r’ if array has been read into h5py file
+return ‘s’ if array has been stacked into the array of group key</dd>
+</dl>
+<p>Links.array_exist</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.simul.link.DLink.inforay">
 <code class="descname">inforay</code><span class="sig-paren">(</span><em>iray</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/simul/link.html#DLink.inforay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink.inforay" title="Permalink to this definition">¶</a></dt>
 <dd><p>provide full information about a specified ray</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>iray</strong> : int</p>
-<blockquote class="last">
-<div><p>ray index</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>iray <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>ray index</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.simul.link.DLink.init_positions">
 <code class="descname">init_positions</code><span class="sig-paren">(</span><em>force=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/simul/link.html#DLink.init_positions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink.init_positions" title="Permalink to this definition">¶</a></dt>
 <dd><p>initialize random positions for a link</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>force</strong> : boolean</td>
-</tr>
-</tbody>
-</table>
+<p>force : boolean</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.simul.link.DLink.load">
 <code class="descname">load</code><span class="sig-paren">(</span><em>obj</em>, <em>grpname</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/simul/link.html#DLink.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load a given object in the correct grp</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>obj</strong> : Object</p>
-<blockquote>
-<div><p>(Signatures|Rays|Ctilde|Tchannel)</p>
-</div></blockquote>
-<p><strong>grpname</strong> : string</p>
-<blockquote>
-<div><p>groupe name of the h5py file</p>
-</div></blockquote>
-<p><strong>kwargs :</strong></p>
-<p class="last"><strong>layout for sig and rays</strong></p>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>obj <span class="classifier-delimiter">:</span> <span class="classifier">Object</span></dt>
+<dd>(Signatures|Rays|Ctilde|Tchannel)</dd>
+<dt>grpname <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>group name of the h5py file</dd>
+</dl>
+<p>kwargs :
+layout for sig and rays</p>
 </dd></dl>
 
 <dl class="method">
@@ -861,127 +686,81 @@ return ‘s’ if array has been stacked into the array of group key</p>
 <dt id="pylayers.simul.link.DLink.plt_cir">
 <code class="descname">plt_cir</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/simul/link.html#DLink.plt_cir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink.plt_cir" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot link channel impulse response</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>BWGHz</strong> : Bandwidth</p>
-<p><strong>Nf</strong> : Number of frequency points</p>
-<p><strong>fftshift</strong> : boolean</p>
-<p><strong>rays</strong> : boolean</p>
+<p>BWGHz : Bandwidth
+Nf    : Number of frequency points
+fftshift : boolean
+rays : boolean</p>
 <blockquote>
-<div><p>display rays contributors</p>
-</div></blockquote>
-<p><strong>fspl</strong> : boolean</p>
-<blockquote class="last">
-<div><p>display free space path loss</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="pylayers.antprop.channel.Tchannel.html#pylayers.antprop.channel.Tchannel.getcir" title="pylayers.antprop.channel.Tchannel.getcir"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.channel.Tchannel.getcir</span></code></a></p>
-</div>
+<div>display rays contributors</div></blockquote>
+<dl class="docutils">
+<dt>fspl <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
+<dd>display free space path loss</dd>
+</dl>
+<p>pylayers.antprop.channel.Tchannel.getcir</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.simul.link.DLink.plt_doa">
 <code class="descname">plt_doa</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/simul/link.html#DLink.plt_doa"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink.plt_doa" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot direction of arrival and departure</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fig</strong> : plt.figure</p>
-<p><strong>ax</strong> : plt.axis</p>
-<p><strong>phi: tuple (-180, 180)</strong></p>
+<p>fig : plt.figure
+ax : plt.axis
+phi: tuple (-180, 180)</p>
 <blockquote>
-<div><p>phi angle</p>
-</div></blockquote>
-<p><strong>normalize: bool</strong></p>
+<div>phi angle</div></blockquote>
+<dl class="docutils">
+<dt>normalize: bool</dt>
+<dd>energy normalized</dd>
+<dt>reverse <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd>inverse theta and phi represenation</dd>
+<dt>polar <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd>polar representation</dd>
+</dl>
+<p>cmap: matplotlib.cmap
+mode: ‘center’ | ‘mean’ | ‘in’</p>
 <blockquote>
-<div><p>energy normalized</p>
-</div></blockquote>
-<p><strong>reverse</strong> : bool</p>
-<blockquote>
-<div><p>inverse theta and phi represenation</p>
-</div></blockquote>
-<p><strong>polar</strong> : bool</p>
-<blockquote>
-<div><p>polar representation</p>
-</div></blockquote>
-<p><strong>cmap: matplotlib.cmap</strong></p>
-<p><strong>mode: ‘center’ | ‘mean’ | ‘in’</strong></p>
-<blockquote>
-<div><p>see bsignal.energy</p>
-</div></blockquote>
-<p><strong>s</strong> : float</p>
-<blockquote>
-<div><p>scatter dot size</p>
-</div></blockquote>
-<p><strong>fontsize: float</strong></p>
-<p><strong>edgecolors: bool</strong></p>
-<p><strong>colorbar: bool</strong></p>
-<p class="last"><strong>title</strong> : bool</p>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="pylayers.antprop.channel.Tchannel.html#pylayers.antprop.channel.Tchannel.plotd" title="pylayers.antprop.channel.Tchannel.plotd"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.channel.Tchannel.plotd</span></code></a></p>
-</div>
+<div>see bsignal.energy</div></blockquote>
+<dl class="docutils">
+<dt>s <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>scatter dot size</dd>
+</dl>
+<p>fontsize: float
+edgecolors: bool
+colorbar: bool
+title : bool</p>
+<p>pylayers.antprop.channel.Tchannel.plotd</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.simul.link.DLink.plt_dod">
 <code class="descname">plt_dod</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/simul/link.html#DLink.plt_dod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink.plt_dod" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot direction of arrival and departure</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fig</strong> : plt.figure</p>
-<p><strong>ax</strong> : plt.axis</p>
-<p><strong>phi: tuple (-180, 180)</strong></p>
+<p>fig : plt.figure
+ax : plt.axis
+phi: tuple (-180, 180)</p>
 <blockquote>
-<div><p>phi angle</p>
-</div></blockquote>
-<p><strong>normalize: bool</strong></p>
+<div>phi angle</div></blockquote>
+<dl class="docutils">
+<dt>normalize: bool</dt>
+<dd>energy normalized</dd>
+<dt>reverse <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd>inverse theta and phi represenation</dd>
+<dt>polar <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd>polar representation</dd>
+</dl>
+<p>cmap: matplotlib.cmap
+mode: ‘center’ | ‘mean’ | ‘in’</p>
 <blockquote>
-<div><p>energy normalized</p>
-</div></blockquote>
-<p><strong>reverse</strong> : bool</p>
-<blockquote>
-<div><p>inverse theta and phi represenation</p>
-</div></blockquote>
-<p><strong>polar</strong> : bool</p>
-<blockquote>
-<div><p>polar representation</p>
-</div></blockquote>
-<p><strong>cmap: matplotlib.cmap</strong></p>
-<p><strong>mode: ‘center’ | ‘mean’ | ‘in’</strong></p>
-<blockquote>
-<div><p>see bsignal.energy</p>
-</div></blockquote>
-<p><strong>s</strong> : float</p>
-<blockquote>
-<div><p>scatter dot size</p>
-</div></blockquote>
-<p><strong>fontsize: float</strong></p>
-<p><strong>edgecolors: bool</strong></p>
-<p><strong>colorbar: bool</strong></p>
-<p class="last"><strong>title</strong> : bool</p>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="pylayers.antprop.channel.Tchannel.html#pylayers.antprop.channel.Tchannel.plotd" title="pylayers.antprop.channel.Tchannel.plotd"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.channel.Tchannel.plotd</span></code></a></p>
-</div>
+<div>see bsignal.energy</div></blockquote>
+<dl class="docutils">
+<dt>s <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>scatter dot size</dd>
+</dl>
+<p>fontsize: float
+edgecolors: bool
+colorbar: bool
+title : bool</p>
+<p>pylayers.antprop.channel.Tchannel.plotd</p>
 </dd></dl>
 
 <dl class="method">
@@ -1000,55 +779,35 @@ return ‘s’ if array has been stacked into the array of group key</p>
 <dt id="pylayers.simul.link.DLink.save">
 <code class="descname">save</code><span class="sig-paren">(</span><em>obj</em>, <em>key</em>, <em>grpname</em>, <em>force=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/simul/link.html#DLink.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save a given object in the correct group</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>obj</strong> : Object</p>
-<blockquote>
-<div><p>(Signatures|Rays|Ctilde|Tchannel)</p>
-</div></blockquote>
-<p><strong>key</strong> : string</p>
-<blockquote>
-<div><p>key of the h5py file</p>
-</div></blockquote>
-<p><strong>gpname</strong> : string</p>
-<blockquote>
-<div><p>groupe name of the h5py file</p>
-</div></blockquote>
-<p class="last"><strong>force</strong> : boolean or list</p>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>obj <span class="classifier-delimiter">:</span> <span class="classifier">Object</span></dt>
+<dd>(Signatures|Rays|Ctilde|Tchannel)</dd>
+<dt>key <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>key of the h5py file</dd>
+<dt>gpname <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>groupe name of the h5py file</dd>
+</dl>
+<p>force : boolean or list</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.simul.link.DLink.save_init">
 <code class="descname">save_init</code><span class="sig-paren">(</span><em>filename_long</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/simul/link.html#DLink.save_init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink.save_init" title="Permalink to this definition">¶</a></dt>
 <dd><p>initialize the hdf5 file for link saving</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename_long</strong> : str</p>
-<blockquote>
-<div><p>complete path and filename</p>
-</div></blockquote>
-<p><strong>‘sig’</strong> : Signatures</p>
-<p><strong>‘ray2’</strong> : 2D rays</p>
-<p><strong>‘ray’</strong> : 3D rays</p>
-<p><strong>‘Ct’</strong> : Propagation channel</p>
-<p><strong>‘H’</strong> : Transmission channel</p>
-<p><strong>‘p_map’</strong> : points</p>
-<p><strong>‘c_map’</strong> : cycles</p>
-<p><strong>‘f_map’</strong> : frequency</p>
-<p><strong>‘A_map’</strong> : antennas</p>
-<p class="last"><strong>‘T_map’</strong> : rotation</p>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>filename_long <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd>complete path and filename</dd>
+</dl>
+<p>‘sig’    : Signatures
+‘ray2’   : 2D rays
+‘ray’    : 3D rays
+‘Ct’     : Propagation channel
+‘H’      : Transmission channel
+‘p_map’  : points
+‘c_map’  : cycles
+‘f_map’  : frequency
+‘A_map’  : antennas
+‘T_map’  : rotation</p>
 </dd></dl>
 
 <dl class="method">
@@ -1060,83 +819,50 @@ return ‘s’ if array has been stacked into the array of group key</p>
 <dt id="pylayers.simul.link.DLink.show">
 <code class="descname">show</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/simul/link.html#DLink.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>show the link</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>s</strong> : int</p>
+<dl class="docutils">
+<dt>s <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>size of Tx/Rx circle in points</dd>
+<dt>ca <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>color of termination a (Tx)</dd>
+<dt>cb <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>color of termination b (Rx)</dd>
+<dt>alpha <span class="classifier-delimiter">:</span> <span class="classifier">float </span></dt>
+<dd>transparency</dd>
+<dt>axis <span class="classifier-delimiter">:</span> <span class="classifier">boolean </span></dt>
+<dd>display axis boolean (default True)</dd>
+<dt>figsize <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd>figure size if fig not specified default (20,10)</dd>
+<dt>fontsize <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>default 20</dd>
+<dt>rays <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
+<dd>activation of rays vizalization (True)</dd>
+<dt>bsig <span class="classifier-delimiter">:</span> <span class="classifier">boolean </span></dt>
+<dd>activation of signature vizualization (False)</dd>
+<dt>laddr <span class="classifier-delimiter">:</span> <span class="classifier">list </span></dt>
+<dd>list of signature addresses</dd>
+</dl>
+<p>cmap : colormap
+radius : float</p>
 <blockquote>
-<div><p>size of Tx/Rx circle in points</p>
-</div></blockquote>
-<p><strong>ca</strong> : string</p>
+<div>radius in meters for layout vizualization</div></blockquote>
+<dl class="docutils">
+<dt>labels <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
+<dd>enabling edge label (useful for signature identification)</dd>
+<dt>pol <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>‘tt’,’pp’,’tp’,’pt’,’co’,’cross’,tot’</dd>
+<dt>col <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>‘cmap’</dd>
+</dl>
+<p>width : float
+alpha : float
+dB    : boolean</p>
 <blockquote>
-<div><p>color of termination a (Tx)</p>
-</div></blockquote>
-<p><strong>cb</strong> : string</p>
-<blockquote>
-<div><p>color of termination b (Rx)</p>
-</div></blockquote>
-<p><strong>alpha</strong> : float</p>
-<blockquote>
-<div><p>transparency</p>
-</div></blockquote>
-<p><strong>axis</strong> : boolean</p>
-<blockquote>
-<div><p>display axis boolean (default True)</p>
-</div></blockquote>
-<p><strong>figsize</strong> : tuple</p>
-<blockquote>
-<div><p>figure size if fig not specified default (20,10)</p>
-</div></blockquote>
-<p><strong>fontsize</strong> : int</p>
-<blockquote>
-<div><p>default 20</p>
-</div></blockquote>
-<p><strong>rays</strong> : boolean</p>
-<blockquote>
-<div><p>activation of rays vizalization (True)</p>
-</div></blockquote>
-<p><strong>bsig</strong> : boolean</p>
-<blockquote>
-<div><p>activation of signature vizualization (False)</p>
-</div></blockquote>
-<p><strong>laddr</strong> : list</p>
-<blockquote>
-<div><p>list of signature addresses</p>
-</div></blockquote>
-<p><strong>cmap</strong> : colormap</p>
-<p><strong>radius</strong> : float</p>
-<blockquote>
-<div><p>radius in meters for layout vizualization</p>
-</div></blockquote>
-<p><strong>labels</strong> : boolean</p>
-<blockquote>
-<div><p>enabling edge label (useful for signature identification)</p>
-</div></blockquote>
-<p><strong>pol</strong> : string</p>
-<blockquote>
-<div><p>‘tt’,’pp’,’tp’,’pt’,’co’,’cross’,tot’</p>
-</div></blockquote>
-<p><strong>col</strong> : string</p>
-<blockquote>
-<div><p>‘cmap’</p>
-</div></blockquote>
-<p><strong>width</strong> : float</p>
-<p><strong>alpha</strong> : float</p>
-<p><strong>dB</strong> : boolean</p>
-<blockquote>
-<div><p>default False</p>
-</div></blockquote>
-<p><strong>dyn</strong> : float</p>
-<blockquote class="last">
-<div><p>dynamic in dB</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.simul.link import *
+<div>default False</div></blockquote>
+<dl class="docutils">
+<dt>dyn <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>dynamic in dB</dd>
+</dl>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.simul.link import *
 &gt;&gt;&gt; DL=Link()
 &gt;&gt;&gt; DL.show(lr=-1,rays=True,dB=True,col=&#39;cmap&#39;,cmap=plt.cm.jet)
 &gt;&gt;&gt; DL.show(laddr=[(6,2)],bsig=True)
@@ -1151,22 +877,12 @@ return ‘s’ if array has been stacked into the array of group key</p>
 <dt>stack new array in h5py file</dt>
 <dd>for a given key (dataframe/group)</dd>
 </dl>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>key</strong> : string</p>
-<p><strong>array</strong> : np.ndarray</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>idx</strong> : int</p>
-<blockquote class="last">
-<div><p>indice of last element of the array of key</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<p>key : string</p>
+<p>array : np.ndarray</p>
+<dl class="docutils">
+<dt>idx <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>indice of last element of the array of key</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -1175,6 +891,7 @@ return ‘s’ if array has been stacked into the array of group key</p>
 
 
            </div>
+           
           </div>
           <footer>
   
@@ -1184,11 +901,11 @@ return ‘s’ if array has been stacked into the array of group key</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1207,9 +924,11 @@ return ‘s’ if array has been stacked into the array of group key</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -1224,14 +943,13 @@ return ‘s’ if array has been stacked into the array of group key</p>
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

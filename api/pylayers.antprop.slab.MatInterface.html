@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,22 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="MatDB" href="pylayers.antprop.slab.MatDB.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +55,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +84,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -119,9 +117,7 @@
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.slab.Interface.html">Interface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.slab.Mat.html">Mat</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.slab.MatDB.html">MatDB</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">MatInterface</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">MatInterface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.slab.Slab.html">Slab</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.slab.SlabDB.html">SlabDB</a></li>
 </ul>
@@ -157,7 +153,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -169,36 +165,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>MatInterface</li>
+        
+      <li>MatInterface</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.antprop.slab.MatInterface.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -209,16 +225,15 @@
 <dl class="class">
 <dt id="pylayers.antprop.slab.MatInterface">
 <em class="property">class </em><code class="descclassname">pylayers.antprop.slab.</code><code class="descname">MatInterface</code><span class="sig-paren">(</span><em>lmat</em>, <em>l</em>, <em>fGHz</em>, <em>theta</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#MatInterface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.MatInterface" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="pylayers.antprop.slab.Interface.html#pylayers.antprop.slab.Interface" title="pylayers.antprop.slab.Interface"><code class="xref py py-class docutils literal"><span class="pre">pylayers.antprop.slab.Interface</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="pylayers.antprop.slab.Interface.html#pylayers.antprop.slab.Interface" title="pylayers.antprop.slab.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pylayers.antprop.slab.Interface</span></code></a></p>
 <p>MatInterface : Class for Interface between two materials</p>
 <p>l distance from the next Interface</p>
-<p class="rubric">Notes</p>
 <p>This is required for recursive utilization of this function when the
 output angle of an interface happens to be the input angle of the
 next interface. As this angle depends on materials which themselves
 depends on frequency THETA is becoming a full matrix without redundancy
 between lines.</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; theta = np.arange(0,np.pi/2,0.01)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; theta = np.arange(0,np.pi/2,0.01)
 &gt;&gt;&gt; fGHz = np.arange(3.1,10.6,0.2)
 &gt;&gt;&gt; Nf = len(fGHz)
 &gt;&gt;&gt; Nt = len(theta)
@@ -229,49 +244,26 @@ between lines.</p>
 &gt;&gt;&gt; II = MatInterface([m1,m2],0,fGHz,theta)
 </pre></div>
 </div>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\]</div>
 <p>I_p = left| begin{array}{cc} frac{1}{T_p} &amp; frac{R_p}{T_p} \ frac{R_p}{T_p} &amp; frac{1}{T_p} end{array}right|</p>
 <p>I_o = left| begin{array}{cc} frac{1}{T_o} &amp; frac{R_o}{T_o} \ frac{R_o}{T_o} &amp; frac{1}{T_o} end{array}right|</p>
-<p>MatIinterface fix the np.pi/2 NaN problem</p>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">RT</span></code>([metalic,&nbsp;RT])</td>
-<td>evaluate Reflection and Transmission matrix</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
-<td>generic help</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">loss0</span></code>(fGHz[,&nbsp;display])</td>
-<td>evaluate Loss at normal incidence theta=0</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">losst</span></code>(fGHz[,&nbsp;display,&nbsp;dB])</td>
-<td>evaluate Loss</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">pcolor</span></code>([dB])</td>
-<td>display of R &amp; T coefficients wrt frequency an angle</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plotwrt</span></code>([var,&nbsp;kv])</td>
-<td>plot R &amp; T coefficients with respect to angle or frequency</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">tocolor</span></code>(fGHz)</td>
-<td>convert transmission into color</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 </div>
 
 
            </div>
+           
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="pylayers.antprop.slab.MatDB.html" class="btn btn-neutral" title="MatDB" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -279,11 +271,11 @@ between lines.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -302,9 +294,11 @@ between lines.</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -319,14 +313,13 @@ between lines.</p>
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

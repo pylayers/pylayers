@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,21 @@
   
 
   
-  
     <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../../../about.html"/>
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="PyLayers" href="../../../index.html"/>
-        <link rel="up" title="Module code" href="../../index.html"/> 
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
 
   
   <script src="../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +54,7 @@
 
           
             
-            <img src="../../../_static/pylayers.png" class="logo" />
+            <img src="../../../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +83,10 @@
           
             
             
-                <ul>
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +97,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -142,7 +139,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -154,34 +151,52 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-      
-    <li>pylayers.simul.link</li>
+        
+      <li>pylayers.simul.link</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -201,19 +216,22 @@ r&quot;&quot;&quot;
 
 &quot;&quot;&quot;
 
-
 try:
     from tvtk.api import tvtk
     from mayavi.sources.vtk_data_source import VTKDataSource
     from mayavi import mlab
 except:
     print(&#39;Layout:Mayavi is not installed&#39;)
+
 import doctest
 import time
 import numpy as np
 import matplotlib.pylab as plt
 import pylayers.signal.waveform as wvf
-import pylayers.util.geomutil as geu 
+import pylayers.util.geomutil as geu
+import logging
+
+logger = logging.getLogger(__name__)
 
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
@@ -232,26 +250,23 @@ from pylayers.antprop.channel import Ctilde, Tchannel , AFPchannel
 from pylayers.antprop.statModel import getchannel
 import tqdm
 import copy
-
 import h5py
 import pdb
 
-
+logger = logging.getLogger(__name__)
 
 <div class="viewcode-block" id="Link"><a class="viewcode-back" href="../../../api/pylayers.simul.link.Link.html#pylayers.simul.link.Link">[docs]</a>class Link(PyLayers):
-    &quot;&quot;&quot;
-        Link is a MetaClass, which derives from `Tchannel`.
-        Tchannel is a transmission channel i.e a radio channel
-        which includes both link termination antennas.
+    &quot;&quot;&quot; Link class
 
-        A common factor of both statistical (SLink) and deterministic channel (DLink)
-        is the exitence of :math:`\alpha_k` and :math:`\tau_k`
-     &quot;&quot;&quot;
+    Members
+    -------
+
+    &quot;&quot;&quot;
+
     def __init__(self):
         &quot;&quot;&quot; Link evaluation metaclass
         &quot;&quot;&quot;
         PyLayers.__init__(self)
-   
 
 
     def __add__(self,l):
@@ -343,9 +358,9 @@ import pdb
             position of a device dev_a
         b : np.ndarray (3,)
             position of a device dev_b
-        ca : int 
+        ca : int
             cycle a number
-        cb : int 
+        cb : int
             cycle b number
         Ta : np.ndarray (3,3)
             Rotation matrice of Antenna of device dev_a relative to global Layout scene
@@ -363,7 +378,7 @@ import pdb
     def __init__(self, **kwargs):
         &quot;&quot;&quot; deterministic link evaluation
 
-        
+
         Advanced (change only if you really know what you do !)
 
         save_opt : list ([&#39;sig&#39;,&#39;ray&#39;,&#39;Ct&#39;,&#39;H&#39;])
@@ -467,22 +482,21 @@ import pdb
 
         Link.__init__(self)
 
-        defaults={ &#39;L&#39;:&#39;&#39;,
-                   &#39;a&#39;:np.array(()),
-                   &#39;b&#39;:np.array(()),
-                   &#39;Aa&#39;:[],
-                   &#39;Ab&#39;:[],
-                   &#39;Ta&#39;:np.eye(3),
-                   &#39;Tb&#39;:np.eye(3),
-                   &#39;fGHz&#39;:np.array([2.4]),
-                   &#39;wav&#39;:wvf.Waveform(),
-                   &#39;cutoff&#39;:3,
-                   &#39;threshold&#39;:0.8,
+        defaults={ &#39;L&#39;: &#39;&#39;,
+                   &#39;a&#39;: np.array(()),
+                   &#39;b&#39;: np.array(()),
+                   &#39;Aa&#39;: [],
+                   &#39;Ab&#39;: [],
+                   &#39;Ta&#39;: np.eye(3),
+                   &#39;Tb&#39;: np.eye(3),
+                   &#39;fGHz&#39;: np.array([2.4]),
+                   &#39;wav&#39;: wvf.Waveform(),
+                   &#39;cutoff&#39;: 3,
+                   &#39;threshold&#39;: 0.8,
                    &#39;delay_excess_max_ns&#39;:500,
-                   &#39;save_opt&#39;:[&#39;sig&#39;,&#39;ray2&#39;,&#39;ray&#39;,&#39;Ct&#39;,&#39;H&#39;],
+                   &#39;save_opt&#39;: [&#39;sig&#39;,&#39;ray2&#39;,&#39;ray&#39;,&#39;Ct&#39;,&#39;H&#39;],
                    &#39;save_idx&#39;:0,
                    &#39;force_create&#39;:False,
-                   &#39;verbose&#39;:False,
                    &#39;seed&#39;:0,
                    &#39;graph&#39;:&#39;tcvirw&#39;
                 }
@@ -497,7 +511,7 @@ import pdb
         # set default attribute
 
         for key, value in defaults.items():
-        
+
             if key not in kwargs:
                 if key in specset :
                     setattr(self,&#39;_&#39;+key,value)
@@ -517,7 +531,7 @@ import pdb
         force = self.force_create
         delattr(self,&#39;force_create&#39;)
 
-       
+
         # dictionnary data exists
         self.dexist={&#39;sig&#39;:{&#39;exist&#39;:False,&#39;grpname&#39;:&#39;&#39;},
                      &#39;ray&#39;:{&#39;exist&#39;:False,&#39;grpname&#39;:&#39;&#39;},
@@ -526,14 +540,14 @@ import pdb
                      &#39;H&#39;:{&#39;exist&#39;:False,&#39;grpname&#39;:&#39;&#39;}
                     }
 
-        # The link frequency range depends on the antenna 
+        # The link frequency range depends on the antenna
         # self.fGHz = kwargs[&#39;fGHz&#39;]
 
-        if self.Aa==[]:
-            self.Aa=Antenna(typ=&#39;Omni&#39;,fGHz=self.fGHz)
-        if self.Ab==[]:
-            self.Ab=Antenna(typ=&#39;Omni&#39;,fGHz=self.fGHz)
-        
+        if self.Aa == []:
+            self.Aa = Antenna(typ=&#39;Omni&#39;,fGHz=self.fGHz)
+        if self.Ab == []:
+            self.Ab = Antenna(typ=&#39;Omni&#39;,fGHz=self.fGHz)
+
         if isinstance(self._L,str):
             self._Lname = self._L
             self._L = Layout(self._Lname,bgraphs=True,bcheck=False)
@@ -546,14 +560,11 @@ import pdb
 
             self.filename = &#39;Links_&#39; + str(self.save_idx) + &#39;_&#39; + self._Lname + &#39;.h5&#39;
             filenameh5 = pyu.getlong(self.filename,pstruc[&#39;DIRLNK&#39;])
-            # check if save file alreasdy exists
+            # check if save file already exists
             if not os.path.exists(filenameh5) or force:
                 print(&#39;Links save file for &#39; + self.L._filename + &#39; does not exist.&#39;)
                 print(&#39;Creating file. You\&#39;ll see this message only once per Layout&#39;)
                 self.save_init(filenameh5)
-
-            
-            
             try:
                 self.L.dumpr()
                 print(&#39;Layout Graph loaded&#39;)
@@ -561,42 +572,42 @@ import pdb
                 print(&#39;This is the first time the Layout is used. Graphs have to be built. Please Wait&#39;)
                 self.L.build(graph=self.graph)
                 self.L.dumpw()
-            
+
             #
-            # In outdoor situation we delete transmission node involving  
-            # an indoor cycle at the exception of AIR 
+            # In outdoor situation we delete transmission node involving
+            # an indoor cycle at the exception of AIR
             #
             cindoor = [p for p in self.L.Gt.nodes() if self.L.Gt.node[p][&#39;indoor&#39;]]
 
             if self._L.typ ==&#39;outdoor&#39;:
                 u = self.L.Gi.node.keys()
-                # lT : list of transmission interactions 
+                # lT : list of transmission interactions
                 lT  =  [k for k in u if (len(k)==3)]
                 # lTi : transmission connected at least to an indoor cycle
                 lTi = [ k for k in lT if ((k[1]  in cindoor) or (k[2] in cindoor))]
-                # lTiw : those which are wall (not those above buildings) 
+                # lTiw : those which are wall (not those above buildings)
                 lTiw = [ k for k in lTi if self.L.Gs.node[k[0]][&#39;name&#39;]!=&#39;AIR&#39; ]
 
                 self.L.Gi.remove_nodes_from(lTiw)
-                lE = self.L.Gi.edges()
+                lE = list(self.L.Gi.edges())
                 for k in range(len(lE)):
                     e = lE[k]
                     try:
-                        output = self.L.Gi.edge[e[0]][e[1]][&#39;output&#39;]
+                        output = self.L.Gi[e[0]][e[1]][&#39;output&#39;]
                     except:
                         pdb.set_trace()
                     for l in output.keys():
                         if l in lTiw:
                             del output[l]
-                    self.L.Gi.edge[e[0]][e[1]][&#39;output&#39;]=output
-                
+
+                    self.L.Gi[e[0]][e[1]][&#39;output&#39;]=output
             #self.L.dumpw()
             #self.L.build()
 
             self.init_positions()
 
 
-           
+
             ###########
             # init freq
             # TODO Check where it is used redundant with fGHz
@@ -787,7 +798,7 @@ import pdb
 
         if hasattr(self,&#39;_maya_fig&#39;) and self._maya_fig._is_running:
             self._update_show3(ant=&#39;a&#39;)
-        
+
         if hasattr(self,&#39;ca&#39;) and hasattr(self,&#39;cb&#39;):
             self.checkh5()
 
@@ -798,7 +809,7 @@ import pdb
            self.Ab._mayamesh.remove()
 
 
-        
+
         #save rot
         rot = self.Tb
         self._Ab = Ant
@@ -811,7 +822,7 @@ import pdb
 
         if hasattr(self,&#39;_maya_fig&#39;) and self._maya_fig._is_running:
             self._update_show3(ant=&#39;b&#39;)
-        
+
         if hasattr(self,&#39;ca&#39;) and hasattr(self,&#39;cb&#39;):
             self.checkh5()
 
@@ -821,7 +832,7 @@ import pdb
         self._Ta = orientation
         if hasattr(self,&#39;_maya_fig&#39;) and self._maya_fig._is_running:
             self._update_show3(ant=&#39;a&#39;)
-        
+
         if hasattr(self,&#39;ca&#39;) and hasattr(self,&#39;cb&#39;):
             self.checkh5()
 
@@ -832,7 +843,7 @@ import pdb
         self._Tb = orientation
         if hasattr(self,&#39;_maya_fig&#39;) and self._maya_fig._is_running:
             self._update_show3(ant=&#39;b&#39;)
-        
+
         if hasattr(self,&#39;ca&#39;) and hasattr(self,&#39;cb&#39;):
             self.checkh5()
 
@@ -866,7 +877,7 @@ import pdb
     def delay_excess_max_ns(self,delay_excess_max_ns):
 
         delay_excess_max_ns = max(delay_excess_max_ns,0.)
-       
+
         self._delay_excess_max_ns = delay_excess_max_ns
 
         if hasattr(self,&#39;ca&#39;) and hasattr(self,&#39;cb&#39;):
@@ -901,7 +912,7 @@ import pdb
             self.Aa.fGHz=self.fGHz
             self.Ab.fGHz=self.fGHz
 
-        
+
         if hasattr(self,&#39;ca&#39;) and hasattr(self,&#39;cb&#39;):
             self.checkh5()
 
@@ -989,7 +1000,7 @@ import pdb
         Parameters
         ----------
 
-        iray : int 
+        iray : int
             ray index
 
         &quot;&quot;&quot;
@@ -1019,10 +1030,10 @@ import pdb
     #         if len(fa)==0:
     #             fa = np.array([2.4])
     #             self.Aa.fGHz = fa
-    #             # raise AttributeError(&quot;Incompatible frequency range in Antenna. Consider change Dlink.fGHz&quot;) 
+    #             # raise AttributeError(&quot;Incompatible frequency range in Antenna. Consider change Dlink.fGHz&quot;)
     #             print &quot;Incompatible frequency range in Antenna. WARNING  Dlink.fGHz changed to 2.4GHz&quot;
     #         try:
-    #             sa = fa[1]-fa[0]  # step frequecy 
+    #             sa = fa[1]-fa[0]  # step frequecy
     #         except: #single frequency
     #             sa = fa[0]
     #         # step
@@ -1043,7 +1054,6 @@ import pdb
     #             self.Ab.fGHz=fb
     #             # raise AttributeError(&quot;Incompatible frequency range in Antenna. Consider change Dlink.fGHz&quot;) 
     #             print &quot;Incompatible frequency range in Antenna. WARNING  Dlink.fGHz changed to 2.4GHz&quot;
-        
     #         try:
     #             sb = fb[1]-fb[0] # step frequency 
     #         except:
@@ -1087,13 +1097,13 @@ import pdb
         elif self.L.typ==&#39;indoor&#39;:
             nodes = [n for n in nodes if n!=0 and self.L.Gt.node[n][&#39;indoor&#39;]] 
         else:
-            nodes = [n for n in nodes if n!=0 ] 
+            nodes = [n for n in nodes if n!=0 ]
 
         # draw the link extremities randomly
 
         np.random.seed(self.seed)
-        ia = np.random.randint(0,len(nodes))    
-        ib = np.random.randint(0,len(nodes))    
+        ia = np.random.randint(0,len(nodes))
+        ib = np.random.randint(0,len(nodes))
         if len(self.a)==0 or force:
             self.ca = nodes[ia]
         else:
@@ -1177,24 +1187,24 @@ import pdb
 
 
 <div class="viewcode-block" id="DLink.save_init"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.save_init">[docs]</a>    def save_init(self,filename_long):
-        &quot;&quot;&quot; initialize the hdf5 file for link saving 
+        &quot;&quot;&quot; initialize the hdf5 file for link saving
 
         Parameters
         ----------
 
         filename_long : str
             complete path and filename
-        
+
         &#39;sig&#39;    : Signatures
-        &#39;ray2&#39;   : 2D rays 
-        &#39;ray&#39;    : 3D rays 
-        &#39;Ct&#39;     : Propagation channel 
-        &#39;H&#39;      : Transmission channel 
-        &#39;p_map&#39;  : points  
-        &#39;c_map&#39;  : cycles 
-        &#39;f_map&#39;  : frequency 
-        &#39;A_map&#39;  : antennas 
-        &#39;T_map&#39;  : rotation 
+        &#39;ray2&#39;   : 2D rays
+        &#39;ray&#39;    : 3D rays
+        &#39;Ct&#39;     : Propagation channel
+        &#39;H&#39;      : Transmission channel
+        &#39;p_map&#39;  : points
+        &#39;c_map&#39;  : cycles
+        &#39;f_map&#39;  : frequency
+        &#39;A_map&#39;  : antennas
+        &#39;T_map&#39;  : rotation
 
         &quot;&quot;&quot;
 
@@ -1246,14 +1256,18 @@ import pdb
         try :
             lfilename=pyu.getlong(self.filename,pstruc[&#39;DIRLNK&#39;])
             f=h5py.File(lfilename,&#39;a&#39;)
+
+            if type(array)==str:
+                array = array.encode(&#39;utf-8&#39;)
+
             if key != &#39;T_map&#39;:
                 sc = f[key].shape
                 f[key].resize((sc[0]+1,sc[1]))
-                f[key][-1,:]=array
+                f[key][-1,:] = array
             else:
                 sc = f[key].shape
                 f[key].resize((sc[0]+1,sc[1],sc[2]))
-                f[key][-1,:,:]=array
+                f[key][-1,:,:] = array
             f.close()
             return np.array([sc[0]])
         except:
@@ -1299,7 +1313,7 @@ import pdb
             key of the h5py file
         gpname : string
             groupe name of the h5py file
-        force : boolean or list 
+        force : boolean or list
         &quot;&quot;&quot;
 
         if not force :
@@ -1309,11 +1323,15 @@ import pdb
         else :
             if self.dexist[key][&#39;exist&#39;]:
                 self._delete(key,grpname)
-              
-            obj._saveh5(self.filename,grpname)
 
-        if self.verbose :
-            print(str(obj.__class__).split(&#39;.&#39;)[-1] + &#39; from &#39;+ grpname + &#39; saved&#39;)</div>
+            #if type(grpname)==str:
+            #    grpname.encode(&#39;utf-8&#39;)
+            try:
+                obj._saveh5(self.filename,grpname)
+            except:
+                pdb.set_trace()
+
+        logger.debug(str(obj.__class__).split(&#39;.&#39;)[-1] + &#39; from &#39;+ grpname + &#39; saved&#39;)</div>
 
 
 <div class="viewcode-block" id="DLink.load"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.load">[docs]</a>    def load(self,obj,grpname,**kwargs):
@@ -1325,9 +1343,9 @@ import pdb
         obj : Object
             (Signatures|Rays|Ctilde|Tchannel)
         grpname : string
-            groupe name of the h5py file
+            group name of the h5py file
 
-        kwargs : 
+        kwargs :
         layout for sig and rays
 
         Examples
@@ -1337,10 +1355,8 @@ import pdb
         &quot;&quot;&quot;
 
 
-
         obj._loadh5(self.filename,grpname,**kwargs)
-        if self.verbose :
-            print(str(obj.__class__).split(&#39;.&#39;)[-1] + &#39; from &#39;+ grpname + &#39; loaded&#39;)</div>
+        logger.debug(str(obj.__class__).split(&#39;.&#39;)[-1] + &#39; from &#39;+ grpname + &#39; loaded&#39;)</div>
 
 
 <div class="viewcode-block" id="DLink.get_grpname"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.get_grpname">[docs]</a>    def get_grpname(self):
@@ -1380,9 +1396,9 @@ import pdb
         # Write in h5py if no prior a-b link
 
         grpname = str(self.cutoff) + &#39;_&#39; + th + &#39;_&#39; + str(ua) + &#39;_&#39; +str(ub)
-        self.dexist[&#39;ray2&#39;][&#39;grpname&#39;]=grpname
-        self.dexist[&#39;ray&#39;][&#39;grpname&#39;]=grpname
-        
+        self.dexist[&#39;ray2&#39;][&#39;grpname&#39;] = grpname
+        self.dexist[&#39;ray&#39;][&#39;grpname&#39;] = grpname
+
 
 
         ############
@@ -1393,10 +1409,10 @@ import pdb
         #farray = np.array(([self.fmin,self.fmax,self.fstep]))
         Nf = len(self.fGHz)
         if Nf &gt; 1:
-            farray = np.array(([self.fGHz[0],self.fGHz[-1],self.fGHz[1]-self.fGHz[0]]))
+            farray = np.array(([self.fGHz[0], self.fGHz[-1], self.fGHz[1]-self.fGHz[0]]))
         else:
-            farray = np.array(([self.fGHz[0],self.fGHz[-1],0]))
-        uf_opt, uf = self.get_idx(&#39;f_map&#39;,farray)
+            farray = np.array(([self.fGHz[0], self.fGHz[-1],0]))
+        uf_opt, uf = self.get_idx(&#39;f_map&#39;, farray)
 
         grpname = str(ua) + &#39;_&#39; + str(ub) + &#39;_&#39; + str(uf)
         self.dexist[&#39;Ct&#39;][&#39;grpname&#39;] = grpname
@@ -1445,10 +1461,10 @@ import pdb
         try :
             lfilename=pyu.getlong(self.filename,pstruc[&#39;DIRLNK&#39;])
             f = h5py.File(lfilename,&#39;r&#39;)
-            if grpname.decode(&#39;utf8&#39;) in f[key].keys():
-                self.dexist[key][&#39;exist&#39;]=True
+            if grpname.encode(&#39;utf8&#39;) in f[key].keys():
+                self.dexist[key][&#39;exist&#39;] = True
             else :
-                self.dexist[key][&#39;exist&#39;]=False
+                self.dexist[key][&#39;exist&#39;] = False
             f.close()
         except:
             f.close()
@@ -1456,7 +1472,7 @@ import pdb
 
 
 <div class="viewcode-block" id="DLink.get_idx"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.get_idx">[docs]</a>    def get_idx(self,key,array,tol=1e-3):
-        &quot;&quot;&quot; try to get the index of the requested array in the group key
+        &quot;&quot;&quot; get the index of the requested array in the group key
             of the hdf5 file.
             If array doesn&#39;t exist, the hdf5file[key] array is stacked
 
@@ -1520,6 +1536,7 @@ import pdb
 
         Returns
         -------
+
         (ua)
 
         ua : np.ndarray
@@ -1589,12 +1606,12 @@ import pdb
                 # ua = np.where(np.in1d(ufmima,ufst))[0]
 
         elif key == &#39;A_map&#39;:
-            ua = np.where(fa==array)[0]
+            ua = np.where(fa == array.encode(&#39;utf-8&#39;))[0]
 
         elif key == &#39;T_map&#39;:
             eq = array == fa
-            seq = np.sum(np.sum(eq,axis=1),axis=1)
-            ua = np.where(seq==9)[0]
+            seq = np.sum(np.sum(eq,axis=1), axis=1)
+            ua = np.where(seq == 9)[0]
         else :
             raise NameError(&#39;Link.array_exist : invalid key&#39;)
 
@@ -1607,20 +1624,19 @@ import pdb
         -----
 
         This function modifies the orientation of the antenna at both sides
-        via Ta and Tb 3x3 matrices and recalculates the channel transfer function 
-        for those new orientations. 
+        via Ta and Tb 3x3 matrices and recalculates the channel transfer function
+        for those new orientations.
         The self.H variable is updated
 
         &quot;&quot;&quot;
         # Antenna Rotation
         self.C.locbas(Ta=self.Ta, Tb=self.Tb)
         # Transmission channel calculation
-        H = self.C.prop2tran(a=self.Aa,b=self.Ab,Friis=True,debug=True)
+        H = self.C.prop2tran(a=self.Aa, b=self.Ab, Friis=True, debug=True)
         self.H = H</div>
 
 <div class="viewcode-block" id="DLink.eval"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.eval">[docs]</a>    def eval(self,**kwargs):
         &quot;&quot;&quot; link evaluation
-
 
         Parameters
         ----------
@@ -1638,10 +1654,10 @@ import pdb
         ra_number_mirror_cf : int
             rays.to3D number of ceil/floor reflexions
         ra_ceil_H: float, (default [])
-            ceil height . 
-                If [] : Layout max ceil height 
-                If 0 : only floor reflection (outdoor case) 
-                If -1 : neither ceil nor floor reflection (2D case) 
+            ceil height .
+                If [] : Layout max ceil height
+                If 0 : only floor reflection (outdoor case)
+                If -1 : neither ceil nor floor reflection (2D case)
         ra_vectorized: boolean (True)
             if True used the (2015 new) vectorized approach to determine 2drays
         progressbar: str
@@ -1649,8 +1665,7 @@ import pdb
             python : progress bar in ipython
 
 
-    
-        Notes    
+        Notes
         -----
 
         update self.ak and self.tk
@@ -1684,25 +1699,21 @@ import pdb
 
         &quot;&quot;&quot;
 
-
-
-        defaults={ &#39;applywav&#39;:False,
-                   &#39;si_progress&#39;:True,
-                   &#39;diffraction&#39;:True,
-                   &#39;ra_vectorized&#39;:True,
-                   &#39;ra_ceil_H&#39;:[],
-                   &#39;ra_number_mirror_cf&#39;:1,
-                   &#39;force&#39;:[],
-                   &#39;bt&#39;:True,
-                   &#39;alg&#39;:1,
-                   &#39;si_reverb&#39;:4,
-                   &#39;nD&#39;:2,
-                   &#39;nR&#39;:10,
-                   &#39;nT&#39;:10,
-                   &#39;debug&#39;:False,
-                   &#39;verbose&#39;:[],
-                   &#39;progressbar&#39;:None,
-                   &#39;rm_aw&#39;:True
+        defaults = {&#39;applywav&#39;: False,
+                   &#39;si_progress&#39;: True,
+                   &#39;diffraction&#39;: True,
+                   &#39;ra_vectorized&#39;: True,
+                   &#39;ra_ceil_H&#39;: [],
+                   &#39;ra_number_mirror_cf&#39;: 1,
+                   &#39;force&#39;: True,
+                   &#39;bt&#39;: True,
+                   &#39;si_reverb&#39;: 4,
+                   &#39;nD&#39;: 2,
+                   &#39;nR&#39;: 10,
+                   &#39;nT&#39;: 10,
+                   &#39;debug&#39;: False,
+                   &#39;progressbar&#39;: None,
+                   &#39;rm_aw&#39;: True
                    }
         # check antenna frequency range compatibility
         if (self.Aa.fGHz!=self.Ab.fGHz).all():
@@ -1732,18 +1743,11 @@ import pdb
                 if kwargs[&#39;force&#39;] == True :
                     kwargs[&#39;force&#39;] = [&#39;sig&#39;,&#39;ray2&#39;,&#39;ray&#39;,&#39;Ct&#39;,&#39;H&#39;]
                 else :
-                    # Ct and H are not yet saved/load 
+                    # Ct and H are not yet saved/loaded
                     # compliantly with the given configutain
                     # their are disabled here
                     kwargs[&#39;force&#39;] = [&#39;Ct&#39;,&#39;H&#39;]
 
-        if kwargs[&#39;verbose&#39;] != []:
-            self.verbose=kwargs[&#39;verbose&#39;]
-
-        
-        # must be placed after all the init !!!!
-        # if self.verbose :
-        #     print(&quot;checkh5&quot;)
         # self.checkh5()
 
         if isinstance(kwargs[&#39;progressbar&#39;],str):
@@ -1759,137 +1763,131 @@ import pdb
         ############
         # Signatures
         ############
-        
-        if self.verbose :
-            print(&quot;Start Signatures&quot;)
+
+
         tic = time.time()
         Si = Signatures(self.L,
                         self.ca,
                         self.cb,
-                        cutoff=kwargs[&#39;cutoff&#39;],
+                        cutoff = kwargs[&#39;cutoff&#39;],
                         threshold = kwargs[&#39;threshold&#39;])
 
         if (self.dexist[&#39;sig&#39;][&#39;exist&#39;] and not (&#39;sig&#39; in kwargs[&#39;force&#39;])):
-            self.load(Si,self.dexist[&#39;sig&#39;][&#39;grpname&#39;],L=self.L)
-            if self.verbose :
-                print(&quot;load signature&quot;)
-        else :
-            ## 1 is the default signature determination algorithm
-            if kwargs[&#39;alg&#39;]==1:
-                self.nD = kwargs[&#39;nD&#39;]
-                self.nT = kwargs[&#39;nT&#39;]
-                self.nR = kwargs[&#39;nR&#39;]
-                self.bt = kwargs[&#39;bt&#39;]
-                
-                Si.run(cutoff = self.cutoff,
-                        diffraction = kwargs[&#39;diffraction&#39;],
-                        threshold = self.threshold,
-                        delay_excess_max_ns = self.delay_excess_max_ns,
-                        nD = self.nD,
-                        nR = self.nR,
-                        nT = self.nT,
-                        progress = kwargs[&#39;si_progress&#39;],
-                        bt = self.bt)
+            logger.info(&quot; Load existing signatures from :%s&quot;,self.dexist[&#39;sig&#39;][&#39;grpname&#39;])
+            self.load(Si, self.dexist[&#39;sig&#39;][&#39;grpname&#39;], L=self.L)
+        else:
+            logger.info(&quot; Run signatures&quot;)
 
-                if self.verbose:
-                    print(&quot;default algorithm&quot;)
+            self.nD = kwargs[&#39;nD&#39;]
+            self.nT = kwargs[&#39;nT&#39;]
+            self.nR = kwargs[&#39;nR&#39;]
+            self.bt = kwargs[&#39;bt&#39;]
 
-            if kwargs[&#39;alg&#39;]==&#39;exp&#39;:
-                TMP = Si.run_exp(cutoff=kwargs[&#39;cutoff&#39;],
-                         cutoffbound=kwargs[&#39;si_reverb&#39;])
-                if self.verbose :
-                    print(&quot;experimental (ex 2015)&quot;)
+            Si.run(cutoff = self.cutoff,
+                    diffraction = kwargs[&#39;diffraction&#39;],
+                    threshold = self.threshold,
+                    delay_excess_max_ns = self.delay_excess_max_ns,
+                    nD = self.nD,
+                    nR = self.nR,
+                    nT = self.nT,
+                    progress = kwargs[&#39;si_progress&#39;],
+                    bt = self.bt)
 
-            if kwargs[&#39;alg&#39;]==&#39;exp2&#39;:
-                TMP = Si.run_exp2(cutoff=kwargs[&#39;cutoff&#39;],
-                        cutoffbound=kwargs[&#39;si_reverb&#39;])
-                if self.verbose :
-                    print(&quot;algo exp2 ( ex 20152)&quot;)
-
-        #Si.run6(diffraction=kwargs[&#39;diffraction&#39;])
-        # save sig
-            
+            logger.info(&quot; Save signature in %s &quot;,self.dexist[&#39;sig&#39;][&#39;grpname&#39;])
             self.save(Si,&#39;sig&#39;,self.dexist[&#39;sig&#39;][&#39;grpname&#39;],force = kwargs[&#39;force&#39;])
 
         self.Si = Si
+
         toc = time.time()
-        if self.verbose :
-            print(&quot;Stop signature&quot;,toc-tic)
+        logger.info(&quot; End signature in %d sec&quot;,toc-tic)
+
         try:
             pbar.update(20)
-        except: 
+        except:
             pass
-
 
 
         ############
         # Rays
         ############
 
-        if self.verbose :
-            print(&quot;Start Rays&quot;)
+        logger.info(&quot; Start Rays determination&quot;)
         tic = time.time()
         r2d = Rays(self.a,self.b)
-       
 
-        #
-        # get 2D rays 
-        #
+
+        #############
+        # get 2D rays
+        #############
+
         if self.dexist[&#39;ray2&#39;][&#39;exist&#39;] and not (&#39;ray2&#39; in kwargs[&#39;force&#39;]):
-            self.load(r2d,self.dexist[&#39;ray2&#39;][&#39;grpname&#39;],L=self.L)
+            logger.info(&quot; Load r2d from %s&quot;, self.dexist[&#39;ray2&#39;][&#39;grpname&#39;])
+            self.load(r2d,self.dexist[&#39;ray2&#39;][&#39;grpname&#39;], L=self.L)
         else :
             # perform computation ...
-            # ... with vectorized ray evaluation 
+            # ... with vectorized ray evaluation
+            logger.debug(&quot; a : (%d,%d,%d)&quot;, self.a[0], self.a[1], self.a[2])
+            logger.debug(&quot; b : (%d,%d,%d)&quot;, self.b[0], self.b[1], self.b[2])
+
             if kwargs[&#39;ra_vectorized&#39;]:
+                logger.info(&quot; Determine r2d vectorized version&quot;)
                 r2d = Si.raysv(self.a,self.b)
             # ... or with original and slow approach ( to be removed in a near future)
             else :
+                logger(&quot;Determine r2d non vectorized version&quot;)
                 r2d = Si.rays(self.a,self.b)
             # save 2D rays
-            self.save(r2d,&#39;ray2&#39;,self.dexist[&#39;ray2&#39;][&#39;grpname&#39;],force = kwargs[&#39;force&#39;])
+
+            logger.info(&quot; save r2d in %s &quot;,self.dexist[&#39;ray2&#39;][&#39;grpname&#39;])
+            self.save(r2d,&#39;ray2&#39;, self.dexist[&#39;ray2&#39;][&#39;grpname&#39;], force = kwargs[&#39;force&#39;])
 
         self.r2d = r2d
 
-        #
-        # get 3D rays 
-        #
+        #############
+        # get 3D rays
+        #############
+
         R = Rays(self.a,self.b)
         R.is3D = True
         if self.dexist[&#39;ray&#39;][&#39;exist&#39;] and not (&#39;ray&#39; in kwargs[&#39;force&#39;]):
-            self.load(R,self.dexist[&#39;ray&#39;][&#39;grpname&#39;],L=self.L)
+            logger.info(&quot; Load r3d from %s&quot;, self.dexist[&#39;ray&#39;][&#39;grpname&#39;])
+            self.load(R,self.dexist[&#39;ray&#39;][&#39;grpname&#39;], L=self.L)
         else :
-
             if kwargs[&#39;ra_ceil_H&#39;] == []:
                 if self.L.typ==&#39;indoor&#39;:
                     ceilheight = self.L.maxheight
                 else:
-                    ceilheight = 0 
+                    ceilheight = 0
             else:
                 ceilheight = kwargs[&#39;ra_ceil_H&#39;]
 
 
-            R = self.r2d.to3D(self.L,H=ceilheight, N=kwargs[&#39;ra_number_mirror_cf&#39;])
+            logger.info(&quot; Run to3d H: %d, N: %d&quot;, ceilheight,kwargs[&#39;ra_number_mirror_cf&#39;] )
+            R = self.r2d.to3D(self.L, H=ceilheight, N=kwargs[&#39;ra_number_mirror_cf&#39;])
             if kwargs[&#39;rm_aw&#39;]:
                 R = R.remove_aw(self.L)
-            
+
+
+            logger.info(&quot; Run R.locbas &quot;)
             R.locbas(self.L)
-            
+
+            logger.info(&quot; Run R.fillinter &quot;)
             R.fillinter(self.L)
 
             # C = Ctilde()
 
             # C = R.eval(self.fGHz)
 
-            # save 3D rays 
+            # save 3D rays
 
-            self.save(R,&#39;ray&#39;,self.dexist[&#39;ray&#39;][&#39;grpname&#39;],force = kwargs[&#39;force&#39;])
+            logger.info(&quot; Save 3D rays in %s&quot;,self.dexist[&#39;ray&#39;][&#39;grpname&#39;])
+            self.save(R, &#39;ray&#39;, self.dexist[&#39;ray&#39;][&#39;grpname&#39;], force = kwargs[&#39;force&#39;])
 
-        
+
         self.R = R
         toc = time.time()
-        if self.verbose :
-            print(&quot;Stop rays&quot;,toc-tic)
-        
+        logger.info(&quot; Stop rays %d&quot;,toc-tic)
+
         if self.R.nray == 0:
             raise NameError(&#39;No rays have been found. Try to re-run the simulation with a higher S.cutoff &#39;)
         try:
@@ -1899,7 +1897,7 @@ import pdb
         ############
         # Ctilde
         ############
-        
+
         if self.dexist[&#39;Ct&#39;][&#39;exist&#39;] and not (&#39;Ct&#39; in kwargs[&#39;force&#39;]):
             C = Ctilde()
             self.load(C,self.dexist[&#39;Ct&#39;][&#39;grpname&#39;])
@@ -1908,7 +1906,7 @@ import pdb
             # Ctilde...
             # Find an other criteria in order to decide if the R has
             # already been evaluated
-            
+
             C = R.eval(self.fGHz)
             # ...save Ct
             self.save(C,&#39;Ct&#39;,self.dexist[&#39;Ct&#39;][&#39;grpname&#39;],force = kwargs[&#39;force&#39;])
@@ -1917,7 +1915,7 @@ import pdb
 
         try:
             pbar.update(20)
-        except: 
+        except:
             pass
         ############
         # H
@@ -1938,8 +1936,6 @@ import pdb
             pbar.update(20)
         except: 
             pass
-
-
 
         if kwargs[&#39;applywav&#39;]:
             if self.H.isFriis:
@@ -1964,7 +1960,7 @@ import pdb
         self.adpmes.cut(imax=imax)
         self.adprt = self.afprt.toadp()
         self.adprt.cut(imax=imax)</div>
-        
+
 <div class="viewcode-block" id="DLink.afp"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.afp">[docs]</a>    def afp(self,**kwargs):
         &quot;&quot;&quot; Evaluate angular frequency profile 
 
@@ -2049,7 +2045,7 @@ import pdb
         # rx = b 
         # angular range (a) : phi 
         #
-       
+
         self.afprt = AFPchannel(tx=self.a,rx=self.b,az=az)
         for k,ph in enumerate(az.squeeze()):
             self.Tb = geu.MATP(self.Ab.sl,self.Ab.el,ph,tilt,polar)
@@ -2058,7 +2054,7 @@ import pdb
             self.evalH()
             E = self.H.energy()
             if k==0:
-                self.dpadp = E[None,...] 
+                self.dpadp = E[None,...]
             else:
                 self.dpadp = np.concatenate((self.dpadp,E[None,...]),axis=0)
 
@@ -2077,7 +2073,7 @@ import pdb
         else:
             self.afprt.x = fGHz
             self.afprt.fcGHz = fGHz[len(fGHz)/2]
-        
+
         self.dpdp = np.sum(self.dpadp,axis=0)
         self.dpap = np.sum(self.dpadp,axis=1)</div>
         #return(afp)
@@ -2190,7 +2186,7 @@ import pdb
         if kwargs[&#39;fig&#39;]==[]:
             fig = plt.figure(figsize=kwargs[&#39;figsize&#39;])
         else:
-            fig = kwargs[&#39;fig&#39;] 
+            fig = kwargs[&#39;fig&#39;]
 
         if kwargs[&#39;ax&#39;]==[]:
             ax = plt.gca()
@@ -2200,14 +2196,14 @@ import pdb
         #
         # Layout
         #
-       
+
         fig,ax = self.L.showG(&#39;s&#39;,
-                              nodes=False,
+                              nodes = False,
                               fig = fig,
                               ax = ax,
-                              labels=kwargs[&#39;labels&#39;],
-                              aw=kwargs[&#39;aw&#39;],
-                              axis=kwargs[&#39;axis&#39;])
+                              labels = kwargs[&#39;labels&#39;],
+                              aw = kwargs[&#39;aw&#39;],
+                              axis = kwargs[&#39;axis&#39;])
         #
         # Point A
         #
@@ -2251,14 +2247,14 @@ import pdb
                 lr  = np.arange(self.R.nray)
             else:
                 lr = kwargs[&#39;lr&#39;]
-            
+
             vmin = val.min()
             vmax = val.max() 
             if kwargs[&#39;dB&#39;]:
                 vmin = 10*np.log10(vmin)
                 vmax = 10*np.log10(vmax)
-            
-            
+
+
             #
             # limitation of the vizualization zone around the center of the link 
             #
@@ -2282,7 +2278,7 @@ import pdb
                     col = kwargs[&#39;col&#39;]
                     width = kwargs[&#39;width&#39;]
                     alpha = kwargs[&#39;alpha&#39;]
-                
+
                 # plot ray (i,r) 
                 fig,ax = self.R.show(rlist=[ir],
                                colray=col,
@@ -2336,7 +2332,7 @@ import pdb
 
 
             &gt;&gt;&gt; from pylayers.simul.link import *
-            &gt;&gt;&gt; L=DLink(verbose=False)
+            &gt;&gt;&gt; L=DLink()
             &gt;&gt;&gt; L.eval()
 
         &quot;&quot;&quot;
@@ -2346,17 +2342,22 @@ import pdb
         else:
             self._maya_fig=mlab.figure(bgcolor=(1,1,1),fgcolor=(0,0,0))
 
+        if &#39;scale&#39; in kwargs:
+            scale = kwargs.pop(&#39;scale&#39;)
+        else:
+            scale = 0.5
+
         if &#39;centered&#39; in kwargs:
             centered = kwargs[&#39;centered&#39;]
         else :
             centered = False
 
         if centered:
-            pg =np.zeros((3))
-            pg[:2]=self.L.pg
+            pg = np.zeros((3))
+            pg[:2] = self.L.pg
 
 
-        if centered :
+        if centered:
             ptx = self.a-pg
             prx = self.b-pg
         else :
@@ -2375,50 +2376,50 @@ import pdb
             # evaluate antenna if required
             if not Atx.evaluated:
                 Atx.eval()
-            try:
-                Atx._show3(T=Ttx.reshape(3,3),
-                           po=ptx,
-                           title=False,
-                           bcolorbar=False,
-                           bnewfig=False,
-                           bcircle = False,
-                           name = Atx._filename,
-                           scale= 0.5,
-                           binteract=False)
-            except:
-                Atx.eval()
-                Atx._show3(T=Ttx.reshape(3,3),
-                            po=ptx,
-                            title=False,
-                            bcolorbar=False,
-                            bnewfig=False,
-                            bcircle = False,
-                            name = Atx._filename,
-                            scale= 0.5,
-                            binteract=False)
+#            try:
+#                Atx._show3(T=Ttx.reshape(3,3),
+#                           po=ptx,
+#                           title=False,
+#                           bcolorbar=False,
+#                           bnewfig=False,
+#                           bcircle = False,
+#                           name = Atx._filename,
+#                           scale= scale,
+#                           binteract=False)
+#            except:
+#                Atx.eval()
+            Atx._show3(T=Ttx.reshape(3,3),
+                        po=ptx,
+                        title=False,
+                        bcolorbar=False,
+                        bnewfig=False,
+                        bcircle = False,
+                        name = Atx._filename,
+                        scale= scale,
+                        binteract=False)
             if not Arx.evaluated:
                 Arx.eval()
-            try:
-                Arx._show3(T=Trx.reshape(3,3),
-                            po=prx,
-                            title=False,
-                            bcolorbar=False,
-                            bnewfig=False,
-                            bcircle = False,
-                            name = Arx._filename,
-                            scale= 0.5,
-                            binteract=False)
-            except:
-                Arx.eval()
-                Arx._show3(T=Trx.reshape(3,3),
-                            po=prx,
-                            title=False,
-                            bcolorbar=False,
-                            bnewfig=False,
-                            bcircle = False,
-                            name = Arx._filename,
-                            scale= 0.5,
-                            binteract=False)
+#            try:
+#                Arx._show3(T=Trx.reshape(3,3),
+#                            po=prx,
+#                            title=False,
+#                            bcolorbar=False,
+#                            bnewfig=False,
+#                            bcircle = False,
+#                            name = Arx._filename,
+#                            scale= scale,
+#                            binteract=False)
+#            except:
+                #Arx.eval()
+            Arx._show3(T=Trx.reshape(3,3),
+                        po=prx,
+                        title=False,
+                        bcolorbar=False,
+                        bnewfig=False,
+                        bcircle = False,
+                        name = Arx._filename,
+                        scale= scale,
+                        binteract=False)
         if lay:
             # check if indoor/outdoor, outdoor or indoor situations
             # a_in = self.L.Gt.node[self.ca][&#39;indoor&#39;]
@@ -2543,14 +2544,14 @@ import pdb
         Parameters
         ----------
 
-        BWGHz : Bandwidth 
+        BWGHz : Bandwidth
         Nf    : Number of frequency points
-        fftshift : boolean 
+        fftshift : boolean
         rays : boolean
             display rays contributors
         fspl : boolean
             display free space path loss
-        
+
         See Also
         --------
 
@@ -2559,8 +2560,8 @@ import pdb
         &quot;&quot;&quot;
 
         defaults = {&#39;fig&#39;:[],
-                    &#39;ax&#39;: [],
-                     &#39;BWGHz&#39;:5,
+                    &#39;ax&#39;:[],
+                    &#39;BWGHz&#39;:5,
                     &#39;Nf&#39;:1000,
                     &#39;rays&#39;:True,
                     &#39;fspl&#39;:True,
@@ -2580,22 +2581,23 @@ import pdb
             ax = plt.gca()
         else:
             ax = kwargs[&#39;ax&#39;]
-        
+
         taumax = self.H.taud.max()
         BWGHz = kwargs[&#39;BWGHz&#39;]
 
         Nf = np.maximum(kwargs[&#39;Nf&#39;],taumax*BWGHz).astype(int)
-        # getcir is a Tchannel method 
+        # getcir is a Tchannel method
 
-        ir = self.H.getcir(BWGHz =BWGHz,Nf=Nf)
-        ir.plot(fig=fig,ax=ax)
+        self.ir = self.H.getcir(BWGHz =BWGHz,Nf=Nf)
+        self.ir.plot(fig=fig,ax=ax)
         plt.ylim(kwargs[&#39;vmin&#39;],kwargs[&#39;vmax&#39;])
 
 
-        delay = ir.x 
+        delay = self.ir.x
+        delay = delay[delay&gt;0]
         dist = delay*0.3
-        FSPL0 = -32.4- 20*np.log10(self.fGHz[0])-20*np.log10(dist) 
-        FSPLG = FSPL0 + self.Aa.GdBmax[0] + self.Ab.GdBmax[0] 
+        FSPL0 = -32.4- 20*np.log10(self.fGHz[0])-20*np.log10(dist)
+        FSPLG = FSPL0 + self.Aa.GdBmax[0] + self.Ab.GdBmax[0]
         if kwargs[&#39;fspl&#39;]:
             # Free space path loss
             ax.plot(delay,FSPL0,linewidth=2,color=&#39;b&#39;,label=&#39;FSPL&#39;)
@@ -2603,19 +2605,19 @@ import pdb
             ax.plot(delay,FSPLG,linewidth=3,color=&#39;k&#39;,label=&#39;FSPL+Gtmax+Grmax&#39;)
 
 
-        if kwargs[&#39;rays&#39;] : 
+        if kwargs[&#39;rays&#39;]:
             # energy of each ray
             ER = np.squeeze(self.H.energy())
             color_range = np.linspace( 0, 1., len(ER))#np.linspace( 0, np.pi, len(ER))
             # sort rays by increasing energy
             uER = ER.argsort()[::-1]
             colors= color_range[uER]
-            # most important rays , it=0 ir=0 , if =0 
+            # most important rays , it=0 ir=0 , if =0
             ax.scatter(self.H.taud[uER],20*np.log10(np.abs(self.H.y[uER,0,0,0])),c=colors,cmap=&#39;hot&#39;)
             ax.set_xlim([min(self.H.taud)-10,max(self.H.taud)+10])
 
         ax.legend()
-        return fig,ax,ir</div>
+        return fig,ax</div>
 
 
 <div class="viewcode-block" id="DLink.plt_doa"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.plt_doa">[docs]</a>    def plt_doa(self,**kwargs):
@@ -2746,6 +2748,7 @@ import pdb
 
         pylayers.antprop.loss.losst
         pylayers.gis.layout.angleonlink3
+
         &quot;&quot;&quot;
 
         v = np.vectorize( lambda t:self.L.Gs.node[t][&#39;name&#39;])
@@ -2771,6 +2774,7 @@ if (__name__ == &quot;__main__&quot;):
 </pre></div>
 
            </div>
+           
           </div>
           <footer>
   
@@ -2780,11 +2784,11 @@ if (__name__ == &quot;__main__&quot;):
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -2803,9 +2807,11 @@ if (__name__ == &quot;__main__&quot;):
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -2820,14 +2826,13 @@ if (__name__ == &quot;__main__&quot;):
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

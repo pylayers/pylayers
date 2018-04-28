@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,32 +25,23 @@
   
 
   
-  
     <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../../about.html"/>
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="PyLayers" href="../../index.html"/>
-        <link rel="up" title="1   Overview" href="../TOC.html"/>
-        <link rel="next" title="Trajectory and Network simulation" href="../4-MOB/Mobility.html"/>
-        <link rel="prev" title="Sorting and Cutting" href="../2-AP/CIR.html"/> 
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Trajectory and Network simulation" href="../4-MOB/Mobility.html" />
+    <link rel="prev" title="Sorting and Cutting" href="../2-AP/CIR.html" /> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -63,7 +56,7 @@
 
           
             
-            <img src="../../_static/pylayers.png" class="logo" />
+            <img src="../../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -92,7 +85,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">User Manual</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html#basic-usage">2&nbsp;&nbsp;&nbsp;Basic Usage</a></li>
@@ -130,6 +126,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -171,7 +168,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -183,52 +180,72 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../index.html">User Manual</a> &raquo;</li>
-      
+        
           <li><a href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
-      
-    <li>Network Simulation Configuration</li>
+        
+      <li>Network Simulation Configuration</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../../_sources/notebook/5-SIM/SimulNetConfig.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="code highlight-none"><div class="highlight"><pre><span></span>!date
+  <div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>!date
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>lundi 6 novembre 2017, 11:23:16 (UTC+0100)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>lundi 6 novembre 2017, 11:23:16 (UTC+0100)
 </pre></div>
 </div>
 <div class="section" id="network-simulation-configuration">
 <h1>Network Simulation Configuration<a class="headerlink" href="#network-simulation-configuration" title="Permalink to this headline">¶</a></h1>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>import ConfigParser
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>import ConfigParser
 from IPython.display import FileLink
 import pylayers.util.pyutil as pyu
 </pre></div>
@@ -243,17 +260,17 @@ should be as realistic as possible, because for many applications it
 turns out that many parameters of interest are stongly dependent of the
 dynamic topology of the mobile network.</p>
 <p>In the following the configuration files for proceeding with those high
-level <code class="docutils literal"><span class="pre">PyLayers</span></code> simulation are described.</p>
-<p>The configuration file is <code class="docutils literal"><span class="pre">simulnet.ini</span></code></p>
+level <code class="docutils literal notranslate"><span class="pre">PyLayers</span></code> simulation are described.</p>
+<p>The configuration file is <code class="docutils literal notranslate"><span class="pre">simulnet.ini</span></code></p>
 <div class="section" id="simulnet-ini">
 <h2>Simulnet.ini<a class="headerlink" href="#simulnet-ini" title="Permalink to this headline">¶</a></h2>
-<p>This file is assumed to be located in <code class="docutils literal"><span class="pre">$BASENAME/ini</span></code>. As the format
+<p>This file is assumed to be located in <code class="docutils literal notranslate"><span class="pre">$BASENAME/ini</span></code>. As the format
 of this file is not stable yet. Refer to the comment in the file below
 for obtaining the inforamtion about the format.</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>!cat $BASENAME/ini/simulnet.ini
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>!cat $BASENAME/ini/simulnet.ini
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[Mysql]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[Mysql]
 host = localhost
 user = root
 passwd = sqlsql
@@ -333,18 +350,18 @@ seed = 1
 verbose = False
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>Cp = ConfigParser.ConfigParser()
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>Cp = ConfigParser.ConfigParser()
 Cp.read(pyu.getlong(&#39;simulnet.ini&#39;,&#39;ini&#39;))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&#39;/home/uguen/Bureau/P1/ini/simulnet.ini&#39;]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;/home/uguen/Bureau/P1/ini/simulnet.ini&#39;]
 </pre></div>
 </div>
-<p>Current version of <code class="docutils literal"><span class="pre">Simulnet.ini</span></code> contains the following sections</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>Cp.sections()
+<p>Current version of <code class="docutils literal notranslate"><span class="pre">Simulnet.ini</span></code> contains the following sections</p>
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>Cp.sections()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&#39;Mysql&#39;,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;Mysql&#39;,
  &#39;Save&#39;,
  &#39;Layout&#39;,
  &#39;Mechanics&#39;,
@@ -356,25 +373,25 @@ Cp.read(pyu.getlong(&#39;simulnet.ini&#39;,&#39;ini&#39;))
 <div class="section" id="save-section">
 <h3>Save section<a class="headerlink" href="#save-section" title="Permalink to this headline">¶</a></h3>
 <p>The save section handles the output files of the simulation.</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Save&#39;))
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Save&#39;))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>{&#39;save&#39;: &#39;[]&#39;, &#39;savep&#39;: &#39;False&#39;, &#39;savepd&#39;: &#39;True&#39;}
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;save&#39;: &#39;[]&#39;, &#39;savep&#39;: &#39;False&#39;, &#39;savepd&#39;: &#39;True&#39;}
 </pre></div>
 </div>
-<p>The <code class="docutils literal"><span class="pre">savep</span></code> boolean enable/disable saving of the simulation.</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Save&#39;))[&#39;savep&#39;]
+<p>The <code class="docutils literal notranslate"><span class="pre">savep</span></code> boolean enable/disable saving of the simulation.</p>
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Save&#39;))[&#39;savep&#39;]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&#39;False&#39;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&#39;False&#39;
 </pre></div>
 </div>
 <p>The log file which contains all traces from the simulated dynamics are
-in <code class="docutils literal"><span class="pre">$BASENAME/netsave</span></code></p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>!ls $BASENAME/netsave/*
+in <code class="docutils literal notranslate"><span class="pre">$BASENAME/netsave</span></code></p>
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>!ls $BASENAME/netsave/*
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>/home/uguen/Bureau/P1/netsave/simulnet_TA-Office.h5
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/home/uguen/Bureau/P1/netsave/simulnet_TA-Office.h5
 </pre></div>
 </div>
 </div>
@@ -382,10 +399,10 @@ in <code class="docutils literal"><span class="pre">$BASENAME/netsave</span></co
 <h3>Layout section<a class="headerlink" href="#layout-section" title="Permalink to this headline">¶</a></h3>
 <p>This section specifies the layout parameter and spatial dimension of the
 simulation</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Layout&#39;))
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Layout&#39;))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>{&#39;filename&#39;: &#39;TA-Office.lay&#39;,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;filename&#39;: &#39;TA-Office.lay&#39;,
  &#39;the_world_height&#39;: &#39;20&#39;,
  &#39;the_world_scale&#39;: &#39;20&#39;,
  &#39;the_world_width&#39;: &#39;65&#39;,
@@ -394,28 +411,28 @@ simulation</p>
 </pre></div>
 </div>
 <p>Choose the used Layout for simulation</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Layout&#39;))[&#39;filename&#39;]
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Layout&#39;))[&#39;filename&#39;]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&#39;TA-Office.lay&#39;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&#39;TA-Office.lay&#39;
 </pre></div>
 </div>
 <p>Setup an offset for defining the coordinate system origin</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>print dict(Cp.items(&#39;Layout&#39;))[&#39;x_offset&#39;]
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>print dict(Cp.items(&#39;Layout&#39;))[&#39;x_offset&#39;]
 print dict(Cp.items(&#39;Layout&#39;))[&#39;y_offset&#39;]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>30
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>30
 2
 </pre></div>
 </div>
 </div>
 <div class="section" id="network-section">
 <h3>Network section<a class="headerlink" href="#network-section" title="Permalink to this headline">¶</a></h3>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Network&#39;))
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Network&#39;))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>{&#39;communication_mode&#39;: &quot;&#39;autonomous&#39;&quot;,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;communication_mode&#39;: &quot;&#39;autonomous&#39;&quot;,
  &#39;dispinfo&#39;: &#39;False&#39;,
  &#39;ipython_nb_show&#39;: &#39;False&#39;,
  &#39;network&#39;: &#39;False&#39;,
@@ -427,45 +444,45 @@ print dict(Cp.items(&#39;Layout&#39;))[&#39;y_offset&#39;]
 </div>
 <p>Setup communication mode between node:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">&quot;autonomous&quot;</span></code> : the data exchange between nodes is driven by the
+<li><code class="docutils literal notranslate"><span class="pre">&quot;autonomous&quot;</span></code> : the data exchange between nodes is driven by the
 localization layer. If more information is required to estimate the
 position then a communication request is sent to the communication
 state</li>
-<li><code class="docutils literal"><span class="pre">&quot;synchro&quot;</span></code> : the data exchange between nodes is periodic. LDPs are
-periodically refreshed at the <code class="docutils literal"><span class="pre">network_update_time</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;synchro&quot;</span></code> : the data exchange between nodes is periodic. LDPs are
+periodically refreshed at the <code class="docutils literal notranslate"><span class="pre">network_update_time</span></code></li>
 </ul>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Network&#39;))[&#39;communication_mode&#39;]
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Network&#39;))[&#39;communication_mode&#39;]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&quot;&#39;autonomous&#39;&quot;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&quot;&#39;autonomous&#39;&quot;
 </pre></div>
 </div>
 <p>Time step for the refresh network information</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Network&#39;))[&#39;network_update_time&#39;]
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Network&#39;))[&#39;network_update_time&#39;]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&#39;0.1&#39;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&#39;0.1&#39;
 </pre></div>
 </div>
 <p>Vizualization of the simulation using matplotlib</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Network&#39;))[&#39;show&#39;]
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Network&#39;))[&#39;show&#39;]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&#39;False&#39;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&#39;False&#39;
 </pre></div>
 </div>
 <p>Vizualization of a table summing up the data exchange of the nodes</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Network&#39;))[&#39;show_table&#39;]
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Network&#39;))[&#39;show_table&#39;]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&#39;False&#39;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&#39;False&#39;
 </pre></div>
 </div>
 <p>Vizualization of the simulation inside ipython notebook</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Network&#39;))[&#39;ipython_nb_show&#39;]
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Network&#39;))[&#39;ipython_nb_show&#39;]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&#39;False&#39;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&#39;False&#39;
 </pre></div>
 </div>
 </div>
@@ -473,49 +490,49 @@ periodically refreshed at the <code class="docutils literal"><span class="pre">n
 <div class="section" id="mechanics">
 <h2>Mechanics<a class="headerlink" href="#mechanics" title="Permalink to this headline">¶</a></h2>
 <p>This section specifies agents dynamic during simulation</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Mechanics&#39;))
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Mechanics&#39;))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>{&#39;choose_destination&#39;: &quot;&#39;random&#39;&quot;,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;choose_destination&#39;: &quot;&#39;random&#39;&quot;,
  &#39;mecanic_update_time&#39;: &#39;0.2&#39;,
  &#39;pdshow&#39;: &#39;False&#39;}
 </pre></div>
 </div>
 <p>Setup how agent choose their target:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>: the agnet move into the layout randomly</li>
-<li><code class="docutils literal"><span class="pre">&quot;file&quot;</span></code> : the agent follow the sequence specified in
-<code class="docutils literal"><span class="pre">&lt;project_dir&gt;/nodes_destination.ini</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>: the agnet move into the layout randomly</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;file&quot;</span></code> : the agent follow the sequence specified in
+<code class="docutils literal notranslate"><span class="pre">&lt;project_dir&gt;/nodes_destination.ini</span></code></li>
 </ul>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Mechanics&#39;))[&#39;choose_destination&#39;]
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Mechanics&#39;))[&#39;choose_destination&#39;]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&quot;&#39;random&#39;&quot;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&quot;&#39;random&#39;&quot;
 </pre></div>
 </div>
 <p>Time step for refreshing the mechanical layer (ground truth position)</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Mechanics&#39;))[&#39;mecanic_update_time&#39;]
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Mechanics&#39;))[&#39;mecanic_update_time&#39;]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&#39;0.2&#39;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&#39;0.2&#39;
 </pre></div>
 </div>
 <div class="section" id="localization-section">
 <h3>Localization section<a class="headerlink" href="#localization-section" title="Permalink to this headline">¶</a></h3>
 <p>Setup Localization algorithms</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Localization&#39;))
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Localization&#39;))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>{&#39;localization&#39;: &#39;False&#39;,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;localization&#39;: &#39;False&#39;,
  &#39;localization_update_time&#39;: &#39;1.0&#39;,
  &#39;method&#39;: &quot;[&#39;geo&#39;]&quot;}
 </pre></div>
 </div>
 <p>enable/disable localization of the agents</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Localization&#39;))[&#39;localization&#39;]
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Localization&#39;))[&#39;localization&#39;]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&#39;False&#39;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&#39;False&#39;
 </pre></div>
 </div>
 <p>Select localization methods :</p>
@@ -523,26 +540,26 @@ periodically refreshed at the <code class="docutils literal"><span class="pre">n
 <li>Algebraic : heterogeneous localization algorithm</li>
 <li>Geometric : RGPA</li>
 </ul>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Localization&#39;))[&#39;method&#39;]
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Localization&#39;))[&#39;method&#39;]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&quot;[&#39;geo&#39;]&quot;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&quot;[&#39;geo&#39;]&quot;
 </pre></div>
 </div>
 <p>Time step for localization update</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Localization&#39;))[&#39;localization_update_time&#39;]
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Localization&#39;))[&#39;localization_update_time&#39;]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&#39;1.0&#39;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&#39;1.0&#39;
 </pre></div>
 </div>
 </div>
 <div class="section" id="simulation-section">
 <h3>Simulation section<a class="headerlink" href="#simulation-section" title="Permalink to this headline">¶</a></h3>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Simulation&#39;))
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Simulation&#39;))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>{&#39;duration&#39;: &#39;60.0&#39;,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;duration&#39;: &#39;60.0&#39;,
  &#39;filename&#39;: &quot;&#39;simulnet&#39;&quot;,
  &#39;seed&#39;: &#39;1&#39;,
  &#39;show_interval&#39;: &#39;0.5&#39;,
@@ -552,24 +569,24 @@ periodically refreshed at the <code class="docutils literal"><span class="pre">n
 </pre></div>
 </div>
 <p>Setup simulation duration in second</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Simulation&#39;))[&#39;duration&#39;]
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Simulation&#39;))[&#39;duration&#39;]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&#39;60.0&#39;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&#39;60.0&#39;
 </pre></div>
 </div>
 <p>Setup random seed for simulation</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Simulation&#39;))[&#39;seed&#39;]
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Simulation&#39;))[&#39;seed&#39;]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&#39;1&#39;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&#39;1&#39;
 </pre></div>
 </div>
 <p>Display messages during simulation</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Simulation&#39;))[&#39;verbose&#39;]
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>dict(Cp.items(&#39;Simulation&#39;))[&#39;verbose&#39;]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&#39;False&#39;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&#39;False&#39;
 </pre></div>
 </div>
 <p>See Also Mobility_</p>
@@ -579,15 +596,16 @@ periodically refreshed at the <code class="docutils literal"><span class="pre">n
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../4-MOB/Mobility.html" class="btn btn-neutral float-right" title="Trajectory and Network simulation" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../4-MOB/Mobility.html" class="btn btn-neutral float-right" title="Trajectory and Network simulation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../2-AP/CIR.html" class="btn btn-neutral" title="Sorting and Cutting" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../2-AP/CIR.html" class="btn btn-neutral" title="Sorting and Cutting" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -597,11 +615,11 @@ periodically refreshed at the <code class="docutils literal"><span class="pre">n
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -620,9 +638,11 @@ periodically refreshed at the <code class="docutils literal"><span class="pre">n
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -637,14 +657,13 @@ periodically refreshed at the <code class="docutils literal"><span class="pre">n
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

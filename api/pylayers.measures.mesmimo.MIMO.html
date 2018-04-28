@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,21 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +54,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +83,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +97,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -133,9 +130,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.mesuwb">29&nbsp;&nbsp;&nbsp;pylayers.measures.mesuwb Module</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="references.html#module-pylayers.measures.mesmimo">30&nbsp;&nbsp;&nbsp;pylayers.measures.mesmimo Module</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="references.html#id67">30.1&nbsp;&nbsp;&nbsp;Classes</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">MIMO</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">MIMO</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="references.html#id68">30.2&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
@@ -151,7 +146,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -163,36 +158,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>MIMO</li>
+        
+      <li>MIMO</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.measures.mesmimo.MIMO.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -203,76 +218,11 @@
 <dl class="class">
 <dt id="pylayers.measures.mesmimo.MIMO">
 <em class="property">class </em><code class="descclassname">pylayers.measures.mesmimo.</code><code class="descname">MIMO</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/mesmimo.html#MIMO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesmimo.MIMO" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This class handles the data coming from a MIMO Channel Sounder</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>H</strong> : raw channel matrix in frequency domain</p>
-<p><strong>Hcal</strong> : calibrated channel matrix in frequency domain</p>
-<p class="last"><strong>hcal</strong> : channel matrix in time domain</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.Bcapacity" title="pylayers.measures.mesmimo.MIMO.Bcapacity"><code class="xref py py-obj docutils literal"><span class="pre">Bcapacity</span></code></a>([Pt,&nbsp;Tp])</td>
-<td>calculates BLAST deterministic MIMO channel capacity</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.Scapacity" title="pylayers.measures.mesmimo.MIMO.Scapacity"><code class="xref py py-obj docutils literal"><span class="pre">Scapacity</span></code></a>([Pt,&nbsp;Tp])</td>
-<td>equivalent SISO capacity</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.WFcapacity" title="pylayers.measures.mesmimo.MIMO.WFcapacity"><code class="xref py py-obj docutils literal"><span class="pre">WFcapacity</span></code></a>([Pt,&nbsp;Tp])</td>
-<td>calculates deterministic MIMO channel capacity</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.animgrid" title="pylayers.measures.mesmimo.MIMO.animgrid"><code class="xref py py-obj docutils literal"><span class="pre">animgrid</span></code></a>(**kwargs)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.calHa" title="pylayers.measures.mesmimo.MIMO.calHa"><code class="xref py py-obj docutils literal"><span class="pre">calHa</span></code></a>(**kwargs)</td>
-<td>calculate the Ha function (angular domain representation)</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.calibration" title="pylayers.measures.mesmimo.MIMO.calibration"><code class="xref py py-obj docutils literal"><span class="pre">calibration</span></code></a>()</td>
-<td>Apply calibration files</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.grid" title="pylayers.measures.mesmimo.MIMO.grid"><code class="xref py py-obj docutils literal"><span class="pre">grid</span></code></a>(M[,&nbsp;OR,&nbsp;OT,&nbsp;cT,&nbsp;cR])</td>
-<td>Evaluate the data on a grid in the plane</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.linear_MMSE" title="pylayers.measures.mesmimo.MIMO.linear_MMSE"><code class="xref py py-obj docutils literal"><span class="pre">linear_MMSE</span></code></a>([cmd,&nbsp;m,&nbsp;snrdB])</td>
-<td>linear MMSE precoding</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.linear_ZF" title="pylayers.measures.mesmimo.MIMO.linear_ZF"><code class="xref py py-obj docutils literal"><span class="pre">linear_ZF</span></code></a>([cmd,&nbsp;m,&nbsp;snrdB])</td>
-<td>linear Zero Forcing precoding</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.loadraw" title="pylayers.measures.mesmimo.MIMO.loadraw"><code class="xref py py-obj docutils literal"><span class="pre">loadraw</span></code></a>()</td>
-<td>load a MIMO Nr x Nt raw data sounder file</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.mulcplot" title="pylayers.measures.mesmimo.MIMO.mulcplot"><code class="xref py py-obj docutils literal"><span class="pre">mulcplot</span></code></a>(mode,&nbsp;**kwargs)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.normalize" title="pylayers.measures.mesmimo.MIMO.normalize"><code class="xref py py-obj docutils literal"><span class="pre">normalize</span></code></a>()</td>
-<td>Normalization of H</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.plot" title="pylayers.measures.mesmimo.MIMO.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>([frequency,&nbsp;phase,&nbsp;dB,&nbsp;cal,&nbsp;fig,&nbsp;ax,&nbsp;color])</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.showgrid" title="pylayers.measures.mesmimo.MIMO.showgrid"><code class="xref py py-obj docutils literal"><span class="pre">showgrid</span></code></a>(**kwargs)</td>
-<td>show the data on a spatial grid</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.svd" title="pylayers.measures.mesmimo.MIMO.svd"><code class="xref py py-obj docutils literal"><span class="pre">svd</span></code></a>()</td>
-<td>singular value decomposition of matrix H</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.transfer" title="pylayers.measures.mesmimo.MIMO.transfer"><code class="xref py py-obj docutils literal"><span class="pre">transfer</span></code></a>()</td>
-<td>calculate transfer matrix.</td>
-</tr>
-</tbody>
-</table>
+<p>H    : raw channel matrix in frequency domain
+Hcal : calibrated channel matrix in frequency domain
+hcal : channel matrix in time domain</p>
 <p class="rubric">Methods Summary</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -280,52 +230,52 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.Bcapacity" title="pylayers.measures.mesmimo.MIMO.Bcapacity"><code class="xref py py-obj docutils literal"><span class="pre">Bcapacity</span></code></a>([Pt,&nbsp;Tp])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.Bcapacity" title="pylayers.measures.mesmimo.MIMO.Bcapacity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bcapacity</span></code></a>([Pt,&nbsp;Tp])</td>
 <td>calculates BLAST deterministic MIMO channel capacity</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.Scapacity" title="pylayers.measures.mesmimo.MIMO.Scapacity"><code class="xref py py-obj docutils literal"><span class="pre">Scapacity</span></code></a>([Pt,&nbsp;Tp])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.Scapacity" title="pylayers.measures.mesmimo.MIMO.Scapacity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Scapacity</span></code></a>([Pt,&nbsp;Tp])</td>
 <td>equivalent SISO capacity</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.WFcapacity" title="pylayers.measures.mesmimo.MIMO.WFcapacity"><code class="xref py py-obj docutils literal"><span class="pre">WFcapacity</span></code></a>([Pt,&nbsp;Tp])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.WFcapacity" title="pylayers.measures.mesmimo.MIMO.WFcapacity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WFcapacity</span></code></a>([Pt,&nbsp;Tp])</td>
 <td>calculates deterministic MIMO channel capacity</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.animgrid" title="pylayers.measures.mesmimo.MIMO.animgrid"><code class="xref py py-obj docutils literal"><span class="pre">animgrid</span></code></a>(**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.animgrid" title="pylayers.measures.mesmimo.MIMO.animgrid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">animgrid</span></code></a>(**kwargs)</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.calHa" title="pylayers.measures.mesmimo.MIMO.calHa"><code class="xref py py-obj docutils literal"><span class="pre">calHa</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.calHa" title="pylayers.measures.mesmimo.MIMO.calHa"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calHa</span></code></a>(**kwargs)</td>
 <td>calculate the Ha function (angular domain representation)</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.calibration" title="pylayers.measures.mesmimo.MIMO.calibration"><code class="xref py py-obj docutils literal"><span class="pre">calibration</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.calibration" title="pylayers.measures.mesmimo.MIMO.calibration"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calibration</span></code></a>()</td>
 <td>Apply calibration files</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.grid" title="pylayers.measures.mesmimo.MIMO.grid"><code class="xref py py-obj docutils literal"><span class="pre">grid</span></code></a>(M[,&nbsp;OR,&nbsp;OT,&nbsp;cT,&nbsp;cR])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.grid" title="pylayers.measures.mesmimo.MIMO.grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">grid</span></code></a>(M[,&nbsp;OR,&nbsp;OT,&nbsp;cT,&nbsp;cR])</td>
 <td>Evaluate the data on a grid in the plane</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.linear_MMSE" title="pylayers.measures.mesmimo.MIMO.linear_MMSE"><code class="xref py py-obj docutils literal"><span class="pre">linear_MMSE</span></code></a>([cmd,&nbsp;m,&nbsp;snrdB])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.linear_MMSE" title="pylayers.measures.mesmimo.MIMO.linear_MMSE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_MMSE</span></code></a>([cmd,&nbsp;m,&nbsp;snrdB])</td>
 <td>linear MMSE precoding</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.linear_ZF" title="pylayers.measures.mesmimo.MIMO.linear_ZF"><code class="xref py py-obj docutils literal"><span class="pre">linear_ZF</span></code></a>([cmd,&nbsp;m,&nbsp;snrdB])</td>
-<td>linear Zero Forcing precoding</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.linear_ZF" title="pylayers.measures.mesmimo.MIMO.linear_ZF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_ZF</span></code></a>([cmd,&nbsp;m,&nbsp;snrdB])</td>
+<td>linear Zero Forcing precoding Parameters ———-</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.loadraw" title="pylayers.measures.mesmimo.MIMO.loadraw"><code class="xref py py-obj docutils literal"><span class="pre">loadraw</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.loadraw" title="pylayers.measures.mesmimo.MIMO.loadraw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadraw</span></code></a>()</td>
 <td>load a MIMO Nr x Nt raw data sounder file</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.mulcplot" title="pylayers.measures.mesmimo.MIMO.mulcplot"><code class="xref py py-obj docutils literal"><span class="pre">mulcplot</span></code></a>(mode,&nbsp;**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.mulcplot" title="pylayers.measures.mesmimo.MIMO.mulcplot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mulcplot</span></code></a>(mode,&nbsp;**kwargs)</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.normalize" title="pylayers.measures.mesmimo.MIMO.normalize"><code class="xref py py-obj docutils literal"><span class="pre">normalize</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.normalize" title="pylayers.measures.mesmimo.MIMO.normalize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize</span></code></a>()</td>
 <td>Normalization of H</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.plot" title="pylayers.measures.mesmimo.MIMO.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>([frequency,&nbsp;phase,&nbsp;dB,&nbsp;cal,&nbsp;fig,&nbsp;ax,&nbsp;color])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.plot" title="pylayers.measures.mesmimo.MIMO.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>([frequency,&nbsp;phase,&nbsp;dB,&nbsp;cal,&nbsp;fig,&nbsp;ax,&nbsp;color])</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.showgrid" title="pylayers.measures.mesmimo.MIMO.showgrid"><code class="xref py py-obj docutils literal"><span class="pre">showgrid</span></code></a>(**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.showgrid" title="pylayers.measures.mesmimo.MIMO.showgrid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">showgrid</span></code></a>(**kwargs)</td>
 <td>show the data on a spatial grid</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.svd" title="pylayers.measures.mesmimo.MIMO.svd"><code class="xref py py-obj docutils literal"><span class="pre">svd</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.svd" title="pylayers.measures.mesmimo.MIMO.svd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">svd</span></code></a>()</td>
 <td>singular value decomposition of matrix H</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.transfer" title="pylayers.measures.mesmimo.MIMO.transfer"><code class="xref py py-obj docutils literal"><span class="pre">transfer</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesmimo.MIMO.transfer" title="pylayers.measures.mesmimo.MIMO.transfer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transfer</span></code></a>()</td>
 <td>calculate transfer matrix.</td>
 </tr>
 </tbody>
@@ -335,32 +285,21 @@
 <dt id="pylayers.measures.mesmimo.MIMO.Bcapacity">
 <code class="descname">Bcapacity</code><span class="sig-paren">(</span><em>Pt=array([ 0.001])</em>, <em>Tp=273</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/mesmimo.html#MIMO.Bcapacity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesmimo.MIMO.Bcapacity" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates BLAST deterministic MIMO channel capacity</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Pt</strong> : np.array (,NPt)</p>
-<blockquote>
-<div><p>the total power is assumed uniformaly distributed over the whole bandwidth</p>
-</div></blockquote>
-<p><strong>Tp</strong> : Receiver Temperature (K)</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>C</strong> : spectral efficiency (bit/s/Hz)</p>
-<blockquote>
-<div><p>np.array (Nf,NPt)</p>
-</div></blockquote>
-<p><strong>rho</strong> : SNR</p>
-<blockquote>
-<div><p>np.array (Nf,Nt,NPt)</p>
-<p>log_2(det(I+(Et/(N0Nt))HH^{H})</p>
-</div></blockquote>
+<dl class="docutils">
+<dt>Pt <span class="classifier-delimiter">:</span> <span class="classifier">np.array (,NPt)</span></dt>
+<dd>the total power is assumed uniformaly distributed over the whole bandwidth</dd>
+</dl>
+<p>Tp : Receiver Temperature (K)</p>
+<dl class="docutils">
+<dt>C <span class="classifier-delimiter">:</span> <span class="classifier">spectral efficiency (bit/s/Hz)</span></dt>
+<dd>np.array (Nf,NPt)</dd>
+<dt>rho <span class="classifier-delimiter">:</span> <span class="classifier">SNR</span></dt>
+<dd><p class="first">np.array (Nf,Nt,NPt)</p>
+<p class="last">log_2(det(I+(Et/(N0Nt))HH^{H})</p>
+</dd>
+</dl>
 <p>Transferd to Mchannel</p>
-<p class="last">Done</p>
-</td>
-</tr>
-</tbody>
-</table>
+<p>Done</p>
 </dd></dl>
 
 <dl class="method">
@@ -373,26 +312,15 @@
 <dt id="pylayers.measures.mesmimo.MIMO.WFcapacity">
 <code class="descname">WFcapacity</code><span class="sig-paren">(</span><em>Pt=array([ 0.001])</em>, <em>Tp=273</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/mesmimo.html#MIMO.WFcapacity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesmimo.MIMO.WFcapacity" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates deterministic MIMO channel capacity</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Pt</strong> :  the total power to be distributed over the different spatial</p>
+<dl class="docutils">
+<dt>Pt <span class="classifier-delimiter">:</span> <span class="classifier">the total power to be distributed over the different spatial</span></dt>
+<dd>channels using water filling</dd>
+</dl>
+<p>Tp : Receiver Noise Temperature (K)</p>
+<p>C : capacity (bit/s)
+rho : SNR (in linear scale)</p>
 <blockquote>
-<div><p>channels using water filling</p>
-</div></blockquote>
-<p><strong>Tp</strong> : Receiver Noise Temperature (K)</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>C</strong> : capacity (bit/s)</p>
-<p><strong>rho</strong> : SNR (in linear scale)</p>
-<blockquote class="last">
-<div><p>log_2(det(It + HH^{H})</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<div>log_2(det(It + HH^{H})</div></blockquote>
 </dd></dl>
 
 <dl class="method">
@@ -424,32 +352,20 @@ Nz   : int (20000)</p>
 <dt id="pylayers.measures.mesmimo.MIMO.grid">
 <code class="descname">grid</code><span class="sig-paren">(</span><em>M</em>, <em>OR=array([ 3.4</em>, <em>0.73])</em>, <em>OT=array([ 5.29</em>, <em>6.65])</em>, <em>cT=array([-0.07</em>, <em>0.  ])</em>, <em>cR=array([ 0.07</em>, <em>0.  ])</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/mesmimo.html#MIMO.grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesmimo.MIMO.grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate the data on a grid in the plane</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>M</strong> : np.array() (Nx x Ny)</p>
-<blockquote class="last">
-<div><dl class="docutils">
-<dt>OR <span class="classifier-delimiter">:</span> <span class="classifier">np.array (,2)</span></dt>
-<dd><p class="first last">Origin of receiver [3.4,0.73]</p>
-</dd>
+<blockquote>
+<div><p>M : np.array() (Nx x Ny)
+OR : np.array (,2)</p>
+<blockquote>
+<div>Origin of receiver [3.4,0.73]</div></blockquote>
+<dl class="docutils">
 <dt>OT <span class="classifier-delimiter">:</span> <span class="classifier">np.array (,2)</span></dt>
-<dd><p class="first last">Origin of transmitter [5.29,6.65]</p>
-</dd>
+<dd>Origin of transmitter [5.29,6.65]</dd>
 <dt>cR <span class="classifier-delimiter">:</span> <span class="classifier">np.array (,2)</span></dt>
-<dd><p class="first last">array receiving vector [0.07,0]</p>
-</dd>
+<dd>array receiving vector [0.07,0]</dd>
 <dt>cT <span class="classifier-delimiter">:</span> <span class="classifier">np.array (,2)</span></dt>
-<dd><p class="first last">array transmitting vector [-0.07,0]</p>
-</dd>
+<dd>array transmitting vector [-0.07,0]</dd>
 </dl>
 </div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
 <p>Updated object members</p>
 <blockquote>
 <div>self.grid : M  (Nx x Ny x 2)
@@ -498,34 +414,25 @@ Module (dB) ;  Angle (Degree)</p>
 <dt id="pylayers.measures.mesmimo.MIMO.showgrid">
 <code class="descname">showgrid</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/mesmimo.html#MIMO.showgrid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesmimo.MIMO.showgrid" title="Permalink to this definition">¶</a></dt>
 <dd><p>show the data on a spatial grid</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>layout:[],</strong></p>
-<p><strong>s:50,</strong></p>
-<p><strong>vmin</strong> : 0,</p>
-<p><strong>vmax: 0.5,</strong></p>
-<p><strong>linewidth:0,</strong></p>
-<p><strong>fig:[],</strong></p>
-<p><strong>ax:[],</strong></p>
-<p><strong>save:True,</strong></p>
-<p><strong>filename:’showgrid1’,</strong></p>
-<p><strong>title:’‘,</strong></p>
-<p><strong>save:True,</strong></p>
-<p><strong>dB</strong> : False,</p>
-<p><strong>OR</strong> : np.array([3.4,0.73]),</p>
-<p><strong>OT</strong> : np.array([5.29,6.65]),</p>
-<p><strong>cR</strong> : np.array([0.07,0]),</p>
-<p><strong>cT</strong> : np.array([-0.07,0]),</p>
-<p><strong>target</strong> : np.array([]),</p>
-<p><strong>gating</strong> : False,</p>
-<p class="last"><strong>dynamic</strong> : 30</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
+<p>layout:[],
+s:50,
+vmin : 0,
+vmax: 0.5,
+linewidth:0,
+fig:[],
+ax:[],
+save:True,
+filename:’showgrid1’,
+title:’‘,
+save:True,
+dB : False,
+OR : np.array([3.4,0.73]),
+OT : np.array([5.29,6.65]),
+cR : np.array([0.07,0]),
+cT : np.array([-0.07,0]),
+target : np.array([]),
+gating : False,
+dynamic : 30</p>
 <p>This function accepts a Layout as input and allows to display
 a projection of the spatio-delay volume on a 2D grid.</p>
 </dd></dl>
@@ -534,25 +441,15 @@ a projection of the spatio-delay volume on a 2D grid.</p>
 <dt id="pylayers.measures.mesmimo.MIMO.svd">
 <code class="descname">svd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/mesmimo.html#MIMO.svd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesmimo.MIMO.svd" title="Permalink to this definition">¶</a></dt>
 <dd><p>singular value decomposition of matrix H</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>The native H matrix is currently (nr x nt x nf ). For applying a</strong></p>
-<p><strong>broadcasted svd a reshaping in (nf x nr x nt ) is required.</strong></p>
-<p><strong>In the future,  it would be a good thing to define the MIMO matrix as</strong></p>
-<p><strong>nf x na x nb structure from the begining</strong></p>
-<p><strong>or</strong></p>
-<p><strong>ns x nf x na x nb</strong></p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>U</strong> : nf x nr x nr</p>
-<p><strong>D</strong> : nf x min(nr,nt)</p>
-<p class="last"><strong>Vh</strong> : nf x nt x nt</p>
-</td>
-</tr>
-</tbody>
-</table>
+<p>The native H matrix is currently (nr x nt x nf ). For applying a
+broadcasted svd a reshaping in (nf x nr x nt ) is required.
+In the future,  it would be a good thing to define the MIMO matrix as</p>
+<p>nf x na x nb structure from the begining</p>
+<p>or</p>
+<p>ns x nf x na x nb</p>
+<p>U  : nf x nr x nr
+D  : nf x min(nr,nt)
+Vh : nf x nt x nt</p>
 </dd></dl>
 
 <dl class="method">
@@ -562,21 +459,13 @@ a projection of the spatio-delay volume on a 2D grid.</p>
 <dt>calculate transfer matrix.</dt>
 <dd>it involves H and Hd against svd() which acts only over H.</dd>
 </dl>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>HdH</strong> : Hermitian transfer matrix  (nf x nt x nt )</p>
-<p><strong>U</strong> : Unitary tensor  (nf x nt x nt )</p>
-<p><strong>S</strong> : Singular values (nf x nt)</p>
-<p><strong>V</strong> : = Ud (in that case because HdH Hermitian)  (nf x nt x nt)</p>
+<p>HdH : Hermitian transfer matrix  (nf x nt x nt )
+U   : Unitary tensor  (nf x nt x nt )
+S   : Singular values (nf x nt)
+V   : = Ud (in that case because HdH Hermitian)  (nf x nt x nt)</p>
 <p>HdH = U L U^{dagger}</p>
-<p>Transfered to Mchannel</p>
-<p class="last">DONE</p>
-</td>
-</tr>
-</tbody>
-</table>
+<p>Transfered to Mchannel 
+DONE</p>
 </dd></dl>
 
 </dd></dl>
@@ -585,6 +474,7 @@ a projection of the spatio-delay volume on a 2D grid.</p>
 
 
            </div>
+           
           </div>
           <footer>
   
@@ -594,11 +484,11 @@ a projection of the spatio-delay volume on a 2D grid.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -617,9 +507,11 @@ a projection of the spatio-delay volume on a 2D grid.</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -634,14 +526,13 @@ a projection of the spatio-delay volume on a 2D grid.</p>
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

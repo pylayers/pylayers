@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,32 +25,23 @@
   
 
   
-  
     <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../../about.html"/>
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="PyLayers" href="../../index.html"/>
-        <link rel="up" title="1   Overview" href="../TOC.html"/>
-        <link rel="next" title="Vector Spherical Harmonics Representation of Antennas" href="AntennaVSH.html"/>
-        <link rel="prev" title="Description of antennas" href="Antenna.html"/> 
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Vector Spherical Harmonics Representation of Antennas" href="AntennaVSH.html" />
+    <link rel="prev" title="Description of antennas" href="Antenna.html" /> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -63,7 +56,7 @@
 
           
             
-            <img src="../../_static/pylayers.png" class="logo" />
+            <img src="../../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -92,7 +85,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">User Manual</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html#basic-usage">2&nbsp;&nbsp;&nbsp;Basic Usage</a></li>
@@ -123,6 +119,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -164,7 +161,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -176,38 +173,58 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../index.html">User Manual</a> &raquo;</li>
-      
+        
           <li><a href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
-      
-    <li>Scalar Spherical Harmonics</li>
+        
+      <li>Scalar Spherical Harmonics</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../../_sources/notebook/2-AP/AntennaSSH.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -215,18 +232,18 @@
             
   <div class="section" id="scalar-spherical-harmonics">
 <h1>Scalar Spherical Harmonics<a class="headerlink" href="#scalar-spherical-harmonics" title="Permalink to this headline">¶</a></h1>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>from pylayers.antprop.antenna import *
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>from pylayers.antprop.antenna import *
 from pylayers.antprop.antssh import *
 %matplotlib inline
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A = Antenna(&#39;S1R1.mat&#39;,directory=&#39;ant/UWBAN/Matfile&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>A = Antenna(&#39;S1R1.mat&#39;,directory=&#39;ant/UWBAN/Matfile&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>A
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>Antenna type : mat
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Antenna type : mat
 ------------------------
 ------------------------
 file name : S1R1.mat
@@ -244,21 +261,21 @@ Nphi : 180
    phi = 272.00  (degrees)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.nf
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>A.nf
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>104
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>104
 </pre></div>
 </div>
-<p>To calculate scalar spherical harmonics use method <code class="docutils literal"><span class="pre">ssh(A,L)</span></code></p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>L = 5
+<p>To calculate scalar spherical harmonics use method <code class="docutils literal notranslate"><span class="pre">ssh(A,L)</span></code></p>
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>L = 5
 A = ssh(A,L=5)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>A
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>Antenna type : mat
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Antenna type : mat
 ------------------------
 ------------------------
 file name : S1R1.mat
@@ -276,79 +293,79 @@ Nphi : 180
    phi = 272.00  (degrees)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.plot(abs(A.S.Cx.s2[0]))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>plt.plot(abs(A.S.Cx.s2[0]))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fa3235ed210&gt;]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fa3235ed210&gt;]
 </pre></div>
 </div>
 <img alt="../../_images/AntennaSSH_8_1.png" src="../../_images/AntennaSSH_8_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.savesh2()
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>A.savesh2()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>/home/uguen/Bureau/P1/ant/S1R1.sh2  already exist
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/home/uguen/Bureau/P1/ant/S1R1.sh2  already exist
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.loadsh2()
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>A.loadsh2()
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.plot(abs(A.S.Cx.s2[0]))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>plt.plot(abs(A.S.Cx.s2[0]))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fa3234ec1d0&gt;]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fa3234ec1d0&gt;]
 </pre></div>
 </div>
 <img alt="../../_images/AntennaSSH_11_1.png" src="../../_images/AntennaSSH_11_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.S.s2tos3()
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>A.S.s2tos3()
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.plot(abs(A.S.Cx.s3[0]))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>plt.plot(abs(A.S.Cx.s3[0]))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fa32342ae10&gt;]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fa32342ae10&gt;]
 </pre></div>
 </div>
 <img alt="../../_images/AntennaSSH_13_1.png" src="../../_images/AntennaSSH_13_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.S.Cx.ind2.shape
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>A.S.Cx.ind2.shape
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(36, 2)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(36, 2)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.savesh3()
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>A.savesh3()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>/home/uguen/Bureau/P1/ant/S1R1.sh3  already exist
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/home/uguen/Bureau/P1/ant/S1R1.sh3  already exist
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.plot(abs(A.S.Cx.s2[0]))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>plt.plot(abs(A.S.Cx.s2[0]))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fa323372190&gt;]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fa323372190&gt;]
 </pre></div>
 </div>
 <img alt="../../_images/AntennaSSH_16_1.png" src="../../_images/AntennaSSH_16_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.loadsh3()
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>A.loadsh3()
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.plot(abs(A.S.Cx.s3[100]))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>plt.plot(abs(A.S.Cx.s3[100]))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fa3232ac150&gt;]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fa3232ac150&gt;]
 </pre></div>
 </div>
 <img alt="../../_images/AntennaSSH_18_1.png" src="../../_images/AntennaSSH_18_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.plot(abs(A.S.Cx.s2[100]))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>plt.plot(abs(A.S.Cx.s2[100]))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fa3231f4410&gt;]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fa3231f4410&gt;]
 </pre></div>
 </div>
 <img alt="../../_images/AntennaSSH_19_1.png" src="../../_images/AntennaSSH_19_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.__dict__.keys()
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>A.__dict__.keys()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&#39;tau&#39;,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;tau&#39;,
  &#39;_is_selected&#39;,
  &#39;PhotoFile&#39;,
  &#39;nf&#39;,
@@ -379,16 +396,16 @@ Nphi : 180
  &#39;sqG&#39;]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.S.Cx.__dict__.keys()
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>A.S.Cx.__dict__.keys()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&#39;k2&#39;, &#39;ind3&#39;, &#39;ind2&#39;, &#39;fmax&#39;, &#39;s2&#39;, &#39;Nf&#39;, &#39;s3&#39;, &#39;lmax&#39;, &#39;fmin&#39;]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;k2&#39;, &#39;ind3&#39;, &#39;ind2&#39;, &#39;fmax&#39;, &#39;s2&#39;, &#39;Nf&#39;, &#39;s3&#39;, &#39;lmax&#39;, &#39;fmin&#39;]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.S.Cx
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>A.S.Cx
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>Nf   : 104
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Nf   : 104
 fmin (GHz) : 0.8
 fmax (GHz) : 5.95
 NCoeff s2  : 36
@@ -399,15 +416,16 @@ Ncoeff s3 : 143
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="AntennaVSH.html" class="btn btn-neutral float-right" title="Vector Spherical Harmonics Representation of Antennas" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="AntennaVSH.html" class="btn btn-neutral float-right" title="Vector Spherical Harmonics Representation of Antennas" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="Antenna.html" class="btn btn-neutral" title="Description of antennas" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="Antenna.html" class="btn btn-neutral" title="Description of antennas" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -417,11 +435,11 @@ Ncoeff s3 : 143
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -440,9 +458,11 @@ Ncoeff s3 : 143
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -457,14 +477,13 @@ Ncoeff s3 : 143
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

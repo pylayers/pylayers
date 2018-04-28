@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,22 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="DEM" href="pylayers.gis.ezone.DEM.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +55,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +84,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -111,9 +109,7 @@
 <li class="toctree-l2"><a class="reference internal" href="references.html#id10">6.1&nbsp;&nbsp;&nbsp;Functions</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="references.html#id11">6.2&nbsp;&nbsp;&nbsp;Classes</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="pylayers.gis.ezone.DEM.html">DEM</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Ezone</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Ezone</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="references.html#id12">6.3&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
@@ -153,7 +149,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -165,36 +161,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>Ezone</li>
+        
+      <li>Ezone</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.gis.ezone.Ezone.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -205,7 +221,7 @@
 <dl class="class">
 <dt id="pylayers.gis.ezone.Ezone">
 <em class="property">class </em><code class="descclassname">pylayers.gis.ezone.</code><code class="descname">Ezone</code><span class="sig-paren">(</span><em>prefix</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/ezone.html#Ezone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.ezone.Ezone" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="pylayers.util.project.PyLayers.html#pylayers.util.project.PyLayers" title="pylayers.util.project.PyLayers"><code class="xref py py-class docutils literal"><span class="pre">pylayers.util.project.PyLayers</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="pylayers.util.project.PyLayers.html#pylayers.util.project.PyLayers" title="pylayers.util.project.PyLayers"><code class="xref py py-class docutils literal notranslate"><span class="pre">pylayers.util.project.PyLayers</span></code></a></p>
 <p>Earth zone</p>
 <p>An Ezone is a class related to a region of Earth delimited by
 (lonmin,lonmax,latmin,latmax)</p>
@@ -218,84 +234,13 @@
 </dd>
 </dl>
 <p>An Ezone is stored in hdf5 format</p>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="9%" />
-<col width="91%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>extent</td>
-<td>(tuple (lonmin,lonmax,latmin,latmax)) dictionnary of cities</td>
-</tr>
-<tr class="row-even"><td>pll</td>
-<td>(point lower left)</td>
-</tr>
-<tr class="row-odd"><td>pur</td>
-<td>(point upper right)</td>
-</tr>
-<tr class="row-even"><td>m</td>
-<td>(Basemap coordinates converter)</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.build" title="pylayers.gis.ezone.Ezone.build"><code class="xref py py-obj docutils literal"><span class="pre">build</span></code></a>(_fileosm,&nbsp;_filehgt,&nbsp;_filelcv)</td>
-<td>build an Ezone from heterogeneous files</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.building" title="pylayers.gis.ezone.Ezone.building"><code class="xref py py-obj docutils literal"><span class="pre">building</span></code></a>(ltile)</td>
-<td>get building in arrays from a list of subtiles</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.cov" title="pylayers.gis.ezone.Ezone.cov"><code class="xref py py-obj docutils literal"><span class="pre">cov</span></code></a>(**kwargs)</td>
-<td>coverage around a point</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.cover" title="pylayers.gis.ezone.Ezone.cover"><code class="xref py py-obj docutils literal"><span class="pre">cover</span></code></a>(**kwargs)</td>
-<td>coverage around a point</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.getdem" title="pylayers.gis.ezone.Ezone.getdem"><code class="xref py py-obj docutils literal"><span class="pre">getdem</span></code></a>()</td>
-<td>get a digital elevation model</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
-<td>generic help</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.loadh5" title="pylayers.gis.ezone.Ezone.loadh5"><code class="xref py py-obj docutils literal"><span class="pre">loadh5</span></code></a>()</td>
-<td>load Ezone from an hdf5 file</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.loadh5old" title="pylayers.gis.ezone.Ezone.loadh5old"><code class="xref py py-obj docutils literal"><span class="pre">loadh5old</span></code></a>(_fileh5)</td>
-<td>load an Ezone from hdf5 file</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.loadtmp" title="pylayers.gis.ezone.Ezone.loadtmp"><code class="xref py py-obj docutils literal"><span class="pre">loadtmp</span></code></a>([_fileh5])</td>
-<td>load an Ezone from hdf5 file</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.ls" title="pylayers.gis.ezone.Ezone.ls"><code class="xref py py-obj docutils literal"><span class="pre">ls</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.profile" title="pylayers.gis.ezone.Ezone.profile"><code class="xref py py-obj docutils literal"><span class="pre">profile</span></code></a>(pa,&nbsp;pb,&nbsp;**kwargs)</td>
-<td>profile extraction between 2 points</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.rebase" title="pylayers.gis.ezone.Ezone.rebase"><code class="xref py py-obj docutils literal"><span class="pre">rebase</span></code></a>([source])</td>
-<td>reevaluate base</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.rennes" title="pylayers.gis.ezone.Ezone.rennes"><code class="xref py py-obj docutils literal"><span class="pre">rennes</span></code></a>()</td>
-<td>Building are stored in quadTree.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.saveh5" title="pylayers.gis.ezone.Ezone.saveh5"><code class="xref py py-obj docutils literal"><span class="pre">saveh5</span></code></a>()</td>
-<td>save Ezone in hdf5 format</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.show" title="pylayers.gis.ezone.Ezone.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>(**kwargs)</td>
-<td>show Ezone</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.tocart" title="pylayers.gis.ezone.Ezone.tocart"><code class="xref py py-obj docutils literal"><span class="pre">tocart</span></code></a>([Nx,&nbsp;Ny,&nbsp;source])</td>
-<td>convert to cartesian coordinates</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>extent <span class="classifier-delimiter">:</span> <span class="classifier">tuple (lonmin,lonmax,latmin,latmax)</span></dt>
+<dd>dictionnary of cities</dd>
+</dl>
+<p>pll    : point lower left
+pur    : point upper right
+m      : Basemap coordinates converter</p>
 <p class="rubric">Methods Summary</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -303,49 +248,55 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.build" title="pylayers.gis.ezone.Ezone.build"><code class="xref py py-obj docutils literal"><span class="pre">build</span></code></a>(_fileosm,&nbsp;_filehgt,&nbsp;_filelcv)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.build" title="pylayers.gis.ezone.Ezone.build"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build</span></code></a>(_fileosm,&nbsp;_filehgt,&nbsp;_filelcv)</td>
 <td>build an Ezone from heterogeneous files</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.building" title="pylayers.gis.ezone.Ezone.building"><code class="xref py py-obj docutils literal"><span class="pre">building</span></code></a>(ltile)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.building" title="pylayers.gis.ezone.Ezone.building"><code class="xref py py-obj docutils literal notranslate"><span class="pre">building</span></code></a>(ltile)</td>
 <td>get building in arrays from a list of subtiles</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.cov" title="pylayers.gis.ezone.Ezone.cov"><code class="xref py py-obj docutils literal"><span class="pre">cov</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.cover" title="pylayers.gis.ezone.Ezone.cover"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cover</span></code></a>(**kwargs)</td>
 <td>coverage around a point</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.cover" title="pylayers.gis.ezone.Ezone.cover"><code class="xref py py-obj docutils literal"><span class="pre">cover</span></code></a>(**kwargs)</td>
-<td>coverage around a point</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.getdem" title="pylayers.gis.ezone.Ezone.getdem"><code class="xref py py-obj docutils literal"><span class="pre">getdem</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.getdem" title="pylayers.gis.ezone.Ezone.getdem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getdem</span></code></a>()</td>
 <td>get a digital elevation model</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.loadh5" title="pylayers.gis.ezone.Ezone.loadh5"><code class="xref py py-obj docutils literal"><span class="pre">loadh5</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.loadh5" title="pylayers.gis.ezone.Ezone.loadh5"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadh5</span></code></a>()</td>
 <td>load Ezone from an hdf5 file</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.loadh5old" title="pylayers.gis.ezone.Ezone.loadh5old"><code class="xref py py-obj docutils literal"><span class="pre">loadh5old</span></code></a>(_fileh5)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.loadh5old" title="pylayers.gis.ezone.Ezone.loadh5old"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadh5old</span></code></a>(_fileh5)</td>
 <td>load an Ezone from hdf5 file</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.loadtmp" title="pylayers.gis.ezone.Ezone.loadtmp"><code class="xref py py-obj docutils literal"><span class="pre">loadtmp</span></code></a>([_fileh5])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.loadtmp" title="pylayers.gis.ezone.Ezone.loadtmp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadtmp</span></code></a>([_fileh5])</td>
 <td>load an Ezone from hdf5 file</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.ls" title="pylayers.gis.ezone.Ezone.ls"><code class="xref py py-obj docutils literal"><span class="pre">ls</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.ls" title="pylayers.gis.ezone.Ezone.ls"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ls</span></code></a>()</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.profile" title="pylayers.gis.ezone.Ezone.profile"><code class="xref py py-obj docutils literal"><span class="pre">profile</span></code></a>(pa,&nbsp;pb,&nbsp;**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.profile" title="pylayers.gis.ezone.Ezone.profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile</span></code></a>(pa,&nbsp;pb,&nbsp;**kwargs)</td>
 <td>profile extraction between 2 points</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.rebase" title="pylayers.gis.ezone.Ezone.rebase"><code class="xref py py-obj docutils literal"><span class="pre">rebase</span></code></a>([source])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.rebase" title="pylayers.gis.ezone.Ezone.rebase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rebase</span></code></a>([source])</td>
 <td>reevaluate base</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.rennes" title="pylayers.gis.ezone.Ezone.rennes"><code class="xref py py-obj docutils literal"><span class="pre">rennes</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.rennes" title="pylayers.gis.ezone.Ezone.rennes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rennes</span></code></a>()</td>
 <td>Building are stored in quadTree.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.saveh5" title="pylayers.gis.ezone.Ezone.saveh5"><code class="xref py py-obj docutils literal"><span class="pre">saveh5</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.route" title="pylayers.gis.ezone.Ezone.route"><code class="xref py py-obj docutils literal notranslate"><span class="pre">route</span></code></a>(pa,&nbsp;pb,&nbsp;**kwargs)</td>
+<td>coverage on a route</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.saveh5" title="pylayers.gis.ezone.Ezone.saveh5"><code class="xref py py-obj docutils literal notranslate"><span class="pre">saveh5</span></code></a>()</td>
 <td>save Ezone in hdf5 format</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.show" title="pylayers.gis.ezone.Ezone.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>(**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.show" title="pylayers.gis.ezone.Ezone.show"><code class="xref py py-obj docutils literal notranslate"><span class="pre">show</span></code></a>(**kwargs)</td>
 <td>show Ezone</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.tocart" title="pylayers.gis.ezone.Ezone.tocart"><code class="xref py py-obj docutils literal"><span class="pre">tocart</span></code></a>([Nx,&nbsp;Ny,&nbsp;source])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.showcov" title="pylayers.gis.ezone.Ezone.showcov"><code class="xref py py-obj docutils literal notranslate"><span class="pre">showcov</span></code></a>(triang,&nbsp;val[,&nbsp;vmin,&nbsp;vmax,&nbsp;cmap,&nbsp;…])</td>
+<td>Show a coverage</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.to_kmz" title="pylayers.gis.ezone.Ezone.to_kmz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_kmz</span></code></a>(**kwargs)</td>
+<td>export to kmz file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.ezone.Ezone.tocart" title="pylayers.gis.ezone.Ezone.tocart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tocart</span></code></a>([Nx,&nbsp;Ny,&nbsp;source])</td>
 <td>convert to cartesian coordinates</td>
 </tr>
 </tbody>
@@ -361,129 +312,44 @@
 <dt id="pylayers.gis.ezone.Ezone.building">
 <code class="descname">building</code><span class="sig-paren">(</span><em>ltile</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/ezone.html#Ezone.building"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.ezone.Ezone.building" title="Permalink to this definition">¶</a></dt>
 <dd><p>get building in arrays from a list of subtiles</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ltile</strong> : list of string</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.gis.ezone.Ezone.cov">
-<code class="descname">cov</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/ezone.html#Ezone.cov"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.ezone.Ezone.cov" title="Permalink to this definition">¶</a></dt>
-<dd><p>coverage around a point</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pc</strong> : np.array</p>
-<blockquote>
-<div><p>center point in cartesian coordinates</p>
-</div></blockquote>
-<p><strong>Nphi</strong> : int</p>
-<blockquote>
-<div><p>Number of angular direction</p>
-</div></blockquote>
-<p><strong>Nr</strong> : int</p>
-<blockquote>
-<div><p>Number of points along radius</p>
-</div></blockquote>
-<p><strong>Rmax</strong> : float</p>
-<blockquote>
-<div><p>Radius maximum (meters)</p>
-</div></blockquote>
-<p><strong>Hr</strong> : float</p>
-<blockquote>
-<div><p>Receiver height</p>
-</div></blockquote>
-<p><strong>Ht</strong> : float</p>
-<blockquote>
-<div><p>Transmitter height</p>
-</div></blockquote>
-<p><strong>K</strong> : float</p>
-<blockquote class="last">
-<div><p>K factor</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<p>ltile : list of strings</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.gis.ezone.Ezone.cover">
 <code class="descname">cover</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/ezone.html#Ezone.cover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.ezone.Ezone.cover" title="Permalink to this definition">¶</a></dt>
 <dd><p>coverage around a point</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pc</strong> : np.array</p>
-<blockquote>
-<div><p>center point in cartesian coordinates</p>
-</div></blockquote>
-<p><strong>Nphi</strong> : int</p>
-<blockquote>
-<div><p>Number of angular direction</p>
-</div></blockquote>
-<p><strong>Nr</strong> : int</p>
-<blockquote>
-<div><p>Number of points along radius</p>
-</div></blockquote>
-<p><strong>Rmax</strong> : float</p>
-<blockquote>
-<div><p>Radius maximum (meters)</p>
-</div></blockquote>
-<p><strong>Hr</strong> : float</p>
-<blockquote>
-<div><p>Receiver height</p>
-</div></blockquote>
-<p><strong>Ht</strong> : float</p>
-<blockquote>
-<div><p>Transmitter height</p>
-</div></blockquote>
-<p><strong>K</strong> : float</p>
-<blockquote class="last">
-<div><p>K factor</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>pc <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd>center point in lonlat coordinates</dd>
+<dt>Nphi <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Number of angular direction</dd>
+<dt>Nr <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Number of points along radius</dd>
+<dt>Rmax <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Radius maximum (meters)</dd>
+<dt>Hr <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Receiver height</dd>
+<dt>Ht <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Transmitter height</dd>
+<dt>K <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>K factor</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.gis.ezone.Ezone.getdem">
 <code class="descname">getdem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/ezone.html#Ezone.getdem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.ezone.Ezone.getdem" title="Permalink to this definition">¶</a></dt>
 <dd><p>get a digital elevation model</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lon</strong> : float</p>
-<p class="last"><strong>lat</strong> : float</p>
-</td>
-</tr>
-</tbody>
-</table>
+<p>lon : float
+lat : float</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.gis.ezone.Ezone.loadh5">
 <code class="descname">loadh5</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/ezone.html#Ezone.loadh5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.ezone.Ezone.loadh5" title="Permalink to this definition">¶</a></dt>
 <dd><p>load Ezone from an hdf5 file</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>prefix</strong> : string</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
+<p>prefix : string</p>
 <p>Structure of the hdf5. The file has the following groups</p>
 <p>extent
 dem</p>
@@ -505,28 +371,14 @@ poly</dd>
 <dt id="pylayers.gis.ezone.Ezone.loadh5old">
 <code class="descname">loadh5old</code><span class="sig-paren">(</span><em>_fileh5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/ezone.html#Ezone.loadh5old"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.ezone.Ezone.loadh5old" title="Permalink to this definition">¶</a></dt>
 <dd><p>load an Ezone from hdf5 file</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>_fileh5</strong> : string</td>
-</tr>
-</tbody>
-</table>
+<p>_fileh5 : string</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.gis.ezone.Ezone.loadtmp">
 <code class="descname">loadtmp</code><span class="sig-paren">(</span><em>_fileh5='RennesFull.h5'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/ezone.html#Ezone.loadtmp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.ezone.Ezone.loadtmp" title="Permalink to this definition">¶</a></dt>
 <dd><p>load an Ezone from hdf5 file</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>_fileh5 :</strong></td>
-</tr>
-</tbody>
-</table>
+<p>_fileh5 :</p>
 </dd></dl>
 
 <dl class="method">
@@ -538,64 +390,52 @@ poly</dd>
 <dt id="pylayers.gis.ezone.Ezone.profile">
 <code class="descname">profile</code><span class="sig-paren">(</span><em>pa</em>, <em>pb</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/ezone.html#Ezone.profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.ezone.Ezone.profile" title="Permalink to this definition">¶</a></dt>
 <dd><p>profile extraction between 2 points</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pa</strong> : tuple</p>
-<blockquote>
-<div><p>termination point a</p>
-</div></blockquote>
-<p><strong>pb</strong> : tuple</p>
-<blockquote>
-<div><p>termination point b</p>
-</div></blockquote>
-<p><strong>Npt</strong> : int</p>
-<blockquote>
-<div><p>number of points</p>
-</div></blockquote>
-<p><strong>ha</strong> : float</p>
-<blockquote>
-<div><p>antenna height a</p>
-</div></blockquote>
-<p><strong>hb :</strong></p>
-<blockquote>
-<div><p>antenna height b</p>
-</div></blockquote>
-<p><strong>K</strong> : float</p>
-<blockquote>
-<div><p>K factor</p>
-</div></blockquote>
-<p><strong>fGHz</strong> : float</p>
-<blockquote>
-<div><p>frequency in GHz</p>
-</div></blockquote>
-<p><strong>source</strong> : string</p>
-<blockquote class="last">
-<div><p>‘aster’ | ‘srtm’</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>pa <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd>termination point a</dd>
+<dt>pb <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd>termination point b</dd>
+<dt>Npt <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>number of points</dd>
+<dt>ha <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>antenna height a</dd>
+<dt>hb :</dt>
+<dd>antenna height b</dd>
+<dt>K <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>K factor</dd>
+<dt>fGHz <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>frequency in GHz</dd>
+<dt>source <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>‘aster’ | ‘srtm’</dd>
+</dl>
+<dl class="docutils">
+<dt>height <span class="classifier-delimiter">:</span> <span class="classifier">np.array (,Npt)</span></dt>
+<dd>total heigh including eath curvature</dd>
+<dt>d <span class="classifier-delimiter">:</span> <span class="classifier">np.array(,Npt)</span></dt>
+<dd>horizontal distance along the link</dd>
+<dt>dh <span class="classifier-delimiter">:</span> <span class="classifier">np.array(,Npy)</span></dt>
+<dd>earth curvature depending on K factor</dd>
+<dt>nu <span class="classifier-delimiter">:</span> <span class="classifier">np.array(,Npt)</span></dt>
+<dd>Fresnel parameter</dd>
+<dt>num <span class="classifier-delimiter">:</span> <span class="classifier">np.array(1,Npt)</span></dt>
+<dd>Fresnel parameter above threshold (default : -sqrt(2))</dd>
+<dt>hlos <span class="classifier-delimiter">:</span> <span class="classifier">(,Npt)</span></dt>
+<dd>height of the line of sight</dd>
+<dt>ellFresnel <span class="classifier-delimiter">:</span> <span class="classifier">(2,N)</span></dt>
+<dd>Fresnel ellipsoid set of points</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.gis.ezone.Ezone.rebase">
 <code class="descname">rebase</code><span class="sig-paren">(</span><em>source='srtm'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/ezone.html#Ezone.rebase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.ezone.Ezone.rebase" title="Permalink to this definition">¶</a></dt>
 <dd><p>reevaluate base</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>source</strong> : string</p>
-<blockquote class="last">
-<div><p>source of data ‘srtm’ or ‘aster’</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>source <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>source of data ‘srtm’ or ‘aster’</dd>
+</dl>
+<p>This methods recalculate the longitude and latitude base based on the
+DEM source choice aster or srtm</p>
 </dd></dl>
 
 <dl class="method">
@@ -608,79 +448,77 @@ lbdg is the list of the quadtrees</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.gis.ezone.Ezone.route">
+<code class="descname">route</code><span class="sig-paren">(</span><em>pa</em>, <em>pb</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/ezone.html#Ezone.route"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.ezone.Ezone.route" title="Permalink to this definition">¶</a></dt>
+<dd><p>coverage on a route</p>
+<dl class="docutils">
+<dt>pa <span class="classifier-delimiter">:</span> <span class="classifier">np.array (1x2)</span></dt>
+<dd>lon,lat</dd>
+<dt>pb <span class="classifier-delimiter">:</span> <span class="classifier">np.array (Nx2)</span></dt>
+<dd>lon,lat</dd>
+</dl>
+<p>L : Loss
+lon
+lat</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylayers.gis.ezone.Ezone.saveh5">
 <code class="descname">saveh5</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/ezone.html#Ezone.saveh5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.ezone.Ezone.saveh5" title="Permalink to this definition">¶</a></dt>
 <dd><p>save Ezone in hdf5 format</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>_fileh5</strong></td>
-</tr>
-</tbody>
-</table>
+<p>_fileh5</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.gis.ezone.Ezone.show">
 <code class="descname">show</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/ezone.html#Ezone.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.ezone.Ezone.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>show Ezone</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>title</strong> : string</p>
-<p><strong>xlabel</strong> : string</p>
-<p><strong>ylabel</strong> : string</p>
-<p><strong>height</strong> : boolean</p>
+<p>title : string
+xlabel : string
+ylabel : string
+height : boolean</p>
 <blockquote>
-<div><p>display dem if True</p>
-</div></blockquote>
-<p><strong>bldg</strong> : boolean</p>
-<blockquote>
-<div><p>display building if True</p>
-</div></blockquote>
-<p><strong>coord</strong> : string</p>
-<blockquote>
-<div><p>‘lonlat’| ‘cartesian’</p>
-</div></blockquote>
-<p><strong>source: string</strong></p>
-<blockquote>
-<div><p>‘srtm’ | ‘aster’</p>
-</div></blockquote>
-<p><strong>extent</strong> : [lonmin,lomax,latmin,latmax]</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">fig,ax</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
+<div>display dem if True</div></blockquote>
+<dl class="docutils">
+<dt>bldg <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
+<dd>display building if True</dd>
+<dt>btile <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
+<dd>display tile overlay with smopy</dd>
+<dt>coord <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>‘lonlat’| ‘cartesian’</dd>
+<dt>source: string</dt>
+<dd>‘srtm’ | ‘aster’</dd>
+</dl>
+<p>extent : [lonmin,lomax,latmin,latmax]</p>
+<p>fig,ax</p>
 <p>If height is False the DEM is not displayed.
 If extent is a void list all the tile is displayed</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.ezone.Ezone.showcov">
+<code class="descname">showcov</code><span class="sig-paren">(</span><em>triang</em>, <em>val</em>, <em>vmin=-130</em>, <em>vmax=-50</em>, <em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object&gt;</em>, <em>bbuild=False</em>, <em>btile=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/ezone.html#Ezone.showcov"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.ezone.Ezone.showcov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show a coverage</p>
+<p>triang : triangulation
+val : values</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.ezone.Ezone.to_kmz">
+<code class="descname">to_kmz</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/ezone.html#Ezone.to_kmz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.ezone.Ezone.to_kmz" title="Permalink to this definition">¶</a></dt>
+<dd><p>export to kmz file</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.gis.ezone.Ezone.tocart">
 <code class="descname">tocart</code><span class="sig-paren">(</span><em>Nx=1201</em>, <em>Ny=1201</em>, <em>source='srtm'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/ezone.html#Ezone.tocart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.ezone.Ezone.tocart" title="Permalink to this definition">¶</a></dt>
 <dd><p>convert to cartesian coordinates</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Nx</strong> : int</p>
-<blockquote>
-<div><p>Number of points along x</p>
-</div></blockquote>
-<p><strong>Nx</strong> : int</p>
-<blockquote class="last">
-<div><p>Number of points along y</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>Nx <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Number of points along x</dd>
+<dt>Nx <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Number of points along y</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -689,8 +527,16 @@ If extent is a void list all the tile is displayed</p>
 
 
            </div>
+           
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="pylayers.gis.ezone.DEM.html" class="btn btn-neutral" title="DEM" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -698,11 +544,11 @@ If extent is a void list all the tile is displayed</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -721,9 +567,11 @@ If extent is a void list all the tile is displayed</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -738,14 +586,13 @@ If extent is a void list all the tile is displayed</p>
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,21 @@
   
 
   
-  
     <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../../../about.html"/>
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="PyLayers" href="../../../index.html"/>
-        <link rel="up" title="Module code" href="../../index.html"/> 
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
 
   
   <script src="../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +54,7 @@
 
           
             
-            <img src="../../../_static/pylayers.png" class="logo" />
+            <img src="../../../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +83,10 @@
           
             
             
-                <ul>
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +97,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -142,7 +139,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -154,42 +151,59 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-      
-    <li>pylayers.antprop.rays</li>
+        
+      <li>pylayers.antprop.rays</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
   <h1>Source code for pylayers.antprop.rays</h1><div class="highlight"><pre>
-<span></span>
-# -*- coding: latin1 -*-
+<span></span># -*- coding: latin1 -*-
 from __future__ import print_function
 &quot;&quot;&quot;
 .. currentmodule:: pylayers.antprop.rays
@@ -199,25 +213,30 @@ from __future__ import print_function
 
 &quot;&quot;&quot;
 import doctest
+import logging
 import os
+import sys
 import glob
 try:
-    from tvtk.api import tvtk
-    from mayavi.sources.vtk_data_source import VTKDataSource
+#    from tvtk.api import tvtk
+#    from mayavi.sources.vtk_data_source import VTKDataSource
     from mayavi import mlab
 except:
     print(&#39;Layout:Mayavi is not installed&#39;)
 import pdb
 import os
 import copy
-import ConfigParser
+if sys.version_info.major==2:
+    import ConfigParser
+else:
+    import configparser
 import glob
 import doctest
 import networkx as nx
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
-import matplotlib.cm as cm 
+import matplotlib.cm as cm
 import struct as stru
 import pylayers.util.geomutil as geu
 import pylayers.util.pyutil as pyu
@@ -231,12 +250,14 @@ import shapely.geometry as shg
 import h5py
 import operator
 
+logger = logging.getLogger(__name__)
+
 <div class="viewcode-block" id="Rays"><a class="viewcode-back" href="../../../api/pylayers.antprop.rays.Rays.html#pylayers.antprop.rays.Rays">[docs]</a>class Rays(PyLayers, dict):
     &quot;&quot;&quot; Class hendling a set of rays
 
     Attributes
     ----------
-    
+
     pTx  : np.array
         transmitter (3,)
     pRx  : np.array
@@ -255,27 +276,27 @@ import operator
     I.D  : IntD
     I.D.A : np.array
         (f,iD,3,3)
-    Lfilename : string 
-        Layout name 
+    Lfilename : string
+        Layout name
     delays : np.array
         ray delays
     dis : np.array
         ray distance = delays*0.3
-    nray : int 
-        number of rays 
-    evaluated : boolean 
+    nray : int
+        number of rays
+    evaluated : boolean
         are rays evaluated ?
-    is3D : boolean 
+    is3D : boolean
         are rays 2d or 3d rays ?
-    isbased : boolean 
-        locbas has been applied ? 
-    filles : boolean 
-        filled  has been applied ? 
-    los : boolean 
+    isbased : boolean
+        locbas has been applied ?
+    filles : boolean
+        filled  has been applied ?
+    los : boolean
         Line of sight boolean
     fGHz : np.array
         frequency points for evaluation
-    origin_sig_name : string 
+    origin_sig_name : string
         signature file which produces the rays
 
 
@@ -321,7 +342,7 @@ import operator
         self.nray = 0
         self.nray2D = 0
         self.raypt = 0
-        self.los = False  
+        self.los = False
         self.is3D = False
         self.isbased = False
         self.filled = False
@@ -397,11 +418,11 @@ import operator
         s = &#39;&#39;
         ni = 0
         nl = 0
-        lgi = self.keys()
+        lgi = list(self.keys())
         lgi.sort()
         if self.is3D:
             s = self.__class__.__name__ + &#39;3D\n&#39; + &#39;----------&#39;+&#39;\n&#39;
-            
+
             for k in lgi:
                 r = self[k][&#39;rayidx&#39;]
                 nr = len(r)
@@ -412,7 +433,7 @@ import operator
         else:
             s = self.__class__.__name__ + &#39;2D\n&#39; + &#39;----------&#39;+&#39;\n&#39;
             nray2D = len(self)
-        
+
         if self.los:
             s = s + &quot;LOS &quot;
         if self.isbased:
@@ -580,18 +601,20 @@ import operator
                     print(&#39;ray/&#39;+grpname +&#39;already exists in &#39;+filenameh5)
                 f = fh5[&#39;ray/&#39;+grpname]
 
-                
+
             else:
                 if not grpname in fh5[&#39;ray2&#39;].keys():
                     fh5[&#39;ray2&#39;].create_group(grpname)
                 else :
                     print(&#39;ray2/&#39;+grpname +&#39;already exists in &#39;+filenameh5)
                 f = fh5[&#39;ray2/&#39;+grpname]
-             # keys not saved as attribute of h5py file
+            # keys not saved as attribute of h5py file
             notattr = [&#39;I&#39;,&#39;B&#39;,&#39;B0&#39;,&#39;dis&#39;]
             for a in self.__dict__.keys():
                 if a not in notattr:
-                    f.attrs[a]=getattr(self,a)  
+                    if type(a)==str:
+                        a.encode(&#39;utf-8&#39;)
+                        f.attrs[a] = getattr(self,a)
 
             for k in self.keys():
                 f.create_group(str(k))
@@ -652,7 +675,7 @@ import operator
 
             for a,va in f.attrs.items():
                 setattr(self,a,va)
-            
+
 
             fh5.close()
 
@@ -664,11 +687,11 @@ import operator
         # fill if save was filled
         # temporary solution in order to avoid
         # creating save for Interactions classes
-        
+
         if self.filled:
-            if kwargs.has_key(&#39;L&#39;):
+            if &#39;L&#39; in kwargs:
                 self.L=kwargs[&#39;L&#39;]
-            else: 
+            else:
                 self.L = Layout(self.Lfilename,bbuild=True)
                 try:
                     self.L.dumpr()
@@ -769,7 +792,7 @@ import operator
         u = np.argsort(self.dis)</div>
 
 
-    def rayfromtyp_order(self,nD=[1],nR=[1],nT=[1],llo=&#39;&amp;&amp;&#39;):
+<div class="viewcode-block" id="Rays.rayfromtyp_order"><a class="viewcode-back" href="../../../api/pylayers.antprop.rays.Rays.html#pylayers.antprop.rays.Rays.rayfromtyp_order">[docs]</a>    def rayfromtyp_order(self,nD=[1],nR=[1],nT=[1],llo=&#39;&amp;&amp;&#39;):
         &quot;&quot;&quot;
             Return rays from a given type (R|T|D) to a given order
             ( number of interaction)
@@ -834,10 +857,10 @@ import operator
                 lr.append(r)
             elif (self.los) and (1 in nT ) and (0 in nD) and (0 in nR) and (ur == 0):
                 lr.append(r)
-        return lr
+        return lr</div>
 
 
-    def extract_typ_order(self,L,nD=[1],nR=[1],nT=[1],llo=&#39;&amp;&amp;&#39;):
+<div class="viewcode-block" id="Rays.extract_typ_order"><a class="viewcode-back" href="../../../api/pylayers.antprop.rays.Rays.html#pylayers.antprop.rays.Rays.extract_typ_order">[docs]</a>    def extract_typ_order(self,L,nD=[1],nR=[1],nT=[1],llo=&#39;&amp;&amp;&#39;):
         &quot;&quot;&quot; Extract group of rays from a certain type (R|T|D) 
             at a order ( &lt;=&gt; given number of interaction)
 
@@ -870,7 +893,7 @@ import operator
         &quot;&quot;&quot;
 
         lr = self.rayfromtyp_order(nD=nD,nR=nR,nT=nT,llo=llo)
-        return self.extract(lr,L)
+        return self.extract(lr,L)</div>
 
 
 <div class="viewcode-block" id="Rays.extract"><a class="viewcode-back" href="../../../api/pylayers.antprop.rays.Rays.html#pylayers.antprop.rays.Rays.extract">[docs]</a>    def extract(self,lnr,L):
@@ -912,13 +935,13 @@ import operator
                 diff=False
 
 
-            if self[ni].has_key(&#39;diffvect&#39;):
+            if &#39;diffvect&#39; in self[ni]:
                 # check if the ray has diffraction interaction
                 inter = self.ray2iidx(nr)[:,0]
                 uD = np.where([i in inter for i in self[ni][&#39;diffidx&#39;]])[0]
             else:
                 uD=[]
-            
+
             diffkey = [&#39;diffvect&#39;,&#39;diffidx&#39;,&#39;diffslabs&#39;]
 
             cray = {}
@@ -926,7 +949,7 @@ import operator
 
             for k in self[ni].keys():
 
-                if ni ==0 : 
+                if ni ==0:
 
                     cray = self[ni]
                     break
@@ -948,7 +971,7 @@ import operator
                                     cray[k]=[tab[uD]]
                                 else:
                                     cray[k]=[]
-                        
+
 
             cray[&#39;nbrays&#39;] = unr+1 # keep only one ray
             r.nray = unr+1
@@ -957,7 +980,7 @@ import operator
             cray[&#39;dis&#39;] = np.array([self[ni][&#39;dis&#39;][ur]])
 
 
-            if r.has_key(ni):
+            if ni in r:
 
                 # R[ni][&#39;sig2d&#39;].append(self[k][&#39;sig2d&#39;][ur])
 
@@ -966,66 +989,66 @@ import operator
                     r[ni][&#39;Bo&#39;] = np.concatenate((r[ni][&#39;Bo&#39;],cray[&#39;Bo&#39;]),axis=3)
                     r[ni][&#39;Bi&#39;] = np.concatenate((r[ni][&#39;Bi&#39;],cray[&#39;Bi&#39;]),axis=3)
 
-                
+
                 if diff:
-                    if r[ni].has_key(&#39;diffidx&#39;):
+                    if &#39;diffidx&#39; in r[ni]:
                         r[ni][&#39;diffidx&#39;] = np.concatenate((r[ni][&#39;diffidx&#39;],cray[&#39;diffidx&#39;]))
                         r[ni][&#39;diffvect&#39;] = np.concatenate((r[ni][&#39;diffvect&#39;],cray[&#39;diffvect&#39;]),axis=1)
                         r[ni][&#39;diffslabs&#39;].append(cray[&#39;diffslabs&#39;])
-                        
+
                     else:
                         r[ni][&#39;diffidx&#39;] = cray[&#39;diffidx&#39;]
                         r[ni][&#39;diffvect&#39;] = cray[&#39;diffvect&#39;]
                         r[ni][&#39;diffslabs&#39;] = cray[&#39;diffslabs&#39;]
 
                 r[ni][&#39;nbrays&#39;] += 1
-                r[ni][&#39;B&#39;] = np.concatenate((r[ni][&#39;B&#39;],cray[&#39;B&#39;]),axis=3)
+                r[ni][&#39;B&#39;] = np.concatenate((r[ni][&#39;B&#39;], cray[&#39;B&#39;]), axis=3)
 
-                r[ni][&#39;pt&#39;] = np.concatenate((r[ni][&#39;pt&#39;],cray[&#39;pt&#39;]),axis=2)
-                r[ni][&#39;rayidx&#39;] = np.concatenate((r[ni][&#39;rayidx&#39;],cray[&#39;rayidx&#39;]),axis=0)
-                r[ni][&#39;Bo0&#39;] = np.concatenate((r[ni][&#39;Bo0&#39;],cray[&#39;Bo0&#39;]),axis=2)
-                
-                r[ni][&#39;scpr&#39;] = np.concatenate((r[ni][&#39;scpr&#39;],cray[&#39;scpr&#39;]),axis=1)
-                r[ni][&#39;aod&#39;] = np.concatenate((r[ni][&#39;aod&#39;],cray[&#39;aod&#39;]),axis=1)
-                r[ni][&#39;si&#39;] = np.concatenate((r[ni][&#39;si&#39;],cray[&#39;si&#39;]),axis=1)
-                r[ni][&#39;sig&#39;] = np.concatenate((r[ni][&#39;sig&#39;],cray[&#39;sig&#39;]),axis=2)
+                r[ni][&#39;pt&#39;] = np.concatenate((r[ni][&#39;pt&#39;], cray[&#39;pt&#39;]), axis=2)
+                r[ni][&#39;rayidx&#39;] = np.concatenate((r[ni][&#39;rayidx&#39;], cray[&#39;rayidx&#39;]), axis=0)
+                r[ni][&#39;Bo0&#39;] = np.concatenate((r[ni][&#39;Bo0&#39;],cray[&#39;Bo0&#39;]), axis=2)
+
+                r[ni][&#39;scpr&#39;] = np.concatenate((r[ni][&#39;scpr&#39;], cray[&#39;scpr&#39;]), axis=1)
+                r[ni][&#39;aod&#39;] = np.concatenate((r[ni][&#39;aod&#39;], cray[&#39;aod&#39;]), axis=1)
+                r[ni][&#39;si&#39;] = np.concatenate((r[ni][&#39;si&#39;], cray[&#39;si&#39;]), axis=1)
+                r[ni][&#39;sig&#39;] = np.concatenate((r[ni][&#39;sig&#39;], cray[&#39;sig&#39;]), axis=2)
                 # r[ni][&#39;sig2d&#39;] = np.concatenate((r[ni][&#39;sig2d&#39;],cray[&#39;sig2d&#39;]),axis=2)
-                r[ni][&#39;aoa&#39;] = np.concatenate((r[ni][&#39;aoa&#39;],cray[&#39;aoa&#39;]),axis=1)
-                r[ni][&#39;vsi&#39;] = np.concatenate((r[ni][&#39;vsi&#39;],cray[&#39;vsi&#39;]),axis=2)
-                r[ni][&#39;theta&#39;] = np.concatenate((r[ni][&#39;theta&#39;],cray[&#39;theta&#39;]),axis=1)
-                r[ni][&#39;norm&#39;] = np.concatenate((r[ni][&#39;norm&#39;],cray[&#39;norm&#39;]),axis=2)
-                r[ni][&#39;dis&#39;] = np.concatenate((r[ni][&#39;dis&#39;],cray[&#39;dis&#39;]),axis=0)
+                r[ni][&#39;aoa&#39;] = np.concatenate((r[ni][&#39;aoa&#39;], cray[&#39;aoa&#39;]), axis=1)
+                r[ni][&#39;vsi&#39;] = np.concatenate((r[ni][&#39;vsi&#39;], cray[&#39;vsi&#39;]), axis=2)
+                r[ni][&#39;theta&#39;] = np.concatenate((r[ni][&#39;theta&#39;], cray[&#39;theta&#39;]), axis=1)
+                r[ni][&#39;norm&#39;] = np.concatenate((r[ni][&#39;norm&#39;], cray[&#39;norm&#39;]), axis=2)
+                r[ni][&#39;dis&#39;] = np.concatenate((r[ni][&#39;dis&#39;], cray[&#39;dis&#39;]), axis=0)
 
             else:
                 r[ni] = cray
 
-        # r[ni][&#39;rays&#39;] = to be done HERE 
+        # r[ni][&#39;rays&#39;] = to be done HERE
 
 
         r.locbas(L)
         r.fillinter(L)
         return(r)</div>
 
-    def extract_old(self,nr,L):
+<div class="viewcode-block" id="Rays.extract_old"><a class="viewcode-back" href="../../../api/pylayers.antprop.rays.Rays.html#pylayers.antprop.rays.Rays.extract_old">[docs]</a>    def extract_old(self,nr,L):
         &quot;&quot;&quot; Extract a single ray
 
         Parameters
         ----------
 
-        nr : ray index 
+        nr : ray index
         L  : Layout
 
         &quot;&quot;&quot;
 
         r = Rays(self.pTx,self.pRx)
         r.is3D = self.is3D
-        
+
         r.nray2D = 1
         r.nb_origin_sig = 1
-        
+
         #ni = self._ray2nbi[nr]
         #ur = np.where(self[ni][&#39;rayidx&#39;]==nr)[0][0]
-        
+
         ni,ur = self.ir2a(nr)
 
         if &#39;D&#39; in self.typ(nr):
@@ -1033,13 +1056,13 @@ import operator
         else:
             diff=False
 
-        if self[ni].has_key(&#39;diffvect&#39;):
+        if &#39;diffvect&#39; in self[ni]:
             # check if the ray has diffraction interaction
             inter = self.ray2iidx(nr)[:,0]
             uD = np.where([i in inter for i in self[ni][&#39;diffidx&#39;]])[0]
         else:
             uD=[]
-        
+
         diffkey = [&#39;diffvect&#39;,&#39;diffidx&#39;,&#39;diffslabs&#39;]
 
         r[ni] = {}
@@ -1066,7 +1089,7 @@ import operator
         r[ni][&#39;dis&#39;] = np.array([self[ni][&#39;dis&#39;][ur]])
         r.locbas(L)
         r.fillinter(L)
-        return(r)
+        return(r)</div>
 
    
 
@@ -1178,7 +1201,7 @@ import operator
                         widthray = 3*vscale
                         alpharay = vscale
                         pdb.set_trace()
-                        cmap = cm.hot 
+                        cmap = cm.hot
                         colorray = cmap(vscale)
                         ax.plot(ray[0, :], ray[1, :],
                                 alpha = alpharay,
@@ -1309,6 +1332,7 @@ import operator
             zb=self.pRx[2]
         ht = za
         hr = zb
+
         assert (hr&lt;H or H==0 or H == -1),&quot;mirror : receiver higher than ceil height&quot;
         assert (ht&lt;H or H==0 or H == -1),&quot;mirror : transmitter higher than ceil height&quot;
 
@@ -1350,7 +1374,7 @@ import operator
             # print &quot;thrp&quot;,thrp
             # print &quot;alphap&quot;,d[zp]
 
-        return(d)</div>
+        return d</div>
 
 <div class="viewcode-block" id="Rays.to3D"><a class="viewcode-back" href="../../../api/pylayers.antprop.rays.Rays.html#pylayers.antprop.rays.Rays.to3D">[docs]</a>    def to3D(self, L, H=3, N=1, rmoutceilR=True):
         &quot;&quot;&quot; transform 2D ray to 3D ray
@@ -1367,8 +1391,8 @@ import operator
         N : int
             number of mirror reflexions
         rmoutceilR : bool
-            Remove ceil reflexions in cycles (Gt nodes) 
-            with indoor=False attribute 
+            Remove ceil reflexions in cycles (Gt nodes)
+            with indoor=False attribute
 
         Returns
         -------
@@ -1394,7 +1418,7 @@ import operator
         #
 
         d = self.mirror(H=H, N=N, za=tx[2], zb=rx[2])
-        
+
         #
         # Elimination of invalid diffraction point 
         # If the diffaction point is a separation between 2 air wall 
@@ -1410,7 +1434,7 @@ import operator
 
             pts = self[i][&#39;pt&#39;][0:2, :, :]
             sig = self[i][&#39;sig&#39;]
-            
+
             if pts.shape[2]!=0:
                 # broadcasting of t and r
                 t = self.pTx[0:2].reshape((2, 1, 1)) * \
@@ -1423,8 +1447,8 @@ import operator
                 r = self.pRx[0:2].reshape((2, 1, 1))
                 pts1 = np.hstack((t,r))
             # append t and r to interaction points in 2D
-            
-            
+
+
             si1 = pts1[:, 1:, :] - pts1[:, :-1, :]
             # array of all ray segments distances
             si = np.sqrt(np.sum(si1 * si1, axis=0))
@@ -1479,7 +1503,7 @@ import operator
             # add parameterization of tx and rx (0,1)
             a1 = np.concatenate((np.zeros((1, Nrayk)), a1, np.ones((1, Nrayk))))
             # reshape signature in adding tx and rx
-            
+
             if sig.shape[0]!=0:
                 sig = np.hstack((np.zeros((2, 1, Nrayk), dtype=int),
                              sig,
@@ -1499,7 +1523,7 @@ import operator
             else:
                  pte = np.hstack((Tx, Rx))
 
-            # extension 
+            # extension
             for l in d:                     # for each vertical pattern (C,F,CF,FC,....)
                 #print k,l,d[l]
                 Nint = len(d[l])            # number of additional interaction
@@ -1553,7 +1577,7 @@ import operator
 
                     elif l &gt; 0 and Nint%2 ==0: # l&gt;0 Nint even
                         u = np.mod(range(Nint), 2)
-                    
+
                     #
                     u = u + 4
                     #
@@ -1607,10 +1631,18 @@ import operator
                     # immediate d&#39;un point 2D renseigne.
                     #
                     try:
-                        iintm_f = map(lambda x : np.where( (siges[1,0:x[0],x[1]]!=4) &amp; (siges[1,0:x[0],x[1]]!=5))[0][-1], zip(iint_f,iray_f))
-                        iintp_f = map(lambda x : np.where( (siges[1,x[0]:,x[1]]!=4) &amp; (siges[1,x[0]:,x[1]]!=5))[0][0]+x[0], zip(iint_f,iray_f))
-                        iintm_c = map(lambda x : np.where( (siges[1,0:x[0],x[1]]!=4) &amp; (siges[1,0:x[0],x[1]]!=5))[0][-1], zip(iint_c,iray_c))
-                        iintp_c = map(lambda x : np.where( (siges[1,x[0]:,x[1]]!=4) &amp; (siges[1,x[0]:,x[1]]!=5))[0][0]+x[0], zip(iint_c,iray_c))
+                        iintm_f = [ np.where( (siges[1,0:x[0],x[1]]!=4) &amp;
+                                             (siges[1,0:x[0],x[1]]!=5))[0][-1]
+                                   for x in  zip(iint_f,iray_f) ]
+                        iintp_f = [ np.where( (siges[1,x[0]:,x[1]]!=4) &amp;
+                                             (siges[1,x[0]:,x[1]]!=5))[0][0]+x[0]
+                                   for x in  zip(iint_f,iray_f) ]
+                        iintm_c = [ np.where( (siges[1,0:x[0],x[1]]!=4) &amp;
+                                             (siges[1,0:x[0],x[1]]!=5))[0][-1]
+                                   for x in zip(iint_c,iray_c) ]
+                        iintp_c = [ np.where( (siges[1,x[0]:,x[1]]!=4) &amp;
+                                             (siges[1,x[0]:,x[1]]!=5))[0][0]+x[0]
+                                   for x in  zip(iint_c,iray_c) ]
                     except:
                         pdb.set_trace()
 
@@ -1634,6 +1666,7 @@ import operator
                     #
                     # If there are floor points
                     #
+
                     if len(iint_f)&gt;0:
                         a1esm_f = a1es[iintm_f, iray_f]
                         a1esc_f = a1es[iint_f, iray_f]
@@ -1644,6 +1677,7 @@ import operator
                         pteesp_f = ptees[0:2, iintp_f, iray_f]
 
                         coeff_f = (a1esc_f-a1esm_f)/(a1esp_f-a1esm_f)
+
                         ptees[0:2, iint_f, iray_f] = pteesm_f + coeff_f*(pteesp_f-pteesm_f)
 
                     #
@@ -1666,7 +1700,7 @@ import operator
                         z[pz] = 2*H-z[pz]
                         ptees[2, :] = z
                     # case where ceil reflection are inhibited
-                    elif H==0 : 
+                    elif H==0:
                         z  = abs(l+a1es*(rx[2]-l))
                         # pz = np.where(z &gt; H)
                         # z[pz] = 2*H-z[pz]
@@ -1691,7 +1725,7 @@ import operator
                 if len(L.lsss)&gt;0:
                     #
                     # lsss : list of sub segments ( iso segments siges)
-                    # lnss : list of diffaction point involving 
+                    # lnss : list of diffaction point involving
 
                     lsss = np.array(L.lsss)
                     lnss = np.array(L.lnss)
@@ -1701,73 +1735,73 @@ import operator
                     # type of interaction
                     typi = siges[1,:,:]
 
-                    # lss : list of subsegments in the current signature 
+                    # lss : list of subsegments in the current signature
                     #
                     # scalability : avoid a loop over all the subsegments in lsss
                     #
                     lss = [ x for x in lsss if x in anstr.ravel()]
-                    
+
                     ray_to_delete = []
-                    for s in lss: 
+                    for s in lss:
                         u  = np.where(anstr==s)
                         if len(u)&gt;0:
                             zs = ptees[2,u[0],u[1]]
                             zinterval = L.Gs.node[s][&#39;z&#39;]
                             unot_in_interval = ~((zs&lt;=zinterval[1]) &amp; (zs&gt;=zinterval[0]))
                             ray_to_delete.extend(u[1][unot_in_interval])
-                            
-                    # lns : list of diffraction points in the current signature 
+
+                    # lns : list of diffraction points in the current signature
                     #       with involving multi segments (iso)
                     # scalability : avoid a loop over all the points in lnss
                     #
                     lns = [ x for x in lnss if x in anstr.ravel()]
-                    
+
                     #
                     # loop over multi diffraction points
                     #
-                
-                    for npt in lns: 
+
+                    for npt in lns:
                         # diffraction cornet in espoo.lay
                         #if npt==-225:
-                        #    import ipdb 
+                        #    import ipdb
                         #    ipdb.set_trace()
 
                         u  = np.where(anstr==npt)
                         if len(u)&gt;0:
-                           # height of the diffraction point 
+                           # height of the diffraction point
                             zp = ptees[2,u[0],u[1]]
 
                             #
-                            # At which couple of segments belongs this height ? 
+                            # At which couple of segments belongs this height ?
                             # get_diffslab function answers that question
                             #
 
                             ltu_seg,ltu_slab = L.get_diffslab(npt,zp)
 
                             #
-                            # delete rays where diffraction point is connected to  
+                            # delete rays where diffraction point is connected to
                             # 2 AIR segments
-                            # 
+                            #
 
-                            [ray_to_delete.append(u[1][i]) for i in range(len(zp)) 
+                            [ray_to_delete.append(u[1][i]) for i in range(len(zp))
                             if ((ltu_slab[i][0]==&#39;AIR&#39;) &amp; (ltu_slab[i][1]==&#39;AIR&#39;))]
                             # #zinterval = L.Gs.node[s][&#39;z&#39;]
                             # # if (zs&lt;=zinterval[1]) &amp; (zs&gt;=zinterval[0]):
                             # if ((tu_slab[0]!=&#39;AIR&#39;) &amp; (tu_slab[1]!=&#39;AIR&#39;)):
                             #     #print(npt , zp)
                             #     pass
-                            # else: 
+                            # else:
                             #     ray_to_delete.append(u[1][0])
-                    
+
                     # # nstr : structure number
                     # nstr  = np.delete(nstr,ray_to_delete,axis=1)
-                    # typi : type of interaction 
+                    # typi : type of interaction
                     typi  = np.delete(typi,ray_to_delete,axis=1)
                     # 3d sequence of points
                     ptees = np.delete(ptees,ray_to_delete,axis=2)
                     # extended (floor/ceil) signature
                     siges = np.delete(siges,ray_to_delete,axis=2)
-                    
+
                 if rmoutceilR:
                     # 1 determine Ceil reflexion index
                     # uc (inter x ray)
@@ -1777,7 +1811,7 @@ import operator
                         P = shg.MultiPoint(ptc[:2,:].T)
                         # to determine the cycle where ceil reflexions append
                         # uinter(nb pt x nb cycles)
-                        mapnode=L.Gt.nodes()
+                        mapnode = list(L.Gt.nodes())
                         uinter = np.array([[L.Gt.node[x][&#39;polyg&#39;].contains(p) for x in mapnode if x&gt;0] for p in P])
                         # import ipdb
                         # ipdb.set_trace()
@@ -1788,12 +1822,11 @@ import operator
                         uout = np.where([not L.Gt.node[mapnode[u+1]][&#39;indoor&#39;] for u in ucy])[0] #ucy+1 is to manage cycle 0
                         # 3 remove ceil reflexions of outdoor cycles
                         if len(uout)&gt;0:
-                        
                             ptees = np.delete(ptees,uc[1][uout],axis=2)
                             siges = np.delete(siges,uc[1][uout],axis=2)
                             sigsave = np.delete(sigsave,uc[1][uout],axis=2)
 
-                if r3d.has_key(k+Nint):
+                if k+Nint in r3d:
                     r3d[k+Nint][&#39;pt&#39;]  = np.dstack((r3d[k+Nint][&#39;pt&#39;], ptees))
                     r3d[k+Nint][&#39;sig&#39;] = np.dstack((r3d[k+Nint][&#39;sig&#39;], siges))
                     r3d[k+Nint][&#39;sig2d&#39;].append(sigsave)
@@ -1833,7 +1866,6 @@ import operator
         val =0
 
         for k in r3d.keys():
-            
             nrayk = np.shape(r3d[k][&#39;sig&#39;])[2]
             r3d[k][&#39;nbrays&#39;] = nrayk
             r3d[k][&#39;rayidx&#39;] = np.arange(nrayk)+val
@@ -1879,7 +1911,7 @@ import operator
         for k in r3d.keys():
             ir = r3d[k][&#39;rayidx&#39;]
             r3d.delays[ir] = r3d[k][&#39;dis&#39;]/0.3
-           
+
 
         r3d.origin_sig_name = self.origin_sig_name
         r3d.Lfilename = L._filename
@@ -1887,7 +1919,7 @@ import operator
         return(r3d)</div>
 
 
-    def get_rays_slabs(self,L,ir):
+<div class="viewcode-block" id="Rays.get_rays_slabs"><a class="viewcode-back" href="../../../api/pylayers.antprop.rays.Rays.html#pylayers.antprop.rays.Rays.get_rays_slabs">[docs]</a>    def get_rays_slabs(self,L,ir):
         &quot;&quot;&quot; return the slabs for a given interaction index 
 
 
@@ -1907,10 +1939,10 @@ import operator
         &quot;&quot;&quot;
 
         v=np.vectorize( lambda t: L.Gs.node[t][&#39;name&#39;] if (t!=0) and (t&gt;0) else &#39;_&#39;)
-        return v(self[ir][&#39;sig&#39;][0])
+        return v(self[ir][&#39;sig&#39;][0])</div>
 
 
-    def remove_aw(self,L):
+<div class="viewcode-block" id="Rays.remove_aw"><a class="viewcode-back" href="../../../api/pylayers.antprop.rays.Rays.html#pylayers.antprop.rays.Rays.remove_aw">[docs]</a>    def remove_aw(self,L):
         &quot;&quot;&quot; remove AIR interactions
         &quot;&quot;&quot;
         # def consecutive(data, stepsize=1):
@@ -1984,7 +2016,7 @@ import operator
                     vsi = self[k][&#39;vsi&#39;][...,ur][...,None]
                     dis = np.array([self[k][&#39;dis&#39;][ur]])
 
-                if R.has_key(new_bi):
+                if new_bi in R:
 
                     # R[new_bi][&#39;sig2d&#39;].append(self[k][&#39;sig2d&#39;][ur])
                     R[new_bi][&#39;pt&#39;] = np.concatenate((R[new_bi][&#39;pt&#39;],pt),axis=2)
@@ -2003,11 +2035,13 @@ import operator
                     R[new_bi][&#39;vsi&#39;] = vsi
                     R[new_bi][&#39;dis&#39;] = dis
 
-        if R.has_key(0):
+        if 0 in R:
             R.los=True
+
         X = [[R[k][&#39;rayidx&#39;][u] for u in range(len(R[k][&#39;rayidx&#39;]))] for k in R]
         R._rayidx_aw = sum(X,[])
-        return R
+
+        return R</div>
 
 <div class="viewcode-block" id="Rays.length"><a class="viewcode-back" href="../../../api/pylayers.antprop.rays.Rays.html#pylayers.antprop.rays.Rays.length">[docs]</a>    def length(self,typ=2):
         &quot;&quot;&quot; calculate length of rays
@@ -2049,18 +2083,18 @@ import operator
         Notes
         -----
 
-        This method adds for each group of interactions the following members 
+        This method adds for each group of interactions the following members
 
         norm : np.array
-            3 x i x r  (interaction vector)  
+            3 x i x r  (interaction vector)
         nstrwall : np.array
-            nstr of interactions 
+            nstr of interactions
         vsi : np.array
-            3 x (i+1) x r 
-        aod : np.array 
-            2 x r 
+            3 x (i+1) x r
+        aod : np.array
+            2 x r
         aoa : np.array
-            2 x r 
+            2 x r
         BoO : np.array
             3 x 3 x r
         Bi  : np.array
@@ -2070,15 +2104,15 @@ import operator
         BiN : np.array
             3 x 3 x r
         scpr : np.array
-            i x r 
-        theta : np.array 
-            i x r 
-        rays  : int 
-        nbrays  : int 
+            i x r
+        theta : np.array
+            i x r
+        rays  : int
+        nbrays  : int
         rayidx : np.array
-        diffslabs :  list 
+        diffslabs : list
         diffvect :  np.array
-            (phi0,phi,beta,NN) 
+            (phi0,phi,beta,NN)
 
 
         &quot;&quot;&quot;
@@ -2088,10 +2122,10 @@ import operator
         #
 
         # nsegment x 3
-        norm = np.array(nx.get_node_attributes(L.Gs,&#39;norm&#39;).values())
+        norm = np.array(list(nx.get_node_attributes(L.Gs,&#39;norm&#39;).values()))
 
         # nsegment x k
-        key = np.array(nx.get_node_attributes(L.Gs,&#39;norm&#39;).keys())
+        key = np.array(list(dict(nx.get_node_attributes(L.Gs,&#39;norm&#39;)).keys()))
 
         # maximum number for refering to segment
         # not to be confused with a segment number
@@ -2099,6 +2133,7 @@ import operator
         nsmax = max(L.Gs.node.keys())
 
         mapping = np.zeros(nsmax+1, dtype=int)
+
         mapping[key] = np.arange(len(key), dtype=int)
 
         #
@@ -2109,6 +2144,7 @@ import operator
         #  nstrs is the nstr of the segment if subsegment :
         #  nstr  is the glabal which allows to recover the slab values
         #
+
         idx = np.array(())
         if self.los:
             idxts = 1
@@ -2119,8 +2155,8 @@ import operator
 
         # list of used wedges
         luw=[]
-        
-        lgi = self.keys()
+
+        lgi = list(self.keys())
         lgi.sort()
         for k in lgi:
             #
@@ -2141,10 +2177,10 @@ import operator
                 # print nstr
                 #
                 # uss : index of subsegment
-                # subsegments are not nodes of Gs but have positive nst index
+                # subsegments are not nodes of Gs but have positive nstr index
                 #
 
-                uss   = np.where(nstr&gt;nsmax)
+                uss   = np.where(nstr &gt; nsmax)
 
                 # print uss
 
@@ -2152,8 +2188,8 @@ import operator
                 #
                 # if subsegments have been found
                 #
-                if len(uss)&gt;0:
-                    ind   = nstr[uss]-nsmax-1
+                if len(uss) &gt;0:
+                    ind   = nstr[uss]- nsmax-1
                     nstrs[uss] = np.array(L.lsss)[ind]
                 #    print nstr
                 #print nstrs
@@ -2170,10 +2206,7 @@ import operator
 
                 self[k][&#39;nstrwall&#39;]  = nstrwall    # store nstr without subsegment
                 self[k][&#39;nstrswall&#39;] = nstrswall   # store nstr with subsegment
-
                 self[k][&#39;norm&#39;] = np.zeros((3, k, nray))   # 3 x int x nray
-
-
 
                 # norm : 3 x i x r
                 #
@@ -2262,17 +2295,19 @@ import operator
                 #
                 # scpr : i x r
                 #
-                
+
                 scpr = np.sum(vn*si[:,0:-1,:], axis=0)
                 self[k][&#39;scpr&#39;] = scpr
                 self[k][&#39;theta&#39;] = np.arccos(abs(scpr))  # *180/np.pi
-                
 
-                def fix_colinear():
+                def fix_colinear(w):
+                    &quot;&quot;&quot;
+                    w : vector
+                    &quot;&quot;&quot;
                     nw = np.sqrt(np.sum(w*w, axis=0))
                     u = np.where(nw==0)
                     if len(u[0])!=0:
-                        print(&#39;colinear situation detected&#39;)
+                        logger.debug(&#39;colinear situation detected&#39;)
                         if (u[0].any() or u[1].any()) \
                             or (u[0].any()==0 or u[1].any()==0):
 
@@ -2285,16 +2320,16 @@ import operator
                             # uh : nbi x nbr anti-colinear index
                             uh = uu[np.logical_not(uvv)]
                             try:
-                                #fiw w for colinear index
-                                w[:,uv[:,0],uv[:,1]] = np.array(([1,0,0]))[:,np.newaxis]
+                                #fix w for colinear index
+                                w[:,uv[:,0],uv[:,1]] = np.array(([1,0,0]))[:,None]
                                 # update normal
-                                nw[uv[:,0],uv[:,1]] = \
-                                    np.sqrt(np.sum(w[:,uv[:,0],uh[:,1]]*w[:,uv[:,0],uv[:,1]],axis=0))
+                                nw[uv[:,0],uv[:,1]] = np.sqrt(np.sum(
+                                    w[:,uv[:,0],uh[:,1]]*w[:,uv[:,0],uv[:,1]],axis=0))
                             except:
                                 pass
                             try:
                                 # fix w for anti-colinear index
-                                w[:,uh[:,0],uh[:,1]] = np.array(([0,0,1]))[:,np.newaxis]
+                                w[:,uh[:,0],uh[:,1]] = np.array(([0,0,1]))[:,None]
                                 # update normal
                                 nw[uh[:,0],uh[:,1]] = \
                                     np.sqrt(np.sum(w[:,uh[:,0],uh[:,1]]*w[:,uh[:,0],uh[:,1]],axis=0))
@@ -2309,7 +2344,7 @@ import operator
                 w = np.cross(s_in, vn, axisa=0, axisb=0, axisc=0)
 
                 # nw : i x r
-                w, nw = fix_colinear()
+                w, nw = fix_colinear(w)
 
                 wn = w/nw
                 v = np.cross(wn, s_in, axisa=0, axisb=0, axisc=0)
@@ -2322,12 +2357,12 @@ import operator
                 #  Bi 3 x 3 x i x r
                 Bi = np.concatenate((es_in,ew,ev),axis=1)
                 #  self[k][&#39;Bi&#39;] 3 x 3 x i x r
-                self[k][&#39;Bi&#39;] = Bi  
+                self[k][&#39;Bi&#39;] = Bi
                 ################################
 
                 w = np.cross(s_out, vn, axisa=0, axisb=0, axisc=0)
 
-                w, nw = fix_colinear()
+                w, nw = fix_colinear(w)
                 #wn = w/np.sqrt(np.sum(w*w, axis=0))
                 wn = w/nw
 
@@ -2340,7 +2375,7 @@ import operator
                 #  Bi 3 x 3 x i x r
                 Bo = np.concatenate((es_out,ew,ev),axis=1)
 
-                 # self[k][&#39;Bo&#39;] 3 x 3 x i x r 
+                 # self[k][&#39;Bo&#39;] 3 x 3 x i x r
                 self[k][&#39;Bo&#39;] = Bo
                 #
                 # AOA (rad)
@@ -2374,7 +2409,7 @@ import operator
                 #                                   eph[:,np.newaxis,:]),axis=1)
 
                 # Creation of B from Bi and Bo
-                # is done after the potential diffraction 
+                # is done after the potential diffraction
                 # computation
 
                 ## index creation
@@ -2404,7 +2439,7 @@ import operator
                 except:
                     self._ray2nbi=_ray2nbi
 
-               
+
                 self._ray2nbi[self[k][&#39;rayidx&#39;]]  = k
                 nbrayt = nbrayt + nbray
                 self.raypt = self.raypt + self[k][&#39;nbrays&#39;]
@@ -2412,7 +2447,7 @@ import operator
                 #################################
                 # Start diffraction specific case
                 #################################
-                
+
                 if len(udiff[0]) != 0 :
                     Z = np.where(ityp.T==1)
                     udiff=Z[1],Z[0]
@@ -2421,7 +2456,7 @@ import operator
                     diffupt=nstr[udiff]
                     # position of diff seg (- because iupnt accept &gt; 0 reference to points)
                     #
-                    # TO BE FIXED 
+                    # TO BE FIXED
                     #
                     #ptdiff = L.pt[:,L.iupnt[-diffupt]]
                     ptdiff = np.array([ (L.Gs.pos[x][0],L.Gs.pos[x][1])  for x in diffupt ]).T
@@ -2429,15 +2464,18 @@ import operator
                     self[k][&#39;diffidx&#39;] = idx[udiff[0],udiff[1]]
                     # get tail head position of seg associated to diff point
                     lair = L.name[&#39;AIR&#39;] + L.name[&#39;_AIR&#39;]
-                    aseg = map(lambda x : filter(lambda y : y not in lair,
-                                         nx.neighbors(L.Gs,x)),
-                                         diffupt)
+                    #aseg = map(lambda x : filter(lambda y : y not in lair,
+                    #                     nx.neighbors(L.Gs,x)),
+                    #                     diffupt)
+
+                    aseg = [ [ y for y in nx.neighbors(L.Gs,x) if y not in lair ] for x in diffupt ]
+
                     #manage flat angle : diffraction by flat segment e.g. door limitation)
                     [aseg[ix].extend(x) for ix,x in enumerate(aseg) if len(x)==1]
                     # get points positions
                     #pdb.set_trace()
-                    pts = np.array(map(lambda x : L.seg2pts([x[0],x[1]]),aseg))
-                    
+                    pts = np.array([ L.seg2pts([x[0],x[1]]) for x in aseg ])
+
                     #self[k][&#39;diffslabs&#39;]=[str(L.sl[L.Gs.node[x[0]][&#39;name&#39;]])+&#39;_&#39;
                     #                    + str(L.sl[L.Gs.node[x[1]][&#39;name&#39;]]]) for x in aseg]
                     self[k][&#39;diffslabs&#39;]=[ L.Gs.node[x[0]][&#39;name&#39;]+&#39;@&#39;
@@ -2456,14 +2494,14 @@ import operator
                     #pts is (nb_diffraction_points x 4 x 2)
                     #- The dimension 4 represent the 2x2 points: t1,h1 and t2,h2
                     # tail and head of segment 1 and 2 respectively
-                    # a segment 
+                    # a segment
                     #- The dimension 2 is x,y
                     #
-                    # The following aims to determine which tails and heads of 
-                    # segments associated to a given diffraction point 
+                    # The following aims to determine which tails and heads of
+                    # segments associated to a given diffraction point
                     # are connected
                     #
-                    # 
+                    #
 
                     # point diff is pt1
                     updpt1 = np.where(np.sum(ptdiff.T==pt1,axis=1)==2)[0]
@@ -2499,11 +2537,11 @@ import operator
                     # NN = (2.-NN)*np.pi
 
                     #angle between face 0, diffraction point and s_in
-                    #s_in[:2,udiff[0],udiff[1]]  : 
+                    #s_in[:2,udiff[0],udiff[1]]  :
                     # s_in of insteractions udiff (2D) restricted to diffraction points
                     vptpa = pt-pa
                     vptpan = vptpa.T / np.sqrt(np.sum((vptpa)*(vptpa),axis=1))
-                    # vpapt= pa-pt # papt : direction vector of face 0 
+                    # vpapt= pa-pt # papt : direction vector of face 0
                     # vpaptn = vpapt.T / np.sqrt(np.sum((vpapt)*(vpapt),axis=1))
                     sid = s_in[:,udiff[0],udiff[1]] #s_in restricted to diff
                     sod = s_out[:,udiff[0],udiff[1]] #s_out restricted to diff
@@ -2546,10 +2584,10 @@ import operator
                     #Bi diffract
                     #####
                     #w is the \perp \soft in diff
-                    w = np.cross(-sid,vnormz, axisa=0, axisb=0, axisc=0)
+                    w = np.cross(-sid, vnormz, axisa=0, axisb=0, axisc=0)
 
                     # nw : i x r
-                    w, nw = fix_colinear()
+                    w, nw = fix_colinear(w)
 
                     wn = w/nw
                     # Handling channel reciprocity s_in --&gt; -s_in
@@ -2570,7 +2608,7 @@ import operator
                     #####
                     w = np.cross(sod,vnormz, axisa=0, axisb=0, axisc=0)
 
-                    w, nw = fix_colinear()
+                    w, nw = fix_colinear(w)
                     wn = w/nw
 
                     #wn = w/np.sqrt(np.sum(w*w, axis=0))
@@ -2661,9 +2699,9 @@ import operator
         Notes
         -------
 
-        This method adds the following members 
-        
-        I : Interactions 
+        This method adds the following members
+
+        I : Interactions
         B : IntB
         B0 : IntB
 
@@ -2735,7 +2773,7 @@ import operator
 
         R.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
         T.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
-        
+
         #to be specified and limited to used wedges
         if hasattr(self,&#39;_luw&#39;):
             D.dusl = dict.fromkeys(self._luw, np.array((), dtype=int))
@@ -2769,9 +2807,8 @@ import operator
                 s_in = si[0:-1,:]
                 # distance in
                 s_out = si[1:,:]
-                
-                if self[k].has_key(&#39;diffvect&#39;):
 
+                if &#39;diffvect&#39; in self[k]:
                     dvec = self[k][&#39;diffvect&#39;]
                     ldsl = self[k][&#39;diffslabs&#39;]
                     dix = self[k][&#39;diffidx&#39;]
@@ -2828,7 +2865,7 @@ import operator
                 # TODO
                 # dirty fix
                 # nbray is either an int or an array. why ?
-                if type(nbray)==np.array:
+                if type(nbray)==np.ndarray:
                     nbray=nbray[0]
 
                 #  ,(i+1)xr
@@ -2845,7 +2882,7 @@ import operator
                 b0 = self[k][&#39;B&#39;][:,:,0,:]
                 # first unitary matrix 1:
                 # dimension i and r are merged
-                b  = self[k][&#39;B&#39;][:,:,1:,:].reshape(3, 3, size2-nbray,order=&#39;F&#39;)
+                b = self[k][&#39;B&#39;][:,:,1:,:].reshape(3, 3, size2-nbray,order=&#39;F&#39;)
 
 
                 ## find used slab
@@ -2854,7 +2891,7 @@ import operator
                 # nstrf is a number of slab
                 # this is a problem for handling subsegment
                 #
-                
+
                 # seek for interactions position
                 ################################
 
@@ -2884,8 +2921,8 @@ import operator
 
                 tsl = np.hstack((tsl, slT))
                 rsl = np.hstack((rsl, slR, slRf, slRc))
-                if self[k].has_key(&#39;diffvect&#39;): 
-                    dw = np.hstack((dw,self[k][&#39;diffslabs&#39;])) 
+                if &#39;diffvect&#39; in self[k]:
+                    dw = np.hstack((dw,self[k][&#39;diffslabs&#39;]))
     ##            for s in uslv:
     ##
     ##                T.dusl[s]=np.hstack((T.dusl[s],len(T.idx) + np.where(sl[uT]==s)[0]))
@@ -2949,11 +2986,11 @@ import operator
                 ###
                 #Diffraction
                 #phi0,phi,si,sd,N,mat0,matN,beta
-                # 
+                #
 
-                if self[k].has_key(&#39;diffvect&#39;): 
+                if &#39;diffvect&#39; in self[k]:
                     # self[k][&#39;diffvect&#39;] = ((phi0,phi,beta,N) x (nb_rayxnb_interactions)   )
-                    #si and so are stacked at the end of self[k][&#39;diffvect&#39;] 
+                    #si and so are stacked at the end of self[k][&#39;diffvect&#39;]
                     #as well:
                     #data =  (6 x (nb_rayxnb_interactions) )
                     # ((phi0,phi,beta,N,sin,sout) x (nb_rayxnb_interactions) )
@@ -2970,9 +3007,12 @@ import operator
                 B.stack(data=np.eye(3)[np.newaxis,:,:], idx=ze)
                 B0.stack(data=np.eye(3)[np.newaxis,:,:],idx=ze)
 
-        T.create_dusl(tsl)
-        R.create_dusl(rsl)
-        D.create_dusl(dw)
+        if len(tsl)&gt;0:
+            T.create_dusl(tsl)
+        if len(rsl)&gt;0:
+            R.create_dusl(rsl)
+        if len(dw)&gt;0:
+            D.create_dusl(dw)
         # create interactions structure
         self.I = I
         self.I.add([T, R, D])
@@ -2984,13 +3024,13 @@ import operator
         self.filled = True</div>
 
 <div class="viewcode-block" id="Rays.eval"><a class="viewcode-back" href="../../../api/pylayers.antprop.rays.Rays.html#pylayers.antprop.rays.Rays.eval">[docs]</a>    def eval(self,fGHz=np.array([2.4]),bfacdiv=False,ib=[]):
-        &quot;&quot;&quot;  field evaluation of rays  
+        &quot;&quot;&quot;  field evaluation of rays
 
         Parameters
         ----------
 
         fGHz : array
-            frequency in GHz 
+            frequency in GHz
         ib : list of interactions block
 
         &quot;&quot;&quot;
@@ -3345,7 +3385,7 @@ import operator
         return(ir)</div>
 
 
-    def ray2ityp(self,r):
+<div class="viewcode-block" id="Rays.ray2ityp"><a class="viewcode-back" href="../../../api/pylayers.antprop.rays.Rays.html#pylayers.antprop.rays.Rays.ray2ityp">[docs]</a>    def ray2ityp(self,r):
         &quot;&quot;&quot; return interaction type for a given ray
 
 
@@ -3367,7 +3407,7 @@ import operator
         di = {1:&#39;D&#39;,2:&#39;R&#39;,3:&#39;T&#39;,4:&#39;R&#39;,5:&#39;R&#39;}
         sig = self.ray2sig(r)
         sig  = sig[1,1:-1]
-        return [di[s] for s in sig]
+        return [di[s] for s in sig]</div>
 
 
 <div class="viewcode-block" id="Rays.ray2nbi"><a class="viewcode-back" href="../../../api/pylayers.antprop.rays.Rays.html#pylayers.antprop.rays.Rays.ray2nbi">[docs]</a>    def ray2nbi(self,r):
@@ -4051,6 +4091,7 @@ if __name__ == &quot;__main__&quot;:
 </pre></div>
 
            </div>
+           
           </div>
           <footer>
   
@@ -4060,11 +4101,11 @@ if __name__ == &quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -4083,9 +4124,11 @@ if __name__ == &quot;__main__&quot;:
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -4100,14 +4143,13 @@ if __name__ == &quot;__main__&quot;:
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

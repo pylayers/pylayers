@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,22 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Inter" href="pylayers.antprop.interactions.Inter.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +55,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +84,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -154,7 +152,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -166,36 +164,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>Interactions</li>
+        
+      <li>Interactions</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.antprop.interactions.Interactions.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -206,45 +224,20 @@
 <dl class="class">
 <dt id="pylayers.antprop.interactions.Interactions">
 <em class="property">class </em><code class="descclassname">pylayers.antprop.interactions.</code><code class="descname">Interactions</code><span class="sig-paren">(</span><em>slab={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#Interactions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.Interactions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="pylayers.antprop.interactions.Inter.html#pylayers.antprop.interactions.Inter" title="pylayers.antprop.interactions.Inter"><code class="xref py py-class docutils literal"><span class="pre">pylayers.antprop.interactions.Inter</span></code></a>, <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="pylayers.antprop.interactions.Inter.html#pylayers.antprop.interactions.Inter" title="pylayers.antprop.interactions.Inter"><code class="xref py py-class docutils literal notranslate"><span class="pre">pylayers.antprop.interactions.Inter</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
 <p>Interaction parameters</p>
 <p>gather all type of interactions (IntB/L/R/T)</p>
-<p class="rubric">Methods</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="26%" />
-<col width="74%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>add(self,li): add a list of basis interactions</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-even"><td>addi(self,i): add a single interaction</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-odd"><td>eval(self)</td>
-<td>(evaluate all the interactions added thanks to self.add or self.addi) and create the self.I which gather all thoses interactions</td>
-</tr>
-<tr class="row-even"><td>5 following types of interactions</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-odd"><td>B</td>
-<td>(local basis transformation matrix (unitary))</td>
-</tr>
-<tr class="row-even"><td>L</td>
-<td>(LOS case)</td>
-</tr>
-<tr class="row-odd"><td>R</td>
-<td>(Reflection)</td>
-</tr>
-<tr class="row-even"><td>T</td>
-<td>(Transmission)</td>
-</tr>
-<tr class="row-odd"><td>D</td>
-<td>(Diffraction)</td>
-</tr>
-</tbody>
-</table>
+<p>add(self,li): add a list of basis interactions
+addi(self,i): add a single interaction
+eval(self) : evaluate all the interactions added thanks to self.add or self.addi</p>
+<blockquote>
+<div>and create the self.I which gather all thoses interactions</div></blockquote>
+<p>5 following types of interactions</p>
+<p>B : local basis transformation matrix (unitary)
+L : LOS case
+R : Reflection
+T : Transmission
+D : Diffraction</p>
 <p class="rubric">Methods Summary</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -252,13 +245,13 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.interactions.Interactions.add" title="pylayers.antprop.interactions.Interactions.add"><code class="xref py py-obj docutils literal"><span class="pre">add</span></code></a>(li)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.interactions.Interactions.add" title="pylayers.antprop.interactions.Interactions.add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add</span></code></a>(li)</td>
 <td>add a list of interactions</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.interactions.Interactions.addi" title="pylayers.antprop.interactions.Interactions.addi"><code class="xref py py-obj docutils literal"><span class="pre">addi</span></code></a>(i)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.interactions.Interactions.addi" title="pylayers.antprop.interactions.Interactions.addi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addi</span></code></a>(i)</td>
 <td>add interactions into Interactions class</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.interactions.Interactions.eval" title="pylayers.antprop.interactions.Interactions.eval"><code class="xref py py-obj docutils literal"><span class="pre">eval</span></code></a>([fGHz])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.interactions.Interactions.eval" title="pylayers.antprop.interactions.Interactions.eval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval</span></code></a>([fGHz])</td>
 <td>evaluate all the interactions</td>
 </tr>
 </tbody>
@@ -268,47 +261,24 @@
 <dt id="pylayers.antprop.interactions.Interactions.add">
 <code class="descname">add</code><span class="sig-paren">(</span><em>li</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#Interactions.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.Interactions.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>add a list of interactions</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>li</strong> : list</p>
-<blockquote class="last">
-<div><p>list of interactions</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>li <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd>list of interactions</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.interactions.Interactions.addi">
 <code class="descname">addi</code><span class="sig-paren">(</span><em>i</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#Interactions.addi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.Interactions.addi" title="Permalink to this definition">¶</a></dt>
 <dd><p>add interactions into Interactions class</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>i</strong> : Inter object</td>
-</tr>
-</tbody>
-</table>
+<p>i : Inter object</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.interactions.Interactions.eval">
 <code class="descname">eval</code><span class="sig-paren">(</span><em>fGHz=array([ 2.4])</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#Interactions.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.Interactions.eval" title="Permalink to this definition">¶</a></dt>
 <dd><p>evaluate all the interactions</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fGHz</strong> : np.array()</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
+<p>fGHz : np.array()</p>
 <dl class="docutils">
 <dt>self.I <span class="classifier-delimiter">:</span> <span class="classifier">np.shape(self.I) = (self.nf,self.nimax,2,2)</span></dt>
 <dd>with self.nf :  number of frequences
@@ -330,8 +300,16 @@ self.nimax : the total number of interactions ( of all rays)</dd>
 
 
            </div>
+           
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="pylayers.antprop.interactions.Inter.html" class="btn btn-neutral" title="Inter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -339,11 +317,11 @@ self.nimax : the total number of interactions ( of all rays)</dd>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -362,9 +340,11 @@ self.nimax : the total number of interactions ( of all rays)</dd>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -379,14 +359,13 @@ self.nimax : the total number of interactions ( of all rays)</dd>
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

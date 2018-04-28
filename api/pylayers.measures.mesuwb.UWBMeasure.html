@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,22 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Tdd" href="pylayers.measures.mesuwb.Tdd.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +55,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +84,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -164,7 +162,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -176,36 +174,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>UWBMeasure</li>
+        
+      <li>UWBMeasure</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.measures.mesuwb.UWBMeasure.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -216,77 +234,29 @@
 <dl class="class">
 <dt id="pylayers.measures.mesuwb.UWBMeasure">
 <em class="property">class </em><code class="descclassname">pylayers.measures.mesuwb.</code><code class="descname">UWBMeasure</code><span class="sig-paren">(</span><em>nTx=1</em>, <em>h=1</em>, <em>display=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/mesuwb.html#UWBMeasure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesuwb.UWBMeasure" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="pylayers.util.project.PyLayers.html#pylayers.util.project.PyLayers" title="pylayers.util.project.PyLayers"><code class="xref py py-class docutils literal"><span class="pre">pylayers.util.project.PyLayers</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="pylayers.util.project.PyLayers.html#pylayers.util.project.PyLayers" title="pylayers.util.project.PyLayers"><code class="xref py py-class docutils literal notranslate"><span class="pre">pylayers.util.project.PyLayers</span></code></a></p>
 <p>UWBMeasure class</p>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="32%" />
-<col width="68%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>tdd</td>
-<td>Time domain deconv data</td>
-</tr>
-<tr class="row-even"><td>fdd</td>
-<td>Freq domain deconv data</td>
-</tr>
-<tr class="row-odd"><td>Date_Time</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-even"><td>LQI</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-odd"><td>Operators</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-even"><td>RAW_DATA</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-odd"><td>CAL_DATAip</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-even"><td>Tx_height</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-odd"><td>Tx_position</td>
-<td>&#160;</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="36%" />
-<col width="64%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>info()  :</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-even"><td>show()</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-odd"><td>emax()</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-even"><td>etot()</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-odd"><td>TDoA()</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-even"><td>Fingerprint()</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-odd"><td>fp()</td>
-<td>(calculate fingerprint)</td>
-</tr>
-<tr class="row-even"><td>TOA()</td>
-<td>&#160;</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>tdd</dt>
+<dd>Time domain deconv data</dd>
+<dt>fdd</dt>
+<dd>Freq domain deconv data</dd>
+</dl>
+<p>Date_Time
+LQI
+Operators
+RAW_DATA
+CAL_DATAip
+Tx_height
+Tx_position</p>
+<p>info()  :
+show()
+emax()
+etot()
+TDoA()
+Fingerprint()
+fp() : calculate fingerprint
+TOA()</p>
 <p class="rubric">Methods Summary</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -294,67 +264,67 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.Efirst" title="pylayers.measures.mesuwb.UWBMeasure.Efirst"><code class="xref py py-obj docutils literal"><span class="pre">Efirst</span></code></a>([Tint,&nbsp;sym,&nbsp;dB])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.Efirst" title="pylayers.measures.mesuwb.UWBMeasure.Efirst"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Efirst</span></code></a>([Tint,&nbsp;sym,&nbsp;dB])</td>
 <td>calculate energy in first path</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.Emax" title="pylayers.measures.mesuwb.UWBMeasure.Emax"><code class="xref py py-obj docutils literal"><span class="pre">Emax</span></code></a>([Tint,&nbsp;sym,&nbsp;dB])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.Emax" title="pylayers.measures.mesuwb.UWBMeasure.Emax"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Emax</span></code></a>([Tint,&nbsp;sym,&nbsp;dB])</td>
 <td>calculate maximum energy</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.Epercent" title="pylayers.measures.mesuwb.UWBMeasure.Epercent"><code class="xref py py-obj docutils literal"><span class="pre">Epercent</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.Epercent" title="pylayers.measures.mesuwb.UWBMeasure.Epercent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Epercent</span></code></a>()</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.Etau0" title="pylayers.measures.mesuwb.UWBMeasure.Etau0"><code class="xref py py-obj docutils literal"><span class="pre">Etau0</span></code></a>([Tint,&nbsp;sym,&nbsp;dB])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.Etau0" title="pylayers.measures.mesuwb.UWBMeasure.Etau0"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Etau0</span></code></a>([Tint,&nbsp;sym,&nbsp;dB])</td>
 <td>calculate the energy around delay tau0</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.Etot" title="pylayers.measures.mesuwb.UWBMeasure.Etot"><code class="xref py py-obj docutils literal"><span class="pre">Etot</span></code></a>([toffns,&nbsp;tdns,&nbsp;dB])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.Etot" title="pylayers.measures.mesuwb.UWBMeasure.Etot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Etot</span></code></a>([toffns,&nbsp;tdns,&nbsp;dB])</td>
 <td>Calculate total energy for the 4 channels</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.ecdf" title="pylayers.measures.mesuwb.UWBMeasure.ecdf"><code class="xref py py-obj docutils literal"><span class="pre">ecdf</span></code></a>([Tnoise,&nbsp;rem_noise,&nbsp;in_positivity,&nbsp;…])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.ecdf" title="pylayers.measures.mesuwb.UWBMeasure.ecdf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecdf</span></code></a>([Tnoise,&nbsp;rem_noise,&nbsp;in_positivity,&nbsp;…])</td>
 <td>calculate energy cumulative density function</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.fp" title="pylayers.measures.mesuwb.UWBMeasure.fp"><code class="xref py py-obj docutils literal"><span class="pre">fp</span></code></a>([alpha])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.fp" title="pylayers.measures.mesuwb.UWBMeasure.fp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fp</span></code></a>([alpha])</td>
 <td>build fingerprint</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.info" title="pylayers.measures.mesuwb.UWBMeasure.info"><code class="xref py py-obj docutils literal"><span class="pre">info</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.info" title="pylayers.measures.mesuwb.UWBMeasure.info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">info</span></code></a>()</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.outlatex" title="pylayers.measures.mesuwb.UWBMeasure.outlatex"><code class="xref py py-obj docutils literal"><span class="pre">outlatex</span></code></a>(S)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.outlatex" title="pylayers.measures.mesuwb.UWBMeasure.outlatex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">outlatex</span></code></a>(S)</td>
 <td>measurement output latex</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.show" title="pylayers.measures.mesuwb.UWBMeasure.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>([fig,&nbsp;delay,&nbsp;display,&nbsp;col,&nbsp;xmin,&nbsp;xmax,&nbsp;…])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.show" title="pylayers.measures.mesuwb.UWBMeasure.show"><code class="xref py py-obj docutils literal notranslate"><span class="pre">show</span></code></a>([fig,&nbsp;delay,&nbsp;display,&nbsp;col,&nbsp;xmin,&nbsp;xmax,&nbsp;…])</td>
 <td>show measurement in time domain</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.tau_Emax" title="pylayers.measures.mesuwb.UWBMeasure.tau_Emax"><code class="xref py py-obj docutils literal"><span class="pre">tau_Emax</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.tau_Emax" title="pylayers.measures.mesuwb.UWBMeasure.tau_Emax"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tau_Emax</span></code></a>()</td>
 <td>calculate the delay of energy peak</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.tau_moy" title="pylayers.measures.mesuwb.UWBMeasure.tau_moy"><code class="xref py py-obj docutils literal"><span class="pre">tau_moy</span></code></a>([display])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.tau_moy" title="pylayers.measures.mesuwb.UWBMeasure.tau_moy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tau_moy</span></code></a>([display])</td>
 <td>calculate mean excess delay</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.tau_rms" title="pylayers.measures.mesuwb.UWBMeasure.tau_rms"><code class="xref py py-obj docutils literal"><span class="pre">tau_rms</span></code></a>([display])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.tau_rms" title="pylayers.measures.mesuwb.UWBMeasure.tau_rms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tau_rms</span></code></a>([display])</td>
 <td>calculate the rms delay spread</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.taumax" title="pylayers.measures.mesuwb.UWBMeasure.taumax"><code class="xref py py-obj docutils literal"><span class="pre">taumax</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.taumax" title="pylayers.measures.mesuwb.UWBMeasure.taumax"><code class="xref py py-obj docutils literal notranslate"><span class="pre">taumax</span></code></a>()</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.tdelay" title="pylayers.measures.mesuwb.UWBMeasure.tdelay"><code class="xref py py-obj docutils literal"><span class="pre">tdelay</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.tdelay" title="pylayers.measures.mesuwb.UWBMeasure.tdelay"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tdelay</span></code></a>()</td>
 <td>build an array with delay values</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.toa_cum" title="pylayers.measures.mesuwb.UWBMeasure.toa_cum"><code class="xref py py-obj docutils literal"><span class="pre">toa_cum</span></code></a>(n[,&nbsp;display])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.toa_cum" title="pylayers.measures.mesuwb.UWBMeasure.toa_cum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toa_cum</span></code></a>(n[,&nbsp;display])</td>
 <td>threshold based toa estimation using cumulative energy</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.toa_max" title="pylayers.measures.mesuwb.UWBMeasure.toa_max"><code class="xref py py-obj docutils literal"><span class="pre">toa_max</span></code></a>([n,&nbsp;display])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.toa_max" title="pylayers.measures.mesuwb.UWBMeasure.toa_max"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toa_max</span></code></a>([n,&nbsp;display])</td>
 <td>descendant threshold based toa estimation</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.toa_max2" title="pylayers.measures.mesuwb.UWBMeasure.toa_max2"><code class="xref py py-obj docutils literal"><span class="pre">toa_max2</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.toa_max2" title="pylayers.measures.mesuwb.UWBMeasure.toa_max2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toa_max2</span></code></a>()</td>
 <td>calculate toa_max (meth2)</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.toa_new" title="pylayers.measures.mesuwb.UWBMeasure.toa_new"><code class="xref py py-obj docutils literal"><span class="pre">toa_new</span></code></a>([display])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.toa_new" title="pylayers.measures.mesuwb.UWBMeasure.toa_new"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toa_new</span></code></a>([display])</td>
 <td>descendant threshold based toa estimation</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.toa_th" title="pylayers.measures.mesuwb.UWBMeasure.toa_th"><code class="xref py py-obj docutils literal"><span class="pre">toa_th</span></code></a>(r,&nbsp;k[,&nbsp;display])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.toa_th" title="pylayers.measures.mesuwb.UWBMeasure.toa_th"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toa_th</span></code></a>(r,&nbsp;k[,&nbsp;display])</td>
 <td>threshold based toa estimation using energy peak</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.toa_win" title="pylayers.measures.mesuwb.UWBMeasure.toa_win"><code class="xref py py-obj docutils literal"><span class="pre">toa_win</span></code></a>([n,&nbsp;display])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.UWBMeasure.toa_win" title="pylayers.measures.mesuwb.UWBMeasure.toa_win"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toa_win</span></code></a>([n,&nbsp;display])</td>
 <td>descendant threshold based toa estimation</td>
 </tr>
 </tbody>
@@ -364,34 +334,18 @@
 <dt id="pylayers.measures.mesuwb.UWBMeasure.Efirst">
 <code class="descname">Efirst</code><span class="sig-paren">(</span><em>Tint=1</em>, <em>sym=0.25</em>, <em>dB=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/mesuwb.html#UWBMeasure.Efirst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesuwb.UWBMeasure.Efirst" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculate energy in first path</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Tint</strong> : float</p>
-<p><strong>sym</strong> : float</p>
-<p class="last"><strong>dB</strong> : boolean</p>
-</td>
-</tr>
-</tbody>
-</table>
+<p>Tint : float
+sym : float
+dB : boolean</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.measures.mesuwb.UWBMeasure.Emax">
 <code class="descname">Emax</code><span class="sig-paren">(</span><em>Tint=1</em>, <em>sym=0.25</em>, <em>dB=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/mesuwb.html#UWBMeasure.Emax"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesuwb.UWBMeasure.Emax" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculate maximum energy</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Tint</strong> : float</p>
-<p><strong>sym :float</strong></p>
-<p class="last"><strong>dB</strong> : boolean</p>
-</td>
-</tr>
-</tbody>
-</table>
+<p>Tint : float
+sym :float
+dB : boolean</p>
 </dd></dl>
 
 <dl class="method">
@@ -409,23 +363,12 @@
 <dt id="pylayers.measures.mesuwb.UWBMeasure.Etot">
 <code class="descname">Etot</code><span class="sig-paren">(</span><em>toffns=0.7</em>, <em>tdns=75</em>, <em>dB=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/mesuwb.html#UWBMeasure.Etot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesuwb.UWBMeasure.Etot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate total energy for the 4 channels</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>toffns</strong> : float</p>
-<blockquote>
-<div><p>time offset for selecting time window</p>
-</div></blockquote>
-<p><strong>tdns</strong> : float</p>
-<blockquote class="last">
-<div><p>time duration of the window</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>toffns <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>time offset for selecting time window</dd>
+<dt>tdns <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>time duration of the window</dd>
+</dl>
 <p>This function gets the total energy of the channel</p>
 <p>from [tau_0 + tofffset , tau_0 + toffset +tduration ]</p>
 </dd></dl>
@@ -434,38 +377,22 @@
 <dt id="pylayers.measures.mesuwb.UWBMeasure.ecdf">
 <code class="descname">ecdf</code><span class="sig-paren">(</span><em>Tnoise=10</em>, <em>rem_noise=True</em>, <em>in_positivity=False</em>, <em>display=False</em>, <em>normalize=True</em>, <em>delay=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/mesuwb.html#UWBMeasure.ecdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesuwb.UWBMeasure.ecdf" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculate energy cumulative density function</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Tnoise</strong></p>
-<p><strong>rem_noise</strong></p>
-<p><strong>in_positivity</strong></p>
-<p><strong>display</strong></p>
-<p><strong>normalize</strong></p>
-<p class="last"><strong>delay</strong></p>
-</td>
-</tr>
-</tbody>
-</table>
+<p>Tnoise
+rem_noise
+in_positivity
+display
+normalize
+delay</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.measures.mesuwb.UWBMeasure.fp">
 <code class="descname">fp</code><span class="sig-paren">(</span><em>alpha=0.1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/mesuwb.html#UWBMeasure.fp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesuwb.UWBMeasure.fp" title="Permalink to this definition">¶</a></dt>
 <dd><p>build fingerprint</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>alpha</strong> : float</p>
-<blockquote class="last">
-<div><p>alpha is a quantile parameter for taum and taurms calculation</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>alpha <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>alpha is a quantile parameter for taum and taurms calculation</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -485,42 +412,26 @@
 <dt id="pylayers.measures.mesuwb.UWBMeasure.show">
 <code class="descname">show</code><span class="sig-paren">(</span><em>fig=[], delay=array([[0],        [0],        [0],        [0]]), display=True, col=['k', 'b', 'g', 'c'], xmin=0, xmax=100, C=0, NC=1, typ='v'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/mesuwb.html#UWBMeasure.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesuwb.UWBMeasure.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>show measurement in time domain</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>delay</strong> : np.array(1,4)</p>
-<p><strong>display</strong></p>
+<p>delay : np.array(1,4)
+display</p>
 <blockquote>
-<div><p>optional</p>
-</div></blockquote>
-<p><strong>col</strong></p>
-<blockquote>
-<div><p>optional</p>
-</div></blockquote>
-<p><strong>xmin</strong></p>
-<blockquote>
-<div><p>optional</p>
-</div></blockquote>
-<p><strong>xmax</strong></p>
-<blockquote>
-<div><p>optional</p>
-</div></blockquote>
-<p><strong>C</strong></p>
-<blockquote class="last">
-<div><blockquote>
-<div><p>optional</p>
-</div></blockquote>
+<div>optional</div></blockquote>
 <dl class="docutils">
+<dt>col</dt>
+<dd>optional</dd>
+<dt>xmin</dt>
+<dd>optional</dd>
+<dt>xmax</dt>
+<dd>optional</dd>
+<dt>C</dt>
+<dd><blockquote class="first">
+<div>optional</div></blockquote>
+<dl class="last docutils">
 <dt>NC</dt>
-<dd><p class="first last">optional</p>
+<dd>optional</dd>
+</dl>
 </dd>
 </dl>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="method">
@@ -550,53 +461,29 @@
 <dt id="pylayers.measures.mesuwb.UWBMeasure.tdelay">
 <code class="descname">tdelay</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/mesuwb.html#UWBMeasure.tdelay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesuwb.UWBMeasure.tdelay" title="Permalink to this definition">¶</a></dt>
 <dd><p>build an array with delay values</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>t2</strong> : np.array</p>
-<blockquote class="last">
-<div><p>[tau0 , tau_th , toa_cum , toa_max , tau_moy ,tau_rms,
-tau_moy+tau_rms]</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>t2 <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd>[tau0 , tau_th , toa_cum , toa_max , tau_moy ,tau_rms,
+tau_moy+tau_rms]</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.measures.mesuwb.UWBMeasure.toa_cum">
 <code class="descname">toa_cum</code><span class="sig-paren">(</span><em>n</em>, <em>display=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/mesuwb.html#UWBMeasure.toa_cum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesuwb.UWBMeasure.toa_cum" title="Permalink to this definition">¶</a></dt>
 <dd><p>threshold based toa estimation using cumulative energy</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n</strong> : int</p>
-<p class="last"><strong>display</strong> : boolean</p>
-</td>
-</tr>
-</tbody>
-</table>
+<p>n : int 
+display : boolean</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.measures.mesuwb.UWBMeasure.toa_max">
 <code class="descname">toa_max</code><span class="sig-paren">(</span><em>n=6</em>, <em>display=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/mesuwb.html#UWBMeasure.toa_max"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesuwb.UWBMeasure.toa_max" title="Permalink to this definition">¶</a></dt>
 <dd><p>descendant threshold based toa estimation</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n</strong> : integer</p>
-<blockquote class="last">
-<div><p>(default 6)</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>n <span class="classifier-delimiter">:</span> <span class="classifier">integer</span></dt>
+<dd>(default 6)</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -615,38 +502,20 @@ tau_moy+tau_rms]</p>
 <dt id="pylayers.measures.mesuwb.UWBMeasure.toa_th">
 <code class="descname">toa_th</code><span class="sig-paren">(</span><em>r</em>, <em>k</em>, <em>display=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/mesuwb.html#UWBMeasure.toa_th"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesuwb.UWBMeasure.toa_th" title="Permalink to this definition">¶</a></dt>
 <dd><p>threshold based toa estimation using energy peak</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>r</strong> : float</p>
-<blockquote>
-<div><p>threshold los</p>
-</div></blockquote>
-<p><strong>k</strong> : float</p>
-<blockquote class="last">
-<div><p>threshold nlos</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>r <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>threshold los</dd>
+<dt>k <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>threshold nlos</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.measures.mesuwb.UWBMeasure.toa_win">
 <code class="descname">toa_win</code><span class="sig-paren">(</span><em>n=9</em>, <em>display=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/mesuwb.html#UWBMeasure.toa_win"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesuwb.UWBMeasure.toa_win" title="Permalink to this definition">¶</a></dt>
 <dd><p>descendant threshold based toa estimation</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n</strong> : key parameter n = 9</p>
-<p class="last"><strong>display</strong> : False</p>
-</td>
-</tr>
-</tbody>
-</table>
+<p>n  : key parameter n = 9
+display : False</p>
 </dd></dl>
 
 </dd></dl>
@@ -655,8 +524,16 @@ tau_moy+tau_rms]</p>
 
 
            </div>
+           
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="pylayers.measures.mesuwb.Tdd.html" class="btn btn-neutral" title="Tdd" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -664,11 +541,11 @@ tau_moy+tau_rms]</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -687,9 +564,11 @@ tau_moy+tau_rms]</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -704,14 +583,13 @@ tau_moy+tau_rms]</p>
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

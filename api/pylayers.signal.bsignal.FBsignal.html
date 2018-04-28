@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,31 +25,22 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/>
-        <link rel="next" title="FHsignal" href="pylayers.signal.bsignal.FHsignal.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FHsignal" href="pylayers.signal.bsignal.FHsignal.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -62,7 +55,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -91,7 +84,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -102,6 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -148,9 +145,7 @@
 <li class="toctree-l2"><a class="reference internal" href="references.html#id115">34.9&nbsp;&nbsp;&nbsp;Functions</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="references.html#id116">34.10&nbsp;&nbsp;&nbsp;Classes</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="pylayers.signal.bsignal.Bsignal.html">Bsignal</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">FBsignal</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">FBsignal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.signal.bsignal.FHsignal.html">FHsignal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.signal.bsignal.FUsignal.html">FUsignal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.signal.bsignal.Noise.html">Noise</a></li>
@@ -168,7 +163,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -180,36 +175,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>FBsignal</li>
+        
+      <li>FBsignal</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.signal.bsignal.FBsignal.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -220,80 +235,11 @@
 <dl class="class">
 <dt id="pylayers.signal.bsignal.FBsignal">
 <em class="property">class </em><code class="descclassname">pylayers.signal.bsignal.</code><code class="descname">FBsignal</code><span class="sig-paren">(</span><em>x=array([]</em>, <em>dtype=float64)</em>, <em>y=array([]</em>, <em>dtype=float64)</em>, <em>label=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FBsignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FBsignal" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal" title="pylayers.signal.bsignal.Bsignal"><code class="xref py py-class docutils literal"><span class="pre">pylayers.signal.bsignal.Bsignal</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal" title="pylayers.signal.bsignal.Bsignal"><code class="xref py py-class docutils literal notranslate"><span class="pre">pylayers.signal.bsignal.Bsignal</span></code></a></p>
 <p>FBsignal : Base signal in Frequency domain</p>
 <p>plot     : plot modulus and phase
 plotri   : plot real part and imaginary part
 plotdB   : plot modulus in dB</p>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">append</span></code>(bs)</td>
-<td>append bs to Bsignal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">cformat</span></code>(**kwargs)</td>
-<td>complex format</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">extract</span></code>(u)</td>
-<td>extract a subset of signal from index</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">flatteny</span></code>([yrange,&nbsp;reversible])</td>
-<td>flatten y array</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">gating</span></code>(xmin,&nbsp;xmax)</td>
-<td>gating between xmin and xmax</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
-<td>generic help</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">imshow</span></code>(**kwargs)</td>
-<td>imshow of y matrix</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">len</span></code>()</td>
-<td>returm length of x axis</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">load</span></code>(filename)</td>
-<td>load a Bsignal from a Matlab File</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">max</span></code>()</td>
-<td>max value of the signal (module if complex)</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">mean</span></code>()</td>
-<td>mean value of the signal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">min</span></code>()</td>
-<td>min value of the signal (module if complex)</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FBsignal.plot" title="pylayers.signal.bsignal.FBsignal.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>(**kwargs)</td>
-<td>plot FBsignal</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FBsignal.plotdB" title="pylayers.signal.bsignal.FBsignal.plotdB"><code class="xref py py-obj docutils literal"><span class="pre">plotdB</span></code></a>([mask,&nbsp;n,&nbsp;phase])</td>
-<td>usage : plotdB()</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FBsignal.plotri" title="pylayers.signal.bsignal.FBsignal.plotri"><code class="xref py py-obj docutils literal"><span class="pre">plotri</span></code></a>([nb])</td>
-<td>plot real and imaginary part</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">save</span></code>(filename)</td>
-<td>save Bsignal in Matlab File Format</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">setx</span></code>(x)</td>
-<td>setx : set x vector</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">sety</span></code>(fun)</td>
-<td>sety : set y vector</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FBsignal.stem" title="pylayers.signal.bsignal.FBsignal.stem"><code class="xref py py-obj docutils literal"><span class="pre">stem</span></code></a>([color])</td>
-<td>stem plot</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">step</span></code>([color])</td>
-<td>plot steps display</td>
-</tr>
-</tbody>
-</table>
 <p class="rubric">Methods Summary</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -301,16 +247,16 @@ plotdB   : plot modulus in dB</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FBsignal.plot" title="pylayers.signal.bsignal.FBsignal.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FBsignal.plot" title="pylayers.signal.bsignal.FBsignal.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>(**kwargs)</td>
 <td>plot FBsignal</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FBsignal.plotdB" title="pylayers.signal.bsignal.FBsignal.plotdB"><code class="xref py py-obj docutils literal"><span class="pre">plotdB</span></code></a>([mask,&nbsp;n,&nbsp;phase])</td>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FBsignal.plotdB" title="pylayers.signal.bsignal.FBsignal.plotdB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plotdB</span></code></a>([mask,&nbsp;n,&nbsp;phase])</td>
 <td>usage : plotdB()</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FBsignal.plotri" title="pylayers.signal.bsignal.FBsignal.plotri"><code class="xref py py-obj docutils literal"><span class="pre">plotri</span></code></a>([nb])</td>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FBsignal.plotri" title="pylayers.signal.bsignal.FBsignal.plotri"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plotri</span></code></a>([nb])</td>
 <td>plot real and imaginary part</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FBsignal.stem" title="pylayers.signal.bsignal.FBsignal.stem"><code class="xref py py-obj docutils literal"><span class="pre">stem</span></code></a>([color])</td>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.FBsignal.stem" title="pylayers.signal.bsignal.FBsignal.stem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stem</span></code></a>([color])</td>
 <td>stem plot</td>
 </tr>
 </tbody>
@@ -320,35 +266,19 @@ plotdB   : plot modulus in dB</p>
 <dt id="pylayers.signal.bsignal.FBsignal.plot">
 <code class="descname">plot</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FBsignal.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FBsignal.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot FBsignal</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>phase</strong> : boolean</p>
+<dl class="docutils">
+<dt>phase <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
+<dd>default True</dd>
+<dt>dB <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
+<dd>default True</dd>
+</dl>
+<p>iy : index of y value to be displayed
+typ : string</p>
 <blockquote>
-<div><p>default True</p>
-</div></blockquote>
-<p><strong>dB</strong> : boolean</p>
-<blockquote>
-<div><p>default True</p>
-</div></blockquote>
-<p><strong>iy</strong> : index of y value to be displayed</p>
-<p><strong>typ</strong> : string</p>
-<blockquote>
-<div><p>[‘l10’,’l20’,’d’,’r’,’du’,’ru’]</p>
-</div></blockquote>
-<p><strong>xlabels</strong></p>
-<p class="last"><strong>ylabels</strong></p>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.plot" title="pylayers.signal.bsignal.Bsignal.plot"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.plot</span></code></a>, <code class="xref py py-obj docutils literal"><span class="pre">pylayers.util.plotutil.mulcplot</span></code></p>
-</div>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.signal.bsignal import *
+<div>[‘l10’,’l20’,’d’,’r’,’du’,’ru’]</div></blockquote>
+<p>xlabels
+ylabels</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.signal.bsignal import *
 &gt;&gt;&gt; from numpy import *
 &gt;&gt;&gt; from scipy import *
 &gt;&gt;&gt; S = FBsignal()
@@ -358,51 +288,31 @@ plotdB   : plot modulus in dB</p>
 &gt;&gt;&gt; plt.show()
 </pre></div>
 </div>
+<p>Bsignal.plot
+pylayers.util.plotutil.mulcplot</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.signal.bsignal.FBsignal.plotdB">
 <code class="descname">plotdB</code><span class="sig-paren">(</span><em>mask=False</em>, <em>n=2</em>, <em>phase=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FBsignal.plotdB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FBsignal.plotdB" title="Permalink to this definition">¶</a></dt>
 <dd><p>usage : plotdB()</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mask :</strong></p>
-<p><strong>n :</strong></p>
-<p class="last"><strong>phase :</strong></p>
-</td>
-</tr>
-</tbody>
-</table>
+<p>mask :
+n :
+phase :</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.signal.bsignal.FBsignal.plotri">
 <code class="descname">plotri</code><span class="sig-paren">(</span><em>nb=-1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FBsignal.plotri"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FBsignal.plotri" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot real and imaginary part</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nb</strong> : int</td>
-</tr>
-</tbody>
-</table>
+<p>nb : int</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.signal.bsignal.FBsignal.stem">
 <code class="descname">stem</code><span class="sig-paren">(</span><em>color='b-'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FBsignal.stem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FBsignal.stem" title="Permalink to this definition">¶</a></dt>
 <dd><p>stem plot</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>color</strong> : string</td>
-</tr>
-</tbody>
-</table>
+<p>color : string</p>
 </dd></dl>
 
 </dd></dl>
@@ -411,12 +321,13 @@ plotdB   : plot modulus in dB</p>
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="pylayers.signal.bsignal.FHsignal.html" class="btn btn-neutral float-right" title="FHsignal" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="pylayers.signal.bsignal.FHsignal.html" class="btn btn-neutral float-right" title="FHsignal" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>
@@ -427,11 +338,11 @@ plotdB   : plot modulus in dB</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -450,9 +361,11 @@ plotdB   : plot modulus in dB</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -467,14 +380,13 @@ plotdB   : plot modulus in dB</p>
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

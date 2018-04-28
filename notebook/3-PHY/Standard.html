@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,29 +25,21 @@
   
 
   
-  
     <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../../about.html"/>
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="PyLayers" href="../../index.html"/> 
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -60,7 +54,7 @@
 
           
             
-            <img src="../../_static/pylayers.png" class="logo" />
+            <img src="../../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -89,7 +83,10 @@
           
             
             
-                <ul>
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -100,6 +97,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -141,7 +139,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -153,34 +151,54 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../index.html">Docs</a> &raquo;</li>
-      
-    <li>Radio standards</li>
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Radio standards</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../../_sources/notebook/3-PHY/Standard.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -188,28 +206,28 @@
             
   <div class="section" id="radio-standards">
 <h1>Radio standards<a class="headerlink" href="#radio-standards" title="Permalink to this headline">¶</a></h1>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>import pylayers.signal.standard as std
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>import pylayers.signal.standard as std
 </pre></div>
 </div>
-<p>Parameters of different standards are stored in <code class="docutils literal"><span class="pre">wstd.json</span></code> file. The
-class which handles wireless standards is <code class="docutils literal"><span class="pre">standard</span></code></p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>ws1 = std.Wstandard(&#39;ieee80211b&#39;)
+<p>Parameters of different standards are stored in <code class="docutils literal notranslate"><span class="pre">wstd.json</span></code> file. The
+class which handles wireless standards is <code class="docutils literal notranslate"><span class="pre">standard</span></code></p>
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>ws1 = std.Wstandard(&#39;ieee80211b&#39;)
 </pre></div>
 </div>
 <p>To list the available standard :</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>ws1.ls()
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>ws1.ls()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>ieee80211g ,  ieee80211b ,  ieee80211a ,  generic ,  bluetooth-class3 ,  bluetooth-class2 ,  bluetooth-class1 ,  ieee80211ah ,  ieee802154 ,  ieee802154b ,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ieee80211g ,  ieee80211b ,  ieee80211a ,  generic ,  bluetooth-class3 ,  bluetooth-class2 ,  bluetooth-class1 ,  ieee80211ah ,  ieee802154 ,  ieee802154b ,
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>wifi= ws1.load(&#39;ieee80211b&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>wifi= ws1.load(&#39;ieee80211b&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>ws1
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>ws1
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>ieee80211b
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ieee80211b
 -------------------------
 1 :  2.412 : [2.401,2.423]
 2 :  2.417 : [2.406,2.428]
@@ -226,16 +244,16 @@ class which handles wireless standards is <code class="docutils literal"><span c
 13 :  2.472 : [2.461,2.483]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>AP1 = std.AP()
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>AP1 = std.AP()
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>ws2 = std.Wstandard(&#39;ieee80211g&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>ws2 = std.Wstandard(&#39;ieee80211g&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>ws2
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>ws2
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>ieee80211g
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ieee80211g
 -------------------------
 1 :  2.412 : [2.401,2.423]
 2 :  2.417 : [2.406,2.428]
@@ -252,16 +270,16 @@ class which handles wireless standards is <code class="docutils literal"><span c
 13 :  2.472 : [2.461,2.483]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>ws3 = std.Wstandard(&#39;ieee80211a&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>ws3 = std.Wstandard(&#39;ieee80211a&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>ws3 = std.Wstandard(&#39;bluetooth-class3&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>ws3 = std.Wstandard(&#39;bluetooth-class3&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>ws3
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>ws3
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>bluetooth-class3
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>bluetooth-class3
 -------------------------
 1 :  2.402 : [2.4015,2.4025]
 2 :  2.403 : [2.4025,2.4035]
@@ -352,6 +370,7 @@ class which handles wireless standards is <code class="docutils literal"><span c
 
 
            </div>
+           
           </div>
           <footer>
   
@@ -361,11 +380,11 @@ class which handles wireless standards is <code class="docutils literal"><span c
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -384,9 +403,11 @@ class which handles wireless standards is <code class="docutils literal"><span c
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -401,14 +422,13 @@ class which handles wireless standards is <code class="docutils literal"><span c
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

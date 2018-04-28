@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,32 +25,23 @@
   
 
   
-  
     <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../../about.html"/>
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="PyLayers" href="../../index.html"/>
-        <link rel="up" title="1   Overview" href="../TOC.html"/>
-        <link rel="next" title="Modelisation of the Thermal Noise" href="Noise.html"/>
-        <link rel="prev" title="TC1 METIS Scenario" href="../2-AP/MetisRayTracing60GHzforTC1.html"/> 
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Modelisation of the Thermal Noise" href="Noise.html" />
+    <link rel="prev" title="TC1 METIS Scenario" href="../2-AP/MetisRayTracing60GHzforTC1.html" /> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -63,7 +56,7 @@
 
           
             
-            <img src="../../_static/pylayers.png" class="logo" />
+            <img src="../../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -92,7 +85,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">User Manual</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html#basic-usage">2&nbsp;&nbsp;&nbsp;Basic Usage</a></li>
@@ -106,7 +102,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html#localization-algorithms">10&nbsp;&nbsp;&nbsp;Localization Algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html#measurements-tools">11&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../TOC.html#pylayers-tools">12&nbsp;&nbsp;&nbsp;PyLayers Tools</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Handling time and frequency domain signals : <code class="docutils literal"><span class="pre">Bsignal</span></code> Class</a><ul>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Handling time and frequency domain signals : <code class="docutils literal notranslate"><span class="pre">Bsignal</span></code> Class</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#fhsignal-in-cir-mode">FHsignal in CIR mode</a></li>
 </ul>
 </li>
@@ -124,6 +120,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -165,7 +162,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -177,213 +174,233 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../index.html">User Manual</a> &raquo;</li>
-      
+        
           <li><a href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
-      
-    <li>Handling time and frequency domain signals : <code class="docutils literal"><span class="pre">Bsignal</span></code> Class</li>
+        
+      <li>Handling time and frequency domain signals : <code class="docutils literal notranslate"><span class="pre">Bsignal</span></code> Class</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../../_sources/notebook/3-PHY/Bsignal.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="code highlight-none"><div class="highlight"><pre><span></span>!date
+  <div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>!date
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>mardi 7 novembre 2017, 21:49:58 (UTC+0100)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mardi 7 novembre 2017, 21:49:58 (UTC+0100)
 </pre></div>
 </div>
 <div class="section" id="handling-time-and-frequency-domain-signals-bsignal-class">
-<h1>Handling time and frequency domain signals : <code class="docutils literal"><span class="pre">Bsignal</span></code> Class<a class="headerlink" href="#handling-time-and-frequency-domain-signals-bsignal-class" title="Permalink to this headline">¶</a></h1>
+<h1>Handling time and frequency domain signals : <code class="docutils literal notranslate"><span class="pre">Bsignal</span></code> Class<a class="headerlink" href="#handling-time-and-frequency-domain-signals-bsignal-class" title="Permalink to this headline">¶</a></h1>
 <p>This section presents some features of the classes implemented in the
-<code class="docutils literal"><span class="pre">`pylayers.signal.bsignal.py</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.signal.bsignal.html">http://pylayers.github.io/pylayers/modules/pylayers.signal.bsignal.html</a>&gt;`__
+<code class="docutils literal notranslate"><span class="pre">`pylayers.signal.bsignal.py</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.signal.bsignal.html">http://pylayers.github.io/pylayers/modules/pylayers.signal.bsignal.html</a>&gt;`__
 module.</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>%matplotlib inline
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>%matplotlib inline
 </pre></div>
 </div>
-<p>The <code class="docutils literal"><span class="pre">Bsignal</span></code> class is a container for a signal with an indexation
+<p>The <code class="docutils literal notranslate"><span class="pre">Bsignal</span></code> class is a container for a signal with an indexation
 range which can be either in time domain or frequency domain.</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>from pylayers.signal.bsignal import *
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>from pylayers.signal.bsignal import *
 from matplotlib.pyplot import *
 </pre></div>
 </div>
 <p>As a first example, let construct an impulse signal normalized in
 energy. To do so there exist a specialized function :
-<code class="docutils literal"><span class="pre">`EnImpulse</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/generated/pylayers.signal.bsignal.EnImpulse.demo.html">http://pylayers.github.io/pylayers/modules/generated/pylayers.signal.bsignal.EnImpulse.demo.html</a>&gt;`__</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>E=TUsignal()
+<code class="docutils literal notranslate"><span class="pre">`EnImpulse</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/generated/pylayers.signal.bsignal.EnImpulse.demo.html">http://pylayers.github.io/pylayers/modules/generated/pylayers.signal.bsignal.EnImpulse.demo.html</a>&gt;`__</p>
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>E=TUsignal()
 E.EnImpulse(feGHz=40)
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>E.plot(typ=&#39;v&#39;)
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>E.plot(typ=&#39;v&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fdf420b63d0&gt;,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fdf420b63d0&gt;,
  array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7fdf2eba5290&gt;]], dtype=object))
 </pre></div>
 </div>
 <img alt="../../_images/Bsignal_7_1.png" src="../../_images/Bsignal_7_1.png" />
-<div class="code highlight-none"><div class="highlight"><pre><span></span>E.energy()
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>E.energy()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>array([ 1.00000008])
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>array([ 1.00000008])
 </pre></div>
 </div>
 <p>The Fourier transform of this signal exhibits the Hermitian Symmetry.</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>F = E.fft()
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>F = E.fft()
 F.plot(typ=&#39;m&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fdf2b3da1d0&gt;,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fdf2b3da1d0&gt;,
  array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7fdf2b4434d0&gt;]], dtype=object))
 </pre></div>
 </div>
 <img alt="../../_images/Bsignal_10_1.png" src="../../_images/Bsignal_10_1.png" />
-<p>We then extract the non redundant part of the signal with the <code class="docutils literal"><span class="pre">ft</span></code>
+<p>We then extract the non redundant part of the signal with the <code class="docutils literal notranslate"><span class="pre">ft</span></code>
 method</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>G=E.ft()
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>G=E.ft()
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>GH=G.symHz(100,scale=&#39;extract&#39;)
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>GH=G.symHz(100,scale=&#39;extract&#39;)
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>print GH.y[0,1]
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>print GH.y[0,1]
 print GH.y[0,-1]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(-0.0014441784194-4.88037298122e-05j)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(-0.0014441784194-4.88037298122e-05j)
 (-0.0014441784194+4.88037298122e-05j)
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>ip = F.ifft()
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>ip = F.ifft()
 ip2= GH.ifft()
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>f,a=E.plot(typ=&#39;v&#39;,labels=[&#39;original&#39;])
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f,a=E.plot(typ=&#39;v&#39;,labels=[&#39;original&#39;])
 f,a=ip.plot(typ=&#39;v&#39;,fig=f,ax=a[0][0],labels=[&#39;no zero padding&#39;])
 f,a=ip2.plot(typ=&#39;v&#39;,fig=f,ax=a[0][0],labels=[&#39;zero padding&#39;])
 title(&#39;extract mode&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7fdf2b243890&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7fdf2b243890&gt;
 </pre></div>
 </div>
 <img alt="../../_images/Bsignal_16_1.png" src="../../_images/Bsignal_16_1.png" />
-<div class="code highlight-none"><div class="highlight"><pre><span></span>ip.energy()
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>ip.energy()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>array([ 1.00000008])
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>array([ 1.00000008])
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>ip2.energy()
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>ip2.energy()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>array([ 3.18478273])
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>array([ 3.18478273])
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>Y=E.esd()
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>Y=E.esd()
 </pre></div>
 </div>
 <div class="section" id="fhsignal-in-cir-mode">
 <h2>FHsignal in CIR mode<a class="headerlink" href="#fhsignal-in-cir-mode" title="Permalink to this headline">¶</a></h2>
 <p>We create a Fusignal which corresponds to the signal</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[X_u(f) = \alpha e^{-2j\pi f \tau}\]</div>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[f\in [f_{min},f_{max}]\]</div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>fGHz = np.arange(2,10,0.01)
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>fGHz = np.arange(2,10,0.01)
 tau = 20
 y = 2*np.ones(len(fGHz))*np.exp(-2*1j*np.pi*fGHz*tau)
 Hu = FUsignal(fGHz,y)
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>Hu.plot(typ=&#39;m&#39;)
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>Hu.plot(typ=&#39;m&#39;)
 Hu.plot(typ=&#39;r&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fdf2b2cf3d0&gt;,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fdf2b2cf3d0&gt;,
  array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7fdf2b15fb10&gt;]], dtype=object))
 </pre></div>
 </div>
 <img alt="../../_images/Bsignal_22_1.png" src="../../_images/Bsignal_22_1.png" />
 <img alt="../../_images/Bsignal_22_2.png" src="../../_images/Bsignal_22_2.png" />
-<div class="code highlight-none"><div class="highlight"><pre><span></span>hu = Hu.ifft()
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>hu = Hu.ifft()
 </pre></div>
 </div>
 <p>The inverse Fourier transform allows to recover perfectly the amplitude
-<span class="math">\(\alpha\)</span> and the delay <span class="math">\(\tau\)</span> of the channel</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>hu.plot(typ=&#39;m&#39;)
+<span class="math notranslate nohighlight">\(\alpha\)</span> and the delay <span class="math notranslate nohighlight">\(\tau\)</span> of the channel</p>
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>hu.plot(typ=&#39;m&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fdf2b344c10&gt;,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fdf2b344c10&gt;,
  array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7fdf2b039490&gt;]], dtype=object))
 </pre></div>
 </div>
 <img alt="../../_images/Bsignal_25_1.png" src="../../_images/Bsignal_25_1.png" />
-<div class="code highlight-none"><div class="highlight"><pre><span></span>real=np.imag(hu.y)
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>real=np.imag(hu.y)
 u = np.where(hu.y==max(hu.y))[0]
 tau = hu.x[u]
 alpha = abs(hu.y[u])
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>H = Hu.symHz(100,scale=&#39;cir&#39;)
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>H = Hu.symHz(100,scale=&#39;cir&#39;)
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>H.plot(typ=&#39;m&#39;)
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>H.plot(typ=&#39;m&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fdf2b01b1d0&gt;,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fdf2b01b1d0&gt;,
  array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7fdf2af74810&gt;]], dtype=object))
 </pre></div>
 </div>
 <img alt="../../_images/Bsignal_28_1.png" src="../../_images/Bsignal_28_1.png" />
-<div class="code highlight-none"><div class="highlight"><pre><span></span>h = H.ifft()
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>h = H.ifft()
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>h.plot(typ=&#39;v&#39;)
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>h.plot(typ=&#39;v&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fdf2aec3990&gt;,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fdf2aec3990&gt;,
  array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7fdf2af3b310&gt;]], dtype=object))
 </pre></div>
 </div>
 <img alt="../../_images/Bsignal_30_1.png" src="../../_images/Bsignal_30_1.png" />
-<div class="code highlight-none"><div class="highlight"><pre><span></span>real=np.imag(h.y)
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>real=np.imag(h.y)
 u = np.where(h.y==max(h.y))[0]
 tau = h.x[u]
 alpha = abs(h.y[u])
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>fft.ifft(H.y)
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>fft.ifft(H.y)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>array([[ -1.50593859e-15 -6.41964563e-20j,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>array([[ -1.50593859e-15 -6.41964563e-20j,
           1.22745263e-04 -1.36427337e-19j,
           8.94216494e-05 -1.03247967e-19j, ...,
           1.05839739e-05 +7.80645228e-20j,
@@ -391,25 +408,25 @@ alpha = abs(h.y[u])
           8.17123442e-05 +3.02799103e-19j]])
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>print H.y[...,203]
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>print H.y[...,203]
 print H.y[...,-203]
 len(H.y)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[-0.10108118-0.07343977j]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[-0.10108118-0.07343977j]
 [-0.10108118+0.07343977j]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>1
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>1
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>Y=h.fft()
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>Y=h.fft()
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>Y.plot(typ=&#39;m&#39;)
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>Y.plot(typ=&#39;m&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fdf2ae642d0&gt;,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fdf2ae642d0&gt;,
  array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7fdf2ae6b390&gt;]], dtype=object))
 </pre></div>
 </div>
@@ -419,15 +436,16 @@ len(H.y)
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="Noise.html" class="btn btn-neutral float-right" title="Modelisation of the Thermal Noise" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="Noise.html" class="btn btn-neutral float-right" title="Modelisation of the Thermal Noise" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../2-AP/MetisRayTracing60GHzforTC1.html" class="btn btn-neutral" title="TC1 METIS Scenario" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../2-AP/MetisRayTracing60GHzforTC1.html" class="btn btn-neutral" title="TC1 METIS Scenario" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -437,11 +455,11 @@ len(H.y)
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -460,9 +478,11 @@ len(H.y)
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -477,14 +497,13 @@ len(H.y)
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

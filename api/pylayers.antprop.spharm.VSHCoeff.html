@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,23 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="VectorCoeff" href="pylayers.antprop.spharm.VectorCoeff.html" />
+    <link rel="prev" title="VCoeff" href="pylayers.antprop.spharm.VCoeff.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +56,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +85,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +99,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -116,9 +115,7 @@
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.spharm.SCoeff.html">SCoeff</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.spharm.SSHCoeff.html">SSHCoeff</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.spharm.VCoeff.html">VCoeff</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">VSHCoeff</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">VSHCoeff</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.spharm.VectorCoeff.html">VectorCoeff</a></li>
 </ul>
 </li>
@@ -156,7 +153,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -168,36 +165,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>VSHCoeff</li>
+        
+      <li>VSHCoeff</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.antprop.spharm.VSHCoeff.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -208,74 +225,8 @@
 <dl class="class">
 <dt id="pylayers.antprop.spharm.VSHCoeff">
 <em class="property">class </em><code class="descclassname">pylayers.antprop.spharm.</code><code class="descname">VSHCoeff</code><span class="sig-paren">(</span><em>Br</em>, <em>Bi</em>, <em>Cr</em>, <em>Ci</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#VSHCoeff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.VSHCoeff" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Vector Spherical Harmonics Coefficients class</p>
-<p class="rubric">Notes</p>
-<p>Br = VCoeff(br)
-Bi = VCoeff(bi)
-Cr = VCoeff(cr)
-Ci = VCoeff(ci)</p>
-<p>C  = VSHCoeff(Br,Bi,Cr,Ci)</p>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="23%" />
-<col width="77%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>Bi</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-even"><td>Br</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-odd"><td>Ci</td>
-<td>&#160;</td>
-</tr>
-<tr class="row-even"><td>Cr</td>
-<td>&#160;</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.drag3" title="pylayers.antprop.spharm.VSHCoeff.drag3"><code class="xref py py-obj docutils literal"><span class="pre">drag3</span></code></a>(Emin)</td>
-<td>thresholded coefficient conversion</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.energy" title="pylayers.antprop.spharm.VSHCoeff.energy"><code class="xref py py-obj docutils literal"><span class="pre">energy</span></code></a>([typ])</td>
-<td>returns aggregated energy over all coefficients</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.plot" title="pylayers.antprop.spharm.VSHCoeff.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>([typ,&nbsp;titre,&nbsp;log,&nbsp;stem,&nbsp;subp])</td>
-<td>plot coeff</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.put3" title="pylayers.antprop.spharm.VSHCoeff.put3"><code class="xref py py-obj docutils literal"><span class="pre">put3</span></code></a>(i,&nbsp;i3)</td>
-<td>put 3</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.s1tos2" title="pylayers.antprop.spharm.VSHCoeff.s1tos2"><code class="xref py py-obj docutils literal"><span class="pre">s1tos2</span></code></a>([L2])</td>
-<td>convert shape 1 to shape 2</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.s2tos3" title="pylayers.antprop.spharm.VSHCoeff.s2tos3"><code class="xref py py-obj docutils literal"><span class="pre">s2tos3</span></code></a>([threshold])</td>
-<td>convert vector spherical coefficients from shape 2 to shape 3</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.s2tos3_new" title="pylayers.antprop.spharm.VSHCoeff.s2tos3_new"><code class="xref py py-obj docutils literal"><span class="pre">s2tos3_new</span></code></a>(k)</td>
-<td>convert vector spherical coefficient from shape 2 to shape 3</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.s3tos2" title="pylayers.antprop.spharm.VSHCoeff.s3tos2"><code class="xref py py-obj docutils literal"><span class="pre">s3tos2</span></code></a>()</td>
-<td>shape 3 to shape 2</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.show" title="pylayers.antprop.spharm.VSHCoeff.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>([typ,&nbsp;k,&nbsp;N,&nbsp;M,&nbsp;kmax,&nbsp;seuildb,&nbsp;animate,&nbsp;…])</td>
-<td>show VSH coeff</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.strip3" title="pylayers.antprop.spharm.VSHCoeff.strip3"><code class="xref py py-obj docutils literal"><span class="pre">strip3</span></code></a>()</td>
-<td>Thresholded coefficient conversion</td>
-</tr>
-</tbody>
-</table>
 <p class="rubric">Methods Summary</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -283,34 +234,34 @@ Ci = VCoeff(ci)</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.drag3" title="pylayers.antprop.spharm.VSHCoeff.drag3"><code class="xref py py-obj docutils literal"><span class="pre">drag3</span></code></a>(Emin)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.drag3" title="pylayers.antprop.spharm.VSHCoeff.drag3"><code class="xref py py-obj docutils literal notranslate"><span class="pre">drag3</span></code></a>(Emin)</td>
 <td>thresholded coefficient conversion</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.energy" title="pylayers.antprop.spharm.VSHCoeff.energy"><code class="xref py py-obj docutils literal"><span class="pre">energy</span></code></a>([typ])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.energy" title="pylayers.antprop.spharm.VSHCoeff.energy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">energy</span></code></a>([typ])</td>
 <td>returns aggregated energy over all coefficients</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.plot" title="pylayers.antprop.spharm.VSHCoeff.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>([typ,&nbsp;titre,&nbsp;log,&nbsp;stem,&nbsp;subp])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.plot" title="pylayers.antprop.spharm.VSHCoeff.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>([typ,&nbsp;titre,&nbsp;log,&nbsp;stem,&nbsp;subp])</td>
 <td>plot coeff</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.put3" title="pylayers.antprop.spharm.VSHCoeff.put3"><code class="xref py py-obj docutils literal"><span class="pre">put3</span></code></a>(i,&nbsp;i3)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.put3" title="pylayers.antprop.spharm.VSHCoeff.put3"><code class="xref py py-obj docutils literal notranslate"><span class="pre">put3</span></code></a>(i,&nbsp;i3)</td>
 <td>put 3</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.s1tos2" title="pylayers.antprop.spharm.VSHCoeff.s1tos2"><code class="xref py py-obj docutils literal"><span class="pre">s1tos2</span></code></a>([L2])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.s1tos2" title="pylayers.antprop.spharm.VSHCoeff.s1tos2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">s1tos2</span></code></a>([L2])</td>
 <td>convert shape 1 to shape 2</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.s2tos3" title="pylayers.antprop.spharm.VSHCoeff.s2tos3"><code class="xref py py-obj docutils literal"><span class="pre">s2tos3</span></code></a>([threshold])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.s2tos3" title="pylayers.antprop.spharm.VSHCoeff.s2tos3"><code class="xref py py-obj docutils literal notranslate"><span class="pre">s2tos3</span></code></a>([threshold])</td>
 <td>convert vector spherical coefficients from shape 2 to shape 3</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.s2tos3_new" title="pylayers.antprop.spharm.VSHCoeff.s2tos3_new"><code class="xref py py-obj docutils literal"><span class="pre">s2tos3_new</span></code></a>(k)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.s2tos3_new" title="pylayers.antprop.spharm.VSHCoeff.s2tos3_new"><code class="xref py py-obj docutils literal notranslate"><span class="pre">s2tos3_new</span></code></a>(k)</td>
 <td>convert vector spherical coefficient from shape 2 to shape 3</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.s3tos2" title="pylayers.antprop.spharm.VSHCoeff.s3tos2"><code class="xref py py-obj docutils literal"><span class="pre">s3tos2</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.s3tos2" title="pylayers.antprop.spharm.VSHCoeff.s3tos2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">s3tos2</span></code></a>()</td>
 <td>shape 3 to shape 2</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.show" title="pylayers.antprop.spharm.VSHCoeff.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>([typ,&nbsp;k,&nbsp;N,&nbsp;M,&nbsp;kmax,&nbsp;seuildb,&nbsp;animate,&nbsp;…])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.show" title="pylayers.antprop.spharm.VSHCoeff.show"><code class="xref py py-obj docutils literal notranslate"><span class="pre">show</span></code></a>([typ,&nbsp;k,&nbsp;N,&nbsp;M,&nbsp;kmax,&nbsp;seuildb,&nbsp;animate,&nbsp;…])</td>
 <td>show VSH coeff</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.strip3" title="pylayers.antprop.spharm.VSHCoeff.strip3"><code class="xref py py-obj docutils literal"><span class="pre">strip3</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.strip3" title="pylayers.antprop.spharm.VSHCoeff.strip3"><code class="xref py py-obj docutils literal notranslate"><span class="pre">strip3</span></code></a>()</td>
 <td>Thresholded coefficient conversion</td>
 </tr>
 </tbody>
@@ -320,75 +271,42 @@ Ci = VCoeff(ci)</p>
 <dt id="pylayers.antprop.spharm.VSHCoeff.drag3">
 <code class="descname">drag3</code><span class="sig-paren">(</span><em>Emin</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#VSHCoeff.drag3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.VSHCoeff.drag3" title="Permalink to this definition">¶</a></dt>
 <dd><p>thresholded coefficient conversion</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>Emin</strong> : Minimum energy</td>
-</tr>
-</tbody>
-</table>
+<p>Emin : Minimum energy</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.spharm.VSHCoeff.energy">
 <code class="descname">energy</code><span class="sig-paren">(</span><em>typ='s1'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#VSHCoeff.energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.VSHCoeff.energy" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns aggregated energy over all coefficients</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : string</p>
-<blockquote>
-<div><p>{‘s1’|’s2’|’s3’}</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>E</strong> : np.array in the same shape as typ</p>
-<blockquote class="last">
-<div><p>s1 : (f,l,m)
+<dl class="docutils">
+<dt>typ <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>{‘s1’|’s2’|’s3’}</dd>
+</dl>
+<dl class="docutils">
+<dt>E <span class="classifier-delimiter">:</span> <span class="classifier">np.array in the same shape as typ</span></dt>
+<dd>s1 : (f,l,m)
 s2 : (f,l*m)
-s3 : (f,ncoeff&lt;lm)</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+s3 : (f,ncoeff&lt;lm)</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.spharm.VSHCoeff.plot">
 <code class="descname">plot</code><span class="sig-paren">(</span><em>typ='s3'</em>, <em>titre='titre'</em>, <em>log=False</em>, <em>stem=True</em>, <em>subp=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#VSHCoeff.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.VSHCoeff.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot coeff</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong></p>
-<p><strong>titre</strong></p>
-<p><strong>log</strong></p>
-<p><strong>stem</strong></p>
-<p class="last"><strong>subp</strong></p>
-</td>
-</tr>
-</tbody>
-</table>
+<p>typ
+titre
+log
+stem
+subp</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.spharm.VSHCoeff.put3">
 <code class="descname">put3</code><span class="sig-paren">(</span><em>i</em>, <em>i3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#VSHCoeff.put3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.VSHCoeff.put3" title="Permalink to this definition">¶</a></dt>
 <dd><p>put 3</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>i</strong> : int</p>
-<p class="last"><strong>i3</strong> : int</p>
-</td>
-</tr>
-</tbody>
-</table>
+<p>i : int
+i3 : int</p>
 </dd></dl>
 
 <dl class="method">
@@ -397,51 +315,28 @@ s3 : (f,ncoeff&lt;lm)</p>
 <dd><p>convert shape 1 to shape 2</p>
 <p>shape 1   array [ Nf x (L+1) x (M+1) ]
 shape 2   array [ Nf x (L+1)*(M+1)   ]</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L2</strong> : max level</p>
-<blockquote class="last">
-<div><p>default (-1 means all values)</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>L2 <span class="classifier-delimiter">:</span> <span class="classifier">max level</span></dt>
+<dd>default (-1 means all values)</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.spharm.VSHCoeff.s2tos3">
 <code class="descname">s2tos3</code><span class="sig-paren">(</span><em>threshold=-1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#VSHCoeff.s2tos3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.VSHCoeff.s2tos3" title="Permalink to this definition">¶</a></dt>
 <dd><p>convert vector spherical coefficients from shape 2 to shape 3</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>threshold</strong> : float</p>
-<blockquote>
-<div><p>default 1e-20</p>
-</div></blockquote>
-<p class="last"><strong>Energy thresholded coefficients</strong></p>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>threshold <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>default 1e-20</dd>
+</dl>
+<p>Energy thresholded coefficients</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.spharm.VSHCoeff.s2tos3_new">
 <code class="descname">s2tos3_new</code><span class="sig-paren">(</span><em>k</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#VSHCoeff.s2tos3_new"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.VSHCoeff.s2tos3_new" title="Permalink to this definition">¶</a></dt>
 <dd><p>convert vector spherical coefficient from shape 2 to shape 3</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>k</strong> : number of coeff</td>
-</tr>
-</tbody>
-</table>
+<p>k : number of coeff</p>
 </dd></dl>
 
 <dl class="method">
@@ -452,35 +347,24 @@ shape 2   array [ Nf x (L+1)*(M+1)   ]</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.spharm.VSHCoeff.show">
-<code class="descname">show</code><span class="sig-paren">(</span><em>typ='s1'</em>, <em>k=1</em>, <em>N=-1</em>, <em>M=-1</em>, <em>kmax=1000</em>, <em>seuildb=50</em>, <em>animate=False</em>, <em>titre=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#VSHCoeff.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.VSHCoeff.show" title="Permalink to this definition">¶</a></dt>
+<code class="descname">show</code><span class="sig-paren">(</span><em>typ='s1'</em>, <em>k=1</em>, <em>N=-1</em>, <em>M=-1</em>, <em>kmax=1000</em>, <em>seuildb=50</em>, <em>animate=False</em>, <em>title=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#VSHCoeff.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.VSHCoeff.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>show VSH coeff</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : str</p>
+<dl class="docutils">
+<dt>typ <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd>{‘s1’,’s2’,’s3’}</dd>
+<dt>k <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>frequency index</dd>
+</dl>
+<p>N  : int
+M  : int
+kmax : int</p>
 <blockquote>
-<div><p>{‘s1’,’s2’,’s3’}</p>
-</div></blockquote>
-<p><strong>k</strong> : int</p>
+<div>maximum of the unfolded coefficient axes</div></blockquote>
+<p>seuildB  : float
+animate : boolean</p>
 <blockquote>
-<div><p>frequency index</p>
-</div></blockquote>
-<p><strong>kmax</strong> : int</p>
-<blockquote>
-<div><p>maximum of the unfolded coefficient axes</p>
-</div></blockquote>
-<p><strong>N</strong> : int</p>
-<p><strong>M</strong> : int</p>
-<p><strong>seuildB</strong> : float</p>
-<p><strong>animate</strong> : boolean</p>
-<blockquote class="last">
-<div><p>default False</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<div>default False</div></blockquote>
+<p>title : string</p>
 </dd></dl>
 
 <dl class="method">
@@ -488,16 +372,8 @@ shape 2   array [ Nf x (L+1)*(M+1)   ]</p>
 <code class="descname">strip3</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#VSHCoeff.strip3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.VSHCoeff.strip3" title="Permalink to this definition">¶</a></dt>
 <dd><p>Thresholded coefficient conversion</p>
 <p>The s3 minimum energy coefficient is deleted</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ind</strong> : int</p>
-<p class="last"><strong>ind3</strong> : int</p>
-</td>
-</tr>
-</tbody>
-</table>
+<p>ind : int
+ind3 : int</p>
 </dd></dl>
 
 </dd></dl>
@@ -506,8 +382,18 @@ shape 2   array [ Nf x (L+1)*(M+1)   ]</p>
 
 
            </div>
+           
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pylayers.antprop.spharm.VectorCoeff.html" class="btn btn-neutral float-right" title="VectorCoeff" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pylayers.antprop.spharm.VCoeff.html" class="btn btn-neutral" title="VCoeff" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -515,11 +401,11 @@ shape 2   array [ Nf x (L+1)*(M+1)   ]</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -538,9 +424,11 @@ shape 2   array [ Nf x (L+1)*(M+1)   ]</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -555,14 +443,13 @@ shape 2   array [ Nf x (L+1)*(M+1)   ]</p>
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

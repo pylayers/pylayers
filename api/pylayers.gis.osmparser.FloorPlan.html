@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,23 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Nodes" href="pylayers.gis.osmparser.Nodes.html" />
+    <link rel="prev" title="Coords" href="pylayers.gis.osmparser.Coords.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +56,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +85,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +99,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -110,9 +109,7 @@
 <li class="toctree-l2"><a class="reference internal" href="references.html#id7">5.1&nbsp;&nbsp;&nbsp;Functions</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="references.html#id8">5.2&nbsp;&nbsp;&nbsp;Classes</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="pylayers.gis.osmparser.Coords.html">Coords</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">FloorPlan</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">FloorPlan</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.gis.osmparser.Nodes.html">Nodes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.gis.osmparser.Relations.html">Relations</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.gis.osmparser.Way.html">Way</a></li>
@@ -157,7 +154,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -169,36 +166,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>FloorPlan</li>
+        
+      <li>FloorPlan</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.gis.osmparser.FloorPlan.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -209,35 +226,10 @@
 <dl class="class">
 <dt id="pylayers.gis.osmparser.FloorPlan">
 <em class="property">class </em><code class="descclassname">pylayers.gis.osmparser.</code><code class="descname">FloorPlan</code><span class="sig-paren">(</span><em>rootid</em>, <em>coords</em>, <em>nodes</em>, <em>ways</em>, <em>relations</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#FloorPlan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.FloorPlan" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">networkx.classes.digraph.DiGraph</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">networkx.classes.digraph.DiGraph</span></code></p>
 <p>FloorPlan class derived from nx.DigGraph</p>
-<p class="rubric">Attributes</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">name</span></code></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.osmparser.FloorPlan.build" title="pylayers.gis.osmparser.FloorPlan.build"><code class="xref py py-obj docutils literal"><span class="pre">build</span></code></a>(typ,&nbsp;eid)</td>
-<td>Notes : recursive construction</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.osmparser.FloorPlan.show" title="pylayers.gis.osmparser.FloorPlan.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>([nid,&nbsp;fig,&nbsp;ax])</td>
-<td>show the floorplan</td>
-</tr>
-</tbody>
-</table>
+<p>build : recursive construction of floor plan 
+show : show the floor plan</p>
 <p class="rubric">Methods Summary</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -245,10 +237,10 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.osmparser.FloorPlan.build" title="pylayers.gis.osmparser.FloorPlan.build"><code class="xref py py-obj docutils literal"><span class="pre">build</span></code></a>(typ,&nbsp;eid)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.osmparser.FloorPlan.build" title="pylayers.gis.osmparser.FloorPlan.build"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build</span></code></a>(typ,&nbsp;eid)</td>
 <td>Notes : recursive construction</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.osmparser.FloorPlan.show" title="pylayers.gis.osmparser.FloorPlan.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>([nid,&nbsp;fig,&nbsp;ax])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.osmparser.FloorPlan.show" title="pylayers.gis.osmparser.FloorPlan.show"><code class="xref py py-obj docutils literal notranslate"><span class="pre">show</span></code></a>([nid,&nbsp;fig,&nbsp;ax])</td>
 <td>show the floorplan</td>
 </tr>
 </tbody>
@@ -258,35 +250,19 @@
 <dt id="pylayers.gis.osmparser.FloorPlan.build">
 <code class="descname">build</code><span class="sig-paren">(</span><em>typ</em>, <em>eid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#FloorPlan.build"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.FloorPlan.build" title="Permalink to this definition">¶</a></dt>
 <dd><p>Notes : recursive construction</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : string</p>
-<blockquote class="last">
-<div><p>‘relation’ | ‘way’ | ‘node’</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>typ <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>‘relation’ | ‘way’ | ‘node’</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.gis.osmparser.FloorPlan.show">
 <code class="descname">show</code><span class="sig-paren">(</span><em>nid=None</em>, <em>fig=[]</em>, <em>ax=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#FloorPlan.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.FloorPlan.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>show the floorplan</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>nid</strong> : int</p>
-<p><strong>fig</strong> : plt.figure</p>
-<p class="last"><strong>ax</strong> : plt.ax</p>
-</td>
-</tr>
-</tbody>
-</table>
+<p>nid : int 
+fig : plt.figure 
+ax  : plt.ax</p>
 </dd></dl>
 
 </dd></dl>
@@ -295,8 +271,18 @@
 
 
            </div>
+           
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pylayers.gis.osmparser.Nodes.html" class="btn btn-neutral float-right" title="Nodes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pylayers.gis.osmparser.Coords.html" class="btn btn-neutral" title="Coords" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -304,11 +290,11 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -327,9 +313,11 @@
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -344,14 +332,13 @@
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,31 +25,22 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/>
-        <link rel="prev" title="R" href="pylayers.antprop.diffRT.R.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="R" href="pylayers.antprop.diffRT.R.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -62,7 +55,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -91,7 +84,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -102,6 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -155,7 +152,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -167,36 +164,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>diff</li>
+        
+      <li>diff</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.antprop.diffRT.diff.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -209,38 +226,34 @@
 <code class="descclassname">pylayers.antprop.diffRT.</code><code class="descname">diff</code><span class="sig-paren">(</span><em>fGHz</em>, <em>phi0</em>, <em>phi</em>, <em>si</em>, <em>sd</em>, <em>N</em>, <em>mat0</em>, <em>matN</em>, <em>beta=1.5707963267948966</em>, <em>mode='tab'</em>, <em>debug=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/diffRT.html#diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.diffRT.diff" title="Permalink to this definition">¶</a></dt>
 <dd><p>Luebbers Diffration coefficient
 for Ray tracing</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Nf</strong> : number of frequencies</p>
-<p><strong>Nr</strong> : number of rays</p>
-<p><strong>fGHz</strong> : np.array (Nf)</p>
-<p><strong>phi0</strong> : np.array (Nr)</p>
-<p><strong>phi</strong> : np.array (Nr)</p>
-<p><strong>si</strong> : np.array (Nr)</p>
-<p><strong>sd</strong> : np.array (Nr)</p>
-<p><strong>N: np.array (Nb)</strong></p>
-<p><strong>mat0</strong> : Mat</p>
-<p><strong>matN</strong> : Mat</p>
-<p><strong>beta</strong> : np.array (Nb)</p>
+<p>Nf : number of frequencies
+Nr : number of rays</p>
+<p>fGHz : np.array (Nf)
+phi0 : np.array (Nr)
+phi : np.array (Nr)
+si : np.array (Nr)
+sd : np.array (Nr)
+N: np.array (Nb)
+mat0 : Mat
+matN : Mat
+beta : np.array (Nb)</p>
 <blockquote>
-<div><p>skew incidence angle (rad)</p>
-</div></blockquote>
-<p><strong>mode</strong> : str ( ‘tab’,’exact’)</p>
-<blockquote class="last">
-<div><p>if ‘tab’: the Fresnel function is interpolated
+<div>skew incidence angle (rad)</div></blockquote>
+<dl class="docutils">
+<dt>mode <span class="classifier-delimiter">:</span> <span class="classifier">str ( ‘tab’,’exact’)</span></dt>
+<dd>if ‘tab’: the Fresnel function is interpolated
 ( increase speed)
 if ‘exact’: the Fresnel function is computed for each values
 ( increase accuracy)
-(see FreF)</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import numpy as np
+(see FreF)</dd>
+</dl>
+<dl class="docutils">
+<dt>Ds <span class="classifier-delimiter">:</span> <span class="classifier">numpy array</span></dt>
+<dd>Diffraction soft</dd>
+<dt>Dh <span class="classifier-delimiter">:</span> <span class="classifier">numpy array</span></dt>
+<dd>Diffraction hard</dd>
+</dl>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import numpy as np
 &gt;&gt;&gt; from pylayers.antprop.slab import *
 &gt;&gt;&gt; Nf=3
 &gt;&gt;&gt; Nr=10
@@ -265,13 +278,14 @@ if ‘exact’: the Fresnel function is computed for each values
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="pylayers.antprop.diffRT.R.html" class="btn btn-neutral" title="R" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pylayers.antprop.diffRT.R.html" class="btn btn-neutral" title="R" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -281,11 +295,11 @@ if ‘exact’: the Fresnel function is computed for each values
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -304,9 +318,11 @@ if ‘exact’: the Fresnel function is computed for each values
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -321,14 +337,13 @@ if ‘exact’: the Fresnel function is computed for each values
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

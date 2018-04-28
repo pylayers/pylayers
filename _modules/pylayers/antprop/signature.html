@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,21 @@
   
 
   
-  
     <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../../../about.html"/>
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="PyLayers" href="../../../index.html"/>
-        <link rel="up" title="Module code" href="../../index.html"/> 
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
 
   
   <script src="../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +54,7 @@
 
           
             
-            <img src="../../../_static/pylayers.png" class="logo" />
+            <img src="../../../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +83,10 @@
           
             
             
-                <ul>
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +97,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -142,7 +139,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -154,34 +151,52 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-      
-    <li>pylayers.antprop.signature</li>
+        
+      <li>pylayers.antprop.signature</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -228,20 +243,25 @@ import shapely.ops as sho
 from tqdm import tqdm
 #from numba import autojit
 
+logger = logging.getLogger(__name__)
 
 <div class="viewcode-block" id="plot_lines"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.plot_lines.html#pylayers.antprop.signature.plot_lines">[docs]</a>def plot_lines(ax, ob, color = []):
-    &quot;&quot;&quot;
+    &quot;&quot;&quot; plot lines with colors
+
     Parameters
     ----------
 
-    ax : 
-    ob : 
+    ax : matplotlib axis
+    ob : list of lines
+    color : list (optional)
+
     &quot;&quot;&quot;
 
     from descartes.patch import PolygonPatch
+
     for ii,line in enumerate(ob):
         if color == []:
-            if ii ==0 : 
+            if ii ==0 :
                 c =&#39;g&#39;
             elif ii == len(ob)-1:
                 c =&#39;r&#39;
@@ -251,21 +271,21 @@ from tqdm import tqdm
             c=color
 
         x, y = line.xy
-        
+
         ax.plot(x, y, color=c, alpha=0.7, linewidth=3, solid_capstyle=&#39;round&#39;, zorder=2)
     return ax</div>
 
 <div class="viewcode-block" id="plot_poly"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.plot_poly.html#pylayers.antprop.signature.plot_poly">[docs]</a>def plot_poly(ax, ob, color = []):
-    &quot;&quot;&quot; plot polygon 
+    &quot;&quot;&quot; plot polygon
 
     Parameters
     ----------
 
-    ax : 
-    ob : 
+    ax :
+    ob :
 
     &quot;&quot;&quot;
-    
+
     from descartes.patch import PolygonPatch
     for ii,poly in enumerate(ob):
         pp = PolygonPatch(poly,alpha=0.3)
@@ -307,7 +327,7 @@ from tqdm import tqdm
    Returns
    -------
 
-   gr : A graph 
+   gr : A graph
 
    &quot;&quot;&quot;
 
@@ -317,13 +337,14 @@ from tqdm import tqdm
         if len(n)&gt;1:
             edlist.append(n)
     gr = g.subgraph(edlist)
-    for k in gr.edge:
-        for k1 in gr.edge[k]:
-            ke = gr.edge[k][k1][&#39;output&#39;].keys()
-            va = gr.edge[k][k1][&#39;output&#39;].values()
-            keva = zip(ke,va)
-            keva_valid = [ x for x in keva if len(x[0])&gt;1]
-            gr.edge[k][k1][&#39;output&#39;]=dict(keva_valid)
+    for k in gr.edges():
+        #print(k)
+        di = gr[k[0]][k[1]]
+        ke = di[&#39;output&#39;].keys()
+        va = di[&#39;output&#39;].values()
+        keva = zip(ke,va)
+        keva_valid = [ x for x in keva if len(x[0])&gt;1]
+        gr[k[0]][k[1]][&#39;output&#39;] = dict(keva_valid)
 
     dpos = {k:g.pos[k] for k in edlist}
     gr.pos=dpos
@@ -355,7 +376,7 @@ from tqdm import tqdm
         ta = th[0]
         he = th[1]
         plu.displot(ta.reshape(2,1),he.reshape(2,1),color=&#39;k&#39;,linewidth=1)
-                      
+
 
     tahe = np.array(tahe) # Nseg x tahe x xy 
     pta = tahe[:,0,:].T  #2 x Nseg
@@ -603,7 +624,7 @@ from tqdm import tqdm
         ----------
 
         L : Layout
-        dump : int 
+        dump : int
         source : int
             cycle number
         target : int
@@ -704,8 +725,8 @@ from tqdm import tqdm
                             b1 = False
                     if b1:
                         sig = Si[2*l:2*l+2,:]
-                        sigi = self.sig2inter(L,sig)
-                        print(k,l,&#39; :&#39;,sigi)</div>
+                        sigi = self.sig2inter(L,sig)</div>
+                        #print(k,l,&#39; :&#39;,sigi)
                         # all 
 
 <div class="viewcode-block" id="Signatures.sig2inter"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.Signatures.html#pylayers.antprop.signature.Signatures.sig2inter">[docs]</a>    def sig2inter(self,L,lsi=[]):
@@ -777,16 +798,19 @@ from tqdm import tqdm
 
 <div class="viewcode-block" id="Signatures.sig2prob"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.Signatures.html#pylayers.antprop.signature.Signatures.sig2prob">[docs]</a>    def sig2prob(self,L,lsi):
         &quot;&quot;&quot; get signatures probability
-            L : Layout
-            lsi : nd.array 
-                signature (2xnb_sig,sig_length)
+
+        Parameters
+        ---------
+        L : Layout
+        lsi : nd.array 
+            signature (2xnb_sig,sig_length)
 
 
-            Returns
-            -------
+        Returns
+        -------
 
-            tlproba : list  (nb_sig,sig_length-2)
-                output proba of each triplet of interaction
+        tlproba : list  (nb_sig,sig_length-2)
+            output proba of each triplet of interaction
 
 
 
@@ -869,7 +893,7 @@ from tqdm import tqdm
 
 <div class="viewcode-block" id="Signatures.check"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.Signatures.html#pylayers.antprop.signature.Signatures.check">[docs]</a>    def check(self):
         &quot;&quot;&quot; check signature
-        
+
         Returns
         -------
 
@@ -881,7 +905,7 @@ from tqdm import tqdm
         OK = Signatures(self.L,self.target,self.source)
         KO = Signatures(self.L,self.target,self.source)
         for i in self:
-        
+
             sigs = self[i]
             for s in range(len(sigs)/2):
                 sig = sigs[2*s:2*s+2,:]
@@ -1226,12 +1250,12 @@ from tqdm import tqdm
         Parameters
         ----------
 
-        seq : list of tuple 
+        seq : list of tuple
                [(2,2),(5,3),(7,2)]
-        
-        1 : Diffraction 
+
+        1 : Diffraction
         2 : Reflexion
-        3 : Diffraction 
+        3 : Diffraction
 
         Returns
         -------
@@ -1241,16 +1265,16 @@ from tqdm import tqdm
 
         &gt;&gt;&gt; DL=DLink()
         &gt;&gt;&gt; DL.eval()
-        &gt;&gt;&gt; seq = [(2,3)] # transmission through segment 2 
+        &gt;&gt;&gt; seq = [(2,3)] # transmission through segment 2
         &gt;&gt;&gt; DL.Si.exist(seq)
 
         &quot;&quot;&quot;
-        # Number of interactions 
+        # Number of interactions
         N = len(seq)
         # signatures with N interaction
         sig = self[N]
         # Number signature with N interaction
-        Nsig = sig.shape[0]/2
+        Nsig = int(sig.shape[0]/2)
         nstr = sig[::2,:]
         typ  = sig[1::2,:]
         # List of signat
@@ -1279,17 +1303,17 @@ from tqdm import tqdm
             backtrace (allow to visit already visited nodes in simple path algorithm)
         progress : boolean
             display the time passed in the loop
-        diffraction : boolean 
-            activate diffraction 
-        threshold : float 
+        diffraction : boolean
+            activate diffraction
+        threshold : float
             for reducing calculation time
-        animations :  boolean 
-        nD : int 
-            maximum number of diffraction 
-        nR : int 
-            maximum number of reflection  
-        nT : int 
-            maximum number of transmission   
+        animations :  boolean
+        nD : int
+            maximum number of diffraction
+        nR : int
+            maximum number of reflection
+        nT : int
+            maximum number of transmission
 
 
         See Also
@@ -1298,12 +1322,12 @@ from tqdm import tqdm
         pylayers.simul.link.Dlink.eval
 
         &quot;&quot;&quot;
-        defaults = {&#39;cutoff&#39; : 2, 
-                    &#39;threshold&#39;:0.1,
-                    &#39;delay_excess_max_ns&#39;:400,
-                    &#39;nD&#39;:1,
-                    &#39;nR&#39;:10,
-                    &#39;nT&#39;:10,
+        defaults = {&#39;cutoff&#39; : 2,
+                    &#39;threshold&#39;: 0.1,
+                    &#39;delay_excess_max_ns&#39;: 400,
+                    &#39;nD&#39;: 1,
+                    &#39;nR&#39;: 10,
+                    &#39;nT&#39;: 10,
                     &#39;bt&#39; : True,
                     &#39;progress&#39;: True,
                     &#39;diffraction&#39; : True,
@@ -1312,42 +1336,44 @@ from tqdm import tqdm
         self.cpt = 0
         for k in defaults:
             if k not in kwargs:
-                kwargs[k] = defaults[k] 
-        
+                kwargs[k] = defaults[k]
+
         self.cutoff = kwargs[&#39;cutoff&#39;]
         if &#39;threshold&#39; not in kwargs:
             kwargs[&#39;threshold&#39;] = self.threshold
         else:
             self.threshold=kwargs[&#39;threshold&#39;]
-
         nD = kwargs[&#39;nD&#39;]
         nT = kwargs[&#39;nT&#39;]
         nR = kwargs[&#39;nR&#39;]
-        bt = kwargs[&#39;bt&#39;] 
-        progress = kwargs[&#39;progress&#39;] 
+        bt = kwargs[&#39;bt&#39;]
+        progress = kwargs[&#39;progress&#39;]
         diffraction = kwargs[&#39;diffraction&#39;]
-        animation = kwargs[&#39;animation&#39;] 
+        animation = kwargs[&#39;animation&#39;]
         delay_excess_max_ns = kwargs[&#39;delay_excess_max_ns&#39;]
         dist_excess_max = delay_excess_max_ns*0.3
-        
 
 
         self.filename = self.L._filename.split(&#39;.&#39;)[0] +&#39;_&#39; + str(self.source) +&#39;_&#39; + str(self.target) +&#39;_&#39; + str(self.cutoff) +&#39;.sig&#39;
+
         #
-        # AIR : editable AIR separation 
-        # _AIR : constructed AIR separation 
+        # AIR : editable AIR separation
+        # _AIR : constructed AIR separation
         #
-        lair = self.L.name[&#39;AIR&#39;]+self.L.name[&#39;_AIR&#39;]
+
+        lair = self.L.name[&#39;AIR&#39;] + self.L.name[&#39;_AIR&#39;]
 
         # list of interactions visible from source
-        lisR,lisT,lisD = self.L.intercy(self.source,typ=&#39;source&#39;)
+        lisR, lisT, lisD = self.L.intercy(self.source,typ=&#39;source&#39;)
+
         if diffraction:
             lis  = lisT + lisR + lisD
         else:
             lis  = lisT + lisR
 
         # list of interactions visible from target
-        litR,litT,litD = self.L.intercy(self.target,typ=&#39;target&#39;)
+        litR, litT, litD = self.L.intercy(self.target,typ=&#39;target&#39;)
+
         if diffraction:
            lit  = litT + litR + litD
         else:
@@ -1355,11 +1381,12 @@ from tqdm import tqdm
 
         pt_source = np.array(self.L.Gt.node[self.source][&#39;polyg&#39;].centroid.coords.xy)
         pt_target = np.array(self.L.Gt.node[self.target][&#39;polyg&#39;].centroid.coords.xy)
+
         d_source_target = np.linalg.norm(pt_source - pt_target)
-        
+
         #print(&quot;source,lis :&quot;,self.source,lis)
         #print(&quot;target,lit :&quot;,self.target,lit)
-        # for u in lit: 
+        # for u in lit:
         #     print u
         # print &quot;-------------&quot;
 
@@ -1379,7 +1406,7 @@ from tqdm import tqdm
         pe = 0
         tic = time.time()
         tic0 = tic
-        #for interaction source  in list of source interactions
+        #for interaction source in list of source interactions
 
         bvisu = False
         # signature counter
@@ -1398,42 +1425,46 @@ from tqdm import tqdm
         # pts : list of neighbour nodes from s[0]
         # tahe : segment extremities or point coordinates (repeated twice)
         lhash = []
-        
+
         if progress :
-            pbar = tqdm(total=100,desc=&#39;Signatures&#39;)
+            pbar = tqdm(total=100, desc=&#39;Signatures&#39;)
 
         for us,s in enumerate(lis):
             if progress:
                 pbar.update(100./(1.*len(lis)))
 
-            # start from a segment     
-            if s[0]&gt;0:
-                pts = self.L.Gs[s[0]].keys()
-                tahe = [np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])]
-            # start from a point 
+            # start from a segment
+            if s[0] &gt; 0:
+                pts = list(dict(self.L.Gs[s[0]]).keys())
+                tahe = [ np.array([ self.L.Gs.pos[pts[0]], self.L.Gs.pos[pts[1]]]) ]
+            # start from a point
             else:
-                tahe = [np.array([self.L.Gs.pos[s[0]],self.L.Gs.pos[s[0]]])]
+                tahe = [np.array([self.L.Gs.pos[s[0]], self.L.Gs.pos[s[0]]])]
 
             # R is a list which contains reflexion matrices (Sn) and translation matrices(vn)
-            # for interaction mirroring 
+            # for interaction mirroring
             # R=[[S0,v0],[S1,v1],...]
 
             R = [(np.eye(2),np.array([0,0]))]
-            
+
             # initialize visited list sequence with the first intercation s
 
             visited = [s]
-           
-            # if 
-            #   + s is in target interaction list 
+
+            # if
+            #   s is in target interaction list
             # or
-            #   + arrival cycle is equal to target cycle
-            # then stack a new signature in self[len(typ)] 
-            # 
+            #   arrival cycle is equal to target cycle
+            # then stack a new signature in self[len(typ)]
+            #
             # TODO : It concerns self[1] : only one interaction (i.e several single reflection or diffraction)
+            #
             if (s in lit) or (s[-1]==self.target):
-                anstr = np.array(map(lambda x: x[0],visited))
-                typ  = np.array(map(lambda x: len(x),visited))
+                #anstr = np.array(map(lambda x: x[0],visited))
+                anstr = np.array([ x[0] for x in visited ])
+                #typ  = np.array(map(lambda x: len(x),visited))
+                typ =np.array([len(x) for x in visited ])
+
                 assert(len(typ)==1)
                 try:
                     self[len(typ)] = np.vstack((self[len(typ)],anstr,typ))
@@ -1443,14 +1474,15 @@ from tqdm import tqdm
                     self.ratio[len(typ)] = np.array([1.])
                 # update signature counter
                 cptsig +=1
+
             # stack is a list of iterators
             #
             #
             stack = [iter(Gi[s])]
-            # air walls do not intervene in the number of transmission (cutoff criteria) 
+            # air walls do not intervene in the number of transmission (cutoff criteria)
             # lawp is the list of airwall position in visited sequence
             # handle the case of the first segment which can be an airwall
-            # 
+            #
             if len(s)==3:
                 nseg = s[0]
                 if ((self.L.Gs.node[nseg][&#39;name&#39;]==&#39;_AIR&#39;) or 
@@ -1469,7 +1501,7 @@ from tqdm import tqdm
                 interaction = next(iter_on_interactions, None)
                 #print visited
                 #if ((visited ==[(6236,74,91),(-213,)]) and (interaction==(-1002,))):
-                #    print interaction 
+                #    print(interaction)
                 #    pdb.set_trace()
                 #if (visited ==[(6236,74,91),(-213,),(6248,99,111)]):
                 #if (visited ==[(6236,74,91),(-213,),(6248,99,111),(6287,111,118)]):
@@ -1479,11 +1511,11 @@ from tqdm import tqdm
                 # continue if True
                 cond1 = not(interaction is None)
                 # cond2 : enable reverberation
-                #     interaction has not been visited yet 
+                #     interaction has not been visited yet
                 #     or 
-                #     bt : True (allow reentrance) (unconditionnaly)  
+                #     bt : True (allow reentrance) (unconditionnaly)
                 # continue if True
-                #cond2 = (interaction in visited) and bt (old) 
+                #cond2 = (interaction in visited) and bt (old)
                 cond2 = not (interaction in visited) or bt
                 # cond3 : test the cutoff condition not get to the limit
                 # continue if True
@@ -1493,21 +1525,21 @@ from tqdm import tqdm
                 uT = [ k for k in range(len(visited)) if len(visited[k])==3 ]
                 if cond1:
                     condD = True
-                    condR = True 
-                    condT = True 
+                    condR = True
+                    condT = True
                     if ((len(interaction)==1) and (len(uD)==nD)):
-                        condD = False 
+                        condD = False
                     if ((len(interaction)==2) and (len(uR)==nR)):
-                        condR = False 
+                        condR = False
                     if ((len(interaction)==3) and (len(uT)==nT)):
-                        condT = False 
+                        condT = False
 
                 #
-                #  animation 
+                #  animation
                 #
                 if animation :
                     cpt = cpt+1
-                    edge=zip(visited[:-1],visited[1:])
+                    edge = zip(visited[:-1],visited[1:])
                     N = nx.draw_networkx_nodes(Gi,pos=Gi.pos,
                             nodelist=visited,labels={},
                             node_size=15,ax=ax,fig=fig)
@@ -1548,9 +1580,9 @@ from tqdm import tqdm
                         #
                         #
                         #
-                        # Testing the type of interaction at rank -2 
-                        # R is a list which contains a rotation matrix 
-                        # and a translation vector for doing the mirroring 
+                        # Testing the type of interaction at rank -2
+                        # R is a list which contains a rotation matrix
+                        # and a translation vector for doing the mirroring
                         # operation
 
                         # diffraction (retrieve a point)
@@ -1558,24 +1590,24 @@ from tqdm import tqdm
                             #th = self.L.Gs.pos[nstr]
                             R.append((np.eye(2),np.array([0,0])))
                         elif len(visited[-2])==2:
-                            # 
-                            # l&#39;avant dernier point est une reflection 
                             #
-                            nseg_points = self.L.Gs[visited[-2][0]].keys()
+                            # l&#39;avant dernier point est une reflection
+                            #
+                            nseg_points = list(dict(self.L.Gs[visited[-2][0]]).keys())
                             ta_seg = np.array(self.L.Gs.pos[nseg_points[0]])
                             he_seg = np.array(self.L.Gs.pos[nseg_points[1]])
                             #
-                            # get reflection matrix from segment visited[-2]  
+                            # get reflection matrix from segment visited[-2]
                             #
                             R.append(geu.axmat(ta_seg,he_seg))
                             # direct order
                             #R.append(geu.axmat(tahe[-1][0],tahe[-1][1]))
-                        # transmission do nothing 
-                        else : 
+                        # transmission do nothing
+                        else :
                             pass
                         # current interaction is of segment type
                         if (nstr&gt;0):
-                            nseg_points = self.L.Gs[nstr].keys()
+                            nseg_points = list(dict(self.L.Gs[nstr]).keys())
                             th = np.array([self.L.Gs.pos[nseg_points[0]],
                                            self.L.Gs.pos[nseg_points[1]]])
                         else:
@@ -1587,7 +1619,7 @@ from tqdm import tqdm
                         #
                         # th   is the current segment tail-head coordinates
                         # tahe is a list of well mirrored tail-head coordinates
-                        
+
                             #tahe.append(a)
                         #if ((visited[0]==(104,23,17)) and (visited[1]==(1,17))):
                         #    print(&quot;th (avant mirror)&quot;,th)
@@ -1598,12 +1630,12 @@ from tqdm import tqdm
                         #
                         pt_th = np.sum(th,axis=0)/2.
                         d_target = np.linalg.norm(pt_target-pt_th)
-                        
+
                         #
-                        # mirroring th until the previous point  
-                        # 
+                        # mirroring th until the previous point
+                        #
                         th_mirror = copy.copy(th)
-                        while np.any(r[0]!=np.eye(2)):     
+                        while np.any(r[0]!=np.eye(2)):
                             th_mirror = np.einsum(&#39;ki,ij-&gt;kj&#39;,th_mirror,r[0])+r[1]
                             ik = ik + 1
                             r  = R[-ik]
@@ -1611,16 +1643,17 @@ from tqdm import tqdm
                         pt_mirror = np.sum(th_mirror,axis=0)/2.
                         d_source = np.linalg.norm(pt_source-pt_mirror)
                         d_excess = d_source + d_target - d_source_target
+
                         # if at least 2 interactions
-                        # or previous point is a diffraction 
+                        # or previous point is a diffraction
 
                         if (len(tahe)&lt;2) or (len(visited[-2])==1) or (len(visited[-1])==1):
                             ratio = 1.0
-                            ratio2 = 1.0 
+                            ratio2 = 1.0
                         else:
-                            # Determine the origin of the cone 
-                            # either the transmitter (ilast =0) 
-                            # or the last diffraction point (ilast=udiff[-1] ) 
+                            # Determine the origin of the cone
+                            # either the transmitter (ilast =0)
+                            # or the last diffraction point (ilast=udiff[-1] )
                             udiff = [ k for k in range(len(visited)) if len(visited[k])==1 ]
                             if udiff==[]:
                                 ilast = 0
@@ -1631,17 +1664,18 @@ from tqdm import tqdm
                             phe0 = tahe[ilast][1]   # head first segment
 
                             #
-                            # TODO : it would be better to replace pta_ and phe_ with the intersection 
+                            # TODO : it would be better to replace pta_ and phe_ with the intersection
                             # of the previous cone with tahe[-1]
                             #
+
                             pta_ = tahe[-1][0]  # tail last segment
-                            phe_ = tahe[-1][1]  # head last segment 
+                            phe_ = tahe[-1][1]  # head last segment
 
                             #
-                            # Calculates the left and right vector of the cone 
+                            # Calculates the left and right vector of the cone
                             #
-                            #  vl left vector 
-                            #  vr right vector 
+                            #  vl left vector
+                            #  vr right vector
                             #
                             #
                             # Detect situations of connected segments
@@ -1656,28 +1690,36 @@ from tqdm import tqdm
                             if (pta0==pta_).all():
                                 apex = pta0
                                 connected = True
-                                v0=phe0-apex
-                                v_=phe_-apex
+                                v0 = phe0 - apex
+                                v_ = phe_ - apex
                             elif (pta0==phe_).all():
                                 apex = pta0
                                 connected = True
-                                v0=phe0-apex
-                                v_=pta_-apex
+                                v0 = phe0 - apex
+                                v_ = pta_ - apex
                             elif (phe0==pta_).all():
                                 apex = phe0
                                 connected = True
-                                v0=pta0-apex
-                                v_=phe_-apex
+                                v0 = pta0 - apex
+                                v_ = phe_ - apex
                             elif (phe0==phe_).all():
-                                apex = phe0    
+                                apex = phe0
                                 connected = True
-                                v0=pta0-apex
-                                v_=pta_-apex
+                                v0 = pta0 - apex
+                                v_ = pta_ - apex
 
+                            if connected:
+                                if ((np.linalg.norm(v0)==0) or (np.linalg.norm(v_)==0)):
+                                    logger.debug(&quot;pta0 : %g,%g&quot;, pta0[0], pta0[1])
+                                    logger.debug(&quot;pta_ : %g,%g&quot;, pta_[0], pta_[1])
+                                    logger.debug(&quot;phe0 : %g,%g&quot;, phe0[0], phe0[1])
+                                    logger.debug(&quot;phe_ : %g,%g&quot;, phe_[0], phe_[1])
+                                    logger.debug(&quot;v0 : %g,%g&quot;, v0[0], v0[1])
+                                    logger.debug(&quot;v_ : %g,%g&quot;, v_[0], v_[1])
                             #
-                            # Does the cone is built from 2 connected segments or 
+                            # Does the cone is built from 2 connected segments or
                             # 2 unconnected segments
-                            #     
+                            #
                             if not connected:
                                 if not (geu.ccw(pta0,phe0,phe_) ^
                                         geu.ccw(phe0,phe_,pta_) ):
@@ -1687,25 +1729,25 @@ from tqdm import tqdm
                                     vr = (pta0,pta_)
                                     vl = (phe0,phe_)
 
-                                # cone dot product 
+                                # cone dot product
                                 # print vr
                                 # print vl
                                 vr_n = (vr[1]-vr[0])/np.linalg.norm(vr[1]-vr[0])
                                 vl_n = (vl[1]-vl[0])/np.linalg.norm(vl[1]-vl[0])
-                                
-                            
+
+
                                 vrdotvl = np.dot(vr_n,vl_n)
-                                # cone angle 
+                                # cone angle
                                 angle_cone = np.arccos(np.maximum(np.minimum(vrdotvl,1.0),-1.0))
                                 #angle_cone = np.arccos(vrdotvl)
                                 # prepare lines and seg argument for intersection checking
                                 if angle_cone!=0:
                                     linel = (vl[0],vl[1]-vl[0])
                                     liner = (vr[0],vr[1]-vr[0])
-                                    # from origin mirrored segment to be tested 
+                                    # from origin mirrored segment to be tested
                                     seg   = (th_mirror[0],th_mirror[1])
 
-                                    # apex calculation 
+                                    # apex calculation
                                     a0u = np.dot(pta0,vr_n)
                                     a0v = np.dot(pta0,vl_n)
                                     b0u = np.dot(phe0,vr_n)
@@ -1718,9 +1760,9 @@ from tqdm import tqdm
                                         pdb.set_trace()
                                     apex = phe0 + kb*vl_n
 
-        
 
-                            else: # cone from connected segments 
+
+                            else: # cone from connected segments
 
                                 v0n  = v0/np.linalg.norm(v0)
                                 try:
@@ -1731,31 +1773,32 @@ from tqdm import tqdm
                                 # import ipdb
                                 # ipdb.set_trace()
                                 sign = np.sign(np.cross(v_n,v0n))
-                                if sign&gt;0:    
+                                if sign&gt;0:
                                     vr_n = -v0n
                                     vl_n = v_n
                                 else:
                                     vr_n = v_n
                                     vl_n = -v0n
-                               
+
                                 vrdotvl = np.dot(vr_n,vl_n)
-                                # cone angle 
+                                # cone angle
                                 angle_cone = np.arccos(np.maximum(np.minimum(vrdotvl,1.0),-1.))
-                           
-                        
-                            #   
+
+
+                            #
                             # the illuminating cone is defined
-                            # the th_mirror to be tested with this cone are known 
-                            # 
+                            # the th_mirror to be tested with this cone are known
+                            #
+
                             if ( (not np.isclose(angle_cone,0,atol=1e-6) )
-                             and ( not np.isclose(angle_cone,np.pi)) ) : 
+                             and ( not np.isclose(angle_cone,np.pi)) ) :
                                 #if self.cpt==16176:
                                 #    pdb.set_trace()
                                 seg,ratio2 = geu.intersect_cone_seg((apex,vl_n),(apex,vr_n),(th_mirror[0],th_mirror[1]),bvis=False)
                             elif ( not np.isclose(angle_cone,0) ):
-                                ratio2 = 1           
+                                ratio2 = 1
                             else:
-                                ratio2 = 0 
+                                ratio2 = 0
                             #print ratio
                             if len(seg)==2:
                                 th_mirror=np.vstack((seg[0],seg[1]))
@@ -1766,17 +1809,17 @@ from tqdm import tqdm
                             ar = np.arctan2(vr_n[1],vr_n[0])
                             if np.allclose(th_mirror[0],apex) or np.allclose(th_mirror[1],apex):
                                 ratio2 = 1.
-                            
+
                             # On connecte l&#39;apex du cone courant aux extrémités du segment courant mirroré
-                            
+
                             # Dans certaines circonstances par example un cone emanant d&#39;un point colinéaire 
                             # avec le segment d&#39;arrivé&quot; (-4) (6,4) le point -4 est aligné avec le segment 6
                             # l&#39;ouverture du cone est nul =&gt; arret. Cela pourrait être géré dans Gi en interdisant 
                             # la visibilité (-4) (6,4) 
-                            
+
 #                            if angle_cone ==0:
 #                                ratio = 0
-#                            else:    
+#                            else:
 #                                if np.allclose(th_mirror[0],apex) or np.allclose(th_mirror[1],apex):
 #                                    ratio = 1.
 #                                else:
@@ -1869,7 +1912,7 @@ from tqdm import tqdm
                                 tahe.append(th)
                             else:
                                 tahe.append(th_mirror)
-                            
+
                             # 
                             # Check if the target has been reached
                             # sequence is valid and last interaction is in the list of targets   
@@ -1881,14 +1924,14 @@ from tqdm import tqdm
                                 # lawp_tmp = [0]+lawp
                                 # lll = [x[0] for ix,x in enumerate(visited) if lawp_tmp[ix]==1]
                                 # print([self.L.Gs.node[x][&#39;name&#39;] for x in lll])
-                            
+
                                 #anstr = np.array([x[0] for ix,x in enumerate(visited) 
                                 #                                  if ((lawp[ix]!=1) or (x[0] in self.L.name[&#39;AIR&#39;]) or (x in (lit+lis)))] )
                                 #typ  = np.array([len(x) for ix,x in enumerate(visited) 
                                 #                                  if ((lawp[ix]!=1) or (x[0] in self.L.name[&#39;AIR&#39;]) or (x in (lit+lis)))] )
                                 #sig = np.array([anstr,typ])
                                 #sighash = hash(str(sig))
-                                
+
 
                                 # if len(anstr) == 2:
                                 #     if (anstr == np.array([323,351])).all():
@@ -1968,10 +2011,6 @@ from tqdm import tqdm
                     stack.pop()</div>
                     #stack.pop()
 
-
-            
-             
-
 <div class="viewcode-block" id="Signatures.plot_cones"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.Signatures.html#pylayers.antprop.signature.Signatures.plot_cones">[docs]</a>    def plot_cones(self,L,i=0,s=0,fig=[],ax=[],figsize=(10,10)):
         &quot;&quot;&quot; display cones of an unfolded signature
 
@@ -2045,8 +2084,8 @@ from tqdm import tqdm
         si = Signature(self[i][(2*s):(2*s)+2])
         si.ev(L)
         pta,phe = si.unfold()
-        
-        
+
+
         return pta,phe</div>
 
 <div class="viewcode-block" id="Signatures.pltunfold"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.Signatures.html#pylayers.antprop.signature.Signatures.pltunfold">[docs]</a>    def pltunfold(self,L,i=0,s=0):
@@ -2163,11 +2202,11 @@ from tqdm import tqdm
 
         for i in lgrint:
             if kwargs[&#39;s&#39;]==-1:
-                lsig = range(len(self[i])/2)
+                lsig = range(int(len(self[i])/2))
             else:
                 lsig = [kwargs[&#39;s&#39;]]
             for j in lsig:
-                sig = map(lambda x: self.L.Gs.pos[x],self[i][2*j])
+                sig = [ self.L.Gs.pos[x] for x in self[i][2*j] ]
                 siga = np.array(sig)
                 # sig = np.hstack((self.pTx[0:2].reshape((2, 1)),
                 #                  np.hstack((self[i][&#39;pt&#39;][0:2, :, j],
@@ -2403,7 +2442,7 @@ from tqdm import tqdm
         return rays</div>
 
 
-<div class="viewcode-block" id="Signatures.raysv"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.Signatures.html#pylayers.antprop.signature.Signatures.raysv">[docs]</a>    def raysv(self,ptx=0,prx=1):
+<div class="viewcode-block" id="Signatures.raysv"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.Signatures.html#pylayers.antprop.signature.Signatures.raysv">[docs]</a>    def raysv(self, ptx=0, prx=1):
         &quot;&quot;&quot; transform dict of signatures into 2D rays - default vectorized version
 
         Parameters
@@ -2439,7 +2478,6 @@ from tqdm import tqdm
           SCHOOL = {{Universit{\&#39;e} Rennes 1}},
           YEAR = {2013},
           MONTH = Dec,
-          KEYWORDS = {Electromagnetic wave propagation simulation ; Human mobility simulation ; Wireless localization methods ; Position estimation methods in wireless networks ; Vectorized computation ; Ray-tracing ; Ultra wide band ; Simulateur de propagation {\&#39;e}lectromagn{\&#39;e}tique ; Simulateur de mobilit{\&#39;e} humaine ; M{\&#39;e}thodes de localisation sans fils ; M{\&#39;e}thodes d&#39;estimation de la position dans les r{\&#39;e}seaux sans fils ; Calcul informatique vectoris{\&#39;e} ; Outil de trac{\&#39;e} de rayons ; Ultra large bande},
           TYPE = {Theses},
           HAL_ID = {tel-00971809},
           HAL_VERSION = {v1},
@@ -2452,6 +2490,7 @@ from tqdm import tqdm
         Signatures.backtrace
 
         &quot;&quot;&quot;
+
         if type(ptx)==int:
             ptx = np.array(self.L.Gt.pos[ptx])
 
@@ -2459,10 +2498,10 @@ from tqdm import tqdm
             prx = np.array(self.L.Gt.pos[prx])
 
         if len(ptx) == 2:
-            ptx= np.r_[ptx,0.5]
+            ptx= np.r_[ptx, 0.5]
 
         if len(ptx) == 2:
-            prx= np.r_[prx,0.5]
+            prx= np.r_[prx, 0.5]
 
         rays = Rays(ptx,prx)
 
@@ -2488,8 +2527,8 @@ from tqdm import tqdm
         polyctx = self.L.Gt.node[cyptx][&#39;polyg&#39;]
         polycrx = self.L.Gt.node[cyprx][&#39;polyg&#39;]
 
-        # The Line of sight situation is detected here 
-        # dtxtx : distance between Tx and Rx 
+        # The Line of sight situation is detected here
+        # dtxtx : distance between Tx and Rx
         dtxrx = np.sum((ptx-prx)*(ptx-prx))
         if dtxrx&gt;1e-15:
             if polyctx.contains(los):
@@ -2500,56 +2539,50 @@ from tqdm import tqdm
 
         M = self.image2(ptx)
         R = self.backtrace(ptx,prx,M)
-        # 
-        # Add LOS ray in ray 2D 
+        #
+        # Add LOS ray in ray 2D
         #
         if rays.los:
             R[0]= {&#39;sig&#39;:np.zeros(shape=(0,0,1)),&#39;pt&#39;: np.zeros(shape=(2,1,0))}
-        
+
         rays.update(R)
-        rays.nb_origin_sig = len(self)
+        rays.nb_origin_sig = len(self.keys())
         rays.origin_sig_name = self.filename
         #pdb.set_trace()
         return rays</div>
 
 <div class="viewcode-block" id="Signatures.backtrace"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.Signatures.html#pylayers.antprop.signature.Signatures.backtrace">[docs]</a>    def backtrace(self, tx, rx, M):
-        &#39;&#39;&#39; backtracing betwen tx and rx 
+        &#39;&#39;&#39; backtracing betwen tx and rx
 
-        Warning :
-            This is an attempt to vectorize the backtrace process.
-            Despite it has been tested on few cases with succes,
-            this is quite new need to be validated !!!
+        Parameters
+        ----------
 
+            tx : ndarray
+                position of tx (2,)
+            rx : ndarray
+                position of tx (2,)
+            M : dict
+                position of intermediate points obtained from self.image()
 
-            Parameters
-            ----------
+        Returns
+        -------
 
-                tx : ndarray
-                    position of tx (2,)
-                rx : ndarray
-                    position of tx (2,)
-                M : dict
-                    position of intermediate points obtained from self.image()
-
-            Return
-            -------
-
-                rayp : dict
-                key = number_of_interactions
-                value =ndarray positions of interactions for creating rays
-
-            Notes
-            -----
-
-            dictionnary of intermediate coordinated :
+            rayp : dict
             key = number_of_interactions
-            value = nd array M with shape : (2,nb_signatures,nb_interactions)
-            and 2 represent x and y coordinates
+            value =ndarray positions of interactions for creating rays
 
-            See Also
-            --------
+        Notes
+        -----
 
-            pylayers.antprop.signature.image
+        dictionnary of intermediate coordinated :
+        key = number_of_interactions
+        value = nd array M with shape : (2,nb_signatures,nb_interactions)
+        and 2 represent x and y coordinates
+
+        See Also
+        --------
+
+        pylayers.antprop.signature.image
 
         &#39;&#39;&#39;
 
@@ -2789,9 +2822,10 @@ from tqdm import tqdm
 
             # rayp_i[:2,:,0]=tx[:,None]
             if len(uvalid) !=0:
-                sir1=signatures[::2].T.reshape(ninter,len(usigv)/2)
-                sir2=signatures[1::2].T.reshape(ninter,len(usigv)/2)
-                sig = np.empty((2,ninter,len(usigv)/2))
+                N = int(len(usigv)/2)
+                sir1=signatures[::2].T.reshape(ninter,N)
+                sir2=signatures[1::2].T.reshape(ninter,N)
+                sig = np.empty((2,ninter,N))
                 sig[0,:,:]=sir1
                 sig[1,:,:]=sir2
                 rayp_i=np.swapaxes(rayp_i,1,2)
@@ -2916,15 +2950,15 @@ from tqdm import tqdm
 
             ityp = self[ninter][1::2]
 
-            for n in xrange(ninter):
+            for n in np.arange(ninter):
                 #get segment ids of signature with ninter interactions
                 uT = np.where(ityp[:,n]==3)[0]
                 uR = np.where(ityp[:,n]==2)[0]
                 uD = np.where(ityp[:,n]==1)[0]
                 if n ==0:
-                    p=tx[:,None]*np.ones((nsig))
+                    p = tx[:,None]*np.ones((nsig))
                 else :
-                    p=M[:,:,n-1]
+                    p = M[:,:,n-1]
                 #reflexion 0 (2.67)
                 M[:,uR,n] = np.einsum(&#39;ijk,jk-&gt;ik&#39;,K[:,:,uR,n],p[:,uR])+v[:,uR,n]
                 #transmission 0 (2.67)
@@ -2941,26 +2975,22 @@ from tqdm import tqdm
 
 <div class="viewcode-block" id="Signatures.image"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.Signatures.html#pylayers.antprop.signature.Signatures.image">[docs]</a>    def image(self,tx=np.array([2.7,12.5])):
         &#39;&#39;&#39; Warning :
-            This is an attempt to vectorize the image process.
-            Despite it has been tested on few cases with success,
-            this is quite new need to be validated !!!
 
+        Parameters
+        ----------
 
-            Parameters
-            ----------
+        tx : ndarray
+            position of tx (2,)
 
-                tx : ndarray
-                    position of tx (2,)
+        Returns
+        -------
 
-            Return
-            -------
+        M : dictionnary
 
-                M : dictionnary
-
-            dictionnary of intermediate coordinated :
-            key = number_of_interactions
-            value = nd array M with shape : (2,nb_signatures,nb_interactions)
-            and 2 represent x and y coordinates
+        dictionnary of intermediate coordinates
+        key = number_of_interactions
+        value = nd array M with shape : (2,nb_signatures,nb_interactions)
+        and 2 represent x and y coordinates
 
 
         &#39;&#39;&#39;
@@ -3202,11 +3232,11 @@ from tqdm import tqdm
                 pass
             return l[0]
 
-        if type(sig)==np.ndarray:
+        if type(sig) == np.ndarray:
             self.seq = sig[0, :]
             self.typ = sig[1, :]
 
-        if type(sig)==list:
+        if type(sig) == list:
             self.seq = map(seginter,sig)
             self.typ = map(typinter,sig)
 
@@ -3265,12 +3295,12 @@ from tqdm import tqdm
                 norm = np.array([0, 0]).reshape(2,1)
             return(np.vstack((pa,pb,pc,norm)))
 
-        v = np.array(map(seqpointa,self.seq))
+            v = np.array(map(seqpointa,self.seq))
 
-        self.pa = v[:,0:2,:]
-        self.pb = v[:,2:4,:]
-        self.pc = v[:,4:6,:]
-        self.norm = v[:,6:,:]</div>
+            self.pa = v[:,0:2,:]
+            self.pb = v[:,2:4,:]
+            self.pc = v[:,4:6,:]
+            self.norm = v[:,6:,:]</div>
 
 
 <div class="viewcode-block" id="Signature.evf"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.Signature.html#pylayers.antprop.signature.Signature.evf">[docs]</a>    def evf(self, L):
@@ -3611,7 +3641,7 @@ from tqdm import tqdm
         else:
             l5 = ax.plot(ray[0,:],ray[1,:],color=&#39;red&#39;,alpha=0.6,linewidth=0.6)
 
-        return fig,ax    </div>
+        return fig,ax</div>
 
 <div class="viewcode-block" id="Signature.backtrace"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.Signature.html#pylayers.antprop.signature.Signature.backtrace">[docs]</a>    def backtrace(self, tx, rx, M):
         &quot;&quot;&quot; backtrace given image, tx, and rx
@@ -3749,12 +3779,12 @@ from tqdm import tqdm
 
         Y : ndarray (2x(N+2))
 
-        See Also 
+        See Also
         --------
 
         Signature.image
         Signature.backtrace
-            
+
         &quot;&quot;&quot;
 
         # ev transforms a sequence of segment into numpy arrays (points)
@@ -3768,7 +3798,7 @@ from tqdm import tqdm
         #    pdb.set_trace()
         isvalid,Y,u = self.backtrace(pTx, pRx, M)
         #print isvalid,Y
-        # 
+        #
         # If incremental mode this function returns an alternative signature
         # in case the signature do not yield a valid ray.
         #
@@ -3785,6 +3815,7 @@ if __name__ == &quot;__main__&quot;:
 </pre></div>
 
            </div>
+           
           </div>
           <footer>
   
@@ -3794,11 +3825,11 @@ if __name__ == &quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -3817,9 +3848,11 @@ if __name__ == &quot;__main__&quot;:
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -3834,14 +3867,13 @@ if __name__ == &quot;__main__&quot;:
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

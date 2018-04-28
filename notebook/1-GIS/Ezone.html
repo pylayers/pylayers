@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,32 +25,23 @@
   
 
   
-  
     <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../../about.html"/>
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="PyLayers" href="../../index.html"/>
-        <link rel="up" title="1   Overview" href="../TOC.html"/>
-        <link rel="next" title="Outdoor Coverage Knife-Edge Model" href="Coverage.html"/>
-        <link rel="prev" title="Modifying the segment nature" href="Multisubsegments.html"/> 
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Outdoor Coverage Knife-Edge Model" href="Coverage.html" />
+    <link rel="prev" title="Modifying the segment nature" href="Multisubsegments.html" /> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -63,7 +56,7 @@
 
           
             
-            <img src="../../_static/pylayers.png" class="logo" />
+            <img src="../../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -92,14 +85,17 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">User Manual</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html#basic-usage">2&nbsp;&nbsp;&nbsp;Basic Usage</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../TOC.html#environment-description">3&nbsp;&nbsp;&nbsp;Environment Description</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="Layout.html">Description of the propagation environment</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Multisubsegments.html">Modifying the segment nature</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Geographical Information and the Earth Zone class : <code class="docutils literal"><span class="pre">Ezone</span></code></a><ul>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Geographical Information and the Earth Zone class : <code class="docutils literal notranslate"><span class="pre">Ezone</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#zooming-in">Zooming in</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#ground-height-profile-extraction">Ground Height Profile Extraction</a></li>
 </ul>
@@ -127,6 +123,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -168,7 +165,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -180,74 +177,94 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../index.html">User Manual</a> &raquo;</li>
-      
+        
           <li><a href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
-      
-    <li>Geographical Information and the Earth Zone class : <code class="docutils literal"><span class="pre">Ezone</span></code></li>
+        
+      <li>Geographical Information and the Earth Zone class : <code class="docutils literal notranslate"><span class="pre">Ezone</span></code></li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../../_sources/notebook/1-GIS/Ezone.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; !date
+  <div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>!date
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>samedi 4 novembre 2017, 10:23:14 (UTC+0100)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>jeudi 26 avril 2018, 19:03:17 (UTC+0200)
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import pylayers.gis.ezone as ez
-&gt;&gt;&gt; from pylayers.gis.gisutil import ent,ext2qt
-&gt;&gt;&gt; import matplotlib.pyplot as plt
-&gt;&gt;&gt; import numpy as np
-&gt;&gt;&gt; import seaborn as sns
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>import pylayers.gis.ezone as ez
+from pylayers.gis.gisutil import ent,ext2qt
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; %matplotlib inline
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>%matplotlib inline
 </pre></div>
 </div>
 <div class="section" id="geographical-information-and-the-earth-zone-class-ezone">
-<h1>Geographical Information and the Earth Zone class : <code class="docutils literal"><span class="pre">Ezone</span></code><a class="headerlink" href="#geographical-information-and-the-earth-zone-class-ezone" title="Permalink to this headline">¶</a></h1>
-<p>The <code class="docutils literal"><span class="pre">Ezone</span></code> class handles an earth zone which corresponds to the
-<code class="docutils literal"><span class="pre">srtm</span></code> or <code class="docutils literal"><span class="pre">aster</span></code> DEM data. It has the same naming convention as
-<code class="docutils literal"><span class="pre">srtm</span></code> files and corresponds to a portion of earth corresponding to 1
-latitude and 1 of longitude. An <code class="docutils literal"><span class="pre">Ezone</span></code> is an heterogeneous dataset
-stored in <code class="docutils literal"><span class="pre">hdf5</span></code> format. Let see an example with the file
-<code class="docutils literal"><span class="pre">N48W002.h5</span></code>.</p>
-<p>By default files are placed in directory <code class="docutils literal"><span class="pre">gis/h5</span></code> of the current
+<h1>Geographical Information and the Earth Zone class : <code class="docutils literal notranslate"><span class="pre">Ezone</span></code><a class="headerlink" href="#geographical-information-and-the-earth-zone-class-ezone" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">Ezone</span></code> class handles an earth zone which corresponds to the
+<code class="docutils literal notranslate"><span class="pre">srtm</span></code> or <code class="docutils literal notranslate"><span class="pre">aster</span></code> DEM data. It has the same naming convention as
+<code class="docutils literal notranslate"><span class="pre">srtm</span></code> files and corresponds to a portion of earth corresponding to 1
+latitude and 1 of longitude. An <code class="docutils literal notranslate"><span class="pre">Ezone</span></code> is an heterogeneous dataset
+stored in <code class="docutils literal notranslate"><span class="pre">hdf5</span></code> format. Let see an example with the file
+<code class="docutils literal notranslate"><span class="pre">N48W002.h5</span></code>.</p>
+<p>By default files are placed in directory <code class="docutils literal notranslate"><span class="pre">gis/h5</span></code> of the current
 project tree.</p>
 <p>The command h5ls allows to see the hierarchical structure of the file</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; !h5ls $BASENAME/gis/h5/N48W002.h5
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>!h5ls $BASENAME/gis/h5/N48W002.h5
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>bldg                     Group
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>bldg                     Group
 dem                      Group
 extent                   Dataset {4}
 </pre></div>
@@ -255,21 +272,21 @@ extent                   Dataset {4}
 <p>Invoking an earth zone requires to specify the tile prefix with the same
 naming convention as with SRTM files. For example let consider the earth
 zone from -2 to -1 in west longitude and from 48 to 49 in North latitude
-this corresponds to the <code class="docutils literal"><span class="pre">N48W002</span></code> tile, so the ezone <code class="docutils literal"><span class="pre">z</span></code> is invoked
+this corresponds to the <code class="docutils literal notranslate"><span class="pre">N48W002</span></code> tile, so the ezone <code class="docutils literal notranslate"><span class="pre">z</span></code> is invoked
 as :</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; z = ez.Ezone(&#39;N48W002&#39;)
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>z = ez.Ezone(&#39;N48W002&#39;)
 </pre></div>
 </div>
 <p>In this initial phase no data is loaded yet, to load all the data
-gathered for this <code class="docutils literal"><span class="pre">Ezone</span></code> in an existing HDF5 file let invoque the
-<code class="docutils literal"><span class="pre">loadh5</span></code> method.</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; z.loadh5()
+gathered for this <code class="docutils literal notranslate"><span class="pre">Ezone</span></code> in an existing HDF5 file let invoque the
+<code class="docutils literal notranslate"><span class="pre">loadh5</span></code> method.</p>
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>z.loadh5()
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; z
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>z
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>N48W002
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>N48W002
 --------
 latlon (deg) : [-2 -1 48 49]
 cartesian (meters) : [0.000 73676.623 0.000 111194.358 ]
@@ -278,40 +295,43 @@ Buildings
 ---------
 i-longitude : 64 96
 i-latitude  : 19 38
+---------
+DEM Aster (hgta) :(3601, 3601)
+DEM srtm (hgts) :(1201, 1201)
 </pre></div>
 </div>
-<p>This object contains the <code class="docutils literal"><span class="pre">srtm</span></code> DEM data, the aster data and a
-filtration of the <code class="docutils literal"><span class="pre">open</span> <span class="pre">street</span> <span class="pre">map</span></code> database selecting only the ways
-with <code class="docutils literal"><span class="pre">building</span></code> attribute. Let’s have a look to the data with the
-<code class="docutils literal"><span class="pre">show</span></code> method.</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a,axd=z.show(source=&#39;srtm&#39;,bldg=False,height=True,clim=[150,350],cmap=plt.cm.hot,alpha=1)
+<p>This object contains the <code class="docutils literal notranslate"><span class="pre">srtm</span></code> DEM data, the aster data and a
+filtration of the <code class="docutils literal notranslate"><span class="pre">open</span> <span class="pre">street</span> <span class="pre">map</span></code> database selecting only the ways
+with <code class="docutils literal notranslate"><span class="pre">building</span></code> attribute. Lets have a look to the data with the
+<code class="docutils literal notranslate"><span class="pre">show</span></code> method.</p>
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f,a,axd,md = z.show(source=&#39;srtm&#39;,bldg=False,height=True,clim=[150,350],cmap=plt.cm.hot,alpha=1)
 </pre></div>
 </div>
 <img alt="../../_images/Ezone_11_0.png" src="../../_images/Ezone_11_0.png" />
-<p>The <code class="docutils literal"><span class="pre">Ezone</span></code> object has a member extent which gives
+<p>The <code class="docutils literal notranslate"><span class="pre">Ezone</span></code> object has a member extent which gives
 [lonmin,lonmax,latmin,latmax]</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; z.extent
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>z.extent
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>array([-2, -1, 48, 49])
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>array([-2, -1, 48, 49])
 </pre></div>
 </div>
 <p>The shape of hgta data is larger (3601,3601) than the srtm data
 (1201,1201)</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; z.hgta.shape
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>z.hgta.shape
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(3601, 3601)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(3601, 3601)
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; z.hgts.shape
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>z.hgts.shape
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(1201, 1201)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(1201, 1201)
 </pre></div>
 </div>
 <p>The aster DEM can also be shown.</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a,axd=z.show(source=&#39;aster&#39;,bldg=False,clim=[0,320])
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f,a,axd,md =z.show(source=&#39;aster&#39;,bldg=False,clim=[0,320])
 </pre></div>
 </div>
 <img alt="../../_images/Ezone_18_0.png" src="../../_images/Ezone_18_0.png" />
@@ -322,22 +342,22 @@ Rennes in Brittany (France).</p>
 <div class="section" id="zooming-in">
 <h2>Zooming in<a class="headerlink" href="#zooming-in" title="Permalink to this headline">¶</a></h2>
 <p>For zooming into a smaller region, we define the zone to visualize a
-given rectangular region with <code class="docutils literal"><span class="pre">(lonmin,lonmax,latmin,latmax)</span></code>.</p>
+given rectangular region with <code class="docutils literal notranslate"><span class="pre">(lonmin,lonmax,latmin,latmax)</span></code>.</p>
 <p>This region can be converted into Cartesian coordinates with the
-<code class="docutils literal"><span class="pre">conv</span></code> method.</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; extent1 = (-1.8,-1.6,48.05,48.15)
-&gt;&gt;&gt; extent1_cart  = ez.conv(extent1,z.m)
-&gt;&gt;&gt; print &quot;latlon extent :&quot;,extent1
-&gt;&gt;&gt; print &quot;Cartesian extent (meters):&quot;,extent1_cart
+<code class="docutils literal notranslate"><span class="pre">conv</span></code> method.</p>
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>extent1 = (-1.8,-1.6,48.05,48.15)
+extent1_cart  = ez.conv(extent1,z.m)
+print(&quot;latlon extent :&quot;,extent1)
+print(&quot;Cartesian extent (meters):&quot;,extent1_cart)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>latlon extent : (-1.8, -1.6, 48.05, 48.15)
-Cartesian extent (meters): [ 14902.21631869  29782.9577558    5482.53114884  16563.42201909]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>latlon extent : (-1.8, -1.6, 48.05, 48.15)
+Cartesian extent (meters): [ 14902.21631867  29782.95775577   5482.5311488   16563.42201904]
 </pre></div>
 </div>
 <p>Once the selected extent has been chosen, it is possible to pass it to
-the <code class="docutils literal"><span class="pre">show</span></code> method for zooming in the map.</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a,axd = z.show(title=&#39;Rennes City Center (ASTER data)&#39;,
+the <code class="docutils literal notranslate"><span class="pre">show</span></code> method for zooming in the map.</p>
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f,a,axd,md = z.show(title=&#39;Rennes City Center (ASTER data)&#39;,
 ...              extent=extent1,
 ...              bldg=True,
 ...              height=True,
@@ -346,7 +366,7 @@ the <code class="docutils literal"><span class="pre">show</span></code> method f
 ...              clim=[0,105],
 ...              figsize=(20,20)
 ...              )
-&gt;&gt;&gt; f,a,axd = z.show(title=&#39;Rennes City Center (SRTM data)&#39;,
+f,a,axd,md = z.show(title=&#39;Rennes City Center (SRTM data)&#39;,
 ...              extent=extent1,
 ...              bldg=True,
 ...              height=True,
@@ -362,30 +382,33 @@ the <code class="docutils literal"><span class="pre">show</span></code> method f
 <p>The maps diplayed above are labeled in longitude (horizontal axis) and
 latitude (vertical axis) but it is also possible to label it in
 cartesian coordinates as below</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; z.rebase()
-&gt;&gt;&gt; z.tocart()
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>z.rebase()
+z.tocart()
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a,axd = z.show(title=&#39;Rennes City Center&#39;,
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f,a,axd,mp = z.show(title=&#39;Rennes City Center&#39;,
 ...              extent=extent1_cart,coord=&#39;cartesian&#39;,
 ...              bldg=True,height=True,
 ...              clim=[0,100])
 </pre></div>
 </div>
-<img alt="../../_images/Ezone_25_0.png" src="../../_images/Ezone_25_0.png" />
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>unrecognized source
+</pre></div>
+</div>
+<img alt="../../_images/Ezone_25_1.png" src="../../_images/Ezone_25_1.png" />
 <p>Let zoom to the University of Rennes 1 campus in the North-East region
 of the city.</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; extent2 = (-1.645,-1.62,48.111,48.125)
-&gt;&gt;&gt; extent2_cart = ez.conv(extent2,z.m)
-&gt;&gt;&gt; print extent2
-&gt;&gt;&gt; print extent2_cart
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>extent2 = (-1.645,-1.62,48.111,48.125)
+extent2_cart = ez.conv(extent2,z.m)
+print(extent2)
+print(extent2_cart)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(-1.645, -1.62, 48.111, 48.125)
-[ 26436.36082372  28294.87716101  12232.14024036  13785.67272683]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(-1.645, -1.62, 48.111, 48.125)
+[ 26436.36082369  28294.87716098  12232.14024031  13785.67272678]
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a,axd = z.show(title=&#39;Beaulieu Campus&#39;,
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f,a,axd,mp = z.show(title=&#39;Beaulieu Campus&#39;,
               extent=extent2_cart,
               coord=&#39;cartesian&#39;,
               height=False,
@@ -394,7 +417,7 @@ of the city.</p>
 </pre></div>
 </div>
 <img alt="../../_images/Ezone_28_0.png" src="../../_images/Ezone_28_0.png" />
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a,axd = z.show(title=&#39;Beaulieu Campus&#39;,
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f,a,axd,mp = z.show(title=&#39;Beaulieu Campus&#39;,
               extent=extent2_cart,
               coord=&#39;cartesian&#39;,
               bldg=True,
@@ -402,42 +425,45 @@ of the city.</p>
               clim=[0,80])
 </pre></div>
 </div>
-<img alt="../../_images/Ezone_29_0.png" src="../../_images/Ezone_29_0.png" />
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>unrecognized source
+</pre></div>
+</div>
+<img alt="../../_images/Ezone_29_1.png" src="../../_images/Ezone_29_1.png" />
 </div>
 <div class="section" id="ground-height-profile-extraction">
 <h2>Ground Height Profile Extraction<a class="headerlink" href="#ground-height-profile-extraction" title="Permalink to this headline">¶</a></h2>
 <p>For predicting the radio propagation, it is necessary to retrieve the
-height profile between 2 points on the earth surface. The <code class="docutils literal"><span class="pre">profile</span></code>
+height profile between 2 points on the earth surface. The <code class="docutils literal notranslate"><span class="pre">profile</span></code>
 method does a profile extraction and geometrical calculation for further
 propagation loss determination using the Deygout method. Points have to
 be expressed in (lon,lat) coordinates in WGS84 system.</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; h,d,dh,nu,num,m,LOS = z.profile(pa=(-1.645,48.111),
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>h,ho,d,dh,nu,num,m,LOS,ellF,LFS,L = z.profile(pa=(-1.645,48.111),
                                  pb=(-1.62,48.325),
                                  fGHz=0.3,
                                  source=&#39;srtm&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/ezone.py:725: RuntimeWarning: divide by zero encountered in divide
-  fac  = np.sqrt(2*d[-1]/(lmbda*d*d[::-1]))
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/ezone.py:794: RuntimeWarning: divide by zero encountered in true_divide
+  fac = np.sqrt(2*d[-1]/(lmbda*d*d[::-1]))
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f = plt.figure(figsize=(15,5))
-&gt;&gt;&gt; a=plt.plot(d,dh,&#39;r&#39;,d,h,&#39;b&#39;,d,m[0,:],&#39;g&#39;,d,LOS,&#39;k&#39;)
-&gt;&gt;&gt; plt.xlabel(&#39;distance (meters)&#39;)
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(15,5))
+a=plt.plot(d,dh,&#39;r&#39;,d,h,&#39;b&#39;,d,m[0,:],&#39;g&#39;,d,LOS,&#39;k&#39;)
+plt.xlabel(&#39;distance (meters)&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7fae96621750&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7f0d7e92c780&gt;
 </pre></div>
 </div>
 <img alt="../../_images/Ezone_32_1.png" src="../../_images/Ezone_32_1.png" />
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f = plt.figure(figsize=(15,5))
-&gt;&gt;&gt; a=plt.plot(d,nu)
-&gt;&gt;&gt; a = plt.axis([0,25000,-2,2])
-&gt;&gt;&gt; plt.title(r&#39;Fresnel parameter $\nu$&#39;)
-&gt;&gt;&gt; plt.xlabel(&#39;Distance (meters)&#39;)
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(15,5))
+a=plt.plot(d,nu)
+a = plt.axis([0,25000,-2,2])
+plt.title(r&#39;Fresnel parameter $\nu$&#39;)
+plt.xlabel(&#39;Distance (meters)&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7fae96551b10&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7f0d7e79d400&gt;
 </pre></div>
 </div>
 <img alt="../../_images/Ezone_33_1.png" src="../../_images/Ezone_33_1.png" />
@@ -446,15 +472,16 @@ be expressed in (lon,lat) coordinates in WGS84 system.</p>
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="Coverage.html" class="btn btn-neutral float-right" title="Outdoor Coverage Knife-Edge Model" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="Coverage.html" class="btn btn-neutral float-right" title="Outdoor Coverage Knife-Edge Model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="Multisubsegments.html" class="btn btn-neutral" title="Modifying the segment nature" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="Multisubsegments.html" class="btn btn-neutral" title="Modifying the segment nature" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -464,11 +491,11 @@ be expressed in (lon,lat) coordinates in WGS84 system.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -487,9 +514,11 @@ be expressed in (lon,lat) coordinates in WGS84 system.</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -504,14 +533,13 @@ be expressed in (lon,lat) coordinates in WGS84 system.</p>
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

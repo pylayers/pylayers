@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,32 +25,23 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/>
-        <link rel="next" title="two_rays_flatearth" href="pylayers.antprop.loss.two_rays_flatearth.html"/>
-        <link rel="prev" title="showfurniture" href="pylayers.antprop.loss.showfurniture.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="two_rays_flatearth" href="pylayers.antprop.loss.two_rays_flatearth.html" />
+    <link rel="prev" title="route" href="pylayers.antprop.loss.route.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -63,7 +56,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -92,7 +85,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -103,6 +99,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -135,15 +132,18 @@
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.OneSlopeMdl.html">OneSlopeMdl</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.PL.html">PL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.PL0.html">PL0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.bullington.html">bullington</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.calnu.html">calnu</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.cdf.html">cdf</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.cost2100.html">cost2100</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.cost231.html">cost231</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.cost259.html">cost259</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.cover.html">cover</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.deygout.html">deygout</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.gaspl.html">gaspl</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.hata.html">hata</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.lossref_compute.html">lossref_compute</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.showfurniture.html">showfurniture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.route.html">route</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">two_rays_curvedearthold</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.two_rays_flatearth.html">two_rays_flatearth</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.visuPts.html">visuPts</a></li>
@@ -166,15 +166,18 @@
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.OneSlopeMdl.html">OneSlopeMdl</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.PL.html">PL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.PL0.html">PL0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.bullington.html">bullington</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.calnu.html">calnu</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.cdf.html">cdf</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.cost2100.html">cost2100</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.cost231.html">cost231</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.cost259.html">cost259</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.cover.html">cover</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.deygout.html">deygout</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.gaspl.html">gaspl</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.hata.html">hata</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.lossref_compute.html">lossref_compute</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.showfurniture.html">showfurniture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.route.html">route</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">two_rays_curvedearthold</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.two_rays_flatearth.html">two_rays_flatearth</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.visuPts.html">visuPts</a></li>
@@ -202,7 +205,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -214,36 +217,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>two_rays_curvedearthold</li>
+        
+      <li>two_rays_curvedearthold</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.antprop.loss.two_rays_curvedearthold.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -254,100 +277,91 @@
 <dl class="function">
 <dt id="pylayers.antprop.loss.two_rays_curvedearthold">
 <code class="descclassname">pylayers.antprop.loss.</code><code class="descname">two_rays_curvedearthold</code><span class="sig-paren">(</span><em>P</em>, <em>h0</em>, <em>h1</em>, <em>fGHz=2.4</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/loss.html#two_rays_curvedearthold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.loss.two_rays_curvedearthold" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>P</strong> : float <a href="#id1"><span class="problematic" id="id2">|</span></a>list</p>
+<dd><p>P : float <a href="#id1"><span class="problematic" id="id2">|</span></a>list</p>
 <blockquote>
 <div><p>if len(P) == 1 =&gt; P is a distance
 if len(P) == 4 =&gt; P is a list of [lon0,lat0,lon1,lat1]</p>
 <p>where :
 lat0 : float <a href="#id3"><span class="problematic" id="id4">|</span></a>string</p>
 <blockquote>
-<div><p>latitude first point (decimal <a href="#id5"><span class="problematic" id="id6">|</span></a>deg min sec Direction)</p>
-</div></blockquote>
+<div>latitude first point (decimal <a href="#id5"><span class="problematic" id="id6">|</span></a>deg min sec Direction)</div></blockquote>
 <dl class="docutils">
 <dt>lat1 <span class="classifier-delimiter">:</span> <span class="classifier">float <a href="#id7"><span class="problematic" id="id8">|</span></a>string</span></dt>
-<dd><p class="first last">latitude second point (decimal <a href="#id9"><span class="problematic" id="id10">|</span></a>deg min sec Direction)</p>
-</dd>
+<dd>latitude second point (decimal <a href="#id9"><span class="problematic" id="id10">|</span></a>deg min sec Direction)</dd>
 <dt>lon0 <span class="classifier-delimiter">:</span> <span class="classifier">float <a href="#id11"><span class="problematic" id="id12">|</span></a>string</span></dt>
-<dd><p class="first last">longitude first point (decimal <a href="#id13"><span class="problematic" id="id14">|</span></a>deg min sec Direction)</p>
-</dd>
+<dd>longitude first point (decimal <a href="#id13"><span class="problematic" id="id14">|</span></a>deg min sec Direction)</dd>
 <dt>lon1 <span class="classifier-delimiter">:</span> <span class="classifier">float <a href="#id15"><span class="problematic" id="id16">|</span></a>string</span></dt>
-<dd><p class="first last">longitude second point (decimal <a href="#id17"><span class="problematic" id="id18">|</span></a>deg min sec Direction)</p>
-</dd>
+<dd>longitude second point (decimal <a href="#id17"><span class="problematic" id="id18">|</span></a>deg min sec Direction)</dd>
 </dl>
 </div></blockquote>
-<p><strong>h0</strong> : float:</p>
-<blockquote>
-<div><p>height of 1st point</p>
-</div></blockquote>
-<p><strong>h1</strong> : float:</p>
-<blockquote>
-<div><p>height of 2nd point</p>
-</div></blockquote>
-<p><strong>fGHz</strong> : float</p>
-<blockquote>
-<div><p>frequency (GHz)</p>
-</div></blockquote>
-<p><strong>k</strong> : float</p>
-<blockquote>
-<div><p>electromagnetic earth factor</p>
-</div></blockquote>
-<p><strong>GtdB</strong> : float</p>
-<blockquote>
-<div><p>Transmitter Antenna Gain (dB)</p>
-</div></blockquote>
-<p><strong>GrdB</strong> : float</p>
-<blockquote>
-<div><p>Receiver Antenna Gain (dB)</p>
-</div></blockquote>
-<p><strong>gamma</strong> : complex (-1.+0.j)</p>
-<blockquote>
-<div><p>Reflexion coeff if eps and sig are not precised</p>
-</div></blockquote>
-<p><strong>‘pol’: string (‘v’)</strong></p>
-<blockquote>
-<div><p>polarization (‘v’|’h’)</p>
-</div></blockquote>
-<p><strong>‘eps’</strong> : float ([])</p>
-<blockquote>
-<div><p>lossless relative permittivity [],</p>
-</div></blockquote>
-<p><strong>‘sig’: float (0.)</strong></p>
-<blockquote>
-<div><p>conductivity</p>
-</div></blockquote>
-<p><strong>dB</strong> : boolean (True)</p>
-<blockquote>
-<div><p>return result in dB</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">P :</p>
-<blockquote class="last">
-<div><p>received power</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>h0 <span class="classifier-delimiter">:</span> <span class="classifier">float:</span></dt>
+<dd>height of 1st point</dd>
+<dt>h1 <span class="classifier-delimiter">:</span> <span class="classifier">float:</span></dt>
+<dd>height of 2nd point</dd>
+<dt>fGHz <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>frequency (GHz)</dd>
+<dt>k <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>electromagnetic earth factor</dd>
+<dt>GtdB <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Transmitter Antenna Gain (dB)</dd>
+<dt>GrdB <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Receiver Antenna Gain (dB)</dd>
+<dt>gamma <span class="classifier-delimiter">:</span> <span class="classifier">complex (-1.+0.j)</span></dt>
+<dd>Reflexion coeff if eps and sig are not precised</dd>
+<dt>‘pol’: string (‘v’)</dt>
+<dd>polarization (‘v’|’h’)</dd>
+<dt>‘eps’ <span class="classifier-delimiter">:</span> <span class="classifier">float ([])</span></dt>
+<dd>lossless relative permittivity [],</dd>
+<dt>‘sig’: float (0.)</dt>
+<dd>conductivity</dd>
+<dt>dB <span class="classifier-delimiter">:</span> <span class="classifier">boolean (True)</span></dt>
+<dd>return result in dB</dd>
+</dl>
+<dl class="docutils">
+<dt>P :</dt>
+<dd>received power</dd>
+</dl>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.loss import *
+&gt;&gt;&gt; import matplotlib.pyplot as plt
+&gt;&gt;&gt; fGHz=2.4
+&gt;&gt;&gt; p0=np.array(([0,0,20]))
+&gt;&gt;&gt; p1=np.array(([0,1,20]))
+&gt;&gt;&gt; p0=p0.reshape(3,1)
+&gt;&gt;&gt; p1=p1.reshape(3,1)
+&gt;&gt;&gt; TRF = [] #Two Ray model on flat earth
+&gt;&gt;&gt; TRC = [] #Two Ray model on curved earth
+&gt;&gt;&gt; PLoss=[]
+&gt;&gt;&gt; for d in np.arange(1,10000,1):
+&gt;&gt;&gt;     p1[1,:]=d
+&gt;&gt;&gt;     TRF.append(two_rays_flatearth(p0[:,0],p1[:,0],fGHz,GtdB=0.,GrdB=0.,))
+&gt;&gt;&gt;     TRC.append(two_rays_curvedearth(d,p0[2,:],p1[2,:],fGHz))
+&gt;&gt;&gt;     PLoss.append(PL(fGHz, p0[:,0],p1[:,0], n=2.0, dB=True, d0=np.array([1])))
+&gt;&gt;&gt; PLoss=np.array(PLoss)[:,0,0]
+&gt;&gt;&gt; plt.semilogx(TRF,label=&#39;two-rays model flat earth&#39;)
+&gt;&gt;&gt; plt.semilogx(TRC,label=&#39;two-rays model curved earth&#39;)
+&gt;&gt;&gt; plt.semilogx(-PLoss,label=&#39;Path Loss&#39;)
+&gt;&gt;&gt; plt.legend()
+&gt;&gt;&gt; plt.show()
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../api/pylayers-antprop-loss-two_rays_curvedearthold-1.py">Source code</a>)</p>
 </dd></dl>
 
 </div>
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="pylayers.antprop.loss.two_rays_flatearth.html" class="btn btn-neutral float-right" title="two_rays_flatearth" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="pylayers.antprop.loss.two_rays_flatearth.html" class="btn btn-neutral float-right" title="two_rays_flatearth" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pylayers.antprop.loss.showfurniture.html" class="btn btn-neutral" title="showfurniture" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pylayers.antprop.loss.route.html" class="btn btn-neutral" title="route" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -357,11 +371,11 @@ lat0 : float <a href="#id3"><span class="problematic" id="id4">|</span></a>strin
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -380,9 +394,11 @@ lat0 : float <a href="#id3"><span class="problematic" id="id4">|</span></a>strin
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -397,14 +413,13 @@ lat0 : float <a href="#id3"><span class="problematic" id="id4">|</span></a>strin
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

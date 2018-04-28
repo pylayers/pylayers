@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,32 +25,23 @@
   
 
   
-  
     <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../../about.html"/>
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="PyLayers" href="../../index.html"/>
-        <link rel="up" title="1   Overview" href="../TOC.html"/>
-        <link rel="next" title="&lt;no title&gt;" href="../../auto_examples/index.html"/>
-        <link rel="prev" title="Handling time and frequency domain signals : Bsignal Class" href="Bsignal.html"/> 
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="../../auto_examples/index.html" />
+    <link rel="prev" title="Handling time and frequency domain signals : Bsignal Class" href="Bsignal.html" /> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -63,7 +56,7 @@
 
           
             
-            <img src="../../_static/pylayers.png" class="logo" />
+            <img src="../../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -92,7 +85,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">User Manual</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html#basic-usage">2&nbsp;&nbsp;&nbsp;Basic Usage</a></li>
@@ -106,7 +102,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html#localization-algorithms">10&nbsp;&nbsp;&nbsp;Localization Algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html#measurements-tools">11&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../TOC.html#pylayers-tools">12&nbsp;&nbsp;&nbsp;PyLayers Tools</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="Bsignal.html">Handling time and frequency domain signals : <code class="docutils literal"><span class="pre">Bsignal</span></code> Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Bsignal.html">Handling time and frequency domain signals : <code class="docutils literal notranslate"><span class="pre">Bsignal</span></code> Class</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Modelisation of the Thermal Noise</a></li>
 </ul>
 </li>
@@ -121,6 +117,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -162,7 +159,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -174,38 +171,58 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../index.html">User Manual</a> &raquo;</li>
-      
+        
           <li><a href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
-      
-    <li>Modelisation of the Thermal Noise</li>
+        
+      <li>Modelisation of the Thermal Noise</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../../_sources/notebook/3-PHY/Noise.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -213,25 +230,25 @@
             
   <div class="section" id="modelisation-of-the-thermal-noise">
 <h1>Modelisation of the Thermal Noise<a class="headerlink" href="#modelisation-of-the-thermal-noise" title="Permalink to this headline">¶</a></h1>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>from pylayers.signal.bsignal import *
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>from pylayers.signal.bsignal import *
 %matplotlib inline
 </pre></div>
 </div>
 <p>The bsignal module has a dedicated class for handling noise signal. To
 create a white noise just type :</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>w = Noise()
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>w = Noise()
 </pre></div>
 </div>
 <p>The representation of the noise object provides information about
 default values. In digital representation of noise the sampling
 frequency is important. The noise signal is generated from a time
-<span class="math">\(t_i\)</span> to a time <span class="math">\(t_f = t_i+T\)</span>. The default power spectral
-density is <span class="math">\(-174dBm/Hz\)</span> and can be modified with the argument
-<code class="docutils literal"><span class="pre">PSDdBmpHz</span></code>.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>w
+<span class="math notranslate nohighlight">\(t_i\)</span> to a time <span class="math notranslate nohighlight">\(t_f = t_i+T\)</span>. The default power spectral
+density is <span class="math notranslate nohighlight">\(-174dBm/Hz\)</span> and can be modified with the argument
+<code class="docutils literal notranslate"><span class="pre">PSDdBmpHz</span></code>.</p>
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>w
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>Sampling frequency : 50 GHz
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Sampling frequency : 50 GHz
 ti  : 0ns
 tf  : 100ns
 ts  : 0.02ns
@@ -247,37 +264,37 @@ Power (dBm) /50 Ohms : -157.010299957 dBm
 Power realized /50 Ohms : -157.223602123 dBm
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>f,a=w.plot(typ=&#39;v&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>f,a=w.plot(typ=&#39;v&#39;)
 </pre></div>
 </div>
 <img alt="../../_images/Noise_6_0.png" src="../../_images/Noise_6_0.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>w.psd()
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>w.psd()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>FUsignal :  (2500,)  (1, 2500)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>FUsignal :  (2500,)  (1, 2500)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>w2 = w.fgating(fcGHz=4,WGHz=3)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>w2 = w.fgating(fcGHz=4,WGHz=3)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>W2=w2.psd()
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>W2=w2.psd()
 W2.plotdB(mask=True)
 </pre></div>
 </div>
 <img alt="../../_images/Noise_9_0.png" src="../../_images/Noise_9_0.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>w.plot(typ=&#39;v&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>w.plot(typ=&#39;v&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fef5f122190&gt;,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fef5f122190&gt;,
  array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7fef5f1509d0&gt;]], dtype=object))
 </pre></div>
 </div>
 <img alt="../../_images/Noise_10_1.png" src="../../_images/Noise_10_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>ip=TUsignal()
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>ip=TUsignal()
 ip.EnImpulse(fcGHz=4.4928,WGHz=0.4992,feGHz=100)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>#fig = plt.figure(figsize=(10,10))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>#fig = plt.figure(figsize=(10,10))
 #for k,snr in enumerate(range(30,-30,-10)):
 #    a = fig.add_subplot(3,2,k+1)
 #    ipn,n=ip.awgn(snr=snr,typ=&#39;snr&#39;)
@@ -290,15 +307,16 @@ ip.EnImpulse(fcGHz=4.4928,WGHz=0.4992,feGHz=100)
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../../auto_examples/index.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../../auto_examples/index.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="Bsignal.html" class="btn btn-neutral" title="Handling time and frequency domain signals : Bsignal Class" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="Bsignal.html" class="btn btn-neutral" title="Handling time and frequency domain signals : Bsignal Class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -308,11 +326,11 @@ ip.EnImpulse(fcGHz=4.4928,WGHz=0.4992,feGHz=100)
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -331,9 +349,11 @@ ip.EnImpulse(fcGHz=4.4928,WGHz=0.4992,feGHz=100)
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -348,14 +368,13 @@ ip.EnImpulse(fcGHz=4.4928,WGHz=0.4992,feGHz=100)
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

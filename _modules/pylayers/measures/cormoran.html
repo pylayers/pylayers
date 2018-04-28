@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,21 @@
   
 
   
-  
     <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../../../about.html"/>
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="PyLayers" href="../../../index.html"/>
-        <link rel="up" title="Module code" href="../../index.html"/> 
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
 
   
   <script src="../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +54,7 @@
 
           
             
-            <img src="../../../_static/pylayers.png" class="logo" />
+            <img src="../../../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +83,10 @@
           
             
             
-                <ul>
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +97,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -142,7 +139,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -154,34 +151,52 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-      
-    <li>pylayers.measures.cormoran</li>
+        
+      <li>pylayers.measures.cormoran</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -236,7 +251,7 @@ try:
     from mayavi.sources.vtk_data_source import VTKDataSource
     from mayavi import mlab
 except:
-    print &#39;Layout:Mayavi is not installed&#39;
+    print(&#39;Layout:Mayavi is not installed&#39;)
 #Those lines handle incompatibility between mayavi and VTK
 #and redirect noisy warning message into a log file
 # import vtk
@@ -387,7 +402,7 @@ except:
         #BODY &amp; interferers
         self.subject = str(self.log[&#39;Subject&#39;].values[0].replace(&#39;jihad&#39;,&#39;Jihad&#39;)).split(&#39; &#39;)
         #filter typos in  self.subject
-        self.subject = filter(lambda x : len(x)!=0,self.subject)
+        self.subject = [ x for x in self.subject if len(x)!=0 ] 
         if &#39;Jihad&#39; in self.subject :
             uj = self.subject.index(&#39;Jihad&#39;)
             self.subject[uj]=&#39;Jihan&#39;
@@ -420,42 +435,42 @@ except:
         # 2 - (if available) apply offset
 
         if (&#39;BS&#39; in self.typ) or (&#39;FULL&#39; in self.typ):
-            print &#39;\nBS data frame index: &#39;,
+            print( &#39;\nBS data frame index: &#39;,)
             self._align_on_devdf(typ=&#39;BS&#39;)
-            print &#39;Align on mocap OK...&#39;,
+            print( &#39;Align on mocap OK...&#39;,)
             try:
                 self._apply_offset(&#39;BS&#39;)
-                print &#39;time-offset applied OK&#39;
+                print (&#39;time-offset applied OK&#39;)
             except:
-                print &#39;WARNING time-offset NOT applied&#39;
+                print (&#39;WARNING time-offset NOT applied&#39;)
                 print (&#39;No BS offset not yet set =&gt; use self.offset_setter &#39;)
 
         if (&#39;TCR&#39; in self.typ) or (&#39;FULL&#39; in self.typ):
-            print &#39;\nTCR data frame index:&#39;, 
+            print (&#39;\nTCR data frame index:&#39;, )
             self._align_on_devdf(typ=&#39;TCR&#39;)
-            print &#39;Align on mocap OK...&#39;,
+            print (&#39;Align on mocap OK...&#39;,)
             try:
                 self._apply_offset(&#39;TCR&#39;)
-                print &#39;time-offset applied OK&#39;
+                print (&#39;time-offset applied OK&#39;)
             except:
-                print &#39;WARNING time-offset NOT applied&#39;
+                print (&#39;WARNING time-offset NOT applied&#39;)
                 print (&#39;No TCR offset not yet set =&gt; use self.offset_setter&#39;)
 
 
         if (&#39;HK&#39; in self.typ) or (&#39;FULL&#39; in self.typ):
-            print &#39;\nHKB data frame index:&#39;,
+            print (&#39;\nHKB data frame index:&#39;,)
             self._align_on_devdf(typ=&#39;HKB&#39;)
-            print &#39;Align on mocap OK...&#39;,
+            print (&#39;Align on mocap OK...&#39;,)
             try:
                 # self._apply_offset(&#39;HKB&#39;)
-                print &#39;time-offset applied OK&#39;
+                print (&#39;time-offset applied OK&#39;)
             except:
-                print &#39;WARNING time-offset NOT applied&#39;
+                print (&#39;WARNING time-offset NOT applied&#39;)
                 print (&#39;No HKB offset not yet set =&gt; use self.offset_setter&#39;)
 
-        print &#39;\nCreate distance Dataframe...&#39;,
+        print (&#39;\nCreate distance Dataframe...&#39;,)
         self._computedistdf()
-        print &#39;OK&#39;,
+        print (&#39;OK&#39;,)
 
     def __repr__(self):
         st = &#39;&#39;
@@ -523,27 +538,27 @@ except:
         &quot;&quot;&quot;
 
         title = &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(&#39;Name in Dataframe&#39;, &#39;Real Id&#39;, &#39;Body Id&#39;, &#39;Subject&#39;)
-        print title + &#39;\n&#39; + &#39;=&#39;*len(title)
+        print( title + &#39;\n&#39; + &#39;=&#39;*len(title))
         # access points HKB
         for d in self.din:
             if (&#39;HK&#39; in d) :
                 dev = self.devmapper(d,&#39;HKB&#39;)
-                print &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3])
+                print(&#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3]))
         if &#39;FULL&#39; in self.typ:
-                print &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;)
+                print (&#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;))
         for d in self.din:
             if (&#39;BS&#39; in d) :
                 dev = self.devmapper(d,&#39;BS&#39;)
-                print &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3])
+                print (&#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3]))
         if &#39;FULL&#39; in self.typ:
-                print &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;)
+                print (&#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;))
 
         # access points TCR
         for d in self.din:
             if (&#39;TCR&#39; in d)  :
                 dev = self.devmapper(d,&#39;TCR&#39;)
-                print &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3])
-        print &#39;{0:66}&#39;.format(&#39;-&#39;*len(title) )
+                print (&#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3]))
+        print (&#39;{0:66}&#39;.format(&#39;-&#39;*len(title) ))
         #device per RAT per body
         for b in self.B:
             if b not in self.interf:
@@ -552,23 +567,23 @@ except:
 
                     if (&#39;HK&#39; in d):
                         dev = self.devmapper(d,&#39;HKB&#39;)
-                        print &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3])
+                        print( &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3]))
                 #bespoon
                 if (&#39;FULL&#39; in self.typ) or (&#39;HKB&#39; in self.typ):
-                    print &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;)
+                    print( &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;))
                 for d in self.B[b].dev.keys():
                     if (&#39;BS&#39; in d):
                         dev = self.devmapper(d,&#39;BS&#39;)
-                        print &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3])
+                        print( &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3]))
                 # print &#39;{0:66}&#39;.format(&#39;-&#39;*len(title) )
                 #TCR per body
                 if &#39;FULL&#39; in self.typ:
-                    print &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;)
+                    print (&#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;))
                 for d in self.B[b].dev.keys():
                     if (&#39;TCR&#39; in d):
                         dev = self.devmapper(d,&#39;TCR&#39;)
-                        print &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3])
-                print &#39;{0:66}&#39;.format(&#39;-&#39;*len(title) )
+                        print (&#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3]))
+                print (&#39;{0:66}&#39;.format(&#39;-&#39;*len(title) ))
 
     @property
     def ant(self):
@@ -576,27 +591,27 @@ except:
         &quot;&quot;&quot;
 
         title = &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(&#39;Name in Dataframe&#39;, &#39;Real Id&#39;, &#39;Body Id&#39;, &#39;Subject&#39;)
-        print title + &#39;\n&#39; + &#39;=&#39;*len(title) 
+        print (title + &#39;\n&#39; + &#39;=&#39;*len(title) )
         # access points HKB
         for d in self.din:
             if (&#39;HK&#39; in d) :
                 dev = self.devmapper(d,&#39;HKB&#39;)
-                print &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3])
+                print (&#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3]))
         if &#39;FULL&#39; in self.typ:
-                print &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;)
+                print (&#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;))
         for d in self.din:
             if (&#39;BS&#39; in d) :
                 dev = self.devmapper(d,&#39;BS&#39;)
-                print &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3])
+                print (&#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3]))
         if &#39;FULL&#39; in self.typ:
-                print &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;)
+                print( &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;))
 
         # access points TCR
         for d in self.din:
             if (&#39;TCR&#39; in d)  :
                 dev = self.devmapper(d,&#39;TCR&#39;)
-                print &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3])
-        print &#39;{0:66}&#39;.format(&#39;-&#39;*len(title) )
+                print( &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3]))
+        print (&#39;{0:66}&#39;.format(&#39;-&#39;*len(title) ))
         #device per RAT per body
         for b in self.B:
             if b not in self.interf:
@@ -605,23 +620,23 @@ except:
 
                     if (&#39;HK&#39; in d):
                         dev = self.devmapper(d,&#39;HKB&#39;)
-                        print &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3])
+                        print( &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3]))
                 #bespoon
                 if (&#39;FULL&#39; in self.typ) or (&#39;HKB&#39; in self.typ):
-                    print &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;)
+                    print( &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;))
                 for d in self.B[b].dev.keys():
                     if (&#39;BS&#39; in d):
                         dev = self.devmapper(d,&#39;BS&#39;)
-                        print &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3])
+                        print( &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3]))
                 # print &#39;{0:66}&#39;.format(&#39;-&#39;*len(title) )
                 #TCR per body
                 if &#39;FULL&#39; in self.typ:
-                    print &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;)
+                    print( &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;))
                 for d in self.B[b].dev.keys():
                     if (&#39;TCR&#39; in d):
                         dev = self.devmapper(d,&#39;TCR&#39;)
-                        print &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3])
-                print &#39;{0:66}&#39;.format(&#39;-&#39;*len(title) )
+                        print( &#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;.format(dev[0],dev[1],dev[2],dev[3]))
+                print( &#39;{0:66}&#39;.format(&#39;-&#39;*len(title) ))
 
 
 
@@ -706,7 +721,7 @@ bernard
 
         filename = os.path.join(self.rootdir,&#39;RAW&#39;,&#39;11-06-2014&#39;,&#39;MOCAP&#39;,&#39;scene.c3d&#39;)
 
-        print &quot;\nload infrastructure node position:&quot;,
+        print( &quot;\nload infrastructure node position:&quot;,)
         a, self.infraname, pts, i = c3d.ReadC3d(filename)
 
         pts = pts/1000.
@@ -824,7 +839,7 @@ bernard
         self.B={}
         color=[&#39;LightBlue&#39;,&#39;YellowGreen&#39;,&#39;PaleVioletRed&#39;,&#39;white&#39;,&#39;white&#39;,&#39;white&#39;,&#39;white&#39;,&#39;white&#39;,&#39;white&#39;,&#39;white&#39;]
         for us,subject in enumerate(self.subject):
-            print &quot;\nload &quot;,subject, &quot; body:&quot;,
+            print( &quot;\nload &quot;,subject, &quot; body:&quot;,)
             seriestr = str(self.serie).zfill(3)
             if day == 11:
                 self.filemocap = os.path.join(self.rootdir,&#39;RAW&#39;,str(self.day)+&#39;-06-2014&#39;,&#39;MOCAP&#39;,&#39;serie_&#39;+seriestr+&#39;.c3d&#39;)
@@ -867,7 +882,7 @@ bernard
                 self.interf.remove(&#39;Bernard_Cylindre:&#39;)
             for ui,i in enumerate(self.interf):
                 #try:
-                print &quot;load &quot;,i, &quot; interfering body:&quot;,
+                print( &quot;load &quot;,i, &quot; interfering body:&quot;,)
                 _filemocap = pyu.getshort(self.filemocap)
                 self.B.update({i:Cylinder(name=i,
                                           _filemocap=_filemocap,
@@ -1288,7 +1303,7 @@ bernard
         #C or D : 3 x 11 body segments x time
         # radius of cylinders are (nb_cylinder x time)
         for b in self.B:
-            print &#39;processing shadowing from &#39;,b
+            print( &#39;processing shadowing from &#39;,b)
             # if b is a body not a cylinder
             if not &#39;Cylindre&#39; in b:
                 uta = self.B[b].sl[:,0].astype(&#39;int&#39;)
@@ -1415,7 +1430,7 @@ bernard
             ax = kwargs.pop(&#39;ax&#39;)
 
         if not &#39;_visiintersect&#39; in dir(self):
-            print &#39;Visibility computed only once&#39;
+            print( &#39;Visibility computed only once&#39;)
             self.compute_visibility(techno=techno)
 
 
@@ -1725,7 +1740,7 @@ bernard
         #     notebook = False
 
         if not &#39;_visiintersect&#39; in dir(self):
-            print &#39;Visibility is computed only once, Please wait\n&#39;
+            print( &#39;Visibility is computed only once, Please wait\n&#39;)
             self.compute_visibility(techno=techno)
 
 
@@ -2059,7 +2074,7 @@ bernard
         if ax == []:
             ax = fig.add_subplot(111)
 
-        if self.offset[self._filename].has_key(&#39;video_sec&#39;):
+        if &#39;video_sec&#39; in self.offset[self._filename]:
             offset = self.offset[self._filename][&#39;video_sec&#39;]
         elif offset != &#39;&#39;:
             offset = offset
@@ -2095,7 +2110,7 @@ bernard
 
         &quot;&quot;&quot;
 
-        if self.offset[self._filename].has_key(&#39;video_sec&#39;):
+        if &#39;video_sec&#39; in self.offset[self._filename]:
             offset = self.offset[self._filename][&#39;video_sec&#39;]
         elif offset != &#39;&#39;:
             offset = offset
@@ -2105,7 +2120,7 @@ bernard
 
         videofile = os.path.join(self.rootdir,&#39;POST-TREATED&#39;,str(self.day)+&#39;-06-2014&#39;,&#39;Videos&#39;)
         ldir = os.listdir(videofile)
-        luldir = map(lambda x : self._filename in x,ldir)
+        luldir = [ self._filename in x for x in ldir ] 
         uldir = luldir.index(True)
         _filename = ldir[uldir]
         filename = os.path.join(videofile,_filename)
@@ -2350,7 +2365,7 @@ bernard
         ax1 = fig.add_subplot(121)
         #img1 = ax1.imshow(self.rssi[:,:,timeindex],interpolation=&#39;nearest&#39;,origin=&#39;lower&#39;)
         img1 = ax1.imshow(dt1,interpolation=&#39;nearest&#39;)
-        labels = map(lambda x : self.idHKB[x],range(1,17))
+        labels = [ self.idHKB[x] for x in range(1,17)] 
         plt.xticks(range(16),labels,rotation=80,fontsize=14)
         plt.yticks(range(16),labels,fontsize=14)
         if kind==&#39;time&#39;:
@@ -2397,7 +2412,7 @@ bernard
             &gt;&gt;&gt; C.lk2nd(lk)
         &quot;&quot;&quot;
         u = lk.replace(&#39;HKB:&#39;,&#39;&#39;).split(&#39;-&#39;)
-        v = map(lambda x : self.idHKB[int(x)],u)
+        v = [ self.idHKB[int(x)] for x in u ]
         return(v)</div>
 
     def _load_offset_dict(self):
@@ -2499,7 +2514,7 @@ bernard
 
         videofile = os.path.join(self.rootdir,&#39;POST-TREATED&#39;,str(self.day)+&#39;-06-2014&#39;,&#39;Videos&#39;)
         ldir = os.listdir(videofile)
-        luldir = map(lambda x : self._filename in x,ldir)
+        luldir = [ self._filename in x for x in ldir ]
         uldir = luldir.index(True)
         _filename = ldir[uldir]
         filename = os.path.join(videofile,_filename)
@@ -2804,9 +2819,9 @@ bernard
         filemat = key+&#39;.mat&#39;
         d = {}
         d[key]={}
-        d[key][&#39;node_name&#39;]=self.dist_nodesmap
-        d[key][&#39;node_place&#39;]=map(lambda x : self.devmapper(x)[0],self.dist_nodesmap)
-        d[key][&#39;node_coord&#39;]=self.points
+        d[key][&#39;node_name&#39;] = self.dist_nodesmap
+        d[key][&#39;node_place&#39;] = [ self.devmapper(x)[0] for x in self.dist_nodesmap ]
+        d[key][&#39;node_coord&#39;] = self.points
 
         for subject in self.interf:
             sub = subject.replace(&#39;:&#39;,&#39;&#39;)
@@ -5482,6 +5497,7 @@ bernard
 </pre></div>
 
            </div>
+           
           </div>
           <footer>
   
@@ -5491,11 +5507,11 @@ bernard
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -5514,9 +5530,11 @@ bernard
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -5531,14 +5549,13 @@ bernard
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

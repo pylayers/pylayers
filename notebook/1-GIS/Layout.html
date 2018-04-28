@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,32 +25,23 @@
   
 
   
-  
     <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../../about.html"/>
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="PyLayers" href="../../index.html"/>
-        <link rel="up" title="1   Overview" href="../TOC.html"/>
-        <link rel="next" title="Modifying the segment nature" href="Multisubsegments.html"/>
-        <link rel="prev" title="1   Overview" href="../TOC.html"/> 
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Modifying the segment nature" href="Multisubsegments.html" />
+    <link rel="prev" title="1   Overview" href="../TOC.html" /> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -63,7 +56,7 @@
 
           
             
-            <img src="../../_static/pylayers.png" class="logo" />
+            <img src="../../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -92,19 +85,22 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">User Manual</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html#basic-usage">2&nbsp;&nbsp;&nbsp;Basic Usage</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../TOC.html#environment-description">3&nbsp;&nbsp;&nbsp;Environment Description</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Description of the propagation environment</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#getting-the-list-of-all-available-layouts-the-ls-method">Getting the list of all available Layouts : the <code class="docutils literal"><span class="pre">ls()</span></code> method</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#getting-the-list-of-all-available-layouts-the-ls-method">Getting the list of all available Layouts : the <code class="docutils literal notranslate"><span class="pre">ls()</span></code> method</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#the-useful-numpy-arrays-of-the-layout">The useful numpy arrays of the Layout</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#tgs-trancodage-from-graph-indexing-to-numpy-array-indexing"><code class="docutils literal"><span class="pre">tgs</span></code> : trancodage from graph indexing to numpy array indexing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tgs-trancodage-from-graph-indexing-to-numpy-array-indexing"><code class="docutils literal notranslate"><span class="pre">tgs</span></code> : trancodage from graph indexing to numpy array indexing</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Multisubsegments.html">Modifying the segment nature</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Ezone.html">Geographical Information and the Earth Zone class : <code class="docutils literal"><span class="pre">Ezone</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Ezone.html">Geographical Information and the Earth Zone class : <code class="docutils literal notranslate"><span class="pre">Ezone</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="Coverage.html">Outdoor Coverage Knife-Edge Model</a></li>
 </ul>
 </li>
@@ -128,6 +124,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -169,7 +166,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -181,90 +178,93 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../index.html">User Manual</a> &raquo;</li>
-      
+        
           <li><a href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
-      
-    <li>Description of the propagation environment</li>
+        
+      <li>Description of the propagation environment</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../../_sources/notebook/1-GIS/Layout.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; !date
+  <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; !date
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>samedi 4 novembre 2017, 10:14:00 (UTC+0100)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>jeudi 26 avril 2018, 19:01:46 (UTC+0200)
 </pre></div>
 </div>
 <div class="section" id="description-of-the-propagation-environment">
 <h1>Description of the propagation environment<a class="headerlink" href="#description-of-the-propagation-environment" title="Permalink to this headline">¶</a></h1>
-<p>The <code class="docutils literal"><span class="pre">Layout</span></code> class contains the data structure for describing a
+<p>The <code class="docutils literal notranslate"><span class="pre">Layout</span></code> class contains the data structure for describing a
 propagation environment. It contains different graphs helping the
-implementation of the ray tracing. The class is implemented in the</p>
-<p><a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.gis.layout.html">layout.py</a></p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.gis.layout import *
+implementation of the ray tracing. The class is implemented in the
+module
+<a class="reference external" href="http://pylayers.github.io/pylayers/api/pylayers.gis.layout.Layout.html">layout.py</a></p>
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.gis.layout import *
 &gt;&gt;&gt; from IPython.display import Image
 &gt;&gt;&gt; import os
 &gt;&gt;&gt; %matplotlib inline
 </pre></div>
 </div>
-<div class="section" id="getting-the-list-of-all-available-layouts-the-ls-method">
-<h2>Getting the list of all available Layouts : the <code class="docutils literal"><span class="pre">ls()</span></code> method<a class="headerlink" href="#getting-the-list-of-all-available-layouts-the-ls-method" title="Permalink to this headline">¶</a></h2>
-<p>Creating an empty Layout is as simple as :</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L=Layout()
-&gt;&gt;&gt; L
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Warning : imposm seems not to be installed
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>----------------
-Project : /home/uguen/Bureau/P1
-
-newfile.lay
-Type : indoor
-Coordinates : cart
-----------------
-Gs : 0(0/0/0) :0
-Gt : 0 : 0
-Gr : 0 : 0
-----------------
-
-
-xrange :(-50, 50)
-yrange :(-50, 50)
-Segment s in Gs =&gt; s_ab coordinates
-s2pc : segment to point coordinates (sparse) [p1,p2] = L.s2pc.toarray().reshape(2,2).T
-s -&gt; u = self.tgs[s] -&gt; v = self.tahe[:,u] -&gt; s_ab = self.pt[:,v]
+<div class="section" id="getting-the-list-of-all-available-layouts-the-ls-method">
+<h2>Getting the list of all available Layouts : the <code class="docutils literal notranslate"><span class="pre">ls()</span></code> method<a class="headerlink" href="#getting-the-list-of-all-available-layouts-the-ls-method" title="Permalink to this headline">¶</a></h2>
+<p>Creating an empty Layout is as simple as :</p>
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L=Layout()
 </pre></div>
 </div>
 <p>The different argument of the <strong>init</strong> function are listed below</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L=Layout(string=&#39;&#39;,
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L=Layout(string=&#39;&#39;,
                  _filematini=&#39;matDB.ini&#39;,
                  _fileslabini=&#39;slabDB.ini&#39;,
                  _filefur=&#39;&#39;,
@@ -279,42 +279,44 @@ s -&gt; u = self.tgs[s] -&gt; v = self.tahe[:,u] -&gt; s_ab = self.pt[:,v]
 <ul class="simple">
 <li><strong>string</strong> is either an existing layout filename (.ini,.osm,.res) or
 the coordinates (lat,lon)</li>
-<li>** _filematini** is the a material filename material ans slab
-are now described in .lay file</li>
+<li>** _filematini** is the a material filename material ans slab are
+now described in .lay file</li>
 <li>** _fileslabini** is the a slab filename</li>
 <li>** _filefur** is the furniture filename</li>
 <li>** bcheck** is a boolean which force layout integrity checking</li>
-<li>** bbuild** is a boolean which force rebuilding the layouts
-graphs</li>
+<li>** bbuild** is a boolean which force rebuilding the layouts graphs</li>
 <li>** bverbose** is a boolean output verbosity</li>
 <li>** bcartesian** is a boolean controling the type of coordinates
 cartesian or (lat,lon)</li>
-<li><strong>dist_m</strong> is a float value which indicates the zone radius in
-meters for openstreet map extraction</li>
-<li><strong>typ</strong> is a string which takes values either ‘floorplan’ or
-‘outdoor’</li>
+<li><strong>dist_m</strong> is a float value which indicates the zone radius in meters
+for openstreet map extraction</li>
+<li><strong>typ</strong> is a string which takes values either floorplan or
+outdoor</li>
 </ul>
 <p>Querying the file name associated with the Layout.</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L._filename
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L._filename
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&#39;newfile.lay&#39;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&#39;newfile.lay&#39;
 </pre></div>
 </div>
-<p>The Layout is described in an <code class="docutils literal"><span class="pre">.lay</span></code> file, a <code class="docutils literal"><span class="pre">.osm</span></code>file or a
-<code class="docutils literal"><span class="pre">.res</span></code> file.</p>
-<p>The <code class="docutils literal"><span class="pre">ls()</span></code> method lists the layout files which are available in the
-<code class="docutils literal"><span class="pre">struc</span></code> directory of your current project, which is set up via the
+<p>The Layout is described in an <code class="docutils literal notranslate"><span class="pre">.lay</span></code> file, a <code class="docutils literal notranslate"><span class="pre">.osm</span></code>file or a
+<code class="docutils literal notranslate"><span class="pre">.res</span></code> file.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">ls()</span></code> method lists the layout files which are available in the
+<code class="docutils literal notranslate"><span class="pre">struc</span></code> directory of your current project, which is set up via the
 $BASENAME environment variable which should be defined in order PyLayers
 find the good directories.</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.ls(&#39;lay&#39;)
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.ls(&#39;lay&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&#39;11Dbibli.lay&#39;,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;11Dbibli.lay&#39;,
+ &#39;48.0894444444_,_-1.67388888889.lay&#39;,
  &#39;B11.lay&#39;,
+ &#39;CEA.lay&#39;,
  &#39;CEA2.lay&#39;,
  &#39;CEA2_.lay&#39;,
  &#39;CORM1.lay&#39;,
+ &#39;Campus_de_Beaulieu_Rennes.lay&#39;,
  &#39;DLR.lay&#39;,
  &#39;DLR2.lay&#39;,
  &#39;Luebbers.lay&#39;,
@@ -325,24 +327,32 @@ find the good directories.</p>
  &#39;MOCAPext.lay&#39;,
  &#39;Munich.lay&#39;,
  &#39;Munich_buildings.lay&#39;,
+ &#39;Saint_Malo.lay&#39;,
  &#39;Scene.lay&#39;,
+ &#39;Servon_SUr_Vilaine.lay&#39;,
+ &#39;Servon_sur_Vilaine.lay&#39;,
  &#39;TA-Office.lay&#39;,
  &#39;TA-Office3.lay&#39;,
  &#39;TC1_METIS.lay&#39;,
+ &#39;TC1_METIS_2D.lay&#39;,
+ &#39;TC1_METIS_2D2.lay&#39;,
  &#39;TC2_METIS.lay&#39;,
  &#39;W2PTIN.lay&#39;,
  &#39;WHERE1.lay&#39;,
  &#39;defdiff.lay&#39;,
  &#39;defsthdiff.lay&#39;,
  &#39;defstr.lay&#39;,
+ &#39;defstr.str.lay&#39;,
  &#39;edge.lay&#39;,
  &#39;espoo.lay&#39;,
  &#39;espoo2.lay&#39;,
  &#39;espoo3.lay&#39;,
+ &#39;espoo4.lay&#39;,
  &#39;homeK_vf.lay&#39;,
  &#39;klepal.lay&#39;,
  &#39;klepal_.lay&#39;,
  &#39;klepal__.lay&#39;,
+ &#39;lat_48_1033333_lon_-1_61833.lay&#39;,
  &#39;library_I2_final.lay&#39;,
  &#39;office_I1.lay&#39;,
  &#39;office_I1_aki_4m.lay&#39;,
@@ -360,309 +370,149 @@ find the good directories.</p>
  &#39;testair1.lay&#39;]
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L=Layout(&#39;defstr.lay&#39;)
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L=Layout(&#39;defstr.lay&#39;)
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>L
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>----------------
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>----------------
 Project : /home/uguen/Bureau/P1
 
-defstr.lay : 5b06adf51ef872a343dfa53c57a587a9
+defstr.lay : c9527fce60fe26328f7bacc7da6899ee
 Type : indoor
 Coordinates : cart
 ----------------
-Gs : 27(12/15/11) :30
+Gs : 27(12/15/3) :30
 Gt : 0 : 0
 Gr : 0 : 0
 ----------------
 
-degree 0 : [-11 -12 -10  -9]
+degree 0 : [-12 -10  -9 -11]
 degree 1 : []
-number of node point of degree 2 : 4
-number of node point of degree 3 : 4
+number of node points of degree 2 : 4
+number of node points of degree 3 : 4
 
-xrange :(-1.5, 11.5)
-yrange :(-0.75, 5.75)
-Segment s in Gs =&gt; s_ab coordinates
-s2pc : segment to point coordinates (sparse) [p1,p2] = L.s2pc.toarray().reshape(2,2).T
-s -&gt; u = self.tgs[s] -&gt; v = self.tahe[:,u] -&gt; s_ab = self.pt[:,v]
+xrange : (-1.5, 11.5)
+yrange : (-0.75, 5.75)
+center : ( 5.00,2.67)
+radius : 7.34
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a=L.showG(&#39;s&#39;,
-             nodes=True,
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>nx.__version__
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&#39;2.1&#39;
+</pre></div>
+</div>
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a=L.showG(&#39;s&#39;,
+             nodes=False,
          slab=True,
          subseg=True,
          figsize=(10,10),labels=True)
 </pre></div>
 </div>
-<img alt="../../_images/Layout_13_0.png" src="../../_images/Layout_13_0.png" />
+<img alt="../../_images/Layout_14_0.png" src="../../_images/Layout_14_0.png" />
 <p>L.ax provides the boundary of the layout with the following tuple format
 : (xmin,xmax,ymin,ymax)</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.ax
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.ax
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(-1.5, 11.5, -0.75, 5.75)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(-1.5, 11.5, -0.75, 5.75)
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.build()
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.build()
 </pre></div>
 </div>
 <p>A Layout is decomposed into convex cycles which are stored in the Gt
-graph. The diffraction points are stored in the dictionnary <code class="docutils literal"><span class="pre">L.ddiff</span></code>.
+graph. The diffraction points are stored in the dictionnary <code class="docutils literal notranslate"><span class="pre">L.ddiff</span></code>.
 The keys of this dictionnary are the diffraction points number and the
 values are a zipped list of output cycles and corresponding wedge
 angles.</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.Gv.node
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.Gv.node
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>{-6: {},
- -4: {},
- -3: {},
- -1: {},
- 1: {},
- 2: {},
- 3: {},
- 4: {},
- 5: {},
- 6: {},
- 7: {},
- 8: {},
- 9: {},
- 10: {},
- 11: {},
- 17: {},
- 22: {},
- 28: {},
- 30: {}}
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>NodeView((1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, -4, 17, 30, 22, -6, 28, -3, -1))
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.ddiff
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.ddiff
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>{-6: ([4, 1], 4.7123889803846897),
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{-6: ([4, 1], 4.7123889803846897),
  -4: ([6, 4], 4.7123889803846897),
  -3: ([6, 3], 4.7123889803846897),
  -1: ([3, 1], 4.7123889803846897)}
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.Gt.node
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.Gt.node
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>{0: {&#39;hash&#39;: &#39;5b06adf51ef872a343dfa53c57a587a9&#39;, &#39;indoor&#39;: False},
- 1: {&#39;indoor&#39;: False,
-  &#39;inter&#39;: [(15, 1, 0),
-   (15, 0, 1),
-   (22, 1, 4),
-   (22, 4, 1),
-   (7, 1),
-   (7, 1, 2),
-   (7, 2, 1),
-   (17, 1, 3),
-   (17, 3, 1),
-   (-3,),
-   (-4,)],
-  &#39;isopen&#39;: True,
-  &#39;polyg&#39;: (-1.5,-0.75)
-  (-1.5,5.75)
-  (0.0,5.0)
-  (0.0,0.0)
-
-  vnodes : (-9 15 -12 22 -6 7 -1 17 )},
- 2: {&#39;indoor&#39;: True,
-  &#39;inter&#39;: [(1, 2),
-   (1, 2, 5),
-   (1, 5, 2),
-   (2, 2, 5),
-   (2, 5, 2),
-   (3, 2),
-   (3, 2, 5),
-   (3, 5, 2),
-   (5, 2),
-   (5, 2, 5),
-   (5, 5, 2),
-   (10, 2),
-   (10, 2, 3),
-   (10, 3, 2),
-   (7, 2),
-   (7, 2, 1),
-   (7, 1, 2),
-   (6, 2),
-   (6, 2, 4),
-   (6, 4, 2),
-   (4, 2),
-   (4, 2, 5),
-   (4, 5, 2),
-   (-3,),
-   (-4,)],
-  &#39;isopen&#39;: True,
-  &#39;polyg&#39;: (5.0,4.0)
-  (5.0,3.0)
-  (5.0,0.0)
-  (0.0,0.0)
-  (0.0,5.0)
-  (5.0,5.0)
-
-  vnodes : (-7 1 2 3 -8 5 -2 10 -1 7 -6 6 -5 4 )},
- 3: {&#39;indoor&#39;: False,
-  &#39;inter&#39;: [(11, 3),
-   (11, 3, 5),
-   (11, 5, 3),
-   (28, 3, 6),
-   (28, 6, 3),
-   (12, 3, 0),
-   (12, 0, 3),
-   (17, 3, 1),
-   (17, 1, 3),
-   (10, 3),
-   (10, 3, 2),
-   (10, 2, 3),
-   (-3,),
-   (-4,)],
-  &#39;isopen&#39;: True,
-  &#39;polyg&#39;: (5.0,0.0)
-  (10.0,0.0)
-  (11.5,-0.75)
-  (-1.5,-0.75)
-  (0.0,0.0)
-
-  vnodes : (-2 11 -3 28 -10 12 -9 17 -1 10 )},
- 4: {&#39;indoor&#39;: False,
-  &#39;inter&#39;: [(30, 4, 6),
-   (30, 6, 4),
-   (9, 4),
-   (9, 4, 5),
-   (9, 5, 4),
-   (6, 4),
-   (6, 4, 2),
-   (6, 2, 4),
-   (22, 4, 1),
-   (22, 1, 4),
-   (14, 4, 0),
-   (14, 0, 4),
-   (-3,),
-   (-4,)],
-  &#39;isopen&#39;: True,
-  &#39;polyg&#39;: (11.5,5.75)
-  (10.0,5.0)
-  (5.0,5.0)
-  (0.0,5.0)
-  (-1.5,5.75)
-
-  vnodes : (-11 30 -4 9 -5 6 -6 22 -12 14 )},
- 5: {&#39;indoor&#39;: True,
-  &#39;inter&#39;: [(4, 5),
-   (4, 5, 2),
-   (4, 2, 5),
-   (9, 5),
-   (9, 5, 4),
-   (9, 4, 5),
-   (8, 5),
-   (8, 5, 6),
-   (8, 6, 5),
-   (11, 5),
-   (11, 5, 3),
-   (11, 3, 5),
-   (5, 5),
-   (5, 5, 2),
-   (5, 2, 5),
-   (1, 5),
-   (1, 5, 2),
-   (1, 2, 5),
-   (2, 5, 2),
-   (2, 2, 5),
-   (3, 5),
-   (3, 5, 2),
-   (3, 2, 5),
-   (-3,),
-   (-4,)],
-  &#39;isopen&#39;: True,
-  &#39;polyg&#39;: (5.0,4.0)
-  (5.0,5.0)
-  (10.0,5.0)
-  (10.0,0.0)
-  (5.0,0.0)
-  (5.0,3.0)
-
-  vnodes : (-7 4 -5 9 -4 8 -3 11 -2 5 -8 1 2 3 )},
- 6: {&#39;indoor&#39;: False,
-  &#39;inter&#39;: [(8, 6),
-   (8, 6, 5),
-   (8, 5, 6),
-   (30, 6, 4),
-   (30, 4, 6),
-   (13, 6, 0),
-   (13, 0, 6),
-   (28, 6, 3),
-   (28, 3, 6),
-   (-3,),
-   (-4,)],
-  &#39;isopen&#39;: True,
-  &#39;polyg&#39;: (10.0,0.0)
-  (10.0,5.0)
-  (11.5,5.75)
-  (11.5,-0.75)
-
-  vnodes : (-3 8 -4 30 -11 13 -10 28 )}}
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>NodeView((0, 1, 2, 3, 4, 5, 6))
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L=Layout(&#39;DLR.lay&#39;)
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L=Layout(&#39;DLR.lay&#39;)
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a=L.showG(&#39;s&#39;,aw=False)
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a=L.showG(&#39;s&#39;,aw=False)
 </pre></div>
 </div>
-<img alt="../../_images/Layout_22_0.png" src="../../_images/Layout_22_0.png" />
+<img alt="../../_images/Layout_23_0.png" src="../../_images/Layout_23_0.png" />
 <p>To check which are the used slabs :</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.sl
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.sl
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>List of Slabs
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>List of Slabs
 -----------------------------
 
-_AIR : AIR | [0.02]
-       white 1
-       epr :(1+0j)    sigma : 0.0
-FLOOR : REINFORCED_CONCRETE | [0.1]
-       grey40 1
-       epr :(8.69999980927+0j)    sigma : 3.0
-WALL : BRICK | [0.07]
-       grey20 3
-       epr :(4.09999990463+0j)    sigma : 0.300000011921
-3D_WINDOW_GLASS : GLASS | AIR | GLASS | [0.005, 0.005, 0.005]
+PARTITION : |PLASTER
+[0.1]
+       grey80 4
+       epr :(8+0j)    sigma : 0.038
+3D_WINDOW_GLASS : |GLASS|AIR|GLASS
+[0.005, 0.005, 0.005]
        blue3 1
        epr :(3.79999995232+0j)    sigma : 0.0
        epr :(1+0j)    sigma : 0.0
        epr :(3.79999995232+0j)    sigma : 0.0
-PARTITION : PLASTER | [0.1]
-       grey80 4
-       epr :(8+0j)    sigma : 0.038
-CEIL : REINFORCED_CONCRETE | [0.1]
-       grey20 1
-       epr :(8.69999980927+0j)    sigma : 3.0
-AIR : AIR | [0.02]
+AIR : |AIR
+[0.02]
        white 1
        epr :(1+0j)    sigma : 0.0
+CEIL : |REINFORCED_CONCRETE
+[0.1]
+       grey20 1
+       epr :(8.69999980927+0j)    sigma : 3.0
+_AIR : |AIR
+[0.02]
+       white 1
+       epr :(1+0j)    sigma : 0.0
+FLOOR : |REINFORCED_CONCRETE
+[0.1]
+       grey40 1
+       epr :(8.69999980927+0j)    sigma : 3.0
+WALL : |BRICK
+[0.07]
+       grey20 3
+       epr :(4.09999990463+0j)    sigma : 0.300000011921
 </pre></div>
 </div>
-<p>Let’s load an other layout. This an indoor office where the FP7 WHERE
+<p>Lets load an other layout. This an indoor office where the FP7 WHERE
 project UWB impulse radio measuremnts have been performed.</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L=Layout(&#39;WHERE1.lay&#39;)
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L=Layout(&#39;WHERE1.lay&#39;)
 </pre></div>
 </div>
 <p>The showG method provides many possible visualization of the layout</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a=L.showG(&#39;s&#39;,airwalls=False,figsize=(20,10))
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a=L.showG(&#39;s&#39;,airwalls=False,figsize=(20,10))
 </pre></div>
 </div>
-<img alt="../../_images/Layout_28_0.png" src="../../_images/Layout_28_0.png" />
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L=Layout(&#39;W2PTIN.lay&#39;)
+<img alt="../../_images/Layout_29_0.png" src="../../_images/Layout_29_0.png" />
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L=Layout(&#39;W2PTIN.lay&#39;)
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a = L.showG(&#39;s&#39;)
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a = L.showG(&#39;s&#39;)
 </pre></div>
 </div>
-<img alt="../../_images/Layout_30_0.png" src="../../_images/Layout_30_0.png" />
+<img alt="../../_images/Layout_31_0.png" src="../../_images/Layout_31_0.png" />
 </div>
 <div class="section" id="the-useful-numpy-arrays-of-the-layout">
 <h2>The useful numpy arrays of the Layout<a class="headerlink" href="#the-useful-numpy-arrays-of-the-layout" title="Permalink to this headline">¶</a></h2>
@@ -681,87 +531,84 @@ numpy array which are mostly used internally.</p>
 <li>degree : degree of nodes</li>
 </ul>
 <div class="section" id="pt-the-array-of-points">
-<h3><code class="docutils literal"><span class="pre">pt</span></code> the array of points<a class="headerlink" href="#pt-the-array-of-points" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">pt</span></code> the array of points<a class="headerlink" href="#pt-the-array-of-points" title="Permalink to this headline">¶</a></h3>
 <p>The point coordinates are stored in two different places</p>
 <ul class="simple">
 <li>L.Gs.pos : in a dictionary form (key is the point negative index)</li>
 <li>L.pt : in a numpy array</li>
 </ul>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; print np.shape(L.pt)
-&gt;&gt;&gt; print len(filter(lambda x: x&lt;0,L.Gs.pos))
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; print(np.shape(L.pt))
+&gt;&gt;&gt; print(len([ x for x in L.Gs.pos.keys() if x &lt;0 ]))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(2, 185)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(2, 185)
 185
 </pre></div>
 </div>
 <p>This dual storage is chosen for computational efficiency reason. The
 priority goes to the graph and the numpy array is calculated at the end
-of the edition in the <code class="docutils literal"><span class="pre">Layout.g2npy</span></code> method (graph to numpy) which is
+of the edition in the <code class="docutils literal notranslate"><span class="pre">Layout.g2npy</span></code> method (graph to numpy) which is
 in charge of the conversion.</p>
 </div>
 <div class="section" id="tahe-tail-head">
 <h3>tahe (tail-head)<a class="headerlink" href="#tahe-tail-head" title="Permalink to this headline">¶</a></h3>
-<p><code class="docutils literal"><span class="pre">tahe</span></code> is a <span class="math">\((2\times N_{s})\)</span> where <span class="math">\(N_s\)</span> denotes the
+<p><code class="docutils literal notranslate"><span class="pre">tahe</span></code> is a <span class="math notranslate nohighlight">\((2\times N_{s})\)</span> where <span class="math notranslate nohighlight">\(N_s\)</span> denotes the
 number of segment. The first line is the tail index of the segment
-<span class="math">\(k\)</span> and the second line is the head of the segment <span class="math">\(k\)</span>.
-Where <span class="math">\(k\)</span> is the index of a given segment (starting in 0).</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.build()
+<span class="math notranslate nohighlight">\(k\)</span> and the second line is the head of the segment <span class="math notranslate nohighlight">\(k\)</span>.
+Where <span class="math notranslate nohighlight">\(k\)</span> is the index of a given segment (starting in 0).</p>
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.build()
 </pre></div>
 </div>
 <p>The figure below illustrates a Layout and a superimposition of the graph
-of cycles <span class="math">\(\mathcal{G}_c\)</span>. Those cycles are automatically
+of cycles <span class="math notranslate nohighlight">\(\mathcal{G}_c\)</span>. Those cycles are automatically
 extracted from a well defined layout. This concept of <strong>cycles</strong> is
 central in the ray determination algorithm which is implemented in
 PyLayers. Notice that the exterior region is the cycle indexed by 0. All
 the rooms which have a common frontier with the exterior cycle are here
 connected to the origin (corresponding to exterior cycle).</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a = L.showG(&#39;s&#39;)
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a = L.showG(&#39;s&#39;)
 </pre></div>
 </div>
-<img alt="../../_images/Layout_36_0.png" src="../../_images/Layout_36_0.png" />
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; nx.draw_networkx_nodes(L.Gi,L.Gi.pos,node_color=&#39;blue&#39;,node_size=1)
-&gt;&gt;&gt; nx.draw_networkx_edges(L.Gi,L.Gi.pos,node_color=&#39;blue&#39;,node_size=1)
+<img alt="../../_images/Layout_37_0.png" src="../../_images/Layout_37_0.png" />
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; p1 = nx.draw_networkx_nodes(L.Gi,L.Gi.pos,node_color=&#39;blue&#39;,node_size=1)
+&gt;&gt;&gt; p2 = nx.draw_networkx_edges(L.Gi,L.Gi.pos,node_color=&#39;blue&#39;,node_size=1)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.LineCollection at 0x7f2acd643a50&gt;
-</pre></div>
-</div>
-<img alt="../../_images/Layout_37_1.png" src="../../_images/Layout_37_1.png" />
+<img alt="../../_images/Layout_38_0.png" src="../../_images/Layout_38_0.png" />
 </div>
 </div>
 <div class="section" id="tgs-trancodage-from-graph-indexing-to-numpy-array-indexing">
-<h2><code class="docutils literal"><span class="pre">tgs</span></code> : trancodage from graph indexing to numpy array indexing<a class="headerlink" href="#tgs-trancodage-from-graph-indexing-to-numpy-array-indexing" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal"><span class="pre">tgs</span></code> is an array with length <span class="math">\(N_s\)</span>+1. The index 0 is not used
+<h2><code class="docutils literal notranslate"><span class="pre">tgs</span></code> : trancodage from graph indexing to numpy array indexing<a class="headerlink" href="#tgs-trancodage-from-graph-indexing-to-numpy-array-indexing" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">tgs</span></code> is an array with length <span class="math notranslate nohighlight">\(N_s\)</span>+1. The index 0 is not used
 because none segment has 0 as an index.</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; ns = 5
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; ns = 5
 &gt;&gt;&gt; utahe = L.tgs[ns]
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; tahe =  L.tahe[:,utahe]
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; tahe =  L.tahe[:,utahe]
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; ptail = L.pt[:,tahe[0]]
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; ptail = L.pt[:,tahe[0]]
 &gt;&gt;&gt; phead = L.pt[:,tahe[1]]
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; print ptail
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; print(ptail)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[ 29.785   6.822]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ 29.785   6.822]
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; print phead
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; print(phead)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[ 27.414   6.822]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ 27.414   6.822]
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.Gs.node[5]
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>L.Gs.node[5]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>{&#39;connect&#39;: [-8, -139],
- &#39;iso&#39;: [5, 435],
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;connect&#39;: [-8, -139],
+ &#39;iso&#39;: [441],
  &#39;name&#39;: &#39;PARTITION&#39;,
  &#39;ncycles&#39;: [70, 72],
  &#39;norm&#39;: array([ 0.,  1.,  0.]),
@@ -770,22 +617,22 @@ because none segment has 0 as an index.</p>
  &#39;z&#39;: (0, 3.0)}
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; print L.Gs.pos[-8]
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>print(L.Gs.pos[-8])
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(29.785, 6.822)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(29.785, 6.822)
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; aseg = np.array([4,7,134])
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; aseg = np.array([4,7,134])
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; print np.shape(aseg)
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; print(np.shape(aseg))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(3,)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(3,)
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; pt  = L.tahe[:,L.tgs[aseg]][0,:]
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; pt  = L.tahe[:,L.tgs[aseg]][0,:]
 &gt;&gt;&gt; ph = L.tahe[:,L.tgs[aseg]][1,:]
 &gt;&gt;&gt; pth = np.vstack((pt,ph))
 </pre></div>
@@ -795,15 +642,16 @@ because none segment has 0 as an index.</p>
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="Multisubsegments.html" class="btn btn-neutral float-right" title="Modifying the segment nature" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="Multisubsegments.html" class="btn btn-neutral float-right" title="Modifying the segment nature" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../TOC.html" class="btn btn-neutral" title="1   Overview" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../TOC.html" class="btn btn-neutral" title="1   Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -813,11 +661,11 @@ because none segment has 0 as an index.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -836,9 +684,11 @@ because none segment has 0 as an index.</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -853,14 +703,13 @@ because none segment has 0 as an index.</p>
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

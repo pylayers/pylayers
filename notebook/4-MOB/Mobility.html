@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,32 +25,23 @@
   
 
   
-  
     <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../../about.html"/>
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="PyLayers" href="../../index.html"/>
-        <link rel="up" title="1   Overview" href="../TOC.html"/>
-        <link rel="next" title="Handling Body Description and Mobility" href="Body.html"/>
-        <link rel="prev" title="Network Simulation Configuration" href="../5-SIM/SimulNetConfig.html"/> 
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Handling Body Description and Mobility" href="Body.html" />
+    <link rel="prev" title="Network Simulation Configuration" href="../5-SIM/SimulNetConfig.html" /> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -63,7 +56,7 @@
 
           
             
-            <img src="../../_static/pylayers.png" class="logo" />
+            <img src="../../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -92,7 +85,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">User Manual</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html#basic-usage">2&nbsp;&nbsp;&nbsp;Basic Usage</a></li>
@@ -129,6 +125,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -170,7 +167,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -182,52 +179,72 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../index.html">User Manual</a> &raquo;</li>
-      
+        
           <li><a href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
-      
-    <li>Trajectory and Network simulation</li>
+        
+      <li>Trajectory and Network simulation</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../../_sources/notebook/4-MOB/Mobility.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="code highlight-none"><div class="highlight"><pre><span></span>!date
+  <div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>!date
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>lundi 6 novembre 2017, 10:11:00 (UTC+0100)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>lundi 6 novembre 2017, 10:11:00 (UTC+0100)
 </pre></div>
 </div>
 <div class="section" id="trajectory-and-network-simulation">
 <h1>Trajectory and Network simulation<a class="headerlink" href="#trajectory-and-network-simulation" title="Permalink to this headline">¶</a></h1>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>from IPython.display import Image, HTML, Latex, YouTubeVideo
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>from IPython.display import Image, HTML, Latex, YouTubeVideo
 import numpy as np
 import pylayers.mobility.trajectory as traj
 from pylayers.mobility.ban.body import *
@@ -235,7 +252,7 @@ from pylayers.gis.layout import *
 %matplotlib inline
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>YouTubeVideo(&#39;1Qa6xLpU5-M&#39;)
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>YouTubeVideo(&#39;1Qa6xLpU5-M&#39;)
 </pre></div>
 </div>
 <iframe
@@ -245,41 +262,41 @@ from pylayers.gis.layout import *
     frameborder="0"
     allowfullscreen
 ></iframe><p>Trajectories can be generated using simulnet.</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>from pylayers.simul.simulnet import *
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>from pylayers.simul.simulnet import *
 S=Simul()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>Warning Unable to read graph Gr
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Warning Unable to read graph Gr
 Warning Unable to read graph Gw
 Layout graphs are loaded from /home/uguen/Bureau/P1/struc/ini
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span># set simulation duration
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span># set simulation duration
 S.sim_opt[&#39;duration&#39;]=&#39;100&#39;
 S.meca_opt[&#39;mecanic_update_time&#39;]=0.1
 # turn on network simulation
 S.net_opt[&#39;network&#39;]=True
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span># run mechanical simulation
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span># run mechanical simulation
 S.runsimul()
 </pre></div>
 </div>
 <div class="section" id="trajectory">
 <h2>Trajectory<a class="headerlink" href="#trajectory" title="Permalink to this headline">¶</a></h2>
 <p>trajectories can be imported from a simulnet simulation with the
-<code class="docutils literal"><span class="pre">importh5</span></code> method</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>from pylayers.mobility.trajectory import *
+<code class="docutils literal notranslate"><span class="pre">importh5</span></code> method</p>
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>from pylayers.mobility.trajectory import *
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>str1 = eval(S.sim_opt[&#39;filename&#39;])
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>str1 = eval(S.sim_opt[&#39;filename&#39;])
 str2 = S.L._filename.split(&#39;.&#39;)[0]
 save_filename = str1 + &#39;_&#39; + str2 +&#39;.h5&#39;
 
 list_traj = S.traj
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>list_traj
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>list_traj
 </pre></div>
 </div>
 <pre class="literal-block">
@@ -338,21 +355,21 @@ t
 1970-01-01  39.0  13.0  2.5  0.0  0.0  0.0  0.0  0.0
 </pre>
 <p>The 2 following trajectories have been calculated with
-<code class="docutils literal"><span class="pre">pylayers.simul.simulnet</span></code></p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>t=S.traj.resample(10)
+<code class="docutils literal notranslate"><span class="pre">pylayers.simul.simulnet</span></code></p>
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>t=S.traj.resample(10)
 </pre></div>
 </div>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>f=plt.figure(figsize=(20,20))
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f=plt.figure(figsize=(20,20))
 f,a = S.L.showG(&#39;s&#39;,fig=f)
 for k,nodes in enumerate(t):
     f,a = nodes.plot(fig=f,ax=a)
 </pre></div>
 </div>
 <img alt="../../_images/Mobility_14_0.png" src="../../_images/Mobility_14_0.png" />
-<div class="code highlight-none"><div class="highlight"><pre><span></span>S
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>S
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>Simulation information
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Simulation information
 ----------------------
 Layout: TA-Office.lay
 Simulation duration: 100
@@ -387,15 +404,16 @@ Postion estimation methods: [&#39;geo&#39;]
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="Body.html" class="btn btn-neutral float-right" title="Handling Body Description and Mobility" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="Body.html" class="btn btn-neutral float-right" title="Handling Body Description and Mobility" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../5-SIM/SimulNetConfig.html" class="btn btn-neutral" title="Network Simulation Configuration" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../5-SIM/SimulNetConfig.html" class="btn btn-neutral" title="Network Simulation Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -405,11 +423,11 @@ Postion estimation methods: [&#39;geo&#39;]
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -428,9 +446,11 @@ Postion estimation methods: [&#39;geo&#39;]
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -445,14 +465,13 @@ Postion estimation methods: [&#39;geo&#39;]
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,21 @@
   
 
   
-  
     <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../../../about.html"/>
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="PyLayers" href="../../../index.html"/>
-        <link rel="up" title="Module code" href="../../index.html"/> 
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
 
   
   <script src="../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +54,7 @@
 
           
             
-            <img src="../../../_static/pylayers.png" class="logo" />
+            <img src="../../../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +83,10 @@
           
             
             
-                <ul>
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +97,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -142,7 +139,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -154,34 +151,52 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-      
-    <li>pylayers.gis.selectl</li>
+        
+      <li>pylayers.gis.selectl</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -196,16 +211,17 @@ r&quot;&quot;&quot;
 .. autosummary::
 
 &quot;&quot;&quot;
+from __future__ import print_function
 import os
 import pdb
-import Image
+from PIL import Image
 import numpy as np
 from pylayers.util import geomutil as geu
 from pylayers.util import pyutil as pyu
 import pylayers.util.plotutil as plu
 
 import matplotlib.pyplot as plt
-from pylayers.util.easygui import *
+#from pylayers.util.easygui import *
 from matplotlib.widgets import RectangleSelector
 
 import copy
@@ -403,9 +419,9 @@ import copy
 
         if verbose:
             try:
-                print &quot;Evenement :&quot;, self.evt,self.ddoc[self.evt]
+                print(&quot;Evenement :&quot;, self.evt,self.ddoc[self.evt])
             except:
-                print self.evt+ &#39;N/A&#39;
+                print(self.evt + &#39;N/A&#39;)
         self.new_state()</div>
 
 
@@ -442,7 +458,7 @@ import copy
         self.nsel = 0
         self.ptsel = np.array([])
         xmin, xmax, ymin, ymax = self.ax.axis()
-        #print xmin,xmax,ymin,ymax
+        #print( xmin,xmax,ymin,ymax)
         dx = xmax - xmin
         dy = ymax - ymin
         dd = np.minimum(dx, dy)
@@ -468,10 +484,10 @@ import copy
             self.ptsel = np.array((x, y))
             self.nsel = self.L.ispoint(self.ptsel, dd / 100)
 
-        #print &quot;Selected point coord : &quot;, self.ptsel
-        #print &quot;Selected point number: &quot;, self.nsel
+        #print(&quot;Selected point coord : &quot;, self.ptsel)
+        #print(&quot;Selected point number: &quot;, self.nsel)
         if self.nsel &gt; 0:
-            print &quot;Selected segment : &quot;, self.nsel
+            print(&quot;Selected segment : &quot;, self.nsel)
 
         self.new_state()</div>
 
@@ -525,7 +541,7 @@ import copy
                 pass
             try:
                 self.selector.set_active(False)
-                print &#39;inhib select&#39;
+                print(&#39;inhib select&#39;)
             except:
                 pass
             #ax.title.set_text(self.state)
@@ -553,7 +569,7 @@ import copy
         if self.state == &#39;SP1&#39;:
             self.fig,self.ax = self.show(self.fig,self.ax,clear=False)
             self.ax.title.set_text(self.statename[self.state])
-            print &#39;Selected node : &#39;+str(self.nsel)
+            print(&#39;Selected node : &#39;+str(self.nsel))
             #ax.title.set_text(self.nsel))
             self.selected_pt1 = self.nsel
             self.pt1 = np.array(self.L.Gs.pos[self.nsel]).reshape(2, 1)
@@ -571,7 +587,7 @@ import copy
             self.p1[0].set_color(&#39;green&#39;)
             self.ax.title.set_text(self.statename[self.state])
             #ax.title.set_text(&#39;Selected node : %d &#39; % (self.nsel))
-            print &#39;Selected node : &#39; + str(self.nsel)
+            print(&#39;Selected node : &#39; + str(self.nsel))
             self.selected_pt2 = self.nsel
             self.pt2 = np.array(self.L.Gs.pos[self.nsel]).reshape(2, 1)
             self.pt_previous = self.pt2
@@ -610,7 +626,7 @@ import copy
                 titre = &#39;Select Segment : %d (%d-&gt;%d) Layer : %s Coseg : %s &#39; % (nse, ta, he, self.current_layer, cosegname)
             else:
                 titre = &#39;Select Segment : %d (%d-&gt;%d) Layer : %s&#39; % (nse, ta, he, self.L.Gs.node[nse][&#39;name&#39;])
-            print titre 
+            print(titre)
             #ax.title.set_text(titre)
             self.L.show_nodes(ndlist=[nse], size=200, color=&#39;r&#39;, alpha=0.5)
 
@@ -620,7 +636,7 @@ import copy
             segdico = self.L.Gs.node[nse]
             z  = segdico[&#39;ss_z&#39;]
             #ax.title.set_text(&#39;SSS : &#39;+self.L.Gs.node[nse][&#39;name&#39;]+&#39; [&#39;+str(z[0])+&#39;]&#39;)
-            print self.L.Gs.node[nse][&#39;name&#39;]+&#39; [&#39;+str(z[0])+&#39;]&#39;
+            print(self.L.Gs.node[nse][&#39;name&#39;]+&#39; [&#39;+str(z[0])+&#39;]&#39;)
             self.segment[0].set_color(&#39;blue&#39;)
         #
         # Create Point state
@@ -639,8 +655,8 @@ import copy
                 self.segment2[0].set_visible(False)
             except:
                 pass
-            print &#39;lclic : free point, +CTRL same x, +SHIFT: same y&#39;
-            self.fig,self.ax=self.show(self.fig,self.ax,clear=False) 
+            print(&#39;lclic : free point, +CTRL same x, +SHIFT: same y&#39;)
+            self.fig,self.ax=self.show(self.fig,self.ax,clear=False)
             self.L.g2npy()
 
         #
@@ -712,7 +728,7 @@ import copy
         &#39;d |Del&#39;  : delete subsegment
         &#39;r |F5&#39;  : refresh
         &#39;o&#39;  : toggle overlay (&lt;&gt; CP mode)
-               set origin (CP mode) 
+               set origin (CP mode)
         &#39;m&#39;  : toggle mode (point or segment)
         &#39;n&#39;  : toggle node label display 
         &#39;z&#39;  : change display parameters
@@ -737,7 +753,7 @@ import copy
         #
         if self.evt == &#39;,&#39;:
             for k in self.ddoc.keys():
-                print k,self.ddoc[k]
+                print(k,self.ddoc[k])
 
         if self.evt == &#39;v&#39;:
             for n in self.L.Gs.pos:
@@ -763,7 +779,7 @@ import copy
 
         if self.evt==&#39;ctrl+z&#39;:
             self.bundo=True
-            print len(self.L.Gs)
+            print( len(self.L.Gs))
             if len (self.undoGs) &gt;2:
                 oGs=self.undoGs.pop(-1)
                 oGs=self.undoGs.pop(-1)
@@ -786,7 +802,7 @@ import copy
                         plt.draw()
                     self.selected=&#39;seg&#39;
                     self.state=&#39;SMS&#39;
-                else: 
+                else:
                     self.fig,self.ax= self.plotselptseg(self.selectpt)
                     self.selected=&#39;pt&#39;
                     self.state=&#39;SMP&#39;
@@ -811,7 +827,7 @@ import copy
         #
         if self.evt==&#39;f&#39;:
             self.L.display[&#39;nodes&#39;] = not self.L.display[&#39;nodes&#39;]
-            print self.L.display[&#39;nodes&#39;]
+            print (self.L.display[&#39;nodes&#39;])
             self.update_state()
             return
 
@@ -820,7 +836,7 @@ import copy
         #
         if self.evt==&#39;g&#39;:
             self.L.display[&#39;ednodes&#39;] = not self.L.display[&#39;ednodes&#39;]
-            print self.L.display[&#39;ednodes&#39;]
+            print (self.L.display[&#39;ednodes&#39;])
             self.update_state()
             return
 
@@ -832,7 +848,7 @@ import copy
             index = self.L.display[&#39;layerset&#39;].index(self.L.display[&#39;activelayer&#39;])
             self.L.display[&#39;activelayer&#39;] = self.L.display[&#39;layerset&#39;][(index+1) % N]
             self.current_layer = self.L.display[&#39;activelayer&#39;]
-            print self.current_layer
+            print (self.current_layer)
             self.update_state()
             return
 
@@ -844,7 +860,7 @@ import copy
             index = self.L.display[&#39;layerset&#39;].index(self.L.display[&#39;activelayer&#39;])
             self.L.display[&#39;activelayer&#39;] = self.L.display[&#39;layerset&#39;][(index-1) % N]
             self.current_layer = self.L.display[&#39;activelayer&#39;]
-            print self.current_layer
+            print (self.current_layer)
             self.update_state()
             return
         #
@@ -994,7 +1010,7 @@ import copy
                     self.update_state()
                     return
                 else :
-                    print &#39;no selected region&#39;
+                    print (&#39;no selected region&#39;)
 
             if self.state==&#39;SMS&#39;:
                 seglist = self.selectseg
@@ -1005,7 +1021,7 @@ import copy
                 self.update_state()
                 return
             else :
-                print &#39;no selected region&#39;
+                print (&#39;no selected region&#39;)
         #
         # r : Refresh
         #
@@ -1086,8 +1102,8 @@ import copy
             #self.L.savestr2(filename)
 
             self.L.saveini(fileini)
-            print &quot;structure saved in &quot;, filename
-            print &quot;structure saved in &quot;, fileini
+            print( &quot;structure saved in &quot;, filename)
+            print( &quot;structure saved in &quot;, fileini)
             return
         #
         # &#39;n&#39; : toggle node label display
@@ -1095,7 +1111,7 @@ import copy
         if self.evt == &#39;n&#39;:
             self.L.display[&#39;ndlabel&#39;] = not self.L.display[&#39;ndlabel&#39;]
             self.L.display[&#39;edlabel&#39;] = not self.L.display[&#39;edlabel&#39;]
-            print self.L.display[&#39;activelayer&#39;]
+            print( self.L.display[&#39;activelayer&#39;])
             self.fig,ax = self.show(fig=self.fig,ax=self.ax,clear=True)
             self.fig.canvas.draw()
             return
@@ -1105,7 +1121,7 @@ import copy
         if self.evt == &#39;w&#39;:
         # display all layer
             self.L.display[&#39;activelayer&#39;] = self.L.name.keys()
-            print self.L.display[&#39;activelayer&#39;]
+            print( self.L.display[&#39;activelayer&#39;])
             self.fig,self.ax = self.show(fig=self.fig,ax=self.ax,clear=True)
             return self.fig,self.ax
         #
@@ -1214,7 +1230,7 @@ import copy
                 if self.set_origin:
                     offx = self.ptsel[0]
                     offy = self.ptsel[1]
-                    print offx,offy
+                    print( offx,offy)
                     xmin,xmax,ymin,ymax = self.L.display[&#39;box&#39;]
                     self.L.display[&#39;box&#39;] = [xmin-offx,xmax-offx,ymin-offy,ymax-offy]
                     self.set_origin=False
@@ -1227,7 +1243,7 @@ import copy
                     offx = self.ptsel[0]
                     val  = eval(enterbox(&#39;enter x value&#39;))
                     ratio = val/offx
-                    print ratio
+                    print( ratio)
                     xmin,xmax,ymin,ymax = self.L.display[&#39;box&#39;]
                     self.L.display[&#39;box&#39;] = [ratio*xmin,ratio*xmax,ymin,ymax]
                     self.set_x=False
@@ -1240,7 +1256,7 @@ import copy
                     offx = self.ptsel[1]
                     val  = eval(enterbox(&#39;enter y value&#39;))
                     ratio = val/offx
-                    print ratio
+                    print( ratio)
                     xmin,xmax,ymin,ymax = self.L.display[&#39;box&#39;]
                     self.L.display[&#39;box&#39;] = [xmin,xmax,ratio*ymin,ratio*ymax]
                     self.set_y=False
@@ -1261,12 +1277,12 @@ import copy
                 he = self.selected_pt2
 
                 segexist = self.L.isseg(ta,he)
-                print segexist
+                print( segexist)
                 # if segment do not already exist, create it
                 if not segexist: 
                     self.nsel  = self.L.add_segment(ta, he,name=self.current_layer)
                 else:
-                    print &quot;segment (&quot;+str(ta)+&quot;,&quot;+str(he)+&quot;) already exists&quot;
+                    print( &quot;segment (&quot;+str(ta)+&quot;,&quot;+str(he)+&quot;) already exists&quot;)
                 self.L.g2npy()
                 self.state = &#39;Init&#39;
                 self.update_state()
@@ -1361,8 +1377,8 @@ import copy
                 x1,x2=x2,x1
             if y1&gt;y2:
                 y1,y2=y2,y1
-            
-            
+
+
             # try:
             selectpt,selectseg = self.L.get_zone([x1,x2,y1,y2])
 
@@ -1380,10 +1396,10 @@ import copy
                 [self.selectseg.pop(self.selectseg.index(x)) for x in selectseg if x in self.selectseg]
             # except:
             #     print &#39;empty selection&#39;
-            print self.selectpt,self.selectseg
+            print(self.selectpt,self.selectseg)
             self.plotselptseg(self.selectpt)
             self.selected=&#39;pt&#39;
-            print self.state
+            print(self.state)
             
                 
 
@@ -1392,7 +1408,7 @@ import copy
                 toggle_selector.RS.set_active(False)
             if not toggle_selector.RS.active:
                 toggle_selector.RS.set_active(True)
-        
+
         if self.evt == &#39;f1&#39;:
             #avoid conflict between zoom and selection 
             # fm=plt.get_current_fig_manager()
@@ -1411,7 +1427,7 @@ import copy
             self.update_state()
 
         if self.evt == &#39;f9&#39;:
-            print self.selectpt, self.selectseg</div></div>
+            print(self.selectpt, self.selectseg)</div></div>
             #print self.selectsl
             # plt.connect(&#39;key_press_event&#39;, toggle_selector)
 
@@ -1421,6 +1437,7 @@ if __name__ == &#39;__main__&#39;:
 </pre></div>
 
            </div>
+           
           </div>
           <footer>
   
@@ -1430,11 +1447,11 @@ if __name__ == &#39;__main__&#39;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1453,9 +1470,11 @@ if __name__ == &#39;__main__&#39;:
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -1470,14 +1489,13 @@ if __name__ == &#39;__main__&#39;:
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

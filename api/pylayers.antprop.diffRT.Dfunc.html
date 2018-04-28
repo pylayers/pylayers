@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,32 +25,23 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/>
-        <link rel="next" title="FreF" href="pylayers.antprop.diffRT.FreF.html"/>
-        <link rel="prev" title="diff" href="pylayers.antprop.diffraction.diff.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FreF" href="pylayers.antprop.diffRT.FreF.html" />
+    <link rel="prev" title="diff" href="pylayers.antprop.diffraction.diff.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -63,7 +56,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -92,7 +85,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -103,6 +99,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -156,7 +153,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -168,36 +165,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>Dfunc</li>
+        
+      <li>Dfunc</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.antprop.diffRT.Dfunc.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -208,38 +225,29 @@
 <dl class="function">
 <dt id="pylayers.antprop.diffRT.Dfunc">
 <code class="descclassname">pylayers.antprop.diffRT.</code><code class="descname">Dfunc</code><span class="sig-paren">(</span><em>sign</em>, <em>k</em>, <em>N</em>, <em>dphi</em>, <em>si</em>, <em>sd</em>, <em>xF=[]</em>, <em>F=[]</em>, <em>beta=1.5707963267948966</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/diffRT.html#Dfunc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.diffRT.Dfunc" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sign</strong> : int</p>
+<dd><dl class="docutils">
+<dt>sign <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>+1 | -1</dd>
+</dl>
+<p>k : wave number
+N : wedge parameter
+dphi : phi-phi0 or phi+phi0
+si : distance source-D
+sd : distance D-observation
+beta : skew incidence angle
+xF : array</p>
 <blockquote>
-<div><p>+1 | -1</p>
-</div></blockquote>
-<p><strong>k</strong> : wave number</p>
-<p><strong>N</strong> : wedge parameter</p>
-<p><strong>dphi</strong> : phi-phi0 or phi+phi0</p>
-<p><strong>si</strong> : distance source-D</p>
-<p><strong>sd</strong> : distance D-observation</p>
-<p><strong>beta</strong> : skew incidence angle</p>
-<p><strong>xF</strong> : array</p>
-<blockquote>
-<div><p>support of Fresnel function.</p>
-</div></blockquote>
-<p><strong>F</strong> : array</p>
-<blockquote>
-<div><p>Values of Fresnel function in regard of support
+<div>support of Fresnel function.</div></blockquote>
+<dl class="docutils">
+<dt>F <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd>Values of Fresnel function in regard of support
 if F =[], fresnel function is computed
-otherwise the passed interpolation F is used.</p>
-</div></blockquote>
-<p><strong>Reference</strong></p>
-<p><strong>———</strong></p>
-<p><strong>[1] KOUYOUMJIAN-PATHAK a uniform geometrical theory of diffraction for an edge</strong></p>
-<p class="last"><strong>in a perfectly conducting surface” IEEE AP nov 74 vol 62 N11</strong></p>
-</td>
-</tr>
-</tbody>
-</table>
+otherwise the passed interpolation F is used.</dd>
+</dl>
+<p>[1] KOUYOUMJIAN-PATHAK a uniform geometrical theory of diffraction for an edge
+in a perfectly conducting surface” IEEE AP nov 74 vol 62 N11</p>
+<blockquote>
+<div>e-jnp.pi/4           1</div></blockquote>
 <dl class="docutils">
 <dt>Di= ——————  *  ———– * F(kla)    ([1] eq 25)</dt>
 <dd>2n*racine(2*np.pi*k)    np.tan(dphi/n)sin(beta)</dd>
@@ -250,15 +258,16 @@ otherwise the passed interpolation F is used.</p>
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="pylayers.antprop.diffRT.FreF.html" class="btn btn-neutral float-right" title="FreF" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="pylayers.antprop.diffRT.FreF.html" class="btn btn-neutral float-right" title="FreF" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pylayers.antprop.diffraction.diff.html" class="btn btn-neutral" title="diff" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pylayers.antprop.diffraction.diff.html" class="btn btn-neutral" title="diff" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -268,11 +277,11 @@ otherwise the passed interpolation F is used.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -291,9 +300,11 @@ otherwise the passed interpolation F is used.</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -308,14 +319,13 @@ otherwise the passed interpolation F is used.</p>
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

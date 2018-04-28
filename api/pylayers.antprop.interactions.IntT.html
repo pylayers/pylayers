@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,23 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Inter" href="pylayers.antprop.interactions.Inter.html" />
+    <link rel="prev" title="IntR" href="pylayers.antprop.interactions.IntR.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +56,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +85,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +99,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -120,9 +119,7 @@
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.interactions.IntB.html">IntB</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.interactions.IntD.html">IntD</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.interactions.IntR.html">IntR</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">IntT</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">IntT</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.interactions.Inter.html">Inter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.interactions.Interactions.html">Interactions</a></li>
 </ul>
@@ -156,7 +153,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -168,36 +165,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>IntT</li>
+        
+      <li>IntT</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.antprop.interactions.IntT.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -208,44 +225,9 @@
 <dl class="class">
 <dt id="pylayers.antprop.interactions.IntT">
 <em class="property">class </em><code class="descclassname">pylayers.antprop.interactions.</code><code class="descname">IntT</code><span class="sig-paren">(</span><em>data=array([]</em>, <em>dtype=float64)</em>, <em>idx=[]</em>, <em>slab={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#IntT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.IntT" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="pylayers.antprop.interactions.Inter.html#pylayers.antprop.interactions.Inter" title="pylayers.antprop.interactions.Inter"><code class="xref py py-class docutils literal"><span class="pre">pylayers.antprop.interactions.Inter</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="pylayers.antprop.interactions.Inter.html#pylayers.antprop.interactions.Inter" title="pylayers.antprop.interactions.Inter"><code class="xref py py-class docutils literal notranslate"><span class="pre">pylayers.antprop.interactions.Inter</span></code></a></p>
 <p>Transmission  interaction class</p>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="79%" />
-<col width="21%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>data = np.array(( i x [theta,si,st]))</td>
-<td>&#160;</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">create_dusl</span></code>(a)</td>
-<td>create dictionnary of used slab.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.interactions.IntT.eval" title="pylayers.antprop.interactions.IntT.eval"><code class="xref py py-obj docutils literal"><span class="pre">eval</span></code></a>([fGHz])</td>
-<td>evaluate transmission</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
-<td>generic help</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">sinsout</span></code>()</td>
-<td>calculate sin sout of the interaction</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">stack</span></code>([data,&nbsp;dtype,&nbsp;idx,&nbsp;isdata])</td>
-<td>stack data and the associated idx</td>
-</tr>
-</tbody>
-</table>
+<p>data = np.array(( i x [theta,si,st]))</p>
 <p class="rubric">Methods Summary</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -253,7 +235,7 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.interactions.IntT.eval" title="pylayers.antprop.interactions.IntT.eval"><code class="xref py py-obj docutils literal"><span class="pre">eval</span></code></a>([fGHz])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.interactions.IntT.eval" title="pylayers.antprop.interactions.IntT.eval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval</span></code></a>([fGHz])</td>
 <td>evaluate transmission</td>
 </tr>
 </tbody>
@@ -263,11 +245,10 @@
 <dt id="pylayers.antprop.interactions.IntT.eval">
 <code class="descname">eval</code><span class="sig-paren">(</span><em>fGHz=array([ 2.4])</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#IntT.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.IntT.eval" title="Permalink to this definition">¶</a></dt>
 <dd><p>evaluate transmission</p>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.rays import *
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.rays import *
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; # generate input data
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; # generate input data
 &gt;&gt;&gt; theta1 = 0.1
 &gt;&gt;&gt; theta2 = 0.4
 &gt;&gt;&gt; si01 = 4
@@ -278,7 +259,7 @@
 &gt;&gt;&gt; data2=np.array((theta2,si02,sir2))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; # store input data to Instance
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; # store input data to Instance
 &gt;&gt;&gt; T = IntT(data1,idx=0)
 &gt;&gt;&gt; T.data
 array([ 0.1 ,  4.  ,  3.15])
@@ -287,17 +268,17 @@ array([ 0.1 ,  4.  ,  3.15])
 &gt;&gt;&gt; T.dusl[&#39;AIR&#39;]=[0,1]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; # evaluation parameters (normally read from config.ini)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; # evaluation parameters (normally read from config.ini)
 &gt;&gt;&gt; T.f = np.array([  2.,  11.])
 &gt;&gt;&gt; T.nf = len(T.f)
 &gt;&gt;&gt; T.olf = np.ones((T.nf))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; # evaluation
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; # evaluation
 &gt;&gt;&gt; eT=T.eval()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; # examples
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; # examples
 &gt;&gt;&gt; ninter = len(T.idx)
 &gt;&gt;&gt; np.shape(eT)
 (1, 2, 2, 2)
@@ -314,8 +295,18 @@ array([[ 1.+0.j,  0.+0.j],
 
 
            </div>
+           
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pylayers.antprop.interactions.Inter.html" class="btn btn-neutral float-right" title="Inter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pylayers.antprop.interactions.IntR.html" class="btn btn-neutral" title="IntR" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -323,11 +314,11 @@ array([[ 1.+0.j,  0.+0.j],
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -346,9 +337,11 @@ array([[ 1.+0.j,  0.+0.j],
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -363,14 +356,13 @@ array([[ 1.+0.j,  0.+0.j],
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

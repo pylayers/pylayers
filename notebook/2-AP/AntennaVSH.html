@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,32 +25,23 @@
   
 
   
-  
     <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../../about.html"/>
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="PyLayers" href="../../index.html"/>
-        <link rel="up" title="1   Overview" href="../TOC.html"/>
-        <link rel="next" title="Indoor Coverage with the PyLayers Multi Wall model" href="Coverage.html"/>
-        <link rel="prev" title="Scalar Spherical Harmonics" href="AntennaSSH.html"/> 
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Indoor Coverage with the PyLayers Multi Wall model" href="Coverage.html" />
+    <link rel="prev" title="Scalar Spherical Harmonics" href="AntennaSSH.html" /> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -63,7 +56,7 @@
 
           
             
-            <img src="../../_static/pylayers.png" class="logo" />
+            <img src="../../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -92,7 +85,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">User Manual</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../TOC.html#basic-usage">2&nbsp;&nbsp;&nbsp;Basic Usage</a></li>
@@ -126,6 +122,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -167,7 +164,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -179,38 +176,58 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../index.html">User Manual</a> &raquo;</li>
-      
+        
           <li><a href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
-      
-    <li>Vector Spherical Harmonics Representation of Antennas</li>
+        
+      <li>Vector Spherical Harmonics Representation of Antennas</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../../_sources/notebook/2-AP/AntennaVSH.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -218,7 +235,7 @@
             
   <div class="section" id="vector-spherical-harmonics-representation-of-antennas">
 <h1>Vector Spherical Harmonics Representation of Antennas<a class="headerlink" href="#vector-spherical-harmonics-representation-of-antennas" title="Permalink to this headline">¶</a></h1>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>from pylayers.antprop.antenna import *
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>from pylayers.antprop.antenna import *
 
 from pylayers.antprop.antvsh import *
 
@@ -226,44 +243,44 @@ from pylayers.antprop.antvsh import *
 </pre></div>
 </div>
 <p>Loading an Antenna from a Matlab file</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A = Antenna(&#39;S2R2.mat&#39;,directory=&#39;ant/UWBAN/Matfile&#39;)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>A = Antenna(&#39;S2R2.mat&#39;,directory=&#39;ant/UWBAN/Matfile&#39;)
 </pre></div>
 </div>
-<p>The shape of the <span class="math">\(F_{\phi}\)</span> functions indicates :</p>
+<p>The shape of the <span class="math notranslate nohighlight">\(F_{\phi}\)</span> functions indicates :</p>
 <ul class="simple">
-<li><span class="math">\(N_{\theta} = 91\)</span></li>
+<li><span class="math notranslate nohighlight">\(N_{\theta} = 91\)</span></li>
 <li>:math:<a href="#id1"><span class="problematic" id="id2">`</span></a>N_{phi} = 180 `</li>
-<li><span class="math">\(N_f= 104\)</span></li>
+<li><span class="math notranslate nohighlight">\(N_f= 104\)</span></li>
 </ul>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>np.shape(A.Fp)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>np.shape(A.Fp)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(91, 180, 104)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(91, 180, 104)
 </pre></div>
 </div>
-<p>The frequency array is expressed in <span class="math">\(GHz\)</span> and delays are expressed
-in <span class="math">\(ns\)</span></p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>fGHz = A.fGHz
+<p>The frequency array is expressed in <span class="math notranslate nohighlight">\(GHz\)</span> and delays are expressed
+in <span class="math notranslate nohighlight">\(ns\)</span></p>
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>fGHz = A.fGHz
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>fGHz.shape
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>fGHz.shape
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(104,)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(104,)
 </pre></div>
 </div>
-<p>Then an electrical delay of <span class="math">\(4.185ns\)</span> is applied on the
-<span class="math">\(F_{\theta}\)</span></p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>I = A.Ft[:,:,:]
+<p>Then an electrical delay of <span class="math notranslate nohighlight">\(4.185ns\)</span> is applied on the
+<span class="math notranslate nohighlight">\(F_{\theta}\)</span></p>
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>I = A.Ft[:,:,:]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>I.shape
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>I.shape
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(91, 180, 104)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(91, 180, 104)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(10,8))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>plt.figure(figsize=(10,8))
 
 plt.imshow(np.unwrap(np.angle(I[:,45,:])))
 
@@ -280,17 +297,17 @@ plt.plot(fGHz,np.unwrap(np.angle(I[45,85,:])))
 plt.xlabel(&#39;f index&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7f595f38dad0&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7f595f38dad0&gt;
 </pre></div>
 </div>
 <img alt="../../_images/AntennaVSH_12_1.png" src="../../_images/AntennaVSH_12_1.png" />
 <img alt="../../_images/AntennaVSH_12_2.png" src="../../_images/AntennaVSH_12_2.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>tau=4.185
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>tau=4.185
 
 I = A.Ft[:,:,:]*np.exp(-2*1j*np.pi*fGHz[None,None,:]*tau)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.imshow(np.unwrap(np.angle(I[:,45,:])))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>plt.imshow(np.unwrap(np.angle(I[:,45,:])))
 
 plt.title(r&#39;Unwrapped phase of $F_{\theta}$ w.r.t frequency and phi for $\theta=\frac{pi}{2}$&#39;)
 
@@ -303,24 +320,24 @@ plt.figure()
 plt.plot(fGHz,np.unwrap(np.angle(I[45,85,:])))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f595efcf710&gt;]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f595efcf710&gt;]
 </pre></div>
 </div>
 <img alt="../../_images/AntennaVSH_14_1.png" src="../../_images/AntennaVSH_14_1.png" />
 <img alt="../../_images/AntennaVSH_14_2.png" src="../../_images/AntennaVSH_14_2.png" />
 <div class="section" id="display-of-the-radiation-pattern-for-all-frequencies">
 <h2>Display of the radiation pattern for all frequencies<a class="headerlink" href="#display-of-the-radiation-pattern-for-all-frequencies" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(10,10))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>plt.figure(figsize=(10,10))
 
 for nf in range(104):
     plt.polar(A.phi,abs(A.Ft[45,:,nf]))
 </pre></div>
 </div>
 <img alt="../../_images/AntennaVSH_16_0.png" src="../../_images/AntennaVSH_16_0.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.info()
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>A.info()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>S2R2.mat
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>S2R2.mat
 type :  mat
 S2R2
 Th1
@@ -340,13 +357,13 @@ No vsh coefficient calculated yet
 <div class="section" id="evaluation-of-vector-spherical-harmonics-coefficients">
 <h1>Evaluation of Vector Spherical Harmonics Coefficients<a class="headerlink" href="#evaluation-of-vector-spherical-harmonics-coefficients" title="Permalink to this headline">¶</a></h1>
 <p>At that stage we compute the Vector Spherical Harmonics coefficients</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A=vsh(A)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>A=vsh(A)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.info()
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>A.info()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>S2R2.mat
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>S2R2.mat
 type :  mat
 S2R2
 Th1
@@ -361,13 +378,13 @@ Nb phi (lon) : 180
 No vsh coefficient calculated yet
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.C.s1tos2(30)
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>A.C.s1tos2(30)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.C
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>A.C
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>Br
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Br
 -------------
 L1  : 90
 M1  : 89
@@ -396,19 +413,19 @@ Ncoeff s1 8010
 NCoeff s2  : 495
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig = plt.figure(figsize=(8,8))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>fig = plt.figure(figsize=(8,8))
 
 A.C.show(&#39;s2&#39;,k=300)
 </pre></div>
 </div>
 <img alt="../../_images/AntennaVSH_23_0.png" src="../../_images/AntennaVSH_23_0.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.C.s2tos3()
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>A.C.s2tos3()
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.C
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>A.C
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>Br
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Br
 -------------
 L1  : 90
 M1  : 89
@@ -441,7 +458,7 @@ NCoeff s2  : 495
 Ncoeff s3 : 145
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig = plt.figure(figsize=(8,8))
+<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>fig = plt.figure(figsize=(8,8))
 
 A.C.show(&#39;s3&#39;)
 
@@ -453,15 +470,16 @@ plt.tight_layout()
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="Coverage.html" class="btn btn-neutral float-right" title="Indoor Coverage with the PyLayers Multi Wall model" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="Coverage.html" class="btn btn-neutral float-right" title="Indoor Coverage with the PyLayers Multi Wall model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="AntennaSSH.html" class="btn btn-neutral" title="Scalar Spherical Harmonics" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="AntennaSSH.html" class="btn btn-neutral" title="Scalar Spherical Harmonics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -471,11 +489,11 @@ plt.tight_layout()
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -494,9 +512,11 @@ plt.tight_layout()
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -511,14 +531,13 @@ plt.tight_layout()
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

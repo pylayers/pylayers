@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,22 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="TUDchannel" href="pylayers.antprop.channel.TUDchannel.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +55,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +84,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -126,9 +124,7 @@
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.AFPchannel.html">AFPchannel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.Ctilde.html">Ctilde</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.Mchannel.html">Mchannel</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">TBchannel</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">TBchannel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.TUDchannel.html">TUDchannel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.TUchannel.html">TUchannel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.Tchannel.html">Tchannel</a></li>
@@ -158,7 +154,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -170,36 +166,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>TBchannel</li>
+        
+      <li>TBchannel</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.antprop.channel.TBchannel.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -210,107 +226,8 @@
 <dl class="class">
 <dt id="pylayers.antprop.channel.TBchannel">
 <em class="property">class </em><code class="descclassname">pylayers.antprop.channel.</code><code class="descname">TBchannel</code><span class="sig-paren">(</span><em>x=array([]</em>, <em>dtype=float64)</em>, <em>y=array([]</em>, <em>dtype=float64)</em>, <em>label=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#TBchannel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.TBchannel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="references.html#pylayers.signal.bsignal.TBsignal" title="pylayers.signal.bsignal.TBsignal"><code class="xref py py-class docutils literal"><span class="pre">pylayers.signal.bsignal.TBsignal</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="references.html#pylayers.signal.bsignal.TBsignal" title="pylayers.signal.bsignal.TBsignal"><code class="xref py py-class docutils literal notranslate"><span class="pre">pylayers.signal.bsignal.TBsignal</span></code></a></p>
 <p>radio channel in non uniform delay domain</p>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.TBchannel.Kfactor" title="pylayers.antprop.channel.TBchannel.Kfactor"><code class="xref py py-obj docutils literal"><span class="pre">Kfactor</span></code></a>([threshold_dB,&nbsp;dB])</td>
-<td>determine Ricean K factor</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.TBchannel.SalehValenzuela" title="pylayers.antprop.channel.TBchannel.SalehValenzuela"><code class="xref py py-obj docutils literal"><span class="pre">SalehValenzuela</span></code></a>(**kwargs)</td>
-<td>generic Saleh and Valenzuela Model</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">append</span></code>(bs)</td>
-<td>append bs to Bsignal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">b2tu</span></code>(N)</td>
-<td>conversion from TBsignal to TUsignal</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">b2tu2</span></code>(fsGHz,&nbsp;Tobsns)</td>
-<td>conversion from TBsignal to TUsignal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">cformat</span></code>(**kwargs)</td>
-<td>complex format</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.TBchannel.delays" title="pylayers.antprop.channel.TBchannel.delays"><code class="xref py py-obj docutils literal"><span class="pre">delays</span></code></a>()</td>
-<td>calculate delay parameters and orthogonality factor from cir</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">extract</span></code>(u)</td>
-<td>extract a subset of signal from index</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">flatteny</span></code>([yrange,&nbsp;reversible])</td>
-<td>flatten y array</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">gating</span></code>(xmin,&nbsp;xmax)</td>
-<td>gating between xmin and xmax</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
-<td>generic help</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">imshow</span></code>(**kwargs)</td>
-<td>imshow of y matrix</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">integ</span></code>(Tns[,&nbsp;Tsns])</td>
-<td>integation of alphak tauk of TBsignal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">len</span></code>()</td>
-<td>returm length of x axis</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">load</span></code>(filename)</td>
-<td>load a Bsignal from a Matlab File</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">max</span></code>()</td>
-<td>max value of the signal (module if complex)</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">mean</span></code>()</td>
-<td>mean value of the signal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">min</span></code>()</td>
-<td>min value of the signal (module if complex)</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>(**kwargs)</td>
-<td>plot TBsignal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">save</span></code>(filename)</td>
-<td>save Bsignal in Matlab File Format</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">setx</span></code>(x)</td>
-<td>setx : set x vector</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">sety</span></code>(fun)</td>
-<td>sety : set y vector</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">stem</span></code>(**kwargs)</td>
-<td>stem display</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">step</span></code>([color])</td>
-<td>plot steps display</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">tap</span></code>(fcGHz,&nbsp;WGHz,&nbsp;Ntap)</td>
-<td>Back to baseband</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.TBchannel.tau_Emax" title="pylayers.antprop.channel.TBchannel.tau_Emax"><code class="xref py py-obj docutils literal"><span class="pre">tau_Emax</span></code></a>()</td>
-<td>calculate the delay of max energy peak</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.TBchannel.tau_moy" title="pylayers.antprop.channel.TBchannel.tau_moy"><code class="xref py py-obj docutils literal"><span class="pre">tau_moy</span></code></a>([alpha,&nbsp;threshold_dB,&nbsp;tau0])</td>
-<td>calculate mean excess delay starting from delay tau0</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.TBchannel.tau_rms" title="pylayers.antprop.channel.TBchannel.tau_rms"><code class="xref py py-obj docutils literal"><span class="pre">tau_rms</span></code></a>([alpha,&nbsp;threshold_dB,&nbsp;tau0])</td>
-<td>calculate root mean square delay spread starting from delay tau_0</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.TBchannel.toFD" title="pylayers.antprop.channel.TBchannel.toFD"><code class="xref py py-obj docutils literal"><span class="pre">toFD</span></code></a>([fGHz])</td>
-<td>Transform to Frequency domain</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">translate</span></code>(tau)</td>
-<td>translate TBsignal signal by tau</td>
-</tr>
-</tbody>
-</table>
 <p class="rubric">Methods Summary</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -318,25 +235,25 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.TBchannel.Kfactor" title="pylayers.antprop.channel.TBchannel.Kfactor"><code class="xref py py-obj docutils literal"><span class="pre">Kfactor</span></code></a>([threshold_dB,&nbsp;dB])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.TBchannel.Kfactor" title="pylayers.antprop.channel.TBchannel.Kfactor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Kfactor</span></code></a>([threshold_dB,&nbsp;dB])</td>
 <td>determine Ricean K factor</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.TBchannel.SalehValenzuela" title="pylayers.antprop.channel.TBchannel.SalehValenzuela"><code class="xref py py-obj docutils literal"><span class="pre">SalehValenzuela</span></code></a>(**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.TBchannel.SalehValenzuela" title="pylayers.antprop.channel.TBchannel.SalehValenzuela"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SalehValenzuela</span></code></a>(**kwargs)</td>
 <td>generic Saleh and Valenzuela Model</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.TBchannel.delays" title="pylayers.antprop.channel.TBchannel.delays"><code class="xref py py-obj docutils literal"><span class="pre">delays</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.TBchannel.delays" title="pylayers.antprop.channel.TBchannel.delays"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delays</span></code></a>()</td>
 <td>calculate delay parameters and orthogonality factor from cir</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.TBchannel.tau_Emax" title="pylayers.antprop.channel.TBchannel.tau_Emax"><code class="xref py py-obj docutils literal"><span class="pre">tau_Emax</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.TBchannel.tau_Emax" title="pylayers.antprop.channel.TBchannel.tau_Emax"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tau_Emax</span></code></a>()</td>
 <td>calculate the delay of max energy peak</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.TBchannel.tau_moy" title="pylayers.antprop.channel.TBchannel.tau_moy"><code class="xref py py-obj docutils literal"><span class="pre">tau_moy</span></code></a>([alpha,&nbsp;threshold_dB,&nbsp;tau0])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.TBchannel.tau_moy" title="pylayers.antprop.channel.TBchannel.tau_moy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tau_moy</span></code></a>([alpha,&nbsp;threshold_dB,&nbsp;tau0])</td>
 <td>calculate mean excess delay starting from delay tau0</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.TBchannel.tau_rms" title="pylayers.antprop.channel.TBchannel.tau_rms"><code class="xref py py-obj docutils literal"><span class="pre">tau_rms</span></code></a>([alpha,&nbsp;threshold_dB,&nbsp;tau0])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.TBchannel.tau_rms" title="pylayers.antprop.channel.TBchannel.tau_rms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tau_rms</span></code></a>([alpha,&nbsp;threshold_dB,&nbsp;tau0])</td>
 <td>calculate root mean square delay spread starting from delay tau_0</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.TBchannel.toFD" title="pylayers.antprop.channel.TBchannel.toFD"><code class="xref py py-obj docutils literal"><span class="pre">toFD</span></code></a>([fGHz])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.TBchannel.toFD" title="pylayers.antprop.channel.TBchannel.toFD"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toFD</span></code></a>([fGHz])</td>
 <td>Transform to Frequency domain</td>
 </tr>
 </tbody>
@@ -346,43 +263,24 @@
 <dt id="pylayers.antprop.channel.TBchannel.Kfactor">
 <code class="descname">Kfactor</code><span class="sig-paren">(</span><em>threshold_dB=20</em>, <em>dB=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#TBchannel.Kfactor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.TBchannel.Kfactor" title="Permalink to this definition">¶</a></dt>
 <dd><p>determine Ricean K factor</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Threshold_dB</strong> : float</p>
-<blockquote>
-<div><p>Only the energy above threshold is taken into account</p>
-</div></blockquote>
-<p><strong>dB</strong> : boolean</p>
-<blockquote class="last">
-<div><p>if True value in dB is returned</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>Threshold_dB <span class="classifier-delimiter">:</span> <span class="classifier">float </span></dt>
+<dd>Only the energy above threshold is taken into account</dd>
+<dt>dB <span class="classifier-delimiter">:</span> <span class="classifier">boolean </span></dt>
+<dd>if True value in dB is returned</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.channel.TBchannel.SalehValenzuela">
 <code class="descname">SalehValenzuela</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#TBchannel.SalehValenzuela"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.TBchannel.SalehValenzuela" title="Permalink to this definition">¶</a></dt>
 <dd><p>generic Saleh and Valenzuela Model</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Lam</strong> : clusters Poisson Process parameter (ns)</p>
-<p><strong>lam</strong> : rays Poisson Process parameter (ns)</p>
-<p><strong>Gam</strong> : clusters exponential decay factor</p>
-<p><strong>gam</strong> : rays exponential decay factor</p>
-<p class="last"><strong>T</strong> : observation duration</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.channel import *
+<p>Lam : clusters Poisson Process parameter (ns)
+lam : rays Poisson Process parameter (ns)
+Gam : clusters exponential decay factor
+gam : rays exponential decay factor
+T   : observation duration</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.channel import *
 &gt;&gt;&gt; C=TBchannel()
 &gt;&gt;&gt; C.SalehValenzuela()
 &gt;&gt;&gt; f,a = C.stem()
@@ -394,35 +292,23 @@
 <dt id="pylayers.antprop.channel.TBchannel.delays">
 <code class="descname">delays</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#TBchannel.delays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.TBchannel.delays" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculate delay parameters and orthogonality factor from cir</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">taum :</p>
-<blockquote>
-<div><p>mean excess delay</p>
-</div></blockquote>
-<p>delayspread</p>
-<blockquote>
-<div><p>rms delay spread</p>
-</div></blockquote>
-<p>of  :</p>
-<blockquote>
-<div><p>orthogonality factor</p>
-</div></blockquote>
-<p>Neelesh Metha, Andreas Molish, Lary Greenstein “Orthogonality Factor in WCDMA Donlinks in Urban Macrocellular</p>
-<p class="last">environments”</p>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>taum :</dt>
+<dd>mean excess delay</dd>
+<dt>delayspread</dt>
+<dd>rms delay spread</dd>
+<dt>of  :</dt>
+<dd>orthogonality factor</dd>
+</dl>
+<p>Neelesh Metha, Andreas Molish, Lary Greenstein “Orthogonality Factor in WCDMA Donlinks in Urban Macrocellular
+environments”</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.channel.TBchannel.tau_Emax">
 <code class="descname">tau_Emax</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#TBchannel.tau_Emax"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.TBchannel.tau_Emax" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculate the delay of max energy peak</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\max_{      au} y^{2}(      au)\]</div>
 </dd></dl>
 
@@ -430,41 +316,23 @@
 <dt id="pylayers.antprop.channel.TBchannel.tau_moy">
 <code class="descname">tau_moy</code><span class="sig-paren">(</span><em>alpha=0.1</em>, <em>threshold_dB=20</em>, <em>tau0=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#TBchannel.tau_moy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.TBchannel.tau_moy" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculate mean excess delay starting from delay tau0</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>alpha</strong> : float</p>
-<p class="last"><strong>tau0</strong> : float</p>
-</td>
-</tr>
-</tbody>
-</table>
+<p>alpha : float
+tau0 : float</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.channel.TBchannel.tau_rms">
 <code class="descname">tau_rms</code><span class="sig-paren">(</span><em>alpha=0.1</em>, <em>threshold_dB=20</em>, <em>tau0=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#TBchannel.tau_rms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.TBchannel.tau_rms" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculate root mean square delay spread starting from delay tau_0</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>alpha</strong> : float</p>
-<p><strong>threshold</strong> : float</p>
+<p>alpha : float
+threshold : float</p>
 <blockquote>
-<div><p>( delay interval is defined between <span class="math">\(\tau(\alpha)\)</span> and <span class="math">\(\tau(1 -\alpha)\)</span> )</p>
-</div></blockquote>
-<p><strong>tau0</strong> : float</p>
-<blockquote class="last">
-<div><p>argument for specifying the delay start</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<div class="math">
+<div>( delay interval is defined between <span class="math notranslate nohighlight">\(\tau(\alpha)\)</span> and <span class="math notranslate nohighlight">\(\tau(1 -\alpha)\)</span> )</div></blockquote>
+<dl class="docutils">
+<dt>tau0 <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>argument for specifying the delay start</dd>
+</dl>
+<div class="math notranslate nohighlight">
 \[\sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)} (\tau-\tau_m)^{2} PDP(\tau) d\tau} {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}}\]</div>
 <p>TUsignal.ecdf
 TUsignal.tau_moy</p>
@@ -474,14 +342,7 @@ TUsignal.tau_moy</p>
 <dt id="pylayers.antprop.channel.TBchannel.toFD">
 <code class="descname">toFD</code><span class="sig-paren">(</span><em>fGHz=array([ 2.</em>, <em>2.01176471</em>, <em>2.02352941</em>, <em>2.03529412</em>, <em>2.04705882</em>, <em>2.05882353</em>, <em>2.07058824</em>, <em>2.08235294</em>, <em>2.09411765</em>, <em>2.10588235</em>, <em>2.11764706</em>, <em>2.12941176</em>, <em>2.14117647</em>, <em>2.15294118</em>, <em>2.16470588</em>, <em>2.17647059</em>, <em>2.18823529</em>, <em>2.2</em>, <em>2.21176471</em>, <em>2.22352941</em>, <em>2.23529412</em>, <em>2.24705882</em>, <em>2.25882353</em>, <em>2.27058824</em>, <em>2.28235294</em>, <em>2.29411765</em>, <em>2.30588235</em>, <em>2.31764706</em>, <em>2.32941176</em>, <em>2.34117647</em>, <em>2.35294118</em>, <em>2.36470588</em>, <em>2.37647059</em>, <em>2.38823529</em>, <em>2.4</em>, <em>2.41176471</em>, <em>2.42352941</em>, <em>2.43529412</em>, <em>2.44705882</em>, <em>2.45882353</em>, <em>2.47058824</em>, <em>2.48235294</em>, <em>2.49411765</em>, <em>2.50588235</em>, <em>2.51764706</em>, <em>2.52941176</em>, <em>2.54117647</em>, <em>2.55294118</em>, <em>2.56470588</em>, <em>2.57647059</em>, <em>2.58823529</em>, <em>2.6</em>, <em>2.61176471</em>, <em>2.62352941</em>, <em>2.63529412</em>, <em>2.64705882</em>, <em>2.65882353</em>, <em>2.67058824</em>, <em>2.68235294</em>, <em>2.69411765</em>, <em>2.70588235</em>, <em>2.71764706</em>, <em>2.72941176</em>, <em>2.74117647</em>, <em>2.75294118</em>, <em>2.76470588</em>, <em>2.77647059</em>, <em>2.78823529</em>, <em>2.8</em>, <em>2.81176471</em>, <em>2.82352941</em>, <em>2.83529412</em>, <em>2.84705882</em>, <em>2.85882353</em>, <em>2.87058824</em>, <em>2.88235294</em>, <em>2.89411765</em>, <em>2.90588235</em>, <em>2.91764706</em>, <em>2.92941176</em>, <em>2.94117647</em>, <em>2.95294118</em>, <em>2.96470588</em>, <em>2.97647059</em>, <em>2.98823529</em>, <em>3.</em>, <em>3.01176471</em>, <em>3.02352941</em>, <em>3.03529412</em>, <em>3.04705882</em>, <em>3.05882353</em>, <em>3.07058824</em>, <em>3.08235294</em>, <em>3.09411765</em>, <em>3.10588235</em>, <em>3.11764706</em>, <em>3.12941176</em>, <em>3.14117647</em>, <em>3.15294118</em>, <em>3.16470588</em>, <em>3.17647059</em>, <em>3.18823529</em>, <em>3.2</em>, <em>3.21176471</em>, <em>3.22352941</em>, <em>3.23529412</em>, <em>3.24705882</em>, <em>3.25882353</em>, <em>3.27058824</em>, <em>3.28235294</em>, <em>3.29411765</em>, <em>3.30588235</em>, <em>3.31764706</em>, <em>3.32941176</em>, <em>3.34117647</em>, <em>3.35294118</em>, <em>3.36470588</em>, <em>3.37647059</em>, <em>3.38823529</em>, <em>3.4</em>, <em>3.41176471</em>, <em>3.42352941</em>, <em>3.43529412</em>, <em>3.44705882</em>, <em>3.45882353</em>, <em>3.47058824</em>, <em>3.48235294</em>, <em>3.49411765</em>, <em>3.50588235</em>, <em>3.51764706</em>, <em>3.52941176</em>, <em>3.54117647</em>, <em>3.55294118</em>, <em>3.56470588</em>, <em>3.57647059</em>, <em>3.58823529</em>, <em>3.6</em>, <em>3.61176471</em>, <em>3.62352941</em>, <em>3.63529412</em>, <em>3.64705882</em>, <em>3.65882353</em>, <em>3.67058824</em>, <em>3.68235294</em>, <em>3.69411765</em>, <em>3.70588235</em>, <em>3.71764706</em>, <em>3.72941176</em>, <em>3.74117647</em>, <em>3.75294118</em>, <em>3.76470588</em>, <em>3.77647059</em>, <em>3.78823529</em>, <em>3.8</em>, <em>3.81176471</em>, <em>3.82352941</em>, <em>3.83529412</em>, <em>3.84705882</em>, <em>3.85882353</em>, <em>3.87058824</em>, <em>3.88235294</em>, <em>3.89411765</em>, <em>3.90588235</em>, <em>3.91764706</em>, <em>3.92941176</em>, <em>3.94117647</em>, <em>3.95294118</em>, <em>3.96470588</em>, <em>3.97647059</em>, <em>3.98823529</em>, <em>4.</em>, <em>4.01176471</em>, <em>4.02352941</em>, <em>4.03529412</em>, <em>4.04705882</em>, <em>4.05882353</em>, <em>4.07058824</em>, <em>4.08235294</em>, <em>4.09411765</em>, <em>4.10588235</em>, <em>4.11764706</em>, <em>4.12941176</em>, <em>4.14117647</em>, <em>4.15294118</em>, <em>4.16470588</em>, <em>4.17647059</em>, <em>4.18823529</em>, <em>4.2</em>, <em>4.21176471</em>, <em>4.22352941</em>, <em>4.23529412</em>, <em>4.24705882</em>, <em>4.25882353</em>, <em>4.27058824</em>, <em>4.28235294</em>, <em>4.29411765</em>, <em>4.30588235</em>, <em>4.31764706</em>, <em>4.32941176</em>, <em>4.34117647</em>, <em>4.35294118</em>, <em>4.36470588</em>, <em>4.37647059</em>, <em>4.38823529</em>, <em>4.4</em>, <em>4.41176471</em>, <em>4.42352941</em>, <em>4.43529412</em>, <em>4.44705882</em>, <em>4.45882353</em>, <em>4.47058824</em>, <em>4.48235294</em>, <em>4.49411765</em>, <em>4.50588235</em>, <em>4.51764706</em>, <em>4.52941176</em>, <em>4.54117647</em>, <em>4.55294118</em>, <em>4.56470588</em>, <em>4.57647059</em>, <em>4.58823529</em>, <em>4.6</em>, <em>4.61176471</em>, <em>4.62352941</em>, <em>4.63529412</em>, <em>4.64705882</em>, <em>4.65882353</em>, <em>4.67058824</em>, <em>4.68235294</em>, <em>4.69411765</em>, <em>4.70588235</em>, <em>4.71764706</em>, <em>4.72941176</em>, <em>4.74117647</em>, <em>4.75294118</em>, <em>4.76470588</em>, <em>4.77647059</em>, <em>4.78823529</em>, <em>4.8</em>, <em>4.81176471</em>, <em>4.82352941</em>, <em>4.83529412</em>, <em>4.84705882</em>, <em>4.85882353</em>, <em>4.87058824</em>, <em>4.88235294</em>, <em>4.89411765</em>, <em>4.90588235</em>, <em>4.91764706</em>, <em>4.92941176</em>, <em>4.94117647</em>, <em>4.95294118</em>, <em>4.96470588</em>, <em>4.97647059</em>, <em>4.98823529</em>, <em>5.        ])</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#TBchannel.toFD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.TBchannel.toFD" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform to Frequency domain</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>H</strong> : Tchannel</td>
-</tr>
-</tbody>
-</table>
+<p>H : Tchannel</p>
 </dd></dl>
 
 </dd></dl>
@@ -490,8 +351,16 @@ TUsignal.tau_moy</p>
 
 
            </div>
+           
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pylayers.antprop.channel.TUDchannel.html" class="btn btn-neutral float-right" title="TUDchannel" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
   
 
   <hr/>
@@ -499,11 +368,11 @@ TUsignal.tau_moy</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -522,9 +391,11 @@ TUsignal.tau_moy</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -539,14 +410,13 @@ TUsignal.tau_moy</p>
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

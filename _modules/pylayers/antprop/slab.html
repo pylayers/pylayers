@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,21 @@
   
 
   
-  
     <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../../../about.html"/>
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="PyLayers" href="../../../index.html"/>
-        <link rel="up" title="Module code" href="../../index.html"/> 
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
 
   
   <script src="../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +54,7 @@
 
           
             
-            <img src="../../../_static/pylayers.png" class="logo" />
+            <img src="../../../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +83,10 @@
           
             
             
-                <ul>
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +97,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -142,7 +139,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -154,34 +151,52 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-      
-    <li>pylayers.antprop.slab</li>
+        
+      <li>pylayers.antprop.slab</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -227,15 +242,13 @@ import glob
 <div class="viewcode-block" id="Interface"><a class="viewcode-back" href="../../../api/pylayers.antprop.slab.Interface.html#pylayers.antprop.slab.Interface">[docs]</a>class Interface(PyLayers):
     &quot;&quot;&quot; Interface between 2 medium
 
-    Notes
-    -----
-
     The adopted axis convention is the following
 
     + nf : axis = 0 frequency axis
     + nt : axis = 1 angular axis
     + p  : axis = 2 parallel polarization axis
     + o  : axis = 3 orhogonal polarization axis
+
     Attributes
     ----------
 
@@ -313,7 +326,6 @@ import glob
         if &#39;T&#39; in RT:
             self.T = np.array(np.zeros([nf, nt, 2, 2]), dtype=complex)
 
-        
         if &#39;R&#39; in RT:
             #self.R[:, :, 0, 0] = self.Io[:, :, 0, 1] / self.Io[:, :, 0, 0]
             #self.R[:, :, 1, 1] = self.Ip[:, :, 0, 1] / self.Ip[:, :, 0, 0]
@@ -688,8 +700,6 @@ import glob
 
     l distance from the next Interface
 
-    Notes
-    -----
 
     This is required for recursive utilization of this function when the
     output angle of an interface happens to be the input angle of the
@@ -697,15 +707,21 @@ import glob
     depends on frequency THETA is becoming a full matrix without redundancy
     between lines.
 
-    &gt;&gt;&gt; theta = np.arange(0,np.pi/2,0.01)
-    &gt;&gt;&gt; fGHz = np.arange(3.1,10.6,0.2)
-    &gt;&gt;&gt; Nf = len(fGHz)
-    &gt;&gt;&gt; Nt = len(theta)
-    &gt;&gt;&gt; sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)
-    &gt;&gt;&gt; mat = sl.mat
-    &gt;&gt;&gt; m1 = mat[&#39;AIR&#39;]
-    &gt;&gt;&gt; m2 = mat[&#39;PLASTER&#39;]
-    &gt;&gt;&gt; II = MatInterface([m1,m2],0,fGHz,theta)
+    Examples
+    --------
+
+        &gt;&gt;&gt; theta = np.arange(0,np.pi/2,0.01)
+        &gt;&gt;&gt; fGHz = np.arange(3.1,10.6,0.2)
+        &gt;&gt;&gt; Nf = len(fGHz)
+        &gt;&gt;&gt; Nt = len(theta)
+        &gt;&gt;&gt; sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)
+        &gt;&gt;&gt; mat = sl.mat
+        &gt;&gt;&gt; m1 = mat[&#39;AIR&#39;]
+        &gt;&gt;&gt; m2 = mat[&#39;PLASTER&#39;]
+        &gt;&gt;&gt; II = MatInterface([m1,m2],0,fGHz,theta)
+
+    Notes
+    -----
 
     .. math::
 
@@ -713,9 +729,6 @@ import glob
 
     I_o = \left| \begin{array}{cc} \frac{1}{T_o} &amp; \frac{R_o}{T_o} \\ \frac{R_o}{T_o} &amp; \frac{1}{T_o} \end{array}\right|
 
-
-    .. todo::
-    MatIinterface fix the np.pi/2 NaN problem
 
 
     &quot;&quot;&quot;
@@ -1127,19 +1140,16 @@ import glob
         iv) &#39;THz&#39;
 
         v) ITU parameter (a,b,c,d)
-            
-
-
 
         Examples
         --------
 
-        &gt;&gt;&gt; from pylayers.antprop.slab import *
-        &gt;&gt;&gt; m = MatDB()
-        &gt;&gt;&gt; m.load(&#39;matDB.ini&#39;)
-        &gt;&gt;&gt; m.add(name=&#39;ConcreteJcB&#39;,cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ=&#39;THz&#39;)
-        &gt;&gt;&gt; m.add(name=&#39;GlassJcB&#39;,cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ=&#39;THz&#39;)
-        &gt;&gt;&gt; out = m.save(&#39;Jacob.ini&#39;)
+            &gt;&gt;&gt; from pylayers.antprop.slab import *
+            &gt;&gt;&gt; m = MatDB()
+            &gt;&gt;&gt; m.load(&#39;matDB.ini&#39;)
+            &gt;&gt;&gt; m.add(name=&#39;ConcreteJcB&#39;,cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ=&#39;THz&#39;)
+            &gt;&gt;&gt; m.add(name=&#39;GlassJcB&#39;,cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ=&#39;THz&#39;)
+            &gt;&gt;&gt; out = m.save(&#39;Jacob.ini&#39;)
 
         &quot;&quot;&quot;
         defaults = {&#39;name&#39;:&#39;MAT&#39;,
@@ -1242,10 +1252,10 @@ import glob
         _fileini : string
             name of the matDB file (usually matDB.ini)
 
-        TODO
-        ----
+        Notes
+        -----
 
-        add ITU format (abcd)
+        TODO add the ITU format (abcd)
 
         &quot;&quot;&quot;
         fileini = pyu.getlong(_fileini, pstruc[&#39;DIRMAT&#39;])
@@ -1305,8 +1315,8 @@ import glob
 <div class="viewcode-block" id="Slab"><a class="viewcode-back" href="../../../api/pylayers.antprop.slab.Slab.html#pylayers.antprop.slab.Slab">[docs]</a>class Slab(Interface,dict):
     &quot;&quot;&quot; Handle a Slab
 
-    Summary
-    -------
+    Notes
+    -----
 
     A Slab is a sequence of layers which have
 
@@ -1346,7 +1356,7 @@ import glob
             slab name
         matDB : MatDB
             material database
-        ds  : dict 
+        ds  : dict
 
         &quot;&quot;&quot;
         # if not specified choose default material database
@@ -1388,14 +1398,14 @@ import glob
             dict.__setitem__(self,&quot;lmatname&quot;, value)
             #dict.__setitem__(self,&quot;nbmat&quot;,nbmat)
             dict.__setitem__(self,&quot;lthick&quot;,[0.05]*nbmat)
-        
+
         elif key == &quot;lthick&quot;:
             #pdb.set_trace()
             #if len(value)!=len(self[&#39;lmatname&#39;]):
             #    raise ValueError(&quot;wrong number of material layers&quot;)
             #else:
             dict.__setitem__(self,&quot;lthick&quot;,value)
-        else:        
+        else:
             dict.__setitem__(self,key, value)
 
 
@@ -1405,7 +1415,7 @@ import glob
         Parameters
         ----------
 
-        u : Slab 
+        u : Slab
 
         &quot;&quot;&quot;
         name = self[&#39;name&#39;]+u[&#39;name&#39;]
@@ -1413,7 +1423,7 @@ import glob
         # lmatname should be modified before lthick
         U[&#39;lmatname&#39;] = self[&#39;lmatname&#39;]+u[&#39;lmatname&#39;]
         U[&#39;lthick&#39;]   = self[&#39;lthick&#39;]+u[&#39;lthick&#39;]
-        U[&#39;lmat&#39;] = self[&#39;lmat&#39;]+u[&#39;lmat&#39;] 
+        U[&#39;lmat&#39;] = self[&#39;lmat&#39;]+u[&#39;lmat&#39;]
         #for i in range(len(U[&#39;lmatname&#39;])):
         #    namem = U[&#39;lmatname&#39;][i]
         #U.conv(matDB)
@@ -1421,11 +1431,14 @@ import glob
 
     def __repr__(self):
         st = self[&#39;name&#39;]+&#39; : &#39;
-        st = st + reduce(lambda x,y: x+&#39; | &#39;+y,self[&#39;lmatname&#39;])+ &#39; | &#39;
-        st = st + str(self[&#39;lthick&#39;])+&#39;\n&#39;
-        st = st + &#39;       &#39; + str(self[&#39;color&#39;])+&#39; &#39;+str(self[&#39;linewidth&#39;])+&#39;\n&#39;
+        st1 = &#39;&#39;
+        for x in self[&#39;lmatname&#39;]:
+            st1 = st1 + &#39;|&#39; + x
+        st = st + st1 + &#39;\n&#39;
+        st = st + str(self[&#39;lthick&#39;]) + &#39;\n&#39;
+        st = st + &#39;       &#39; + str(self[&#39;color&#39;])+&#39; &#39;+str(self[&#39;linewidth&#39;]) + &#39;\n&#39;
         for  k in self[&#39;lmat&#39;]:
-            st = st + &#39;       epr :&#39; + str(k[&#39;epr&#39;]) + &#39;    sigma : &#39; + str(k[&#39;sigma&#39;])+&#39;\n&#39;
+            st = st + &#39;       epr :&#39; + str(k[&#39;epr&#39;]) + &#39;    sigma : &#39; + str(k[&#39;sigma&#39;]) + &#39;\n&#39;
 
         if self[&#39;evaluated&#39;]:
             nf = len(self.fGHz)
@@ -1671,11 +1684,6 @@ import glob
 <div class="viewcode-block" id="Slab.filter"><a class="viewcode-back" href="../../../api/pylayers.antprop.slab.Slab.html#pylayers.antprop.slab.Slab.filter">[docs]</a>    def filter(self,win,theta=0):
         &quot;&quot;&quot; filtering waveform
 
-        Warning
-        -------
-
-        Not implemented yet
-
         Parameters
         ----------
 
@@ -1685,6 +1693,11 @@ import glob
         -------
 
         wout : Waveform
+
+        Notes
+        -----
+
+        NOT IMPLEMENTED
 
         &quot;&quot;&quot;
         # get frequency base of the waveform
@@ -1884,20 +1897,18 @@ import glob
 
         filemat : string
         fileslab : string
-        ds : dict 
+        ds : dict
             slab dict read from layout file. if ds == {}   load from files
-        dm : dict 
-            mat dict read from layout file. 
+        dm : dict
+            mat dict read from layout file.
 
         Notes
         -----
 
-        There are two ways to initialize a SlabDB either from dict ds and dm usually read 
-        in  the 
-        Layout file .ini or from 2 specified file
+        There are two ways to initialize a SlabDB either from dict ds and dm usually read
+        in  the Layout file .ini or from 2 specified file
 
         &quot;&quot;&quot;
-        
         # Load from file
         if (fileslab != &#39;&#39;):
             self.fileslab = fileslab
@@ -2197,9 +2208,6 @@ import glob
 # class Wedge(Interface,dict):
 #     &quot;&quot;&quot; Handle a Wedge
 
-#     Summary
-#     -------
-
 #     A Wedge is a cone with, on its 2 faces :
 
 #     - a Material/Slab s0
@@ -2423,6 +2431,7 @@ if (__name__ == &quot;__main__&quot;):
 </pre></div>
 
            </div>
+           
           </div>
           <footer>
   
@@ -2432,11 +2441,11 @@ if (__name__ == &quot;__main__&quot;):
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -2455,9 +2464,11 @@ if (__name__ == &quot;__main__&quot;):
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -2472,14 +2483,13 @@ if (__name__ == &quot;__main__&quot;):
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

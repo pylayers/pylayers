@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,23 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="WrongTileError" href="pylayers.gis.srtm.WrongTileError.html" />
+    <link rel="prev" title="SRTMDownloader" href="pylayers.gis.srtm.SRTMDownloader.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +56,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +85,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +99,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -110,9 +109,7 @@
 <li class="toctree-l3"><a class="reference internal" href="pylayers.gis.srtm.InvalidTileError.html">InvalidTileError</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.gis.srtm.NoSuchTileError.html">NoSuchTileError</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.gis.srtm.SRTMDownloader.html">SRTMDownloader</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">SRTMTile</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">SRTMTile</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.gis.srtm.WrongTileError.html">WrongTileError</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.gis.srtm.parseHTMLDirectoryListing.html">parseHTMLDirectoryListing</a></li>
 </ul>
@@ -156,7 +153,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -168,36 +165,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>SRTMTile</li>
+        
+      <li>SRTMTile</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.gis.srtm.SRTMTile.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -208,30 +225,13 @@
 <dl class="class">
 <dt id="pylayers.gis.srtm.SRTMTile">
 <em class="property">class </em><code class="descclassname">pylayers.gis.srtm.</code><code class="descname">SRTMTile</code><span class="sig-paren">(</span><em>f</em>, <em>lat</em>, <em>lon</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/srtm.html#SRTMTile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.srtm.SRTMTile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Base class for all SRTM tiles.
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for all SRTM tiles.
 Each SRTM tile is size x size pixels big and contains
 data for the area from (lat, lon) to (lat+1, lon+1) inclusive.
 This means there is a 1 pixel overlap between tiles. This makes it
 easier for as to interpolate the value, because for every point we
 only have to look at a single tile.</p>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.srtm.SRTMTile.calcOffset" title="pylayers.gis.srtm.SRTMTile.calcOffset"><code class="xref py py-obj docutils literal"><span class="pre">calcOffset</span></code></a>(x,&nbsp;y)</td>
-<td>Calculate offset into data array.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.srtm.SRTMTile.getAltitudeFromLatLon" title="pylayers.gis.srtm.SRTMTile.getAltitudeFromLatLon"><code class="xref py py-obj docutils literal"><span class="pre">getAltitudeFromLatLon</span></code></a>(lat,&nbsp;lon)</td>
-<td>Get the altitude of a lat lon pair, using the four neighbouring pixels for interpolation.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.srtm.SRTMTile.getPixelValue" title="pylayers.gis.srtm.SRTMTile.getPixelValue"><code class="xref py py-obj docutils literal"><span class="pre">getPixelValue</span></code></a>(x,&nbsp;y)</td>
-<td>Get the value of a pixel from the data, handling voids in the SRTM data.</td>
-</tr>
-</tbody>
-</table>
 <p class="rubric">Methods Summary</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -239,13 +239,13 @@ only have to look at a single tile.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.srtm.SRTMTile.calcOffset" title="pylayers.gis.srtm.SRTMTile.calcOffset"><code class="xref py py-obj docutils literal"><span class="pre">calcOffset</span></code></a>(x,&nbsp;y)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.srtm.SRTMTile.calcOffset" title="pylayers.gis.srtm.SRTMTile.calcOffset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calcOffset</span></code></a>(x,&nbsp;y)</td>
 <td>Calculate offset into data array.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.srtm.SRTMTile.getAltitudeFromLatLon" title="pylayers.gis.srtm.SRTMTile.getAltitudeFromLatLon"><code class="xref py py-obj docutils literal"><span class="pre">getAltitudeFromLatLon</span></code></a>(lat,&nbsp;lon)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.srtm.SRTMTile.getAltitudeFromLatLon" title="pylayers.gis.srtm.SRTMTile.getAltitudeFromLatLon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getAltitudeFromLatLon</span></code></a>(lat,&nbsp;lon)</td>
 <td>Get the altitude of a lat lon pair, using the four neighbouring pixels for interpolation.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.srtm.SRTMTile.getPixelValue" title="pylayers.gis.srtm.SRTMTile.getPixelValue"><code class="xref py py-obj docutils literal"><span class="pre">getPixelValue</span></code></a>(x,&nbsp;y)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.srtm.SRTMTile.getPixelValue" title="pylayers.gis.srtm.SRTMTile.getPixelValue"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPixelValue</span></code></a>(x,&nbsp;y)</td>
 <td>Get the value of a pixel from the data, handling voids in the SRTM data.</td>
 </tr>
 </tbody>
@@ -278,8 +278,18 @@ SRTM data.</p>
 
 
            </div>
+           
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pylayers.gis.srtm.WrongTileError.html" class="btn btn-neutral float-right" title="WrongTileError" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pylayers.gis.srtm.SRTMDownloader.html" class="btn btn-neutral" title="SRTMDownloader" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -287,11 +297,11 @@ SRTM data.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -310,9 +320,11 @@ SRTM data.</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -327,14 +339,13 @@ SRTM data.</p>
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,21 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +54,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +83,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +97,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -146,9 +143,7 @@
 <li class="toctree-l2"><a class="reference internal" href="references.html#noise-class">34.8&nbsp;&nbsp;&nbsp;Noise Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="references.html#id115">34.9&nbsp;&nbsp;&nbsp;Functions</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="references.html#id116">34.10&nbsp;&nbsp;&nbsp;Classes</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Bsignal</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Bsignal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.signal.bsignal.FBsignal.html">FBsignal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.signal.bsignal.FHsignal.html">FHsignal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.signal.bsignal.FUsignal.html">FUsignal</a></li>
@@ -167,7 +162,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -179,36 +174,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>Bsignal</li>
+        
+      <li>Bsignal</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.signal.bsignal.Bsignal.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -219,76 +234,13 @@
 <dl class="class">
 <dt id="pylayers.signal.bsignal.Bsignal">
 <em class="property">class </em><code class="descclassname">pylayers.signal.bsignal.</code><code class="descname">Bsignal</code><span class="sig-paren">(</span><em>x=array([]</em>, <em>dtype=float64)</em>, <em>y=array([]</em>, <em>dtype=float64)</em>, <em>label=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="pylayers.util.project.PyLayers.html#pylayers.util.project.PyLayers" title="pylayers.util.project.PyLayers"><code class="xref py py-class docutils literal"><span class="pre">pylayers.util.project.PyLayers</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="pylayers.util.project.PyLayers.html#pylayers.util.project.PyLayers" title="pylayers.util.project.PyLayers"><code class="xref py py-class docutils literal notranslate"><span class="pre">pylayers.util.project.PyLayers</span></code></a></p>
 <p>Signal with an embedded time base</p>
 <p>This class gathers a 1D signal and its axis indexation.</p>
 <p>The x base is not necessarily uniform</p>
 <p>x has 1 axis</p>
 <p>x and the last axes of y have the same length</p>
 <p>By construction shape(y)[-1] :=len(x), len(x) takes priority in case of observed conflict</p>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.append" title="pylayers.signal.bsignal.Bsignal.append"><code class="xref py py-obj docutils literal"><span class="pre">append</span></code></a>(bs)</td>
-<td>append bs to Bsignal</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.cformat" title="pylayers.signal.bsignal.Bsignal.cformat"><code class="xref py py-obj docutils literal"><span class="pre">cformat</span></code></a>(**kwargs)</td>
-<td>complex format</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.extract" title="pylayers.signal.bsignal.Bsignal.extract"><code class="xref py py-obj docutils literal"><span class="pre">extract</span></code></a>(u)</td>
-<td>extract a subset of signal from index</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.flatteny" title="pylayers.signal.bsignal.Bsignal.flatteny"><code class="xref py py-obj docutils literal"><span class="pre">flatteny</span></code></a>([yrange,&nbsp;reversible])</td>
-<td>flatten y array</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.gating" title="pylayers.signal.bsignal.Bsignal.gating"><code class="xref py py-obj docutils literal"><span class="pre">gating</span></code></a>(xmin,&nbsp;xmax)</td>
-<td>gating between xmin and xmax</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
-<td>generic help</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.imshow" title="pylayers.signal.bsignal.Bsignal.imshow"><code class="xref py py-obj docutils literal"><span class="pre">imshow</span></code></a>(**kwargs)</td>
-<td>imshow of y matrix</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.len" title="pylayers.signal.bsignal.Bsignal.len"><code class="xref py py-obj docutils literal"><span class="pre">len</span></code></a>()</td>
-<td>returm length of x axis</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.load" title="pylayers.signal.bsignal.Bsignal.load"><code class="xref py py-obj docutils literal"><span class="pre">load</span></code></a>(filename)</td>
-<td>load a Bsignal from a Matlab File</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.max" title="pylayers.signal.bsignal.Bsignal.max"><code class="xref py py-obj docutils literal"><span class="pre">max</span></code></a>()</td>
-<td>max value of the signal (module if complex)</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.mean" title="pylayers.signal.bsignal.Bsignal.mean"><code class="xref py py-obj docutils literal"><span class="pre">mean</span></code></a>()</td>
-<td>mean value of the signal</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.min" title="pylayers.signal.bsignal.Bsignal.min"><code class="xref py py-obj docutils literal"><span class="pre">min</span></code></a>()</td>
-<td>min value of the signal (module if complex)</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.plot" title="pylayers.signal.bsignal.Bsignal.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>(**kwargs)</td>
-<td>plot signal Bsignal</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.save" title="pylayers.signal.bsignal.Bsignal.save"><code class="xref py py-obj docutils literal"><span class="pre">save</span></code></a>(filename)</td>
-<td>save Bsignal in Matlab File Format</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.setx" title="pylayers.signal.bsignal.Bsignal.setx"><code class="xref py py-obj docutils literal"><span class="pre">setx</span></code></a>(x)</td>
-<td>setx : set x vector</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.sety" title="pylayers.signal.bsignal.Bsignal.sety"><code class="xref py py-obj docutils literal"><span class="pre">sety</span></code></a>(fun)</td>
-<td>sety : set y vector</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.stem" title="pylayers.signal.bsignal.Bsignal.stem"><code class="xref py py-obj docutils literal"><span class="pre">stem</span></code></a>(**kwargs)</td>
-<td>stem display</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.step" title="pylayers.signal.bsignal.Bsignal.step"><code class="xref py py-obj docutils literal"><span class="pre">step</span></code></a>([color])</td>
-<td>plot steps display</td>
-</tr>
-</tbody>
-</table>
 <p class="rubric">Methods Summary</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -296,55 +248,55 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.append" title="pylayers.signal.bsignal.Bsignal.append"><code class="xref py py-obj docutils literal"><span class="pre">append</span></code></a>(bs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.append" title="pylayers.signal.bsignal.Bsignal.append"><code class="xref py py-obj docutils literal notranslate"><span class="pre">append</span></code></a>(bs)</td>
 <td>append bs to Bsignal</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.cformat" title="pylayers.signal.bsignal.Bsignal.cformat"><code class="xref py py-obj docutils literal"><span class="pre">cformat</span></code></a>(**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.cformat" title="pylayers.signal.bsignal.Bsignal.cformat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cformat</span></code></a>(**kwargs)</td>
 <td>complex format</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.extract" title="pylayers.signal.bsignal.Bsignal.extract"><code class="xref py py-obj docutils literal"><span class="pre">extract</span></code></a>(u)</td>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.extract" title="pylayers.signal.bsignal.Bsignal.extract"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract</span></code></a>(u)</td>
 <td>extract a subset of signal from index</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.flatteny" title="pylayers.signal.bsignal.Bsignal.flatteny"><code class="xref py py-obj docutils literal"><span class="pre">flatteny</span></code></a>([yrange,&nbsp;reversible])</td>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.flatteny" title="pylayers.signal.bsignal.Bsignal.flatteny"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flatteny</span></code></a>([yrange,&nbsp;reversible])</td>
 <td>flatten y array</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.gating" title="pylayers.signal.bsignal.Bsignal.gating"><code class="xref py py-obj docutils literal"><span class="pre">gating</span></code></a>(xmin,&nbsp;xmax)</td>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.gating" title="pylayers.signal.bsignal.Bsignal.gating"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gating</span></code></a>(xmin,&nbsp;xmax)</td>
 <td>gating between xmin and xmax</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.imshow" title="pylayers.signal.bsignal.Bsignal.imshow"><code class="xref py py-obj docutils literal"><span class="pre">imshow</span></code></a>(**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.imshow" title="pylayers.signal.bsignal.Bsignal.imshow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">imshow</span></code></a>(**kwargs)</td>
 <td>imshow of y matrix</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.len" title="pylayers.signal.bsignal.Bsignal.len"><code class="xref py py-obj docutils literal"><span class="pre">len</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.len" title="pylayers.signal.bsignal.Bsignal.len"><code class="xref py py-obj docutils literal notranslate"><span class="pre">len</span></code></a>()</td>
 <td>returm length of x axis</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.load" title="pylayers.signal.bsignal.Bsignal.load"><code class="xref py py-obj docutils literal"><span class="pre">load</span></code></a>(filename)</td>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.load" title="pylayers.signal.bsignal.Bsignal.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(filename)</td>
 <td>load a Bsignal from a Matlab File</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.max" title="pylayers.signal.bsignal.Bsignal.max"><code class="xref py py-obj docutils literal"><span class="pre">max</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.max" title="pylayers.signal.bsignal.Bsignal.max"><code class="xref py py-obj docutils literal notranslate"><span class="pre">max</span></code></a>()</td>
 <td>max value of the signal (module if complex)</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.mean" title="pylayers.signal.bsignal.Bsignal.mean"><code class="xref py py-obj docutils literal"><span class="pre">mean</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.mean" title="pylayers.signal.bsignal.Bsignal.mean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mean</span></code></a>()</td>
 <td>mean value of the signal</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.min" title="pylayers.signal.bsignal.Bsignal.min"><code class="xref py py-obj docutils literal"><span class="pre">min</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.min" title="pylayers.signal.bsignal.Bsignal.min"><code class="xref py py-obj docutils literal notranslate"><span class="pre">min</span></code></a>()</td>
 <td>min value of the signal (module if complex)</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.plot" title="pylayers.signal.bsignal.Bsignal.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>(**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.plot" title="pylayers.signal.bsignal.Bsignal.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>(**kwargs)</td>
 <td>plot signal Bsignal</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.save" title="pylayers.signal.bsignal.Bsignal.save"><code class="xref py py-obj docutils literal"><span class="pre">save</span></code></a>(filename)</td>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.save" title="pylayers.signal.bsignal.Bsignal.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>(filename)</td>
 <td>save Bsignal in Matlab File Format</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.setx" title="pylayers.signal.bsignal.Bsignal.setx"><code class="xref py py-obj docutils literal"><span class="pre">setx</span></code></a>(x)</td>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.setx" title="pylayers.signal.bsignal.Bsignal.setx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setx</span></code></a>(x)</td>
 <td>setx : set x vector</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.sety" title="pylayers.signal.bsignal.Bsignal.sety"><code class="xref py py-obj docutils literal"><span class="pre">sety</span></code></a>(fun)</td>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.sety" title="pylayers.signal.bsignal.Bsignal.sety"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sety</span></code></a>(fun)</td>
 <td>sety : set y vector</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.stem" title="pylayers.signal.bsignal.Bsignal.stem"><code class="xref py py-obj docutils literal"><span class="pre">stem</span></code></a>(**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.stem" title="pylayers.signal.bsignal.Bsignal.stem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stem</span></code></a>(**kwargs)</td>
 <td>stem display</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.step" title="pylayers.signal.bsignal.Bsignal.step"><code class="xref py py-obj docutils literal"><span class="pre">step</span></code></a>([color])</td>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.step" title="pylayers.signal.bsignal.Bsignal.step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">step</span></code></a>([color])</td>
 <td>plot steps display</td>
 </tr>
 </tbody>
@@ -360,13 +312,9 @@
 <dt id="pylayers.signal.bsignal.Bsignal.cformat">
 <code class="descname">cformat</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.cformat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.cformat" title="Permalink to this definition">¶</a></dt>
 <dd><p>complex format</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sax</strong> : list</p>
-<blockquote>
-<div><p>selected output axis from y default [0,1]
+<dl class="docutils">
+<dt>sax <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd>selected output axis from y default [0,1]
 typ : string
 ‘m’   : modulus
 ‘v’   : value
@@ -379,37 +327,27 @@ typ : string
 ‘gdn’ : group delay (ns)
 ‘gdm’ : group distance (m)
 ‘re’  : real part
-‘im’  : imaginary part</p>
-</div></blockquote>
-<p><strong>sel</strong> : list of ndarray()</p>
-<blockquote>
-<div><p>data selection along selected axis, all the axis void
-default [[],[]]</p>
-</div></blockquote>
-<p><strong>ik</strong> : fixed axis value default (0)</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>a0</strong> : first data axis</p>
-<blockquote>
-<div><p>this axis can be self.x or not</p>
-</div></blockquote>
-<p><strong>a1</strong> : second data axis</p>
-<p><strong>dt</strong> : data</p>
-<p><strong>ylabels</strong> : string</p>
-<blockquote class="last">
-<div><p>label for the selected complex data format</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
+‘im’  : imaginary part</dd>
+<dt>sel <span class="classifier-delimiter">:</span> <span class="classifier">list of ndarray()</span></dt>
+<dd>data selection along selected axis, all the axis void
+default [[],[]]</dd>
+</dl>
+<p>ik : fixed axis value default (0)</p>
+<dl class="docutils">
+<dt>a0 <span class="classifier-delimiter">:</span> <span class="classifier">first data axis</span></dt>
+<dd>this axis can be self.x or not</dd>
+</dl>
+<p>a1 : second data axis
+dt : data</p>
+<dl class="docutils">
+<dt>ylabels <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>label for the selected complex data format</dd>
+</dl>
 <p>This function returns 2 arrays x and y and the corresponding labels
 Convention : the last axis of y has same dimension as x
 y can have an arbitrary number of axis i.e a MIMO channel matrix
 could be x :  f and y : t x r x f</p>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import numpy as np
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import numpy as np
 &gt;&gt;&gt; S = Bsignal()
 &gt;&gt;&gt; x = np.arange(100)
 &gt;&gt;&gt; y = np.arange(400).reshape(2,2,100)+1j*np.arange(400).reshape(2,2,100)
@@ -426,18 +364,9 @@ could be x :  f and y : t x r x f</p>
 <dt id="pylayers.signal.bsignal.Bsignal.extract">
 <code class="descname">extract</code><span class="sig-paren">(</span><em>u</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.extract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.extract" title="Permalink to this definition">¶</a></dt>
 <dd><p>extract a subset of signal from index</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>u</strong> : np.array</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>O</strong> : Usignal</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.signal.bsignal import *
+<p>u : np.array</p>
+<p>O : Usignal</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.signal.bsignal import *
 &gt;&gt;&gt; import numpy as np
 &gt;&gt;&gt; x = np.arange(0,1,0.01)
 &gt;&gt;&gt; y = np.sin(2*np.pi*x)
@@ -462,45 +391,22 @@ could be x :  f and y : t x r x f</p>
 <dt id="pylayers.signal.bsignal.Bsignal.flatteny">
 <code class="descname">flatteny</code><span class="sig-paren">(</span><em>yrange=[]</em>, <em>reversible=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.flatteny"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.flatteny" title="Permalink to this definition">¶</a></dt>
 <dd><p>flatten y array</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>yrange</strong> : array of y index values to be flattenned</p>
-<p><strong>reversible</strong> : boolean</p>
-<blockquote class="last">
-<div><p>if True the sum is place in object member yf
-else y is smashed</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<p>yrange : array of y index values to be flattenned
+reversible : boolean</p>
+<blockquote>
+<div>if True the sum is place in object member yf
+else y is smashed</div></blockquote>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.signal.bsignal.Bsignal.gating">
 <code class="descname">gating</code><span class="sig-paren">(</span><em>xmin</em>, <em>xmax</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.gating"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.gating" title="Permalink to this definition">¶</a></dt>
 <dd><p>gating between xmin and xmax</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>xmin</strong> : float</p>
-<p><strong>xmax</strong> : float</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">nothing self is modified</p>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">When a gating is applied the removed information is lost</p>
-</div>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import numpy as np
+<p>xmin : float
+xmax : float</p>
+<blockquote>
+<div>nothing self is modified</div></blockquote>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import numpy as np
 &gt;&gt;&gt; import matplotlib.pyplot as plt
 &gt;&gt;&gt; from pylayers.signal.bsignal import *
 &gt;&gt;&gt; x = np.linspace(-10,10,100)
@@ -515,7 +421,7 @@ else y is smashed</p>
 <div class="figure">
 <img alt="../_images/pylayers-signal-bsignal-Bsignal-2_00_00.png" src="../_images/pylayers-signal-bsignal-Bsignal-2_00_00.png" />
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; s.gating(-3,4)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; s.gating(-3,4)
 &gt;&gt;&gt; fig,ax=s.plot(typ=[&#39;v&#39;])
 &gt;&gt;&gt; txt2 = plt.title(&#39;after gating&#39;)
 &gt;&gt;&gt; plt.show()
@@ -525,49 +431,33 @@ else y is smashed</p>
 <div class="figure">
 <img alt="../_images/pylayers-signal-bsignal-Bsignal-2_01_00.png" src="../_images/pylayers-signal-bsignal-Bsignal-2_01_00.png" />
 </div>
+<blockquote>
+<div>When a gating is applied the removed information is lost</div></blockquote>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.signal.bsignal.Bsignal.imshow">
 <code class="descname">imshow</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.imshow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.imshow" title="Permalink to this definition">¶</a></dt>
 <dd><p>imshow of y matrix</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>interpolation</strong> : string</p>
+<dl class="docutils">
+<dt>interpolation <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>‘none’|’nearest’|’bilinear’</dd>
+<dt>cmap <span class="classifier-delimiter">:</span> <span class="classifier">colormap</span></dt>
+<dd>plt.cm.BrBG</dd>
+<dt>aspect <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>‘auto’ (default) ,’equal’,’scalar’</dd>
+<dt>function <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>{‘imshow’|’pcolormesh’}</dd>
+<dt>typ <span class="classifier-delimiter">:</span> <span class="classifier">string </span></dt>
+<dd>‘l20’,’l10’</dd>
+</dl>
+<p>vmin : min value
+vmax : max value 
+sax  : list</p>
 <blockquote>
-<div><p>‘none’|’nearest’|’bilinear’</p>
-</div></blockquote>
-<p><strong>cmap</strong> : colormap</p>
-<blockquote>
-<div><p>plt.cm.BrBG</p>
-</div></blockquote>
-<p><strong>aspect</strong> : string</p>
-<blockquote>
-<div><p>‘auto’ (default) ,’equal’,’scalar’</p>
-</div></blockquote>
-<p><strong>function</strong> : string</p>
-<blockquote>
-<div><p>{‘imshow’|’pcolormesh’}</p>
-</div></blockquote>
-<p><strong>typ</strong> : string</p>
-<blockquote>
-<div><p>‘l20’,’l10’</p>
-</div></blockquote>
-<p><strong>vmin</strong> : min value</p>
-<p><strong>vmax</strong> : max value</p>
-<p><strong>sax</strong> : list</p>
-<blockquote>
-<div><p>selct axe</p>
-</div></blockquote>
-<p class="last"><strong>bindex</strong></p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f = np.arange(100)
+<div>selct axe</div></blockquote>
+<p>bindex</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f = np.arange(100)
 &gt;&gt;&gt; y = np.random.randn(50,100)+1j*np.random.randn(50,100)
 &gt;&gt;&gt; F = FUsignal(f,y)
 </pre></div>
@@ -584,18 +474,8 @@ else y is smashed</p>
 <dt id="pylayers.signal.bsignal.Bsignal.load">
 <code class="descname">load</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>load a Bsignal from a Matlab File</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> : string</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.save" title="pylayers.signal.bsignal.Bsignal.save"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.save</span></code></a></p>
-</div>
+<p>filename : string</p>
+<p>Bsignal.save</p>
 </dd></dl>
 
 <dl class="method">
@@ -620,80 +500,46 @@ else y is smashed</p>
 <dt id="pylayers.signal.bsignal.Bsignal.plot">
 <code class="descname">plot</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot signal Bsignal</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>iy</strong> : index of the waveform to plot (-1 = all)</p>
-<p><strong>col</strong> : string</p>
+<p>iy    : index of the waveform to plot (-1 = all)
+col   : string</p>
 <blockquote>
-<div><p>default  ‘black’</p>
-</div></blockquote>
-<p><strong>vline</strong> : ndarray</p>
-<p><strong>hline</strong> : ndarray</p>
-<p><strong>unit1</strong> : string</p>
+<div>default  ‘black’</div></blockquote>
+<p>vline : ndarray
+hline : ndarray
+unit1 : string</p>
 <blockquote>
-<div><p>default ‘V’</p>
-</div></blockquote>
-<p><strong>unit2</strong> : string</p>
+<div>default ‘V’</div></blockquote>
+<dl class="docutils">
+<dt>unit2 <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>default ‘V’</dd>
+</dl>
+<p>xmin  : float
+xmax  : float
+ax    : axes instance or []
+dB    : boolean</p>
 <blockquote>
-<div><p>default ‘V’</p>
-</div></blockquote>
-<p><strong>xmin</strong> : float</p>
-<p><strong>xmax</strong> : float</p>
-<p><strong>ax</strong> : axes instance or []</p>
-<p><strong>dB</strong> : boolean</p>
-<blockquote>
-<div><p>default False</p>
-</div></blockquote>
-<p><strong>dist</strong> : boolean</p>
-<blockquote>
-<div><p>default False</p>
-</div></blockquote>
-<p><strong>display</strong> : boolean</p>
-<blockquote>
-<div><p>default True</p>
-</div></blockquote>
-<p><strong>logx</strong> : boolean</p>
-<blockquote>
-<div><p>defaut False</p>
-</div></blockquote>
-<p><strong>logy</strong> : boolean</p>
-<blockquote>
-<div><p>default False</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>fig</strong> : figure</p>
-<p class="last"><strong>ax</strong> : np.array of axes</p>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.util.plotutil.mulcplot</span></code></p>
-</div>
+<div>default False</div></blockquote>
+<dl class="docutils">
+<dt>dist <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
+<dd>default False</dd>
+<dt>display <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
+<dd>default True</dd>
+<dt>logx <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
+<dd>defaut False</dd>
+<dt>logy <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
+<dd>default False</dd>
+</dl>
+<p>fig : figure
+ax : np.array of axes</p>
+<p>pylayers.util.plotutil.mulcplot</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.signal.bsignal.Bsignal.save">
 <code class="descname">save</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>save Bsignal in Matlab File Format</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> : string</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="references.html#pylayers.signal.bsignal.Bsignal.load" title="pylayers.signal.bsignal.Bsignal.load"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.load</span></code></a></p>
-</div>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.signal.bsignal import *
+<p>filename : string</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.signal.bsignal import *
 &gt;&gt;&gt; import matplotlib.pyplot as plt
 &gt;&gt;&gt; e = TUsignal()
 &gt;&gt;&gt; e.EnImpulse(feGHz=100)
@@ -716,21 +562,14 @@ else y is smashed</p>
 <img alt="../_images/pylayers-signal-bsignal-Bsignal-3_01.png" src="../_images/pylayers-signal-bsignal-Bsignal-3_01.png" />
 <p class="caption"><span class="caption-text">(<a class="reference external" href="../api/pylayers-signal-bsignal-Bsignal-3_01.png">png</a>, <a class="reference external" href="../api/pylayers-signal-bsignal-Bsignal-3_01.hires.png">hires.png</a>, <a class="reference external" href="../api/pylayers-signal-bsignal-Bsignal-3_01.pdf">pdf</a>)</span></p>
 </div>
+<p>Bsignal.load</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.signal.bsignal.Bsignal.setx">
 <code class="descname">setx</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.setx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.setx" title="Permalink to this definition">¶</a></dt>
 <dd><p>setx : set x vector</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> : np.array</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
+<p>x : np.array</p>
 <p>y is set to a zero vector</p>
 <p>Use __set__ instead</p>
 </dd></dl>
@@ -739,34 +578,18 @@ else y is smashed</p>
 <dt id="pylayers.signal.bsignal.Bsignal.sety">
 <code class="descname">sety</code><span class="sig-paren">(</span><em>fun</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.sety"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.sety" title="Permalink to this definition">¶</a></dt>
 <dd><p>sety : set y vector</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fun</strong> : function</td>
-</tr>
-</tbody>
-</table>
+<p>fun : function</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.signal.bsignal.Bsignal.stem">
 <code class="descname">stem</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.stem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.stem" title="Permalink to this definition">¶</a></dt>
 <dd><p>stem display</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>color</strong> : string</p>
-<blockquote class="last">
-<div><p>default ‘b-‘</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.signal.bsignal import *
+<dl class="docutils">
+<dt>color <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>default ‘b-‘</dd>
+</dl>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.signal.bsignal import *
 &gt;&gt;&gt; import matplotlib.pyplot as plt
 &gt;&gt;&gt; si = Bsignal()
 &gt;&gt;&gt; si.x= np.arange(100)
@@ -784,18 +607,10 @@ else y is smashed</p>
 <dt id="pylayers.signal.bsignal.Bsignal.step">
 <code class="descname">step</code><span class="sig-paren">(</span><em>color='b'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.step" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot steps display</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>color</strong> : string</p>
-<blockquote class="last">
-<div><p>default ‘b-‘</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>color <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>default ‘b-‘</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -804,6 +619,7 @@ else y is smashed</p>
 
 
            </div>
+           
           </div>
           <footer>
   
@@ -813,11 +629,11 @@ else y is smashed</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -836,9 +652,11 @@ else y is smashed</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -853,14 +671,13 @@ else y is smashed</p>
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

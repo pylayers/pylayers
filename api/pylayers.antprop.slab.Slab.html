@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,22 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="SlabDB" href="pylayers.antprop.slab.SlabDB.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +55,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +84,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -120,9 +118,7 @@
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.slab.Mat.html">Mat</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.slab.MatDB.html">MatDB</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.slab.MatInterface.html">MatInterface</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Slab</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Slab</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.slab.SlabDB.html">SlabDB</a></li>
 </ul>
 </li>
@@ -157,7 +153,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -169,36 +165,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>Slab</li>
+        
+      <li>Slab</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.antprop.slab.Slab.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -209,150 +225,31 @@
 <dl class="class">
 <dt id="pylayers.antprop.slab.Slab">
 <em class="property">class </em><code class="descclassname">pylayers.antprop.slab.</code><code class="descname">Slab</code><span class="sig-paren">(</span><em>name</em>, <em>matDB</em>, <em>ds={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Slab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Slab" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="pylayers.antprop.slab.Interface.html#pylayers.antprop.slab.Interface" title="pylayers.antprop.slab.Interface"><code class="xref py py-class docutils literal"><span class="pre">pylayers.antprop.slab.Interface</span></code></a>, <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="pylayers.antprop.slab.Interface.html#pylayers.antprop.slab.Interface" title="pylayers.antprop.slab.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pylayers.antprop.slab.Interface</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+<p>Handle a Slab</p>
 <p>A Slab is a sequence of layers which have</p>
 <ul class="simple">
 <li>a given width</li>
 <li>a given material from the material DB</li>
 </ul>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="26%" />
-<col width="74%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>name :</td>
-<td>Slab name</td>
-</tr>
-<tr class="row-even"><td>nbmat :</td>
-<td>Number of layers</td>
-</tr>
-<tr class="row-odd"><td>index :</td>
-<td>Slab Index</td>
-</tr>
-<tr class="row-even"><td>lmatname :</td>
-<td>list of material name</td>
-</tr>
-<tr class="row-odd"><td>lthick :</td>
-<td>list of thickness of layers</td>
-</tr>
-<tr class="row-even"><td>color :</td>
-<td>color of slab dor display</td>
-</tr>
-<tr class="row-odd"><td>linewidth :</td>
-<td>linewidth for structure display</td>
-</tr>
-<tr class="row-even"><td>mat</td>
-<td>(Associated Material Database)</td>
-</tr>
-<tr class="row-odd"><td>evaluated</td>
-<td>(Boolean)</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">RT</span></code>([metalic,&nbsp;RT])</td>
-<td>evaluate Reflection and Transmission matrix</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">clear</span></code>(()&nbsp;-&gt;&nbsp;None.&nbsp;&nbsp;Remove&nbsp;all&nbsp;items&nbsp;from&nbsp;D.)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.conv" title="pylayers.antprop.slab.Slab.conv"><code class="xref py py-obj docutils literal"><span class="pre">conv</span></code></a>(matDB)</td>
-<td>build the Slab list of materials lmat</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">copy</span></code>(()&nbsp;-&gt;&nbsp;a&nbsp;shallow&nbsp;copy&nbsp;of&nbsp;D)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.eval" title="pylayers.antprop.slab.Slab.eval"><code class="xref py py-obj docutils literal"><span class="pre">eval</span></code></a>([fGHz,&nbsp;theta,&nbsp;compensate,&nbsp;RT])</td>
-<td>evaluation of the Slab</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.excess_grdelay" title="pylayers.antprop.slab.Slab.excess_grdelay"><code class="xref py py-obj docutils literal"><span class="pre">excess_grdelay</span></code></a>([fGHz,&nbsp;theta])</td>
-<td>calculate transmission excess delay in ns</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.filter" title="pylayers.antprop.slab.Slab.filter"><code class="xref py py-obj docutils literal"><span class="pre">filter</span></code></a>(win[,&nbsp;theta])</td>
-<td>filtering waveform</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">fromkeys</span></code>(…)</td>
-<td>v defaults to None.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get</span></code>((k[,d])&nbsp;-&gt;&nbsp;D[k]&nbsp;if&nbsp;k&nbsp;in&nbsp;D,&nbsp;…)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">has_key</span></code>((k)&nbsp;-&gt;&nbsp;True&nbsp;if&nbsp;D&nbsp;has&nbsp;a&nbsp;key&nbsp;k,&nbsp;else&nbsp;False)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
-<td>generic help</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.info" title="pylayers.antprop.slab.Slab.info"><code class="xref py py-obj docutils literal"><span class="pre">info</span></code></a>()</td>
-<td>display Slab Info</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">items</span></code>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D’s&nbsp;(key,&nbsp;value)&nbsp;pairs,&nbsp;…)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">iteritems</span></code>(()&nbsp;-&gt;&nbsp;an&nbsp;iterator&nbsp;over&nbsp;the&nbsp;(key,&nbsp;…)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">iterkeys</span></code>(()&nbsp;-&gt;&nbsp;an&nbsp;iterator&nbsp;over&nbsp;the&nbsp;keys&nbsp;of&nbsp;D)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">itervalues</span></code>(…)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">keys</span></code>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D’s&nbsp;keys)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.loss0" title="pylayers.antprop.slab.Slab.loss0"><code class="xref py py-obj docutils literal"><span class="pre">loss0</span></code></a>([fGHz])</td>
-<td>calculate loss for theta=0 at frequency (fGHz)</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.losst" title="pylayers.antprop.slab.Slab.losst"><code class="xref py py-obj docutils literal"><span class="pre">losst</span></code></a>(fGHz,&nbsp;theta)</td>
-<td>Calculate loss w.r.t angle and frequency</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">pcolor</span></code>([dB])</td>
-<td>display of R &amp; T coefficients wrt frequency an angle</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plotwrt</span></code>([var,&nbsp;kv])</td>
-<td>plot R &amp; T coefficients with respect to angle or frequency</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">pop</span></code>((k[,d])&nbsp;-&gt;&nbsp;v,&nbsp;…)</td>
-<td>If key is not found, d is returned if given, otherwise KeyError is raised</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">popitem</span></code>(()&nbsp;-&gt;&nbsp;(k,&nbsp;v),&nbsp;…)</td>
-<td>2-tuple; but raise KeyError if D is empty.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">setdefault</span></code>((k[,d])&nbsp;-&gt;&nbsp;D.get(k,d),&nbsp;…)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.show" title="pylayers.antprop.slab.Slab.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>([fGHz,&nbsp;theta,&nbsp;dtype,&nbsp;dB])</td>
-<td>show slab Reflection and Transmission coefficient</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.tocolor" title="pylayers.antprop.slab.Slab.tocolor"><code class="xref py py-obj docutils literal"><span class="pre">tocolor</span></code></a>([fGHz])</td>
-<td>convert slab properrties into a color</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code>(([E,&nbsp;…)</td>
-<td>If E present and has a .keys() method, does:     for k in E: D[k] = E[k]</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">values</span></code>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D’s&nbsp;values)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">viewitems</span></code>(…)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">viewkeys</span></code>(…)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">viewvalues</span></code>(…)</td>
-<td></td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>name :</dt>
+<dd>Slab name</dd>
+<dt>nbmat :</dt>
+<dd>Number of layers</dd>
+<dt>index :</dt>
+<dd>Slab Index</dd>
+<dt>lmatname :</dt>
+<dd>list of material name</dd>
+<dt>lthick :</dt>
+<dd>list of thickness of layers</dd>
+<dt>color :</dt>
+<dd>color of slab dor display</dd>
+<dt>linewidth :</dt>
+<dd>linewidth for structure display</dd>
+</dl>
+<p>mat : Associated Material Database</p>
+<p>evaluated : Boolean</p>
 <p class="rubric">Methods Summary</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -360,31 +257,31 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.conv" title="pylayers.antprop.slab.Slab.conv"><code class="xref py py-obj docutils literal"><span class="pre">conv</span></code></a>(matDB)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.conv" title="pylayers.antprop.slab.Slab.conv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conv</span></code></a>(matDB)</td>
 <td>build the Slab list of materials lmat</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.eval" title="pylayers.antprop.slab.Slab.eval"><code class="xref py py-obj docutils literal"><span class="pre">eval</span></code></a>([fGHz,&nbsp;theta,&nbsp;compensate,&nbsp;RT])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.eval" title="pylayers.antprop.slab.Slab.eval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval</span></code></a>([fGHz,&nbsp;theta,&nbsp;compensate,&nbsp;RT])</td>
 <td>evaluation of the Slab</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.excess_grdelay" title="pylayers.antprop.slab.Slab.excess_grdelay"><code class="xref py py-obj docutils literal"><span class="pre">excess_grdelay</span></code></a>([fGHz,&nbsp;theta])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.excess_grdelay" title="pylayers.antprop.slab.Slab.excess_grdelay"><code class="xref py py-obj docutils literal notranslate"><span class="pre">excess_grdelay</span></code></a>([fGHz,&nbsp;theta])</td>
 <td>calculate transmission excess delay in ns</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.filter" title="pylayers.antprop.slab.Slab.filter"><code class="xref py py-obj docutils literal"><span class="pre">filter</span></code></a>(win[,&nbsp;theta])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.filter" title="pylayers.antprop.slab.Slab.filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter</span></code></a>(win[,&nbsp;theta])</td>
 <td>filtering waveform</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.info" title="pylayers.antprop.slab.Slab.info"><code class="xref py py-obj docutils literal"><span class="pre">info</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.info" title="pylayers.antprop.slab.Slab.info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">info</span></code></a>()</td>
 <td>display Slab Info</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.loss0" title="pylayers.antprop.slab.Slab.loss0"><code class="xref py py-obj docutils literal"><span class="pre">loss0</span></code></a>([fGHz])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.loss0" title="pylayers.antprop.slab.Slab.loss0"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loss0</span></code></a>([fGHz])</td>
 <td>calculate loss for theta=0 at frequency (fGHz)</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.losst" title="pylayers.antprop.slab.Slab.losst"><code class="xref py py-obj docutils literal"><span class="pre">losst</span></code></a>(fGHz,&nbsp;theta)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.losst" title="pylayers.antprop.slab.Slab.losst"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losst</span></code></a>(fGHz,&nbsp;theta)</td>
 <td>Calculate loss w.r.t angle and frequency</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.show" title="pylayers.antprop.slab.Slab.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>([fGHz,&nbsp;theta,&nbsp;dtype,&nbsp;dB])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.show" title="pylayers.antprop.slab.Slab.show"><code class="xref py py-obj docutils literal notranslate"><span class="pre">show</span></code></a>([fGHz,&nbsp;theta,&nbsp;dtype,&nbsp;dB])</td>
 <td>show slab Reflection and Transmission coefficient</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.tocolor" title="pylayers.antprop.slab.Slab.tocolor"><code class="xref py py-obj docutils literal"><span class="pre">tocolor</span></code></a>([fGHz])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Slab.tocolor" title="pylayers.antprop.slab.Slab.tocolor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tocolor</span></code></a>([fGHz])</td>
 <td>convert slab properrties into a color</td>
 </tr>
 </tbody>
@@ -400,43 +297,23 @@
 <dt id="pylayers.antprop.slab.Slab.eval">
 <code class="descname">eval</code><span class="sig-paren">(</span><em>fGHz=array([ 1.])</em>, <em>theta=array([ 0.</em>, <em>0.03205707</em>, <em>0.06411414</em>, <em>0.0961712</em>, <em>0.12822827</em>, <em>0.16028534</em>, <em>0.19234241</em>, <em>0.22439948</em>, <em>0.25645654</em>, <em>0.28851361</em>, <em>0.32057068</em>, <em>0.35262775</em>, <em>0.38468481</em>, <em>0.41674188</em>, <em>0.44879895</em>, <em>0.48085602</em>, <em>0.51291309</em>, <em>0.54497015</em>, <em>0.57702722</em>, <em>0.60908429</em>, <em>0.64114136</em>, <em>0.67319843</em>, <em>0.70525549</em>, <em>0.73731256</em>, <em>0.76936963</em>, <em>0.8014267</em>, <em>0.83348377</em>, <em>0.86554083</em>, <em>0.8975979</em>, <em>0.92965497</em>, <em>0.96171204</em>, <em>0.9937691</em>, <em>1.02582617</em>, <em>1.05788324</em>, <em>1.08994031</em>, <em>1.12199738</em>, <em>1.15405444</em>, <em>1.18611151</em>, <em>1.21816858</em>, <em>1.25022565</em>, <em>1.28228272</em>, <em>1.31433978</em>, <em>1.34639685</em>, <em>1.37845392</em>, <em>1.41051099</em>, <em>1.44256806</em>, <em>1.47462512</em>, <em>1.50668219</em>, <em>1.53873926</em>, <em>1.57079633])</em>, <em>compensate=False</em>, <em>RT='RT'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Slab.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Slab.eval" title="Permalink to this definition">¶</a></dt>
 <dd><p>evaluation of the Slab</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fGHz</strong> : frequency GHz ( np.array([1.0]) )</p>
-<p><strong>theta</strong> : np.array</p>
+<p>fGHz : frequency GHz ( np.array([1.0]) )
+theta : np.array</p>
 <blockquote>
-<div><p>incidence angle (from normal) radians</p>
-</div></blockquote>
-<p><strong>compensate</strong> : boolean</p>
-<p class="last"><strong>RT</strong> : string</p>
-</td>
-</tr>
-</tbody>
-</table>
+<div>incidence angle (from normal) radians</div></blockquote>
+<p>compensate : boolean
+RT : string</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.slab.Slab.excess_grdelay">
 <code class="descname">excess_grdelay</code><span class="sig-paren">(</span><em>fGHz=array([ 2.4</em>, <em>2.5</em>, <em>2.6</em>, <em>2.7</em>, <em>2.8</em>, <em>2.9</em>, <em>3.</em>, <em>3.1</em>, <em>3.2</em>, <em>3.3</em>, <em>3.4</em>, <em>3.5</em>, <em>3.6</em>, <em>3.7</em>, <em>3.8</em>, <em>3.9])</em>, <em>theta=array([0])</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Slab.excess_grdelay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Slab.excess_grdelay" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculate transmission excess delay in ns</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fGHz</strong> : array</p>
-<p><strong>default arange(2.4,4,0.1)</strong></p>
-<p><strong>theta</strong> : default 0</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>delayo</strong> : excess delay polarization o</p>
-<p class="last"><strong>delayp</strong> : excess delay polarization p</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
+<p>fGHz : array
+default arange(2.4,4,0.1)
+theta : default 0</p>
+<p>delayo : excess delay polarization o
+delayp : excess delay polarization p</p>
 <p>#&gt;&gt;&gt; from pylayers.antprop.slab import *
 #&gt;&gt;&gt; from matplotlib.pylab import *
 #&gt;&gt;&gt; import numpy as np
@@ -453,24 +330,16 @@
 <dt id="pylayers.antprop.slab.Slab.filter">
 <code class="descname">filter</code><span class="sig-paren">(</span><em>win</em>, <em>theta=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Slab.filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Slab.filter" title="Permalink to this definition">¶</a></dt>
 <dd><p>filtering waveform</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>win</strong> : Waveform</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>wout</strong> : Waveform</td>
-</tr>
-</tbody>
-</table>
+<p>win : Waveform</p>
+<p>wout : Waveform</p>
+<p>NOT IMPLEMENTED</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.slab.Slab.info">
 <code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Slab.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Slab.info" title="Permalink to this definition">¶</a></dt>
 <dd><p>display Slab Info</p>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import numpy as np
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import numpy as np
 &gt;&gt;&gt; import matplotlib.pyplot as plt
 &gt;&gt;&gt; from pylayers.antprop.slab import *
 &gt;&gt;&gt; sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)
@@ -492,24 +361,13 @@
 <dt id="pylayers.antprop.slab.Slab.loss0">
 <code class="descname">loss0</code><span class="sig-paren">(</span><em>fGHz=2.4</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Slab.loss0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Slab.loss0" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculate loss for theta=0 at frequency (fGHz)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fGHz</strong> : frequency (GHz) np.array()</p>
-<p><strong>default 2.4</strong></p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Lo</strong> : np.array</p>
-<p>Loss at 0 deg polarization ortho</p>
-<p><strong>Lp</strong> : np.array</p>
-<p class="last">Loss at 0 deg polarization para</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.slab import *
+<p>fGHz : frequency (GHz) np.array()
+default 2.4</p>
+<p>Lo : np.array
+Loss at 0 deg polarization ortho
+Lp : np.array
+Loss at 0 deg polarization para</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.slab import *
 &gt;&gt;&gt; sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)
 &gt;&gt;&gt; s1 = sl[&#39;AIR&#39;]
 &gt;&gt;&gt; Lo,Lp = s1.loss0(2.4)
@@ -523,61 +381,35 @@
 <dt id="pylayers.antprop.slab.Slab.losst">
 <code class="descname">losst</code><span class="sig-paren">(</span><em>fGHz</em>, <em>theta</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Slab.losst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Slab.losst" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate loss w.r.t angle and frequency</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fGHz</strong> : np.array()</p>
-<p><strong>frequency (GHz)</strong></p>
-<p><strong>theta</strong> : np.array</p>
-<p><strong>theta angle (radians)</strong></p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Lo</strong> : np.array</p>
-<p>Loss orthogonal</p>
-<p><strong>Lp</strong> : np.array</p>
-<p class="last">Loss paralell</p>
-</td>
-</tr>
-</tbody>
-</table>
+<p>fGHz : np.array()
+frequency (GHz)</p>
+<p>theta : np.array
+theta angle (radians)</p>
+<p>Lo : np.array
+Loss orthogonal</p>
+<p>Lp : np.array
+Loss paralell</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.slab.Slab.show">
-<code class="descname">show</code><span class="sig-paren">(</span><em>fGHz=2.4</em>, <em>theta=array([ 0.</em>, <em>0.01</em>, <em>0.02</em>, <em>0.03</em>, <em>0.04</em>, <em>0.05</em>, <em>0.06</em>, <em>0.07</em>, <em>0.08</em>, <em>0.09</em>, <em>0.1</em>, <em>0.11</em>, <em>0.12</em>, <em>0.13</em>, <em>0.14</em>, <em>0.15</em>, <em>0.16</em>, <em>0.17</em>, <em>0.18</em>, <em>0.19</em>, <em>0.2</em>, <em>0.21</em>, <em>0.22</em>, <em>0.23</em>, <em>0.24</em>, <em>0.25</em>, <em>0.26</em>, <em>0.27</em>, <em>0.28</em>, <em>0.29</em>, <em>0.3</em>, <em>0.31</em>, <em>0.32</em>, <em>0.33</em>, <em>0.34</em>, <em>0.35</em>, <em>0.36</em>, <em>0.37</em>, <em>0.38</em>, <em>0.39</em>, <em>0.4</em>, <em>0.41</em>, <em>0.42</em>, <em>0.43</em>, <em>0.44</em>, <em>0.45</em>, <em>0.46</em>, <em>0.47</em>, <em>0.48</em>, <em>0.49</em>, <em>0.5</em>, <em>0.51</em>, <em>0.52</em>, <em>0.53</em>, <em>0.54</em>, <em>0.55</em>, <em>0.56</em>, <em>0.57</em>, <em>0.58</em>, <em>0.59</em>, <em>0.6</em>, <em>0.61</em>, <em>0.62</em>, <em>0.63</em>, <em>0.64</em>, <em>0.65</em>, <em>0.66</em>, <em>0.67</em>, <em>0.68</em>, <em>0.69</em>, <em>0.7</em>, <em>0.71</em>, <em>0.72</em>, <em>0.73</em>, <em>0.74</em>, <em>0.75</em>, <em>0.76</em>, <em>0.77</em>, <em>0.78</em>, <em>0.79</em>, <em>0.8</em>, <em>0.81</em>, <em>0.82</em>, <em>0.83</em>, <em>0.84</em>, <em>0.85</em>, <em>0.86</em>, <em>0.87</em>, <em>0.88</em>, <em>0.89</em>, <em>0.9</em>, <em>0.91</em>, <em>0.92</em>, <em>0.93</em>, <em>0.94</em>, <em>0.95</em>, <em>0.96</em>, <em>0.97</em>, <em>0.98</em>, <em>0.99</em>, <em>1.</em>, <em>1.01</em>, <em>1.02</em>, <em>1.03</em>, <em>1.04</em>, <em>1.05</em>, <em>1.06</em>, <em>1.07</em>, <em>1.08</em>, <em>1.09</em>, <em>1.1</em>, <em>1.11</em>, <em>1.12</em>, <em>1.13</em>, <em>1.14</em>, <em>1.15</em>, <em>1.16</em>, <em>1.17</em>, <em>1.18</em>, <em>1.19</em>, <em>1.2</em>, <em>1.21</em>, <em>1.22</em>, <em>1.23</em>, <em>1.24</em>, <em>1.25</em>, <em>1.26</em>, <em>1.27</em>, <em>1.28</em>, <em>1.29</em>, <em>1.3</em>, <em>1.31</em>, <em>1.32</em>, <em>1.33</em>, <em>1.34</em>, <em>1.35</em>, <em>1.36</em>, <em>1.37</em>, <em>1.38</em>, <em>1.39</em>, <em>1.4</em>, <em>1.41</em>, <em>1.42</em>, <em>1.43</em>, <em>1.44</em>, <em>1.45</em>, <em>1.46</em>, <em>1.47</em>, <em>1.48</em>, <em>1.49</em>, <em>1.5</em>, <em>1.51</em>, <em>1.52</em>, <em>1.53</em>, <em>1.54</em>, <em>1.55</em>, <em>1.56</em>, <em>1.57])</em>, <em>dtype=&lt;type 'numpy.float64'&gt;</em>, <em>dB=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Slab.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Slab.show" title="Permalink to this definition">¶</a></dt>
+<code class="descname">show</code><span class="sig-paren">(</span><em>fGHz=2.4</em>, <em>theta=array([ 0.</em>, <em>0.01</em>, <em>0.02</em>, <em>0.03</em>, <em>0.04</em>, <em>0.05</em>, <em>0.06</em>, <em>0.07</em>, <em>0.08</em>, <em>0.09</em>, <em>0.1</em>, <em>0.11</em>, <em>0.12</em>, <em>0.13</em>, <em>0.14</em>, <em>0.15</em>, <em>0.16</em>, <em>0.17</em>, <em>0.18</em>, <em>0.19</em>, <em>0.2</em>, <em>0.21</em>, <em>0.22</em>, <em>0.23</em>, <em>0.24</em>, <em>0.25</em>, <em>0.26</em>, <em>0.27</em>, <em>0.28</em>, <em>0.29</em>, <em>0.3</em>, <em>0.31</em>, <em>0.32</em>, <em>0.33</em>, <em>0.34</em>, <em>0.35</em>, <em>0.36</em>, <em>0.37</em>, <em>0.38</em>, <em>0.39</em>, <em>0.4</em>, <em>0.41</em>, <em>0.42</em>, <em>0.43</em>, <em>0.44</em>, <em>0.45</em>, <em>0.46</em>, <em>0.47</em>, <em>0.48</em>, <em>0.49</em>, <em>0.5</em>, <em>0.51</em>, <em>0.52</em>, <em>0.53</em>, <em>0.54</em>, <em>0.55</em>, <em>0.56</em>, <em>0.57</em>, <em>0.58</em>, <em>0.59</em>, <em>0.6</em>, <em>0.61</em>, <em>0.62</em>, <em>0.63</em>, <em>0.64</em>, <em>0.65</em>, <em>0.66</em>, <em>0.67</em>, <em>0.68</em>, <em>0.69</em>, <em>0.7</em>, <em>0.71</em>, <em>0.72</em>, <em>0.73</em>, <em>0.74</em>, <em>0.75</em>, <em>0.76</em>, <em>0.77</em>, <em>0.78</em>, <em>0.79</em>, <em>0.8</em>, <em>0.81</em>, <em>0.82</em>, <em>0.83</em>, <em>0.84</em>, <em>0.85</em>, <em>0.86</em>, <em>0.87</em>, <em>0.88</em>, <em>0.89</em>, <em>0.9</em>, <em>0.91</em>, <em>0.92</em>, <em>0.93</em>, <em>0.94</em>, <em>0.95</em>, <em>0.96</em>, <em>0.97</em>, <em>0.98</em>, <em>0.99</em>, <em>1.</em>, <em>1.01</em>, <em>1.02</em>, <em>1.03</em>, <em>1.04</em>, <em>1.05</em>, <em>1.06</em>, <em>1.07</em>, <em>1.08</em>, <em>1.09</em>, <em>1.1</em>, <em>1.11</em>, <em>1.12</em>, <em>1.13</em>, <em>1.14</em>, <em>1.15</em>, <em>1.16</em>, <em>1.17</em>, <em>1.18</em>, <em>1.19</em>, <em>1.2</em>, <em>1.21</em>, <em>1.22</em>, <em>1.23</em>, <em>1.24</em>, <em>1.25</em>, <em>1.26</em>, <em>1.27</em>, <em>1.28</em>, <em>1.29</em>, <em>1.3</em>, <em>1.31</em>, <em>1.32</em>, <em>1.33</em>, <em>1.34</em>, <em>1.35</em>, <em>1.36</em>, <em>1.37</em>, <em>1.38</em>, <em>1.39</em>, <em>1.4</em>, <em>1.41</em>, <em>1.42</em>, <em>1.43</em>, <em>1.44</em>, <em>1.45</em>, <em>1.46</em>, <em>1.47</em>, <em>1.48</em>, <em>1.49</em>, <em>1.5</em>, <em>1.51</em>, <em>1.52</em>, <em>1.53</em>, <em>1.54</em>, <em>1.55</em>, <em>1.56</em>, <em>1.57])</em>, <em>dtype=&lt;class 'numpy.float64'&gt;</em>, <em>dB=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Slab.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Slab.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>show slab Reflection and Transmission coefficient</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fGHz</strong> : float</p>
-<p><strong>theta</strong> : np.array</p>
-<p><strong>dtype :</strong></p>
-<p><strong>display</strong> : string</p>
-<p><strong>{‘modulus’}</strong></p>
-<p><strong>dB</strong> : boolean</p>
-<p class="last"><strong>False</strong></p>
-</td>
-</tr>
-</tbody>
-</table>
+<p>fGHz : float
+theta : np.array
+dtype :
+display : string
+{‘modulus’}
+dB : boolean
+False</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.slab.Slab.tocolor">
 <code class="descname">tocolor</code><span class="sig-paren">(</span><em>fGHz=array([ 2.4])</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Slab.tocolor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Slab.tocolor" title="Permalink to this definition">¶</a></dt>
 <dd><p>convert slab properrties into a color</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fGHz</strong> : np.array</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)
+<p>fGHz : np.array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)
 &gt;&gt;&gt; s1 = sl[&#39;PARTITION&#39;]
 &gt;&gt;&gt; col24 = s1.tocolor(np.array([2.4]))
 &gt;&gt;&gt; fGHz = np.arange(0.5,8,100)
@@ -592,8 +424,16 @@
 
 
            </div>
+           
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pylayers.antprop.slab.SlabDB.html" class="btn btn-neutral float-right" title="SlabDB" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
   
 
   <hr/>
@@ -601,11 +441,11 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -624,9 +464,11 @@
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -641,14 +483,13 @@
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

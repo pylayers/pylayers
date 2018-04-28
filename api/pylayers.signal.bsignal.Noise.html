@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,31 +25,22 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/>
-        <link rel="prev" title="FUsignal" href="pylayers.signal.bsignal.FUsignal.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="FUsignal" href="pylayers.signal.bsignal.FUsignal.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -62,7 +55,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -91,7 +84,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -102,6 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -151,9 +148,7 @@
 <li class="toctree-l3"><a class="reference internal" href="pylayers.signal.bsignal.FBsignal.html">FBsignal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.signal.bsignal.FHsignal.html">FHsignal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.signal.bsignal.FUsignal.html">FUsignal</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Noise</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Noise</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.signal.bsignal.TBsignal.html">TBsignal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.signal.bsignal.TUsignal.html">TUsignal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.signal.bsignal.Usignal.html">Usignal</a></li>
@@ -168,7 +163,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -180,36 +175,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>Noise</li>
+        
+      <li>Noise</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.signal.bsignal.Noise.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -220,230 +235,8 @@
 <dl class="class">
 <dt id="pylayers.signal.bsignal.Noise">
 <em class="property">class </em><code class="descclassname">pylayers.signal.bsignal.</code><code class="descname">Noise</code><span class="sig-paren">(</span><em>ti=0</em>, <em>tf=100</em>, <em>fsGHz=50</em>, <em>PSDdBmpHz=-174</em>, <em>NF=0</em>, <em>R=50</em>, <em>seed=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Noise"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Noise" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="references.html#pylayers.signal.bsignal.TUsignal" title="pylayers.signal.bsignal.TUsignal"><code class="xref py py-class docutils literal"><span class="pre">pylayers.signal.bsignal.TUsignal</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="references.html#pylayers.signal.bsignal.TUsignal" title="pylayers.signal.bsignal.TUsignal"><code class="xref py py-class docutils literal notranslate"><span class="pre">pylayers.signal.bsignal.TUsignal</span></code></a></p>
 <p>Create noise</p>
-<p class="rubric">Attributes</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.NF" title="pylayers.signal.bsignal.Noise.NF"><code class="xref py py-obj docutils literal"><span class="pre">NF</span></code></a></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.PSDdBmpHz" title="pylayers.signal.bsignal.Noise.PSDdBmpHz"><code class="xref py py-obj docutils literal"><span class="pre">PSDdBmpHz</span></code></a></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.R" title="pylayers.signal.bsignal.Noise.R"><code class="xref py py-obj docutils literal"><span class="pre">R</span></code></a></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.fsGHz" title="pylayers.signal.bsignal.Noise.fsGHz"><code class="xref py py-obj docutils literal"><span class="pre">fsGHz</span></code></a></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.seed" title="pylayers.signal.bsignal.Noise.seed"><code class="xref py py-obj docutils literal"><span class="pre">seed</span></code></a></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.tf" title="pylayers.signal.bsignal.Noise.tf"><code class="xref py py-obj docutils literal"><span class="pre">tf</span></code></a></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.ti" title="pylayers.signal.bsignal.Noise.ti"><code class="xref py py-obj docutils literal"><span class="pre">ti</span></code></a></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.tsns" title="pylayers.signal.bsignal.Noise.tsns"><code class="xref py py-obj docutils literal"><span class="pre">tsns</span></code></a></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Efirst_loc</span></code>(nint,&nbsp;E0)</td>
-<td>find the Efirst using the mean like</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">EnImpulse</span></code>(**kwargs)</td>
-<td>Create an energy normalized Gaussian impulse (Usignal)</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">MaskImpulse</span></code>(**kwargs)</td>
-<td>MaskImpulse : Create an Energy normalized Gaussian impulse (Usignal)</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Yadd_zeros2l</span></code>(N)</td>
-<td>time domain extension on the left with N zeros</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Yadd_zeros2r</span></code>(N)</td>
-<td>time domain extension on right with N zeros</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">abs</span></code>()</td>
-<td>return the absolute value of an Usignal</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">align</span></code>(u2)</td>
-<td>align two TUsignal on a same base</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">alignc</span></code>(u2)</td>
-<td>align 2 Usignal</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.amplify" title="pylayers.signal.bsignal.Noise.amplify"><code class="xref py py-obj docutils literal"><span class="pre">amplify</span></code></a>(GdB,&nbsp;NF)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">append</span></code>(bs)</td>
-<td>append bs to Bsignal</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">b2tu</span></code>(N)</td>
-<td>conversion from TBsignal to TUsignal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">b2tu2</span></code>(fsGHz,&nbsp;Tobsns)</td>
-<td>conversion from TBsignal to TUsignal</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">cformat</span></code>(**kwargs)</td>
-<td>complex format</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">convolve</span></code>(u)</td>
-<td>time domain convolution</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">correlate</span></code>(s[,&nbsp;normalized])</td>
-<td>The time step dx should be the same</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">corrgauss</span></code>(sigma)</td>
-<td>Correlate TUsignal with a normalized gaussian of standard deviation sigma</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">diff</span></code>()</td>
-<td>numerical differentiation TUsignal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">dx</span></code>()</td>
-<td>get the time step of Usignal.x</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">energy</span></code>([axis])</td>
-<td>calculate the energy of an Usignal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">eprfl</span></code>([axis])</td>
-<td>Energy profile</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">esd</span></code>([mode])</td>
-<td>Calculate the energy spectral density of the U signal</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Noise.eval" title="pylayers.signal.bsignal.Noise.eval"><code class="xref py py-obj docutils literal"><span class="pre">eval</span></code></a>()</td>
-<td>noise evaluation</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">expand</span></code>(a)</td>
-<td>expand the time support by a scale factor a</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">extract</span></code>(u)</td>
-<td>extract a subset of signal from index</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">fft</span></code>([shift])</td>
-<td>forward fast Fourier transform of TUsignal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">fftsh</span></code>()</td>
-<td>return an FHsignal</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">fftshift</span></code>()</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Noise.fgating" title="pylayers.signal.bsignal.Noise.fgating"><code class="xref py py-obj docutils literal"><span class="pre">fgating</span></code></a>(fcGHz,&nbsp;WGHz[,&nbsp;window])</td>
-<td>apply a frequency gating</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">filter</span></code>([order,&nbsp;wp,&nbsp;ws,&nbsp;ftype])</td>
-<td>TUsignal filtering</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">flatteny</span></code>([yrange,&nbsp;reversible])</td>
-<td>flatten y array</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">ft</span></code>()</td>
-<td>return the associated FUsignal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">gating</span></code>(xmin,&nbsp;xmax)</td>
-<td>gating between xmin and xmax</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
-<td>generic help</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">imshow</span></code>(**kwargs)</td>
-<td>imshow of y matrix</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">info</span></code>()</td>
-<td>display information about TUsignal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">integ</span></code>(Tns[,&nbsp;Tsns])</td>
-<td>integation of alphak tauk of TBsignal</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">len</span></code>()</td>
-<td>returm length of x axis</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">load</span></code>(filename)</td>
-<td>load a Bsignal from a Matlab File</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">max</span></code>()</td>
-<td>maximum of Usignal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">mean</span></code>()</td>
-<td>mean value of the signal</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">min</span></code>()</td>
-<td>minimum of Usignal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>(**kwargs)</td>
-<td>plot TBsignal</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Noise.ppsd" title="pylayers.signal.bsignal.Noise.ppsd"><code class="xref py py-obj docutils literal"><span class="pre">ppsd</span></code></a>([mask])</td>
-<td>plot Power Spectral Density</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">psd</span></code>([Tpns,&nbsp;R,&nbsp;periodic])</td>
-<td>calculate TUsignal power spectral density</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">resample</span></code>(x_new[,&nbsp;kind])</td>
-<td>resample the Usignal with a new x base</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">save</span></code>(filename)</td>
-<td>save Bsignal in Matlab File Format</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">setx</span></code>(start,&nbsp;stop,&nbsp;dx)</td>
-<td>set the x array of the Usignal (y=0)</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">sety</span></code>(fun)</td>
-<td>sety : set y vector</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">shift</span></code>(tau)</td>
-<td>shift the Usignal by tau (expressed in the same unit as Bsignal.x)</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">showpsd</span></code>([fig,&nbsp;ax,&nbsp;display,&nbsp;PRPns])</td>
-<td>show psd</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">stem</span></code>(**kwargs)</td>
-<td>stem display</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">step</span></code>([color])</td>
-<td>plot steps display</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">tap</span></code>(fcGHz,&nbsp;WGHz,&nbsp;Ntap)</td>
-<td>Back to baseband</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">translate</span></code>(tau)</td>
-<td>translate TBsignal signal by tau</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">truncate</span></code>(imin,&nbsp;imax[,&nbsp;axis])</td>
-<td>truncate USignal in range [posmin, posmax]</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">width</span></code>()</td>
-<td>get the extension support of the Usignal</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">window</span></code>([win])</td>
-<td>windowing Usignal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">zleft</span></code>(xmin)</td>
-<td>add zeros on the left  until xmin</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">zlr</span></code>(xmin,&nbsp;xmax)</td>
-<td>This corresponds to a gating between xmin and xmax</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">zright</span></code>(xmax)</td>
-<td>add zeros on the right until xmax</td>
-</tr>
-</tbody>
-</table>
 <p class="rubric">Attributes Summary</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -451,28 +244,28 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.NF" title="pylayers.signal.bsignal.Noise.NF"><code class="xref py py-obj docutils literal"><span class="pre">NF</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.NF" title="pylayers.signal.bsignal.Noise.NF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NF</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.PSDdBmpHz" title="pylayers.signal.bsignal.Noise.PSDdBmpHz"><code class="xref py py-obj docutils literal"><span class="pre">PSDdBmpHz</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.PSDdBmpHz" title="pylayers.signal.bsignal.Noise.PSDdBmpHz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PSDdBmpHz</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.R" title="pylayers.signal.bsignal.Noise.R"><code class="xref py py-obj docutils literal"><span class="pre">R</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.R" title="pylayers.signal.bsignal.Noise.R"><code class="xref py py-obj docutils literal notranslate"><span class="pre">R</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.fsGHz" title="pylayers.signal.bsignal.Noise.fsGHz"><code class="xref py py-obj docutils literal"><span class="pre">fsGHz</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.fsGHz" title="pylayers.signal.bsignal.Noise.fsGHz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fsGHz</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.seed" title="pylayers.signal.bsignal.Noise.seed"><code class="xref py py-obj docutils literal"><span class="pre">seed</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.seed" title="pylayers.signal.bsignal.Noise.seed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">seed</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.tf" title="pylayers.signal.bsignal.Noise.tf"><code class="xref py py-obj docutils literal"><span class="pre">tf</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.tf" title="pylayers.signal.bsignal.Noise.tf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tf</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.ti" title="pylayers.signal.bsignal.Noise.ti"><code class="xref py py-obj docutils literal"><span class="pre">ti</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.ti" title="pylayers.signal.bsignal.Noise.ti"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ti</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.tsns" title="pylayers.signal.bsignal.Noise.tsns"><code class="xref py py-obj docutils literal"><span class="pre">tsns</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.tsns" title="pylayers.signal.bsignal.Noise.tsns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tsns</span></code></a></td>
 <td></td>
 </tr>
 </tbody>
@@ -484,16 +277,16 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.amplify" title="pylayers.signal.bsignal.Noise.amplify"><code class="xref py py-obj docutils literal"><span class="pre">amplify</span></code></a>(GdB,&nbsp;NF)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.signal.bsignal.Noise.amplify" title="pylayers.signal.bsignal.Noise.amplify"><code class="xref py py-obj docutils literal notranslate"><span class="pre">amplify</span></code></a>(GdB,&nbsp;NF)</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Noise.eval" title="pylayers.signal.bsignal.Noise.eval"><code class="xref py py-obj docutils literal"><span class="pre">eval</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Noise.eval" title="pylayers.signal.bsignal.Noise.eval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval</span></code></a>()</td>
 <td>noise evaluation</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Noise.fgating" title="pylayers.signal.bsignal.Noise.fgating"><code class="xref py py-obj docutils literal"><span class="pre">fgating</span></code></a>(fcGHz,&nbsp;WGHz[,&nbsp;window])</td>
+<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Noise.fgating" title="pylayers.signal.bsignal.Noise.fgating"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fgating</span></code></a>(fcGHz,&nbsp;WGHz[,&nbsp;window])</td>
 <td>apply a frequency gating</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Noise.ppsd" title="pylayers.signal.bsignal.Noise.ppsd"><code class="xref py py-obj docutils literal"><span class="pre">ppsd</span></code></a>([mask])</td>
+<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.signal.bsignal.Noise.ppsd" title="pylayers.signal.bsignal.Noise.ppsd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppsd</span></code></a>([mask])</td>
 <td>plot Power Spectral Density</td>
 </tr>
 </tbody>
@@ -556,38 +349,21 @@
 <dt id="pylayers.signal.bsignal.Noise.fgating">
 <code class="descname">fgating</code><span class="sig-paren">(</span><em>fcGHz</em>, <em>WGHz</em>, <em>window='rect'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Noise.fgating"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Noise.fgating" title="Permalink to this definition">¶</a></dt>
 <dd><p>apply a frequency gating</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fcGHz</strong> : float</p>
-<p><strong>WGHz</strong> : float</p>
-<p><strong>window</strong> : string</p>
-<blockquote class="last">
-<div><p>‘rect’</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<p>fcGHz : float
+WGHz  : float
+window : string</p>
+<blockquote>
+<div>‘rect’</div></blockquote>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.signal.bsignal.Noise.ppsd">
 <code class="descname">ppsd</code><span class="sig-paren">(</span><em>mask=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Noise.ppsd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Noise.ppsd" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot Power Spectral Density</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mask</strong> : boolean</p>
-<blockquote class="last">
-<div><p>True</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>mask <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
+<dd>True</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -596,13 +372,14 @@
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="pylayers.signal.bsignal.FUsignal.html" class="btn btn-neutral" title="FUsignal" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pylayers.signal.bsignal.FUsignal.html" class="btn btn-neutral" title="FUsignal" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -612,11 +389,11 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -635,9 +412,11 @@
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -652,14 +431,13 @@
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

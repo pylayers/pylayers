@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,21 @@
   
 
   
-  
     <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../../../about.html"/>
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="PyLayers" href="../../../index.html"/>
-        <link rel="up" title="Module code" href="../../index.html"/> 
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
 
   
   <script src="../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +54,7 @@
 
           
             
-            <img src="../../../_static/pylayers.png" class="logo" />
+            <img src="../../../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +83,10 @@
           
             
             
-                <ul>
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +97,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -142,7 +139,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -154,34 +151,52 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-      
-    <li>pylayers.antprop.loss</li>
+        
+      <li>pylayers.antprop.loss</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -206,10 +221,11 @@ import logging
 import numpy as np
 from scipy import io
 import matplotlib.pylab as plt
-import pylayers.measures.mesuwb
 import pylayers.gis.gisutil as gu
 import numpy.linalg as la
 import pdb
+import time
+from numba import jit
 
 <div class="viewcode-block" id="PL0"><a class="viewcode-back" href="../../../api/pylayers.antprop.loss.PL0.html#pylayers.antprop.loss.PL0">[docs]</a>def PL0(fGHz,GtdB=0,GrdB=0,R=1):
     &quot;&quot;&quot;  Path Loss at frequency fGHZ @ R
@@ -391,40 +407,37 @@ import pdb
     # Besides, M is defined as M = pg + beta*uw + gamma*uh then  alpha*rx + (1-alpha)tx = pg + beta*uw + gamma*uh
     # [rx-tx , -uw, -uh]*[alpha,beta,gamma].T = pg - tx &lt;==&gt; Ax = b solved by la.solve ; x[0]=alpha, x[1]=beta and
 
-    TODO
-    ----
-
-    To be vectorized 
+    TODO To be vectorized
 
     &quot;&quot;&quot;
 
-    
+
 
     rxtx = rx - tx # LOS distance
-   
+
     # x[2]=gamma.
-    A = np.vstack((rxtx,-uw,-uh)).T 
+    A = np.vstack((rxtx,-uw,-uh)).T
     b = pg - tx
     x = la.solve(A,b)
-    
+
     # condition of shadowing
-    condseg = ((x[0]&gt;1) or (x[0]&lt;0)) 
-    condw = ((x[1]&gt;w/2.) or (x[1]&lt;-w/2.)) 
-    condh = ((x[2]&gt;h/2.) or (x[2]&lt;-h/2.)) 
-    
+    condseg = ((x[0]&gt;1) or (x[0]&lt;0))
+    condw = ((x[1]&gt;w/2.) or (x[1]&lt;-w/2.))
+    condh = ((x[2]&gt;h/2.) or (x[2]&lt;-h/2.))
+
     visi = condseg or condw or condh
     if visi:
         shad = -1
     else:
         shad = 1
-        
+
     r = np.dot(rxtx,rxtx)**0.5
     w1 = pg + uw*w/2.
     w2 = pg - uw*w/2.
     h1 = pg + uh*h/2.
     h2 = pg - uh*h/2.
 
-    
+
     Dtw1 = np.dot(tx-w1,tx-w1)**0.5
     Drw1 = np.dot(rx-w1,rx-w1)**0.5
     Dtw2 = np.dot(tx-w2,tx-w2)**0.5
@@ -433,12 +446,12 @@ import pdb
     Drh1 = np.dot(rx-h1,rx-h1)**0.5
     Dth2 = np.dot(tx-h2,tx-h2)**0.5
     Drh2 = np.dot(rx-h2,rx-h2)**0.5
-    
+
     D1w = Dtw1+Drw1
     D1h = Dth1+Drh1
     D2w = Dtw2+Drw2
     D2h = Dth2+Drh2
-    
+
 
     if shad == 1:
         signw1 = 1
@@ -808,7 +821,7 @@ import pdb
     return(pl)</div>
 
 <div class="viewcode-block" id="cost259"><a class="viewcode-back" href="../../../api/pylayers.antprop.loss.cost259.html#pylayers.antprop.loss.cost259">[docs]</a>def cost259(pMS,pBS,fMHz):
-    &quot;&quot;&quot; cost259 model 
+    &quot;&quot;&quot; cost259 model
 
     Parameters
     ----------
@@ -840,12 +853,23 @@ import pdb
     fGHz : np.array
     hMS : height mobile station (m)
     hBS : height base station (m)
+    typ : &#39;small&#39; or &#39;big&#39;
 
     Returns
     -------
 
     L : Attenuation (dB)
 
+    Examples
+    --------
+
+        &gt;&gt;&gt; d = np.linspace(100,5000,120)
+        &gt;&gt;&gt; hBS = 30
+        &gt;&gt;&gt; hMS = 1.5
+        &gt;&gt;&gt; fGHz = 0.9
+        &gt;&gt;&gt; pMS = np.array([d,0,hMS])
+        &gt;&gt;&gt; pBS = np.array([d,0,hBS])
+        &gt;&gt;&gt; L = hata(pMS,pBS,fGHz,hMS,hBS,&#39;small&#39;)
 
     Notes
     -----
@@ -934,7 +958,7 @@ import pdb
     D = np.sqrt(np.sum((pts-p)**2,axis=0))
     # f x grid x ap
     #PL = np.array([PL0(fGHz)])[:,np.newaxis] + 10*n*np.log10(D)[np.newaxis,:]
-    
+
     PL = PL0(fGHz,d0)[:,np.newaxis] + 10*n*np.log10(D/d0)[np.newaxis,:]
 
     if not dB:
@@ -1034,7 +1058,7 @@ import pdb
     LossWallp = np.zeros((len(fGHz),Nlink))
     EdWallo = np.zeros((len(fGHz),Nlink))
     EdWallp = np.zeros((len(fGHz),Nlink))
-    
+
     for slname in cslab:
         # u index of slabs of name slname
         # data[&#39;a&#39;][u] angle
@@ -1058,11 +1082,11 @@ import pdb
         #
         # sum contribution of slab of a same link
         #
-        Wallo = np.array(map(lambda x: np.sum(lko[:,indices[x]:indicep[x]],axis=1),irange)).T
-        Wallp = np.array(map(lambda x: np.sum(lkp[:,indices[x]:indicep[x]],axis=1),irange)).T
+        Wallo = np.array([ np.sum(lko[:,indices[x]:indicep[x]],axis=1) for x in irange ] ).T
+        Wallp = np.array([ np.sum(lkp[:,indices[x]:indicep[x]],axis=1) for x in irange ] ).T
 
-        Edo = np.array(map(lambda x: np.sum(do[indices[x]:indicep[x]]),irange)).T
-        Edp = np.array(map(lambda x: np.sum(dp[indices[x]:indicep[x]]),irange)).T
+        Edo = np.array([np.sum(do[indices[x]:indicep[x]]) for x in irange]).T
+        Edp = np.array([np.sum(dp[indices[x]:indicep[x]]) for x in irange]).T
 
         LossWallo[:,involved_links] = LossWallo[:,involved_links] + Wallo
         LossWallp[:,involved_links] = LossWallp[:,involved_links] + Wallp
@@ -1412,74 +1436,289 @@ import pdb
 
     &quot;&quot;&quot;
 
-    ld  = 0.3/fGHz
-    nu  = h*np.sqrt(2*(d1+d2)/(ld*d1*d2))
+    ld = 0.3/fGHz
+    nu = h*np.sqrt(2*(d1+d2)/(ld*d1*d2))
 
     return(nu)</div>
 
 
+<div class="viewcode-block" id="route"><a class="viewcode-back" href="../../../api/pylayers.antprop.loss.route.html#pylayers.antprop.loss.route">[docs]</a>def route(X, Y, Z, Ha, Hb, fGHz, K, method=&#39;deygout&#39;):
+    &quot;&quot;&quot; diffraction loss along a route
 
-<div class="viewcode-block" id="showfurniture"><a class="viewcode-back" href="../../../api/pylayers.antprop.loss.showfurniture.html#pylayers.antprop.loss.showfurniture">[docs]</a>def showfurniture(fig,ax):
-    &quot;&quot;&quot; show furniture (not the good module) 
+
+    Parameters
+    ----------
+
+    X : np.array (Nphi,Nr)
+        cartesian coordinate grid
+    Y : np.array (Nphi,Nr)
+        cartesian coordinate grid
+    Z : np.array (Nphi,Nr)
+        height (meters)
+
+    Ha : float
+    Hb : float
+    fGHz : np.array (,Nf)
+        frequency in GHz
+    method : &#39;deygout&#39; | &#39;bullington&#39;
+
+    Returns
+    -------
+
+    L : Losses (dB)
+
+
     &quot;&quot;&quot;
-    #R1_A.show(fig,ax)
-    #R1_B1.show(fig,ax)
-    #R1_B2.show(fig,ax)
-    #R2_A.show(fig,ax)
-    #R6_A.show(fig,ax)
-    #R6_B.show(fig,ax)
-    #R6_C.show(fig,ax)
-    R6_D.show(fig,ax)
-    R6_E.show(fig,ax)
-    R6_F.show(fig,ax)
-    R6_G.show(fig,ax)
-    R6_HA.show(fig,ax)
-    R6_HB.show(fig,ax)
-    R6_IA.show(fig,ax)
-    R6_IB.show(fig,ax)
-    R13_A.show(fig,ax)
-    R13_B.show(fig,ax)
-    R13_C.show(fig,ax)
-    R12_A1.show(fig,ax)
-    R12_A2.show(fig,ax)
-    #R12_B.show(fig,ax)
-    #R12_C1.show(fig,ax)
-    #R12_C2.show(fig,ax)
-    R12_D.show(fig,ax)
-    #R7_A1.show(fig,ax)
-    #R7_A2.show(fig,ax)
-    #R7_B.show(fig,ax)
-    R7_C1.show(fig,ax)
-    R7_C2.show(fig,ax)
-    R7_D.show(fig,ax)
-    #R10_A.show(fig,ax)
-    #R10_B.show(fig,ax)
-    R10_C.show(fig,ax)
-    R10_D.show(fig,ax)
-    #R11_A.show(fig,ax)
-    #R11_B.show(fig,ax)
-    R11_C.show(fig,ax)
-    R11_D1.show(fig,ax)
-    R11_D2.show(fig,ax)
-    R11_E1.show(fig,ax)
-    R11_E2.show(fig,ax)
-    R11_F.show(fig,ax)
-    #R8_A.show(fig,ax)
-    #R8_B.show(fig,ax)
-    #R9_A1.show(fig,ax)
-    #R9_A2.show(fig,ax)
-    R9_B1.show(fig,ax)
-    R9_B2.show(fig,ax)
-    R9_B3.show(fig,ax)
-    #R9_C.show(fig,ax)
-    R9_D.show(fig,ax)
-    R9_E1.show(fig,ax)
-    R9_E2.show(fig,ax)
-    R9_F.show(fig,ax)
-    R9_G.show(fig,ax)
-    axis(&#39;scaled&#39;)</div>
+    Nphi, Nr = Z.shape
 
-<div class="viewcode-block" id="two_rays_flatearth"><a class="viewcode-back" href="../../../api/pylayers.antprop.loss.two_rays_flatearth.html#pylayers.antprop.loss.two_rays_flatearth">[docs]</a>def two_rays_flatearth(fGHz,**kwargs):
+    if (type(fGHz) == float):
+        fGHz = np.array([fGHz])
+
+    Nf = len(fGHz)
+    L = np.zeros((Nphi, Nf))
+    L0 = np.zeros(Nf)
+    # loop over azimut
+    for ip in xrange(Nphi):
+        x = X[ip, :]
+        y = Y[ip, :]
+        z = Z[ip, :]
+        d = np.sqrt((x-x[0])**2+(y-y[0])**2)
+        # effect of refraction in equivalent earth curvature
+        dh = d*(d[::-1])/(2*K*6375e3)
+        z = z + dh
+        LOS = 32.4 + 20*np.log10(fGHz) + 20*np.log10(d[-1])
+        z[0] = z[0] + Ha
+        z[-1] = z[-1] + Hb
+        if method == &#39;deygout&#39;:
+            LDiff = deygout(d, z, fGHz, L0, 0)
+        if method == &#39;bullington&#39;:
+            LDiff, deq, heq = bullington(d, z, fGHz)
+        L[ip, :] = LDiff+LOS
+    return(L)</div>
+
+<div class="viewcode-block" id="cover"><a class="viewcode-back" href="../../../api/pylayers.antprop.loss.cover.html#pylayers.antprop.loss.cover">[docs]</a>def cover(X, Y, Z, Ha, Hb, fGHz, K, method=&#39;deygout&#39;):
+    &quot;&quot;&quot; outdoor coverage on a region
+
+    Parameters
+    ----------
+
+    X : np.array (Nphi,Nr)
+        cartesian coordinate grid
+    Y : np.array (Nphi,Nr)
+        cartesian coordinate grid
+    Z : np.array (Nphi,Nr)
+        height (meters)
+
+    Ha : float
+    Hb : float
+    fGHz : np.array (,Nf)
+        frequency in GHz
+    method : &#39;deygout&#39; | &#39;bullington&#39;
+
+    Returns
+    -------
+
+    L : Losses (dB)
+
+
+    &quot;&quot;&quot;
+    Nphi, Nr = Z.shape
+
+    if (type(fGHz) == float):
+        fGHz = np.array([fGHz])
+
+    Nf = len(fGHz)
+    L = np.zeros((Nphi, Nr, Nf))
+    L0 = np.zeros(Nf)
+    # loop over azimut
+    for ip in xrange(Nphi):
+        # loop over range
+        # il : 2 ... Nr-2
+        # uk : 0 ....Nr-1
+        for il in np.arange(2, Nr-1):
+            uk = np.arange(0, il+1)
+            z = np.empty(len(uk))
+            x = X[ip, uk]
+            y = Y[ip, uk]
+            z[uk] = Z[ip, uk]
+            d = np.sqrt((x-x[0])**2+(y-y[0])**2)
+            # effect of refraction in equivalent earth curvature
+            dh = d*(d[::-1])/(2*K*6375e3)
+            z = z + dh
+            LOS = 32.4 + 20*np.log10(fGHz) + 20*np.log10(d[-1])
+            z[0] = z[0] + Ha
+            z[-1] = z[-1] + Hb
+            if method == &#39;deygout&#39;:
+                LDiff = deygout(d, z, fGHz, L0, 0)
+            if method == &#39;bullington&#39;:
+                LDiff, deq, heq = bullington(d, z, fGHz)
+            L[ip, il, :] = LDiff[None, :]+LOS[None,:]
+    return(L)</div>
+
+
+<div class="viewcode-block" id="deygout"><a class="viewcode-back" href="../../../api/pylayers.antprop.loss.deygout.html#pylayers.antprop.loss.deygout">[docs]</a>def deygout(d, height, fGHz, L, depth):
+    &quot;&quot;&quot; Deygout attenuation
+
+    Parameters
+    ----------
+
+    d : np.array (,N)
+        horizontal distance
+    height : np.array (,N)
+        height profile
+    fGHz : np.array (,Nf)
+        frequency GHz
+    L : np.array (,Nf)
+        Additional Loss
+    depth : recursive depth
+
+    Notes
+    -----
+
+    This function is recursive
+
+    &quot;&quot;&quot;
+    lmbda = 0.3/fGHz
+    L0 = np.zeros(len(fGHz))
+    depth = depth+1
+    N = len(height)
+    if depth &lt; 3:
+        if N &gt; 3:
+            u = np.arange(N)/(N-1.0)  # float
+            # l : straight line between termination (LOS)
+            l = (height[0])*(1-u)+(height[-1])*u
+            # h excludes termination points
+            h = height[1:-1] - l[1:-1]
+            # Fresnel parameter (engagement)
+            nu = h[:, None] * np.sqrt((2/lmbda[None, :]) *
+                             (1/d[1:-1, None]+1/(d[-1]-d[1:-1, None])))
+            imax = np.unique(np.nanargmax(nu, axis=0))[0]
+            numax = nu[imax, :]
+        else:
+            numax = -10*np.ones(len(fGHz))
+        if (numax &gt; -0.78).any():
+            w = numax - 0.1
+            L = L + np.maximum(6.9 + 20*np.log10(np.sqrt(w**2+1)+w), 0)
+            # left link
+            height1 = height[0:imax+2]
+            d1 = d[0:imax+2]
+            Ll = deygout(d1, height1, fGHz, L0, depth)
+            # right link
+            height2 = height[imax+1:]
+            d2 = d[imax+1:]
+            Lr = deygout(d2, height2, fGHz, L0, depth)
+            # add losses
+            L = L + Lr + Ll
+
+    return(L)</div>
+
+<div class="viewcode-block" id="bullington"><a class="viewcode-back" href="../../../api/pylayers.antprop.loss.bullington.html#pylayers.antprop.loss.bullington">[docs]</a>def bullington(d, height, fGHz):
+    &quot;&quot;&quot; edges attenuation with Bullington method
+
+    Parameters
+    ----------
+
+    d : np.array
+    height : np.array
+        antenna height is includes in height[0] and height[-1]
+    fGHz : np.array
+
+    Returns
+    -------
+
+    L : np.array
+        total loss
+
+    &quot;&quot;&quot;
+
+    def recl(d, height):
+        &quot;&quot;&quot; determine left interception point
+        Parameters
+        ----------
+        d : np.array
+        height : np.array
+
+        &quot;&quot;&quot;
+        N = len(height)
+        u = np.arange(N)/(N-1.)
+        # l : straight line between termination (LOS)
+        l = height[0]*(1-u)+(height[-1])*u
+        h = height - l
+        # imax : index of the maximum height offset
+        imax = np.argmax(h)
+        if imax&gt;0:
+            # hmax : maximum height offset
+            hmax = h[imax]
+            # parameterization from 0 to imax
+            ul = np.arange(imax)/(imax-1.)
+            # straight line
+            dhl = h[0]*(1-ul) + hmax*ul
+            # el : offset if &lt;0 split again
+            el = dhl - h[0:imax]
+            if np.min(el) &lt; 0:
+                u, v = recl(d[0:imax+1], height[0:imax+1])
+            else:
+                u = d[0:imax+1]
+                v = h[0:imax+1]
+        else:
+            u = d[0:1]
+            v = d[0:1]
+        return(u, v)
+    #if min(er)&lt;0:
+    #    u,v = rec(d[imax-1:-1],dhl)
+    #else:
+    #er  = dhr - h[imax-1:-1]
+    def recr(d, height):
+        &quot;&quot;&quot; determine the right interception point
+        &quot;&quot;&quot;
+        N = len(height)
+        u = np.arange(N)/(N-1.)
+        l = height[0]*(1-u)+(height[-1])*u
+        h = height - l
+        imax = np.argmax(h)
+        hmax = h[imax]
+        ur = np.arange(N-imax)/(N-imax-1.)
+        dhr = hmax*(1-ur) + h[-1]*ur
+
+        er = dhr - h[imax:]
+        if np.min(er) &lt; 0:
+            u, v = recr(d[imax:],h[imax:])
+        else:
+            u = d[imax:]
+            v = h[imax:]
+
+        return(u,v)
+        #if min(er)&lt;0:
+    #    u,v = rec(d[imax-1:-1],dhl)
+    #else:
+    #er  = dhr - h[imax-1:-1]
+
+    lmbda = 0.3/fGHz
+    u = np.arange(len(height))/(len(height)-1.)
+    l = (height[0])*(1-u)+(height[-1])*u
+    h = height - l
+    if (h&gt;0).any():
+        ul, vl = recl(d, height)
+        ur, vr = recr(d, height)
+        idtx = len(ul)
+        idrx = len(h) - len(ur)
+        dtx = d[idtx]
+        drx = d[-1]-d[idrx]
+        htx = h[idtx-1]
+        hrx = h[idrx]
+        deq = (dtx*hrx)*d[-1]/(drx*htx+dtx*hrx)
+        heq = deq*(htx/dtx)
+    else:
+        heq = -np.min(np.abs(h[1:-1]))
+        ieq = np.where(h==heq)[0][0]
+        deq = d[ieq]
+
+    nu = heq*np.sqrt((2/lmbda)*(1/deq+1/(d[-1]-deq)))
+    w = nu - 0.1
+    L = np.maximum(6.9 + 20*np.log10(np.sqrt(w**2+1)+w), 0)
+    return(L, deq, heq)</div>
+
+<div class="viewcode-block" id="two_rays_flatearth"><a class="viewcode-back" href="../../../api/pylayers.antprop.loss.two_rays_flatearth.html#pylayers.antprop.loss.two_rays_flatearth">[docs]</a>def two_rays_flatearth(fGHz, **kwargs):
     &quot;&quot;&quot;
     Parameters
     ----------
@@ -1507,7 +1746,7 @@ import pdb
     gamma : complex (-1.+0.j)
         Reflexion coeff
 
-    
+
     dB : boolean (True)
         return result in d
 
@@ -1515,7 +1754,7 @@ import pdb
     Returns
     -------
 
-    P : 
+    P :
         received power
 
 
@@ -1624,33 +1863,29 @@ import pdb
         dloss=kwargs[&#39;d&#39;]
         ht=kwargs[&#39;ht&#39;]
         hr=kwargs[&#39;hr&#39;]
-        
-
-
+    
     Gt = 10**((1.*Gt)/10.)
     Gr = 10**((1.*Gr)/10.)
 
-
-    
     d0 = np.sqrt( dloss**2 - 1.*(ht-hr)**2 ) # d0
     dref = np.sqrt(d0**2+1.*(ht+hr)**2) #l0&#39;
 
 
     if eps != []:
         psy = np.arcsin((ht+hr)/dref)
-        er = eps  - 60.j*sig*0.3/fGHz
+        er = eps - 60.j*sig*0.3/fGHz
         if pol == &#39;v&#39;:
-            Z= (1./er)* np.sqrt(er-np.cos(psy)**2)
+            Z = (1./er)* np.sqrt(er-np.cos(psy)**2)
         elif pol == &#39;h&#39;:
-            Z= np.sqrt(er-np.cos(psy)**2)
+            Z = np.sqrt(er-np.cos(psy)**2)
 
         gamma = (np.sin(psy)-Z)/((np.sin(psy)+Z))
 
 
 
-    deltad= dref-dloss
+    deltad = dref-dloss
     deltaphi = (2*np.pi*fGHz*deltad)/0.3
-    E= (0.3/(4*np.pi*fGHz) ) *(np.sqrt(Gt*Gr)/dloss + gamma * np.sqrt(Gr*Gr)*(np.exp(-1.j*deltaphi))/dref)
+    E= (0.3/(4*np.pi*fGHz)) * (np.sqrt(Gt*Gr)/dloss + gamma * np.sqrt(Gr*Gr)*(np.exp(-1.j*deltaphi))/dref)
     P = abs(E)**2
 
     # import ipdb
@@ -1667,7 +1902,7 @@ import pdb
     Parameters
     ----------
 
-    P : float |list 
+    P : float |list
 
         if len(P) == 1 =&gt; P is a distance
         if len(P) == 4 =&gt; P is a list of [lon0,lat0,lon1,lat1]
@@ -1682,15 +1917,15 @@ import pdb
         lon1 : float |string
             longitude second point (decimal |deg min sec Direction)
     h0 : float:
-        height of 1st point 
+        height of 1st point
     h1 : float:
-        height of 2nd point 
+        height of 2nd point
     k : electromagnetic earth factor
 
 
     Returns
     -------
-    
+
     dloss : float
         length of direct path (meter)
     dref : float
@@ -1777,7 +2012,7 @@ import pdb
     Parameters
     ----------
 
-    P : float |list 
+    P : float |list
 
         if len(P) == 1 =&gt; P is a distance
         if len(P) == 4 =&gt; P is a list of [lon0,lat0,lon1,lat1]
@@ -1792,9 +2027,9 @@ import pdb
         lon1 : float |string
             longitude second point (decimal |deg min sec Direction)
     h0 : float:
-        height of 1st point 
+        height of 1st point
     h1 : float:
-        height of 2nd point 
+        height of 2nd point
     fGHz : float
         frequency (GHz)
 
@@ -1813,7 +2048,7 @@ import pdb
     &#39;eps&#39; : float ([])
         lossless relative permittivity [],
     &#39;sig&#39;: float (0.)
-        conductivity 
+        conductivity
 
 
     dB : boolean (True)
@@ -1823,17 +2058,15 @@ import pdb
     Returns
     -------
 
-    P : 
+    P :
         received power
 
-
-
-    Example
-    -------
+    Examples
+    --------
 
     .. plot::
         :include-source:
-        
+
         &gt;&gt;&gt; from pylayers.antprop.loss import *
         &gt;&gt;&gt; import matplotlib.pyplot as plt
         &gt;&gt;&gt; fGHz=2.4
@@ -2043,6 +2276,7 @@ if __name__==&quot;__main__&quot;:
 </pre></div>
 
            </div>
+           
           </div>
           <footer>
   
@@ -2052,11 +2286,11 @@ if __name__==&quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -2075,9 +2309,11 @@ if __name__==&quot;__main__&quot;:
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -2092,14 +2328,13 @@ if __name__==&quot;__main__&quot;:
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

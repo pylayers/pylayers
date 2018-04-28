@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,23 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="UWBMeasure" href="pylayers.measures.mesuwb.UWBMeasure.html" />
+    <link rel="prev" title="TFP" href="pylayers.measures.mesuwb.TFP.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +56,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +85,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +99,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -146,9 +145,7 @@
 <li class="toctree-l3"><a class="reference internal" href="pylayers.measures.mesuwb.Fdd.html">Fdd</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.measures.mesuwb.RAW_DATA.html">RAW_DATA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.measures.mesuwb.TFP.html">TFP</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Tdd</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Tdd</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.measures.mesuwb.UWBMeasure.html">UWBMeasure</a></li>
 </ul>
 </li>
@@ -166,7 +163,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -178,36 +175,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>Tdd</li>
+        
+      <li>Tdd</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.measures.mesuwb.Tdd.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -218,64 +235,30 @@
 <dl class="class">
 <dt id="pylayers.measures.mesuwb.Tdd">
 <em class="property">class </em><code class="descclassname">pylayers.measures.mesuwb.</code><code class="descname">Tdd</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/mesuwb.html#Tdd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesuwb.Tdd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="pylayers.util.project.PyLayers.html#pylayers.util.project.PyLayers" title="pylayers.util.project.PyLayers"><code class="xref py py-class docutils literal"><span class="pre">pylayers.util.project.PyLayers</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="pylayers.util.project.PyLayers.html#pylayers.util.project.PyLayers" title="pylayers.util.project.PyLayers"><code class="xref py py-class docutils literal notranslate"><span class="pre">pylayers.util.project.PyLayers</span></code></a></p>
 <p>Time Domain Deconv Data</p>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="35%" />
-<col width="65%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>ch1</td>
-<td>signal on channel 1 (ch.TUchannel)</td>
-</tr>
-<tr class="row-even"><td>ch2</td>
-<td>signal on channel 2 (ch.TUchannel)</td>
-</tr>
-<tr class="row-odd"><td>ch3</td>
-<td>signal on channel 3 (ch.TUchannel)</td>
-</tr>
-<tr class="row-even"><td>ch4</td>
-<td>signal on channel 4 (ch.TUchannel)</td>
-</tr>
-<tr class="row-odd"><td>tx</td>
-<td>exitation waveform ( Impulse feeding Tx antenna) (bs.TUsignal)</td>
-</tr>
-<tr class="row-even"><td>time is expressed in nano seconds</td>
-<td>&#160;</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.Tdd.PL" title="pylayers.measures.mesuwb.Tdd.PL"><code class="xref py py-obj docutils literal"><span class="pre">PL</span></code></a>(fmin,&nbsp;fmax,&nbsp;B)</td>
-<td>Calculate NB Path Loss on a given UWB frequency band</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.Tdd.box" title="pylayers.measures.mesuwb.Tdd.box"><code class="xref py py-obj docutils literal"><span class="pre">box</span></code></a>()</td>
-<td>evaluate min and max of the 4 channels</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.Tdd.show" title="pylayers.measures.mesuwb.Tdd.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>([fig,&nbsp;delay,&nbsp;display,&nbsp;title,&nbsp;col,&nbsp;…])</td>
-<td>show the 4 Impulse Radio Impulse responses</td>
-</tr>
-</tbody>
-</table>
-<table border="1" class="docutils">
-<colgroup>
-<col width="68%" />
-<col width="32%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>show_span(delay,wide)</td>
-<td>&#160;</td>
-</tr>
-</tbody>
-</table>
+<dl class="docutils">
+<dt>ch1</dt>
+<dd>signal on channel 1 (ch.TUchannel)</dd>
+<dt>ch2</dt>
+<dd>signal on channel 2 (ch.TUchannel)</dd>
+<dt>ch3</dt>
+<dd>signal on channel 3 (ch.TUchannel)</dd>
+<dt>ch4</dt>
+<dd>signal on channel 4 (ch.TUchannel)</dd>
+<dt>tx</dt>
+<dd>exitation waveform ( Impulse feeding Tx antenna) (bs.TUsignal)</dd>
+</dl>
+<p>time is expressed in nano seconds</p>
+<dl class="docutils">
+<dt>PL</dt>
+<dd>Calculate NB Path Loss on a given UWB frequency band</dd>
+<dt>box</dt>
+<dd>return min and max value</dd>
+<dt>show</dt>
+<dd>display the 4 channels</dd>
+</dl>
+<p>show_span(delay,wide)</p>
 <p class="rubric">Methods Summary</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -283,19 +266,19 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.Tdd.PL" title="pylayers.measures.mesuwb.Tdd.PL"><code class="xref py py-obj docutils literal"><span class="pre">PL</span></code></a>(fmin,&nbsp;fmax,&nbsp;B)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.Tdd.PL" title="pylayers.measures.mesuwb.Tdd.PL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PL</span></code></a>(fmin,&nbsp;fmax,&nbsp;B)</td>
 <td>Calculate NB Path Loss on a given UWB frequency band</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.Tdd.box" title="pylayers.measures.mesuwb.Tdd.box"><code class="xref py py-obj docutils literal"><span class="pre">box</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.Tdd.box" title="pylayers.measures.mesuwb.Tdd.box"><code class="xref py py-obj docutils literal notranslate"><span class="pre">box</span></code></a>()</td>
 <td>evaluate min and max of the 4 channels</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.Tdd.plot" title="pylayers.measures.mesuwb.Tdd.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>([type])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.Tdd.plot" title="pylayers.measures.mesuwb.Tdd.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>([type])</td>
 <td>type : raw | filter</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.Tdd.show" title="pylayers.measures.mesuwb.Tdd.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>([fig,&nbsp;delay,&nbsp;display,&nbsp;title,&nbsp;col,&nbsp;…])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.mesuwb.Tdd.show" title="pylayers.measures.mesuwb.Tdd.show"><code class="xref py py-obj docutils literal notranslate"><span class="pre">show</span></code></a>([fig,&nbsp;delay,&nbsp;display,&nbsp;title,&nbsp;col,&nbsp;…])</td>
 <td>show the 4 Impulse Radio Impulse responses</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.Tdd.show_span" title="pylayers.measures.mesuwb.Tdd.show_span"><code class="xref py py-obj docutils literal"><span class="pre">show_span</span></code></a>([delay,&nbsp;wide])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.mesuwb.Tdd.show_span" title="pylayers.measures.mesuwb.Tdd.show_span"><code class="xref py py-obj docutils literal notranslate"><span class="pre">show_span</span></code></a>([delay,&nbsp;wide])</td>
 <td>show span</td>
 </tr>
 </tbody>
@@ -305,30 +288,17 @@
 <dt id="pylayers.measures.mesuwb.Tdd.PL">
 <code class="descname">PL</code><span class="sig-paren">(</span><em>fmin</em>, <em>fmax</em>, <em>B</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/mesuwb.html#Tdd.PL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesuwb.Tdd.PL" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate NB Path Loss on a given UWB frequency band</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fmin</strong></p>
-<blockquote class="last">
-<div><blockquote>
-<div><p>start frequency GHz</p>
-</div></blockquote>
-<dl class="docutils">
+<blockquote>
+<div><dl class="docutils">
+<dt>fmin</dt>
+<dd>start frequency GHz</dd>
 <dt>fmax</dt>
-<dd><p class="first last">stop frequency GHz</p>
-</dd>
+<dd>stop frequency GHz</dd>
 <dt>B</dt>
-<dd><p class="first last">NB bandwith (GHz)</p>
-</dd>
+<dd>NB bandwith (GHz)</dd>
 </dl>
 </div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.util.project import *
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.util.project import *
 &gt;&gt;&gt; from pylayers.measures.mesuwb import *
 &gt;&gt;&gt; import matplotlib.pylab as plt
 &gt;&gt;&gt; M  = UWBMeasure(1)
@@ -343,8 +313,7 @@
 <dt id="pylayers.measures.mesuwb.Tdd.box">
 <code class="descname">box</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/mesuwb.html#Tdd.box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesuwb.Tdd.box" title="Permalink to this definition">¶</a></dt>
 <dd><p>evaluate min and max of the 4 channels</p>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.mesuwb import *
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.mesuwb import *
 &gt;&gt;&gt; M  = UWBMeasure(1)
 &gt;&gt;&gt; T  = M.tdd
 &gt;&gt;&gt; bo = T.box()
@@ -362,24 +331,13 @@
 <dt id="pylayers.measures.mesuwb.Tdd.show">
 <code class="descname">show</code><span class="sig-paren">(</span><em>fig=[], delay=array([[0],        [0],        [0],        [0]]), display=True, title=['Rx1', 'Rx2', 'Rx3', 'Rx4'], col=['k', 'b', 'g', 'c'], xmin=0, xmax=200, typ='v'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/mesuwb.html#Tdd.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesuwb.Tdd.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>show the 4 Impulse Radio Impulse responses</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>delay</strong></p>
-<blockquote>
-<div><p>delay values to be displayed vertically [tau0 - toa_th toa_cum toa_max , taum-taurms taum+taurms]</p>
-</div></blockquote>
-<p><strong>display</strong></p>
-<blockquote class="last">
-<div><p>if display == False the first subplot is reserved for displaying the Layout</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.mesuwb import *
+<dl class="docutils">
+<dt>delay</dt>
+<dd>delay values to be displayed vertically [tau0 - toa_th toa_cum toa_max , taum-taurms taum+taurms]</dd>
+<dt>display</dt>
+<dd>if display == False the first subplot is reserved for displaying the Layout</dd>
+</dl>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.mesuwb import *
 &gt;&gt;&gt; import matplotlib.pylab as plt
 &gt;&gt;&gt; ntx = 2
 &gt;&gt;&gt; M  = UWBMeasure(ntx)
@@ -396,8 +354,7 @@
 <dt id="pylayers.measures.mesuwb.Tdd.show_span">
 <code class="descname">show_span</code><span class="sig-paren">(</span><em>delay=array([0</em>, <em>0</em>, <em>0</em>, <em>0])</em>, <em>wide=array([0</em>, <em>0</em>, <em>0</em>, <em>0])</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/mesuwb.html#Tdd.show_span"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesuwb.Tdd.show_span" title="Permalink to this definition">¶</a></dt>
 <dd><p>show span</p>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.util.project import *
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.util.project import *
 &gt;&gt;&gt; from pylayers.measures.mesuwb import *
 &gt;&gt;&gt; M  = UWBMeasure(2)
 &gt;&gt;&gt; T  = M.tdd
@@ -414,8 +371,18 @@
 
 
            </div>
+           
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pylayers.measures.mesuwb.UWBMeasure.html" class="btn btn-neutral float-right" title="UWBMeasure" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pylayers.measures.mesuwb.TFP.html" class="btn btn-neutral" title="TFP" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -423,11 +390,11 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -446,9 +413,11 @@
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -463,14 +432,13 @@
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

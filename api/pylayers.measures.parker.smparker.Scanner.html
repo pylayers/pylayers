@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -23,30 +25,21 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="author" title="About these documents"
-              href="../about.html"/>
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyLayers" href="../index.html"/>
-        <link rel="up" title="1   pylayers.util.project Module" href="references.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -61,7 +54,7 @@
 
           
             
-            <img src="../_static/pylayers.png" class="logo" />
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -90,7 +83,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -101,6 +97,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
@@ -139,9 +136,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="references.html#id111">33.2&nbsp;&nbsp;&nbsp;Classes</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="pylayers.measures.parker.smparker.Axes.html">Axes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.measures.parker.smparker.Profile.html">Profile</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Scanner</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Scanner</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="references.html#id112">33.3&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
@@ -154,7 +149,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id136">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -166,36 +161,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-      
-    <li>Scanner</li>
+        
+      <li>Scanner</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/api/pylayers.measures.parker.smparker.Scanner.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -206,41 +221,8 @@
 <dl class="class">
 <dt id="pylayers.measures.parker.smparker.Scanner">
 <em class="property">class </em><code class="descclassname">pylayers.measures.parker.smparker.</code><code class="descname">Scanner</code><span class="sig-paren">(</span><em>port='not connected'</em>, <em>anchors={}</em>, <em>reset=True</em>, <em>vel=15</em>, <em>acc=15</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/parker/smparker.html#Scanner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.parker.smparker.Scanner" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="pylayers.util.project.PyLayers.html#pylayers.util.project.PyLayers" title="pylayers.util.project.PyLayers"><code class="xref py py-class docutils literal"><span class="pre">pylayers.util.project.PyLayers</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="pylayers.util.project.PyLayers.html#pylayers.util.project.PyLayers" title="pylayers.util.project.PyLayers"><code class="xref py py-class docutils literal notranslate"><span class="pre">pylayers.util.project.PyLayers</span></code></a></p>
 <p>This class handles the FACS (Four Axes Channel Scanner)</p>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Scanner.check_pa" title="pylayers.measures.parker.smparker.Scanner.check_pa"><code class="xref py py-obj docutils literal"><span class="pre">check_pa</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
-<td>generic help</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Scanner.home" title="pylayers.measures.parker.smparker.Scanner.home"><code class="xref py py-obj docutils literal"><span class="pre">home</span></code></a>([cmd,&nbsp;init,&nbsp;vel])</td>
-<td>allows a return home for 3 axes</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Scanner.meas" title="pylayers.measures.parker.smparker.Scanner.meas"><code class="xref py py-obj docutils literal"><span class="pre">meas</span></code></a>(A[,&nbsp;_fileh5,&nbsp;gcal,&nbsp;ical,&nbsp;vel,&nbsp;Nmeas,&nbsp;…])</td>
-<td>measure MIMO channel over a set of points from AntArray and store in h5</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Scanner.mv" title="pylayers.measures.parker.smparker.Scanner.mv"><code class="xref py py-obj docutils literal"><span class="pre">mv</span></code></a>([pt,&nbsp;at,&nbsp;frame,&nbsp;vel])</td>
-<td>move to target point</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Scanner.origin" title="pylayers.measures.parker.smparker.Scanner.origin"><code class="xref py py-obj docutils literal"><span class="pre">origin</span></code></a>([cmd,&nbsp;p0,&nbsp;ang0])</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Scanner.reset" title="pylayers.measures.parker.smparker.Scanner.reset"><code class="xref py py-obj docutils literal"><span class="pre">reset</span></code></a>()</td>
-<td>reset and enpower all axes</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Scanner.upd_pos" title="pylayers.measures.parker.smparker.Scanner.upd_pos"><code class="xref py py-obj docutils literal"><span class="pre">upd_pos</span></code></a>(pH)</td>
-<td>update position</td>
-</tr>
-</tbody>
-</table>
 <p class="rubric">Methods Summary</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -248,25 +230,25 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Scanner.check_pa" title="pylayers.measures.parker.smparker.Scanner.check_pa"><code class="xref py py-obj docutils literal"><span class="pre">check_pa</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Scanner.check_pa" title="pylayers.measures.parker.smparker.Scanner.check_pa"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_pa</span></code></a>()</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Scanner.home" title="pylayers.measures.parker.smparker.Scanner.home"><code class="xref py py-obj docutils literal"><span class="pre">home</span></code></a>([cmd,&nbsp;init,&nbsp;vel])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Scanner.home" title="pylayers.measures.parker.smparker.Scanner.home"><code class="xref py py-obj docutils literal notranslate"><span class="pre">home</span></code></a>([cmd,&nbsp;init,&nbsp;vel])</td>
 <td>allows a return home for 3 axes</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Scanner.meas" title="pylayers.measures.parker.smparker.Scanner.meas"><code class="xref py py-obj docutils literal"><span class="pre">meas</span></code></a>(A[,&nbsp;_fileh5,&nbsp;gcal,&nbsp;ical,&nbsp;vel,&nbsp;Nmeas,&nbsp;…])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Scanner.meas" title="pylayers.measures.parker.smparker.Scanner.meas"><code class="xref py py-obj docutils literal notranslate"><span class="pre">meas</span></code></a>(A[,&nbsp;_fileh5,&nbsp;gcal,&nbsp;ical,&nbsp;vel,&nbsp;Nmeas,&nbsp;…])</td>
 <td>measure MIMO channel over a set of points from AntArray and store in h5</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Scanner.mv" title="pylayers.measures.parker.smparker.Scanner.mv"><code class="xref py py-obj docutils literal"><span class="pre">mv</span></code></a>([pt,&nbsp;at,&nbsp;frame,&nbsp;vel])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Scanner.mv" title="pylayers.measures.parker.smparker.Scanner.mv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mv</span></code></a>([pt,&nbsp;at,&nbsp;frame,&nbsp;vel])</td>
 <td>move to target point</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Scanner.origin" title="pylayers.measures.parker.smparker.Scanner.origin"><code class="xref py py-obj docutils literal"><span class="pre">origin</span></code></a>([cmd,&nbsp;p0,&nbsp;ang0])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Scanner.origin" title="pylayers.measures.parker.smparker.Scanner.origin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">origin</span></code></a>([cmd,&nbsp;p0,&nbsp;ang0])</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Scanner.reset" title="pylayers.measures.parker.smparker.Scanner.reset"><code class="xref py py-obj docutils literal"><span class="pre">reset</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Scanner.reset" title="pylayers.measures.parker.smparker.Scanner.reset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset</span></code></a>()</td>
 <td>reset and enpower all axes</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Scanner.upd_pos" title="pylayers.measures.parker.smparker.Scanner.upd_pos"><code class="xref py py-obj docutils literal"><span class="pre">upd_pos</span></code></a>(pH)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.measures.parker.smparker.Scanner.upd_pos" title="pylayers.measures.parker.smparker.Scanner.upd_pos"><code class="xref py py-obj docutils literal notranslate"><span class="pre">upd_pos</span></code></a>(pH)</td>
 <td>update position</td>
 </tr>
 </tbody>
@@ -281,20 +263,11 @@
 <dt id="pylayers.measures.parker.smparker.Scanner.home">
 <code class="descname">home</code><span class="sig-paren">(</span><em>cmd='set'</em>, <em>init=True</em>, <em>vel=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/parker/smparker.html#Scanner.home"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.parker.smparker.Scanner.home" title="Permalink to this definition">¶</a></dt>
 <dd><p>allows a return home for 3 axes</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cmd</strong> : set</p>
-<p><strong>init</strong> : boolean (False)</p>
-<p><strong>vel</strong> : velocity (10)</p>
-<p class="last"><strong>frame</strong> : landmark {‘H’|’A’|’G’}</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.parker import smparker 
+<p>cmd   : set
+init  : boolean (False)
+vel   : velocity (10)
+frame : landmark {‘H’|’A’|’G’}</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.parker import smparker 
 &gt;&gt;&gt; S = smparker.Scanner()
 &gt;&gt;&gt; S.home(&#39;go&#39;)
 </pre></div>
@@ -305,64 +278,41 @@
 <dt id="pylayers.measures.parker.smparker.Scanner.meas">
 <code class="descname">meas</code><span class="sig-paren">(</span><em>A</em>, <em>_fileh5='test.h5'</em>, <em>gcal=1</em>, <em>ical=1</em>, <em>vel=15</em>, <em>Nmeas=1</em>, <em>pAnt=array([ 1.6</em>, <em>5.2</em>, <em>1.6])</em>, <em>vAnt=array([ 1.</em>, <em>0.</em>, <em>0.])</em>, <em>comment='test'</em>, <em>author='mamadou'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/parker/smparker.html#Scanner.meas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.parker.smparker.Scanner.meas" title="Permalink to this definition">¶</a></dt>
 <dd><p>measure MIMO channel over a set of points from AntArray and store in h5</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : Aarray</p>
-<p><strong>_fileh5</strong> : string</p>
+<p>A       : Aarray
+_fileh5 : string</p>
 <blockquote>
-<div><p>name of the h5 file containing calibration data</p>
-</div></blockquote>
-<p><strong>gcal</strong> : calibration group</p>
-<p><strong>ical</strong> : calibration index</p>
-<p><strong>vel</strong> : int</p>
+<div>name of the h5 file containing calibration data</div></blockquote>
+<p>gcal    : calibration group
+ical    : calibration index
+vel     : int</p>
 <blockquote>
-<div><p>scanner moving velocity</p>
-</div></blockquote>
-<p><strong>Nmeas</strong> : int</p>
-<blockquote>
-<div><p>Number of measurement</p>
-</div></blockquote>
-<p><strong>pAnt</strong> : np.array(,3)</p>
-<blockquote>
-<div><p>Coordinates of non scanner antenna phase center</p>
-</div></blockquote>
-<p><strong>vAnt</strong> : np.array(,3)</p>
-<blockquote class="last">
-<div><p>Coordinates of non scanner antenna unitary vector</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<div>scanner moving velocity</div></blockquote>
+<dl class="docutils">
+<dt>Nmeas <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Number of measurement</dd>
+<dt>pAnt <span class="classifier-delimiter">:</span> <span class="classifier">np.array(,3)</span></dt>
+<dd>Coordinates of non scanner antenna phase center</dd>
+<dt>vAnt <span class="classifier-delimiter">:</span> <span class="classifier">np.array(,3)</span></dt>
+<dd>Coordinates of non scanner antenna unitary vector</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.measures.parker.smparker.Scanner.mv">
 <code class="descname">mv</code><span class="sig-paren">(</span><em>pt=array([ 0.</em>, <em>0.</em>, <em>0.])</em>, <em>at=0</em>, <em>frame='A'</em>, <em>vel=20</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/parker/smparker.html#Scanner.mv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.parker.smparker.Scanner.mv" title="Permalink to this definition">¶</a></dt>
 <dd><p>move to target point</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pt</strong> : target position (pt=np.array([0,0,0]))</p>
+<dl class="docutils">
+<dt>pt <span class="classifier-delimiter">:</span> <span class="classifier">target position (pt=np.array([0,0,0]))</span></dt>
+<dd>for axe z, if value is positif (+), it moves up and else moves down</dd>
+</dl>
+<p>at : target angle
+frame : {‘G’|’H’|’A’}</p>
 <blockquote>
-<div><p>for axe z, if value is positif (+), it moves up and else moves down</p>
-</div></blockquote>
-<p><strong>at</strong> : target angle</p>
-<p><strong>frame</strong> : {‘G’|’H’|’A’}</p>
-<blockquote>
-<div><p>determine in which frame is expressed pt (default A)</p>
-</div></blockquote>
-<p><strong>vel</strong> : int</p>
-<blockquote class="last">
-<div><p>velocity</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<div>determine in which frame is expressed pt (default A)</div></blockquote>
+<dl class="docutils">
+<dt>vel <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>velocity</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -374,8 +324,7 @@
 <dt id="pylayers.measures.parker.smparker.Scanner.reset">
 <code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/parker/smparker.html#Scanner.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.parker.smparker.Scanner.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>reset and enpower all axes</p>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.parker import smparker 
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.measures.parker import smparker 
 &gt;&gt;&gt; S = smparker.Scanner()
 &gt;&gt;&gt; S.reset()
 </pre></div>
@@ -386,20 +335,10 @@
 <dt id="pylayers.measures.parker.smparker.Scanner.upd_pos">
 <code class="descname">upd_pos</code><span class="sig-paren">(</span><em>pH</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/measures/parker/smparker.html#Scanner.upd_pos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.parker.smparker.Scanner.upd_pos" title="Permalink to this definition">¶</a></dt>
 <dd><p>update position</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pH</strong> : current position in H frame</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>self.pH</strong> : corrdinate in Home frame</p>
-<p><strong>self.pA</strong> : coordinate in Array frame</p>
-<p class="last"><strong>self.pG</strong> : coordinate in Global Frame</p>
-</td>
-</tr>
-</tbody>
-</table>
+<p>pH : current position in H frame</p>
+<p>self.pH : corrdinate in Home frame
+self.pA : coordinate in Array frame
+self.pG : coordinate in Global Frame</p>
 </dd></dl>
 
 </dd></dl>
@@ -408,6 +347,7 @@
 
 
            </div>
+           
           </div>
           <footer>
   
@@ -417,11 +357,11 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Dec 01, 2017.
+      Last updated on Apr 28, 2018.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -440,9 +380,11 @@
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -457,14 +399,13 @@
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>
