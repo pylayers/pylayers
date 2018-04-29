@@ -267,9 +267,16 @@ class DLink(Link):
         Examples
         --------
 
-        >>> from pylayers.simul.link import *
-        >>> DL = DLink(L=Layout('DLR.lay'))
-        >>> DL.eval()
+            >>> from pylayers.simul.link import *
+            >>> DL = DLink(L=Layout('DLR.lay'))
+            >>> DL.eval()
+
+        Notes
+        -----
+
+        When modifying the coordinates of the link it is important to modify
+        the array and not one of its component. In that case the cycle will not
+        be updated.
 
 
         """
@@ -510,14 +517,15 @@ class DLink(Link):
     @a.setter
     def a(self,position):
         if not self.L.ptin(position):
-            if position[0]<self.L.ax[0]:
-                position[0]=self.L.ax[0]
-            if position[0]>self.L.ax[1]:
-                position[0]=self.L.ax[1]
-            if position[1]<self.L.ax[2]:
-                position[1]=self.L.ax[2]
-            if position[1]>self.L.ax[3]:
-                position[1]=self.L.ax[3]
+            # limit position in the visible region L.ax
+            if position[0] < self.L.ax[0]:
+                position[0] = self.L.ax[0]
+            if position[0] > self.L.ax[1]:
+                position[0] = self.L.ax[1]
+            if position[1] < self.L.ax[2]:
+                position[1] = self.L.ax[2]
+            if position[1] > self.L.ax[3]:
+                position[1] = self.L.ax[3]
             # raise NameError ('Warning : point a is not inside the Layout')
             # raise NameError ('Warning : point a is not inside the Layout')
         if not self.L.pt2cy(position) == self.ca:
@@ -602,8 +610,6 @@ class DLink(Link):
     def Ab(self,Ant):
         if hasattr(self.Ab,'_mayamesh'):
            self.Ab._mayamesh.remove()
-
-
 
         #save rot
         rot = self.Tb
@@ -738,22 +744,20 @@ class DLink(Link):
 
         if hasattr(self,'filename'):
             s = 'filename: ' + self.filename +'\n'
-
-            s = s + 'Link Parameters :\n'
-            s = s + '------- --------\n'
             s = s + 'Layout : ' + self.Lname + '\n\n'
             s = s + 'Node a   \n'
             s = s + '------  \n'
-            s = s + 'position : ' + str (self.a) + "  in cycle " + str(self.ca) + '\n'
-            s = s + 'Antenna : ' + str (self.Aa.typ) + '\n'
-            s = s + 'Rotation matrice : \n ' + str (self.Ta) + '\n\n'
+            s = s + '\tcoord : ' + str (self.a) + "  in cycle " + str(self.ca) + '\n'
+            s = s + '\tantenna : ' + str (self.Aa.typ) + '\n'
+            if (self.Ta!=np.eye(3)).any():
+                s = s + '\trotation matrice : \n ' + str (self.Ta) + '\n\n'
             s = s + 'Node b   \n'
             s = s + '------  \n'
-            s = s + 'position : ' + str (self.b) + " in cycle " + str(self.cb) + '\n'
-            s = s + 'Antenna : ' + str (self.Ab.typ) + '\n'
-            s = s + 'Rotation matrice : \n ' + str (self.Tb) + '\n\n'
-            s = s + 'Link evaluation information : \n'
-            s = s + '----------------------------- \n'
+            s = s + '\tcoord : ' + str (self.b) + " in cycle " + str(self.cb) + '\n'
+            s = s + '\tantenna : ' + str (self.Ab.typ) + '\n'
+            if (self.Ta!=np.eye(3)).any():
+                s = s + 'rotation matrice : \n ' + str (self.Tb) + '\n\n'
+            s = s + '\n---------------- \n'
             s = s + 'distance : ' + str("%6.3f" % np.sqrt(np.sum((self.a-self.b)**2))) + ' m \n'
             s = s + 'delay : ' + str("%6.3f" % (np.sqrt(np.sum((self.a-self.b)**2))/0.3)) + ' ns\n'
             rd2deg = 180/np.pi
@@ -761,30 +765,23 @@ class DLink(Link):
                 vsba = self.b-self.a
                 a1 = geu.angledir(vsba[None,:])
                 a2 = geu.angledir(-vsba[None,:])
-                s = s + 'azimuth (a | b ) : '+str(a1[0,1]*rd2deg)+' deg  | '+str(a2[0,1]*rd2deg)+ ' deg\n'
-                s = s + 'elevation (a | b ) : '+str(a1[0,0]*rd2deg)+ ' deg |  '+str(a2[0,0]*rd2deg)+ ' deg\n'
+                s = s + 'azimuth (a | b ) : %.2f ' % (a1[0,1]*rd2deg) +' deg  | %.2f' % (a2[0,1]*rd2deg) + ' deg\n'
+                s = s + 'elevation (a | b ) : %.2f' % (a1[0,0]*rd2deg) + ' deg | %.2f ' % (a2[0,0]*rd2deg) + ' deg\n'
                 s = s + 'tilt (a |  b ) : '+str((a1[0,0]-np.pi/2)*rd2deg)+ ' deg  | '+ str((a2[0,0]-np.pi/2)*rd2deg)+ ' deg\n'
             #s = s + 'Frequency range :  \n'
-            s = s + 'fmin (fGHz) : ' + str(self.fGHz[0]) +'\n'
-            s = s + 'fmax (fGHz) : ' + str(self.fGHz[-1]) +'\n'
             Nf = len(self.fGHz)
+            s = s + 'fGHz : %.2f, %.2f, %g ' %(self.fGHz[0],self.fGHz[-1],Nf) +'\n'
             if Nf>1:
-                s = s + 'fstep (fGHz) : ' + str(self.fGHz[1]-self.fGHz[0]) +'\n'
-            else:
-                s = s + 'fstep (fGHz) : ' + str(self.fGHz[0]-self.fGHz[0]) +'\n'
-            s = s + 'Nf : ' + str(Nf) +'\n '
+                s = s + 'fstep (GHz) : ' + str(self.fGHz[1]-self.fGHz[0]) +'\n'
             d =  np.sqrt(np.sum((self.a-self.b)**2))
             if Nf>1:
                 fcGHz = (self.fGHz[-1]+self.fGHz[0])/2.
             else:
                 fcGHz = self.fGHz[0]
             L  = 32.4+20*np.log(d)+20*np.log10(fcGHz)
-            s = s + 'Algorithm information : \n'
-            s = s + '----------------------------- \n'
-            s = s + 'cutoff : '+ str(self.cutoff)+'\n'
-            s = s + 'threshold :'+ str(self.threshold)+'\n'
-            s = s + 'delay_excess_max : '+ str(self.delay_excess_max_ns)+' ns \n'
-            s = s + 'dist_excess_max : '+ str(self.delay_excess_max_ns*0.3)+' m \n'
+            s = s + '\n------------- \n'
+            s = s + 'cutoff/threshold : %g / %.2f' %(self.cutoff, self.threshold)+'\n'
+            s = s + 'max delay /dist: %.2f ns / %.2f m' %(self.delay_excess_max_ns,self.delay_excess_max_ns*0.3)+'\n'
         else:
             s = 'No Layout specified'
         return s
@@ -1904,28 +1901,28 @@ class DLink(Link):
         ----------
 
         s   : int
-            size of Tx/Rx circle in points 
+            size of Tx/Rx marker in points
         ca  : string
-            color of termination a (Tx)
+            color of termination a (A)
         cb  : string
-            color of termination b (Rx)
-        alpha : float 
-            transparency 
-        axis : boolean 
+            color of termination b (B)
+        alpha : float
+            marker transparency (0 < alpha <1)
+        axis : boolean
             display axis boolean (default True)
         figsize : tuple
             figure size if fig not specified default (20,10)
         fontsize : int
             default 20
         rays : boolean
-            activation of rays vizalization (True)  
-        bsig : boolean 
+            activation of rays vizalization (True)
+        bsig : boolean
             activation of signature vizualization (False)
-        laddr : list 
-            list of signature addresses 
+        laddr : list
+            list of signature addresses
         cmap : colormap
-        radius : float 
-            radius in meters for layout vizualization 
+        radius : float
+            radius in meters for layout vizualization
         labels : boolean
             enabling edge label (useful for signature identification)
         pol : string
@@ -1948,31 +1945,33 @@ class DLink(Link):
         >>> DL.show(laddr=[(6,2)],bsig=True)
 
         """
-        defaults ={'s':80,   # size points
-                   'ca':'b', # color a 
-                   'cb':'r', # color b 
-                   'alpha':1,
-                   'axis':True,
-                   'lr':-1,
-                   'ls':-1,
-                   'fig':[],
-                   'ax':[],
-                   'figsize':(20,10),
-                   'fontsize':20,
-                   'rays':True,
-                   'bsig':False,
-                   'laddr':[(1,0)],
-                   'cmap':plt.cm.hot,
-                   'pol':'tot',
-                   'col':'k',
-                   'width':1,
-                   'alpha':1,
-                   'col':'k',
-                   'radius':90,
-                   'dB':False,
-                   'labels':False,
-                   'aw':False,
-                   'dyn':70}
+        defaults ={'s': 300,   # size points
+                   'ca': '#6666ff', # color a
+                   'cb': '#ff0000', # color b
+                   'markera': "^", # tri_up
+                   'markerb': "o", # circle
+                   'alpha': 1,
+                   'axis': True,
+                   'lr': -1,
+                   'ls': -1,
+                   'fig': [],
+                   'ax': [],
+                   'figsize': (20,10),
+                   'fontsize': 20,
+                   'rays': True,
+                   'bsig': False,
+                   'laddr': [(1,0)],
+                   'cmap': plt.cm.hot,
+                   'pol': 'tot',
+                   'col': 'k',
+                   'width': 1,
+                   'alpha': 1,
+                   'col': 'k',
+                   'radius': -1,
+                   'dB': False,
+                   'labels': False,
+                   'aw': False,
+                   'dyn': 70}
 
         for key in defaults:
             if key not in kwargs:
@@ -1999,20 +1998,11 @@ class DLink(Link):
                               labels = kwargs['labels'],
                               aw = kwargs['aw'],
                               axis = kwargs['axis'])
-        #
-        # Point A
-        #
-        self.caf = ax.scatter(self.a[0],
-                   self.a[1], c=kwargs['ca'], s=kwargs['s'],
-                   alpha=kwargs['alpha'])
-        ax.text(self.a[0]+0.1,self.a[1]+0.1,'A',fontsize=kwargs['fontsize'])
-        #
-        # Point B
-        #
-        self.cbf = ax.scatter(self.b[0],
-                   self.b[1], c=kwargs['cb'], s=kwargs['s'],
-                   alpha=kwargs['alpha'])
-        ax.text(self.b[0]-0.1,self.b[1]+0.1,'B',fontsize=kwargs['fontsize'])
+
+        if kwargs['radius'] == -1:
+            kwargs['radius'] = self.L.radius
+
+        ax.set_facecolor('#cccccc')
         #
         # Plot Rays
         #
@@ -2032,7 +2022,7 @@ class DLink(Link):
             #    val = ECtt+ECpp
             #if kwargs['pol']=='cross':
             #"    val = ECtp+ECpt
-            val = self.H.energy()[:,0,0] 
+            val = self.H.energy()[:,0,0]
 
             clm = kwargs['cmap']
             #
@@ -2044,19 +2034,20 @@ class DLink(Link):
                 lr = kwargs['lr']
 
             vmin = val.min()
-            vmax = val.max() 
+            vmax = val.max()
             if kwargs['dB']:
                 vmin = 10*np.log10(vmin)
                 vmax = 10*np.log10(vmax)
 
 
             #
-            # limitation of the vizualization zone around the center of the link 
+            # limitation of the vizualization zone around the center of the link
             #
+
             pm = (self.a+self.b)/2.
             R  = np.minimum(kwargs['radius'],1.5*self.L.radius)
-            ax.set_xlim(pm[0]-R,pm[0]+R)
-            ax.set_ylim(pm[1]-R,pm[1]+R)
+            #ax.set_xlim(pm[0]-R,pm[0]+R)
+            #ax.set_ylim(pm[1]-R,pm[1]+R)
 
             for ir  in lr:
                 if kwargs['dB']:
@@ -2064,24 +2055,24 @@ class DLink(Link):
                 else:
                     RayEnergy=val[ir]/val.max()
 
-                if kwargs['col']=='cmap':
+                if kwargs['col'] == 'cmap':
                     col = clm(RayEnergy)
                     #width = 10*RayEnergy
-                    width = kwargs['width'] 
+                    width = kwargs['width']
                     alpha = 1
                 else:
                     col = kwargs['col']
                     width = kwargs['width']
                     alpha = kwargs['alpha']
 
-                # plot ray (i,r) 
-                fig,ax = self.R.show(rlist=[ir],
-                               colray=col,
-                               widthray=width,
-                               alpharay=alpha,
-                               fig=fig,ax=ax,
-                               layout=False,
-                               points=False)
+                # plot ray (i,r)
+                fig,ax = self.R.show(rlist = [ir],
+                               colray = col,
+                               widthray = width,
+                               alpharay = alpha,
+                               fig = fig, ax = ax,
+                               layout = False,
+                               points = False)
 
             if kwargs['col']=='cmap':
                 sm = plt.cm.ScalarMappable(cmap=kwargs['cmap'], norm=plt.Normalize(vmin=vmin, vmax=vmax))
@@ -2092,12 +2083,40 @@ class DLink(Link):
         #
 
         if kwargs['bsig']:
-            for addr in kwargs['laddr']: 
+            for addr in kwargs['laddr']:
                 seq = self.Si[addr[0]][2*addr[1]:2*addr[1]+2,:]
                 Si = Signature(seq)
                 isvalid,r,u = Si.sig2ray(self.L,self.a[0:2],self.b[0:2])
                 fig,ax = Si.show(self.L,self.a[0:2],self.b[0:2],fig=fig,ax=ax)
 
+        #
+        # Point A
+        #
+        self.caf = ax.scatter(self.a[0], self.a[1],
+                              c = kwargs['ca'],
+                              s = kwargs['s'],
+                              marker = kwargs['markera'],
+                              edgecolor='black',
+                              facecolor=kwargs['ca'],
+                              linewidth=2,
+                              alpha =kwargs['alpha'])
+
+        ax.text(self.a[0]+0.3,self.a[1]+0.3,'a',
+                fontsize = kwargs['fontsize'], bbox=dict(facecolor='white',alpha=0.5))
+        #
+        # Point B
+        #
+        self.cbf = ax.scatter(self.b[0], self.b[1],
+                              c = kwargs['cb'],
+                              s = kwargs['s'],
+                              marker = kwargs['markerb'],
+                              edgecolor='black',
+                              facecolor=kwargs['cb'],
+                              linewidth=2,
+                              alpha = kwargs['alpha'])
+
+        ax.text(self.b[0]-0.3, self.b[1]+0.3, 'b',
+                fontsize=kwargs['fontsize'],bbox=dict(facecolor='white',alpha=0.5))
         return fig,ax
 
     def _show3(self,rays=True, lay= True, ant= True, newfig= False, **kwargs):

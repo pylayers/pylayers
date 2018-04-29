@@ -78,6 +78,11 @@ def Dgrid_points(points,Px):
     Px     : np.array
              point 2 x 1  array
 
+    Returns
+    -------
+
+    D: Euclidian distance matrix
+
     """
 
     Dx = points[:,0] - Px[0]
@@ -426,8 +431,8 @@ def LossMetisShadowing2(fGHz,tx,rx,pg,uw,uh,w,h):
     condh2 = (visi*condh*(D1h>D2h)).astype(bool)
     signh1[condh1]=-1
     signh2[condh2]=-1
-    
-            
+
+
     Fw1 = FMetisShad2(fGHz,r,D1w,sign=signw1)
     Fh1 = FMetisShad2(fGHz,r,D1h,sign=signh1)
     Fw2 = FMetisShad2(fGHz,r,D2w,sign=signw2)
@@ -437,6 +442,7 @@ def LossMetisShadowing2(fGHz,tx,rx,pg,uw,uh,w,h):
 
     #return(Lsh,shad,tmp,Fw1,Fh1,Fw2,Fh2,condh,condw)
     return(Lsh)
+
 def Dgrid_zone(zone,Px):
     """ Distance point to zone
 
@@ -452,10 +458,16 @@ def Dgrid_zone(zone,Px):
     Px : np.array
          point
 
-    Build the distance matrix between Tx and points in the zone
+    Returns
+    -------
+
+    D : np.array Nx x Ny
+        Euclidian distance matrix
 
     Notes
     -----
+
+    Build the distance matrix between Tx and points in the zone
 
     use broadcasting instead
 

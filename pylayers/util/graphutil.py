@@ -99,6 +99,8 @@ def draw(G,**kwargs):
                 'alphan': 0.8,
                 'alphae': 1.0,
                 'nodelist': [],
+                #'background_color':'#cccccc',
+                'background_color':'#7f7f7f',
                 'edgelist': [],
                 'figsize': (8,8)
                  }
@@ -126,6 +128,10 @@ def draw(G,**kwargs):
         ax = kwargs['ax']
 
     #
+    #  set background color
+    #
+    fig.set_facecolor(kwargs['background_color'])
+    #
     # edges list and nodes list
     #
 
@@ -141,22 +147,21 @@ def draw(G,**kwargs):
         edgelist = [x for k,x in enumerate(G.edges()) if k in kwargs['edgelist'] ] # for nx an edge list is a list of tuple
     # remove airwalls
         #pno = filter(lambda x : G.nodes()[x]>0,nodelist)
+    if G.name == 'Gs':
+        pno = [ x for x in nodelist if  x>0 ]
+        # node == air
+        na1 = [x for x in pno if  G.node[x]['name']=='AIR' ]
+        na2 = [x for x in pno if  G.node[x]['name']=='_AIR' ]
+        na = na1 + na2
+        # edge == air
+        ea=[]
+        [[ea.append((n1,n2)) for n2 in G[n1].keys()] for n1 in na]
+        [[ea.append((n2,n1)) for n2 in G[n1].keys()] for n1 in na]
 
-    pno = [x for x in nodelist if  x>0 ]
-    # node == air
-
-    na1 = [x for x in pno if  G.node[x]['name']=='AIR' ]
-    na2 = [x for x in pno if  G.node[x]['name']=='_AIR' ]
-    na = na1 + na2
-    # edge == air
-    ea=[]
-    [[ea.append((n1,n2)) for n2 in G[n1].keys()] for n1 in na]
-    [[ea.append((n2,n1)) for n2 in G[n1].keys()] for n1 in na]
-
-    nodelista = [ x for x in nodelist if x in na ]
-    edgelista = [ x for x in edgelist if x in ea ]
-    nodelist = [ x for x in nodelist if x not in na ]
-    edgelist = [ x for x in edgelist if x not in ea ]
+        nodelista = [ x for x in nodelist if x in na ]
+        edgelista = [ x for x in edgelist if x in ea ]
+        nodelist = [ x for x in nodelist if x not in na ]
+        edgelist = [ x for x in edgelist if x not in ea ]
 
     if kwargs['nodes']:
         ## TODO This does not work

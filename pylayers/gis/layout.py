@@ -8831,7 +8831,7 @@ class Layout(pro.PyLayers):
         show : boolean
             False
         nodes : boolean
-            False
+            alse
         edges : boolean
             True
         airwalls | aw: boolean
@@ -8973,7 +8973,7 @@ class Layout(pro.PyLayers):
                     'font_size': 15,
                     'nodelist': [],
                     'edgelist': [],
-                    'figsize': (5, 5),
+                    'figsize': (8, 8),
                     'mode': 'nocycle',
                     'alphacy': 0.8,
                     'colorcy': '#abcdef',
@@ -8988,6 +8988,7 @@ class Layout(pro.PyLayers):
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
+
         if kwargs['aw'] != []:
             kwargs['airwalls'] = kwargs['aw']
         # overriding first argument graph

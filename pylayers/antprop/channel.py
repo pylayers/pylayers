@@ -702,6 +702,22 @@ class ADPchannel(bs.TUsignal):
         app = np.real(np.sum(self.y*np.conj(self.y),axis=1))
 
     def pltcir(self,phideg,Gain=21):
+        """ plot Channel Impulse Response
+
+        Parameters
+        ----------
+
+        phideg : f
+
+        Returns
+        -------
+
+        fig,ax
+        u
+
+        """
+
+
         phi = phideg*np.pi/180.
         dang = np.abs(self.az - phi)
         u = np.where(dang==np.min(dang))[0][0]
@@ -1599,16 +1615,21 @@ class TBchannel(bs.TBsignal):
         uf = np.where(self.y*self.y>v)
 
         taum = self.tau_moy(tau0,threshold_dB=threshold_dB)
-        
+
         num = np.sum(self.y[uf]*self.y[uf]*(self.x[uf[-1]]-taum)**2)
         den = np.sum(self.y[uf]*self.y[uf])
-        
+
         taurms = np.sqrt(num/den)
 
         return taurms
 
     def toFD(self,fGHz=np.linspace(2,5,256)):
         """ Transform to Frequency domain
+
+        Parameters
+        ----------
+        fGHz : ,Nf
+            frequency in GHz
 
         Returns
         -------
@@ -1619,6 +1640,7 @@ class TBchannel(bs.TBsignal):
 
         z = np.sum(self.y[:,None]*np.exp(-2*1j*fGHz[None,:]*np.pi*self.x[:,None]),axis=0)
         H = Tchannel(x=fGHz,y=z,tau=self.x)
+
         return H
 
     def SalehValenzuela(self,**kwargs):
@@ -2873,7 +2895,7 @@ class Mchannel(bs.FUsignal):
                 if (r == 3) & (t == 3):
                     ax.axes.set_xlabel('Frequency (GHz)',fontsize=15)
 
-                
+
 
 
 class Tchannel(bs.FUsignal):

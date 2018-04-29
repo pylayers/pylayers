@@ -204,8 +204,10 @@ def showsig2(lsig,L,tahe):
     plt.axis('auto')
     plt.legend()
 #@profile
+
 def valid(lsig,L,tahe=[]):
-    """ 
+    """
+
     Check if a signature is valid.
     if a segment of a given signature is not in or touches the polygon
     described by the 1st and last segment, the signature is not valid
@@ -216,7 +218,7 @@ def valid(lsig,L,tahe=[]):
 
     lsig : list of tuple from run  |signatures
     L : layout
-    tahe : 
+    tahe :
         lensig , ta|he , x,y
 
     Returns
@@ -250,7 +252,7 @@ def valid(lsig,L,tahe=[]):
     seq = lsig[:,0]
     # upos = np.where(seq>0)[0]
     # uneg = np.where(seq<0)[0]
-    
+
     # tahep = L.seg2pts(seq[upos])
     # tahen = np.array([L.Gs.pos[i] for i in seq[uneg]]).T
     # tahen = np.vstack((tahen,tahen))
@@ -299,6 +301,7 @@ def valid(lsig,L,tahe=[]):
     # else:
 
     tahe = np.array(tahe) # Nseg x tahe x xy 
+    pdb.set_trace()
     pta = tahe[:,0,:].T  #2 x Nseg
     phe = tahe[:,1,:].T  # 2 x Nseg 
 
@@ -343,7 +346,7 @@ def valid(lsig,L,tahe=[]):
     # if np.sum(tahe-tahetest) != 0:
     #     import ipdb
     #     ipdb.set_trace()
-    
+
     # determine the 2 side of the polygon ( top/bottom = tahe[0]/tahe[-1])
     #vl and vr are 2 director vector lying on the polygon side.
     if not (geu.ccw(pta[:,0],phe[:,0],phe[:,-1]) ^
@@ -355,7 +358,7 @@ def valid(lsig,L,tahe=[]):
         # twisted = True
         #lef = sh.LineString((pta[:,0],pta[:,-1]))
         #rig = sh.LineString((phe[:,0],phe[:,-1]))
-    else:    
+    else:
         vr = ( pta[:,0], phe[:,-1])
         vl = ( phe[:,0],pta[:,-1])
         # vr = ( pta[:,0],pta[:,-1])
@@ -363,8 +366,8 @@ def valid(lsig,L,tahe=[]):
         # twisted = False
         #lef = sh.LineString((pta[:,0],phe[:,-1]))
         #rig = sh.LineString((pta[:,-1],phe[:,0]))
-        
-       
+
+
 
 
     # looking situation where Tail and head are not inside the polygon
@@ -458,17 +461,18 @@ class Signatures(PyLayers,dict):
         s = self.__class__.__name__ + '\n' + '----------'+'\n'
         #s = s + str(self.__sizeof__())+'\n'
         for k in self:
-            size[k] = len(self[k])/2
+            size[k] = int(len(self[k])/2)
         s = s + 'from cycle : '+ str(self.source) + ' to cycle ' + str(self.target)+'\n'
         if self.dump==-1:
             ldump = self.keys()
         else:
             ldump = self.dump
+
         for k in ldump:
             s = s + str(k) + ' : ' + str(size[k]) + '\n'
             a = np.swapaxes(self[k].reshape(size[k],2,k),0,2)
             # nl x 2 x nsig
-            
+
             for l in np.arange(a.shape[2]):
                 for i in range(k):
                     if i==k-1:
@@ -476,24 +480,24 @@ class Signatures(PyLayers,dict):
                     else:
                         s = s + '('+str(a[i,0,l])+','+str(a[i,1,l])+'),'
                 s = s+'\n'
-                
+
 
         return(s)
 
     def __len__(self):
         nsig = 0
         for k in self:
-            size = len(self[k])/2
+            size = int(len(self[k])/2)
             nsig += size
         return(nsig)
 
     def compl(self,lint,L):
-        """ completion from lint 
+        """ completion from lint
 
         Parameters
         ----------
 
-        lint : list 
+        lint : list
             list of interactions
 
         Examples
@@ -506,14 +510,14 @@ class Signatures(PyLayers,dict):
         # all group of interactions
         for k in self:
             if k > len(lint):
-                Si = self[k] 
+                Si = self[k]
                 Ns,Nb = Si.shape
                 # all signatures form a group of interactions
-                for l in range(Ns/2):
+                for l in range(int(Ns/2)):
                     # all interactions
                     b1 = True
-                    for i1,it in enumerate(lint): 
-                        if ((Si[2*l,i1] == it[0]) and 
+                    for i1,it in enumerate(lint):
+                        if ((Si[2*l,i1] == it[0]) and
                            (Si[2*l+1,i1] == it[1])):
                             pass 
                         else:
@@ -640,7 +644,7 @@ class Signatures(PyLayers,dict):
         self.nsig = 0
         self.nint = 0
         for k in self:
-            size = len(self[k])/2
+            size = int(len(self[k])/2)
             self.nsig += size
             self.nint += size*k
 
@@ -656,7 +660,7 @@ class Signatures(PyLayers,dict):
         print(self.__class__.__name__ + '\n' + '----------'+'\n')
         #s = s + str(self.__sizeof__())+'\n'
         for k in self:
-            size[k] = len(self[k])/2
+            size[k] = int(len(self[k])/2)
         print('from cycle : '+ str(self.source) + ' to cycle ' + str(self.target)+'\n')
         pyu.printout('Reflection',pyu.BLUE)
         print('  ')
@@ -702,7 +706,7 @@ class Signatures(PyLayers,dict):
         for i in self:
 
             sigs = self[i]
-            for s in range(len(sigs)/2):
+            for s in range(int(len(sigs)/2)):
                 sig = sigs[2*s:2*s+2,:]
 
                 ok = valid(sig.T,self.L)
@@ -1280,7 +1284,7 @@ class Signatures(PyLayers,dict):
             #
             if len(s)==3:
                 nseg = s[0]
-                if ((self.L.Gs.node[nseg]['name']=='_AIR') or 
+                if ((self.L.Gs.node[nseg]['name']=='_AIR') or
                    (self.L.Gs.node[nseg]['name']=='AIR')):
                     lawp = [1]
                 else:
@@ -1430,7 +1434,8 @@ class Signatures(PyLayers,dict):
                         # mirroring th until the previous point
                         #
                         th_mirror = copy.copy(th)
-                        while np.any(r[0]!=np.eye(2)):
+
+                        while np.any(r[0] != np.eye(2)):
                             th_mirror = np.einsum('ki,ij->kj',th_mirror,r[0])+r[1]
                             ik = ik + 1
                             r  = R[-ik]
@@ -1455,6 +1460,7 @@ class Signatures(PyLayers,dict):
                             else:
                                 ilast=udiff[-1]
 
+                            #print(tahe)
                             pta0 = tahe[ilast][0]   # tail first segment  (last difraction)
                             phe0 = tahe[ilast][1]   # head first segment
 
@@ -1596,7 +1602,7 @@ class Signatures(PyLayers,dict):
                                 ratio2 = 0
                             #print ratio
                             if len(seg)==2:
-                                th_mirror=np.vstack((seg[0],seg[1]))
+                                th_mirror = np.vstack((seg[0],seg[1]))
                             else:
                                 pass
 
@@ -1707,7 +1713,8 @@ class Signatures(PyLayers,dict):
                                 tahe.append(th)
                             else:
                                 tahe.append(th_mirror)
-
+                            #if (tahe[-1][0]==tahe[-1][1]).all():
+                            #    pdb.set_trace()
                             # 
                             # Check if the target has been reached
                             # sequence is valid and last interaction is in the list of targets   
@@ -1798,6 +1805,8 @@ class Signatures(PyLayers,dict):
                     #      tahe 
                     #      lawp
                     #      stack
+                    #if (tahe[-1][0]==tahe[-1][1]).all():
+                    #    pdb.set_trace()
                     tahe.pop()
                     try:
                         lawp.pop()
@@ -1932,7 +1941,7 @@ class Signatures(PyLayers,dict):
         ax = plot_poly(ax,poly)
 
     def show(self,L,**kwargs):
-        """  plot signatures within the simulated environment
+        """  plot signatures in the simulated environment
 
         Parameters
         ----------
@@ -1957,10 +1966,10 @@ class Signatures(PyLayers,dict):
 
         """
         defaults = {'i':-1,
-                   's':-1,
-                   'fig':[],
-                   'ax':[],
-                   'graph':'s',
+                    's':-1,
+                    'fig':[],
+                    'ax':[],
+                    'graph':'s',
                     'color':'black',
                     'alphasig':1,
                     'widthsig':0.1,
@@ -1995,21 +2004,28 @@ class Signatures(PyLayers,dict):
             lgrint = [kwargs['i']]
 
 
-        for i in lgrint:
-            if kwargs['s']==-1:
+        if kwargs['s'] == -1:
+            for i in lgrint:
                 lsig = range(int(len(self[i])/2))
-            else:
-                lsig = [kwargs['s']]
-            for j in lsig:
-                sig = [ self.L.Gs.pos[x] for x in self[i][2*j] ]
+                for j in lsig:
+                    sig = [ self.L.Gs.pos[x] for x in self[i][2*j] ]
+                    siga = np.array(sig)
+                    ax.plot(siga[:,0], siga[:,1],
+                            alpha = kwargs['alphasig'],
+                            color = kwargs['colsig'],
+                            linewidth = kwargs['widthsig'])
+                    ax.axis('off')
+        else:
+            lsig = [kwargs['s']]
+            for s1 in lsig:
+                sig = [ self.L.Gs.pos[x[0]]  for x in s1]
                 siga = np.array(sig)
-                # sig = np.hstack((self.pTx[0:2].reshape((2, 1)),
-                #                  np.hstack((self[i]['pt'][0:2, :, j],
-                #                  self.pRx[0:2].reshape((2, 1))))
-                #                  ))
                 ax.plot(siga[:,0], siga[:,1],
-                        alpha=kwargs['alphasig'],color=kwargs['colsig'],linewidth=kwargs['widthsig'])
+                        alpha = kwargs['alphasig'],
+                        color = kwargs['colsig'],
+                        linewidth = kwargs['widthsig'])
                 ax.axis('off')
+
         return(fig,ax)
 
     def showi(self,uni=0,us=0):

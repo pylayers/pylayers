@@ -556,18 +556,18 @@ class Bsignal(PyLayers):
         interpolation : string
             'none'|'nearest'|'bilinear'
         cmap : colormap
-            plt.cm.BrBG
+            plt.cm.jet
         aspect : string
             'auto' (default) ,'equal','scalar'
         function : string
             {'imshow'|'pcolormesh'}
-        typ : string 
+        typ : string
             'l20','l10'
         vmin : min value
-        vmax : max value 
-        sax  : list 
-            selct axe
-        bindex 
+        vmax : max value
+        sax  : list
+            select axe
+        bindex
 
         Examples
         --------
@@ -579,7 +579,7 @@ class Bsignal(PyLayers):
 
         """
         defaults = {'interpolation':'none',
-                    'cmap':plt.cm.BrBG,
+                    'cmap':plt.cm.jet,
                     'aspect':'auto',
                     'fontsize':20,
                     'typ':'l20',
@@ -3293,6 +3293,7 @@ class FUsignal(FBsignal,Usignal):
         ax1 = fig.add_subplot(121)
         fig,ax1 = self.imshow(typ='l20',fig=fig,ax=ax1,**kwargs)
         ax2 = fig.add_subplot(122)
+
         if 'vmin' in kwargs:
             del kwargs['vmin']
         if 'vmax' in kwargs:
