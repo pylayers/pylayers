@@ -879,10 +879,10 @@ class Signatures(PyLayers,dict):
             fh5.close()
             raise NameError('Signature: issue when reading h5py file')
 
-        if kwargs.has_key('L'):
-            self.L=kwargs['L']
+        if 'L' in kwargs:
+            self.L = kwargs['L']
         else:
-            self.L=layout.Layout(Lname)
+            self.L = layout.Layout(Lname)
             try:
                 self.L.dumpr()
             except:

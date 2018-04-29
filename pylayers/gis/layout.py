@@ -9051,7 +9051,11 @@ class Layout(pro.PyLayers):
                         kwargs['edgelist'] = kwargs['edgelist'] + list(y)
                     #kwargs['edgelist'] = list(reduce(lambda x, y: list(x) + list(y), lseg2))
                     if kwargs['slab']:
-                        kwargs['edge_color'] = cold[self.sl[lmat]['color']]
+                        if self.sl[lmat]['color'][0]=="#":
+                            kwargs['edge_color'] = self.sl[lmat]['color']
+                        else:
+                            kwargs['edge_color'] = cold[self.sl[lmat]['color']]
+
                         kwargs['width'] = self.sl[lmat]['linewidth']
                     else:
                         kwargs['edge_color'] = 'k'

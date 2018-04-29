@@ -1961,7 +1961,7 @@ class DLink(Link):
                    'rays': True,
                    'bsig': False,
                    'laddr': [(1,0)],
-                   'cmap': plt.cm.hot,
+                   'cmap': plt.cm.hot_r,
                    'pol': 'tot',
                    'col': 'k',
                    'width': 1,
@@ -1971,7 +1971,8 @@ class DLink(Link):
                    'dB': False,
                    'labels': False,
                    'aw': False,
-                   'dyn': 70}
+                   'dyn': 70,
+                   'ix' : 0}
 
         for key in defaults:
             if key not in kwargs:
@@ -2006,7 +2007,7 @@ class DLink(Link):
         #
         # Plot Rays
         #
-        if kwargs['rays'] and self.R.nray>0:
+        if kwargs['rays'] and self.R.nray > 0:
             #ECtt,ECpp,ECtp,ECpt = self.C.energy()
             #if kwargs['pol']=='tt':
             #    val = ECtt
@@ -2035,6 +2036,7 @@ class DLink(Link):
 
             vmin = val.min()
             vmax = val.max()
+
             if kwargs['dB']:
                 vmin = 10*np.log10(vmin)
                 vmax = 10*np.log10(vmax)
@@ -2051,9 +2053,9 @@ class DLink(Link):
 
             for ir  in lr:
                 if kwargs['dB']:
-                    RayEnergy=max((10*np.log10(val[ir]/val.max())+kwargs['dyn']),0)/kwargs['dyn']
+                    RayEnergy = max((10*np.log10(val[ir]/val.max())+kwargs['dyn']),0)/kwargs['dyn']
                 else:
-                    RayEnergy=val[ir]/val.max()
+                    RayEnergy = val[ir]/val.max()
 
                 if kwargs['col'] == 'cmap':
                     col = clm(RayEnergy)
@@ -2077,7 +2079,9 @@ class DLink(Link):
             if kwargs['col']=='cmap':
                 sm = plt.cm.ScalarMappable(cmap=kwargs['cmap'], norm=plt.Normalize(vmin=vmin, vmax=vmax))
                 sm._A = []
-                plt.colorbar(sm)
+                cb = plt.colorbar(sm)
+                cb.ax.tick_params(labelsize=24)
+                cb.set_label('Level (dB)', fontsize=24)
         #
         # Plot signature
         #
@@ -2099,10 +2103,11 @@ class DLink(Link):
                               edgecolor='black',
                               facecolor=kwargs['ca'],
                               linewidth=2,
-                              alpha =kwargs['alpha'])
+                              alpha =kwargs['alpha'],
+                              zorder = 1000)
 
-        ax.text(self.a[0]+0.3,self.a[1]+0.3,'a',
-                fontsize = kwargs['fontsize'], bbox=dict(facecolor='white',alpha=0.5))
+        #ax.text(self.a[0]+0.3,self.a[1]+0.3,'a',
+        #        fontsize = kwargs['fontsize'], bbox=dict(facecolor='white',alpha=0.5))
         #
         # Point B
         #
@@ -2113,10 +2118,28 @@ class DLink(Link):
                               edgecolor='black',
                               facecolor=kwargs['cb'],
                               linewidth=2,
-                              alpha = kwargs['alpha'])
+                              alpha = kwargs['alpha'],
+                              zorder = 1000)
 
-        ax.text(self.b[0]-0.3, self.b[1]+0.3, 'b',
-                fontsize=kwargs['fontsize'],bbox=dict(facecolor='white',alpha=0.5))
+        #ax.text(self.b[0]+0.3, self.b[1]+0.3, 'b',
+        #        fontsize=kwargs['fontsize'],bbox=dict(facecolor='white',alpha=0.5))
+
+        #
+        # white scale
+        #
+        xe = 1
+        ye = -1
+        le = 1
+        ax.plot(np.array([xe,xe+le]),np.array([ye,ye]),linewidth=4,color='black')
+        ax.plot(np.array([xe,xe]),np.array([ye,ye+0.2]),linewidth=4,color='black')
+        ax.plot(np.array([xe+le,xe+le]),np.array([ye,ye+0.2]),linewidth=4,color='black')
+        ax.text(xe-0.1,ye-0.5,'1 meter',fontsize=18)
+        plt.axis('auto')
+        ax.tick_params(labelsize = 24)
+        ax.set_xlabel('x meters',fontsize = 24)
+        ax.set_ylabel('y meters',fontsize = 24)
+        #plt.savefig('Link.eps')
+        plt.savefig('Link'+str(ix)+'.png')
         return fig,ax
 
     def _show3(self,rays=True, lay= True, ant= True, newfig= False, **kwargs):
@@ -2339,8 +2362,6 @@ class DLink(Link):
              # [x.remove() for x in self._maya_fig.children ]
 
         # # update wall opaccity
-        
-        
         # ds  =[i for i in self._maya_fig.children if self.L._filename in i.name][0]
         # a_in = self.L.Gt.node[self.ca]['indoor']
         # b_in = self.L.Gt.node[self.cb]['indoor']
@@ -2380,7 +2401,8 @@ class DLink(Link):
                     'rays':True,
                     'fspl':True,
                     'vmin':-120,
-                    'vmax':-40
+                    'vmax':-40,
+                    'ix':0
                     }
 
         for key, value in defaults.items():
@@ -2431,6 +2453,7 @@ class DLink(Link):
             ax.set_xlim([min(self.H.taud)-10,max(self.H.taud)+10])
 
         ax.legend()
+        plt.savefig('cir'+str(ix)+'.png')
         return fig,ax
 
 
