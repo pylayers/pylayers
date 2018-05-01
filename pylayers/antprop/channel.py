@@ -65,7 +65,7 @@ class AFPchannel(bs.FUsignal):
                       ):
         bs.FUsignal.__init__(self,x=x,y=y,label='AFP')
         if len(self.x)!=0:
-            self.fcGHz = self.x[len(self.x)/2]
+            self.fcGHz = self.x[int(len(self.x)/2)]
         self.tx = tx
         self.rx = rx
         self.ang_offset = 0
@@ -79,7 +79,7 @@ class AFPchannel(bs.FUsignal):
         assert((self.az == other.az).all())
         A = AFPchannel()
         A.x = self.x
-        A.fcGHz = A.x[len(A.x)/2]
+        A.fcGHz = A.x[int(len(A.x)/2)]
         A.az = self.az
         A.y = self.y + other.y
         return A
@@ -90,7 +90,7 @@ class AFPchannel(bs.FUsignal):
         assert((self.az == other.az).all())
         A = AFPchannel()
         A.x = self.x
-        A.fcGHz = A.x[len(A.x)/2]
+        A.fcGHz = A.x[int(len(A.x)/2)]
         A.az = self.az
         Amod = np.abs(self.y)-np.abs(other.y)
         A.y = Amod*np.exp(1j*np.angle(self.y))
@@ -202,7 +202,7 @@ class AFPchannel(bs.FUsignal):
         #
 
         self.x = np.linspace(self.fmin,self.fmax,self.Nf)
-        self.fcGHz = self.x[len(self.x)/2]
+        self.fcGHz = self.x[int(len(self.x)/2)]
         self.y = amp*np.exp(1j*ang*np.pi/180.)*cal_trf[None,:]*window
         #
         # if extension is txt file comes from ESPOO measurement
@@ -220,11 +220,11 @@ class AFPchannel(bs.FUsignal):
             self.az[u] = self.az[u] + 2*np.pi
 
     def  electrical_delay(self,tauns=0):
-        """ electrical delay 
+        """ electrical delay
 
         Parameters
         ----------
-        tauns : float 
+        tauns : float
 
         """
         self.y = self.y * np.exp(-2*1j*np.pi*self.x*tauns)
@@ -257,6 +257,15 @@ class AFPchannel(bs.FUsignal):
         return adp
 
     def estimate(self,taumax=200,phimax=2*np.pi):
+        """ estimate specular model parameters
+
+        Parameters
+        ----------
+
+        taumax : float
+        phimax : float
+
+        """
         def cost(xk,f,phi):
             B = AFPchannel()
             B.specular_model(xk,f,phi)
@@ -305,7 +314,7 @@ class AFPchannel(bs.FUsignal):
 
 
         """
-        K = len(x)/3
+        K = int(len(x)/3)
         assert(len(x)==3*K)
         ak = x[0:K][:,None,None]
         tk = x[K:2*K][:,None,None]
@@ -314,12 +323,12 @@ class AFPchannel(bs.FUsignal):
         if wH ==[]:
             wH = np.ones(len(fGHz))
         tf  = ak*np.exp(-2*1j*np.pi*fGHz[None,:,None]*tk)*wH[None,:,None]
-        dphi = pk-phi[None,None,:]
+        dphi = pk - phi[None,None,:]
         Gmax = 10**(GmaxdB/10.)
         g = np.exp(-(2*np.sqrt(np.log(2))*dphi/HPBW)**2)
         tfg = tf*g
         self.x = fGHz
-        self.fcGHz = self.x[len(self.x)/2]
+        self.fcGHz = self.x[int(len(self.x)/2)]
         # self.y : angle(0) fGHz(1)
         self.y = np.sum(tfg,axis=0).T
         self.az = phi
@@ -1451,9 +1460,9 @@ class ADPchannel(bs.TUsignal):
         rho,theta = np.meshgrid(self.x*cvel,self.az)
         # convert y data in desired format
         dt,ylabels = self.cformat(**kwargs)
-        val = dt[:,0::Ndec][:,0:imax/Ndec]
-        th  = theta[:,0::Ndec][:,0:imax/Ndec]
-        rh  = rho[:,0::Ndec][:,0:imax/Ndec]
+        val = dt[:,0::Ndec][:,0:int(imax/Ndec)]
+        th  = theta[:,0::Ndec][:,0:int(imax/Ndec)]
+        rh  = rho[:,0::Ndec][:,0:int(imax/Ndec)]
         #vmin = np.min(val)
         #vmax = np.max(val)
         #Dynamic = max_val-vmin
@@ -3519,7 +3528,7 @@ class Tchannel(bs.FUsignal):
         normalize: bool
             energy normalized
         reverse : bool
-            inverse theta and phi represenation
+            inverse theta and phi representation
         polar : bool
             polar representation
         cmap: matplotlib.cmap
@@ -3536,12 +3545,13 @@ class Tchannel(bs.FUsignal):
         defaults = {
                     'fig': [],
                     'ax': [],
-                    'phi':(-180, 180),
-                    'normalize':False,
+                    'phi': (-180, 180),
                     'reverse' : True,
-                    'cmap':plt.cm.hot_r,
-                    'mode':'center',
-                    's':30,
+                    'cmap': plt.cm.hot_r,
+                    'vmin': [],
+                    'vmax': [],
+                    'mode': 'center',
+                    's': 30,
                     'fontsize':12,
                     'edgecolors':'none',
                     'b3d':False,
@@ -3570,22 +3580,24 @@ class Tchannel(bs.FUsignal):
         ax = kwargs.pop('ax')
         colorbar = kwargs.pop('colorbar')
         reverse = kwargs.pop('reverse')
-        normalize = kwargs.pop('normalize')
-        mode =kwargs.pop('mode')
+        mode = kwargs.pop('mode')
         title =kwargs.pop('title')
         xa = kwargs.pop('xa')
         xb = kwargs.pop('xb')
+        b3d = kwargs.pop('b3d')
+        vmin = kwargs.pop('vmin')
+        vmax = kwargs.pop('vmax')
+
         if fig == []:
             fig = plt.figure()
 
 
         Etot = self.energy(mode=mode) + 1e-15
+        EtotdB = 10*np.log10(Etot)
+        EtotdB = np.minimum(EtotdB,vmax)
+        EtotdB = np.maximum(EtotdB,vmin)
 
 
-        if normalize:
-            Emax = max(Etot)
-            Etot = Etot / Emax
-        #
         # col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
         # WARNING polar plot require radian angles
         #
@@ -3610,13 +3622,18 @@ class Tchannel(bs.FUsignal):
             al = 180. / np.pi
             alb = 180. / np.pi
 
-        col = 10 * np.log10(Etot)
+        col = (EtotdB - vmin)/(vmax-vmin)
         kwargs['c'] = col
+        kwargs['s'] = 200*col
+        kwargs['vmin'] = 0.
+        kwargs['vmax'] = 1.
+
         if len(col) != len(di):
             print("len(col):", len(col))
             print("len(di):", len(di))
         if ax == []:
             ax = fig.add_subplot(111, polar=polar)
+
         if reverse :
             scat = ax.scatter(di[:, 1] * al, di[:, 0] * alb, **kwargs)
             ax.axis((phi[0], phi[1], the[0], the[1]))
@@ -3630,12 +3647,10 @@ class Tchannel(bs.FUsignal):
 
         if title:
             ax.set_title(d, fontsize=fontsize+2)
+
         if colorbar:
             b = plt.colorbar(scat,cax=ax)
-            if normalize:
-                b.set_label('dB')
-            else:
-                b.set_label('Path Loss (dB)')
+            b.set_label('Path Loss (dB)')
 
             for t in b.ax.get_yticklabels():
                 t.set_fontsize(fontsize)
@@ -5215,7 +5230,7 @@ class Ctilde(PyLayers):
                     'cmap':plt.cm.hot_r,
                     'mode':'center',
                     's':30,
-                    'fontsize':12,
+                    'fontsize':22,
                     'edgecolors':'none',
                     'b3d':False,
                     'polar':False,

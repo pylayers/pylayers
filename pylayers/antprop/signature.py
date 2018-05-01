@@ -2672,7 +2672,11 @@ class Signatures(PyLayers,dict):
             # 1 : 2 points (linking the nidment) a=0,b=1
             # 2 : nb of found signatures/nidments
             # 3 : nb interactions
-            pt = np.nan*np.empty((2,2,nsig,ninter))
+
+            try:
+                pt = np.nan*np.zeros((2,2,nsig,ninter))
+            except:
+                pdb.set_trace()
 
             #1 negative points
             # seek for diffraction 

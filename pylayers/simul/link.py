@@ -1918,6 +1918,8 @@ class DLink(Link):
             activation of rays vizalization (True)
         bsig : boolean
             activation of signature vizualization (False)
+        bsave : boolean
+            save in a file indexed by ix
         laddr : list
             list of signature addresses
         cmap : colormap
@@ -1934,14 +1936,19 @@ class DLink(Link):
         dB    : boolean
             default False
         dyn : float
-            dynamic in dB
+            dynamic in dB (def 70dB)
+
+        Returns
+        -------
+
+        fig,ax
 
         Examples
         --------
 
         >>> from pylayers.simul.link import *
         >>> DL=Link()
-        >>> DL.show(lr=-1,rays=True,dB=True,col='cmap',cmap=plt.cm.jet)
+        >>> DL.show(lr=-1,rays=True,dB=True,col='cmap',cmap = plt.cm.jet)
         >>> DL.show(laddr=[(6,2)],bsig=True)
 
         """
@@ -1960,19 +1967,24 @@ class DLink(Link):
                    'fontsize': 20,
                    'rays': True,
                    'bsig': False,
+                   'bsave': False,
                    'laddr': [(1,0)],
                    'cmap': plt.cm.hot_r,
                    'pol': 'tot',
-                   'col': 'k',
-                   'width': 1,
+                   'color': 'k',
+                   'linewidth': 1,
                    'alpha': 1,
-                   'col': 'k',
                    'radius': -1,
-                   'dB': False,
+                   'vmin': [],
+                   'vmax': [],
+                   'dB': True,
                    'labels': False,
                    'aw': False,
                    'dyn': 70,
-                   'ix' : 0}
+                   'ix' : 0,
+                   'vmin': -120,
+                   'vmax': -40,
+                   'bcolorbar': True}
 
         for key in defaults:
             if key not in kwargs:
@@ -1984,7 +1996,7 @@ class DLink(Link):
             fig = kwargs['fig']
 
         if kwargs['ax']==[]:
-            ax = plt.gca()
+            ax = fig.add_subplot(111)
         else:
             ax=kwargs['ax']
 
@@ -1992,7 +2004,7 @@ class DLink(Link):
         # Layout
         #
 
-        fig,ax = self.L.showG('s',
+        fig, ax = self.L.showG('s',
                               nodes = False,
                               fig = fig,
                               ax = ax,
@@ -2003,7 +2015,8 @@ class DLink(Link):
         if kwargs['radius'] == -1:
             kwargs['radius'] = self.L.radius
 
-        ax.set_facecolor('#cccccc')
+        # background color
+        #ax.set_facecolor('#cccccc')
         #
         # Plot Rays
         #
@@ -2034,54 +2047,78 @@ class DLink(Link):
             else:
                 lr = kwargs['lr']
 
-            vmin = val.min()
-            vmax = val.max()
 
-            if kwargs['dB']:
-                vmin = 10*np.log10(vmin)
-                vmax = 10*np.log10(vmax)
+            #
+            #  Set the min and max of ray level
+            #
+
+            if kwargs['vmin'] == []:
+                vmin = val.min()
+                vmax = val.max()
+
+                if kwargs['dB']:
+                    vmin = 10*np.log10(vmin)
+                    vmax = 10*np.log10(vmax)
+            else:
+                vmin = kwargs['vmin']
+                vmax = kwargs['vmax'] 
 
 
             #
             # limitation of the vizualization zone around the center of the link
             #
 
-            pm = (self.a+self.b)/2.
+            pm = (self.a + self.b)/2.
             R  = np.minimum(kwargs['radius'],1.5*self.L.radius)
             #ax.set_xlim(pm[0]-R,pm[0]+R)
             #ax.set_ylim(pm[1]-R,pm[1]+R)
 
+            #
+            # each ray ir from list lr has its own color
+            #
             for ir  in lr:
                 if kwargs['dB']:
-                    RayEnergy = max((10*np.log10(val[ir]/val.max())+kwargs['dyn']),0)/kwargs['dyn']
+                    valdB = np.array(10*np.log10(val[ir]))
+                    valdB = np.maximum(vmin,valdB)
+                    valdB = np.minimum(vmax,valdB)
+                    #RayEnergy = max((10*np.log10(val[ir]/val.max())+kwargs['dyn']),0)/kwargs['dyn']
+                    RayEnergy = (valdB-vmin)/(vmax-vmin)
                 else:
-                    RayEnergy = val[ir]/val.max()
+                    valLin = val[ir]
+                    valdB = np.maximum(vmin,valLin)
+                    valdB = np.minimum(vmax,valLin)
+                    RayEnergy = (valLin-vmin)/(vmax - vmin)
 
-                if kwargs['col'] == 'cmap':
-                    col = clm(RayEnergy)
+                if kwargs['color'] == 'cmap':
+                    color = clm(RayEnergy)
                     #width = 10*RayEnergy
-                    width = kwargs['width']
+                    linewidth = kwargs['linewidth']
                     alpha = 1
                 else:
-                    col = kwargs['col']
-                    width = kwargs['width']
+                    color = kwargs['color']
+                    linewidth = kwargs['linewidth']
                     alpha = kwargs['alpha']
 
                 # plot ray (i,r)
                 fig,ax = self.R.show(rlist = [ir],
-                               colray = col,
-                               widthray = width,
-                               alpharay = alpha,
+                               color = color,
+                               linewidth = 10*RayEnergy,
+                               alpha = alpha,
                                fig = fig, ax = ax,
                                layout = False,
-                               points = False)
+                               points = False,
+                               bcolorbar = True,
+                               cmap = kwargs['cmap'],
+                               vmin = vmin,
+                               vmax = vmax )
 
-            if kwargs['col']=='cmap':
-                sm = plt.cm.ScalarMappable(cmap=kwargs['cmap'], norm=plt.Normalize(vmin=vmin, vmax=vmax))
-                sm._A = []
-                cb = plt.colorbar(sm)
-                cb.ax.tick_params(labelsize=24)
-                cb.set_label('Level (dB)', fontsize=24)
+            #if kwargs['color']=='cmap':
+            #    sm = plt.cm.ScalarMappable(cmap=kwargs['cmap'], norm=plt.Normalize(vmin=kwargs['vmin'],
+            #                                                  vmax=kwargs['vmax']))
+            #    sm._A = []
+            #    cb = plt.colorbar(sm)
+            #    cb.ax.tick_params(labelsize=24)
+            #    cb.set_label('Level (dB)', fontsize=24)
         #
         # Plot signature
         #
@@ -2134,12 +2171,15 @@ class DLink(Link):
         ax.plot(np.array([xe,xe]),np.array([ye,ye+0.2]),linewidth=4,color='black')
         ax.plot(np.array([xe+le,xe+le]),np.array([ye,ye+0.2]),linewidth=4,color='black')
         ax.text(xe-0.1,ye-0.5,'1 meter',fontsize=18)
-        plt.axis('auto')
+        #plt.axis('auto')
         ax.tick_params(labelsize = 24)
         ax.set_xlabel('x meters',fontsize = 24)
         ax.set_ylabel('y meters',fontsize = 24)
         #plt.savefig('Link.eps')
-        plt.savefig('Link'+str(ix)+'.png')
+        if kwargs['bsave']:
+            plt.savefig('Link'+str(kwargs['ix'])+'.png')
+            plt.close()
+
         return fig,ax
 
     def _show3(self,rays=True, lay= True, ant= True, newfig= False, **kwargs):
@@ -2150,9 +2190,9 @@ class DLink(Link):
         Parameters
         ----------
 
-        rays: boolean 
-        lay : boolean 
-        ant : boolean 
+        rays: boolean
+        lay : boolean
+        ant : boolean
         newfig : boolean (default : False)
         kwargs of Rays.show3()
 
@@ -2366,7 +2406,7 @@ class DLink(Link):
         # a_in = self.L.Gt.node[self.ca]['indoor']
         # b_in = self.L.Gt.node[self.cb]['indoor']
 
-        # if 
+        # if
         # if a_in or b_in:
         #     # indoor situation
         #     ds.children[0].children[0].actor.property.opacity=0.5
@@ -2387,6 +2427,11 @@ class DLink(Link):
         fspl : boolean
             display free space path loss
 
+        Returns
+        -------
+
+        fig,ax
+
         See Also
         --------
 
@@ -2394,15 +2439,20 @@ class DLink(Link):
 
         """
 
-        defaults = {'fig':[],
-                    'ax':[],
-                    'BWGHz':5,
-                    'Nf':1000,
-                    'rays':True,
-                    'fspl':True,
-                    'vmin':-120,
-                    'vmax':-40,
-                    'ix':0
+        defaults = {'fig' : [],
+                    'ax' : [],
+                    'BWGHz' :5,
+                    'Nf' :1000,
+                    'rays' :True,
+                    'fspl' :True,
+                    'vmin' :-120,
+                    'vmax' : -40,
+                    'taumin': 0,
+                    'taumax': 160,
+                    'bgrid':True,
+                    'ix' : 0,
+                    'bsave' : False,
+                    'fontsize':18
                     }
 
         for key, value in defaults.items():
@@ -2413,20 +2463,27 @@ class DLink(Link):
             fig = plt.gcf()
         else:
             fig = kwargs['fig']
+
         if kwargs['ax'] == []:
             ax = plt.gca()
         else:
             ax = kwargs['ax']
 
-        taumax = self.H.taud.max()
+        fontsize = kwargs.pop('fontsize')
+        vmin = kwargs.pop('vmin')
+        vmax = kwargs.pop('vmax')
+        taumin = kwargs.pop('taumin')
+        taumax = kwargs.pop('taumax')
+        #taumax = self.H.taud.max()
         BWGHz = kwargs['BWGHz']
 
         Nf = np.maximum(kwargs['Nf'],taumax*BWGHz).astype(int)
         # getcir is a Tchannel method
 
-        self.ir = self.H.getcir(BWGHz =BWGHz,Nf=Nf)
-        self.ir.plot(fig=fig,ax=ax)
-        plt.ylim(kwargs['vmin'],kwargs['vmax'])
+        self.ir = self.H.getcir(BWGHz=BWGHz, Nf=Nf)
+        self.ir.plot(fig=fig, ax=ax, fontsize=fontsize)
+
+        ax.set_ylim(vmin,vmax)
 
 
         delay = self.ir.x
@@ -2434,26 +2491,42 @@ class DLink(Link):
         dist = delay*0.3
         FSPL0 = -32.4- 20*np.log10(self.fGHz[0])-20*np.log10(dist)
         FSPLG = FSPL0 + self.Aa.GdBmax[0] + self.Ab.GdBmax[0]
+
         if kwargs['fspl']:
             # Free space path loss
             ax.plot(delay,FSPL0,linewidth=2,color='b',label='FSPL')
             # Free space path loss + gain
             ax.plot(delay,FSPLG,linewidth=3,color='k',label='FSPL+Gtmax+Grmax')
 
+        for item in ([ax.title, ax.xaxis.label, ax.yaxis.label] +
+             ax.get_xticklabels() + ax.get_yticklabels()):
+                item.set_fontsize(fontsize)
+
+        if kwargs['bgrid']:
+            ax.grid()
 
         if kwargs['rays']:
-            # energy of each ray
+            # energy of each ray normaized between vmin(0) and vmax(1)
             ER = np.squeeze(self.H.energy())
-            color_range = np.linspace( 0, 1., len(ER))#np.linspace( 0, np.pi, len(ER))
-            # sort rays by increasing energy
             uER = ER.argsort()[::-1]
-            colors= color_range[uER]
+            ER = ER[uER]
+            ERdB = 10*np.log10(ER)
+            ERdB = np.minimum(ERdB,vmax)
+            ERdB = np.maximum(ERdB,vmin)
+            colors = (ERdB-vmin)/(vmax-vmin)
+            #color_range = np.linspace( 0, 1., len(ER))#np.linspace( 0, np.pi, len(ER))
+            # sort rays by increasing energy
+            #colors = color_range[uER]
             # most important rays , it=0 ir=0 , if =0
-            ax.scatter(self.H.taud[uER],20*np.log10(np.abs(self.H.y[uER,0,0,0])),c=colors,cmap='hot')
-            ax.set_xlim([min(self.H.taud)-10,max(self.H.taud)+10])
+            ax.scatter(self.H.taud[uER],ERdB,c=colors,s=200*colors,cmap=kwargs['cmap'],vmin=0,vmax=1)
+            #ax.set_xlim([min(self.H.taud)-10,max(self.H.taud)+10])
+            ax.set_xlim(taumin,taumax)
 
-        ax.legend()
-        plt.savefig('cir'+str(ix)+'.png')
+        ax.legend(fontsize=fontsize)
+        if kwargs['bsave']:
+            plt.savefig('cir'+str(kwargs['ix'])+'.png')
+            plt.close()
+
         return fig,ax
 
 
@@ -2491,7 +2564,7 @@ class DLink(Link):
         """
         kwargs['d']='doa'
         return self.H.plotd(**kwargs)
-        
+
     def plt_dod(self,**kwargs):
         """plot direction of arrival and departure
 
@@ -2533,7 +2606,7 @@ class DLink(Link):
         defaults = { 'fig':[],
                      'ax':[]
                     }
-        
+
         for k in defaults:
             if k not in kwargs:
                 kwargs[k] = defaults[k]
@@ -2558,7 +2631,7 @@ class DLink(Link):
         defaults = { 'fig':[],
                      'ax':[]
                     }
-        
+
         for k in defaults:
             if k not in kwargs:
                 kwargs[k] = defaults[k]

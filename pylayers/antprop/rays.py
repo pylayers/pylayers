@@ -875,7 +875,6 @@ class Rays(PyLayers, dict):
                                 r[ni][k]=tab[uD]
                             else:
                                 r[ni][k]=[]
-                    
 
         r[ni]['nrays'] = 1 # keep only one ray
         r.nray = 1
@@ -886,7 +885,7 @@ class Rays(PyLayers, dict):
         r.fillinter(L)
         return(r)
 
-   
+
 
     def show(self,**kwargs):
         """  plot 2D rays within the simulated environment
@@ -902,11 +901,11 @@ class Rays(PyLayers, dict):
         fig : figure
         ax  : axis
         L   : Layout
-        alpharay : float
+        alpha : float
             1
-        widthray : float
+        linewidth : float
             0.1
-        colray : string
+        color : string
             'black'
         ms : int
             marker size :  5
@@ -914,22 +913,25 @@ class Rays(PyLayers, dict):
             True
         points : boolean
             True
-        ER : ray energy 
+        ER : ray energy
 
         """
-        defaults = {'rlist':[],
-                   'fig':[],
-                   'ax':[],
-                    'L':[],
-                   'graph':'s',
-                    'color':'black',
-                    'alpharay':1,
-                    'widthray':0.5,
-                    'colray':'black',
-                    'ms':5,
-                    'layout':True,
-                    'points':True,
-                    'labels':False
+        defaults = {'rlist': [],
+                    'fig': [],
+                    'ax': [],
+                    'L': [],
+                    'graph': 's',
+                    'color': 'black',
+                    'alpha': 1,
+                    'linewidth': 0.5,
+                    'ms': 5,
+                    'vmin':0,
+                    'vmax':-70,
+                    'cmap': plt.cm.hot_r,
+                    'layout': True,
+                    'points': True,
+                    'labels': False,
+                    'bcolorbar': False
                    }
 
         for key, value in defaults.items():
@@ -938,16 +940,17 @@ class Rays(PyLayers, dict):
 
         if kwargs['fig'] ==[]:
             fig = plt.figure()
+
         if kwargs['ax'] ==[]:
             ax = fig.add_subplot(111)
-        
+
         #
-        # display the Layout 
+        # display the Layout
         #
         if kwargs['layout'] == True:
             if kwargs['L'] != []:
                 fig,ax = kwargs['L'].showG(**kwargs)
-            else : 
+            else :
                 raise AttributeError('Please give a Layout file as argument')
         else:
             fig = kwargs['fig']
@@ -960,15 +963,14 @@ class Rays(PyLayers, dict):
             ax.plot(self.pRx[0], self.pRx[1], 'og',ms=kwargs['ms'])
         # i=-1 all rays
         # else block of interactions i
-        
-        # plot all rays 
+        # plot all rays
         if kwargs['rlist'] == []:
 
             # list of group of interactions
             lgrint = self.keys()
 
             for i in lgrint:
-                # list of rays 
+                # list of rays
                 lray = range(len(self[i]['pt'][0, 0, :]))
 
                 #if self.filled :
@@ -986,29 +988,28 @@ class Rays(PyLayers, dict):
 
                     if 'ER' not in kwargs:
                         ax.plot(ray[0, :], ray[1, :],
-                            alpha = kwargs['alpharay'],
-                            color = kwargs['colray'],
-                            linewidth=kwargs['widthray'])
+                            alpha = kwargs['alpha'],
+                            color = kwargs['color'],
+                            linewidth = kwargs['linewidth'])
                     else:
                         EdB = 10*np.log10(ER[index_ray])
                         ERdB = 10*np.log10(E)
                         vscale  = 1.-(max(ERdB)-EdB)/(max(ERdB)-min(ERdB))
-                        widthray = 3*vscale
-                        alpharay = vscale
-                        pdb.set_trace()
+                        linewidth = 3*vscale
+                        alpha = vscale
                         cmap = cm.hot
-                        colorray = cmap(vscale)
+                        color = cmap(vscale)
                         ax.plot(ray[0, :], ray[1, :],
-                                alpha = alpharay,
-                                color = colorray,
-                                linewidth = widthray)
+                                alpha = alpha,
+                                color = color,
+                                linewidth = linewidth)
 
                     ax.axis('off')
                     #if self.filled :
                     #    ax.set_title('rays index :'+ str(self[i]['rayidx'][lray]))
         else:
             rlist = kwargs['rlist']
-            # 3D ray 
+            # 3D ray
             if self.is3D:
                 nbi = self._ray2nbi[rlist]
                 nr = np.array((nbi,rlist))
@@ -1026,13 +1027,12 @@ class Rays(PyLayers, dict):
                                          self.pRx[0:2].reshape((2, 1))))
                                          ))
                         ax.plot(ray[0, :], ray[1, :],
-                                alpha = kwargs['alpharay'],
-                                color = kwargs['colray'],
-                                linewidth = kwargs['widthray'])
+                                alpha = kwargs['alpha'],
+                                color = kwargs['color'],
+                                linewidth = kwargs['linewidth'])
                         ax.axis('off')
-            # 2D ray 
+            # 2D ray
             else:
-
                 for i in rlist:
                     lray = range(len(self[i]['pt'][0, 0, :]))
                     #if self.filled :
@@ -1043,26 +1043,20 @@ class Rays(PyLayers, dict):
                                          self.pRx[0:2].reshape((2, 1))))
                                          ))
                         ax.plot(ray[0, :], ray[1, :],
-                                alpha=kwargs['alpharay'],
-                                color=kwargs['colray'],
-                                linewidth=kwargs['widthray'])
+                                alpha=kwargs['alpha'],
+                                color=kwargs['color'],
+                                linewidth=kwargs['linewidth'])
                         ax.axis('off')
 
-                        #if self.filled :
-                        #    ax.set_title('rays index :'+ str(self[i]['rayidx'][lray]))
-
-
-
-
-                # raynb = (nr[1,unr[i]]).astype(int)
-                # nbr=len(raynb)
-                
-                # ptidx = [np.where(self[i]['rayidx']==x)[0][0] for x in raynb]
-                # # current number of interactions
-                # cnbi = i + 2
-            
-                # pt = self[i]['pt'][:,:,ptidx].reshape(3,cnbi*nbr,order='F')
-
+        if kwargs['bcolorbar']:
+            # axes : left , bottom , width , height
+            sm = plt.cm.ScalarMappable(cmap = kwargs['cmap'], norm = plt.Normalize(vmin=kwargs['vmin'],vmax=kwargs['vmax']))
+            sm._A = []  # necessary set_array
+            cax = fig.add_axes([0.18,0.35, 0.35, 0.025])
+            #cb = plt.colorbar(sm,cax=cax,orientation='horizontal')
+            cb = plt.colorbar(sm,cax=cax,orientation='horizontal')
+            cb.ax.tick_params(labelsize=24)
+            cb.set_label('Level (dB)', fontsize=24)
 
         return(fig,ax)
 
@@ -2883,6 +2877,9 @@ class Rays(PyLayers, dict):
             if l != 0:
                 # l stands for the number of interactions
                 r = self[l]['nbrays']
+                # dirty fix should not be an array
+                if type(r)==np.ndarray:
+                    r = r[0]
                 # reshape in order to have a 1D list of index
                 # reshape ray index
                 rrl = self[l]['rays'].reshape(r*l,order='F')

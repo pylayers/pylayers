@@ -2437,7 +2437,7 @@ class TUsignal(TBsignal, Usignal):
 
         te = 1.0 / feGHz
         Tww = 10 * Tp
-        Ni = round(Tww / (2 * te))
+        Ni = int(round(Tww / (2 * te)))
         # Tww/2 multiple de te
         Tww = 2 * te * Ni
         x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
@@ -2504,7 +2504,7 @@ class TUsignal(TBsignal, Usignal):
             if len(x) == 0:
                 te = 1.0 / fe
                 Tw = 10. / band
-                Ni = round(Tw / (2 * te))
+                Ni = int(round(Tw / (2 * te)))
                 # Tww/2 multiple de te
                 Tww = 2 * te * Ni
                 x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
@@ -2893,7 +2893,7 @@ class FUsignal(FBsignal,Usignal):
             EMH2  = MH2.sum(axis=-1)*(self.x[1]-self.x[0])
 
         if mode=='center':
-            EMH2  = MH2[...,len(self.x)/2]
+            EMH2  = MH2[...,int(len(self.x)/2)]
 
         if mode=='first':
             EMH2  = MH2[...,0]
