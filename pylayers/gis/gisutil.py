@@ -298,3 +298,40 @@ def haversine(lat1, lon1, lat2, lon2):
     c = 2. * np.arctan2(np.sqrt(a), np.sqrt(1.-a))
 
     return R * c
+
+
+
+def get_google_elev_profile(node0,node1,nb_samples=10):
+    """ 
+        return elevation profile between 2 nodes
+        using google elevation API data
+
+        Parameters
+        ----------
+
+            node0 = [lon,lat]
+            node1 = [lon,lat]
+            nb_samples = int 
+
+        Return
+        ------
+
+        profile : np.ndarray (nb_samples)
+            elevation for the nb_sambples between node0 and node1
+
+
+
+    """ 
+    ELEVATION_BASE_URL = 'https://maps.googleapis.com/maps/api/elevation/json?'
+    
+    n0  = str(node0[0]) + ',' + str(node0[1])
+    n1  = str(node1[0]) + ',' + str(node1[1])
+    url = ELEVATION_BASE_URL + 'path=' + n0 + '|' + n1 +'&samples=' + str(nb_samples)
+    response = simplejson.load(urllib.urlopen(url))
+    if response['status'] =='OK':
+        profile = []
+        for k in range(nb_samples):
+            profile.append(response['results'][k]['elevation'])
+        return np.array(profile)
+    else:
+        print ('issue in getting elevation from google')
