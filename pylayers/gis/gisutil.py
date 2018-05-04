@@ -3,6 +3,8 @@ import numpy as np
 import pdb
 import simplejson
 import urllib
+import requests
+import json
 """
 
 .. currentmodule:: pylayers.gis.gisutil
@@ -336,3 +338,52 @@ def get_google_elev_profile(node0,node1,nb_samples=10):
         return np.array(profile)
     else:
         print ('issue in getting elevation from google')
+
+def get_osm_elev_profile(node0,node1,nb_samples=10):
+    """ 
+        return elevation profile between 2 nodes
+        using google elevation API data
+
+        Parameters
+        ----------
+
+            node0 = [lon,lat]
+            node1 = [lon,lat]
+            nb_samples = int 
+
+        Return
+        ------
+
+        profile : np.ndarray (nb_samples)
+            elevation for the nb_sambples between node0 and node1
+
+
+
+    """ 
+
+
+    n0 = np.array(node0)
+    n1 = np.array(node1)
+
+    locations = (n1-n0)*np.linspace(0,1,nb_samples)[:,None] + n0
+    loc = [{"latitude":k[0],"longitude":k[1]} for k in locations]
+    data = {"locations":loc}
+    dataj= json.dumps(data)
+    
+    URL = 'https://api.open-elevation.com/api/v1/lookup'
+    headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+    r = requests.post(URL, data=dataj,headers=headers)
+
+    if r.status_code == 200:
+        pass
+    elif r.status_code == 400:
+        print 'invalid json? '
+        return np.array([])
+    else:
+        print 'issue getting elevation info'
+        return np.array([])
+    dres=json.loads(r.text)['results']
+
+    # res = np.array([[x['latitude'],x['longitude'],x['elevation']] for x in delev])
+    elev = np.array([x['elevation'] for x in dres])
+    return elev

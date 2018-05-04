@@ -10,11 +10,11 @@ import pdb
 # git clone https://github.com/arsenovic/mplrc.git
 #
 #
-from matplotlib import rcParams
+# from matplotlib import rcParams
 
 
-rcParams['text.usetex'] = True
-rcParams['text.latex.unicode'] = True
+# rcParams['text.usetex'] = True
+# rcParams['text.latex.unicode'] = True
 
 
 class CDF(object):

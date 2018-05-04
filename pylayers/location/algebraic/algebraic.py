@@ -1191,7 +1191,7 @@ def scenario():
         >>> RN_TOA = L*sp.rand(dim,nRN)
         >>> RN_RSS = L*sp.rand(dim,nRN)
         >>> RN_TDOA = L*sp.rand(dim,nRN)
-
+    
         >>> d_TOA = dist(RN_TOA,BN,0) # actual distances
         >>> TOF = d_TOA/c # actual TOA
         >>> TOA_std = 0.001/c*np.ones(np.shape(TOF))
