@@ -8,7 +8,7 @@ r"""
 Bsignal Class
 =============
 
-.. autoclass:: Bsignal 
+.. autoclass:: Bsignal
     :members:
 
 Usignal Class
@@ -297,8 +297,6 @@ class Bsignal(PyLayers):
 
         Use __set__ instead
 
-        .. todo:: check coherence of support internally
-
         """
         self.x = x
         Np = len(self.x)
@@ -558,18 +556,18 @@ class Bsignal(PyLayers):
         interpolation : string
             'none'|'nearest'|'bilinear'
         cmap : colormap
-            plt.cm.BrBG
+            plt.cm.jet
         aspect : string
             'auto' (default) ,'equal','scalar'
         function : string
             {'imshow'|'pcolormesh'}
-        typ : string 
+        typ : string
             'l20','l10'
         vmin : min value
-        vmax : max value 
-        sax  : list 
-            selct axe
-        bindex 
+        vmax : max value
+        sax  : list
+            select axe
+        bindex
 
         Examples
         --------
@@ -581,7 +579,7 @@ class Bsignal(PyLayers):
 
         """
         defaults = {'interpolation':'none',
-                    'cmap':plt.cm.BrBG,
+                    'cmap':plt.cm.jet,
                     'aspect':'auto',
                     'fontsize':20,
                     'typ':'l20',
@@ -592,15 +590,15 @@ class Bsignal(PyLayers):
                     'ylabel':''}
 
         for k in defaults.keys():
-            if not kwargs.has_key(k):
+            if not k in kwargs:
                 kwargs[k]=defaults[k]
 
-        if not kwargs.has_key('fig'):
+        if not 'fig' in kwargs:
             fig = plt.figure()
         else:
             fig = kwargs['fig']
 
-        if not kwargs.has_key('ax'):
+        if not 'ax' in kwargs:
             ax = fig.add_subplot(111)
         else:
             ax = kwargs['ax']
@@ -1102,7 +1100,7 @@ class Usignal(Bsignal):
             #pstart2 = findpos(u2.x, xnew[0])
             pstart2 = np.where(u2.x==xnew[0])[0]
             #pstop2 = pstart2 + findpos(u2.x[pstart2:dim2], xnew[-1])
-            pstop2 = pstart2 + np.where(u2.x[pstart2:dim2]==xnew[-1])[0]
+            pstop2 = pstart2 + np.where(u2.x[pstart2:dim2] == xnew[-1])[0]
 
             u2 = u2.truncate(pstart2, pstop2 + 1)
             u1 = u1.resample(xnew)
@@ -1202,8 +1200,8 @@ class Usignal(Bsignal):
         Parameters
         ----------
 
-        imin  : int 
-        imax  : int 
+        imin  : int
+        imax  : int
         axis  : axis to truncate (default -1)
 
         Returns
@@ -1220,7 +1218,7 @@ class Usignal(Bsignal):
             x_new = self.x[imin:imax]
         else:
             x_new = self.x
-        
+
         if (axis==-1):
             y_new = self.y[..., imin:imax]
         if (axis==0):
@@ -1341,8 +1339,8 @@ class Usignal(Bsignal):
         xmax : float
             add zeros after xmax
 
-        Summary
-        --------
+        Notes
+        -----
 
         This corresponds to a gating between xmin and xmax
 
@@ -2226,8 +2224,8 @@ class TUsignal(TBsignal, Usignal):
         normalized : boolean
             default True
 
-        Summary
-        -------
+        Notes
+        -----
             The time step dx should be the same
 
             The chosen time reference is the one of the self signal
@@ -2439,7 +2437,7 @@ class TUsignal(TBsignal, Usignal):
 
         te = 1.0 / feGHz
         Tww = 10 * Tp
-        Ni = round(Tww / (2 * te))
+        Ni = int(round(Tww / (2 * te)))
         # Tww/2 multiple de te
         Tww = 2 * te * Ni
         x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
@@ -2506,7 +2504,7 @@ class TUsignal(TBsignal, Usignal):
             if len(x) == 0:
                 te = 1.0 / fe
                 Tw = 10. / band
-                Ni = round(Tw / (2 * te))
+                Ni = int(round(Tw / (2 * te)))
                 # Tww/2 multiple de te
                 Tww = 2 * te * Ni
                 x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
@@ -2895,7 +2893,7 @@ class FUsignal(FBsignal,Usignal):
             EMH2  = MH2.sum(axis=-1)*(self.x[1]-self.x[0])
 
         if mode=='center':
-            EMH2  = MH2[...,len(self.x)/2]
+            EMH2  = MH2[...,int(len(self.x)/2)]
 
         if mode=='first':
             EMH2  = MH2[...,0]
@@ -3260,8 +3258,8 @@ class FUsignal(FBsignal,Usignal):
     def iftshift(self, Nz=1):
         """ Return the associated TUsignal
 
-        Summary
-        -------
+        Notes
+        -----
 
         apply the inverse fftshift operator to come back in time
 
@@ -3280,9 +3278,9 @@ class FUsignal(FBsignal,Usignal):
     def show(self,**kwargs):
         """ imshow visualization of Modulus and Phase
 
-        vmin : 
-        vmax : 
-        cmap : colormap 
+        vmin :
+        vmax :
+        cmap : colormap
 
         """
 
@@ -3295,10 +3293,12 @@ class FUsignal(FBsignal,Usignal):
         ax1 = fig.add_subplot(121)
         fig,ax1 = self.imshow(typ='l20',fig=fig,ax=ax1,**kwargs)
         ax2 = fig.add_subplot(122)
-        if 'vmin' in kwargs: 
+
+        if 'vmin' in kwargs:
             del kwargs['vmin']
-        if 'vmax' in kwargs: 
+        if 'vmax' in kwargs:
             del kwargs['vmax']
+
         fig,ax2= self.imshow(typ='d',fig=fig,ax=ax2,**kwargs)
 
         return fig,[ax1,ax2]
@@ -3481,12 +3481,12 @@ class FHsignal(FUsignal):
         N = len(self.x)
         # even case
         if np.mod(N, 2) == 0:
-            xu = self.x[1:(N + 2) / 2]
-            yu = self.y[...,1:(N + 2) / 2]
+            xu = self.x[1:int((N + 2) / 2)]
+            yu = self.y[...,1:int((N + 2) / 2)]
         # odd case
         else:
-            xu = self.x[1:(N + 1) / 2]
-            yu = self.y[...,1:(N + 1) / 2]
+            xu = self.x[1:int((N + 1) / 2)]
+            yu = self.y[...,1:int((N + 1) / 2)]
 
         O = FUsignal(x=xu, y=yu)
 
@@ -3503,12 +3503,13 @@ class Noise(TUsignal):
     """ Create noise
     """
     def __init__(self,
-                 ti=0,
+                 ti = 0,
                  tf = 100,
                  fsGHz = 50,
                  PSDdBmpHz = -174,
                  NF = 0,
-                 R = 50, seed=1):
+                 R = 50,
+                 seed = 1):
         """ object constructor
 
         Parameters
@@ -3640,19 +3641,19 @@ class Noise(TUsignal):
     def __repr__(self):
         st = ''
         st = st+ 'Sampling frequency : '+ str(self.fsGHz)+' GHz\n'
-        st = st+ 'ti  : '+ str(self.ti)+'ns \n'
-        st = st+ 'tf  : '+ str(self.tf)+'ns \n'
-        st = st+ 'ts  : '+ str(self.tsns)+'ns \n'
-        st = st+ 'N   : '+ str(len(self.x))+'\n'
+        st = st+ 'ti  : %.2f' % self.ti+'ns \n'
+        st = st+ 'tf  : %.2f' % self.tf+'ns \n'
+        st = st+ 'ts  : %.2f' % self.tsns+'ns \n'
+        st = st+ 'N   : %i '  % len(self.x)+'\n'
         st = st + '-------------\n'
-        st = st+ 'DSP : ' + str(self.PSDdBmpHz)+ ' dBm/Hz\n'
-        st = st+ '    : ' + str(10**(self.PSDdBmpHz/10.)*1e-3)+ ' Joules\n'
+        st = st+ 'DSP : %.2f' % self.PSDdBmpHz+ ' dBm/Hz\n'
+        st = st+ '    : %.2e' % 10**(self.PSDdBmpHz/10.)*1e-3+ ' Joules\n'
         st = st + '-------------\n'
-        st = st+ 'Noise Figure : ' + str(self.NF)+ ' dB\n'
-        st = st+ 'Vrms : '+ str(self.vrms)+ ' Volts\n'
-        st = st+ 'Variance : '+ str(self.var)+ ' V^2\n'
-        st = st+ 'Power (dBm) /'+str(self.R)+' Ohms : '+ str(10*np.log10(self.PW)-60)+ ' dBm\n'
-        st = st+ 'Power realized /'+str(self.R)+' Ohms : '+ str(10*np.log10(self.Pr)-60)+ ' dBm\n'
+        st = st+ 'Noise Figure : %.2f ' % self.NF+ ' dB\n'
+        st = st+ 'Vrms : %.2e' % self.vrms+ ' Volts\n'
+        st = st+ 'Variance :%.2e ' % self.var +  ' V^2\n'
+        st = st+ 'Power (dBm) / %.2f' % self.R + ' Ohms : '+ str(10*np.log10(self.PW)-60)+ ' dBm\n'
+        st = st+ 'Power realized / %.2f'  % self.R + ' Ohms : '+ str(10*np.log10(self.Pr)-60)+ ' dBm\n'
         return(st)
 
     def ppsd(self,mask=True):

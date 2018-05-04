@@ -11,13 +11,13 @@ r"""
 
 """
 
-
 try:
     from tvtk.api import tvtk
     from mayavi.sources.vtk_data_source import VTKDataSource
     from mayavi import mlab
 except:
     print('Layout:Mayavi is not installed')
+
 import doctest
 import time
 import numpy as np
@@ -51,14 +51,13 @@ import pdb
 logger = logging.getLogger(__name__)
 
 class Link(PyLayers):
-    """
-        Link is a MetaClass, which derives from `Tchannel`.
-        Tchannel is a transmission channel i.e a radio channel
-        which includes both link termination antennas.
+    """ Link class
 
-        A common factor of both statistical (SLink) and deterministic channel (DLink)
-        is the exitence of :math:`\alpha_k` and :math:`\tau_k`
-     """
+    Members
+    -------
+
+    """
+
     def __init__(self):
         """ Link evaluation metaclass
         """
@@ -268,9 +267,16 @@ class DLink(Link):
         Examples
         --------
 
-        >>> from pylayers.simul.link import *
-        >>> DL = DLink(L=Layout('DLR.lay'))
-        >>> DL.eval()
+            >>> from pylayers.simul.link import *
+            >>> DL = DLink(L=Layout('DLR.lay'))
+            >>> DL.eval()
+
+        Notes
+        -----
+
+        When modifying the coordinates of the link it is important to modify
+        the array and not one of its component. In that case the cycle will not
+        be updated.
 
 
         """
@@ -385,18 +391,18 @@ class DLink(Link):
                 lTiw = [ k for k in lTi if self.L.Gs.node[k[0]]['name']!='AIR' ]
 
                 self.L.Gi.remove_nodes_from(lTiw)
-                lE = self.L.Gi.edges()
+                lE = list(self.L.Gi.edges())
                 for k in range(len(lE)):
                     e = lE[k]
                     try:
-                        output = self.L.Gi.edge[e[0]][e[1]]['output']
+                        output = self.L.Gi[e[0]][e[1]]['output']
                     except:
                         pdb.set_trace()
                     for l in output.keys():
                         if l in lTiw:
                             del output[l]
-                    self.L.Gi.edge[e[0]][e[1]]['output']=output
 
+                    self.L.Gi[e[0]][e[1]]['output']=output
             #self.L.dumpw()
             #self.L.build()
 
@@ -511,14 +517,15 @@ class DLink(Link):
     @a.setter
     def a(self,position):
         if not self.L.ptin(position):
-            if position[0]<self.L.ax[0]:
-                position[0]=self.L.ax[0]
-            if position[0]>self.L.ax[1]:
-                position[0]=self.L.ax[1]
-            if position[1]<self.L.ax[2]:
-                position[1]=self.L.ax[2]
-            if position[1]>self.L.ax[3]:
-                position[1]=self.L.ax[3]
+            # limit position in the visible region L.ax
+            if position[0] < self.L.ax[0]:
+                position[0] = self.L.ax[0]
+            if position[0] > self.L.ax[1]:
+                position[0] = self.L.ax[1]
+            if position[1] < self.L.ax[2]:
+                position[1] = self.L.ax[2]
+            if position[1] > self.L.ax[3]:
+                position[1] = self.L.ax[3]
             # raise NameError ('Warning : point a is not inside the Layout')
             # raise NameError ('Warning : point a is not inside the Layout')
         if not self.L.pt2cy(position) == self.ca:
@@ -603,8 +610,6 @@ class DLink(Link):
     def Ab(self,Ant):
         if hasattr(self.Ab,'_mayamesh'):
            self.Ab._mayamesh.remove()
-
-
 
         #save rot
         rot = self.Tb
@@ -739,22 +744,20 @@ class DLink(Link):
 
         if hasattr(self,'filename'):
             s = 'filename: ' + self.filename +'\n'
-
-            s = s + 'Link Parameters :\n'
-            s = s + '------- --------\n'
             s = s + 'Layout : ' + self.Lname + '\n\n'
             s = s + 'Node a   \n'
             s = s + '------  \n'
-            s = s + 'position : ' + str (self.a) + "  in cycle " + str(self.ca) + '\n'
-            s = s + 'Antenna : ' + str (self.Aa.typ) + '\n'
-            s = s + 'Rotation matrice : \n ' + str (self.Ta) + '\n\n'
+            s = s + '\tcoord : ' + str (self.a) + "  in cycle " + str(self.ca) + '\n'
+            s = s + '\tantenna : ' + str (self.Aa.typ) + '\n'
+            if (self.Ta!=np.eye(3)).any():
+                s = s + '\trotation matrice : \n ' + str (self.Ta) + '\n\n'
             s = s + 'Node b   \n'
             s = s + '------  \n'
-            s = s + 'position : ' + str (self.b) + " in cycle " + str(self.cb) + '\n'
-            s = s + 'Antenna : ' + str (self.Ab.typ) + '\n'
-            s = s + 'Rotation matrice : \n ' + str (self.Tb) + '\n\n'
-            s = s + 'Link evaluation information : \n'
-            s = s + '----------------------------- \n'
+            s = s + '\tcoord : ' + str (self.b) + " in cycle " + str(self.cb) + '\n'
+            s = s + '\tantenna : ' + str (self.Ab.typ) + '\n'
+            if (self.Ta!=np.eye(3)).any():
+                s = s + 'rotation matrice : \n ' + str (self.Tb) + '\n\n'
+            s = s + '\n---------------- \n'
             s = s + 'distance : ' + str("%6.3f" % np.sqrt(np.sum((self.a-self.b)**2))) + ' m \n'
             s = s + 'delay : ' + str("%6.3f" % (np.sqrt(np.sum((self.a-self.b)**2))/0.3)) + ' ns\n'
             rd2deg = 180/np.pi
@@ -762,30 +765,23 @@ class DLink(Link):
                 vsba = self.b-self.a
                 a1 = geu.angledir(vsba[None,:])
                 a2 = geu.angledir(-vsba[None,:])
-                s = s + 'azimuth (a | b ) : '+str(a1[0,1]*rd2deg)+' deg  | '+str(a2[0,1]*rd2deg)+ ' deg\n'
-                s = s + 'elevation (a | b ) : '+str(a1[0,0]*rd2deg)+ ' deg |  '+str(a2[0,0]*rd2deg)+ ' deg\n'
+                s = s + 'azimuth (a | b ) : %.2f ' % (a1[0,1]*rd2deg) +' deg  | %.2f' % (a2[0,1]*rd2deg) + ' deg\n'
+                s = s + 'elevation (a | b ) : %.2f' % (a1[0,0]*rd2deg) + ' deg | %.2f ' % (a2[0,0]*rd2deg) + ' deg\n'
                 s = s + 'tilt (a |  b ) : '+str((a1[0,0]-np.pi/2)*rd2deg)+ ' deg  | '+ str((a2[0,0]-np.pi/2)*rd2deg)+ ' deg\n'
             #s = s + 'Frequency range :  \n'
-            s = s + 'fmin (fGHz) : ' + str(self.fGHz[0]) +'\n'
-            s = s + 'fmax (fGHz) : ' + str(self.fGHz[-1]) +'\n'
             Nf = len(self.fGHz)
+            s = s + 'fGHz : %.2f, %.2f, %g ' %(self.fGHz[0],self.fGHz[-1],Nf) +'\n'
             if Nf>1:
-                s = s + 'fstep (fGHz) : ' + str(self.fGHz[1]-self.fGHz[0]) +'\n'
-            else:
-                s = s + 'fstep (fGHz) : ' + str(self.fGHz[0]-self.fGHz[0]) +'\n'
-            s = s + 'Nf : ' + str(Nf) +'\n '
+                s = s + 'fstep (GHz) : ' + str(self.fGHz[1]-self.fGHz[0]) +'\n'
             d =  np.sqrt(np.sum((self.a-self.b)**2))
             if Nf>1:
                 fcGHz = (self.fGHz[-1]+self.fGHz[0])/2.
             else:
                 fcGHz = self.fGHz[0]
             L  = 32.4+20*np.log(d)+20*np.log10(fcGHz)
-            s = s + 'Algorithm information : \n'
-            s = s + '----------------------------- \n'
-            s = s + 'cutoff : '+ str(self.cutoff)+'\n'
-            s = s + 'threshold :'+ str(self.threshold)+'\n'
-            s = s + 'delay_excess_max : '+ str(self.delay_excess_max_ns)+' ns \n'
-            s = s + 'dist_excess_max : '+ str(self.delay_excess_max_ns*0.3)+' m \n'
+            s = s + '\n------------- \n'
+            s = s + 'cutoff/threshold : %g / %.2f' %(self.cutoff, self.threshold)+'\n'
+            s = s + 'max delay /dist: %.2f ns / %.2f m' %(self.delay_excess_max_ns,self.delay_excess_max_ns*0.3)+'\n'
         else:
             s = 'No Layout specified'
         return s
@@ -983,7 +979,7 @@ class DLink(Link):
 
 
     def save_init(self,filename_long):
-        """ initialize the hdf5 file for link saving 
+        """ initialize the hdf5 file for link saving
 
         Parameters
         ----------
@@ -992,15 +988,15 @@ class DLink(Link):
             complete path and filename
 
         'sig'    : Signatures
-        'ray2'   : 2D rays 
-        'ray'    : 3D rays 
-        'Ct'     : Propagation channel 
-        'H'      : Transmission channel 
-        'p_map'  : points  
-        'c_map'  : cycles 
-        'f_map'  : frequency 
-        'A_map'  : antennas 
-        'T_map'  : rotation 
+        'ray2'   : 2D rays
+        'ray'    : 3D rays
+        'Ct'     : Propagation channel
+        'H'      : Transmission channel
+        'p_map'  : points
+        'c_map'  : cycles
+        'f_map'  : frequency
+        'A_map'  : antennas
+        'T_map'  : rotation
 
         """
 
@@ -1052,14 +1048,18 @@ class DLink(Link):
         try :
             lfilename=pyu.getlong(self.filename,pstruc['DIRLNK'])
             f=h5py.File(lfilename,'a')
+
+            if type(array)==str:
+                array = array.encode('utf-8')
+
             if key != 'T_map':
                 sc = f[key].shape
                 f[key].resize((sc[0]+1,sc[1]))
-                f[key][-1,:]=array
+                f[key][-1,:] = array
             else:
                 sc = f[key].shape
                 f[key].resize((sc[0]+1,sc[1],sc[2]))
-                f[key][-1,:,:]=array
+                f[key][-1,:,:] = array
             f.close()
             return np.array([sc[0]])
         except:
@@ -1116,7 +1116,12 @@ class DLink(Link):
             if self.dexist[key]['exist']:
                 self._delete(key,grpname)
 
-            obj._saveh5(self.filename,grpname)
+            #if type(grpname)==str:
+            #    grpname.encode('utf-8')
+            try:
+                obj._saveh5(self.filename,grpname)
+            except:
+                pdb.set_trace()
 
         logger.debug(str(obj.__class__).split('.')[-1] + ' from '+ grpname + ' saved')
 
@@ -1183,9 +1188,9 @@ class DLink(Link):
         # Write in h5py if no prior a-b link
 
         grpname = str(self.cutoff) + '_' + th + '_' + str(ua) + '_' +str(ub)
-        self.dexist['ray2']['grpname']=grpname
-        self.dexist['ray']['grpname']=grpname
-        
+        self.dexist['ray2']['grpname'] = grpname
+        self.dexist['ray']['grpname'] = grpname
+
 
 
         ############
@@ -1196,10 +1201,10 @@ class DLink(Link):
         #farray = np.array(([self.fmin,self.fmax,self.fstep]))
         Nf = len(self.fGHz)
         if Nf > 1:
-            farray = np.array(([self.fGHz[0],self.fGHz[-1],self.fGHz[1]-self.fGHz[0]]))
+            farray = np.array(([self.fGHz[0], self.fGHz[-1], self.fGHz[1]-self.fGHz[0]]))
         else:
-            farray = np.array(([self.fGHz[0],self.fGHz[-1],0]))
-        uf_opt, uf = self.get_idx('f_map',farray)
+            farray = np.array(([self.fGHz[0], self.fGHz[-1],0]))
+        uf_opt, uf = self.get_idx('f_map', farray)
 
         grpname = str(ua) + '_' + str(ub) + '_' + str(uf)
         self.dexist['Ct']['grpname'] = grpname
@@ -1248,10 +1253,10 @@ class DLink(Link):
         try :
             lfilename=pyu.getlong(self.filename,pstruc['DIRLNK'])
             f = h5py.File(lfilename,'r')
-            if grpname.decode('utf8') in f[key].keys():
-                self.dexist[key]['exist']=True
+            if grpname.encode('utf8') in f[key].keys():
+                self.dexist[key]['exist'] = True
             else :
-                self.dexist[key]['exist']=False
+                self.dexist[key]['exist'] = False
             f.close()
         except:
             f.close()
@@ -1259,7 +1264,7 @@ class DLink(Link):
 
 
     def get_idx(self,key,array,tol=1e-3):
-        """ try to get the index of the requested array in the group key
+        """ get the index of the requested array in the group key
             of the hdf5 file.
             If array doesn't exist, the hdf5file[key] array is stacked
 
@@ -1323,6 +1328,7 @@ class DLink(Link):
 
         Returns
         -------
+
         (ua)
 
         ua : np.ndarray
@@ -1392,12 +1398,12 @@ class DLink(Link):
                 # ua = np.where(np.in1d(ufmima,ufst))[0]
 
         elif key == 'A_map':
-            ua = np.where(fa==array)[0]
+            ua = np.where(fa == array.encode('utf-8'))[0]
 
         elif key == 'T_map':
             eq = array == fa
-            seq = np.sum(np.sum(eq,axis=1),axis=1)
-            ua = np.where(seq==9)[0]
+            seq = np.sum(np.sum(eq,axis=1), axis=1)
+            ua = np.where(seq == 9)[0]
         else :
             raise NameError('Link.array_exist : invalid key')
 
@@ -1491,15 +1497,15 @@ class DLink(Link):
                    'ra_vectorized': True,
                    'ra_ceil_H': [],
                    'ra_number_mirror_cf': 1,
-                   'force':True,
-                   'bt':True,
-                   'si_reverb':4,
-                   'nD':2,
-                   'nR':10,
-                   'nT':10,
-                   'debug':False,
-                   'progressbar':None,
-                   'rm_aw':True
+                   'force': True,
+                   'bt': True,
+                   'si_reverb': 4,
+                   'nD': 2,
+                   'nR': 10,
+                   'nT': 10,
+                   'debug': False,
+                   'progressbar': None,
+                   'rm_aw': True
                    }
         # check antenna frequency range compatibility
         if (self.Aa.fGHz!=self.Ab.fGHz).all():
@@ -1895,28 +1901,30 @@ class DLink(Link):
         ----------
 
         s   : int
-            size of Tx/Rx circle in points 
+            size of Tx/Rx marker in points
         ca  : string
-            color of termination a (Tx)
+            color of termination a (A)
         cb  : string
-            color of termination b (Rx)
-        alpha : float 
-            transparency 
-        axis : boolean 
+            color of termination b (B)
+        alpha : float
+            marker transparency (0 < alpha <1)
+        axis : boolean
             display axis boolean (default True)
         figsize : tuple
             figure size if fig not specified default (20,10)
         fontsize : int
             default 20
         rays : boolean
-            activation of rays vizalization (True)  
-        bsig : boolean 
+            activation of rays vizalization (True)
+        bsig : boolean
             activation of signature vizualization (False)
-        laddr : list 
-            list of signature addresses 
+        bsave : boolean
+            save in a file indexed by ix
+        laddr : list
+            list of signature addresses
         cmap : colormap
-        radius : float 
-            radius in meters for layout vizualization 
+        radius : float
+            radius in meters for layout vizualization
         labels : boolean
             enabling edge label (useful for signature identification)
         pol : string
@@ -1928,42 +1936,55 @@ class DLink(Link):
         dB    : boolean
             default False
         dyn : float
-            dynamic in dB
+            dynamic in dB (def 70dB)
+
+        Returns
+        -------
+
+        fig,ax
 
         Examples
         --------
 
         >>> from pylayers.simul.link import *
         >>> DL=Link()
-        >>> DL.show(lr=-1,rays=True,dB=True,col='cmap',cmap=plt.cm.jet)
+        >>> DL.show(lr=-1,rays=True,dB=True,col='cmap',cmap = plt.cm.jet)
         >>> DL.show(laddr=[(6,2)],bsig=True)
 
         """
-        defaults ={'s':80,   # size points
-                   'ca':'b', # color a 
-                   'cb':'r', # color b 
-                   'alpha':1,
-                   'axis':True,
-                   'lr':-1,
-                   'ls':-1,
-                   'fig':[],
-                   'ax':[],
-                   'figsize':(20,10),
-                   'fontsize':20,
-                   'rays':True,
-                   'bsig':False,
-                   'laddr':[(1,0)],
-                   'cmap':plt.cm.hot,
-                   'pol':'tot',
-                   'col':'k',
-                   'width':1,
-                   'alpha':1,
-                   'col':'k',
-                   'radius':90,
-                   'dB':False,
-                   'labels':False,
-                   'aw':False,
-                   'dyn':70}
+        defaults ={'s': 300,   # size points
+                   'ca': '#6666ff', # color a
+                   'cb': '#ff0000', # color b
+                   'markera': "^", # tri_up
+                   'markerb': "o", # circle
+                   'alpha': 1,
+                   'axis': True,
+                   'lr': -1,
+                   'ls': -1,
+                   'fig': [],
+                   'ax': [],
+                   'figsize': (20,10),
+                   'fontsize': 20,
+                   'rays': True,
+                   'bsig': False,
+                   'bsave': False,
+                   'laddr': [(1,0)],
+                   'cmap': plt.cm.hot_r,
+                   'pol': 'tot',
+                   'color': 'k',
+                   'linewidth': 1,
+                   'alpha': 1,
+                   'radius': -1,
+                   'vmin': [],
+                   'vmax': [],
+                   'dB': True,
+                   'labels': False,
+                   'aw': False,
+                   'dyn': 70,
+                   'ix' : 0,
+                   'vmin': -120,
+                   'vmax': -40,
+                   'bcolorbar': True}
 
         for key in defaults:
             if key not in kwargs:
@@ -1972,42 +1993,34 @@ class DLink(Link):
         if kwargs['fig']==[]:
             fig = plt.figure(figsize=kwargs['figsize'])
         else:
-            fig = kwargs['fig'] 
+            fig = kwargs['fig']
 
         if kwargs['ax']==[]:
-            ax = plt.gca()
+            ax = fig.add_subplot(111)
         else:
             ax=kwargs['ax']
 
         #
         # Layout
         #
-       
-        fig,ax = self.L.showG('s',
-                              nodes=False,
+
+        fig, ax = self.L.showG('s',
+                              nodes = False,
                               fig = fig,
                               ax = ax,
-                              labels=kwargs['labels'],
-                              aw=kwargs['aw'],
-                              axis=kwargs['axis'])
-        #
-        # Point A
-        #
-        self.caf = ax.scatter(self.a[0],
-                   self.a[1], c=kwargs['ca'], s=kwargs['s'],
-                   alpha=kwargs['alpha'])
-        ax.text(self.a[0]+0.1,self.a[1]+0.1,'A',fontsize=kwargs['fontsize'])
-        #
-        # Point B
-        #
-        self.cbf = ax.scatter(self.b[0],
-                   self.b[1], c=kwargs['cb'], s=kwargs['s'],
-                   alpha=kwargs['alpha'])
-        ax.text(self.b[0]-0.1,self.b[1]+0.1,'B',fontsize=kwargs['fontsize'])
+                              labels = kwargs['labels'],
+                              aw = kwargs['aw'],
+                              axis = kwargs['axis'])
+
+        if kwargs['radius'] == -1:
+            kwargs['radius'] = self.L.radius
+
+        # background color
+        #ax.set_facecolor('#cccccc')
         #
         # Plot Rays
         #
-        if kwargs['rays'] and self.R.nray>0:
+        if kwargs['rays'] and self.R.nray > 0:
             #ECtt,ECpp,ECtp,ECpt = self.C.energy()
             #if kwargs['pol']=='tt':
             #    val = ECtt
@@ -2023,7 +2036,7 @@ class DLink(Link):
             #    val = ECtt+ECpp
             #if kwargs['pol']=='cross':
             #"    val = ECtp+ECpt
-            val = self.H.energy()[:,0,0] 
+            val = self.H.energy()[:,0,0]
 
             clm = kwargs['cmap']
             #
@@ -2034,60 +2047,138 @@ class DLink(Link):
             else:
                 lr = kwargs['lr']
 
-            vmin = val.min()
-            vmax = val.max() 
-            if kwargs['dB']:
-                vmin = 10*np.log10(vmin)
-                vmax = 10*np.log10(vmax)
+
+            #
+            #  Set the min and max of ray level
+            #
+
+            if kwargs['vmin'] == []:
+                vmin = val.min()
+                vmax = val.max()
+
+                if kwargs['dB']:
+                    vmin = 10*np.log10(vmin)
+                    vmax = 10*np.log10(vmax)
+            else:
+                vmin = kwargs['vmin']
+                vmax = kwargs['vmax'] 
 
 
             #
-            # limitation of the vizualization zone around the center of the link 
+            # limitation of the vizualization zone around the center of the link
             #
-            pm = (self.a+self.b)/2.
+
+            pm = (self.a + self.b)/2.
             R  = np.minimum(kwargs['radius'],1.5*self.L.radius)
-            ax.set_xlim(pm[0]-R,pm[0]+R)
-            ax.set_ylim(pm[1]-R,pm[1]+R)
+            #ax.set_xlim(pm[0]-R,pm[0]+R)
+            #ax.set_ylim(pm[1]-R,pm[1]+R)
 
+            #
+            # each ray ir from list lr has its own color
+            #
             for ir  in lr:
                 if kwargs['dB']:
-                    RayEnergy=max((10*np.log10(val[ir]/val.max())+kwargs['dyn']),0)/kwargs['dyn']
+                    valdB = np.array(10*np.log10(val[ir]))
+                    valdB = np.maximum(vmin,valdB)
+                    valdB = np.minimum(vmax,valdB)
+                    #RayEnergy = max((10*np.log10(val[ir]/val.max())+kwargs['dyn']),0)/kwargs['dyn']
+                    RayEnergy = (valdB-vmin)/(vmax-vmin)
                 else:
-                    RayEnergy=val[ir]/val.max()
+                    valLin = val[ir]
+                    valdB = np.maximum(vmin,valLin)
+                    valdB = np.minimum(vmax,valLin)
+                    RayEnergy = (valLin-vmin)/(vmax - vmin)
 
-                if kwargs['col']=='cmap':
-                    col = clm(RayEnergy)
+                if kwargs['color'] == 'cmap':
+                    color = clm(RayEnergy)
                     #width = 10*RayEnergy
-                    width = kwargs['width'] 
+                    linewidth = kwargs['linewidth']
                     alpha = 1
                 else:
-                    col = kwargs['col']
-                    width = kwargs['width']
+                    color = kwargs['color']
+                    linewidth = kwargs['linewidth']
                     alpha = kwargs['alpha']
 
-                # plot ray (i,r) 
-                fig,ax = self.R.show(rlist=[ir],
-                               colray=col,
-                               widthray=width,
-                               alpharay=alpha,
-                               fig=fig,ax=ax,
-                               layout=False,
-                               points=False)
+                # plot ray (i,r)
+                fig,ax = self.R.show(rlist = [ir],
+                               color = color,
+                               linewidth = 10*RayEnergy,
+                               alpha = alpha,
+                               fig = fig, ax = ax,
+                               layout = False,
+                               points = False,
+                               bcolorbar = True,
+                               cmap = kwargs['cmap'],
+                               vmin = vmin,
+                               vmax = vmax )
 
-            if kwargs['col']=='cmap':
-                sm = plt.cm.ScalarMappable(cmap=kwargs['cmap'], norm=plt.Normalize(vmin=vmin, vmax=vmax))
-                sm._A = []
-                plt.colorbar(sm)
+            #if kwargs['color']=='cmap':
+            #    sm = plt.cm.ScalarMappable(cmap=kwargs['cmap'], norm=plt.Normalize(vmin=kwargs['vmin'],
+            #                                                  vmax=kwargs['vmax']))
+            #    sm._A = []
+            #    cb = plt.colorbar(sm)
+            #    cb.ax.tick_params(labelsize=24)
+            #    cb.set_label('Level (dB)', fontsize=24)
         #
         # Plot signature
         #
 
         if kwargs['bsig']:
-            for addr in kwargs['laddr']: 
+            for addr in kwargs['laddr']:
                 seq = self.Si[addr[0]][2*addr[1]:2*addr[1]+2,:]
                 Si = Signature(seq)
                 isvalid,r,u = Si.sig2ray(self.L,self.a[0:2],self.b[0:2])
                 fig,ax = Si.show(self.L,self.a[0:2],self.b[0:2],fig=fig,ax=ax)
+
+        #
+        # Point A
+        #
+        self.caf = ax.scatter(self.a[0], self.a[1],
+                              c = kwargs['ca'],
+                              s = kwargs['s'],
+                              marker = kwargs['markera'],
+                              edgecolor='black',
+                              facecolor=kwargs['ca'],
+                              linewidth=2,
+                              alpha =kwargs['alpha'],
+                              zorder = 1000)
+
+        #ax.text(self.a[0]+0.3,self.a[1]+0.3,'a',
+        #        fontsize = kwargs['fontsize'], bbox=dict(facecolor='white',alpha=0.5))
+        #
+        # Point B
+        #
+        self.cbf = ax.scatter(self.b[0], self.b[1],
+                              c = kwargs['cb'],
+                              s = kwargs['s'],
+                              marker = kwargs['markerb'],
+                              edgecolor='black',
+                              facecolor=kwargs['cb'],
+                              linewidth=2,
+                              alpha = kwargs['alpha'],
+                              zorder = 1000)
+
+        #ax.text(self.b[0]+0.3, self.b[1]+0.3, 'b',
+        #        fontsize=kwargs['fontsize'],bbox=dict(facecolor='white',alpha=0.5))
+
+        #
+        # white scale
+        #
+        xe = 1
+        ye = -1
+        le = 1
+        ax.plot(np.array([xe,xe+le]),np.array([ye,ye]),linewidth=4,color='black')
+        ax.plot(np.array([xe,xe]),np.array([ye,ye+0.2]),linewidth=4,color='black')
+        ax.plot(np.array([xe+le,xe+le]),np.array([ye,ye+0.2]),linewidth=4,color='black')
+        ax.text(xe-0.1,ye-0.5,'1 meter',fontsize=18)
+        #plt.axis('auto')
+        ax.tick_params(labelsize = 24)
+        ax.set_xlabel('x meters',fontsize = 24)
+        ax.set_ylabel('y meters',fontsize = 24)
+        #plt.savefig('Link.eps')
+        if kwargs['bsave']:
+            plt.savefig('Link'+str(kwargs['ix'])+'.png')
+            plt.close()
 
         return fig,ax
 
@@ -2099,9 +2190,9 @@ class DLink(Link):
         Parameters
         ----------
 
-        rays: boolean 
-        lay : boolean 
-        ant : boolean 
+        rays: boolean
+        lay : boolean
+        ant : boolean
         newfig : boolean (default : False)
         kwargs of Rays.show3()
 
@@ -2311,13 +2402,11 @@ class DLink(Link):
              # [x.remove() for x in self._maya_fig.children ]
 
         # # update wall opaccity
-        
-        
         # ds  =[i for i in self._maya_fig.children if self.L._filename in i.name][0]
         # a_in = self.L.Gt.node[self.ca]['indoor']
         # b_in = self.L.Gt.node[self.cb]['indoor']
 
-        # if 
+        # if
         # if a_in or b_in:
         #     # indoor situation
         #     ds.children[0].children[0].actor.property.opacity=0.5
@@ -2338,6 +2427,11 @@ class DLink(Link):
         fspl : boolean
             display free space path loss
 
+        Returns
+        -------
+
+        fig,ax
+
         See Also
         --------
 
@@ -2345,14 +2439,20 @@ class DLink(Link):
 
         """
 
-        defaults = {'fig':[],
-                    'ax':[],
-                    'BWGHz':5,
-                    'Nf':1000,
-                    'rays':True,
-                    'fspl':True,
-                    'vmin':-120,
-                    'vmax':-40
+        defaults = {'fig' : [],
+                    'ax' : [],
+                    'BWGHz' :5,
+                    'Nf' :1000,
+                    'rays' :True,
+                    'fspl' :True,
+                    'vmin' :-120,
+                    'vmax' : -40,
+                    'taumin': 0,
+                    'taumax': 160,
+                    'bgrid':True,
+                    'ix' : 0,
+                    'bsave' : False,
+                    'fontsize':18
                     }
 
         for key, value in defaults.items():
@@ -2363,20 +2463,27 @@ class DLink(Link):
             fig = plt.gcf()
         else:
             fig = kwargs['fig']
+
         if kwargs['ax'] == []:
             ax = plt.gca()
         else:
             ax = kwargs['ax']
 
-        taumax = self.H.taud.max()
+        fontsize = kwargs.pop('fontsize')
+        vmin = kwargs.pop('vmin')
+        vmax = kwargs.pop('vmax')
+        taumin = kwargs.pop('taumin')
+        taumax = kwargs.pop('taumax')
+        #taumax = self.H.taud.max()
         BWGHz = kwargs['BWGHz']
 
         Nf = np.maximum(kwargs['Nf'],taumax*BWGHz).astype(int)
         # getcir is a Tchannel method
 
-        self.ir = self.H.getcir(BWGHz =BWGHz,Nf=Nf)
-        self.ir.plot(fig=fig,ax=ax)
-        plt.ylim(kwargs['vmin'],kwargs['vmax'])
+        self.ir = self.H.getcir(BWGHz=BWGHz, Nf=Nf)
+        self.ir.plot(fig=fig, ax=ax, fontsize=fontsize)
+
+        ax.set_ylim(vmin,vmax)
 
 
         delay = self.ir.x
@@ -2384,25 +2491,42 @@ class DLink(Link):
         dist = delay*0.3
         FSPL0 = -32.4- 20*np.log10(self.fGHz[0])-20*np.log10(dist)
         FSPLG = FSPL0 + self.Aa.GdBmax[0] + self.Ab.GdBmax[0]
+
         if kwargs['fspl']:
             # Free space path loss
             ax.plot(delay,FSPL0,linewidth=2,color='b',label='FSPL')
             # Free space path loss + gain
             ax.plot(delay,FSPLG,linewidth=3,color='k',label='FSPL+Gtmax+Grmax')
 
+        for item in ([ax.title, ax.xaxis.label, ax.yaxis.label] +
+             ax.get_xticklabels() + ax.get_yticklabels()):
+                item.set_fontsize(fontsize)
+
+        if kwargs['bgrid']:
+            ax.grid()
 
         if kwargs['rays']:
-            # energy of each ray
+            # energy of each ray normaized between vmin(0) and vmax(1)
             ER = np.squeeze(self.H.energy())
-            color_range = np.linspace( 0, 1., len(ER))#np.linspace( 0, np.pi, len(ER))
-            # sort rays by increasing energy
             uER = ER.argsort()[::-1]
-            colors= color_range[uER]
+            ER = ER[uER]
+            ERdB = 10*np.log10(ER)
+            ERdB = np.minimum(ERdB,vmax)
+            ERdB = np.maximum(ERdB,vmin)
+            colors = (ERdB-vmin)/(vmax-vmin)
+            #color_range = np.linspace( 0, 1., len(ER))#np.linspace( 0, np.pi, len(ER))
+            # sort rays by increasing energy
+            #colors = color_range[uER]
             # most important rays , it=0 ir=0 , if =0
-            ax.scatter(self.H.taud[uER],20*np.log10(np.abs(self.H.y[uER,0,0,0])),c=colors,cmap='hot')
-            ax.set_xlim([min(self.H.taud)-10,max(self.H.taud)+10])
+            ax.scatter(self.H.taud[uER],ERdB,c=colors,s=200*colors,cmap=kwargs['cmap'],vmin=0,vmax=1)
+            #ax.set_xlim([min(self.H.taud)-10,max(self.H.taud)+10])
+            ax.set_xlim(taumin,taumax)
 
-        ax.legend()
+        ax.legend(fontsize=fontsize)
+        if kwargs['bsave']:
+            plt.savefig('cir'+str(kwargs['ix'])+'.png')
+            plt.close()
+
         return fig,ax
 
 
@@ -2440,7 +2564,7 @@ class DLink(Link):
         """
         kwargs['d']='doa'
         return self.H.plotd(**kwargs)
-        
+
     def plt_dod(self,**kwargs):
         """plot direction of arrival and departure
 
@@ -2482,7 +2606,7 @@ class DLink(Link):
         defaults = { 'fig':[],
                      'ax':[]
                     }
-        
+
         for k in defaults:
             if k not in kwargs:
                 kwargs[k] = defaults[k]
@@ -2507,7 +2631,7 @@ class DLink(Link):
         defaults = { 'fig':[],
                      'ax':[]
                     }
-        
+
         for k in defaults:
             if k not in kwargs:
                 kwargs[k] = defaults[k]

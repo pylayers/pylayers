@@ -37,15 +37,13 @@ import glob
 class Interface(PyLayers):
     """ Interface between 2 medium
 
-    Notes
-    -----
-
     The adopted axis convention is the following
 
     + nf : axis = 0 frequency axis
     + nt : axis = 1 angular axis
     + p  : axis = 2 parallel polarization axis
     + o  : axis = 3 orhogonal polarization axis
+
     Attributes
     ----------
 
@@ -123,7 +121,6 @@ class Interface(PyLayers):
         if 'T' in RT:
             self.T = np.array(np.zeros([nf, nt, 2, 2]), dtype=complex)
 
-        
         if 'R' in RT:
             #self.R[:, :, 0, 0] = self.Io[:, :, 0, 1] / self.Io[:, :, 0, 0]
             #self.R[:, :, 1, 1] = self.Ip[:, :, 0, 1] / self.Ip[:, :, 0, 0]
@@ -498,8 +495,6 @@ class MatInterface(Interface):
 
     l distance from the next Interface
 
-    Notes
-    -----
 
     This is required for recursive utilization of this function when the
     output angle of an interface happens to be the input angle of the
@@ -507,15 +502,21 @@ class MatInterface(Interface):
     depends on frequency THETA is becoming a full matrix without redundancy
     between lines.
 
-    >>> theta = np.arange(0,np.pi/2,0.01)
-    >>> fGHz = np.arange(3.1,10.6,0.2)
-    >>> Nf = len(fGHz)
-    >>> Nt = len(theta)
-    >>> sl = SlabDB('matDB.ini','slabDB.ini')
-    >>> mat = sl.mat
-    >>> m1 = mat['AIR']
-    >>> m2 = mat['PLASTER']
-    >>> II = MatInterface([m1,m2],0,fGHz,theta)
+    Examples
+    --------
+
+        >>> theta = np.arange(0,np.pi/2,0.01)
+        >>> fGHz = np.arange(3.1,10.6,0.2)
+        >>> Nf = len(fGHz)
+        >>> Nt = len(theta)
+        >>> sl = SlabDB('matDB.ini','slabDB.ini')
+        >>> mat = sl.mat
+        >>> m1 = mat['AIR']
+        >>> m2 = mat['PLASTER']
+        >>> II = MatInterface([m1,m2],0,fGHz,theta)
+
+    Notes
+    -----
 
     .. math::
 
@@ -523,9 +524,6 @@ class MatInterface(Interface):
 
     I_o = \left| \begin{array}{cc} \frac{1}{T_o} & \frac{R_o}{T_o} \\ \frac{R_o}{T_o} & \frac{1}{T_o} \end{array}\right|
 
-
-    .. todo::
-    MatIinterface fix the np.pi/2 NaN problem
 
 
     """
@@ -937,19 +935,16 @@ class MatDB(PyLayers,dict):
         iv) 'THz'
 
         v) ITU parameter (a,b,c,d)
-            
-
-
 
         Examples
         --------
 
-        >>> from pylayers.antprop.slab import *
-        >>> m = MatDB()
-        >>> m.load('matDB.ini')
-        >>> m.add(name='ConcreteJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
-        >>> m.add(name='GlassJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
-        >>> out = m.save('Jacob.ini')
+            >>> from pylayers.antprop.slab import *
+            >>> m = MatDB()
+            >>> m.load('matDB.ini')
+            >>> m.add(name='ConcreteJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
+            >>> m.add(name='GlassJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
+            >>> out = m.save('Jacob.ini')
 
         """
         defaults = {'name':'MAT',
@@ -1052,10 +1047,10 @@ class MatDB(PyLayers,dict):
         _fileini : string
             name of the matDB file (usually matDB.ini)
 
-        TODO
-        ----
+        Notes
+        -----
 
-        add ITU format (abcd)
+        TODO add the ITU format (abcd)
 
         """
         fileini = pyu.getlong(_fileini, pstruc['DIRMAT'])
@@ -1115,8 +1110,8 @@ class MatDB(PyLayers,dict):
 class Slab(Interface,dict):
     """ Handle a Slab
 
-    Summary
-    -------
+    Notes
+    -----
 
     A Slab is a sequence of layers which have
 
@@ -1156,7 +1151,7 @@ class Slab(Interface,dict):
             slab name
         matDB : MatDB
             material database
-        ds  : dict 
+        ds  : dict
 
         """
         # if not specified choose default material database
@@ -1198,14 +1193,14 @@ class Slab(Interface,dict):
             dict.__setitem__(self,"lmatname", value)
             #dict.__setitem__(self,"nbmat",nbmat)
             dict.__setitem__(self,"lthick",[0.05]*nbmat)
-        
+
         elif key == "lthick":
             #pdb.set_trace()
             #if len(value)!=len(self['lmatname']):
             #    raise ValueError("wrong number of material layers")
             #else:
             dict.__setitem__(self,"lthick",value)
-        else:        
+        else:
             dict.__setitem__(self,key, value)
 
 
@@ -1215,7 +1210,7 @@ class Slab(Interface,dict):
         Parameters
         ----------
 
-        u : Slab 
+        u : Slab
 
         """
         name = self['name']+u['name']
@@ -1223,7 +1218,7 @@ class Slab(Interface,dict):
         # lmatname should be modified before lthick
         U['lmatname'] = self['lmatname']+u['lmatname']
         U['lthick']   = self['lthick']+u['lthick']
-        U['lmat'] = self['lmat']+u['lmat'] 
+        U['lmat'] = self['lmat']+u['lmat']
         #for i in range(len(U['lmatname'])):
         #    namem = U['lmatname'][i]
         #U.conv(matDB)
@@ -1231,11 +1226,14 @@ class Slab(Interface,dict):
 
     def __repr__(self):
         st = self['name']+' : '
-        st = st + reduce(lambda x,y: x+' | '+y,self['lmatname'])+ ' | '
-        st = st + str(self['lthick'])+'\n'
-        st = st + '       ' + str(self['color'])+' '+str(self['linewidth'])+'\n'
+        st1 = ''
+        for x in self['lmatname']:
+            st1 = st1 + '|' + x
+        st = st + st1 + '\n'
+        st = st + str(self['lthick']) + '\n'
+        st = st + '       ' + str(self['color'])+' '+str(self['linewidth']) + '\n'
         for  k in self['lmat']:
-            st = st + '       epr :' + str(k['epr']) + '    sigma : ' + str(k['sigma'])+'\n'
+            st = st + '       epr :' + str(k['epr']) + '    sigma : ' + str(k['sigma']) + '\n'
 
         if self['evaluated']:
             nf = len(self.fGHz)
@@ -1481,11 +1479,6 @@ class Slab(Interface,dict):
     def filter(self,win,theta=0):
         """ filtering waveform
 
-        Warning
-        -------
-
-        Not implemented yet
-
         Parameters
         ----------
 
@@ -1495,6 +1488,11 @@ class Slab(Interface,dict):
         -------
 
         wout : Waveform
+
+        Notes
+        -----
+
+        NOT IMPLEMENTED
 
         """
         # get frequency base of the waveform
@@ -1694,20 +1692,18 @@ class SlabDB(dict):
 
         filemat : string
         fileslab : string
-        ds : dict 
+        ds : dict
             slab dict read from layout file. if ds == {}   load from files
-        dm : dict 
-            mat dict read from layout file. 
+        dm : dict
+            mat dict read from layout file.
 
         Notes
         -----
 
-        There are two ways to initialize a SlabDB either from dict ds and dm usually read 
-        in  the 
-        Layout file .ini or from 2 specified file
+        There are two ways to initialize a SlabDB either from dict ds and dm usually read
+        in  the Layout file .ini or from 2 specified file
 
         """
-        
         # Load from file
         if (fileslab != ''):
             self.fileslab = fileslab
@@ -2006,9 +2002,6 @@ class SlabDB(dict):
 
 # class Wedge(Interface,dict):
 #     """ Handle a Wedge
-
-#     Summary
-#     -------
 
 #     A Wedge is a cone with, on its 2 faces :
 

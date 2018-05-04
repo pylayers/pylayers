@@ -1,4 +1,6 @@
 #-*- coding:Utf-8 -*-
+import os
+import sys
 import socket
 import doctest
 import time
@@ -8,7 +10,6 @@ import sqlite3
 import matplotlib.pyplot as plt
 from types import *
 from numpy import array
-import ipdb
 import h5py
 import select
 from pylayers.util.project import  *
@@ -20,8 +21,12 @@ from pylayers.measures.exploith5 import Mesh5
 #from  pylayers.measures.parker.smparker import *
 from time import sleep
 import seaborn as sns
-import os
-import ConfigParser
+
+if sys.version_info.major==2:
+    import ConfigParser
+else:
+    import configparser as ConfigParser
+
 
 """
 Module to drive the network analyzer E5072A
@@ -59,7 +64,7 @@ class SCPI(PyLayers):
         if "VNA_IP" in os.environ:
             host = os.environ["VNA_IP"]
         else:
-            print "VNA IP not defined"
+            print("VNA IP not defined")
             exit
         if not self.emulated:
             try:
@@ -73,7 +78,7 @@ class SCPI(PyLayers):
                 self.s.connect((host, port))
             except socket.error as e:
                 if self._verbose:
-                    print 'SCPI>> connect({:s}:{:d}) failed {:s}', format(host, port, e)
+                    print('SCPI>> connect({:s}:{:d}) failed {:s}', format(host, port, e))
                 else:
                     pass
                     #self.emulated = True
@@ -81,7 +86,7 @@ class SCPI(PyLayers):
 
         self.Nf   = 201
         self.getIdent()
-        print self.ident
+        print (self.ident)
         #assert('E5072A' in self.ident), "E5072A not responding"
         self.freq()
         self.points()
@@ -141,7 +146,7 @@ class SCPI(PyLayers):
             return self._write(cmd + b'\n')
         except IOError as e:
             if self._verbose:
-                print 'SCPI>> write({:s}) failed: {:s}'.format(cmd.strip(), e)
+                print('SCPI>> write({:s}) failed: {:s}'.format(cmd.strip(), e))
             else:
                 raise e
 
@@ -188,15 +193,15 @@ class SCPI(PyLayers):
             cmd = self._write(cmd + '\n')
             ans = self._read()
             if self._verbose:
-                print '>> {:s} \n<< {:s} \n'.format(cmd.strip(), ans.strip()),
+                print( '>> {:s} \n<< {:s} \n'.format(cmd.strip(), ans.strip()),)
                 if ans == '':
                     cmd = self._write('SYST:ERR?\n')
                     err = self._read()
-                    print '>> {:s} \n<< {:s} \n'.format(cmd.strip(), err.strip()),
+                    print('>> {:s} \n<< {:s} \n'.format(cmd.strip(), err.strip()),)
             return str(ans.strip())
         except IOError as e:
             if self._verbose:
-                print 'SCPI>> ask({:s}) failed: {:s}'.format(cmd.strip(), e)
+                print('SCPI>> ask({:s}) failed: {:s}'.format(cmd.strip(), e))
             else:
                 raise e
 
@@ -370,7 +375,7 @@ class SCPI(PyLayers):
             if cmd == 'set':
                 coms = com+' '+str(value)
                 if echo:
-                    print coms
+                    print(coms)
                 self.write(coms)
 
     def power_level(self,chan=1,cmd='get',power=10):
@@ -814,29 +819,29 @@ class SCPI(PyLayers):
         tic = time.time()
 
         for iT in range(Mt):
-            print "connect transmitter :", iT +1
+            print("connect transmitter :", iT +1)
             switch.write_port(0,iT)
             for iR in range(Mr):
                 switch.write_port(1,iR)
-                print "connect receiver :", iR + 1
+                print("connect receiver :", iR + 1)
                 c = ""
                 while "g" not in c:
                     c = raw_input("Hit g key ")
 
                 for k in dcal:
-                    print "---------------------------------------------------------------------"
-                    print "                 Configuration Parameters                            "
-                    print   dcal[k]
-                    print "---------------------------------------------------------------------"
-                    
+                    print("------------------------------------------------------------------")
+                    print("                 Configuration Parameters ")
+                    print(dcal[k])
+                    print("------------------------------------------------------------------")
+
                     t1 = time.time()
                     for k2 in dcal[k]:
                         if k2=='nf':
                             self.points(dcal[k]['nf'], cmd='set')
-                            print "set number of points  :",dcal[k]['nf']
+                            print( "set number of points  :",dcal[k]['nf'])
                         if k2=='ifbhz':
                             self.ifband(ifbHz=dcal[k]['ifbhz'], cmd='set')
-                            print "set number of ifbHz   :",dcal[k]['ifbhz']
+                            print( "set number of ifbHz   :",dcal[k]['ifbhz'])
                         if k2=='navrg':
                             self.avrg(b='ON',navrg=dcal[k]['navrg'], cmd='setavrg')
                         if k2=='power':
@@ -846,11 +851,11 @@ class SCPI(PyLayers):
                     #get Nmeas calibration vector
 
                     tic_Dmeas = time.time()
-                    print "beginning of the acquisition"
+                    print( "beginning of the acquisition")
                     time.sleep(2)
                     Dmeas = self.getdata(chan=1,Nmeas=dcal[k]['nmeas'],calibration=True)
                     toc_Dmeas = time.time()
-                    print "end of the acquisition (s) :",toc_Dmeas-tic_Dmeas
+                    print( "end of the acquisition (s) :",toc_Dmeas-tic_Dmeas)
 
                     if ((iR==0) and (iT==0)):
                         cal.create_dataset(k, (dcal[k]['nmeas'], Mr, Mt, self.Nf), dtype=np.complex64)
@@ -864,11 +869,9 @@ class SCPI(PyLayers):
                         cal[k].attrs['nt']        = Nt
                         cal[k].attrs['nr']        = Nr
                         cal[k].attrs['nmeas']     = dcal[k]['nmeas']
-                        
                         if typ=='single':
-                            cal[k].attrs['_filecalh5'] =_filecalh5 
+                            cal[k].attrs['_filecalh5'] =_filecalh5
                             cal[k].attrs['gcalm']= gcalm
-                            
                     cal[k][:,iR,iT,:] = Dmeas[:,0,0,:]
                     cal[k].attrs['nf']        = self.Nf
                     cal[k].attrs['ifbhz']     = self.ifbHz
@@ -876,14 +879,14 @@ class SCPI(PyLayers):
                     cal[k].attrs['power']     = self.power
 
                     t2 =  time.time()
-                    print "duration set up (s) :",t2-t1
+                    print( "duration set up (s) :",t2-t1)
 
         toc = time.time()
 
-        print "---------------------------------------------------------"
-        print "                   END of calibration                    "
-        print " measurement time (s)                     :",toc-tic
-        print "---------------------------------------------------------"
+        print("---------------------------------------------------------")
+        print("                   END of calibration                    ")
+        print(" measurement time (s)                     :",toc-tic)
+        print("---------------------------------------------------------")
 
         f.close()
 
@@ -898,9 +901,9 @@ class SCPI(PyLayers):
         tval = np.empty((len(lNf),len(lIF)),dtype=np.float64)
         Pb = np.empty((len(lNf),len(lIF)),dtype=np.float64)
         for kf,f in enumerate(lNf):
-            print f
+            print(f)
             for ki,i in enumerate(lIF):
-                print i
+                print(i)
                 self.points(f,cmd='set')
                 self.ifband(ifbHz=i,cmd='set')
                 time.sleep(3)
@@ -912,8 +915,8 @@ class SCPI(PyLayers):
                 Hc = H - Hm
                 var = np.mean(np.abs(Hc*np.conj(Hc)),axis=0)
                 var2  = np.mean(var)
-                print "Time :",toc-tic
-                print "Noise Power dB:",10*np.log10(var2)
+                print( "Time :",toc-tic)
+                print( "Noise Power dB:",10*np.log10(var2))
                 tval[kf,ki]=toc-tic
                 Pb[kf,ki]= var2
         return(tval,Pb)
@@ -995,7 +998,7 @@ class SCPI(PyLayers):
         self.ifbHz   = di['response']['ifbhz']
 
         # apply configuration setup
-        
+
         self.freq(fminGHz=self.fminGHz, fmaxGHz=self.fmaxGHz, cmd='set')
         self.points(self.Nf, cmd='set')
         self.power_level(cmd='set',power=self.power)
@@ -1007,13 +1010,13 @@ class SCPI(PyLayers):
         #toc_freq = time.time()
         #print "time measurement for frequency set up (s) :", tic-toc_freq
         #time.sleep(1)
-        
+
         #tic = time.time()
         #self.points(self.Nf, cmd='set')
         #toc_pts = time.time()
         #print "time measurement for points set up (s) :", tic-toc_pts
         #time.sleep(1)
-        
+
         #self.parS(param=self.param, cmd='set')
         #toc_parS = time.time()
         #print "time measurement for parS set up (s) :", tic-toc_parS

@@ -132,13 +132,14 @@ def gidl(g):
         if len(n)>1:
             edlist.append(n)
     gr = g.subgraph(edlist)
-    for k in gr.edge:
-        for k1 in gr.edge[k]:
-            ke = gr.edge[k][k1]['output'].keys()
-            va = gr.edge[k][k1]['output'].values()
-            keva = zip(ke,va)
-            keva_valid = [ x for x in keva if len(x[0])>1]
-            gr.edge[k][k1]['output']=dict(keva_valid)
+    for k in gr.edges():
+        #print(k)
+        di = gr[k[0]][k[1]]
+        ke = di['output'].keys()
+        va = di['output'].values()
+        keva = zip(ke,va)
+        keva_valid = [ x for x in keva if len(x[0])>1]
+        gr[k[0]][k[1]]['output'] = dict(keva_valid)
 
     dpos = {k:g.pos[k] for k in edlist}
     gr.pos=dpos
@@ -203,8 +204,10 @@ def showsig2(lsig,L,tahe):
     plt.axis('auto')
     plt.legend()
 #@profile
+
 def valid(lsig,L,tahe=[]):
-    """ 
+    """
+
     Check if a signature is valid.
     if a segment of a given signature is not in or touches the polygon
     described by the 1st and last segment, the signature is not valid
@@ -215,7 +218,7 @@ def valid(lsig,L,tahe=[]):
 
     lsig : list of tuple from run  |signatures
     L : layout
-    tahe : 
+    tahe :
         lensig , ta|he , x,y
 
     Returns
@@ -249,7 +252,7 @@ def valid(lsig,L,tahe=[]):
     seq = lsig[:,0]
     # upos = np.where(seq>0)[0]
     # uneg = np.where(seq<0)[0]
-    
+
     # tahep = L.seg2pts(seq[upos])
     # tahen = np.array([L.Gs.pos[i] for i in seq[uneg]]).T
     # tahen = np.vstack((tahen,tahen))
@@ -298,6 +301,7 @@ def valid(lsig,L,tahe=[]):
     # else:
 
     tahe = np.array(tahe) # Nseg x tahe x xy 
+    pdb.set_trace()
     pta = tahe[:,0,:].T  #2 x Nseg
     phe = tahe[:,1,:].T  # 2 x Nseg 
 
@@ -342,7 +346,7 @@ def valid(lsig,L,tahe=[]):
     # if np.sum(tahe-tahetest) != 0:
     #     import ipdb
     #     ipdb.set_trace()
-    
+
     # determine the 2 side of the polygon ( top/bottom = tahe[0]/tahe[-1])
     #vl and vr are 2 director vector lying on the polygon side.
     if not (geu.ccw(pta[:,0],phe[:,0],phe[:,-1]) ^
@@ -354,7 +358,7 @@ def valid(lsig,L,tahe=[]):
         # twisted = True
         #lef = sh.LineString((pta[:,0],pta[:,-1]))
         #rig = sh.LineString((phe[:,0],phe[:,-1]))
-    else:    
+    else:
         vr = ( pta[:,0], phe[:,-1])
         vl = ( phe[:,0],pta[:,-1])
         # vr = ( pta[:,0],pta[:,-1])
@@ -362,8 +366,8 @@ def valid(lsig,L,tahe=[]):
         # twisted = False
         #lef = sh.LineString((pta[:,0],phe[:,-1]))
         #rig = sh.LineString((pta[:,-1],phe[:,0]))
-        
-       
+
+
 
 
     # looking situation where Tail and head are not inside the polygon
@@ -418,7 +422,7 @@ class Signatures(PyLayers,dict):
         ----------
 
         L : Layout
-        dump : int 
+        dump : int
         source : int
             cycle number
         target : int
@@ -457,17 +461,18 @@ class Signatures(PyLayers,dict):
         s = self.__class__.__name__ + '\n' + '----------'+'\n'
         #s = s + str(self.__sizeof__())+'\n'
         for k in self:
-            size[k] = len(self[k])/2
+            size[k] = int(len(self[k])/2)
         s = s + 'from cycle : '+ str(self.source) + ' to cycle ' + str(self.target)+'\n'
         if self.dump==-1:
             ldump = self.keys()
         else:
             ldump = self.dump
+
         for k in ldump:
             s = s + str(k) + ' : ' + str(size[k]) + '\n'
             a = np.swapaxes(self[k].reshape(size[k],2,k),0,2)
             # nl x 2 x nsig
-            
+
             for l in np.arange(a.shape[2]):
                 for i in range(k):
                     if i==k-1:
@@ -475,24 +480,24 @@ class Signatures(PyLayers,dict):
                     else:
                         s = s + '('+str(a[i,0,l])+','+str(a[i,1,l])+'),'
                 s = s+'\n'
-                
+
 
         return(s)
 
     def __len__(self):
         nsig = 0
         for k in self:
-            size = len(self[k])/2
+            size = int(len(self[k])/2)
             nsig += size
         return(nsig)
 
     def compl(self,lint,L):
-        """ completion from lint 
+        """ completion from lint
 
         Parameters
         ----------
 
-        lint : list 
+        lint : list
             list of interactions
 
         Examples
@@ -505,14 +510,14 @@ class Signatures(PyLayers,dict):
         # all group of interactions
         for k in self:
             if k > len(lint):
-                Si = self[k] 
+                Si = self[k]
                 Ns,Nb = Si.shape
                 # all signatures form a group of interactions
-                for l in range(Ns/2):
+                for l in range(int(Ns/2)):
                     # all interactions
                     b1 = True
-                    for i1,it in enumerate(lint): 
-                        if ((Si[2*l,i1] == it[0]) and 
+                    for i1,it in enumerate(lint):
+                        if ((Si[2*l,i1] == it[0]) and
                            (Si[2*l+1,i1] == it[1])):
                             pass 
                         else:
@@ -520,7 +525,7 @@ class Signatures(PyLayers,dict):
                     if b1:
                         sig = Si[2*l:2*l+2,:]
                         sigi = self.sig2inter(L,sig)
-                        print(k,l,' :',sigi)
+                        #print(k,l,' :',sigi)
                         # all 
 
     def sig2inter(self,L,lsi=[]):
@@ -592,16 +597,19 @@ class Signatures(PyLayers,dict):
 
     def sig2prob(self,L,lsi):
         """ get signatures probability
-            L : Layout
-            lsi : nd.array 
-                signature (2xnb_sig,sig_length)
+
+        Parameters
+        ---------
+        L : Layout
+        lsi : nd.array 
+            signature (2xnb_sig,sig_length)
 
 
-            Returns
-            -------
+        Returns
+        -------
 
-            tlproba : list  (nb_sig,sig_length-2)
-                output proba of each triplet of interaction
+        tlproba : list  (nb_sig,sig_length-2)
+            output proba of each triplet of interaction
 
 
 
@@ -636,7 +644,7 @@ class Signatures(PyLayers,dict):
         self.nsig = 0
         self.nint = 0
         for k in self:
-            size = len(self[k])/2
+            size = int(len(self[k])/2)
             self.nsig += size
             self.nint += size*k
 
@@ -652,7 +660,7 @@ class Signatures(PyLayers,dict):
         print(self.__class__.__name__ + '\n' + '----------'+'\n')
         #s = s + str(self.__sizeof__())+'\n'
         for k in self:
-            size[k] = len(self[k])/2
+            size[k] = int(len(self[k])/2)
         print('from cycle : '+ str(self.source) + ' to cycle ' + str(self.target)+'\n')
         pyu.printout('Reflection',pyu.BLUE)
         print('  ')
@@ -684,7 +692,7 @@ class Signatures(PyLayers,dict):
 
     def check(self):
         """ check signature
-        
+
         Returns
         -------
 
@@ -696,9 +704,9 @@ class Signatures(PyLayers,dict):
         OK = Signatures(self.L,self.target,self.source)
         KO = Signatures(self.L,self.target,self.source)
         for i in self:
-        
+
             sigs = self[i]
-            for s in range(len(sigs)/2):
+            for s in range(int(len(sigs)/2)):
                 sig = sigs[2*s:2*s+2,:]
 
                 ok = valid(sig.T,self.L)
@@ -871,10 +879,10 @@ class Signatures(PyLayers,dict):
             fh5.close()
             raise NameError('Signature: issue when reading h5py file')
 
-        if kwargs.has_key('L'):
-            self.L=kwargs['L']
+        if 'L' in kwargs:
+            self.L = kwargs['L']
         else:
-            self.L=layout.Layout(Lname)
+            self.L = layout.Layout(Lname)
             try:
                 self.L.dumpr()
             except:
@@ -1041,12 +1049,12 @@ class Signatures(PyLayers,dict):
         Parameters
         ----------
 
-        seq : list of tuple 
+        seq : list of tuple
                [(2,2),(5,3),(7,2)]
-        
-        1 : Diffraction 
+
+        1 : Diffraction
         2 : Reflexion
-        3 : Diffraction 
+        3 : Diffraction
 
         Returns
         -------
@@ -1056,16 +1064,16 @@ class Signatures(PyLayers,dict):
 
         >>> DL=DLink()
         >>> DL.eval()
-        >>> seq = [(2,3)] # transmission through segment 2 
+        >>> seq = [(2,3)] # transmission through segment 2
         >>> DL.Si.exist(seq)
 
         """
-        # Number of interactions 
+        # Number of interactions
         N = len(seq)
         # signatures with N interaction
         sig = self[N]
         # Number signature with N interaction
-        Nsig = sig.shape[0]/2
+        Nsig = int(sig.shape[0]/2)
         nstr = sig[::2,:]
         typ  = sig[1::2,:]
         # List of signat
@@ -1114,11 +1122,11 @@ class Signatures(PyLayers,dict):
 
         """
         defaults = {'cutoff' : 2,
-                    'threshold':0.1,
-                    'delay_excess_max_ns':400,
-                    'nD':1,
-                    'nR':10,
-                    'nT':10,
+                    'threshold': 0.1,
+                    'delay_excess_max_ns': 400,
+                    'nD': 1,
+                    'nR': 10,
+                    'nT': 10,
                     'bt' : True,
                     'progress': True,
                     'diffraction' : True,
@@ -1134,35 +1142,37 @@ class Signatures(PyLayers,dict):
             kwargs['threshold'] = self.threshold
         else:
             self.threshold=kwargs['threshold']
-
         nD = kwargs['nD']
         nT = kwargs['nT']
         nR = kwargs['nR']
         bt = kwargs['bt']
         progress = kwargs['progress']
         diffraction = kwargs['diffraction']
-        animation = kwargs['animation'] 
+        animation = kwargs['animation']
         delay_excess_max_ns = kwargs['delay_excess_max_ns']
         dist_excess_max = delay_excess_max_ns*0.3
 
 
-
         self.filename = self.L._filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
+
         #
-        # AIR : editable AIR separation 
-        # _AIR : constructed AIR separation 
+        # AIR : editable AIR separation
+        # _AIR : constructed AIR separation
         #
-        lair = self.L.name['AIR']+self.L.name['_AIR']
+
+        lair = self.L.name['AIR'] + self.L.name['_AIR']
 
         # list of interactions visible from source
-        lisR,lisT,lisD = self.L.intercy(self.source,typ='source')
+        lisR, lisT, lisD = self.L.intercy(self.source,typ='source')
+
         if diffraction:
             lis  = lisT + lisR + lisD
         else:
             lis  = lisT + lisR
 
         # list of interactions visible from target
-        litR,litT,litD = self.L.intercy(self.target,typ='target')
+        litR, litT, litD = self.L.intercy(self.target,typ='target')
+
         if diffraction:
            lit  = litT + litR + litD
         else:
@@ -1170,6 +1180,7 @@ class Signatures(PyLayers,dict):
 
         pt_source = np.array(self.L.Gt.node[self.source]['polyg'].centroid.coords.xy)
         pt_target = np.array(self.L.Gt.node[self.target]['polyg'].centroid.coords.xy)
+
         d_source_target = np.linalg.norm(pt_source - pt_target)
 
         #print("source,lis :",self.source,lis)
@@ -1194,7 +1205,7 @@ class Signatures(PyLayers,dict):
         pe = 0
         tic = time.time()
         tic0 = tic
-        #for interaction source  in list of source interactions
+        #for interaction source in list of source interactions
 
         bvisu = False
         # signature counter
@@ -1215,19 +1226,19 @@ class Signatures(PyLayers,dict):
         lhash = []
 
         if progress :
-            pbar = tqdm(total=100,desc='Signatures')
+            pbar = tqdm(total=100, desc='Signatures')
 
         for us,s in enumerate(lis):
             if progress:
                 pbar.update(100./(1.*len(lis)))
 
             # start from a segment
-            if s[0]>0:
-                pts = self.L.Gs[s[0]].keys()
-                tahe = [np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])]
+            if s[0] > 0:
+                pts = list(dict(self.L.Gs[s[0]]).keys())
+                tahe = [ np.array([ self.L.Gs.pos[pts[0]], self.L.Gs.pos[pts[1]]]) ]
             # start from a point
             else:
-                tahe = [np.array([self.L.Gs.pos[s[0]],self.L.Gs.pos[s[0]]])]
+                tahe = [np.array([self.L.Gs.pos[s[0]], self.L.Gs.pos[s[0]]])]
 
             # R is a list which contains reflexion matrices (Sn) and translation matrices(vn)
             # for interaction mirroring
@@ -1240,15 +1251,19 @@ class Signatures(PyLayers,dict):
             visited = [s]
 
             # if
-            #   + s is in target interaction list
+            #   s is in target interaction list
             # or
-            #   + arrival cycle is equal to target cycle
-            # then stack a new signature in self[len(typ)] 
-            # 
+            #   arrival cycle is equal to target cycle
+            # then stack a new signature in self[len(typ)]
+            #
             # TODO : It concerns self[1] : only one interaction (i.e several single reflection or diffraction)
+            #
             if (s in lit) or (s[-1]==self.target):
-                anstr = np.array(map(lambda x: x[0],visited))
-                typ  = np.array(map(lambda x: len(x),visited))
+                #anstr = np.array(map(lambda x: x[0],visited))
+                anstr = np.array([ x[0] for x in visited ])
+                #typ  = np.array(map(lambda x: len(x),visited))
+                typ =np.array([len(x) for x in visited ])
+
                 assert(len(typ)==1)
                 try:
                     self[len(typ)] = np.vstack((self[len(typ)],anstr,typ))
@@ -1258,17 +1273,18 @@ class Signatures(PyLayers,dict):
                     self.ratio[len(typ)] = np.array([1.])
                 # update signature counter
                 cptsig +=1
+
             # stack is a list of iterators
             #
             #
             stack = [iter(Gi[s])]
-            # air walls do not intervene in the number of transmission (cutoff criteria) 
+            # air walls do not intervene in the number of transmission (cutoff criteria)
             # lawp is the list of airwall position in visited sequence
             # handle the case of the first segment which can be an airwall
             #
             if len(s)==3:
                 nseg = s[0]
-                if ((self.L.Gs.node[nseg]['name']=='_AIR') or 
+                if ((self.L.Gs.node[nseg]['name']=='_AIR') or
                    (self.L.Gs.node[nseg]['name']=='AIR')):
                     lawp = [1]
                 else:
@@ -1284,7 +1300,7 @@ class Signatures(PyLayers,dict):
                 interaction = next(iter_on_interactions, None)
                 #print visited
                 #if ((visited ==[(6236,74,91),(-213,)]) and (interaction==(-1002,))):
-                #    print interaction 
+                #    print(interaction)
                 #    pdb.set_trace()
                 #if (visited ==[(6236,74,91),(-213,),(6248,99,111)]):
                 #if (visited ==[(6236,74,91),(-213,),(6248,99,111),(6287,111,118)]):
@@ -1294,11 +1310,11 @@ class Signatures(PyLayers,dict):
                 # continue if True
                 cond1 = not(interaction is None)
                 # cond2 : enable reverberation
-                #     interaction has not been visited yet 
+                #     interaction has not been visited yet
                 #     or 
-                #     bt : True (allow reentrance) (unconditionnaly)  
+                #     bt : True (allow reentrance) (unconditionnaly)
                 # continue if True
-                #cond2 = (interaction in visited) and bt (old) 
+                #cond2 = (interaction in visited) and bt (old)
                 cond2 = not (interaction in visited) or bt
                 # cond3 : test the cutoff condition not get to the limit
                 # continue if True
@@ -1308,21 +1324,21 @@ class Signatures(PyLayers,dict):
                 uT = [ k for k in range(len(visited)) if len(visited[k])==3 ]
                 if cond1:
                     condD = True
-                    condR = True 
-                    condT = True 
+                    condR = True
+                    condT = True
                     if ((len(interaction)==1) and (len(uD)==nD)):
-                        condD = False 
+                        condD = False
                     if ((len(interaction)==2) and (len(uR)==nR)):
-                        condR = False 
+                        condR = False
                     if ((len(interaction)==3) and (len(uT)==nT)):
-                        condT = False 
+                        condT = False
 
                 #
-                #  animation 
+                #  animation
                 #
                 if animation :
                     cpt = cpt+1
-                    edge=zip(visited[:-1],visited[1:])
+                    edge = zip(visited[:-1],visited[1:])
                     N = nx.draw_networkx_nodes(Gi,pos=Gi.pos,
                             nodelist=visited,labels={},
                             node_size=15,ax=ax,fig=fig)
@@ -1363,9 +1379,9 @@ class Signatures(PyLayers,dict):
                         #
                         #
                         #
-                        # Testing the type of interaction at rank -2 
-                        # R is a list which contains a rotation matrix 
-                        # and a translation vector for doing the mirroring 
+                        # Testing the type of interaction at rank -2
+                        # R is a list which contains a rotation matrix
+                        # and a translation vector for doing the mirroring
                         # operation
 
                         # diffraction (retrieve a point)
@@ -1373,24 +1389,24 @@ class Signatures(PyLayers,dict):
                             #th = self.L.Gs.pos[nstr]
                             R.append((np.eye(2),np.array([0,0])))
                         elif len(visited[-2])==2:
-                            # 
-                            # l'avant dernier point est une reflection 
                             #
-                            nseg_points = self.L.Gs[visited[-2][0]].keys()
+                            # l'avant dernier point est une reflection
+                            #
+                            nseg_points = list(dict(self.L.Gs[visited[-2][0]]).keys())
                             ta_seg = np.array(self.L.Gs.pos[nseg_points[0]])
                             he_seg = np.array(self.L.Gs.pos[nseg_points[1]])
                             #
-                            # get reflection matrix from segment visited[-2]  
+                            # get reflection matrix from segment visited[-2]
                             #
                             R.append(geu.axmat(ta_seg,he_seg))
                             # direct order
                             #R.append(geu.axmat(tahe[-1][0],tahe[-1][1]))
-                        # transmission do nothing 
-                        else : 
+                        # transmission do nothing
+                        else :
                             pass
                         # current interaction is of segment type
                         if (nstr>0):
-                            nseg_points = self.L.Gs[nstr].keys()
+                            nseg_points = list(dict(self.L.Gs[nstr]).keys())
                             th = np.array([self.L.Gs.pos[nseg_points[0]],
                                            self.L.Gs.pos[nseg_points[1]]])
                         else:
@@ -1402,7 +1418,7 @@ class Signatures(PyLayers,dict):
                         #
                         # th   is the current segment tail-head coordinates
                         # tahe is a list of well mirrored tail-head coordinates
-                        
+
                             #tahe.append(a)
                         #if ((visited[0]==(104,23,17)) and (visited[1]==(1,17))):
                         #    print("th (avant mirror)",th)
@@ -1413,12 +1429,13 @@ class Signatures(PyLayers,dict):
                         #
                         pt_th = np.sum(th,axis=0)/2.
                         d_target = np.linalg.norm(pt_target-pt_th)
-                        
+
                         #
-                        # mirroring th until the previous point  
-                        # 
+                        # mirroring th until the previous point
+                        #
                         th_mirror = copy.copy(th)
-                        while np.any(r[0]!=np.eye(2)):     
+
+                        while np.any(r[0] != np.eye(2)):
                             th_mirror = np.einsum('ki,ij->kj',th_mirror,r[0])+r[1]
                             ik = ik + 1
                             r  = R[-ik]
@@ -1426,37 +1443,40 @@ class Signatures(PyLayers,dict):
                         pt_mirror = np.sum(th_mirror,axis=0)/2.
                         d_source = np.linalg.norm(pt_source-pt_mirror)
                         d_excess = d_source + d_target - d_source_target
+
                         # if at least 2 interactions
-                        # or previous point is a diffraction 
+                        # or previous point is a diffraction
 
                         if (len(tahe)<2) or (len(visited[-2])==1) or (len(visited[-1])==1):
                             ratio = 1.0
-                            ratio2 = 1.0 
+                            ratio2 = 1.0
                         else:
-                            # Determine the origin of the cone 
-                            # either the transmitter (ilast =0) 
-                            # or the last diffraction point (ilast=udiff[-1] ) 
+                            # Determine the origin of the cone
+                            # either the transmitter (ilast =0)
+                            # or the last diffraction point (ilast=udiff[-1] )
                             udiff = [ k for k in range(len(visited)) if len(visited[k])==1 ]
                             if udiff==[]:
                                 ilast = 0
                             else:
                                 ilast=udiff[-1]
 
+                            #print(tahe)
                             pta0 = tahe[ilast][0]   # tail first segment  (last difraction)
                             phe0 = tahe[ilast][1]   # head first segment
 
                             #
-                            # TODO : it would be better to replace pta_ and phe_ with the intersection 
+                            # TODO : it would be better to replace pta_ and phe_ with the intersection
                             # of the previous cone with tahe[-1]
                             #
+
                             pta_ = tahe[-1][0]  # tail last segment
-                            phe_ = tahe[-1][1]  # head last segment 
+                            phe_ = tahe[-1][1]  # head last segment
 
                             #
-                            # Calculates the left and right vector of the cone 
+                            # Calculates the left and right vector of the cone
                             #
-                            #  vl left vector 
-                            #  vr right vector 
+                            #  vl left vector
+                            #  vr right vector
                             #
                             #
                             # Detect situations of connected segments
@@ -1471,28 +1491,36 @@ class Signatures(PyLayers,dict):
                             if (pta0==pta_).all():
                                 apex = pta0
                                 connected = True
-                                v0=phe0-apex
-                                v_=phe_-apex
+                                v0 = phe0 - apex
+                                v_ = phe_ - apex
                             elif (pta0==phe_).all():
                                 apex = pta0
                                 connected = True
-                                v0=phe0-apex
-                                v_=pta_-apex
+                                v0 = phe0 - apex
+                                v_ = pta_ - apex
                             elif (phe0==pta_).all():
                                 apex = phe0
                                 connected = True
-                                v0=pta0-apex
-                                v_=phe_-apex
+                                v0 = pta0 - apex
+                                v_ = phe_ - apex
                             elif (phe0==phe_).all():
-                                apex = phe0    
+                                apex = phe0
                                 connected = True
-                                v0=pta0-apex
-                                v_=pta_-apex
+                                v0 = pta0 - apex
+                                v_ = pta_ - apex
 
+                            if connected:
+                                if ((np.linalg.norm(v0)==0) or (np.linalg.norm(v_)==0)):
+                                    logger.debug("pta0 : %g,%g", pta0[0], pta0[1])
+                                    logger.debug("pta_ : %g,%g", pta_[0], pta_[1])
+                                    logger.debug("phe0 : %g,%g", phe0[0], phe0[1])
+                                    logger.debug("phe_ : %g,%g", phe_[0], phe_[1])
+                                    logger.debug("v0 : %g,%g", v0[0], v0[1])
+                                    logger.debug("v_ : %g,%g", v_[0], v_[1])
                             #
-                            # Does the cone is built from 2 connected segments or 
+                            # Does the cone is built from 2 connected segments or
                             # 2 unconnected segments
-                            #     
+                            #
                             if not connected:
                                 if not (geu.ccw(pta0,phe0,phe_) ^
                                         geu.ccw(phe0,phe_,pta_) ):
@@ -1502,25 +1530,25 @@ class Signatures(PyLayers,dict):
                                     vr = (pta0,pta_)
                                     vl = (phe0,phe_)
 
-                                # cone dot product 
+                                # cone dot product
                                 # print vr
                                 # print vl
                                 vr_n = (vr[1]-vr[0])/np.linalg.norm(vr[1]-vr[0])
                                 vl_n = (vl[1]-vl[0])/np.linalg.norm(vl[1]-vl[0])
-                                
-                            
+
+
                                 vrdotvl = np.dot(vr_n,vl_n)
-                                # cone angle 
+                                # cone angle
                                 angle_cone = np.arccos(np.maximum(np.minimum(vrdotvl,1.0),-1.0))
                                 #angle_cone = np.arccos(vrdotvl)
                                 # prepare lines and seg argument for intersection checking
                                 if angle_cone!=0:
                                     linel = (vl[0],vl[1]-vl[0])
                                     liner = (vr[0],vr[1]-vr[0])
-                                    # from origin mirrored segment to be tested 
+                                    # from origin mirrored segment to be tested
                                     seg   = (th_mirror[0],th_mirror[1])
 
-                                    # apex calculation 
+                                    # apex calculation
                                     a0u = np.dot(pta0,vr_n)
                                     a0v = np.dot(pta0,vl_n)
                                     b0u = np.dot(phe0,vr_n)
@@ -1533,9 +1561,9 @@ class Signatures(PyLayers,dict):
                                         pdb.set_trace()
                                     apex = phe0 + kb*vl_n
 
-        
 
-                            else: # cone from connected segments 
+
+                            else: # cone from connected segments
 
                                 v0n  = v0/np.linalg.norm(v0)
                                 try:
@@ -1546,34 +1574,35 @@ class Signatures(PyLayers,dict):
                                 # import ipdb
                                 # ipdb.set_trace()
                                 sign = np.sign(np.cross(v_n,v0n))
-                                if sign>0:    
+                                if sign>0:
                                     vr_n = -v0n
                                     vl_n = v_n
                                 else:
                                     vr_n = v_n
                                     vl_n = -v0n
-                               
+
                                 vrdotvl = np.dot(vr_n,vl_n)
-                                # cone angle 
+                                # cone angle
                                 angle_cone = np.arccos(np.maximum(np.minimum(vrdotvl,1.0),-1.))
-                           
-                        
-                            #   
+
+
+                            #
                             # the illuminating cone is defined
-                            # the th_mirror to be tested with this cone are known 
-                            # 
+                            # the th_mirror to be tested with this cone are known
+                            #
+
                             if ( (not np.isclose(angle_cone,0,atol=1e-6) )
-                             and ( not np.isclose(angle_cone,np.pi)) ) : 
+                             and ( not np.isclose(angle_cone,np.pi)) ) :
                                 #if self.cpt==16176:
                                 #    pdb.set_trace()
                                 seg,ratio2 = geu.intersect_cone_seg((apex,vl_n),(apex,vr_n),(th_mirror[0],th_mirror[1]),bvis=False)
                             elif ( not np.isclose(angle_cone,0) ):
-                                ratio2 = 1           
+                                ratio2 = 1
                             else:
-                                ratio2 = 0 
+                                ratio2 = 0
                             #print ratio
                             if len(seg)==2:
-                                th_mirror=np.vstack((seg[0],seg[1]))
+                                th_mirror = np.vstack((seg[0],seg[1]))
                             else:
                                 pass
 
@@ -1581,17 +1610,17 @@ class Signatures(PyLayers,dict):
                             ar = np.arctan2(vr_n[1],vr_n[0])
                             if np.allclose(th_mirror[0],apex) or np.allclose(th_mirror[1],apex):
                                 ratio2 = 1.
-                            
+
                             # On connecte l'apex du cone courant aux extrémités du segment courant mirroré
-                            
+
                             # Dans certaines circonstances par example un cone emanant d'un point colinéaire 
                             # avec le segment d'arrivé" (-4) (6,4) le point -4 est aligné avec le segment 6
                             # l'ouverture du cone est nul => arret. Cela pourrait être géré dans Gi en interdisant 
                             # la visibilité (-4) (6,4) 
-                            
+
 #                            if angle_cone ==0:
 #                                ratio = 0
-#                            else:    
+#                            else:
 #                                if np.allclose(th_mirror[0],apex) or np.allclose(th_mirror[1],apex):
 #                                    ratio = 1.
 #                                else:
@@ -1684,7 +1713,8 @@ class Signatures(PyLayers,dict):
                                 tahe.append(th)
                             else:
                                 tahe.append(th_mirror)
-                            
+                            #if (tahe[-1][0]==tahe[-1][1]).all():
+                            #    pdb.set_trace()
                             # 
                             # Check if the target has been reached
                             # sequence is valid and last interaction is in the list of targets   
@@ -1696,14 +1726,14 @@ class Signatures(PyLayers,dict):
                                 # lawp_tmp = [0]+lawp
                                 # lll = [x[0] for ix,x in enumerate(visited) if lawp_tmp[ix]==1]
                                 # print([self.L.Gs.node[x]['name'] for x in lll])
-                            
+
                                 #anstr = np.array([x[0] for ix,x in enumerate(visited) 
                                 #                                  if ((lawp[ix]!=1) or (x[0] in self.L.name['AIR']) or (x in (lit+lis)))] )
                                 #typ  = np.array([len(x) for ix,x in enumerate(visited) 
                                 #                                  if ((lawp[ix]!=1) or (x[0] in self.L.name['AIR']) or (x in (lit+lis)))] )
                                 #sig = np.array([anstr,typ])
                                 #sighash = hash(str(sig))
-                                
+
 
                                 # if len(anstr) == 2:
                                 #     if (anstr == np.array([323,351])).all():
@@ -1775,6 +1805,8 @@ class Signatures(PyLayers,dict):
                     #      tahe 
                     #      lawp
                     #      stack
+                    #if (tahe[-1][0]==tahe[-1][1]).all():
+                    #    pdb.set_trace()
                     tahe.pop()
                     try:
                         lawp.pop()
@@ -1782,10 +1814,6 @@ class Signatures(PyLayers,dict):
                         pass
                     stack.pop()
                     #stack.pop()
-
-
-            
-             
 
     def plot_cones(self,L,i=0,s=0,fig=[],ax=[],figsize=(10,10)):
         """ display cones of an unfolded signature
@@ -1860,8 +1888,8 @@ class Signatures(PyLayers,dict):
         si = Signature(self[i][(2*s):(2*s)+2])
         si.ev(L)
         pta,phe = si.unfold()
-        
-        
+
+
         return pta,phe
 
     def pltunfold(self,L,i=0,s=0):
@@ -1913,7 +1941,7 @@ class Signatures(PyLayers,dict):
         ax = plot_poly(ax,poly)
 
     def show(self,L,**kwargs):
-        """  plot signatures within the simulated environment
+        """  plot signatures in the simulated environment
 
         Parameters
         ----------
@@ -1938,10 +1966,10 @@ class Signatures(PyLayers,dict):
 
         """
         defaults = {'i':-1,
-                   's':-1,
-                   'fig':[],
-                   'ax':[],
-                   'graph':'s',
+                    's':-1,
+                    'fig':[],
+                    'ax':[],
+                    'graph':'s',
                     'color':'black',
                     'alphasig':1,
                     'widthsig':0.1,
@@ -1976,21 +2004,28 @@ class Signatures(PyLayers,dict):
             lgrint = [kwargs['i']]
 
 
-        for i in lgrint:
-            if kwargs['s']==-1:
-                lsig = range(len(self[i])/2)
-            else:
-                lsig = [kwargs['s']]
-            for j in lsig:
-                sig = map(lambda x: self.L.Gs.pos[x],self[i][2*j])
+        if kwargs['s'] == -1:
+            for i in lgrint:
+                lsig = range(int(len(self[i])/2))
+                for j in lsig:
+                    sig = [ self.L.Gs.pos[x] for x in self[i][2*j] ]
+                    siga = np.array(sig)
+                    ax.plot(siga[:,0], siga[:,1],
+                            alpha = kwargs['alphasig'],
+                            color = kwargs['colsig'],
+                            linewidth = kwargs['widthsig'])
+                    ax.axis('off')
+        else:
+            lsig = [kwargs['s']]
+            for s1 in lsig:
+                sig = [ self.L.Gs.pos[x[0]]  for x in s1]
                 siga = np.array(sig)
-                # sig = np.hstack((self.pTx[0:2].reshape((2, 1)),
-                #                  np.hstack((self[i]['pt'][0:2, :, j],
-                #                  self.pRx[0:2].reshape((2, 1))))
-                #                  ))
                 ax.plot(siga[:,0], siga[:,1],
-                        alpha=kwargs['alphasig'],color=kwargs['colsig'],linewidth=kwargs['widthsig'])
+                        alpha = kwargs['alphasig'],
+                        color = kwargs['colsig'],
+                        linewidth = kwargs['widthsig'])
                 ax.axis('off')
+
         return(fig,ax)
 
     def showi(self,uni=0,us=0):
@@ -2218,7 +2253,7 @@ class Signatures(PyLayers,dict):
         return rays
 
 
-    def raysv(self,ptx=0,prx=1):
+    def raysv(self, ptx=0, prx=1):
         """ transform dict of signatures into 2D rays - default vectorized version
 
         Parameters
@@ -2254,7 +2289,6 @@ class Signatures(PyLayers,dict):
           SCHOOL = {{Universit{\'e} Rennes 1}},
           YEAR = {2013},
           MONTH = Dec,
-          KEYWORDS = {Electromagnetic wave propagation simulation ; Human mobility simulation ; Wireless localization methods ; Position estimation methods in wireless networks ; Vectorized computation ; Ray-tracing ; Ultra wide band ; Simulateur de propagation {\'e}lectromagn{\'e}tique ; Simulateur de mobilit{\'e} humaine ; M{\'e}thodes de localisation sans fils ; M{\'e}thodes d'estimation de la position dans les r{\'e}seaux sans fils ; Calcul informatique vectoris{\'e} ; Outil de trac{\'e} de rayons ; Ultra large bande},
           TYPE = {Theses},
           HAL_ID = {tel-00971809},
           HAL_VERSION = {v1},
@@ -2267,6 +2301,7 @@ class Signatures(PyLayers,dict):
         Signatures.backtrace
 
         """
+
         if type(ptx)==int:
             ptx = np.array(self.L.Gt.pos[ptx])
 
@@ -2274,10 +2309,10 @@ class Signatures(PyLayers,dict):
             prx = np.array(self.L.Gt.pos[prx])
 
         if len(ptx) == 2:
-            ptx= np.r_[ptx,0.5]
+            ptx= np.r_[ptx, 0.5]
 
         if len(ptx) == 2:
-            prx= np.r_[prx,0.5]
+            prx= np.r_[prx, 0.5]
 
         rays = Rays(ptx,prx)
 
@@ -2303,8 +2338,8 @@ class Signatures(PyLayers,dict):
         polyctx = self.L.Gt.node[cyptx]['polyg']
         polycrx = self.L.Gt.node[cyprx]['polyg']
 
-        # The Line of sight situation is detected here 
-        # dtxtx : distance between Tx and Rx 
+        # The Line of sight situation is detected here
+        # dtxtx : distance between Tx and Rx
         dtxrx = np.sum((ptx-prx)*(ptx-prx))
         if dtxrx>1e-15:
             if polyctx.contains(los):
@@ -2315,56 +2350,50 @@ class Signatures(PyLayers,dict):
 
         M = self.image2(ptx)
         R = self.backtrace(ptx,prx,M)
-        # 
-        # Add LOS ray in ray 2D 
+        #
+        # Add LOS ray in ray 2D
         #
         if rays.los:
             R[0]= {'sig':np.zeros(shape=(0,0,1)),'pt': np.zeros(shape=(2,1,0))}
-        
+
         rays.update(R)
-        rays.nb_origin_sig = len(self)
+        rays.nb_origin_sig = len(self.keys())
         rays.origin_sig_name = self.filename
         #pdb.set_trace()
         return rays
 
     def backtrace(self, tx, rx, M):
-        ''' backtracing betwen tx and rx 
+        ''' backtracing betwen tx and rx
 
-        Warning :
-            This is an attempt to vectorize the backtrace process.
-            Despite it has been tested on few cases with succes,
-            this is quite new need to be validated !!!
+        Parameters
+        ----------
 
+            tx : ndarray
+                position of tx (2,)
+            rx : ndarray
+                position of tx (2,)
+            M : dict
+                position of intermediate points obtained from self.image()
 
-            Parameters
-            ----------
+        Returns
+        -------
 
-                tx : ndarray
-                    position of tx (2,)
-                rx : ndarray
-                    position of tx (2,)
-                M : dict
-                    position of intermediate points obtained from self.image()
-
-            Return
-            -------
-
-                rayp : dict
-                key = number_of_interactions
-                value =ndarray positions of interactions for creating rays
-
-            Notes
-            -----
-
-            dictionnary of intermediate coordinated :
+            rayp : dict
             key = number_of_interactions
-            value = nd array M with shape : (2,nb_signatures,nb_interactions)
-            and 2 represent x and y coordinates
+            value =ndarray positions of interactions for creating rays
 
-            See Also
-            --------
+        Notes
+        -----
 
-            pylayers.antprop.signature.image
+        dictionnary of intermediate coordinated :
+        key = number_of_interactions
+        value = nd array M with shape : (2,nb_signatures,nb_interactions)
+        and 2 represent x and y coordinates
+
+        See Also
+        --------
+
+        pylayers.antprop.signature.image
 
         '''
 
@@ -2604,9 +2633,10 @@ class Signatures(PyLayers,dict):
 
             # rayp_i[:2,:,0]=tx[:,None]
             if len(uvalid) !=0:
-                sir1=signatures[::2].T.reshape(ninter,len(usigv)/2)
-                sir2=signatures[1::2].T.reshape(ninter,len(usigv)/2)
-                sig = np.empty((2,ninter,len(usigv)/2))
+                N = int(len(usigv)/2)
+                sir1=signatures[::2].T.reshape(ninter,N)
+                sir2=signatures[1::2].T.reshape(ninter,N)
+                sig = np.empty((2,ninter,N))
                 sig[0,:,:]=sir1
                 sig[1,:,:]=sir2
                 rayp_i=np.swapaxes(rayp_i,1,2)
@@ -2642,7 +2672,11 @@ class Signatures(PyLayers,dict):
             # 1 : 2 points (linking the nidment) a=0,b=1
             # 2 : nb of found signatures/nidments
             # 3 : nb interactions
-            pt = np.nan*np.empty((2,2,nsig,ninter))
+
+            try:
+                pt = np.nan*np.zeros((2,2,nsig,ninter))
+            except:
+                pdb.set_trace()
 
             #1 negative points
             # seek for diffraction 
@@ -2731,15 +2765,15 @@ class Signatures(PyLayers,dict):
 
             ityp = self[ninter][1::2]
 
-            for n in xrange(ninter):
+            for n in np.arange(ninter):
                 #get segment ids of signature with ninter interactions
                 uT = np.where(ityp[:,n]==3)[0]
                 uR = np.where(ityp[:,n]==2)[0]
                 uD = np.where(ityp[:,n]==1)[0]
                 if n ==0:
-                    p=tx[:,None]*np.ones((nsig))
+                    p = tx[:,None]*np.ones((nsig))
                 else :
-                    p=M[:,:,n-1]
+                    p = M[:,:,n-1]
                 #reflexion 0 (2.67)
                 M[:,uR,n] = np.einsum('ijk,jk->ik',K[:,:,uR,n],p[:,uR])+v[:,uR,n]
                 #transmission 0 (2.67)
@@ -2756,26 +2790,22 @@ class Signatures(PyLayers,dict):
 
     def image(self,tx=np.array([2.7,12.5])):
         ''' Warning :
-            This is an attempt to vectorize the image process.
-            Despite it has been tested on few cases with success,
-            this is quite new need to be validated !!!
 
+        Parameters
+        ----------
 
-            Parameters
-            ----------
+        tx : ndarray
+            position of tx (2,)
 
-                tx : ndarray
-                    position of tx (2,)
+        Returns
+        -------
 
-            Return
-            -------
+        M : dictionnary
 
-                M : dictionnary
-
-            dictionnary of intermediate coordinated :
-            key = number_of_interactions
-            value = nd array M with shape : (2,nb_signatures,nb_interactions)
-            and 2 represent x and y coordinates
+        dictionnary of intermediate coordinates
+        key = number_of_interactions
+        value = nd array M with shape : (2,nb_signatures,nb_interactions)
+        and 2 represent x and y coordinates
 
 
         '''
@@ -3017,11 +3047,11 @@ class Signature(PyLayers,object):
                 pass
             return l[0]
 
-        if type(sig)==np.ndarray:
+        if type(sig) == np.ndarray:
             self.seq = sig[0, :]
             self.typ = sig[1, :]
 
-        if type(sig)==list:
+        if type(sig) == list:
             self.seq = map(seginter,sig)
             self.typ = map(typinter,sig)
 
@@ -3080,12 +3110,12 @@ class Signature(PyLayers,object):
                 norm = np.array([0, 0]).reshape(2,1)
             return(np.vstack((pa,pb,pc,norm)))
 
-        v = np.array(map(seqpointa,self.seq))
+            v = np.array(map(seqpointa,self.seq))
 
-        self.pa = v[:,0:2,:]
-        self.pb = v[:,2:4,:]
-        self.pc = v[:,4:6,:]
-        self.norm = v[:,6:,:]
+            self.pa = v[:,0:2,:]
+            self.pb = v[:,2:4,:]
+            self.pc = v[:,4:6,:]
+            self.norm = v[:,6:,:]
 
 
     def evf(self, L):
@@ -3426,7 +3456,7 @@ class Signature(PyLayers,object):
         else:
             l5 = ax.plot(ray[0,:],ray[1,:],color='red',alpha=0.6,linewidth=0.6)
 
-        return fig,ax    
+        return fig,ax
 
     def backtrace(self, tx, rx, M):
         """ backtrace given image, tx, and rx
@@ -3564,12 +3594,12 @@ class Signature(PyLayers,object):
 
         Y : ndarray (2x(N+2))
 
-        See Also 
+        See Also
         --------
 
         Signature.image
         Signature.backtrace
-            
+
         """
 
         # ev transforms a sequence of segment into numpy arrays (points)
@@ -3583,7 +3613,7 @@ class Signature(PyLayers,object):
         #    pdb.set_trace()
         isvalid,Y,u = self.backtrace(pTx, pRx, M)
         #print isvalid,Y
-        # 
+        #
         # If incremental mode this function returns an alternative signature
         # in case the signature do not yield a valid ray.
         #

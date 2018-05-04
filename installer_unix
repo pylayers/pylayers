@@ -1,5 +1,4 @@
 conda install numpy --yes
-conda install mayavi --yes
 conda install shapely --yes
 conda install libgdal --yes
 conda install gdal --yes

@@ -2,7 +2,8 @@
 #!/usr/bin/env python
 
 """
-Setup script for pylayers 
+    Setup script for pylayers
+
 """
 import numpy
 from setuptools import setup,find_packages
@@ -15,9 +16,7 @@ setup(name='pylayers' ,
       author_email='bernard.uguen@univ-rennes1.fr, nicolas.amiot@univ-rennes1.fr, mohamed.laaraeidh@gmail.com',
       url='https://github.com/pylayers/pylayers',
       include_dirs = [numpy.get_include()],
-      install_requires=[
-        
-                        ],
+      install_requires=[],
       packages=find_packages()
 )
 
@@ -40,7 +39,7 @@ if not os.path.isfile(os.path.join(home,'.pylayers')):
         f.write('source\n')
         f.write(source)
         basen_env = os.getenv('BASENAME')
-        # test if env var BASENAME already set 
+        # test if env var BASENAME already set
         #if not create a pyproject directory
         if basen_env == None:
             if not os.path.isdir(os.path.join(home,project)):
@@ -50,9 +49,9 @@ if not os.path.isfile(os.path.join(home,'.pylayers')):
         f.write('\nproject\n')
         f.write(os.path.join(home,project))
 
-# if pylayers has already been installed, a .pylayers exists. 
+# if pylayers has already been installed, a .pylayers exists.
 # The idea here is to maintain the project path and to update the source path.
-else: 
+else:
     with open(os.path.join(home,'.pylayers'),'r') as f:
         lines = f.readlines()
         # line corresponding to the source's path

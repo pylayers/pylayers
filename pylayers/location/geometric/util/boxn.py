@@ -223,7 +223,7 @@ class LBoxN(PyLayers):
 #        self.box = self.box + lb.box
 #        V1  = sum(self.vol)
 #        V2  = lb.box[0].vol*len(lb.box)
-#        # uptate center of gravity 
+#        # uptate center of gravity
 #        try:
 #            self.grav = (V1*self.grav+V2*lb.grav)/(V1+V2)
 #        except:
@@ -232,24 +232,24 @@ class LBoxN(PyLayers):
 
 
     def info(self):
-        """ display LBoxN information 
+        """ display LBoxN information
         """
-        Vtot = 0 
+        Vtot = 0
         for k in range(len(self.box)):
             #print "Box : ",k," Volume :",self.vol[k]
             #print "ndim :",self.ndim
-            print "------------"
+            print("------------")
             self.box[k].info()
             Vtot = Vtot+self.box[k].vol
-        print "Volume : ",Vtot    
+        print("Volume : ",Vtot)
 
     def bd2coord(self,Mapping = False):
-        """Boundaru to coordinates   
+        """Boundary to coordinates
 
         Convert boundaries of Lbox to their vertexes coordintates
 
         in :
-        [xmin ymin zmin]       
+        [xmin ymin zmin]
         [xmax ymax zmax]
 
         out :
@@ -602,8 +602,8 @@ class BoxN(PyLayers):
     def mesure(self):
         """ Measure BoxN
         Obtain measure of :
-        - size of each interval from each dimension 
-        - center of each interval from each dimension 
+        - size of each interval from each dimension
+        - center of each interval from each dimension
         - Volume of the BoxN
 
         """
@@ -640,8 +640,8 @@ class BoxN(PyLayers):
         """ Information on BoxN
         """
 
-        print "Volume (.vol) :",self.vol
-        print "Center (.ctr)  :",self.ctr
+        print( "Volume (.vol) :",self.vol)
+        print( "Center (.ctr)  :",self.ctr)
 
 
     def bd2coord(self):
@@ -860,20 +860,20 @@ class BoxN(PyLayers):
         trans = -np.sort(-np.linspace(0.1,0.5,H_Id),-1)
 
         if self.parmsh['interactive']==True:
-            print '(read geometry {define foo \n'
-            print "LIST\n"
-            print "{appearance  {-edge material {alpha "+str(alpha)+ " diffuse 1 0 0" +" }}"
+            print('(read geometry {define foo \n')
+            print("LIST\n")
+            print("{appearance  {-edge material {alpha "+str(alpha)+ " diffuse 1 0 0" +" }}")
             # 6 faces du cube
             for k in range(6):
-                print "{QUAD "
+                print("{QUAD ")
                 # 4 sommets de la face
                 for li in range(4):
                     x = str(self.bd[b[k,i,0],dim[0]])
                     y = str(self.bd[b[k,i,1],dim[1]])
                     z = str(self.bd[b[k,i,2],dim[2]])
-                    print x+" "+y+" "+z+" "
-                print "} "
-            print '}})'
+                    print(x+" "+y+" "+z+" ")
+                print("} ")
+            print('}})')
         else:
             ch ='_'
             for c in Id:

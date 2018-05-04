@@ -44,10 +44,11 @@ class Model(object):
         self.PL0_c()
         self.method = method
 
-    def info(self):
-        print 'frequency (f in GHz) : ', self.f
-        print 'path loss exponent (n) : ', self.n
-        print 'PL0 : ', self.PL0
+    def __repr__(self):
+        st = ''
+        st = st + 'frequency (f in GHz) : %.2f' % self.f
+        st = st + 'path loss exponent (n) : %.2f' % self.n
+        st  'PL0 : %.2f' % self.PL0
 
     def PL0_c(self, Gt=0, Gr=0):
         """

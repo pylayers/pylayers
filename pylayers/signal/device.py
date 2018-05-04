@@ -34,7 +34,7 @@ try:
     from mayavi.sources.vtk_data_source import VTKDataSource
     from mayavi import mlab
 except:
-    print 'Layout:Mayavi is not installed'
+    print('Layout:Mayavi is not installed')
 import pdb
 
 
@@ -44,7 +44,7 @@ def devicels():
     fp = open(pyu.getlong('devices.json', pstruc['DIRSIMUL']))
     dev = json.load(fp)
     fp.close()
-    print dev.keys()
+    print(dev.keys())
 
 
 class Device(object):

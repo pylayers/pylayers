@@ -16,21 +16,26 @@ import pylayers.gis.ezone as ez
 import pylayers.signal.standard as std
 
 import matplotlib.cm  as cm
-
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as m
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-import ConfigParser
+
+if sys.version_info.major==2:
+    import ConfigParser
+else:
+    import configparser as ConfigParser
+
 import pdb
 import doctest
 from itertools import product
+
 try:
     from mayavi import mlab
     from tvtk.tools import visual
-
 except:
-    print 'mayavi not installed'
+    print('mayavi not installed')
 
 
 class Coverage(PyLayers):
@@ -87,7 +92,7 @@ class Coverage(PyLayers):
         """
 
 
-        self.config = ConfigParser.ConfigParser()
+        self.config = ConfigParser.ConfigParser(allow_no_value=True)
         self.config.read(pyu.getlong(_fileini,pstruc['DIRSIMUL']))
 
         self.layoutopt = dict(self.config.items('layout'))
@@ -95,7 +100,7 @@ class Coverage(PyLayers):
         self.apopt     = dict(self.config.items('ap'))
         self.rxopt     = dict(self.config.items('rx'))
         self.showopt   = dict(self.config.items('show'))
-        
+
         # get the Layout
         filename = self.layoutopt['filename']
         if filename.endswith('lay'):
@@ -117,7 +122,7 @@ class Coverage(PyLayers):
             # create grid
             #
             self.creategrid(mode=self.mode,boundary=self.boundary,_fileini=self.filespa)
-            
+
             self.dap = {}
             for k in self.apopt:
                 kwargs  = eval(self.apopt[k])
@@ -132,7 +137,6 @@ class Coverage(PyLayers):
             except:
                 self.L.build()
                 self.L.dumpw()
-
 
         else:
             self.typ='outdoor'
@@ -198,8 +202,8 @@ class Coverage(PyLayers):
             self.grid =self.RN.position[0:2,:].T
         else:
             if mode=="full":
-                mi=np.min(self.L.Gs.pos.values(),axis=0)+0.01
-                ma=np.max(self.L.Gs.pos.values(),axis=0)-0.01
+                mi=np.min(np.array(list(self.L.Gs.pos.values())),axis=0)+0.01
+                ma=np.max(np.array(list(self.L.Gs.pos.values())),axis=0)-0.01
             if mode=="zone":
                 assert boundary!=[]
                 mi = np.array([boundary[0],boundary[1]])
@@ -883,7 +887,7 @@ class Coverage(PyLayers):
                      'best':True
                    }
 
-        title = self.dap[self.dap.keys()[0]].s.name+ ' : '
+        title = self.dap[list(self.dap.keys())[0]].s.name+ ' : '
 
         for k in defaults:
             if k not in kwargs:

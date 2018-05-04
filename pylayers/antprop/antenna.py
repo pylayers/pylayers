@@ -246,6 +246,7 @@ class Pattern(PyLayers):
             kwargs['param']=defaults['param']
 
         l = kwargs['param']['l']
+
         if self.grid:
             # Nth x Nphx Nf
             k = 2*np.pi*self.fGHz[None,None,:]/0.3
@@ -264,15 +265,25 @@ class Pattern(PyLayers):
 
         return Ft,Fp
 
+    def __pPatch(self,**kwargs):
+        """ Patch antenna
+        from Balanis (14-40b) page 835 (Rectangular Patch)
+        """
+
+        defaults = { 'param' : { 'h':0.001588, 'W':0.01186, 'L':0.00906 } }
+        if 'param' not in kwargs or kwargs['param']=={}:
+            kwargs['param']=defaults['param']
+
+
     def __pOmni(self,**kwargs):
         """  omnidirectional pattern
 
         Parameters
         ----------
 
-        param : dict 
+        param : dict
             dictionnary of parameters
-            + pol : string 
+            + pol : string
                 't'| 'p'
             + GmaxdB : float
                 0
@@ -345,12 +356,12 @@ class Pattern(PyLayers):
         Dy = 0.886*ld_c/(self.param['HPBW_y_deg']*deg_to_rad)
         Dx_n = Dx/ld
         Dy_n = Dy/ld
-        if self.grid: 
+        if self.grid:
             # Nth x Nph x Nf
             theta = self.theta[:,None,None]
             phi = self.phi[None,:,None]
         else:
-            # Ndir x Nf 
+            # Ndir x Nf
             theta = self.theta[:,None]
             phi = self.phi[:,None]
 
@@ -361,16 +372,16 @@ class Pattern(PyLayers):
         HPBW_x = (0.886*ld/Dx)/deg_to_rad
         HPBW_y = (0.886*ld/Dy)/deg_to_rad
         Gmax = self.param['Gfactor']/(HPBW_x*HPBW_y)
-        F  = np.sqrt(Gmax[...,:])*F_nor # Ndir x Nf 
+        F  = np.sqrt(Gmax[...,:])*F_nor # Ndir x Nf
 
         # Handling repartition on both vector components
-        # enforce E.y = 0 
+        # enforce E.y = 0
         if self.param['polar']=='x':
             Ft = F/np.sqrt(1+(np.cos(theta)*np.sin(phi)/np.cos(phi))**2)
             Fp = (-np.cos(theta)*np.sin(phi)/np.cos(phi))*Ft
             nan_bool = np.isnan(Fp)
-            Fp[nan_bool] = F[nan_bool] 
-        # enforce E.x = 0 
+            Fp[nan_bool] = F[nan_bool]
+        # enforce E.x = 0
         if self.param['polar']=='y':
             Ft = F/np.sqrt(1+(np.cos(theta)*np.cos(phi)/np.sin(phi))**2)
             Fp = (np.cos(theta)*np.cos(phi)/np.sin(phi))*Ft
@@ -526,12 +537,12 @@ class Pattern(PyLayers):
         b = 0.886*ld_c/(self.param['HPBW_b_deg']*deg_to_rad)
         a_n = a/ld
         b_n = b/ld
-        if self.grid: 
+        if self.grid:
             # Nth x Nph x Nf
             theta = self.theta[:,None,None]
             phi = self.phi[None,:,None]
         else:
-            # Ndir x Nf 
+            # Ndir x Nf
             theta = self.theta[:,None]
             phi = self.phi[:,None]
 
@@ -544,10 +555,10 @@ class Pattern(PyLayers):
         HPBW_a = (1.189*ld/a)/deg_to_rad
         HPBW_b = (0.886*ld/b)/deg_to_rad
         Gmax = self.param['Gfactor']/(HPBW_a*HPBW_b)
-        F  = np.sqrt(Gmax[...,:])*F_nor # Ndir x Nf 
+        F  = np.sqrt(Gmax[...,:])*F_nor # Ndir x Nf
 
         # Handling repartition on both vector components
-        # enforce E.y = 0 
+        # enforce E.y = 0
         if self.param['polar']=='x':
             Ft = F/np.sqrt(1+(np.cos(theta)*np.sin(phi)/np.cos(phi))**2)
             Fp = (-np.cos(theta)*np.sin(phi)/np.cos(phi))*Ft
@@ -725,7 +736,7 @@ class Pattern(PyLayers):
         polar = param.pop('polar')
         tilt = param.pop('tilt')
         # TODO check tilt value is compatible
-        lbands = self.atoll.keys()
+        lbands = list(dict(self.atoll).keys())
         # Gver : 360,Nf
         # Ghor : 360,Nf
         Gver = self.atoll[lbands[iband]][polar]['ver'][:,tilt,:]
@@ -736,7 +747,7 @@ class Pattern(PyLayers):
         Nhor = Ghor.shape[0]
         Nver = Gver.shape[0]
         # grid mode (180,360,Nf)
-        rmax = (Nver/2)
+        rmax = int(Nver/2)
         self.theta = np.linspace(0,np.pi,rmax+1)
         self.phi = np.linspace(0,2*np.pi-2*np.pi/Nhor,Nhor)
         #self.nth = len(self.theta)
@@ -989,7 +1000,8 @@ class Pattern(PyLayers):
         e1 = np.mod(self.phi-p0,2*np.pi)
         e2 = np.mod(p0-self.phi,2*np.pi)
 
-        e = np.array(map(lambda x: min(x[0],x[1]),zip(e1,e2)))
+        e = np.minimum(e1,e2)
+
         argphi = (e**2)/p3
         Nf = len(self.fGHz)
 
@@ -1813,10 +1825,6 @@ class Pattern(PyLayers):
             self.sqG = np.sqrt(self.G)
             self.GdB = 10*np.log10(self.G)
 
-
-
-
-
     def plotG(self,**kwargs):
         """ antenna plot gain in 2D
 
@@ -1846,9 +1854,10 @@ class Pattern(PyLayers):
         fig
         ax
 
-        Info
-        ----
-        self.nth and self.nph has to be correctly set 
+        Notes
+        -----
+
+        self.nth and self.nph has to be correctly set
 
         Examples
         --------
@@ -1976,9 +1985,9 @@ class Pattern(PyLayers):
 
                 # handle parity
                 if np.mod(Np, 2) == 0:
-                    iphi2 = np.mod(iphi1 + Np / 2, Np)
+                    iphi2 = np.mod(iphi1 + int(Np / 2), Np)
                 else:
-                    iphi2 = np.mod(iphi1 + (Np - 1) / 2, Np)
+                    iphi2 = np.mod(iphi1 + int((Np - 1) / 2), Np)
 
                 if len(shsqG)==3:
                     arg1 = (u1,iphi1,ik)
@@ -2258,7 +2267,7 @@ class Antenna(Pattern):
             for k in self.param:
                 st = st + ' ' + k + ' : ' + str(self.param[k])+'\n'
         if hasattr(self,'atoll'):
-            for k1 in self.atoll.keys():
+            for k1 in list(dict(self.atoll).keys()):
                 st = st + str(k1)+'\n'
                 for k2 in self.atoll[k1]:
                     st = st + ' '+ str(k2)+'\n'
@@ -2455,8 +2464,8 @@ class Antenna(Pattern):
 
         directory : string
 
-        Info
-        ----
+        Notes
+        -----
 
         attol dictionnary is created
         atoll[keyband][polar]['hor'] = Ghor.reshape(360,ct,cf)
@@ -2578,8 +2587,6 @@ class Antenna(Pattern):
 
         Examples
         --------
-
-            Read an Antenna file in UWBAN directory and plot a polar plot
 
         .. plot::
             :include-source:
@@ -3037,9 +3044,6 @@ class Antenna(Pattern):
 
         the file is seek in the $BASENAME/ant directory
 
-        .. todo:
-            consider using an ini file for the header
-        Trx header structure
 
         fmin fmax Nf  phmin   phmax   Nphi    thmin    thmax    Ntheta  #EDelay
         0     1   2   3       4       5       6        7        8       9
@@ -3050,7 +3054,7 @@ class Antenna(Pattern):
             mode : string
             mode 1 : columns are organized ['f','phi','th','ReFph','ImFphi','ReFth','ImFth']
             mode 2 : columns are organized ['f','phi','th','GdB','GdB_ph','GdB_th']
-                    mode2 corresponds to TRXV2 
+                    mode2 corresponds to TRXV2
 
 
         The measured values of Fp Ft and sqG and the associated theta and phi range
@@ -3063,7 +3067,7 @@ class Antenna(Pattern):
         ------
 
         for mode 2 :
-        it is require to create a header file "header_<_filename>.txt with the structure 
+        it is require to create a header file "header_<_filename>.txt with the structure
         # fmin fmax Nf  phmin   phmax   Nphi    thmin    thmax    Ntheta  #EDelay
         and to remove header for trx file.
 
@@ -3430,7 +3434,7 @@ class Antenna(Pattern):
         else:
             f = mlab.gcf()
 
-        if kwargs.has_key('opacity'):
+        if 'opacity' in kwargs:
             opacity = kwargs['opacity']
         else: 
             opacity = 1
@@ -3555,7 +3559,7 @@ class Antenna(Pattern):
         if fGHz == []:
             # self.ext == '' <=> mathematically generated => nf = 1
             if self.ext != '':
-                k = len(self.fGHz)/2
+                k = int(len(self.fGHz)/2)
             else:
                 k = 0
         else :
@@ -4575,8 +4579,8 @@ class Antenna(Pattern):
         emax : float
             error default 0.05
 
-        Summary
-        -------
+        Notes
+        -----
 
         Create antenna's vsh3 file which only contains
         the significant vsh coefficients in shape 3,
@@ -5687,7 +5691,12 @@ class AntPosRot(Antenna):
 
 def _gain(Ft,Fp):
     """  calculates antenna gain
-    
+
+    Parameters
+    ----------
+    Ft
+    Fp
+
     Returns
     -------
 
@@ -5708,7 +5717,7 @@ def _gain(Ft,Fp):
     -----
 
     .. math:: 
-    
+
         G(\theta,phi) = |F_{\\theta}|^2 + |F_{\\phi}|^2
 
     """
@@ -5847,11 +5856,11 @@ def F0(nu,sigma):
     Fm = cm-1j*sm
 
     F = sf*expf*(Fp -Fm)
-    return F 
+    return F
 
 def F1(nu,sigma):
-    """ F1 function for horn antenna pattern 
-   
+    """ F1 function for horn antenna pattern
+
     http://www.ece.rutgers.edu/~orfanidi/ewa/ch18.pdf
 
     18.3.3

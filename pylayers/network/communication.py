@@ -48,8 +48,14 @@ from pylayers.network.emsolver import EMSolver
 from pylayers.gis.layout import Layout
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
-import ConfigParser
-from SimPy.SimulationRT import Process,hold,SimEvent,Simulation,waitevent
+
+if sys.version_info.major==2:
+    import ConfigParser
+    from SimPy.SimulationRT import Process, hold, SimEvent, Simulation, waitevent
+else:
+    import configparser as ConfigParser
+    from  simpy import Process
+
 from random import uniform,gauss
 from pylayers.network.network import  Node,Network
 import networkx as nx
@@ -101,35 +107,48 @@ class TX(Process):
     def __init__(self,**args):
         defaults={'sim':None,
                   'net': Network(),
-                  'gcom': Gcom(),
+                  #'gcom': Gcom(),
+                  'gcom': [], # Temporary
                   'ID': 0,
                   'dec':{},
                   'devt': {},
                   'lcst': []
                   }
 ##       initialize attributes
-        for key, value in defaults.items():
-            if args.has_key(key):
 
+        for key, value in defaults.items():
+            if key in args:
                 setattr(self, key, args[key])
             else:
                 setattr(self, key, value)
                 args[key]=value
-        self.args=args
-        self.gcom=self.args['gcom']
+
+        self.args = args
+        self.gcom = self.args['gcom']
 
 
-        self.cmdrq=SimEvent('RQ'+str(self.ID),sim=self.sim) # command request
+        if sys.version_info.major==2:
+            self.cmdrq =SimEvent('RQ'+str(self.ID),sim=self.sim) # command request
+        else:
+            pass
+            # Python3 implementation not done
 
         try:
-            self.PN=self.net.node[self.ID]['PN']
+            self.PN = self.net.node[self.ID]['PN']
         except:
-            self.PN=Network()
+            self.PN = Network()
 
 #        self.create_evt()
 
 #        self.c_init()
-        Process.__init__(self,name='Tx'+str(self.ID),sim=self.sim)
+
+        if sys.version_info.major==2:
+            Process.__init__(self,name='Tx'+str(self.ID),sim=self.sim)
+        else:
+            pass
+            #Process.__init__(self,env,generator)
+            # Python3 implementation not done
+
         Cf = ConfigParser.ConfigParser()
         Cf.read(pyu.getlong('agent.ini','ini'))
         for s in Cf.sections():
@@ -148,7 +167,7 @@ class TX(Process):
             for d in self.dcond.keys():
                 if self.c_interpret(self.dcond[d]):
                     self.levt.append(self.dcste[c])
-            print 'Tx ', self.ID,' @',self.sim.now()
+            print('Tx ', self.ID,' @',self.sim.now())
             yield hold, self, self.refresh
 
 
@@ -183,7 +202,7 @@ class TX(Process):
 #        self.create_evt()
 #        while 1:
 #            if self.sim.verbose:
-#                print 'request TOA', self.ID
+#                print('request TOA', self.ID)
 #            for wstd in self.PN.SubNet.keys():
 #                for n in self.PN.SubNet[wstd].edge[self.ID].keys():
 #                    # check nodes in visibility
@@ -195,7 +214,7 @@ class TX(Process):
 ##                [self.PN.edge[self.ID][n][wstd].update(
 ##                {'TOA':self.net.edge[self.ID][n][wstd]['TOA'],'tTOA':self.sim.now()})
 ##                for n in self.PN.SubNet[wstd].edge[self.ID].keys() if self.net.edge[self.ID][n][wstd]['vis']]
-##            print 'refresh TOA node', self.ID, ' @',self.sim.now()
+##            print('refresh TOA node', self.ID, ' @',self.sim.now())
 
 
 
@@ -246,7 +265,7 @@ class TX(Process):
 
 
     def request(self):
-        """ request a transmission commanded by localizaiton
+        """ request a transmission initiated by localization
         """
         self.dec = self.gcom.dec[self.ID]
         self.create_evt()
@@ -254,7 +273,7 @@ class TX(Process):
             # wait request localization from localization layer
             yield waitevent,self,self.cmdrq
             if self.sim.verbose:
-                print "communication requested by node ",self.ID
+                print("communication requested by node ",self.ID)
 
             # n = nodes compliant with the rules given in communication.py
             #     and in self.gcom.dec[self.ID]
@@ -303,7 +322,8 @@ class RX(Process):
         defaults={'sim':None,
                   'ID':'1',
                   'net':Network(),
-                  'gcom': Gcom(),
+                  #'gcom': Gcom(),
+                  'gcom': [],
                   'devt': {},
                   'refreshRSS':0.3,
                   'refreshTOA':0.3,
@@ -311,7 +331,7 @@ class RX(Process):
                   }
 ##       initialize attributes
         for key, value in defaults.items():
-            if args.has_key(key):
+            if key in args:
 
                 setattr(self, key, args[key])
             else:
@@ -437,7 +457,7 @@ class RX(Process):
                 for n in self.PN.SubNet[wstd].edge[self.ID].keys() ]
 
             if self.sim.verbose:
-                print 'refresh RSS node', self.ID, ' @',self.sim.now()
+                print('refresh RSS node', self.ID, ' @',self.sim.now())
 
             yield hold, self, self.refreshRSS
 
@@ -524,7 +544,7 @@ class RX(Process):
                     # update personal network
                     self.fill_req(evt.name[0],evt.name[2])
                     if self.sim.verbose:
-                        print 'Done request from',evt.name[0],'to',evt.name[1], 'on wstd', evt.name[2]
+                        print('Done request from',evt.name[0],'to',evt.name[1], 'on wstd', evt.name[2])
 
 
 
@@ -579,24 +599,24 @@ class Gcom(nx.MultiDiGraph):
     The keys of devt are a tuple (nodeid#1, nodeid#2 , wstd).
 
     """
-
-    def __init__(self, net=Network(), sim=Simulation()):
+    #def __init__(self, net=Network(), sim=Simulation()):
+    def __init__(self, net, sim):
         """
         net : pylayers.network.Network
 
         """
         nx.MultiDiGraph.__init__(self)
-        self.net=net
-        self.sim=sim
-        self.fileini='communication.ini'
-        self.dec={}
-        self.devt={}
+        self.net = net
+        self.sim = sim
+        self.fileini = 'communication.ini'
+        self.dec = {}
+        self.devt = {}
 
     def load_dec_file(self):
-        self.config     = ConfigParser.ConfigParser()
+        self.config = ConfigParser.ConfigParser()
         self.config.read(pyu.getlong(self.fileini,pstruc['DIRSIMUL']))
-        nodes=self.config.sections()
-        ntype=nx.get_node_attributes(self.net,'typ')
+        nodes = self.config.sections()
+        ntype = nx.get_node_attributes(self.net,'typ')
         for n in self:
             try:
                 if ntype[n]=='ag':
@@ -606,7 +626,7 @@ class Gcom(nx.MultiDiGraph):
                     self.dec[n]['action']=eval(dict(self.config.items(n))['action'])
                     self.dec[n]['rule']=eval(dict(self.config.items(n))['rule'])
             except:
-                nconfig     = ConfigParser.ConfigParser()
+                nconfig = ConfigParser.ConfigParser()
                 nconfig.add_section(n)
                 nconfig.set(n,'wstd',[self.net.node[n]['wstd'][0]])
                 nconfig.set(n,'rule',['always'])
@@ -614,10 +634,10 @@ class Gcom(nx.MultiDiGraph):
                 fileini = pyu.getlong(self.fileini, pstruc['DIRSIMUL'])
                 fd = open(fileini, "a")
                 nconfig.write(fd)
-                fd.close() 
+                fd.close()
                 print ('Warning: Communication of node '+n + 'set with default values')
 
-                
+
 
 
 
@@ -652,7 +672,7 @@ class Gcom(nx.MultiDiGraph):
                     else :
                         self.add_edges_from(self.net.Gen_tuple(nx.DiGraph(le).reverse().edges_iter(),wstd,ld))
                 except:
-                    print 'WARNING : no edge on wstd',wstd
+                    print('WARNING : no edge on wstd',wstd)
 
 
 
@@ -722,7 +742,7 @@ class Gcom(nx.MultiDiGraph):
 #    N.update_PN()
 
 
-#    gcom=Gcom(net=N,sim=sim)
+#    gcom = Gcom(net=N,sim=sim)
 #    gcom.create_graph()
 #    gcom.create_evt()
 #    tx=[]

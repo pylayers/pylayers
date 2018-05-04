@@ -48,19 +48,23 @@ SimPy Process compliant version of the Network class
 #####################################################################
 
 import numpy as np
-import scipy as sp 
+import scipy as sp
 import networkx as nx
 import itertools
 import pickle as pk
 import pkgutil
 from copy import deepcopy
-
-
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 #import Tkinter as tk
+import sys
+if sys.version_info.major==2:
+    import ConfigParser
+    from SimPy.SimulationRT import Process,hold
+else:
+    import configparser as ConfigParser
+    from simpy import Process
 
-import ConfigParser
 import copy
 import pdb
 #from PyLayers.Network.Node import Node
@@ -75,17 +79,14 @@ import time
 import pylayers.util.pyutil as pyu
 
 
-from SimPy.SimulationRT import Process,hold
 import pprint
 import select
-import sys
 
 try:
     from mayavi import mlab
     from tvtk.tools import visual
-
 except:
-    print 'mayavi not installed'
+    print('mayavi not installed')
 
 
 # How to take into account  1 specific key specifique for 1 MultiGraph
@@ -1210,10 +1211,10 @@ class Network(PyLayers,nx.MultiDiGraph):
 
         """
         for wstd in self.wstd.keys():
-            print '-'*30
-            print wstd
+            print('-'*30)
+            print(wstd)
             print('{0:10} | {1:5} | {2:5} | {3:5} | {4:5} | {5:5} |'.format('Node link','TOA ','TOA std', 'Pr','Pr std', 'distance' ))
-            print '-'*30
+            print('-'*30)
             T=nx.get_edge_attributes(self.SubNet[wstd],'TOA')
             P=nx.get_edge_attributes(self.SubNet[wstd],'Pr')
             D=nx.get_edge_attributes(self.SubNet[wstd],'d')
@@ -1993,7 +1994,7 @@ class PNetwork(Process):
 
             self.net.pos=self.net.get_pos()
             if self.sim.verbose:
-                print 'network updated @',self.sim.now()
+                print('network updated @',self.sim.now())
             self.net.idx=self.net.idx+1
             yield hold, self, self.net_updt_time
 

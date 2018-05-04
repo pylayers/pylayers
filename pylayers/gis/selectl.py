@@ -6,6 +6,7 @@ r"""
 .. autosummary::
 
 """
+from __future__ import print_function
 import os
 import pdb
 from PIL import Image
@@ -15,7 +16,7 @@ from pylayers.util import pyutil as pyu
 import pylayers.util.plotutil as plu
 
 import matplotlib.pyplot as plt
-from pylayers.util.easygui import *
+#from pylayers.util.easygui import *
 from matplotlib.widgets import RectangleSelector
 
 import copy
@@ -213,9 +214,9 @@ class SelectL(object):
 
         if verbose:
             try:
-                print "Evenement :", self.evt,self.ddoc[self.evt]
+                print("Evenement :", self.evt,self.ddoc[self.evt])
             except:
-                print self.evt+ 'N/A'
+                print(self.evt + 'N/A')
         self.new_state()
 
 
@@ -252,7 +253,7 @@ class SelectL(object):
         self.nsel = 0
         self.ptsel = np.array([])
         xmin, xmax, ymin, ymax = self.ax.axis()
-        #print xmin,xmax,ymin,ymax
+        #print( xmin,xmax,ymin,ymax)
         dx = xmax - xmin
         dy = ymax - ymin
         dd = np.minimum(dx, dy)
@@ -278,10 +279,10 @@ class SelectL(object):
             self.ptsel = np.array((x, y))
             self.nsel = self.L.ispoint(self.ptsel, dd / 100)
 
-        #print "Selected point coord : ", self.ptsel
-        #print "Selected point number: ", self.nsel
+        #print("Selected point coord : ", self.ptsel)
+        #print("Selected point number: ", self.nsel)
         if self.nsel > 0:
-            print "Selected segment : ", self.nsel
+            print("Selected segment : ", self.nsel)
 
         self.new_state()
 
@@ -335,7 +336,7 @@ class SelectL(object):
                 pass
             try:
                 self.selector.set_active(False)
-                print 'inhib select'
+                print('inhib select')
             except:
                 pass
             #ax.title.set_text(self.state)
@@ -363,7 +364,7 @@ class SelectL(object):
         if self.state == 'SP1':
             self.fig,self.ax = self.show(self.fig,self.ax,clear=False)
             self.ax.title.set_text(self.statename[self.state])
-            print 'Selected node : '+str(self.nsel)
+            print('Selected node : '+str(self.nsel))
             #ax.title.set_text(self.nsel))
             self.selected_pt1 = self.nsel
             self.pt1 = np.array(self.L.Gs.pos[self.nsel]).reshape(2, 1)
@@ -381,7 +382,7 @@ class SelectL(object):
             self.p1[0].set_color('green')
             self.ax.title.set_text(self.statename[self.state])
             #ax.title.set_text('Selected node : %d ' % (self.nsel))
-            print 'Selected node : ' + str(self.nsel)
+            print('Selected node : ' + str(self.nsel))
             self.selected_pt2 = self.nsel
             self.pt2 = np.array(self.L.Gs.pos[self.nsel]).reshape(2, 1)
             self.pt_previous = self.pt2
@@ -420,7 +421,7 @@ class SelectL(object):
                 titre = 'Select Segment : %d (%d->%d) Layer : %s Coseg : %s ' % (nse, ta, he, self.current_layer, cosegname)
             else:
                 titre = 'Select Segment : %d (%d->%d) Layer : %s' % (nse, ta, he, self.L.Gs.node[nse]['name'])
-            print titre 
+            print(titre)
             #ax.title.set_text(titre)
             self.L.show_nodes(ndlist=[nse], size=200, color='r', alpha=0.5)
 
@@ -430,7 +431,7 @@ class SelectL(object):
             segdico = self.L.Gs.node[nse]
             z  = segdico['ss_z']
             #ax.title.set_text('SSS : '+self.L.Gs.node[nse]['name']+' ['+str(z[0])+']')
-            print self.L.Gs.node[nse]['name']+' ['+str(z[0])+']'
+            print(self.L.Gs.node[nse]['name']+' ['+str(z[0])+']')
             self.segment[0].set_color('blue')
         #
         # Create Point state
@@ -449,8 +450,8 @@ class SelectL(object):
                 self.segment2[0].set_visible(False)
             except:
                 pass
-            print 'lclic : free point, +CTRL same x, +SHIFT: same y'
-            self.fig,self.ax=self.show(self.fig,self.ax,clear=False) 
+            print('lclic : free point, +CTRL same x, +SHIFT: same y')
+            self.fig,self.ax=self.show(self.fig,self.ax,clear=False)
             self.L.g2npy()
 
         #
@@ -522,7 +523,7 @@ class SelectL(object):
         'd |Del'  : delete subsegment
         'r |F5'  : refresh
         'o'  : toggle overlay (<> CP mode)
-               set origin (CP mode) 
+               set origin (CP mode)
         'm'  : toggle mode (point or segment)
         'n'  : toggle node label display 
         'z'  : change display parameters
@@ -547,7 +548,7 @@ class SelectL(object):
         #
         if self.evt == ',':
             for k in self.ddoc.keys():
-                print k,self.ddoc[k]
+                print(k,self.ddoc[k])
 
         if self.evt == 'v':
             for n in self.L.Gs.pos:
@@ -573,7 +574,7 @@ class SelectL(object):
 
         if self.evt=='ctrl+z':
             self.bundo=True
-            print len(self.L.Gs)
+            print( len(self.L.Gs))
             if len (self.undoGs) >2:
                 oGs=self.undoGs.pop(-1)
                 oGs=self.undoGs.pop(-1)
@@ -596,7 +597,7 @@ class SelectL(object):
                         plt.draw()
                     self.selected='seg'
                     self.state='SMS'
-                else: 
+                else:
                     self.fig,self.ax= self.plotselptseg(self.selectpt)
                     self.selected='pt'
                     self.state='SMP'
@@ -621,7 +622,7 @@ class SelectL(object):
         #
         if self.evt=='f':
             self.L.display['nodes'] = not self.L.display['nodes']
-            print self.L.display['nodes']
+            print (self.L.display['nodes'])
             self.update_state()
             return
 
@@ -630,7 +631,7 @@ class SelectL(object):
         #
         if self.evt=='g':
             self.L.display['ednodes'] = not self.L.display['ednodes']
-            print self.L.display['ednodes']
+            print (self.L.display['ednodes'])
             self.update_state()
             return
 
@@ -642,7 +643,7 @@ class SelectL(object):
             index = self.L.display['layerset'].index(self.L.display['activelayer'])
             self.L.display['activelayer'] = self.L.display['layerset'][(index+1) % N]
             self.current_layer = self.L.display['activelayer']
-            print self.current_layer
+            print (self.current_layer)
             self.update_state()
             return
 
@@ -654,7 +655,7 @@ class SelectL(object):
             index = self.L.display['layerset'].index(self.L.display['activelayer'])
             self.L.display['activelayer'] = self.L.display['layerset'][(index-1) % N]
             self.current_layer = self.L.display['activelayer']
-            print self.current_layer
+            print (self.current_layer)
             self.update_state()
             return
         #
@@ -804,7 +805,7 @@ class SelectL(object):
                     self.update_state()
                     return
                 else :
-                    print 'no selected region'
+                    print ('no selected region')
 
             if self.state=='SMS':
                 seglist = self.selectseg
@@ -815,7 +816,7 @@ class SelectL(object):
                 self.update_state()
                 return
             else :
-                print 'no selected region'
+                print ('no selected region')
         #
         # r : Refresh
         #
@@ -896,8 +897,8 @@ class SelectL(object):
             #self.L.savestr2(filename)
 
             self.L.saveini(fileini)
-            print "structure saved in ", filename
-            print "structure saved in ", fileini
+            print( "structure saved in ", filename)
+            print( "structure saved in ", fileini)
             return
         #
         # 'n' : toggle node label display
@@ -905,7 +906,7 @@ class SelectL(object):
         if self.evt == 'n':
             self.L.display['ndlabel'] = not self.L.display['ndlabel']
             self.L.display['edlabel'] = not self.L.display['edlabel']
-            print self.L.display['activelayer']
+            print( self.L.display['activelayer'])
             self.fig,ax = self.show(fig=self.fig,ax=self.ax,clear=True)
             self.fig.canvas.draw()
             return
@@ -915,7 +916,7 @@ class SelectL(object):
         if self.evt == 'w':
         # display all layer
             self.L.display['activelayer'] = self.L.name.keys()
-            print self.L.display['activelayer']
+            print( self.L.display['activelayer'])
             self.fig,self.ax = self.show(fig=self.fig,ax=self.ax,clear=True)
             return self.fig,self.ax
         #
@@ -1024,7 +1025,7 @@ class SelectL(object):
                 if self.set_origin:
                     offx = self.ptsel[0]
                     offy = self.ptsel[1]
-                    print offx,offy
+                    print( offx,offy)
                     xmin,xmax,ymin,ymax = self.L.display['box']
                     self.L.display['box'] = [xmin-offx,xmax-offx,ymin-offy,ymax-offy]
                     self.set_origin=False
@@ -1037,7 +1038,7 @@ class SelectL(object):
                     offx = self.ptsel[0]
                     val  = eval(enterbox('enter x value'))
                     ratio = val/offx
-                    print ratio
+                    print( ratio)
                     xmin,xmax,ymin,ymax = self.L.display['box']
                     self.L.display['box'] = [ratio*xmin,ratio*xmax,ymin,ymax]
                     self.set_x=False
@@ -1050,7 +1051,7 @@ class SelectL(object):
                     offx = self.ptsel[1]
                     val  = eval(enterbox('enter y value'))
                     ratio = val/offx
-                    print ratio
+                    print( ratio)
                     xmin,xmax,ymin,ymax = self.L.display['box']
                     self.L.display['box'] = [xmin,xmax,ratio*ymin,ratio*ymax]
                     self.set_y=False
@@ -1071,12 +1072,12 @@ class SelectL(object):
                 he = self.selected_pt2
 
                 segexist = self.L.isseg(ta,he)
-                print segexist
+                print( segexist)
                 # if segment do not already exist, create it
                 if not segexist: 
                     self.nsel  = self.L.add_segment(ta, he,name=self.current_layer)
                 else:
-                    print "segment ("+str(ta)+","+str(he)+") already exists"
+                    print( "segment ("+str(ta)+","+str(he)+") already exists")
                 self.L.g2npy()
                 self.state = 'Init'
                 self.update_state()
@@ -1171,8 +1172,8 @@ class SelectL(object):
                 x1,x2=x2,x1
             if y1>y2:
                 y1,y2=y2,y1
-            
-            
+
+
             # try:
             selectpt,selectseg = self.L.get_zone([x1,x2,y1,y2])
 
@@ -1190,10 +1191,10 @@ class SelectL(object):
                 [self.selectseg.pop(self.selectseg.index(x)) for x in selectseg if x in self.selectseg]
             # except:
             #     print 'empty selection'
-            print self.selectpt,self.selectseg
+            print(self.selectpt,self.selectseg)
             self.plotselptseg(self.selectpt)
             self.selected='pt'
-            print self.state
+            print(self.state)
             
                 
 
@@ -1202,7 +1203,7 @@ class SelectL(object):
                 toggle_selector.RS.set_active(False)
             if not toggle_selector.RS.active:
                 toggle_selector.RS.set_active(True)
-        
+
         if self.evt == 'f1':
             #avoid conflict between zoom and selection 
             # fm=plt.get_current_fig_manager()
@@ -1221,7 +1222,7 @@ class SelectL(object):
             self.update_state()
 
         if self.evt == 'f9':
-            print self.selectpt, self.selectseg
+            print(self.selectpt, self.selectseg)
             #print self.selectsl
             # plt.connect('key_press_event', toggle_selector)
 

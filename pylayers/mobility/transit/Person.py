@@ -4,7 +4,7 @@
 Utility Functions
 =================
 
-.. autosummary;; 
+.. autosummary
     :toctree: generated/
 
     scale
@@ -13,7 +13,7 @@ Utility Functions
 Person Class
 =================
 
-.. autosummary;; 
+.. autosummary
     :toctree: generated/
 
     Person.__init__
@@ -21,9 +21,17 @@ Person Class
     Person.move
     Person.delete
 """
-from SimPy.SimulationRT import Process,Simulation,hold
-import ConfigParser
+
 import datetime
+import sys
+
+if sys.version_info.major==2:
+    import ConfigParser
+    from SimPy.SimulationRT import Process,Simulation,hold
+else:
+    import configparser as ConfigParser
+    from  simpy import Process
+
 #from math import *
 #from random import normalvariate,uniform
 from pylayers.mobility.transit.vec3 import vec3
@@ -171,17 +179,17 @@ class Person(Process):
         if roomId < 0:
             try :
                 self.roomId   = random.sample(self.L.Gr.nodes(),1)[0]
-            except: 
+            except:
                 raise NameError('This error is due to the lack of Gr graph in the Layout argument passed to Person(Object)')
         else:
             self.roomId    = roomId
-        self.forbidroomId = froom 
+        self.forbidroomId = froom
         self.cdest = cdest # choose tdestination type
         if self.cdest == 'random':
             # self.nextroomId   = int(np.floor(random.uniform(0,self.L.Gr.size())))
             try :
                 self.nextroomId   = random.sample(self.L.Gr.nodes(),1)[0]
-            except: 
+            except:
                 raise NameError('This error is due to the lack of Gr graph in the Layout argument passed to Person(Object)')
             while self.nextroomId == self.roomId or (self.nextroomId in self.forbidroomId): # or (self.nextroomId in self.sim.roomlist): # test destination different de l'arrive
                 # self.nextroomId   = int(np.floor(random.uniform(0,self.L.Gr.size())))
@@ -192,9 +200,9 @@ class Person(Process):
            cfg.read(pyu.getlong('nodes_destination.ini','ini'))
            self.room_seq=eval(dict(cfg.items(self.ID))['room_seq'])
            self.room_wait=eval(dict(cfg.items(self.ID))['room_wait'])
-           print 'WARNING: when nodes_destination ini file is read:'
-           print '1) the room initialization starts in the first room of the list, not in the room configured in agent.ini'
-           print '2) forbiden rooms are neglected'
+           print( 'WARNING: when nodes_destination ini file is read:')
+           print( '1) the room initialization starts in the first room of the list, not in the room configured in agent.ini')
+           print( '2) forbiden rooms are neglected')
            self.room_counter=1
            self.nb_room=len(self.room_seq)
            self.roomId=self.room_seq[0]
@@ -208,7 +216,7 @@ class Person(Process):
                 self.waypoints.append(vec3(tup))
         try:
             self.position = vec3(L.Gr.pos[self.roomId][0],L.Gr.pos[self.roomId][1])
-        except:     
+        except:
             self.position = vec3()
 #           self.old_pos = vec3()
         self.stuck = 0
@@ -280,8 +288,8 @@ class Person(Process):
         while True:
             if self.moving:
                 if self.sim.verbose:
-                    print 'meca: updt ag ' + self.ID + ' @ ',self.sim.now()
-                
+                    print('meca: updt ag ' + self.ID + ' @ ',self.sim.now())
+
                 # if np.allclose(conv_vecarr(self.destination)[:2],self.L.Gw.pos[47]):
                 #     import ipdb
                 #     ipdb.set_trace()
@@ -289,7 +297,7 @@ class Person(Process):
 
                 while self.cancelled:
                     yield passivate, self
-                    print "Person.move: activated after being cancelled" 
+                    print("Person.move: activated after being cancelled")
                 checked = []
                 for zone in self.world.zones(self):
                     if zone not in checked:
@@ -412,16 +420,16 @@ class Person(Process):
                     #
                     # coord door
                     #
-                    #unode = self.L.Gs.neighbors(doorId)    
+                    #unode = self.L.Gs.neighbors(doorId)
                     #p1    = self.L.Gs.pos[unode[0]]
                     #p2    = self.L.Gs.pos[unode[1]]
                     #print p1
                     #print p2
                     #pdoor = (np.array(p1)+np.array(p2))/2
                         self.destination = self.waypoints[0]
-                    
+
                         if self.sim.verbose:
-                            print 'meca: ag ' + self.ID + ' wait ' + str(self.wait)#*self.interval) 
+                            print('meca: ag ' + self.ID + ' wait ' + str(self.wait) ) 
                         yield hold, self, self.wait
 
                     else:

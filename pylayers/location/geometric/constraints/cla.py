@@ -709,7 +709,7 @@ class CLA(object):
         sc      : display all constraint or give a list with the constrinat number to observe ex: [0,1,3]. default 'all'
 
         Returns
-        -------        
+        ------- 
 
         Nothing but calls a geomview instance
 
@@ -1217,7 +1217,7 @@ class CLA(object):
         OBSOLETE
 
         """
-        print 'min dist'
+        print('min dist')
         pdb.set_trace()
         # recherche distance entre barycentre et les centres des boites distance2barycentre(d2b)
         d2b = np.sqrt(np.sum((a - b) ** 2, axis=1))
@@ -1310,7 +1310,7 @@ class CLA(object):
         box_center = self.dlayer[l][dlindx].ctr
         uc = np.where(self.usable)[0]
 
-        
+
         # proba computation for all center of each boxes
         for j in uc:#range(len(self.c)):
             #if self.c[j].type != 'Exclude':
@@ -1399,7 +1399,7 @@ class CLA(object):
                         dd.append(np.sqrt(np.sum((pc - self.c[itoas[0]].p) ** 2)))
                     except:
                         dd.append(np.sqrt(np.sum((pc - self.c[itoas[1]].p) ** 2)))
-                    print pc
+                    print(pc)
             #                       try:
 #                               vmax=[]
 #                               for i in range(len(lclust)):
@@ -1451,7 +1451,7 @@ class CLA(object):
 
                         self.pe = np.mean(self.dlayer[l][dlindx].ctr[
                             np.unique(lclust[0])], axis=0)
-                       # print "HT processing done"
+                       # print("HT processing done")
                         pestdmax = np.max(self.dlayer[l][
                             dlindx].ctr[np.unique(lclust[0])])
                         pestdmin = np.min(self.dlayer[l][

@@ -613,11 +613,10 @@ class Simul(PyLayers):
                     #
                     if self.todo[typ]:
                         if self.verbose:
-                            print '-'*30
-                            print 'time:', t, '/',  lt[-1] ,' time idx:', ut,
-                            '/',len(ta),'/',ks
-                            print 'processing: ',na, ' <-> ', nb, 'wstd: ', w
-                            print '-'*30
+                            print('-'*30)
+                            print('time:', t, '/',  lt[-1] ,' time idx:', ut, '/',len(ta),'/',ks)
+                            print('processing: ',na, ' <-> ', nb, 'wstd: ', w)
+                            print('-'*30)
                         eng = 0
                         #
                         # Invoque link deterministic simulation 
@@ -903,7 +902,7 @@ class Simul(PyLayers):
                 if len(df) != 0:
                     output[linkname]['t'].append(tt)
                     if len(df)>1:
-                        print 'Warning possible issue in self.get_value'
+                        print('Warning possible issue in self.get_value')
                     line = df.iloc[-1]
                     # # get info of the corresponding timestamp
                     # line = df[(df['id_a'] == link[0]) & (df['id_b'] == link[1])].iloc[-1]
@@ -985,7 +984,7 @@ class Simul(PyLayers):
 
         for l in output.keys():
             if output[l].has_key('time_to_simul'):
-                print 'link', l , 'require simulation for timestamps', output[l]['time_to_simul']
+                print('link', l , 'require simulation for timestamps', output[l]['time_to_simul'])
 
 
         return(output)
@@ -1072,7 +1071,7 @@ class Simul(PyLayers):
                 if len(df) != 0:
                     output[linkname]['t'].append(tt)
                     if len(df)>1:
-                        print 'Warning possible issue in self.get_link'
+                        print('Warning possible issue in self.get_link')
                     line = df.iloc[-1]
                     # # get info of the corresponding timestamp
                     # line = df[(df['id_a'] == link[0]) & (df['id_b'] == link[1])].iloc[-1]

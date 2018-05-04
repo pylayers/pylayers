@@ -65,7 +65,7 @@ class AFPchannel(bs.FUsignal):
                       ):
         bs.FUsignal.__init__(self,x=x,y=y,label='AFP')
         if len(self.x)!=0:
-            self.fcGHz = self.x[len(self.x)/2]
+            self.fcGHz = self.x[int(len(self.x)/2)]
         self.tx = tx
         self.rx = rx
         self.ang_offset = 0
@@ -79,7 +79,7 @@ class AFPchannel(bs.FUsignal):
         assert((self.az == other.az).all())
         A = AFPchannel()
         A.x = self.x
-        A.fcGHz = A.x[len(A.x)/2]
+        A.fcGHz = A.x[int(len(A.x)/2)]
         A.az = self.az
         A.y = self.y + other.y
         return A
@@ -90,7 +90,7 @@ class AFPchannel(bs.FUsignal):
         assert((self.az == other.az).all())
         A = AFPchannel()
         A.x = self.x
-        A.fcGHz = A.x[len(A.x)/2]
+        A.fcGHz = A.x[int(len(A.x)/2)]
         A.az = self.az
         Amod = np.abs(self.y)-np.abs(other.y)
         A.y = Amod*np.exp(1j*np.angle(self.y))
@@ -202,7 +202,7 @@ class AFPchannel(bs.FUsignal):
         #
 
         self.x = np.linspace(self.fmin,self.fmax,self.Nf)
-        self.fcGHz = self.x[len(self.x)/2]
+        self.fcGHz = self.x[int(len(self.x)/2)]
         self.y = amp*np.exp(1j*ang*np.pi/180.)*cal_trf[None,:]*window
         #
         # if extension is txt file comes from ESPOO measurement
@@ -218,6 +218,16 @@ class AFPchannel(bs.FUsignal):
             self.az = ang_offset - self.azmes
             u = np.where(self.az<0)
             self.az[u] = self.az[u] + 2*np.pi
+
+    def  electrical_delay(self,tauns=0):
+        """ electrical delay
+
+        Parameters
+        ----------
+        tauns : float
+
+        """
+        self.y = self.y * np.exp(-2*1j*np.pi*self.x*tauns)
 
     def toadp(self,imax=-1):
         """ convert afp into adp (frequency->delay)
@@ -247,6 +257,15 @@ class AFPchannel(bs.FUsignal):
         return adp
 
     def estimate(self,taumax=200,phimax=2*np.pi):
+        """ estimate specular model parameters
+
+        Parameters
+        ----------
+
+        taumax : float
+        phimax : float
+
+        """
         def cost(xk,f,phi):
             B = AFPchannel()
             B.specular_model(xk,f,phi)
@@ -295,7 +314,7 @@ class AFPchannel(bs.FUsignal):
 
 
         """
-        K = len(x)/3
+        K = int(len(x)/3)
         assert(len(x)==3*K)
         ak = x[0:K][:,None,None]
         tk = x[K:2*K][:,None,None]
@@ -304,12 +323,12 @@ class AFPchannel(bs.FUsignal):
         if wH ==[]:
             wH = np.ones(len(fGHz))
         tf  = ak*np.exp(-2*1j*np.pi*fGHz[None,:,None]*tk)*wH[None,:,None]
-        dphi = pk-phi[None,None,:]
+        dphi = pk - phi[None,None,:]
         Gmax = 10**(GmaxdB/10.)
         g = np.exp(-(2*np.sqrt(np.log(2))*dphi/HPBW)**2)
         tfg = tf*g
         self.x = fGHz
-        self.fcGHz = self.x[len(self.x)/2]
+        self.fcGHz = self.x[int(len(self.x)/2)]
         # self.y : angle(0) fGHz(1)
         self.y = np.sum(tfg,axis=0).T
         self.az = phi
@@ -401,12 +420,11 @@ class ADPchannel(bs.TUsignal):
             s = s + 'ang (geo): '+ str(self.anglos_geo)+' (est): '+str(self.angpeak_est)+'\n'
         return(s)
 
-    def peak(self,refinement=False):
+    def peak(self, refinement=False):
         """ evaluate peak of PADP
 
         Parameters
         ----------
-
         refinment : boolean
             provide a refined version of angular estimation
 
@@ -417,17 +435,18 @@ class ADPchannel(bs.TUsignal):
 
         """
         alphapeak = np.max(np.abs(self.y))
-        iphi,itau = np.where(np.abs(self.y)==alphapeak)
+        iphi, itau = np.where(np.abs(self.y)==alphapeak)
         taupeak = self.x[itau][0]
         if refinement:
             pr = np.abs(self.y)[iphi-1:iphi+2,itau].squeeze()
             azr = self.az[iphi-1:iphi+2]
-            Id  = np.sum(pr)
-            In  = np.sum(pr*azr)
+            Id = np.sum(pr)
+            In = np.sum(pr*azr)
             phipeak = In/Id
         else:
             phipeak = self.az[iphi]
-        return alphapeak,taupeak,phipeak[0]
+
+        return alphapeak, taupeak, phipeak[0]
 
     def cut(self,imin=0,imax=1000):
         self.y = self.y[:,imin:imax]
@@ -692,6 +711,22 @@ class ADPchannel(bs.TUsignal):
         app = np.real(np.sum(self.y*np.conj(self.y),axis=1))
 
     def pltcir(self,phideg,Gain=21):
+        """ plot Channel Impulse Response
+
+        Parameters
+        ----------
+
+        phideg : f
+
+        Returns
+        -------
+
+        fig,ax
+        u
+
+        """
+
+
         phi = phideg*np.pi/180.
         dang = np.abs(self.az - phi)
         u = np.where(dang==np.min(dang))[0][0]
@@ -881,6 +916,24 @@ class ADPchannel(bs.TUsignal):
         ----------
 
         fcGHz : float
+        figsize':(1010)
+        fontsize':18
+        fig' : []
+        ax': []
+        xlabel': True
+        ylabel': True
+        legend': True
+        losdelay': True
+        freespace': True
+        desembeded': False
+        typic':True
+        semilogx':True
+        bcir':False
+        raw': False
+        Gmax':22.68
+        Gmin':19
+        Tilt':10
+        HPBW':10
 
         Returns
         -------
@@ -904,6 +957,7 @@ class ADPchannel(bs.TUsignal):
                      'semilogx':True,
                      'bcir':False,
                      'raw': False,
+                     'bplot':True,
                      'Gmax':22.68,
                      'Gmin':19,
                      'Tilt':10,
@@ -917,16 +971,22 @@ class ADPchannel(bs.TUsignal):
 
         for k in defaults:
             if k not in kwargs:
-                kwargs[k]=defaults[k]
-
+                kwargs[k] = defaults[k]
+        # get antenna gain extremum
+        # typical value is chosen as the mean value
         Gmax = kwargs.pop('Gmax')
         Gmin = kwargs.pop('Gmin')
         Gtyp = (Gmax+Gmin)/2.
         # get peak value of the PADP
-        alpha,tau,phi = self.peak()
+        # it is assume that this retreave the LOS component
+        alpha, tau, phi = self.peak()
+        # Na : number of angular steps
         Na = self.y.shape[0]
         # pdp : power delay profile
         pdp = np.real(np.sum(self.y*np.conj(self.y),axis=0))
+        # delay index of pdp maximum
+        u = np.where(pdp==max(pdp))[0]
+        # omnidirectional free space path loss
         # spdp : square root of power delay profile
         spdp = TUchannel(x=self.x,y=np.sqrt(pdp))
         u  = np.where(pdp==max(pdp))[0]
@@ -937,15 +997,105 @@ class ADPchannel(bs.TUsignal):
         #
         # The -3dB is specific to the Aalto measurement and desembeding (1/2)
         #
-        pdp_min = 10*np.log10(pdp)-Gmax-1
-        pdp_max = 10*np.log10(pdp)-Gmin-1
-        pdp_typ = 10*np.log10(pdp)-Gtyp-1
+        pdpdB = 10*np.log10(pdp)
+        pdp_min = pdpdB-Gmax-1
+        pdp_max = pdpdB-Gmin-1
+        pdp_typ = pdpdB-Gtyp-1
+
         umin = np.where(pdp_min>-118)
         pdp_min_thr = pdp_min[umin]
         umax = np.where(pdp_max>-118)
         pdp_max_thr = pdp_max[umax]
+
         PL = -10*np.log10(np.sum(10**(pdp_min_thr/10.)))
-        return self.x,pdp
+
+        if kwargs['bplot']:
+            if kwargs['fig']==[]:
+                fig = plt.figure(figsize=kwargs['figsize'])
+            else:
+                fig = kwargs['fig']
+            if kwargs['ax'] == []:
+                ax  = fig.add_subplot(111)
+            else:
+                ax = kwargs['ax']
+
+            if kwargs['semilogx']:
+                if kwargs['raw']:
+                    ax.semilogx(self.x,10*np.log10(pdp),color='r',label=r'$10\log_{10}(\sum_{\phi} PADP(\phi))$',linewidth=0.5)
+                #ax.semilogx(np.array([tau]),np.array([AttmaxdB]),color='k')
+
+                if kwargs['desembeded']:
+                    ax.semilogx(self.x,pdp_min,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmax),color='green')
+                    ax.semilogx(self.x,pdp_max,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmin),color='red')
+
+                if kwargs['typic']:
+                    ax.semilogx(self.x,pdp_typ,label=kwargs['label'],color=kwargs['color'],linewidth=kwargs['linewidth'])
+
+                if kwargs['freespace']:
+                    if kwargs['typic']:
+                        ax.semilogx(self.x,FS,color=kwargs['color'],linewidth=kwargs['linewidth']+1,label='Free Space path profile')
+                    else:
+                        ax.semilogx(self.x,FS,color='k',linewidth=2,label='Free Space path profile')
+
+                if kwargs['losdelay']:
+                    ax.vlines(self.taupeak_est,ymin=-130,ymax=-40,linestyles='dashed',color='blue')
+                    ax.vlines(self.taulos_geo,ymin=-130,ymax=-40,linestyles='dashed',color='red')
+
+                #ax.set_xlim(10,1000)
+                if kwargs['xlabel']:
+                    ax.set_xlabel('Delay (ns) log scale',fontsize=kwargs['fontsize'])
+
+                if kwargs['bcir']:
+                    phi = self.angpeak_est*np.pi/180.
+                    dang = np.abs(self.az - phi)
+                    u = np.where(dang==np.min(dang))[0][0]
+                    ax.semilogx(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmax,color='r')
+                    ax.semilogx(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmin,color='g')
+            else:
+                if kwargs['raw']:
+                    ax.plot(self.x,10*np.log10(pdp),color='r',label=r'$10\log_{10}(\sum_{\phi} PADP(\phi))$',linewidth=0.5)
+                ax.plot(np.array([tau]),np.array([AttmaxdB]),color='k')
+
+                if kwargs['desembeded']:
+                    ax.plot(self.x,pdp_min,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmax))
+                    ax.plot(self.x,pdp_max,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmin))
+
+                if kwargs['typic']:
+                    ax.plot(self.x,pdp_typ,label=kwargs['label'],color=kwargs['color'])
+
+                if kwargs['freespace']:
+                    if kwargs['typic']:
+                        ax.plot(self.x,FS,color=kwargs['color'],linewidth=kwargs['linewidth']+1,label='Free Space path profile')
+                    else:
+                        ax.plot(self.x,FS,color='k',linewidth=2,label='Free Space path profile')
+
+                if kwargs['losdelay']:
+                    ax.vlines(self.taupeak_est,ymin=-130,ymax=-40,linestyles='dashed',color='blue')
+                    ax.vlines(self.taulos_geo,ymin=-130,ymax=-40,linestyles='dashed',color='red')
+
+                #ax.set_xlim(0,1000)
+                if kwargs['xlabel']:
+                    ax.set_xlabel('Delay (ns)',fontsize=kwargs['fontsize']) 
+
+                if kwargs['bcir']:
+                    phi = self.angpeak_est*np.pi/180.
+                    dang = np.abs(self.az - phi)
+                    u = np.where(dang==np.min(dang))[0][0]
+                    ax.plot(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmax,'r')
+                    ax.plot(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmin,'g')
+
+            if kwargs['ylabel']:
+                ax.set_ylabel('level (dB)',fontsize=kwargs['fontsize']) 
+            ax.set_title(self._filename+' '+str(PL))
+            if kwargs['legend']:
+                plt.legend(loc='best')
+
+            return fig,ax
+        else:
+            return (self.x,pdp)
+
+#        PL = -10*np.log10(np.sum(10**(pdp_min_thr/10.)))
+#        return self.x,pdp
 
 #        if kwargs['fig']==[]:
 #            fig = plt.figure(figsize=kwargs['figsize'])
@@ -1310,9 +1460,9 @@ class ADPchannel(bs.TUsignal):
         rho,theta = np.meshgrid(self.x*cvel,self.az)
         # convert y data in desired format
         dt,ylabels = self.cformat(**kwargs)
-        val = dt[:,0::Ndec][:,0:imax/Ndec]
-        th  = theta[:,0::Ndec][:,0:imax/Ndec]
-        rh  = rho[:,0::Ndec][:,0:imax/Ndec]
+        val = dt[:,0::Ndec][:,0:int(imax/Ndec)]
+        th  = theta[:,0::Ndec][:,0:int(imax/Ndec)]
+        rh  = rho[:,0::Ndec][:,0:int(imax/Ndec)]
         #vmin = np.min(val)
         #vmax = np.max(val)
         #Dynamic = max_val-vmin
@@ -1454,6 +1604,7 @@ class TBchannel(bs.TBsignal):
         .. math::
 
             \sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)} (\tau-\tau_m)^{2} PDP(\tau) d\tau} {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}}
+
         See Also
         --------
 
@@ -1473,16 +1624,21 @@ class TBchannel(bs.TBsignal):
         uf = np.where(self.y*self.y>v)
 
         taum = self.tau_moy(tau0,threshold_dB=threshold_dB)
-        
+
         num = np.sum(self.y[uf]*self.y[uf]*(self.x[uf[-1]]-taum)**2)
         den = np.sum(self.y[uf]*self.y[uf])
-        
+
         taurms = np.sqrt(num/den)
 
         return taurms
 
     def toFD(self,fGHz=np.linspace(2,5,256)):
         """ Transform to Frequency domain
+
+        Parameters
+        ----------
+        fGHz : ,Nf
+            frequency in GHz
 
         Returns
         -------
@@ -1493,6 +1649,7 @@ class TBchannel(bs.TBsignal):
 
         z = np.sum(self.y[:,None]*np.exp(-2*1j*fGHz[None,:]*np.pi*self.x[:,None]),axis=0)
         H = Tchannel(x=fGHz,y=z,tau=self.x)
+
         return H
 
     def SalehValenzuela(self,**kwargs):
@@ -2747,7 +2904,7 @@ class Mchannel(bs.FUsignal):
                 if (r == 3) & (t == 3):
                     ax.axes.set_xlabel('Frequency (GHz)',fontsize=15)
 
-                
+
 
 
 class Tchannel(bs.FUsignal):
@@ -3371,7 +3528,7 @@ class Tchannel(bs.FUsignal):
         normalize: bool
             energy normalized
         reverse : bool
-            inverse theta and phi represenation
+            inverse theta and phi representation
         polar : bool
             polar representation
         cmap: matplotlib.cmap
@@ -3388,12 +3545,13 @@ class Tchannel(bs.FUsignal):
         defaults = {
                     'fig': [],
                     'ax': [],
-                    'phi':(-180, 180),
-                    'normalize':False,
+                    'phi': (-180, 180),
                     'reverse' : True,
-                    'cmap':plt.cm.hot_r,
-                    'mode':'center',
-                    's':30,
+                    'cmap': plt.cm.hot_r,
+                    'vmin': [],
+                    'vmax': [],
+                    'mode': 'center',
+                    's': 30,
                     'fontsize':12,
                     'edgecolors':'none',
                     'b3d':False,
@@ -3422,22 +3580,24 @@ class Tchannel(bs.FUsignal):
         ax = kwargs.pop('ax')
         colorbar = kwargs.pop('colorbar')
         reverse = kwargs.pop('reverse')
-        normalize = kwargs.pop('normalize')
-        mode =kwargs.pop('mode')
+        mode = kwargs.pop('mode')
         title =kwargs.pop('title')
         xa = kwargs.pop('xa')
         xb = kwargs.pop('xb')
+        b3d = kwargs.pop('b3d')
+        vmin = kwargs.pop('vmin')
+        vmax = kwargs.pop('vmax')
+
         if fig == []:
             fig = plt.figure()
 
 
         Etot = self.energy(mode=mode) + 1e-15
+        EtotdB = 10*np.log10(Etot)
+        EtotdB = np.minimum(EtotdB,vmax)
+        EtotdB = np.maximum(EtotdB,vmin)
 
 
-        if normalize:
-            Emax = max(Etot)
-            Etot = Etot / Emax
-        #
         # col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
         # WARNING polar plot require radian angles
         #
@@ -3462,13 +3622,18 @@ class Tchannel(bs.FUsignal):
             al = 180. / np.pi
             alb = 180. / np.pi
 
-        col = 10 * np.log10(Etot)
+        col = (EtotdB - vmin)/(vmax-vmin)
         kwargs['c'] = col
+        kwargs['s'] = 200*col
+        kwargs['vmin'] = 0.
+        kwargs['vmax'] = 1.
+
         if len(col) != len(di):
             print("len(col):", len(col))
             print("len(di):", len(di))
         if ax == []:
             ax = fig.add_subplot(111, polar=polar)
+
         if reverse :
             scat = ax.scatter(di[:, 1] * al, di[:, 0] * alb, **kwargs)
             ax.axis((phi[0], phi[1], the[0], the[1]))
@@ -3482,12 +3647,10 @@ class Tchannel(bs.FUsignal):
 
         if title:
             ax.set_title(d, fontsize=fontsize+2)
+
         if colorbar:
             b = plt.colorbar(scat,cax=ax)
-            if normalize:
-                b.set_label('dB')
-            else:
-                b.set_label('Path Loss (dB)')
+            b.set_label('Path Loss (dB)')
 
             for t in b.ax.get_yticklabels():
                 t.set_fontsize(fontsize)
@@ -3669,8 +3832,8 @@ class Tchannel(bs.FUsignal):
         edgecolors: bool
         colorbar bool
 
-        Summary
-        --------
+        Notes
+        -----
 
         scatter plot of the DoA-DoD channel structure
         the energy is colorcoded over all couples of DoA-DoD
@@ -5067,7 +5230,7 @@ class Ctilde(PyLayers):
                     'cmap':plt.cm.hot_r,
                     'mode':'center',
                     's':30,
-                    'fontsize':12,
+                    'fontsize':22,
                     'edgecolors':'none',
                     'b3d':False,
                     'polar':False,
@@ -5211,8 +5374,8 @@ class Ctilde(PyLayers):
         xa :
         xb :
 
-        Summary
-        --------
+        Notes
+        -----
 
         scatter plot of the DoA-DoD channel structure
         the energy is color coded over all couples of DoA-DoD

@@ -1,10 +1,16 @@
-from SimPy.SimulationRT import Simulation, Process, hold
 import numpy as np
 import scipy as sp
 import scipy.io as spio
 import networkx as nx
 import matplotlib.pyplot as plt
-import ConfigParser
+import sys
+
+if sys.version_info.major==2:
+    from SimPy.SimulationRT import Simulation, Process, hold
+    import ConfigParser
+else:
+    import configparser as ConfigParser
+    from simpy import Process
 
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu

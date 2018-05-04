@@ -8,6 +8,7 @@
 ####################################################################
 
 import types, math, copy
+import pdb
 
 # vec3
 class vec3:
@@ -36,9 +37,8 @@ class vec3:
         specify them as a string:
 
         v = vec3([1,2,3]) -> v = <1,2,3>
-        v = vec3("4,5")   -> v = <4,5,0>        
+        v = vec3("4,5")   -> v = <4,5,0>
         """
-        
         if len(args)==0:
             self.x, self.y, self.z = (0.0, 0.0, 0.0)
 
@@ -47,7 +47,7 @@ class vec3:
             # scalar
             if T==types.FloatType or T==types.IntType or T==types.LongType:
                 self.x, self.y, self.z = (args[0], args[0], args[0])
-            # vec3  
+            # vec3
             elif isinstance(args[0], vec3):
                 self.x, self.y, self.z = args[0]
             # Tuple/List
@@ -62,7 +62,7 @@ class vec3:
                 elif len(args[0])==3:
                     self.x, self.y, self.z = args[0]
                 else:
-                    raise TypeError, "vec3() takes at most 3 arguments"
+                    raise TypeError("vec3() takes at most 3 arguments")
             # String
             elif T==types.StringType:
                 s=args[0].replace(","," ").replace("  "," ").strip().split(" ")
@@ -73,20 +73,20 @@ class vec3:
                 self.x, self.y, self.z = dummy
             # error
             else:
-                raise TypeError,"vec3() arg can't be converted to vec3"
+                raise TypeError("vec3() arg can't be converted to vec3")
 
         elif len(args)==2:
             self.x, self.y, self.z = (args[0], args[1], 0.0)
-            
+
         elif len(args)==3:
             self.x, self.y, self.z = args
 
         else:
-            raise TypeError, "vec3() takes at most 3 arguments"
+            raise TypeError("vec3() takes at most 3 arguments")
 
 
     def __repr__(self):
-        return 'vec3('+`self.x`+', '+`self.y`+', '+`self.z`+')'
+        return 'vec3('+str(self.x)+', '+str(self.y)+', '+str(self.z)+')'
 
     def __str__(self):
         fmt="%1.4f"
@@ -99,11 +99,11 @@ class vec3:
         >>> a=vec3(1.0, 0.5, -1.8)
         >>> b=vec3(-0.3, 0.75, 0.5)
         >>> c=vec3(-0.3, 0.75, 0.5)
-        >>> print a==b
+        >>> print(a==b)
         0
-        >>> print b==c
+        >>> print(b==c)
         1
-        >>> print a==None
+        >>> print(a==None)
         0
         """
         if isinstance(other, vec3):
@@ -117,11 +117,11 @@ class vec3:
         >>> a=vec3(1.0, 0.5, -1.8)
         >>> b=vec3(-0.3, 0.75, 0.5)
         >>> c=vec3(-0.3, 0.75, 0.5)
-        >>> print a!=b
+        >>> print(a!=b)
         1
-        >>> print b!=c
+        >>> print(b!=c)
         0
-        >>> print a!=None
+        >>> print(a!=None)
         1
         """
         if isinstance(other, vec3):
@@ -135,37 +135,37 @@ class vec3:
 
         >>> a=vec3(1.0, 0.5, -1.8)
         >>> b=vec3(-0.3, 0.75, 0.5)
-        >>> print a+b
+        >>> print(a+b)
         (0.7000, 1.2500, -1.3000)
         """
         if isinstance(other, vec3):
             return vec3(self.x+other.x, self.y+other.y, self.z+other.z)
         else:
-            raise TypeError, "unsupported operand type for +"
+            raise TypeError("unsupported operand type for +")
 
     def __sub__(self, other):
         """Vector subtraction.
 
         >>> a=vec3(1.0, 0.5, -1.8)
         >>> b=vec3(-0.3, 0.75, 0.5)
-        >>> print a-b
+        >>> print(a-b)
         (1.3000, -0.2500, -2.3000)
         """
         if isinstance(other, vec3):
             return vec3(self.x-other.x, self.y-other.y, self.z-other.z)
         else:
-            raise TypeError, "unsupported operand type for -"
+            raise TypeError("unsupported operand type for -")
 
     def __mul__(self, other):
         """Multiplication with a scalar or dot product.
 
         >>> a=vec3(1.0, 0.5, -1.8)
         >>> b=vec3(-0.3, 0.75, 0.5)
-        >>> print a*2.0
+        >>> print(a*2.0)
         (2.0000, 1.0000, -3.6000)
-        >>> print 2.0*a
+        >>> print(2.0*a)
         (2.0000, 1.0000, -3.6000)
-        >>> print a*b
+        >>> print(a*b)
         -0.825
         """
 
@@ -182,7 +182,7 @@ class vec3:
             if getattr(other,"__rmul__",None)!=None:
                 return other.__rmul__(self)
             else:
-                raise TypeError, "unsupported operand type for *"
+                raise TypeError("unsupported operand type for *")
 
     __rmul__ = __mul__
 
@@ -190,7 +190,7 @@ class vec3:
         """Division by scalar
 
         >>> a=vec3(1.0, 0.5, -1.8)
-        >>> print a/2.0
+        >>> print(a/2.0)
         (0.5000, 0.2500, -0.9000)
         """
         T = type(other)
@@ -199,13 +199,14 @@ class vec3:
             return vec3(self.x/other, self.y/other, self.z/other)
         # unsupported
         else:
-            raise TypeError, "unsupported operand type for /"
+            raise TypeError("unsupported operand type for /")
 
     def __mod__(self, other):
         """Modulo (component wise)
 
         >>> a=vec3(3.0, 2.5, -1.8)
-        >>> print a%2.0
+        >>> print(a%2.0)
+
         (1.0000, 0.5000, 0.2000)
         """
         T = type(other)
@@ -214,7 +215,7 @@ class vec3:
             return vec3(self.x%other, self.y%other, self.z%other)
         # unsupported
         else:
-            raise TypeError, "unsupported operand type for %"
+            raise TypeError("unsupported operand type for %")
 
     def __iadd__(self, other):
         """Inline vector addition.
@@ -222,7 +223,7 @@ class vec3:
         >>> a=vec3(1.0, 0.5, -1.8)
         >>> b=vec3(-0.3, 0.75, 0.5)
         >>> a+=b
-        >>> print a
+        >>> print(a)
         (0.7000, 1.2500, -1.3000)
         """
         if isinstance(other, vec3):
@@ -231,7 +232,7 @@ class vec3:
             self.z+=other.z
             return self
         else:
-            raise TypeError, "unsupported operand type for +="
+            raise TypeError("unsupported operand type for +=")
 
     def __isub__(self, other):
         """Inline vector subtraction.
@@ -239,7 +240,7 @@ class vec3:
         >>> a=vec3(1.0, 0.5, -1.8)
         >>> b=vec3(-0.3, 0.75, 0.5)
         >>> a-=b
-        >>> print a
+        >>> print(a)
         (1.3000, -0.2500, -2.3000)
         """
         if isinstance(other, vec3):
@@ -248,14 +249,14 @@ class vec3:
             self.z-=other.z
             return self
         else:
-            raise TypeError, "unsupported operand type for -="
+            raise TypeError("unsupported operand type for -=")
 
     def __imul__(self, other):
         """Inline multiplication (only with scalar)
 
         >>> a=vec3(1.0, 0.5, -1.8)
         >>> a*=2.0
-        >>> print a
+        >>> print(a)
         (2.0000, 1.0000, -3.6000)
         """
         T = type(other)
@@ -266,14 +267,14 @@ class vec3:
             self.z*=other
             return self
         else:
-            raise TypeError, "unsupported operand type for *="
+            raise TypeError("unsupported operand type for *=")
 
     def __idiv__(self, other):
         """Inline division with scalar
 
         >>> a=vec3(1.0, 0.5, -1.8)
         >>> a/=2.0
-        >>> print a
+        >>> print(a)
         (0.5000, 0.2500, -0.9000)
         """
         T = type(other)
@@ -284,14 +285,14 @@ class vec3:
             self.z/=other
             return self
         else:
-            raise TypeError, "unsupported operand type for /="
+            raise TypeError("unsupported operand type for /=")
 
     def __imod__(self, other):
         """Inline modulo
 
         >>> a=vec3(3.0, 2.5, -1.8)
         >>> a%=2.0
-        >>> print a
+        >>> print(a)
         (1.0000, 0.5000, 0.2000)
         """
         T = type(other)
@@ -302,13 +303,13 @@ class vec3:
             self.z%=other
             return self
         else:
-            raise TypeError, "unsupported operand type for %="
+            raise TypeError("unsupported operand type for %=")
 
     def __neg__(self):
         """Negation
 
         >>> a=vec3(3.0, 2.5, -1.8)
-        >>> print -a
+        >>> print(-a)
         (-3.0000, -2.5000, 1.8000)
         """
         return vec3(-self.x, -self.y, -self.z)
@@ -316,7 +317,7 @@ class vec3:
     def __pos__(self):
         """
         >>> a=vec3(3.0, 2.5, -1.8)
-        >>> print +a
+        >>> print(+a)
         (3.0000, 2.5000, -1.8000)
         """
         return vec3(+self.x, +self.y, +self.z)
@@ -327,7 +328,7 @@ class vec3:
         abs(v) is equivalent to v.length().
 
         >>> a=vec3(1.0, 0.5, -1.8)
-        >>> print abs(a)
+        >>> print(abs(a))
         2.11896201004
         """
         return math.sqrt(self*self)
@@ -341,40 +342,40 @@ class vec3:
         """Return a component by index (0-based)
 
         >>> a=vec3(1.0, 0.5, -1.8)
-        >>> print a[0]
+        >>> print(a[0])
         1.0
-        >>> print a[1]
+        >>> print(a[1])
         0.5
-        >>> print a[2]
+        >>> print(a[2])
         -1.8
         """
         T=type(key)
         if T!=types.IntType and T!=types.LongType:
-            raise TypeError, "index must be integer"
+            raise TypeError("index must be integer")
 
         if   key==0: return self.x
         elif key==1: return self.y
         elif key==2: return self.z
         else:
-            raise IndexError,"index out of range"
+            raise IndexError("index out of range")
 
     def __setitem__(self, key, value):
         """Set a component by index (0-based)
 
         >>> a=vec3()
         >>> a[0]=1.5; a[1]=0.7; a[2]=-0.3
-        >>> print a
+        >>> print(a)
         (1.5000, 0.7000, -0.3000)
         """
         T=type(key)
         if T!=types.IntType and T!=types.LongType:
-            raise TypeError, "index must be integer"
+            raise TypeError("index must be integer")
 
         if   key==0: self.x = value
         elif key==1: self.y = value
         elif key==2: self.z = value
         else:
-            raise IndexError,"index out of range"
+            raise IndexError("index out of range")
 
     def cross(self, other):
         """Cross product.
@@ -382,17 +383,17 @@ class vec3:
         >>> a=vec3(1.0, 0.5, -1.8)
         >>> b=vec3(-0.3, 0.75, 0.5)
         >>> c=a.cross(b)
-        >>> print c
+        >>> print(c)
         (1.6000, 0.0400, 0.9000)
         """
-        
+
         if isinstance(other, vec3):
             return vec3(self.y*other.z-self.z*other.y,
                         self.z*other.x-self.x*other.z,
                         self.x*other.y-self.y*other.x)
         else:
-            raise TypeError, "unsupported operand type for cross()"
-        
+            raise TypeError("unsupported operand type for cross()")
+
 
     def length(self):
         """Return the length of the vector.
@@ -400,7 +401,7 @@ class vec3:
         v.length() is equivalent to abs(v).
 
         >>> a=vec3(1.0, 0.5, -1.8)
-        >>> print a.length()
+        >>> print(a.length())
         2.11896201004
         """
 
@@ -410,7 +411,7 @@ class vec3:
         """Return normalized vector.
 
         >>> a=vec3(1.0, 0.5, -1.8)
-        >>> print a.normalize()
+        >>> print(a.normalize())
         (0.4719, 0.2360, -0.8495)
         """
         try:
@@ -424,14 +425,14 @@ class vec3:
 
         >>> a=vec3(1.0, 0.5, -1.8)
         >>> b=vec3(-0.3, 0.75, 0.5)
-        >>> print a.angle(b)
+        >>> print(a.angle(b))
         1.99306755584
         """
-        
+
         if isinstance(other, vec3):
             return math.acos((self*other) / (abs(self)*abs(other)))
         else:
-            raise TypeError, "unsupported operand type for angle()"
+            raise TypeError("unsupported operand type for angle()")
 
     def reflect(self, N):
         """Return the reflection vector.
@@ -439,7 +440,7 @@ class vec3:
         N is the surface normal which has to be of unit length.
 
         >>> a=vec3(1.0, 0.5, -1.8)
-        >>> print a.reflect(vec3(1,0,1))
+        >>> print( a.reflect(vec3(1,0,1))
         (2.6000, 0.5000, -0.2000)
         """
 
@@ -452,9 +453,9 @@ class vec3:
         eta is the relative index of refraction. If the returned
         vector is zero then there is no transmitted light because
         of total internal reflection.
-        
+
         >>> a=vec3(1.0, -1.5, 0.8)
-        >>> print a.refract(vec3(0,1,0), 1.33)
+        >>> print(a.refract(vec3(0,1,0), 1.33))
         (1.3300, -1.7920, 1.0640)
         """
 
@@ -472,7 +473,7 @@ class vec3:
         self*self.ortho()==0).
 
         >>> a=vec3(1.0, -1.5, 0.8)
-        >>> print round(a*a.ortho(),8)
+        >>> print(round(a*a.ortho(),8))
         0.0
         """
 
@@ -488,33 +489,32 @@ class vec3:
         # x is smallest
         else:
             return vec3(0.0, -self.z, self.y)
-        
-	
+
     def ang0(self):
-	C    = vec3(1.0,0.0,0.0)
-	try:
-		return self.angle(C)
-	except: 
-		return 0.0
+        C  = vec3(1.0,0.0,0.0)
+        try:
+            return self.angle(C)
+        except:
+            return 0.0
 
     def vquarter(self):
-	a0 	= copy.copy(self.normalize())
-	a1 	= copy.copy(self.normalize())
-	a0.x	= math.cos(self.ang0()+math.pi/6.0)*self.length()
-	a1.x	= math.cos(self.ang0()-math.pi/6.0)*self.length()
-	a0.y	= math.sin(self.ang0()+math.pi/6.0)*self.length()
-	a1.y	= math.sin(self.ang0()-math.pi/6.0)*self.length()
-	return [a0,self,a1]
+        a0 	= copy.copy(self.normalize())
+        a1 	= copy.copy(self.normalize())
+        a0.x	= math.cos(self.ang0()+math.pi/6.0)*self.length()
+        a1.x	= math.cos(self.ang0()-math.pi/6.0)*self.length()
+        a0.y	= math.sin(self.ang0()+math.pi/6.0)*self.length()
+        a1.y	= math.sin(self.ang0()-math.pi/6.0)*self.length()
+        return [a0,self,a1]
 
     def tolist(self):
-	return [self.x, self.y, self.z]
- 
+	    return [self.x, self.y, self.z]
+
 
 ######################################################################
 def _test():
     import doctest, vec3
     failed, total = doctest.testmod(vec3)
-    print "%d/%d failed" % (failed, total)
+    print("%d/%d failed" % (failed, total))
 
 if __name__=="__main__":
 

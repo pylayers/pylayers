@@ -611,6 +611,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
 
         tpts : tuple
            tpts[0] : points coordinates
+                    np.array
            tpts[1] : points index
         L : pylayers.layout.Layout
 
@@ -635,7 +636,8 @@ class Polygon(pro.PyLayers, shg.Polygon):
         # TODO : Sometimes polygon points are not exactly corresponding to nodes of Layout (Why ? )
         #        This is the reason of the applied tolerance of 5cm
         #
-        npts = [ ispoint(tpts, np.array(xx), tol=0.05) for xx in zip(x[0:-1], y[0:-1])]
+
+        npts = [ ispoint(tpts, np.array(xx), tol=0.05) for xx in zip(x[0:-1], y[0:-1]) ]
 
         assert (0 not in npts), pdb.set_trace()
         #if 0 in npts:
@@ -643,6 +645,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
         # seg list of tuple [(n1,n2),(n2,n3),....(,)]
         seg = zip(npts, np.roll(npts, -1))
         vnodes = []
+
         for pseg in seg:
             vnodes = vnodes + [pseg[0]]
             # get the list of associated segments
@@ -757,7 +760,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
         """
         # get the sequence of segments
         # handle subsegments
-        lseg = filter(lambda x: x > 0, self.vnodes)
+        lseg = [x for x in self.vnodes if x > 0 ]
         S1 = []
         S2 = []
         AS2 = []
@@ -885,7 +888,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
             ax = kwargs['ax']
 
         x, y = self.exterior.xy
-        numpt = filter(lambda z: z < 0, self.vnodes)
+        numpt = [ z for z in self.vnodes if z <0 ]
 
         ax.fill(x, y,
                 color=kwargs['color'],
@@ -1035,8 +1038,8 @@ class Polygon(pro.PyLayers, shg.Polygon):
         # vnodes do not necessarily start with a point
         #
 
-        npt = filter(lambda x: x < 0, self.vnodes)
-        nseg = filter(lambda x: x > 0, self.vnodes)
+        npt = [ x for x in self.vnodes if x < 0 ]
+        nseg = [ x for x in self.vnodes if x < 0 ]
 
         #
         # in convex case all segments see all segments
@@ -1726,7 +1729,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
         if not hasattr(self, 'xy'):
             self.coorddeter()
 
-        pts = filter(lambda x: x < 0, self.vnodes)
+        pts = [ x for x in self.vnodes if x < 0 ]
         A = self.xy[:, :-1]
         B = np.roll(A, -1)
         C = np.roll(B, -1)
@@ -3364,28 +3367,28 @@ def are_points_inside_cone1(points,apex,v,radius=np.inf):
             dp1p2 = u1*u2
         else:
             dp1p2 =  pvec1*pvec2
-        bcw[k,...] = dp1p2 < 0 
+        bcw[k,...] = dp1p2 < 0
     #
-    # be careful the unbitable part is below (avoid np.where) 
+    # be careful the unbitable part is below (avoid np.where)
     #
     bcone = np.prod(bcw,axis=0)
     bcone_ = np.zeros(len(brad),dtype=bool)
     bcone__ = np.zeros(len(bhs),dtype=bool)
     bcone_[brad] = bcone
     bcone__[bhs] = bcone_
-    return bcone__ 
+    return bcone__
 
 def are_points_inside_cone(points,apex,v,radius=np.inf):
-    """ determine if a set of points are inside a cone 
+    """ determine if a set of points are inside a cone
 
-    Parameters 
+    Parameters
     ----------
 
-    points : np.array (Npoints x Ndim ) 
+    points : np.array (Npoints x Ndim )
     apex : (Ndim x 1)
     v    : (Ndim x Nvec)
     radius : float
-        
+
 
     """
 
@@ -3393,25 +3396,26 @@ def are_points_inside_cone(points,apex,v,radius=np.inf):
     assert(type(apex)==np.ndarray)
     assert(type(v)==np.ndarray)
 
-    w = points - apex[None,:]  
+    w = points - apex[None,:]
     nw = np.linalg.norm(w,axis=1)
-    # remove point which are too close to the apex 
+    # remove point which are too close to the apex
     bvalid = ~np.isclose(nw,0)
 
     Nvec = v.shape[1]
-    # vcone  : cone axis 
+    # vcone  : cone axis
     v_n  = v/np.linalg.norm(v,axis=0)
     vcone = np.mean(v_n,axis=1)
-    # cliping half space 
+    # cliping half space
     bhs = bvalid & (np.dot(w,vcone)>0)
-    # cliping distance 
+    # cliping distance
     brad = np.linalg.norm(w[bhs,:],axis=1) < radius
 
-    w_vec = w[bhs,:][brad,:] 
+    w_vec = w[bhs,:][brad,:]
     try:
         x = np.linalg.solve(v_n,w_vec.T)
     except:
         pdb.set_trace()
+
     bx = x>0
 
     bcone = np.prod(bx,axis=0)
@@ -3419,50 +3423,70 @@ def are_points_inside_cone(points,apex,v,radius=np.inf):
     bcone__ = np.zeros(len(bhs),dtype=bool)
     bcone_[brad] = bcone
     bcone__[bhs] = bcone_
-    return bcone__ 
+    return bcone__
 
 def intersect_cone_seg(line0,line1,seg,bvis=False,bbool=False):
-    """ intersection of a cone and a segment 
+    """ intersection of a cone and a segment
 
     Parameters
     ----------
 
     line0 : tuple(np.array,np.array)
-        ( apex , pt1 ) 
+        ( apex , pt1 )
     line1 : tuple(np.array,np.array)
-        ( apex , pt2 ) 
+        ( apex , pt2 )
     seg  : tuple(np.array,np.array)
-        (pta , ptb ) 
-    bvis 
-    bbool
+        (pta , ptb )
+    bvis : boolean for geometric vizualisation
+    bbool : boolean
 
-    See Also 
+    Returns
+    -------
+
+    tahe : tail head of segment
+    ratio : float
+
+    Examples
     --------
 
-    Signature.run 
-    are_points_inside_cone 
+        >>> line0 = (np.array([ 5.631,  5.051]), np.array([ 0.99998193,  0.00601082]))
+        >>> line1 = (np.array([ 5.631,  5.051]), np.array([ 0.99998947,  0.00458921]))
+        >>> seg   = (np.array([ 5.631,  5.051]), np.array([ 5.64275066,  3.22603098]))
+        >>> intersect_cone_seg(line0,line1,seg,bvis=True,bbool=False)
+
+    See Also
+    --------
+
+    Signature.run
+    are_points_inside_cone
     intersect_halfline_seg
 
     """
     tahe = []
-    ratio = 0 
-    # points : np.array 2 x 2   
+    ratio = 0
+    # points : np.array 2 x 2
     points = np.vstack((seg[0],seg[1]))
     apex = line0[0]
     # if second point of lines are the same (problem)
     if ( (line0[1][0]==line1[1][0]) and
          (line0[1][1]==line1[1][1])   ):
-         pdb.set_trace() 
+         pdb.set_trace()
 
-    # v : np.array 2 x 2 
-    # first column  termination of line0 
-    # second column termination of line1 
-    
+    # v : np.array 2 x 2
+    # first column  termination of line0
+    # second column termination of line1
+
     v = np.vstack((line0[1],line1[1])).T
     bb = are_points_inside_cone(points,apex,v,radius=np.inf)
 
     x0,p0 = intersect_halfline_seg(line0, seg)
     x1,p1 = intersect_halfline_seg(line1, seg)
+
+    # intersection at the apex 
+    if (p0==p1).all():
+        return(tahe,ratio)
+
+
 
     if bb[0] & bb[1]: # termination of segment fully inside the cone
         tahe = seg
@@ -3471,20 +3495,21 @@ def intersect_cone_seg(line0,line1,seg,bvis=False,bbool=False):
         else:
             ratio = 1
 
-    if ~bb[0] & ~bb[1]: # termination segment fully outside the cone 
-        if (( ( (x1>0) or np.isclose(x1,0)) & ((x1<1) or np.isclose(x1,1)) ) and 
+    if ~bb[0] & ~bb[1]: # termination segment fully outside the cone
+        if (( ( (x1>0) or np.isclose(x1,0)) & ((x1<1) or np.isclose(x1,1)) ) and
             ( ( (x0>0) or np.isclose(x0,0)) & ((x0<1) or np.isclose(x0,1)) ) ):
             tahe = [p0,p1]
             ratio = 1
         else:
-            tahe = [] 
+            tahe = []
             ratio = 0
 
-    if bb[0] & ~bb[1]: # seg0 inside seg1 outside 
-        if (( (x1>0) or np.isclose(x1,0)) & ((x1<1) or np.isclose(x1,1)) ): 
+    #pdb.set_trace()
+    if bb[0] & ~bb[1]: # seg0 inside seg1 outside
+        if (( (x1>0) or np.isclose(x1,0)) & ((x1<1) or np.isclose(x1,1)) ):
             tahe = [seg[0],p1]
-        if (( (x0>0) or np.isclose(x0,0)) & ((x0<1) or np.isclose(x0,1)) ): 
-            tahe = [seg[0],p0] 
+        if (( (x0>0) or np.isclose(x0,0)) & ((x0<1) or np.isclose(x0,1)) ):
+            tahe = [seg[0],p0]
         if (np.abs(x0)!=np.inf) and (np.abs(x1)!=np.inf):
             try:
                 ratio = np.linalg.norm(tahe[1]-tahe[0])/np.linalg.norm(p1-p0)
@@ -3493,10 +3518,10 @@ def intersect_cone_seg(line0,line1,seg,bvis=False,bbool=False):
         else:
             ratio = 1
 
-    if ~bb[0] & bb[1]: # seg0 outside seg1 inside 
+    if ~bb[0] & bb[1]: # seg0 outside seg1 inside
         if (( (x0>0) or np.isclose(x0,0)) & ((x0<1) or np.isclose(x0,1)) ):
             tahe = [seg[1],p0]
-        if (( (x1>0) or np.isclose(x1,0)) & ((x1<1) or np.isclose(x1,1)) ): 
+        if (( (x1>0) or np.isclose(x1,0)) & ((x1<1) or np.isclose(x1,1)) ):
             tahe = [seg[1],p1]
         if (np.abs(x0)!=np.inf) and (np.abs(x1)!=np.inf ):
             ratio = np.linalg.norm(tahe[1]-tahe[0])/np.linalg.norm(p1-p0)

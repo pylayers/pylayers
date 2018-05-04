@@ -46,7 +46,7 @@ try:
     from mayavi.sources.vtk_data_source import VTKDataSource
     from mayavi import mlab
 except:
-    print 'Layout:Mayavi is not installed'
+    print('Layout:Mayavi is not installed')
 #Those lines handle incompatibility between mayavi and VTK
 #and redirect noisy warning message into a log file
 # import vtk
@@ -197,7 +197,7 @@ class CorSer(PyLayers):
         #BODY & interferers
         self.subject = str(self.log['Subject'].values[0].replace('jihad','Jihad')).split(' ')
         #filter typos in  self.subject
-        self.subject = filter(lambda x : len(x)!=0,self.subject)
+        self.subject = [ x for x in self.subject if len(x)!=0 ] 
         if 'Jihad' in self.subject :
             uj = self.subject.index('Jihad')
             self.subject[uj]='Jihan'
@@ -230,42 +230,42 @@ class CorSer(PyLayers):
         # 2 - (if available) apply offset
 
         if ('BS' in self.typ) or ('FULL' in self.typ):
-            print '\nBS data frame index: ',
+            print( '\nBS data frame index: ',)
             self._align_on_devdf(typ='BS')
-            print 'Align on mocap OK...',
+            print( 'Align on mocap OK...',)
             try:
                 self._apply_offset('BS')
-                print 'time-offset applied OK'
+                print ('time-offset applied OK')
             except:
-                print 'WARNING time-offset NOT applied'
+                print ('WARNING time-offset NOT applied')
                 print ('No BS offset not yet set => use self.offset_setter ')
 
         if ('TCR' in self.typ) or ('FULL' in self.typ):
-            print '\nTCR data frame index:', 
+            print ('\nTCR data frame index:', )
             self._align_on_devdf(typ='TCR')
-            print 'Align on mocap OK...',
+            print ('Align on mocap OK...',)
             try:
                 self._apply_offset('TCR')
-                print 'time-offset applied OK'
+                print ('time-offset applied OK')
             except:
-                print 'WARNING time-offset NOT applied'
+                print ('WARNING time-offset NOT applied')
                 print ('No TCR offset not yet set => use self.offset_setter')
 
 
         if ('HK' in self.typ) or ('FULL' in self.typ):
-            print '\nHKB data frame index:',
+            print ('\nHKB data frame index:',)
             self._align_on_devdf(typ='HKB')
-            print 'Align on mocap OK...',
+            print ('Align on mocap OK...',)
             try:
                 # self._apply_offset('HKB')
-                print 'time-offset applied OK'
+                print ('time-offset applied OK')
             except:
-                print 'WARNING time-offset NOT applied'
+                print ('WARNING time-offset NOT applied')
                 print ('No HKB offset not yet set => use self.offset_setter')
 
-        print '\nCreate distance Dataframe...',
+        print ('\nCreate distance Dataframe...',)
         self._computedistdf()
-        print 'OK',
+        print ('OK',)
 
     def __repr__(self):
         st = ''
@@ -333,27 +333,27 @@ class CorSer(PyLayers):
         """
 
         title = '{0:21} | {1:7} | {2:8} | {3:10} '.format('Name in Dataframe', 'Real Id', 'Body Id', 'Subject')
-        print title + '\n' + '='*len(title)
+        print( title + '\n' + '='*len(title))
         # access points HKB
         for d in self.din:
             if ('HK' in d) :
                 dev = self.devmapper(d,'HKB')
-                print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+                print('{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
         if 'FULL' in self.typ:
-                print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+                print ('{0:21} | {1:7} | {2:8} | {3:10} '.format('','','',''))
         for d in self.din:
             if ('BS' in d) :
                 dev = self.devmapper(d,'BS')
-                print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+                print ('{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
         if 'FULL' in self.typ:
-                print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+                print ('{0:21} | {1:7} | {2:8} | {3:10} '.format('','','',''))
 
         # access points TCR
         for d in self.din:
             if ('TCR' in d)  :
                 dev = self.devmapper(d,'TCR')
-                print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
-        print '{0:66}'.format('-'*len(title) )
+                print ('{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
+        print ('{0:66}'.format('-'*len(title) ))
         #device per RAT per body
         for b in self.B:
             if b not in self.interf:
@@ -362,23 +362,23 @@ class CorSer(PyLayers):
 
                     if ('HK' in d):
                         dev = self.devmapper(d,'HKB')
-                        print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+                        print( '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
                 #bespoon
                 if ('FULL' in self.typ) or ('HKB' in self.typ):
-                    print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+                    print( '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','',''))
                 for d in self.B[b].dev.keys():
                     if ('BS' in d):
                         dev = self.devmapper(d,'BS')
-                        print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+                        print( '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
                 # print '{0:66}'.format('-'*len(title) )
                 #TCR per body
                 if 'FULL' in self.typ:
-                    print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+                    print ('{0:21} | {1:7} | {2:8} | {3:10} '.format('','','',''))
                 for d in self.B[b].dev.keys():
                     if ('TCR' in d):
                         dev = self.devmapper(d,'TCR')
-                        print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
-                print '{0:66}'.format('-'*len(title) )
+                        print ('{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
+                print ('{0:66}'.format('-'*len(title) ))
 
     @property
     def ant(self):
@@ -386,27 +386,27 @@ class CorSer(PyLayers):
         """
 
         title = '{0:21} | {1:7} | {2:8} | {3:10} '.format('Name in Dataframe', 'Real Id', 'Body Id', 'Subject')
-        print title + '\n' + '='*len(title) 
+        print (title + '\n' + '='*len(title) )
         # access points HKB
         for d in self.din:
             if ('HK' in d) :
                 dev = self.devmapper(d,'HKB')
-                print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+                print ('{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
         if 'FULL' in self.typ:
-                print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+                print ('{0:21} | {1:7} | {2:8} | {3:10} '.format('','','',''))
         for d in self.din:
             if ('BS' in d) :
                 dev = self.devmapper(d,'BS')
-                print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+                print ('{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
         if 'FULL' in self.typ:
-                print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+                print( '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','',''))
 
         # access points TCR
         for d in self.din:
             if ('TCR' in d)  :
                 dev = self.devmapper(d,'TCR')
-                print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
-        print '{0:66}'.format('-'*len(title) )
+                print( '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
+        print ('{0:66}'.format('-'*len(title) ))
         #device per RAT per body
         for b in self.B:
             if b not in self.interf:
@@ -415,23 +415,23 @@ class CorSer(PyLayers):
 
                     if ('HK' in d):
                         dev = self.devmapper(d,'HKB')
-                        print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+                        print( '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
                 #bespoon
                 if ('FULL' in self.typ) or ('HKB' in self.typ):
-                    print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+                    print( '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','',''))
                 for d in self.B[b].dev.keys():
                     if ('BS' in d):
                         dev = self.devmapper(d,'BS')
-                        print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+                        print( '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
                 # print '{0:66}'.format('-'*len(title) )
                 #TCR per body
                 if 'FULL' in self.typ:
-                    print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+                    print( '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','',''))
                 for d in self.B[b].dev.keys():
                     if ('TCR' in d):
                         dev = self.devmapper(d,'TCR')
-                        print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
-                print '{0:66}'.format('-'*len(title) )
+                        print( '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3]))
+                print( '{0:66}'.format('-'*len(title) ))
 
 
 
@@ -516,7 +516,7 @@ bernard
 
         filename = os.path.join(self.rootdir,'RAW','11-06-2014','MOCAP','scene.c3d')
 
-        print "\nload infrastructure node position:",
+        print( "\nload infrastructure node position:",)
         a, self.infraname, pts, i = c3d.ReadC3d(filename)
 
         pts = pts/1000.
@@ -634,7 +634,7 @@ bernard
         self.B={}
         color=['LightBlue','YellowGreen','PaleVioletRed','white','white','white','white','white','white','white']
         for us,subject in enumerate(self.subject):
-            print "\nload ",subject, " body:",
+            print( "\nload ",subject, " body:",)
             seriestr = str(self.serie).zfill(3)
             if day == 11:
                 self.filemocap = os.path.join(self.rootdir,'RAW',str(self.day)+'-06-2014','MOCAP','serie_'+seriestr+'.c3d')
@@ -677,7 +677,7 @@ bernard
                 self.interf.remove('Bernard_Cylindre:')
             for ui,i in enumerate(self.interf):
                 #try:
-                print "load ",i, " interfering body:",
+                print( "load ",i, " interfering body:",)
                 _filemocap = pyu.getshort(self.filemocap)
                 self.B.update({i:Cylinder(name=i,
                                           _filemocap=_filemocap,
@@ -1098,7 +1098,7 @@ bernard
         #C or D : 3 x 11 body segments x time
         # radius of cylinders are (nb_cylinder x time)
         for b in self.B:
-            print 'processing shadowing from ',b
+            print( 'processing shadowing from ',b)
             # if b is a body not a cylinder
             if not 'Cylindre' in b:
                 uta = self.B[b].sl[:,0].astype('int')
@@ -1225,7 +1225,7 @@ bernard
             ax = kwargs.pop('ax')
 
         if not '_visiintersect' in dir(self):
-            print 'Visibility computed only once'
+            print( 'Visibility computed only once')
             self.compute_visibility(techno=techno)
 
 
@@ -1535,7 +1535,7 @@ bernard
         #     notebook = False
 
         if not '_visiintersect' in dir(self):
-            print 'Visibility is computed only once, Please wait\n'
+            print( 'Visibility is computed only once, Please wait\n')
             self.compute_visibility(techno=techno)
 
 
@@ -1869,7 +1869,7 @@ bernard
         if ax == []:
             ax = fig.add_subplot(111)
 
-        if self.offset[self._filename].has_key('video_sec'):
+        if 'video_sec' in self.offset[self._filename]:
             offset = self.offset[self._filename]['video_sec']
         elif offset != '':
             offset = offset
@@ -1905,7 +1905,7 @@ bernard
 
         """
 
-        if self.offset[self._filename].has_key('video_sec'):
+        if 'video_sec' in self.offset[self._filename]:
             offset = self.offset[self._filename]['video_sec']
         elif offset != '':
             offset = offset
@@ -1915,7 +1915,7 @@ bernard
 
         videofile = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','Videos')
         ldir = os.listdir(videofile)
-        luldir = map(lambda x : self._filename in x,ldir)
+        luldir = [ self._filename in x for x in ldir ] 
         uldir = luldir.index(True)
         _filename = ldir[uldir]
         filename = os.path.join(videofile,_filename)
@@ -2160,7 +2160,7 @@ bernard
         ax1 = fig.add_subplot(121)
         #img1 = ax1.imshow(self.rssi[:,:,timeindex],interpolation='nearest',origin='lower')
         img1 = ax1.imshow(dt1,interpolation='nearest')
-        labels = map(lambda x : self.idHKB[x],range(1,17))
+        labels = [ self.idHKB[x] for x in range(1,17)] 
         plt.xticks(range(16),labels,rotation=80,fontsize=14)
         plt.yticks(range(16),labels,fontsize=14)
         if kind=='time':
@@ -2207,7 +2207,7 @@ bernard
             >>> C.lk2nd(lk)
         """
         u = lk.replace('HKB:','').split('-')
-        v = map(lambda x : self.idHKB[int(x)],u)
+        v = [ self.idHKB[int(x)] for x in u ]
         return(v)
 
     def _load_offset_dict(self):
@@ -2309,7 +2309,7 @@ bernard
 
         videofile = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','Videos')
         ldir = os.listdir(videofile)
-        luldir = map(lambda x : self._filename in x,ldir)
+        luldir = [ self._filename in x for x in ldir ]
         uldir = luldir.index(True)
         _filename = ldir[uldir]
         filename = os.path.join(videofile,_filename)
@@ -2614,9 +2614,9 @@ bernard
         filemat = key+'.mat'
         d = {}
         d[key]={}
-        d[key]['node_name']=self.dist_nodesmap
-        d[key]['node_place']=map(lambda x : self.devmapper(x)[0],self.dist_nodesmap)
-        d[key]['node_coord']=self.points
+        d[key]['node_name'] = self.dist_nodesmap
+        d[key]['node_place'] = [ self.devmapper(x)[0] for x in self.dist_nodesmap ]
+        d[key]['node_coord'] = self.points
 
         for subject in self.interf:
             sub = subject.replace(':','')

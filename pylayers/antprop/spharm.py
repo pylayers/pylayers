@@ -38,7 +38,7 @@ def indexssh(L,mirror=True):
     ----------
 
     L : maximum order
-    mirror : boolean 
+    mirror : boolean
         if True the output contains negative m indices
 
     Returns
@@ -189,12 +189,6 @@ class VectorCoeff(PyLayers):
         data : np.array
         ind : np.array
 
-        Notes
-        -----
-
-        .. warning::
-            seems deprecated
-
         """
 
         self.s1 = np.array([])
@@ -265,7 +259,7 @@ class SSHCoeff(PyLayers):
         ----------
 
         threshold : float
-            default 1e-5
+            default (-1)
 
         Notes
         -----
@@ -273,7 +267,7 @@ class SSHCoeff(PyLayers):
         s3 corresponds to energy thresholded coefficients
 
         """
-        
+
         if threshold!=-1:
             # integrates energy over frequency axis = 0
             Ex = np.sum(np.abs(self.Cx.s2) ** 2, axis=0)
@@ -363,7 +357,10 @@ class SCoeff(PyLayers):
          ind  : ndarray
          k    : ndarray
 
+         Notes
+         -----
          s2 , s3 containers are created
+
         """
 
         #~ defaults = { 'typ': 's2',
@@ -407,7 +404,7 @@ class SCoeff(PyLayers):
 
         return(st)
 
-    def inits2(self, data,ind):
+    def inits2(self, data, ind):
         """ initialize shape 2 format
 
         Parameters
@@ -1243,26 +1240,6 @@ class VCoeff(object):
 class VSHCoeff(object):
     """ Vector Spherical Harmonics Coefficients class
 
-
-    Attributes
-    ----------
-
-    Bi
-    Br
-    Ci
-    Cr
-
-
-    Notes
-    ------
-
-    Br = VCoeff(br)
-    Bi = VCoeff(bi)
-    Cr = VCoeff(cr)
-    Ci = VCoeff(ci)
-
-    C  = VSHCoeff(Br,Bi,Cr,Ci)
-
     """
     def __init__(self, Br, Bi, Cr, Ci):
         """ Init  VSHCoeff
@@ -1270,10 +1247,11 @@ class VSHCoeff(object):
         Parameters
         ----------
 
-        Br
-        Bi
-        Cr
-        Ci
+        Br :
+        Bi :
+        Cr :
+        Ci :
+
         """
 
         self.Br = Br
@@ -1282,7 +1260,7 @@ class VSHCoeff(object):
         self.Ci = Ci
 
     def __repr__(self):
-        """ 
+        """
         """
         st = "Br"+'\n'
         st = st + "-------------"+'\n'
@@ -1296,9 +1274,9 @@ class VSHCoeff(object):
         st = st + "Ci"+'\n'
         st = st + "-------------"+'\n'
         st = st + self.Ci.__repr__()
-        return(st) 
+        return(st)
 
-    def plot(self,typ='s3',titre='titre',log=False,stem=True,subp=True):
+    def plot(self, typ='s3', titre='titre', log=False, stem=True, subp=True):
         """ plot coeff
 
         Parameters
@@ -1345,7 +1323,7 @@ class VSHCoeff(object):
                         '$\sum_f \sum_m |Ci_{l}^{(m)}(f)|$'))
 
     def show(self, typ='s1', k=1, N=-1, M=-1, kmax = 1000, seuildb=50,
-             animate=False,titre=''):
+             animate=False,title=''):
         """ show VSH coeff
 
         Parameters
@@ -1355,17 +1333,19 @@ class VSHCoeff(object):
             {'s1','s2','s3'}
         k  : int
             frequency index
-        kmax : int
-            maximum of the unfolded coefficient axes
         N  : int
         M  : int
+        kmax : int
+            maximum of the unfolded coefficient axes
         seuildB  : float
         animate : boolean
                 default False
+        title : string
+
         """
         if not animate:
             fa = np.linspace(self.Br.fmin,self.Br.fmax,self.Br.Nf)
-            st = titre+'  shape : '+typ
+            st = title + '  shape : '+typ
             plt.suptitle(st,fontsize=14)
             plt.subplot(221)
             titre = '$|Br_{n}^{(m)}|$'
@@ -1505,13 +1485,10 @@ class VSHCoeff(object):
             self.Cr.ind3 = self.Cr.ind2
             self.Cr.s3 = self.Cr.s2
             self.Cr.k2 = np.arange(0,self.Cr.ind2.shape[0])
-            
+
             self.Ci.ind3 = self.Ci.ind2
             self.Ci.s3 = self.Ci.s2
             self.Ci.k2 = np.arange(0,self.Ci.ind2.shape[0])
-
-
-
 
     def s3tos2(self):
         """ shape 3 to shape 2
@@ -2023,7 +2000,7 @@ def VW(l, m, theta ,phi):
     Pmm1l, Pmp1l = AFLegendre(L, L, x)
 
     K   = len(l)
-    Nr  = len(x)  
+    Nr  = len(x)
 
     l   = l.reshape(1,K)
     m   = m.reshape(1,K)

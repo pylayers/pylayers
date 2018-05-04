@@ -9,8 +9,12 @@ Module OSMParser
 """
 from osmapi import OsmApi
 import geocoder as geo
+import sys
 import urllib
-import urllib2 as url
+if sys.version_info.major==2:
+    from  urllib2 import urlopen
+else:
+    from  urllib.request import urlopen
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 import pylayers.util.geomutil as geu
@@ -22,14 +26,14 @@ import matplotlib.pyplot as plt
 try:
     from imposm.parser import OSMParser
 except:
-    print "Warning : imposm seems not to be installed"
+    print("Warning : imposm seems not to be installed")
 import networkx as nx
 import numpy as np
 import pdb
 
 # classes that handle the OSM data file format.
 class Way(object):
-    """  
+    """
 
     A Way is a polyline or a Polygon (if closed)
 
@@ -469,7 +473,7 @@ class Ways(object):
             # retrieve PolyGon or LineString
             # progress bar
             if k%1000==0:
-                print k,N
+                print(k,N)
             shp = self.way[b].shp
             if type(shp)==geu.Polygon:
                 pa = self.way[b].shp.ndarray()
@@ -506,7 +510,7 @@ class Ways(object):
         for b in self.way:
             tags  = self.way[b].tags
             if ('building' in tags) | ('buildingpart' in tags):
-                print "buildingpart found"
+                print("buildingpart found")
                 try:
                     poly  = self.way[b].shp
                     if 'building:roof:colour' in tags:
@@ -515,7 +519,7 @@ class Ways(object):
                         col = '#abcdef'
                     fig, ax = poly.plot(fig=fig, ax=ax,color=col)
                 except:
-                    print "building: ",b," is not a polygon"
+                    print("building: ",b," is not a polygon")
         plt.axis('scaled')
         return(fig,ax)
 
@@ -699,7 +703,7 @@ def getosm(address='Rennes', latlon=0, dist_m=400,
         try:
             lat,lon = place.latlng
         except:
-            print place
+            print(place)
     else:
         lat = latlon[0]
         lon = latlon[1]
@@ -832,14 +836,14 @@ def osmparse(_filename,typ='indoor',verbose=False,c=True,n=True,w=True,r=True,ca
         coords.clean()
         coords_parser = OSMParser(concurrency=4, coords_callback=coords.coords)
         if verbose:
-            print "parsing coords"
+            print("parsing coords")
 
         coords_parser.parse(filename)
 
         m = coords.cartesian(cart=cart)
 
         if verbose:
-            print str(coords.cpt)
+            print(str(coords.cpt))
     else:
         coords = None
     #
@@ -851,12 +855,12 @@ def osmparse(_filename,typ='indoor',verbose=False,c=True,n=True,w=True,r=True,ca
         nodes_parser = OSMParser(concurrency=4, nodes_callback=nodes.nodes)
 
         if verbose:
-            print "parsing nodes"
+            print("parsing nodes")
 
         nodes_parser.parse(filename)
 
         if verbose:
-            print str(nodes.cpt)
+            print(str(nodes.cpt))
     else:
         nodes = None
 
@@ -871,11 +875,11 @@ def osmparse(_filename,typ='indoor',verbose=False,c=True,n=True,w=True,r=True,ca
         if typ=='indoor':
             ways_parser = OSMParser(concurrency=4, ways_callback=ways.ways)
         if verbose:
-            print "parsing ways"
+            print("parsing ways")
         ways_parser.parse(filename)
 
         if verbose:
-            print str(ways.cpt)
+            print(str(ways.cpt))
 
         # convert lat,lon in cartesian
         ways.eval(coords)
@@ -891,11 +895,11 @@ def osmparse(_filename,typ='indoor',verbose=False,c=True,n=True,w=True,r=True,ca
         relations_parser = OSMParser(concurrency=4,relations_callback=relations.relations)
 
         if verbose:
-            print "parsing relations"
+            print("parsing relations")
         relations_parser.parse(filename)
 
         if verbose:
-            print str(relations.cpt)
+            print(str(relations.cpt))
     else:
         relations = None
 
@@ -944,7 +948,7 @@ def extract(alat,alon,fileosm,fileout):
     command = 'osmconvert -b='+str(lonmin)+','\
             + str(latmin)+','+str(lonmax)+','\
             + str(latmax)+' '+fileosm +' > '+ fileout+'.osm'
-    print command
+    print(command)
     os.system(command)
 
     m = Basemap(llcrnrlon=lonmin,llcrnrlat=latmin,urcrnrlon=lonmax,urcrnrlat=latmax,
@@ -986,7 +990,7 @@ def buildingsparse(filename):
     for bid in relations.relation:
         tags = relations.relation[bid]['tags']
         if tags['type']=='outdoor':
-            print "Constructing Indoor building ", bid
+            print("Constructing Indoor building ", bid)
             bdg = FloorPlan(bid,coords,nodes,ways,relations)
             bdg.build(typ='relation',eid=bid)
     return bdg,m

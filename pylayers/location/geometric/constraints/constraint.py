@@ -144,7 +144,7 @@ class Constraint(object):
         self.parmsh['boxes'] = True       # display constraint box
         self.parmsh['estimated'] = True  # display estimated point
         self.parmsh['estimated_LS'] = False  # display estimated point with LS method
-        self.parmsh['quadric'] = True   # display sphere or hyperbola   
+        self.parmsh['quadric'] = True   # display sphere or hyperbola
         self.parmsh['grid'] = True       # display grid
         self.parmsh['grav'] = True       # display box gravity center
         if self.origin == {}:
@@ -233,30 +233,30 @@ class Constraint(object):
     def info_old(self):
         """ display info on constraint
         """
-        print "Type         : ", self.type
-        print "--------------------------"
-        print "Time         : ", self.time
-        print "validity (s) : ", self.validity
+        print( "Type         : ", self.type)
+        print( "--------------------------")
+        print( "Time         : ", self.time)
+        print( "validity (s) : ", self.validity)
 
         if ((self.runable)):
-            print "Origin : ", self.p
+            print( "Origin : ", self.p)
 
         if self.evaluated:
             Npts = np.shape(self.g.p)[0]
-            print "Nb valid points in volume    : ", Npts, " voxel"
-            print "Taille kO: ", Npts * 12 / (2 ** 10), " kO"
+            print( "Nb valid points in volume    : ", Npts, " voxel")
+            print( "Taille kO: ", Npts * 12 / (2 ** 10), " kO")
 
         if self.type == "TOA":
             self.estvol()
-            print "Estimated Volume", self.estvlm
-            print "Toa (ns)", self.value
-            print "std (ns)", self.std
-            print "vcw     ", self.vcw
-            print "Range(m)", self.range
-            print "sstd (m)", self.sstd
-        print "-------------------"
+            print( "Estimated Volume", self.estvlm)
+            print( "Toa (ns)", self.value)
+            print( "std (ns)", self.std)
+            print( "vcw     ", self.vcw)
+            print( "Range(m)", self.range)
+            print( "sstd (m)", self.sstd)
+        print( "-------------------")
         self.lbox.info()
-        print "-------------------"
+        print( "-------------------")
 
     # def info(self):
 
@@ -268,17 +268,15 @@ class Constraint(object):
         """
 
         """
-        print '{0:4} , {1:15}, {2:5}, {3:5}, {4:7}, {5:6}, {6:8}, {7:9}'.format('type', 'p', 'value', 'std', 'runable' , 'usable' , 'obsolete' , 'evaluated')
+        print( '{0:4} , {1:15}, {2:5}, {3:5}, {4:7}, {5:6}, {6:8}, {7:9}'.format('type', 'p', 'value', 'std', 'runable' , 'usable' , 'obsolete' , 'evaluated'))
         np.set_printoptions(precision=3)
-        print '{0:4} , {1:15}, {2:5}, {3:5}, {4:7}, {5:6}, {6:8}, {7:9}'.format(self.type, self.p, self.value, self.std, self.runable, self.usable , self.obsolete , self.evaluated)
+        print( '{0:4} , {1:15}, {2:5}, {3:5}, {4:7}, {5:6}, {6:8}, {7:9}'.format(self.type, self.p, self.value, self.std, self.runable, self.usable , self.obsolete , self.evaluated))
 
 
     def _show3(self):
 
 
         if self.runable:
-            
-
             #
             # Display scene
             #
@@ -321,7 +319,7 @@ class Constraint(object):
                 if self.type != 'Fusion':
                     mlab.points3d(self.p[0],self.p[1],self.p[2],color=(1,1,1),opacity=1)
                     # mlab.text3d(self.p[0],self.p[1],self.p[2],'p',color=(0,0,0))
-                
+
             if self.evaluated:
                 if self.parmsh['estimated']:
                     mlab.points3d(self.pe[0],self.pe[1],self.pe[2],color=(0,0,1))
@@ -330,7 +328,7 @@ class Constraint(object):
                     mlab.points3d(self.p_LS[0],self.p_LS[1],self.p_LS[2],color=(1,0,1))
                     mlab.text3d(self.p_LS[0],self.p_LS[1],self.p_LS[2],'p_LS',color=(0,0,0))
         else:
-            print 'constraint is not runnable. It can not be displayed'
+            print('constraint is not runnable. It can not be displayed')
 
 
 
@@ -422,11 +420,11 @@ class Constraint(object):
                                 R=0.1, access='append')
 
             if self.parmsh['display']:
-                print filename
+                print(filename)
                 chaine = "geomview  -nopanel  -b 1 1 1 " + \
                     filename + " 2>/dev/null &"
                 os.system(chaine)
             else:
                 return(fname)
         else:
-            print 'constraint is not runnable. It can not be displayed'
+            print('constraint is not runnable. It can not be displayed')

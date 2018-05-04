@@ -10,17 +10,21 @@
     :members:
 
 """
-from pylayers.util.project import *
+
 import sys
+import pdb
+from pylayers.util.project import *
 
 
-from SimPy.SimulationRT import Process,hold
+if sys.version_info.major==2:
+    from SimPy.SimulationRT import Process,hold
+else:
+    from simpy import Process
 
 from pylayers.util import utilnet
 from pylayers.network.network import Network, Node
 #from pylayers.location.locarule import Take_all,  merge_rules
 
-import pdb
 
 from pylayers.location.geometric.constraints.cla import *
 from pylayers.location.geometric.constraints.rss import *
@@ -28,9 +32,7 @@ from pylayers.location.geometric.constraints.toa import *
 from pylayers.location.geometric.constraints.tdoa import *
 from pylayers.location.geometric.constraints.exclude import *
 from pylayers.location.algebraic.algebraic import *
-
 from pylayers.network.communication import Gcom, TX, RX
-
 from   pylayers.network.model import PLSmodel
 import networkx as nx
 
@@ -328,8 +330,7 @@ class PLocalization(Process):
         self.method = self.loc.method
         self.sim = sim
 
-
-        print ('!!!!!! Warning Localization : No RSS only localization !!!!!')
+        print('!!!!!! Warning Localization : No RSS only localization !!!!!')
 
     def run(self):
 #        self.loc.get_const()
@@ -354,11 +355,11 @@ class PLocalization(Process):
 
 #            if not bep or (self.sim.now() - self.loc.net.node[self.loc.ID]['PN'].node[self.loc.ID]['te']>self.loc_updt_time):
             if self.sim.verbose:
-                print 'localization request communication from node',self.loc.ID, '@',self.sim.now()
+                print('localization request communication from node',self.loc.ID, '@',self.sim.now())
             self.tx.cmdrq.signal()
             self.loc.update(ldp='TOA')
-            
+
 
             if bep and self.sim.verbose :
-                print 'LOCALIZATION node',self.loc.ID, ' update @',self.sim.now()
+                print('LOCALIZATION node',self.loc.ID, ' update @',self.sim.now())
             yield hold, self, self.loc_updt_time
