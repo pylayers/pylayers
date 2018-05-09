@@ -6172,7 +6172,7 @@ def reflection_matrix(U):
 
     return M
 
-def ellipse2D(pa, pb, l, N):
+def ellipse2D(pa, pb, l, N , unit='meter'):
     """ points on an ellipse
 
     pa : np.array
@@ -6180,15 +6180,19 @@ def ellipse2D(pa, pb, l, N):
     pb : np.array
         focus b
     l  : float
-        excess
+        excess in unit : meters or ns
     N  : int
         Number of points
+    unit : string
+        'meter' | 'ns'
 
     Returns
     -------
 
     points : np.array
         2 x Npt
+    ang : np.array
+        , Npt
 
     Examples
     --------
@@ -6204,16 +6208,21 @@ def ellipse2D(pa, pb, l, N):
         >>> plt.plot(p[0,:],p[1,:])
 
     """
-    dmax = np.sqrt(np.dot(pb-pa, pb-pa))
-    a = (dmax/2. + l/4.)
-    b = 0.5*np.sqrt(dmax*l)
+    d = np.sqrt(np.dot(pb-pa, pb-pa))
+    if unit=='ns':
+        l = l*0.3
+    a = (d/2. + l/2.)
+    # this is the familiar asymptotic approximation valid if l << d
+    b_approx = np.sqrt(d*l/2)
+    b =  0.5*np.sqrt(l*(2*d+l))
+
     pg = (pa+pb)/2.
-    u = (pb-pa)/dmax
+    u = (pb-pa)/d
     z = np.array([0, 0, 1])
     v = np.cross(z, u)[0:2]
     ag = np.linspace(0, 2*np.pi, N)
-    p = pg[:, None] + a*u[:, None]*np.cos(ag[None, :])+b*v[:, None]*np.sin(ag[None, :])
-    return(p)
+    p = pg[:, None] + a*u[:, None]*np.cos(ag[None, :]) + b*v[:, None]*np.sin(ag[None, :])
+    return p,ag
 
 if __name__ == "__main__":
     plt.ion()

@@ -1476,8 +1476,11 @@ class ADPchannel(bs.TUsignal):
         #ax.axis('equal')
 
 
-    def toafp(self):
-        return afp
+    def toafp(self,fmin):
+        x = np.linspace(0,(len(self.x)-1)/(self.x[-1]-self.x[0]),len(self.x))
+        y = np.fft.ifft(self.y,axis=1)
+
+        return adp
 
 class TBchannel(bs.TBsignal):
     """ radio channel in non uniform delay domain

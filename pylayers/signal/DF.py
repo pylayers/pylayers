@@ -28,14 +28,14 @@ class DF(PyLayers):
     Attributes
     ----------
 
-    a : array 
-        transfer function coefficients denominator 
+    a : array
+        transfer function coefficients denominator
     b : array
-        transfer function coefficients numerator 
+        transfer function coefficients numerator
     p : array dtype=complex
-        transfer function poles 
+        transfer function poles
     z : array dtype=complex
-        transfer function zeros 
+        transfer function zeros
 
     Methods
     -------
@@ -130,19 +130,19 @@ class DF(PyLayers):
         F   = DF()
         F.p = np.hstack((rpa1,rpa2))
         F.z = np.hstack((rpb1,rpb2))
-        
+
         F.simplify()
 
         return(F)
 
 
     def simplify(self,tol=1e-16):
-        """ simplify transfer function 
+        """ simplify transfer function
 
         Parameters
         ----------
-        tol : float 
-            tolerance for simplification 
+        tol : float
+            tolerance for simplification
 
         """
         ip = []
@@ -158,9 +158,9 @@ class DF(PyLayers):
         self.z = np.delete(self.z,iz)
 
     def flipc(self):
-        """ flip coefficient 
-        
-        This is equivalent to the transformation 
+        """ flip coefficient
+
+        This is equivalent to the transformation
 
         z -> 1/z
 
@@ -177,16 +177,18 @@ class DF(PyLayers):
         Returns
         -------
 
+        DF :
+
 
         Notes
         -----
 
         if $$H(z)=\\frac{1+b_1z^1+...+b_Nz^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$
-        
-        it returns 
+
+        it returns
 
         $$H_m(z)=\\frac{b_N+b_{N-1}z^1+...+z^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$
-        
+
         """
 
         if self.fir:
@@ -214,10 +216,10 @@ class DF(PyLayers):
 
         Examples
         --------
-        
+
         .. plot::
             :include-source:
-            
+
             >>> import matplotlib.pyplot as plt
             >>> df = DF(b=np.array([1,1],a=np.array([1,-1]))
             >>> N = 100 
@@ -326,7 +328,7 @@ class DF(PyLayers):
             self.H   = bs.FUsignal(w/np.pi,h)
             xlabel = 'Relative frequency'
 
-        
+
         if kwargs['display']:
             if 'fig' not in kwargs:
                 fig = plt.figure()
