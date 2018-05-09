@@ -5,8 +5,6 @@ pylayers.egg-info/PKG-INFO
 pylayers.egg-info/SOURCES.txt
 pylayers.egg-info/dependency_links.txt
 pylayers.egg-info/top_level.txt
-pylayers/antprop/CM.py
-pylayers/antprop/VolumeSlicer.py
 pylayers/antprop/__init__.py
 pylayers/antprop/aarray.py
 pylayers/antprop/antenna.py
@@ -45,7 +43,6 @@ pylayers/gis/building.py
 pylayers/gis/ezone.py
 pylayers/gis/furniture.py
 pylayers/gis/gisutil.py
-pylayers/gis/interpol2d.py
 pylayers/gis/kml.py
 pylayers/gis/layout.py
 pylayers/gis/lireifc.py
@@ -55,7 +52,6 @@ pylayers/gis/osmparser.py
 pylayers/gis/readvrml.py
 pylayers/gis/selectl.py
 pylayers/gis/srtm.py
-pylayers/gis/test_load_buildings.py
 pylayers/gui/PylayersGui.py
 pylayers/gui/__init__.py
 pylayers/gui/editor.py
@@ -68,7 +64,6 @@ pylayers/location/algebraic/PyGraphTool.py
 pylayers/location/algebraic/PyMathTool.py
 pylayers/location/algebraic/__init__.py
 pylayers/location/algebraic/algebraic.py
-pylayers/location/algebraic/algebraic2.py
 pylayers/location/algebraic/crlb.py
 pylayers/location/algebraic/hdf.py
 pylayers/location/algebraic/rss.py
