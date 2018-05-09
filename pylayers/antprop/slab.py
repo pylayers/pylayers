@@ -1338,7 +1338,7 @@ class Slab(Interface,dict):
         theta_in = copy.deepcopy(theta)
 
         nf = len(fGHz)
-        nt = len(theta)
+        #nt = len(theta)
         #thetai = theta[0]
         #thetaf = theta[-1]
         ### WARNING thetas can be NOT sorted.
@@ -1438,10 +1438,10 @@ class Slab(Interface,dict):
                 break
 
         self.Io = Co
-        # attempt to fix bug 
+        # attempt to fix bug
         self.Ip = Cp
         #self.Ip = -Cp
-        
+
         # evaluate reflection and transmission matrix
         self.RT(metalic,RT=RT)
 # if compensate:

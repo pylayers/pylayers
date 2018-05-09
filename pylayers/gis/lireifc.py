@@ -2,7 +2,7 @@
 """
 .. currentmodule:: pylayers.antprop.lireifc
 
-.. autosummary:: 
+.. autosummary::
 
 """
 from __future__ import print_function
@@ -12,7 +12,6 @@ import glob
 import sys
 import os
 import numpy as np
-import scipy as sp
 from pylayers.util import geomutil as geo
 from pylayers.util import pyutil as pyu
 
