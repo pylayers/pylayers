@@ -1851,19 +1851,12 @@ class DLink(Link):
         #
 
         self.afprt = AFPchannel(tx=self.a,rx=self.b,az=az)
-        tgain = []
-
         for k,ph in enumerate(az.squeeze()):
             self.Tb = geu.MATP(self.Ab.sl,self.Ab.el,ph,tilt,polar)
             # self._update_show3(ant='b')
+            # pdb.set_trace()
             self.evalH()
-            # tgain = np.append(tgain,20*np.log10(np.abs(self.H.y[0,:]))[0][0][0])
-            # print ph*180/np.pi,20*np.log10(np.abs(self.H.y[0,:]))
             E = self.H.energy()
-
-            # import ipdb
-            # ipdb.set_trace()
-            
             if k==0:
                 self.dpadp = E[None,...]
             else:
@@ -1878,11 +1871,6 @@ class DLink(Link):
                 self.afprt.y = np.vstack((self.afprt.y,np.squeeze(S)))
             except:
                 self.afprt.y = np.squeeze(S)
-
-        # import ipdb
-        # pdb.set_trace()
-
-
         if self.H.y.shape[3]!=1:
             self.afprt.x = self.H.x
             self.afprt.fcGHz = self.afprt.x[len(self.afprt.x)/2]
@@ -2428,11 +2416,7 @@ class DLink(Link):
             # sort rays by increasing energy
             uER = ER.argsort()[::-1]
             colors= color_range[uER]
-<<<<<<< HEAD
-            # most important rays , it=0 ir=0 , if =0 
-=======
-            # most important rays , it=0 ir=0 , if =0
->>>>>>> c783e13a76eb87e8aa02498be6807444bca7c93c
+            # most important rays , it=0 ir=0 , if =0
             ax.scatter(self.H.taud[uER],20*np.log10(np.abs(self.H.y[uER,0,0,0])),c=colors,cmap='hot')
             ax.set_xlim([min(self.H.taud)-10,max(self.H.taud)+10])
 

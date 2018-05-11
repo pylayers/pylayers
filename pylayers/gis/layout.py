@@ -1023,17 +1023,13 @@ class Layout(pro.PyLayers):
 
         # matrix segment-segment 
         # usage 
-<<<<<<< HEAD
         # self.sgsg[seg1,seg2] => return common point
-=======
-        # self.sgsg[seg1,seg2] => return common point
 
->>>>>>> c783e13a76eb87e8aa02498be6807444bca7c93c
         mno = max(self.Gs.nodes())
         self.sgsg = sparse.lil_matrix((mno+1,mno+1),dtype='int')
 
         # loop over segments 
-        # a segment is always connected to 2 nodes 
+        # a segment is always connected to 2 nodes 
         # pdb.set_trace() 
         for s in useg:
             # get point index of the segment 
