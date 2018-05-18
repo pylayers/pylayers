@@ -1216,7 +1216,7 @@ class Scanner(PyLayers):
         #             'Nr' : 4,
         #             'emulated' :True}
 
-        defaults = {'time':True,
+        defaults = {'time': True,
                     'Nt' : 8,
                     'Nr' : 4,
                     'emulated' :False}
@@ -1365,11 +1365,12 @@ class Scanner(PyLayers):
             self.ang0=ang0
 
     def reset(self):
-        """ reset and enpower all axes
+        """ reset and power all axes
 
         Examples
         --------
-        >>> from pylayers.measures.parker import smparker 
+
+        >>> from pylayers.measures.parker import smparker
         >>> S = smparker.Scanner()
         >>> S.reset()
 

@@ -74,13 +74,15 @@ class AFPchannel(bs.FUsignal):
                       y = np.array([]),
                       tx = np.array([]),
                       rx = np.array([]),
-                      az = np.array([])
+                      az = np.array([]),
+                      label = ''
                       ):
         bs.FUsignal.__init__(self,x=x,y=y,label='AFP')
         if len(self.x)!=0:
             self.fcGHz = self.x[int(len(self.x)/2)]
         self.tx = tx
         self.rx = rx
+        self.label = label
         self.ang_offset = 0
         self.refinement = False
         self.az = az
@@ -111,7 +113,7 @@ class AFPchannel(bs.FUsignal):
 
     def __repr__(self):
         cv = 180/np.pi
-        s = 'Angular Frequency Profile object \n'
+        s = 'Angular Frequency Profile: '+self.label+'\n'
         s = s + 'Tx : '+str(self.tx)+'\n'
         s = s + 'Rx : '+str(self.rx)+'\n'
         return s
@@ -4011,18 +4013,24 @@ class Tchannel(bs.FUsignal):
         Returns
         -------
 
-        RSSI: float
-        RSSI value in dB
+        PrdB: float
+            RSSI value in dB
+            $$10\log_10 |a_k|^2$$
+
+        PrpdB : float
+            RSSI in a tap over a frequency band ufreq
+            $$10\log_10 |a_k e^{-2j \pi f \tau|^2$$
+
 
         Notes
         -----
 
-        This function will be deprecated by energy function
+            This function will be deprecated by energy function
 
         """
         # Amplitude
         Ak    = self.y[:, ufreq]
-        # Power 
+        # Power
         Pr    = np.sum(Ak*np.conj(Ak))
         # Complex amplitude
         akp   = Ak*np.exp(-2*1j*np.pi*self.x[ufreq]*self.taud)
@@ -4728,18 +4736,19 @@ class Tchannel(bs.FUsignal):
 
     def scatterers(self,pMS,pBS,mode='sbounce'):
         """
+
+        Parameters
+        ----------
+
         mode: Boolean
               - image | sbounce (single bounce)
 
-        alpha :complex array (,Nscat)
-        tau   : float array(,Nscat)
-        phi   : float (,Nscat)
-
         pMS : np.array (,3)
+
         pBS : np.array (,3)
         ang_offset : float  (degrees)
 
-        Return:
+        Returns
         -------
 
         xs: estimated x scatterer coordinate
@@ -4767,10 +4776,12 @@ class Tchannel(bs.FUsignal):
 
             """
 
-            #d_BS_to_scat  = np.sqrt((pBS[0] - p_s[0])**2 + (pBS[1]-p_s[1])**2) # distance between the BS and the estimated scatterer
-            d_BS_to_scat  = np.sqrt((pBS[0] - p_s[0])**2 + (pBS[1]-p_s[1])**2 +
-                                    (pBS[2]-p_s[2])**2 )  # distance between the BS and the estimated scatterer
-            d_scat_to_MS  = np.sqrt((pMS[0] - p_s[0])**2 + (pMS[1]-p_s[1])**2 + (pMS[2] -p_s[2])**2)# distance between the estimated scatterer and the MS
+            d0  = np.sqrt((pBS[0] - p_s[0])**2 +
+                          (pBS[1] - p_s[1])**2 +
+                          (pBS[2] - p_s[2])**2 )  # distance between the BS and the estimated scatterer
+            d1  = np.sqrt((pMS[0] - p_s[0])**2 +
+                          (pMS[1] - p_s[1])**2 +
+                          (pMS[2] - p_s[2])**2) # distance between the estimated scatterer and the MS
             xs = p_s[0]
             ys = p_s[1]
             zs = p_s[2]
@@ -4778,12 +4789,11 @@ class Tchannel(bs.FUsignal):
             # Equations to be minimized
 
             r_fres = 0.3*tau
-            eq1 = r_fres - (d_BS_to_scat + d_scat_to_MS)
-            eq2 = xs - pBS[0] - d_BS_to_scat*np.cos(phi)
-            eq3 = ys - pBS[1] - d_BS_to_scat*np.sin(phi)
+            eq1 = r_fres - (d0 + d1)
+            eq2 = xs - pBS[0] - d0 * np.cos(phi)
+            eq3 = ys - pBS[1] - d0 * np.sin(phi)
 
-            # abs values are taken for the minimization
-            return(np.abs(eq1) + np.abs(eq2) + np.abs(eq3))
+            return np.abs(eq1) + np.abs(eq2) + np.abs(eq3)
 
         Nscat = np.shape(self.y)[0]
         phi = self.doa[:,1]
