@@ -9536,7 +9536,6 @@ class Layout(pro.PyLayers):
     def buildGr(self):
         """ build the graph of rooms Gr
 
-
         Notes
         -----
 
@@ -9553,17 +9552,21 @@ class Layout(pro.PyLayers):
         self.Gr.remove_node(0)
         self.Gr.remove_edges_from(self.Gt.edges())
 
-        for e in self.Gt.edges():
-            if (not 0 in e) and (self.Gt.node[e[0]]['indoor']) and (self.Gt.node[e[1]]['indoor']):
+        for e in list(self.Gt.edges()):
+            if ((not 0 in e) and
+                (self.Gt.node[e[0]]['indoor']) and
+                (self.Gt.node[e[1]]['indoor']) ):
 
                 seg = self.Gt[e[0]][e[1]]['segment']
                 seg = np.unique(seg)
-                trans_seg = [n for n in seg 
+                trans_seg = [n for n in seg
                              if (self.Gs.node[n]['transition'])
                              and n not in self.segboundary]
                 if trans_seg != []:
-                    self.Gr.add_edge(e[0],e[1],{'segment':trans_seg})
-        deg = self.Gr.degree()
+                    self.Gr.add_edge(e[0],e[1],segment=trans_seg)
+
+        deg = dict(self.Gr.degree())
+        #pdb.set_trace()
         self.Gr.remove_nodes_from([n for n in deg if deg[n] == 0])
 
     def buildGw(self):
