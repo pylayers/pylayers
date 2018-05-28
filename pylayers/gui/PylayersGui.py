@@ -8,9 +8,9 @@ PyLayers GUI
     :members:
 
 
-To run this code. type 
+To run this code. type
 
-python PylayersGui.py 
+python PylayersGui.py
 
 
 """
@@ -34,7 +34,7 @@ from traitsui.qt4.basic_editor_factory import BasicEditorFactory
 
 
 
-# console ipython 
+# console ipython
 from IPython import embed_kernel
 
 
@@ -70,14 +70,14 @@ else:
 # First import the embed function
 from IPython.frontend.terminal.embed import InteractiveShellEmbed
 
-## INIT DLink object 
+## INIT DLink object
 
 DL=DLink()
 
 filename=pyu.getlong('wstd.json',pstruc['DIRSIMUL'])
 fp = open(filename)
 stds = json.load(fp)
-av_wstds = ['None']+ stds.keys()
+av_wstds = ['None']+ list(stds.keys())
 
 
 
@@ -107,7 +107,7 @@ class QIPythonWidget(RichJupyterWidget):
         def stop():
             kernel_client.stop_channels()
             kernel_manager.shutdown_kernel()
-            guisupport.get_app_qt4().exit()            
+            guisupport.get_app_qt4().exit()
         self.exit_requested.connect(stop)
 
     def pushVariables(self,variableDict):
@@ -187,7 +187,7 @@ class WstdHandler(Handler):
 
         # As default value, use the first city in the list:
         info.object.chann = self.channels[0]
-        # info.object.DL.fGHz = 
+        # info.object.DL.fGHz =
 
 
 
@@ -430,7 +430,7 @@ class PylayersGUI(HasTraits):
     def plt_cir(self):
         self.figcir.clf()
         ax = self.figcir.add_subplot(111)
-        DL.plt_cir(fig=self.figcir,ax=ax,BWGHz=self.BWGHz,Nf = 5000 )
+        DL.plt_cir(fig=self.figcir, ax=ax, BWGHz=self.BWGHz, Nf = 5000 )
         # ir = DL.H.getcir(BWGHz=5,Nf=1000)
         # ir.plot(fig=self.figcir,ax=ax)
         # ax.plot(DL.H.taud,20*np.log10(DL.H.y[:,0,0,0]),'or')
@@ -516,9 +516,9 @@ class PylayersGUI(HasTraits):
 
     # chann = Enum(av_chann)
 
-    GWstd_None = Group(Item('fmin',label='fGHz min',style='text'),
-                       Item('fmax',label='fGHz max',style='text'),
-                       Item('fstep',label='fGHz step',style='text'),
+    GWstd_None = Group(Item('fmin', label='fGHz min', style='text'),
+                       Item('fmax', label='fGHz max', style='text'),
+                       Item('fstep', label='fGHz step', style='text'),
                        label = 'Frequency',
                        show_border= True,
                        enabled_when = 'Wstd_Enum == \'None\''

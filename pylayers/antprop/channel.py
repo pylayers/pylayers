@@ -27,6 +27,7 @@ import pylayers.antprop.antenna as ant
 from pylayers.util.project import *
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from mpl_toolkits.mplot3d import Axes3D
+from scipy.optimize import fmin
 
 try:
     import h5py
@@ -56,18 +57,32 @@ class AFPchannel(bs.FUsignal):
     offset : float angle in radians
         azimuth offset w.r.t global frame
 
+    Methods
+    -------
+
+    norm2
+    construct
+    electrical_delay
+    loadmes
+    toadp
+    estimate
+    peak
+    specular_model
+
     """
     def __init__(self,x = np.array([]),
                       y = np.array([]),
                       tx = np.array([]),
                       rx = np.array([]),
-                      az = np.array([])
+                      az = np.array([]),
+                      label = ''
                       ):
         bs.FUsignal.__init__(self,x=x,y=y,label='AFP')
         if len(self.x)!=0:
             self.fcGHz = self.x[int(len(self.x)/2)]
         self.tx = tx
         self.rx = rx
+        self.label = label
         self.ang_offset = 0
         self.refinement = False
         self.az = az
@@ -98,7 +113,7 @@ class AFPchannel(bs.FUsignal):
 
     def __repr__(self):
         cv = 180/np.pi
-        s = 'Angular Frequency Profile object \n'
+        s = 'Angular Frequency Profile: '+self.label+'\n'
         s = s + 'Tx : '+str(self.tx)+'\n'
         s = s + 'Rx : '+str(self.rx)+'\n'
         return s
@@ -344,7 +359,7 @@ class ADPchannel(bs.TUsignal):
     az : array
         azimuth in radian
     ang_offset :
-    theta :  float
+    theta : float
     phi : float
     tau : float
     _filename : string
@@ -353,14 +368,14 @@ class ADPchannel(bs.TUsignal):
 
     """
     def __init__(self,
-            x=np.array([]),
-            y=np.array([]),
-            az=np.array([]),
-            tx=np.array([]),
-            rx=np.array([]),
+            x = np.array([]),
+            y = np.array([]),
+            az = np.array([]),
+            tx = np.array([]),
+            rx = np.array([]),
             fcGHz=28,
             _filename='',
-            refinement=False,
+            refinement = False,
             ang_offset = 0,
             ):
         """
@@ -465,12 +480,12 @@ class ADPchannel(bs.TUsignal):
 
         rhoE  : energy ratio of padp Eadp/Eself
         rhoEc : energy ratio of centered padp Ecadp/Ecself
-        rho   : normalized intercorrelation  :  <self-mean(self),adp-mean(adp)>/Eself 
-        rhon  : intercorrelation of normalized padp   <self_normalized,adp_normalized> 
+        rho   : normalized intercorrelation  :  <self-mean(self),adp-mean(adp)>/Eself
+        rhon  : intercorrelation of normalized padp   <self_normalized,adp_normalized>
 
         Notes
         -----
-        This can be used to compare a measured PADP with a Ray tracing PADP 
+        This can be used to compare a measured PADP with a Ray tracing PADP
 
 
         """
@@ -560,7 +575,8 @@ class ADPchannel(bs.TUsignal):
             fig = plt.figure()
         if ax==[]:
             ax = fig.add_subplot(111)
-        rd2deg = 180/np.pi
+
+        #rd2deg = 180/np.pi
         #extent = (self.az[-1]*rd2deg+agoffset,
         #          self.az[0]*rd2deg+agoffset,
         #          self.x[imin],self.x[imax])
@@ -1476,8 +1492,11 @@ class ADPchannel(bs.TUsignal):
         #ax.axis('equal')
 
 
-    def toafp(self):
-        return afp
+    def toafp(self,fmin):
+        x = np.linspace(0,(len(self.x)-1)/(self.x[-1]-self.x[0]),len(self.x))
+        y = np.fft.ifft(self.y,axis=1)
+
+        return adp
 
 class TBchannel(bs.TBsignal):
     """ radio channel in non uniform delay domain
@@ -1509,20 +1528,16 @@ class TBchannel(bs.TBsignal):
         tau0 : float
 
         """
-        t = self.x
-        y = self.y
-
-        #cdf, vary = self.ecdf()
 
         u = np.max(self.y*self.y)
         v = 10**(np.log10(u)-threshold_dB/10.)
 
-        uf = np.where(self.y*self.y>v)
+        uf = np.where(self.y*self.y > v)
 
         num = np.sum(self.y[uf]*self.y[uf]*self.x[uf[-1]])
         den = np.sum(self.y[uf]*self.y[uf])
         taum = num/den
-    
+
 
         return(taum)
 
@@ -2621,7 +2636,7 @@ class Mchannel(bs.FUsignal):
     def __init__(self,
                 x ,
                 y ,
-                **kwargs):      
+                **kwargs):
         """ class constructor
 
         Parameters
@@ -2629,8 +2644,8 @@ class Mchannel(bs.FUsignal):
 
         x  :  , nfreq
             frequency GHz
-        y  :  Nm x Nr x Nt x Nf 
-            measured channel 
+        y  :  Nm x Nr x Nt x Nf
+            measured channel
 
         """
         defaults = {
@@ -2645,7 +2660,7 @@ class Mchannel(bs.FUsignal):
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]
-        
+
         self.calibrated = kwargs.pop('calibrated')
         self.label = kwargs.pop('label')
         self.filename = kwargs.pop('filename')
@@ -2660,10 +2675,9 @@ class Mchannel(bs.FUsignal):
 
         bs.FUsignal.__init__(self,x=x,y=y,label='Mchannel')
 
-    
-        
+
     def __repr__(self):
-        st = bs.FUsignal.__repr__(self)  
+        st = bs.FUsignal.__repr__(self)
         if self.calibrated:
             st = st + 'Calibrated'
         else:
@@ -2693,7 +2707,6 @@ class Mchannel(bs.FUsignal):
         # Hd : nm x nt x nr x nf
         Hd  = np.conj(self.y.swapaxes(1,2))
 
-        
         if HdH:
             #T : nm x nt x nt x nf
             T = np.einsum('uijk,ujlk->uilk',Hd,H)
@@ -2706,7 +2719,7 @@ class Mchannel(bs.FUsignal):
         #S   : nm x nf x (nr|nt)
         #V   : nm x nf x (nr|nt) x (nr|nt)
         U,S,V  = la.svd(T)
-        
+
 
         return (U,S,V)
 
@@ -2733,9 +2746,11 @@ class Mchannel(bs.FUsignal):
         Notes
         -----
 
-        The returned value is homogeneous to bit/s the aggregated capacity is obtrained by a simple summation 
-        of the returned quantity. To obtain the sum rate or the spectral efficiency in (bit/s/Hz ) the returned 
-        value should be divided by the frequency step dfGHz
+        The returned value is homogeneous to bit/s the aggregated capacity is
+        obtrained by a simple summation
+        of the returned quantity. To obtain the sum rate or the spectral
+        efficiency in (bit/s/Hz ) the returned value should be divided by the
+        frequency step dfGHz
 
         """
 
@@ -2744,7 +2759,6 @@ class Mchannel(bs.FUsignal):
         BGHz  = fGHz[-1]-fGHz[0]
         dfGHz = fGHz[1]-fGHz[0]
 
-    
         if type(Pt)==float:
             Pt=np.array([Pt])
 
@@ -2765,20 +2779,20 @@ class Mchannel(bs.FUsignal):
 
         U,S,V = self.eig(HdH=True)
 
-        
+
         Ps  = Pt/(self.Nt)
-      
+
 
         Pb  = N0*BGHz*1e9   # Watt
 
 
-        # S : nm x nf x nr 
+        # S : nm x nf x nr
         # rho : nm x nf x nr x power
         #
         rho  = (Ps[None,None,None,:]/Pb)*S[:,:,:,None]
-        
+
         CB   = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=2)
-       
+
         return(rho,CB)
 
     def WFcapacity(self,Pt=np.array([1e-3]),Tp=273):
@@ -2912,8 +2926,8 @@ class Tchannel(bs.FUsignal):
 
     The transmission channel TChannel is obtained through combination of the propagation
     channel and the antenna transfer functions from both transmitter and receiver.
-    This channel contains all the spatial information for each individual ray. 
-    Warning : This is a frequency domain channel deriving from bs.FUsignal 
+    This channel contains all the spatial information for each individual ray.
+    Warning : This is a frequency domain channel deriving from bs.FUsignal
 
     Attributes
     ----------
@@ -2980,7 +2994,7 @@ class Tchannel(bs.FUsignal):
         self.isFriis = False
         self.windowed = False
         self.calibrated = False
-        self.filcal="calibration.mat"
+        self.filcal = "calibration.mat"
         bs.FUsignal.__init__(self,x=x,y=y,label='Channel')
 
 
@@ -3207,7 +3221,7 @@ class Tchannel(bs.FUsignal):
 
         """
         if W!=[]:
-            U = W * self 
+            U = W * self
         else:
             U = self
 
@@ -3220,9 +3234,6 @@ class Tchannel(bs.FUsignal):
         """ apply waveform (time domain ) to obtain the
             rays impulses response
 
-            this is the 2015 vectorized method for applying 
-            wav on Tchannel
-
         Parameters
         ----------
 
@@ -3231,13 +3242,11 @@ class Tchannel(bs.FUsignal):
         Returns
         -------
 
-        rir  : array, 
+        rir  : array,
             impulse response for each ray separately
             the size of the array is (nb_rays, support_length)
-            support_length is calculated in regard of the 
+            support_length is calculated in regard of the
             delays of the channel
-
-            
 
         Notes
         ------
@@ -3266,9 +3275,9 @@ class Tchannel(bs.FUsignal):
         Parameters
         ----------
 
-        BWGHz : Bandwidth 
+        BWGHz : Bandwidth
         Nf    : Number of frequency points
-        fftshift : boolean 
+        fftshift : boolean
 
         See Also
         --------
@@ -3279,9 +3288,9 @@ class Tchannel(bs.FUsignal):
         fGHz  = np.linspace(0,BWGHz,Nf)
         dfGHz = fGHz[1]-fGHz[0]
         tauns = np.linspace(0,1/dfGHz,Nf)
-        # E : r x nr x nt x f 
+        # E : r x nr x nt x f
         E    = np.exp(-2*1j*np.pi*self.taud[:,None,None,None]*fGHz[None,None,None,:])
-        # self.y : r x nr x nt x f 
+        # self.y : r x nr x nt x f
         if self.y.shape[3]==E.shape[3]:
             H    = np.sum(E*self.y,axis=0)
         else:
@@ -3289,7 +3298,7 @@ class Tchannel(bs.FUsignal):
                 H    = np.sum(E*self.y,axis=0)
             else:
                 H    = np.sum(E*self.y[:,:,:,0][:,:,:,None],axis=0)
-        # back in time - last axis is frequency (axis=2) 
+        # back in time - last axis is frequency (axis=2)
         cir  = np.fft.ifft(H,axis=2)
         if fftshift:
             cir = np.fft.fftshift(cir,axes=2)
@@ -3300,7 +3309,7 @@ class Tchannel(bs.FUsignal):
         return(cir)
 
     def get_cir(self,Wgam=[]):
-        """ get Channel impulse response of the channel 
+        """ get Channel impulse response of the channel
             for a given waveform
 
         Parameters
@@ -3325,7 +3334,7 @@ class Tchannel(bs.FUsignal):
         rir = self.applywav(Wgam)
         cir = np.sum(rir.y,axis=0)
         return bs.TUsignal(rir.x, cir)
-        
+
 
     def applywavC(self, w, dxw):
         """ apply waveform method C
@@ -3373,8 +3382,8 @@ class Tchannel(bs.FUsignal):
         Parameters
         ----------
 
-        fcGHz : center frequency 
-        WMHz  : bandwidth in MHz 
+        fcGHz : center frequency
+        WMHz  : bandwidth in MHz
         Nf    : Number of frequency points
 
         """
@@ -3395,7 +3404,7 @@ class Tchannel(bs.FUsignal):
         # self.taud : (,Nray)
 
         # complex amplitude in baseband
-        # Nray x Nr x Nt x Nf1 
+        # Nray x Nr x Nt x Nf1
         abb  = self.y*np.exp(-2 * 1j * np.pi *self.taud[:,None,None,None] * fcGHz )
         fMHz = np.linspace(-WMHz/2.,WMHz/2,Nf)
         E = np.exp(-2*1j*fMHz[None,None,None,:]*1e-3*self.taud[:,None,None,None])
@@ -3410,8 +3419,8 @@ class Tchannel(bs.FUsignal):
         Parameters
         ----------
 
-        fcGHz : center frequency 
-        WGHz  : bandwidth 
+        fcGHz : center frequency
+        WGHz  : bandwidth
         Ntap  : int
 
         """
@@ -3440,8 +3449,6 @@ class Tchannel(bs.FUsignal):
         htapi = np.sum(htap,axis=0)
 
         return htapi
-
-
 
     def applywavB(self, Wgam):
         """ apply waveform method B (time domain )
@@ -3911,7 +3918,7 @@ class Tchannel(bs.FUsignal):
             Etot = bs.FUsignal.energy(self,axis=1,mode=mode,Friis=False)
         else:
             Etot = bs.FUsignal.energy(self,axis=1,mode=mode,Friis=True)
-            
+
         if sumray:
             Etot = np.sum(Etot,axis=0)
         return Etot
@@ -4006,18 +4013,24 @@ class Tchannel(bs.FUsignal):
         Returns
         -------
 
-        RSSI: float
-        RSSI value in dB
+        PrdB: float
+            RSSI value in dB
+            $$10\log_10 |a_k|^2$$
+
+        PrpdB : float
+            RSSI in a tap over a frequency band ufreq
+            $$10\log_10 |a_k e^{-2j \pi f \tau|^2$$
+
 
         Notes
         -----
 
-        This function will be deprecated by energy function
+            This function will be deprecated by energy function
 
         """
         # Amplitude
         Ak    = self.y[:, ufreq]
-        # Power 
+        # Power
         Pr    = np.sum(Ak*np.conj(Ak))
         # Complex amplitude
         akp   = Ak*np.exp(-2*1j*np.pi*self.x[ufreq]*self.taud)
@@ -4431,7 +4444,7 @@ class Tchannel(bs.FUsignal):
 
         Returns
         -------
-        
+
         rir : TUsignal
 
 
@@ -4451,7 +4464,6 @@ class Tchannel(bs.FUsignal):
 
         t0 = self.s.x[0]
         te = self.s.x[-1]
-       
 
         shy = self.s.y.shape
         dx = self.s.x[1]-self.s.x[0]
@@ -4461,15 +4473,15 @@ class Tchannel(bs.FUsignal):
         # convert tau in an integer offset
         # taumin ray is not shifted
         itau = np.floor((tau-taumin)/dx).astype(int)
-        
+
         U = np.ones((shy[0],shy[-1]),dtype=int)
-        CU = np.cumsum(U,axis=1)-1 #-1 to start @ value 0 
+        CU = np.cumsum(U,axis=1)-1 #-1 to start @ value 0
 
         rir  = np.zeros((shy[0],N))
         col1 = np.repeat(np.arange(shy[0],dtype=int),shy[-1])
         col2 = (CU+itau[:,None]).ravel()
         index = np.vstack((col1,col2)).T
-    
+
         rir[index[:,0],index[:,1]] = self.s.y.ravel()
         t = np.linspace(t0+taumin,te+taumax,N)
         return bs.TUsignal(x=t, y=rir)
@@ -4720,6 +4732,94 @@ class Tchannel(bs.FUsignal):
 
         pdp = self.ift(ffts=1)
         return pdp
+
+
+    def scatterers(self,pMS,pBS,mode='sbounce'):
+        """
+
+        Parameters
+        ----------
+
+        mode: Boolean
+              - image | sbounce (single bounce)
+
+        pMS : np.array (,3)
+
+        pBS : np.array (,3)
+        ang_offset : float  (degrees)
+
+        Returns
+        -------
+
+        xs: estimated x scatterer coordinate
+        ys: estimated y scatterer coordinate
+
+        """
+        def fun(p_s,pBS,PMs,tau,phi):
+            """ function to be minimized
+
+            Parameters
+            ----------
+
+            p_s: np.array (,2)
+                 2D scatterer coordinates containing the xs and ys coordinates
+
+            tau   : float (in ns)
+                    estimated delay
+            phi   : float (in deg.)
+                    estimated angle
+
+            pMS : np.array (,2)
+                  containing the x and y MS coordinates
+            pBS : np.array (,2)
+                  containing the x and y and z BS coordinates
+
+            """
+
+            d0  = np.sqrt((pBS[0] - p_s[0])**2 +
+                          (pBS[1] - p_s[1])**2 +
+                          (pBS[2] - p_s[2])**2 )  # distance between the BS and the estimated scatterer
+            d1  = np.sqrt((pMS[0] - p_s[0])**2 +
+                          (pMS[1] - p_s[1])**2 +
+                          (pMS[2] - p_s[2])**2) # distance between the estimated scatterer and the MS
+            xs = p_s[0]
+            ys = p_s[1]
+            zs = p_s[2]
+
+            # Equations to be minimized
+
+            r_fres = 0.3*tau
+            eq1 = r_fres - (d0 + d1)
+            eq2 = xs - pBS[0] - d0 * np.cos(phi)
+            eq3 = ys - pBS[1] - d0 * np.sin(phi)
+
+            return np.abs(eq1) + np.abs(eq2) + np.abs(eq3)
+
+        Nscat = np.shape(self.y)[0]
+        phi = self.doa[:,1]
+        tau = self.taud
+
+        if mode == 'image': # image principal mode
+            xs = pBS[0] + tau*0.3*np.cos(phi)
+            ys = pBS[1] + tau*0.3*np.sin(phi)
+
+        if mode=='sbounce': # single bounce mode
+            xs = np.array([])
+            ys = np.array([])
+            zs = np.array([])
+
+            for k in range(Nscat): # loop over the all detected MPCs
+                #zguess = (pMS[0:2] + pBS[0:2])/2. # Initial guess
+                zguess = (pMS + pBS)/2. # Initial guess
+
+                #z  = fmin(fun,zguess,(pBS[0:2],pMS[0:2],tau[k],phi[k]),disp=False) # minimizing Eq.
+                z  = fmin(fun,zguess,(pBS,pMS,tau[k],phi[k]),disp=False) # minimizing Eq.
+                xs = np.append(xs,z[0])
+                ys = np.append(ys,z[1])
+                zs = np.append(zs,z[2])
+
+        return(xs,ys,zs)
+
 
 class Ctilde(PyLayers):
     """ container for the 4 components of the polarimetric ray channel

@@ -55,7 +55,6 @@ import re
 import numpy as np
 import scipy as sp
 import matplotlib.pylab as plt
-import scipy.special as spe
 import doctest
 import logging
 #from   bitstring  import BitString
@@ -323,21 +322,21 @@ def ininter(ar,val1,val2):
     return(ar[criterium])
 
 def compint(linterval,zmin,zmax,tol=1e-6):
-    """ get complementary intervals 
+    """ get complementary intervals
 
     Parameters
     ----------
 
-    linterval : tuple or list of tuple 
+    linterval : tuple or list of tuple
     zmin : min value
-    zmax : max value 
-    
+    zmax : max value
+
     This function is used for filling the gap with air walls in layout
-    
+
     Example
     -------
         >>> linterval = [(0.2,1),(1.5,2),(2.5,2.7)]
-        >>> zmin =0. 
+        >>> zmin =0.
         >>> zmax =3.
         >>> compint(linterval,zmin,zmax)
         [(0.0, 0.2), (1, 1.5), (2, 2.5), (2.7, 3.0)]
@@ -351,10 +350,9 @@ def compint(linterval,zmin,zmax,tol=1e-6):
         [(-2.0, 0), (3, 4.0)]
 
     """
-    N = len(linterval)
     vmin = np.array([])
     vmax = np.array([])
-    for it in linterval: 
+    for it in linterval:
         vmin = np.append(vmin,it[0])
         vmax = np.append(vmax,it[1])
     u = np.argsort(vmin)
@@ -365,7 +363,7 @@ def compint(linterval,zmin,zmax,tol=1e-6):
     #else:
     #    pdb.set_trace()
     assert(u==v).all(),logging.critical("compint : interval overlap")
-    # sort interval in increasing order 
+    # sort interval in increasing order
     lint = []
     for k in range(len(u)):
         lint.append(linterval[u[k]])
@@ -377,11 +375,11 @@ def compint(linterval,zmin,zmax,tol=1e-6):
                 compint.append((zmin,it[0]))
         elif (it[0]-ip[1])>tol:
                 compint.append((ip[1],it[0]))
-        ip = it 
+        ip = it
     if it[1]<zmax:
         compint.append((it[1],zmax))
 
-    return compint 
+    return compint
 
 def cshift(l, offset):
     """ ndarray circular shift     

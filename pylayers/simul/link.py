@@ -2042,8 +2042,9 @@ class DLink(Link):
             #
             # Select group of interactions
             #
-            if kwargs['lr']==-1:
-                lr  = np.arange(self.R.nray)
+            if type(kwargs['lr'])==float:
+                if kwargs['lr']==-1:
+                    lr  = np.arange(self.R.nray)
             else:
                 lr = kwargs['lr']
 
@@ -2107,7 +2108,7 @@ class DLink(Link):
                                fig = fig, ax = ax,
                                layout = False,
                                points = False,
-                               bcolorbar = True,
+                               bcolorbar = kwargs['bcolorbar'],
                                cmap = kwargs['cmap'],
                                vmin = vmin,
                                vmax = vmax )
@@ -2165,13 +2166,13 @@ class DLink(Link):
         # white scale
         #
         xe = 1
-        ye = -1
+        ye = 3
         le = 1
-        ax.plot(np.array([xe,xe+le]),np.array([ye,ye]),linewidth=4,color='black')
-        ax.plot(np.array([xe,xe]),np.array([ye,ye+0.2]),linewidth=4,color='black')
-        ax.plot(np.array([xe+le,xe+le]),np.array([ye,ye+0.2]),linewidth=4,color='black')
+        ax.plot(np.array([xe,xe+le]),np.array([ye,ye]),linewidth=4,color='k')
+        ax.plot(np.array([xe,xe]),np.array([ye,ye+0.2]),linewidth=4,color='k')
+        ax.plot(np.array([xe+le,xe+le]),np.array([ye,ye+0.2]),linewidth=4,color='k')
         ax.text(xe-0.1,ye-0.5,'1 meter',fontsize=18)
-        #plt.axis('auto')
+        #plt.axis('on')
         ax.tick_params(labelsize = 24)
         ax.set_xlabel('x meters',fontsize = 24)
         ax.set_ylabel('y meters',fontsize = 24)

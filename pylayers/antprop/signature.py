@@ -7,7 +7,6 @@ from __future__ import print_function
     :members:
 
 """
-import doctest
 import os
 import glob
 import doctest
