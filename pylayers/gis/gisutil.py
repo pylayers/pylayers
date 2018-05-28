@@ -305,12 +305,19 @@ def distance_on_earth(lat1, long1, lat2, long2):
 
 
 
-def haversine(lat1, lon1, lat2, lon2):
+def haversine(lat1, lon1, lat2, lon2,mode = 'normal'):
     """
     lat 1 (Na)
     lon 1 (Na)
     lat 2 (Nb)
     lon 2 (Nb)
+
+
+    mode = 'normal' | 'comb'
+
+        if normal : Na=Nb shape of lat1 & lon1 == lat2 & lon2.
+            compute distnace elementwise
+        if comb : return a matrix (Na,Nb) of distance. make all combinations
 
     result(Na,Nb)
     """
@@ -326,10 +333,16 @@ def haversine(lat1, lon1, lat2, lon2):
         lon2 = np.array([lon2])
 
     R = 6371000 # earth radius in meter
-    phi1 = (lat1 * np.pi/180.)[:,None]
-    phi2 = (lat2 * np.pi/180.)[None,:]
-    deltaphi = (lat2[None,:]-lat1[:,None]) * np.pi/180.
-    deltalamda = (lon2[None,:]-lon1[:,None]) * np.pi/180.
+    if mode == 'comb':
+        phi1 = (lat1 * np.pi/180.)[:,None]
+        phi2 = (lat2 * np.pi/180.)[None,:]
+        deltaphi = (lat2[None,:]-lat1[:,None]) * np.pi/180.
+        deltalamda = (lon2[None,:]-lon1[:,None]) * np.pi/180.
+    elif mode == 'normal':
+        phi1 = (lat1 * np.pi/180.)
+        phi2 = (lat2 * np.pi/180.)
+        deltaphi = (lat2-lat1) * np.pi/180.
+        deltalamda = (lon2-lon1) * np.pi/180.
 
     a = np.sin(deltaphi/2.) * np.sin(deltaphi/2.) + np.cos(phi1) * np.cos(phi2) * np.sin(deltalamda/2.) * np.sin(deltalamda/2.)
     c = 2. * np.arctan2(np.sqrt(a), np.sqrt(1.-a))
