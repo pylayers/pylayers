@@ -1543,7 +1543,7 @@ import glob
         theta_in = copy.deepcopy(theta)
 
         nf = len(fGHz)
-        nt = len(theta)
+        #nt = len(theta)
         #thetai = theta[0]
         #thetaf = theta[-1]
         ### WARNING thetas can be NOT sorted.
@@ -1643,10 +1643,10 @@ import glob
                 break
 
         self.Io = Co
-        # attempt to fix bug 
+        # attempt to fix bug
         self.Ip = Cp
         #self.Ip = -Cp
-        
+
         # evaluate reflection and transmission matrix
         self.RT(metalic,RT=RT)
 # if compensate:
@@ -2441,7 +2441,7 @@ if (__name__ == &quot;__main__&quot;):
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Apr 29, 2018.
+      Last updated on May 31, 2018.
 
     </p>
   </div>

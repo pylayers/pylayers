@@ -222,7 +222,7 @@
 <dd><p>Bases: <a class="reference internal" href="pylayers.util.project.PyLayers.html#pylayers.util.project.PyLayers" title="pylayers.util.project.PyLayers"><code class="xref py py-class docutils literal notranslate"><span class="pre">pylayers.util.project.PyLayers</span></code></a></p>
 <p>Digital Filter Class</p>
 <dl class="docutils">
-<dt>a <span class="classifier-delimiter">:</span> <span class="classifier">array </span></dt>
+<dt>a <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
 <dd>transfer function coefficients denominator</dd>
 <dt>b <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
 <dd>transfer function coefficients numerator</dd>
@@ -429,6 +429,7 @@ Fmax : maximal phase filter</dd>
 <dt id="pylayers.signal.DF.DF.match">
 <code class="descname">match</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/DF.html#DF.match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.DF.DF.match" title="Permalink to this definition">¶</a></dt>
 <dd><p>return a match filter</p>
+<p>DF :</p>
 <p>if $$H(z)=\frac{1+b_1z^1+…+b_Nz^{-N}}{1+a_1z^1+…+a_Mz^{-M}}$$</p>
 <p>it returns</p>
 <p>$$H_m(z)=\frac{b_N+b_{N-1}z^1+…+z^{-N}}{1+a_1z^1+…+a_Mz^{-M}}$$</p>
@@ -453,7 +454,7 @@ desired = (0.0001,1,0.0001))</p>
 <code class="descname">simplify</code><span class="sig-paren">(</span><em>tol=1e-16</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/DF.html#DF.simplify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.DF.DF.simplify" title="Permalink to this definition">¶</a></dt>
 <dd><p>simplify transfer function</p>
 <dl class="docutils">
-<dt>tol <span class="classifier-delimiter">:</span> <span class="classifier">float </span></dt>
+<dt>tol <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
 <dd>tolerance for simplification</dd>
 </dl>
 </dd></dl>
@@ -495,7 +496,7 @@ desired = (0.0001,1,0.0001))</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Apr 28, 2018.
+      Last updated on May 31, 2018.
 
     </p>
   </div>

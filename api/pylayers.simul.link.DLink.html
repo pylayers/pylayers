@@ -696,6 +696,7 @@ rays : boolean</p>
 <dt>fspl <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
 <dd>display free space path loss</dd>
 </dl>
+<p>fig,ax</p>
 <p>pylayers.antprop.channel.Tchannel.getcir</p>
 </dd></dl>
 
@@ -821,14 +822,14 @@ title : bool</p>
 <dd><p>show the link</p>
 <dl class="docutils">
 <dt>s <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>size of Tx/Rx circle in points</dd>
+<dd>size of Tx/Rx marker in points</dd>
 <dt>ca <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
-<dd>color of termination a (Tx)</dd>
+<dd>color of termination a (A)</dd>
 <dt>cb <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
-<dd>color of termination b (Rx)</dd>
-<dt>alpha <span class="classifier-delimiter">:</span> <span class="classifier">float </span></dt>
-<dd>transparency</dd>
-<dt>axis <span class="classifier-delimiter">:</span> <span class="classifier">boolean </span></dt>
+<dd>color of termination b (B)</dd>
+<dt>alpha <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>marker transparency (0 &lt; alpha &lt;1)</dd>
+<dt>axis <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
 <dd>display axis boolean (default True)</dd>
 <dt>figsize <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
 <dd>figure size if fig not specified default (20,10)</dd>
@@ -836,9 +837,11 @@ title : bool</p>
 <dd>default 20</dd>
 <dt>rays <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
 <dd>activation of rays vizalization (True)</dd>
-<dt>bsig <span class="classifier-delimiter">:</span> <span class="classifier">boolean </span></dt>
+<dt>bsig <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
 <dd>activation of signature vizualization (False)</dd>
-<dt>laddr <span class="classifier-delimiter">:</span> <span class="classifier">list </span></dt>
+<dt>bsave <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
+<dd>save in a file indexed by ix</dd>
+<dt>laddr <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
 <dd>list of signature addresses</dd>
 </dl>
 <p>cmap : colormap
@@ -860,11 +863,12 @@ dB    : boolean</p>
 <div>default False</div></blockquote>
 <dl class="docutils">
 <dt>dyn <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>dynamic in dB</dd>
+<dd>dynamic in dB (def 70dB)</dd>
 </dl>
+<p>fig,ax</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.simul.link import *
 &gt;&gt;&gt; DL=Link()
-&gt;&gt;&gt; DL.show(lr=-1,rays=True,dB=True,col=&#39;cmap&#39;,cmap=plt.cm.jet)
+&gt;&gt;&gt; DL.show(lr=-1,rays=True,dB=True,col=&#39;cmap&#39;,cmap = plt.cm.jet)
 &gt;&gt;&gt; DL.show(laddr=[(6,2)],bsig=True)
 </pre></div>
 </div>
@@ -901,7 +905,7 @@ dB    : boolean</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Apr 28, 2018.
+      Last updated on May 31, 2018.
 
     </p>
   </div>

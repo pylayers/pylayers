@@ -1080,7 +1080,6 @@ logger = logging.getLogger(__name__)
                                 r[ni][k]=tab[uD]
                             else:
                                 r[ni][k]=[]
-                    
 
         r[ni][&#39;nrays&#39;] = 1 # keep only one ray
         r.nray = 1
@@ -1091,7 +1090,7 @@ logger = logging.getLogger(__name__)
         r.fillinter(L)
         return(r)</div>
 
-   
+
 
 <div class="viewcode-block" id="Rays.show"><a class="viewcode-back" href="../../../api/pylayers.antprop.rays.Rays.html#pylayers.antprop.rays.Rays.show">[docs]</a>    def show(self,**kwargs):
         &quot;&quot;&quot;  plot 2D rays within the simulated environment
@@ -1107,11 +1106,11 @@ logger = logging.getLogger(__name__)
         fig : figure
         ax  : axis
         L   : Layout
-        alpharay : float
+        alpha : float
             1
-        widthray : float
+        linewidth : float
             0.1
-        colray : string
+        color : string
             &#39;black&#39;
         ms : int
             marker size :  5
@@ -1119,22 +1118,25 @@ logger = logging.getLogger(__name__)
             True
         points : boolean
             True
-        ER : ray energy 
+        ER : ray energy
 
         &quot;&quot;&quot;
-        defaults = {&#39;rlist&#39;:[],
-                   &#39;fig&#39;:[],
-                   &#39;ax&#39;:[],
-                    &#39;L&#39;:[],
-                   &#39;graph&#39;:&#39;s&#39;,
-                    &#39;color&#39;:&#39;black&#39;,
-                    &#39;alpharay&#39;:1,
-                    &#39;widthray&#39;:0.5,
-                    &#39;colray&#39;:&#39;black&#39;,
-                    &#39;ms&#39;:5,
-                    &#39;layout&#39;:True,
-                    &#39;points&#39;:True,
-                    &#39;labels&#39;:False
+        defaults = {&#39;rlist&#39;: [],
+                    &#39;fig&#39;: [],
+                    &#39;ax&#39;: [],
+                    &#39;L&#39;: [],
+                    &#39;graph&#39;: &#39;s&#39;,
+                    &#39;color&#39;: &#39;black&#39;,
+                    &#39;alpha&#39;: 1,
+                    &#39;linewidth&#39;: 0.5,
+                    &#39;ms&#39;: 5,
+                    &#39;vmin&#39;:0,
+                    &#39;vmax&#39;:-70,
+                    &#39;cmap&#39;: plt.cm.hot_r,
+                    &#39;layout&#39;: True,
+                    &#39;points&#39;: True,
+                    &#39;labels&#39;: False,
+                    &#39;bcolorbar&#39;: False
                    }
 
         for key, value in defaults.items():
@@ -1143,16 +1145,17 @@ logger = logging.getLogger(__name__)
 
         if kwargs[&#39;fig&#39;] ==[]:
             fig = plt.figure()
+
         if kwargs[&#39;ax&#39;] ==[]:
             ax = fig.add_subplot(111)
-        
+
         #
-        # display the Layout 
+        # display the Layout
         #
         if kwargs[&#39;layout&#39;] == True:
             if kwargs[&#39;L&#39;] != []:
                 fig,ax = kwargs[&#39;L&#39;].showG(**kwargs)
-            else : 
+            else :
                 raise AttributeError(&#39;Please give a Layout file as argument&#39;)
         else:
             fig = kwargs[&#39;fig&#39;]
@@ -1165,15 +1168,14 @@ logger = logging.getLogger(__name__)
             ax.plot(self.pRx[0], self.pRx[1], &#39;og&#39;,ms=kwargs[&#39;ms&#39;])
         # i=-1 all rays
         # else block of interactions i
-        
-        # plot all rays 
+        # plot all rays
         if kwargs[&#39;rlist&#39;] == []:
 
             # list of group of interactions
             lgrint = self.keys()
 
             for i in lgrint:
-                # list of rays 
+                # list of rays
                 lray = range(len(self[i][&#39;pt&#39;][0, 0, :]))
 
                 #if self.filled :
@@ -1191,29 +1193,28 @@ logger = logging.getLogger(__name__)
 
                     if &#39;ER&#39; not in kwargs:
                         ax.plot(ray[0, :], ray[1, :],
-                            alpha = kwargs[&#39;alpharay&#39;],
-                            color = kwargs[&#39;colray&#39;],
-                            linewidth=kwargs[&#39;widthray&#39;])
+                            alpha = kwargs[&#39;alpha&#39;],
+                            color = kwargs[&#39;color&#39;],
+                            linewidth = kwargs[&#39;linewidth&#39;])
                     else:
                         EdB = 10*np.log10(ER[index_ray])
                         ERdB = 10*np.log10(E)
                         vscale  = 1.-(max(ERdB)-EdB)/(max(ERdB)-min(ERdB))
-                        widthray = 3*vscale
-                        alpharay = vscale
-                        pdb.set_trace()
+                        linewidth = 3*vscale
+                        alpha = vscale
                         cmap = cm.hot
-                        colorray = cmap(vscale)
+                        color = cmap(vscale)
                         ax.plot(ray[0, :], ray[1, :],
-                                alpha = alpharay,
-                                color = colorray,
-                                linewidth = widthray)
+                                alpha = alpha,
+                                color = color,
+                                linewidth = linewidth)
 
                     ax.axis(&#39;off&#39;)
                     #if self.filled :
                     #    ax.set_title(&#39;rays index :&#39;+ str(self[i][&#39;rayidx&#39;][lray]))
         else:
             rlist = kwargs[&#39;rlist&#39;]
-            # 3D ray 
+            # 3D ray
             if self.is3D:
                 nbi = self._ray2nbi[rlist]
                 nr = np.array((nbi,rlist))
@@ -1231,13 +1232,12 @@ logger = logging.getLogger(__name__)
                                          self.pRx[0:2].reshape((2, 1))))
                                          ))
                         ax.plot(ray[0, :], ray[1, :],
-                                alpha = kwargs[&#39;alpharay&#39;],
-                                color = kwargs[&#39;colray&#39;],
-                                linewidth = kwargs[&#39;widthray&#39;])
+                                alpha = kwargs[&#39;alpha&#39;],
+                                color = kwargs[&#39;color&#39;],
+                                linewidth = kwargs[&#39;linewidth&#39;])
                         ax.axis(&#39;off&#39;)
-            # 2D ray 
+            # 2D ray
             else:
-
                 for i in rlist:
                     lray = range(len(self[i][&#39;pt&#39;][0, 0, :]))
                     #if self.filled :
@@ -1248,26 +1248,20 @@ logger = logging.getLogger(__name__)
                                          self.pRx[0:2].reshape((2, 1))))
                                          ))
                         ax.plot(ray[0, :], ray[1, :],
-                                alpha=kwargs[&#39;alpharay&#39;],
-                                color=kwargs[&#39;colray&#39;],
-                                linewidth=kwargs[&#39;widthray&#39;])
+                                alpha=kwargs[&#39;alpha&#39;],
+                                color=kwargs[&#39;color&#39;],
+                                linewidth=kwargs[&#39;linewidth&#39;])
                         ax.axis(&#39;off&#39;)
 
-                        #if self.filled :
-                        #    ax.set_title(&#39;rays index :&#39;+ str(self[i][&#39;rayidx&#39;][lray]))
-
-
-
-
-                # raynb = (nr[1,unr[i]]).astype(int)
-                # nbr=len(raynb)
-                
-                # ptidx = [np.where(self[i][&#39;rayidx&#39;]==x)[0][0] for x in raynb]
-                # # current number of interactions
-                # cnbi = i + 2
-            
-                # pt = self[i][&#39;pt&#39;][:,:,ptidx].reshape(3,cnbi*nbr,order=&#39;F&#39;)
-
+        if kwargs[&#39;bcolorbar&#39;]:
+            # axes : left , bottom , width , height
+            sm = plt.cm.ScalarMappable(cmap = kwargs[&#39;cmap&#39;], norm = plt.Normalize(vmin=kwargs[&#39;vmin&#39;],vmax=kwargs[&#39;vmax&#39;]))
+            sm._A = []  #Â necessary set_array
+            cax = fig.add_axes([0.18,0.35, 0.35, 0.025])
+            #cb = plt.colorbar(sm,cax=cax,orientation=&#39;horizontal&#39;)
+            cb = plt.colorbar(sm,cax=cax,orientation=&#39;horizontal&#39;)
+            cb.ax.tick_params(labelsize=24)
+            cb.set_label(&#39;Level (dB)&#39;, fontsize=24)
 
         return(fig,ax)</div>
 
@@ -3088,6 +3082,9 @@ logger = logging.getLogger(__name__)
             if l != 0:
                 # l stands for the number of interactions
                 r = self[l][&#39;nbrays&#39;]
+                # dirty fix should not be an array
+                if type(r)==np.ndarray:
+                    r = r[0]
                 # reshape in order to have a 1D list of index
                 # reshape ray index
                 rrl = self[l][&#39;rays&#39;].reshape(r*l,order=&#39;F&#39;)
@@ -4101,7 +4098,7 @@ if __name__ == &quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Apr 29, 2018.
+      Last updated on May 31, 2018.
 
     </p>
   </div>

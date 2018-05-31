@@ -225,7 +225,7 @@
 <h1>AFPchannel<a class="headerlink" href="#afpchannel" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pylayers.antprop.channel.AFPchannel">
-<em class="property">class </em><code class="descclassname">pylayers.antprop.channel.</code><code class="descname">AFPchannel</code><span class="sig-paren">(</span><em>x=array([]</em>, <em>dtype=float64)</em>, <em>y=array([]</em>, <em>dtype=float64)</em>, <em>tx=array([]</em>, <em>dtype=float64)</em>, <em>rx=array([]</em>, <em>dtype=float64)</em>, <em>az=array([]</em>, <em>dtype=float64)</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#AFPchannel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.AFPchannel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pylayers.antprop.channel.</code><code class="descname">AFPchannel</code><span class="sig-paren">(</span><em>x=array([]</em>, <em>dtype=float64)</em>, <em>y=array([]</em>, <em>dtype=float64)</em>, <em>tx=array([]</em>, <em>dtype=float64)</em>, <em>rx=array([]</em>, <em>dtype=float64)</em>, <em>az=array([]</em>, <em>dtype=float64)</em>, <em>label=''</em>, <em>_filename=''</em>, <em>refinement=False</em>, <em>ang_offset=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#AFPchannel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.AFPchannel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="references.html#pylayers.signal.bsignal.FUsignal" title="pylayers.signal.bsignal.FUsignal"><code class="xref py py-class docutils literal notranslate"><span class="pre">pylayers.signal.bsignal.FUsignal</span></code></a></p>
 <p>Angular Frequency Profile channel</p>
 <dl class="docutils">
@@ -247,6 +247,14 @@ tau : link delay (ns)</p>
 <dt>offset <span class="classifier-delimiter">:</span> <span class="classifier">float angle in radians</span></dt>
 <dd>azimuth offset w.r.t global frame</dd>
 </dl>
+<p>norm2
+construct
+electrical_delay
+loadmes
+toadp
+estimate
+peak
+specular_model</p>
 <p class="rubric">Methods Summary</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -261,7 +269,7 @@ tau : link delay (ns)</p>
 <td>electrical delay</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.AFPchannel.estimate" title="pylayers.antprop.channel.AFPchannel.estimate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">estimate</span></code></a>([taumax,&nbsp;phimax])</td>
-<td></td>
+<td>estimate specular model parameters</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.AFPchannel.loadmes" title="pylayers.antprop.channel.AFPchannel.loadmes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadmes</span></code></a>(_filename,&nbsp;_filecal[,&nbsp;fcGHz,&nbsp;BW,&nbsp;…])</td>
 <td>Load measurement file</td>
@@ -296,7 +304,11 @@ tau : link delay (ns)</p>
 <dl class="method">
 <dt id="pylayers.antprop.channel.AFPchannel.estimate">
 <code class="descname">estimate</code><span class="sig-paren">(</span><em>taumax=200</em>, <em>phimax=6.283185307179586</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#AFPchannel.estimate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.AFPchannel.estimate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>estimate specular model parameters</p>
+<p>taumax : float
+phimax : float</p>
+<p>specular_model</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.channel.AFPchannel.loadmes">
@@ -396,7 +408,7 @@ HPBW : Half Power Beamwidth</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Apr 28, 2018.
+      Last updated on May 31, 2018.
 
     </p>
   </div>

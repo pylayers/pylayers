@@ -234,7 +234,7 @@
 <dd>azimuth in radian</dd>
 </dl>
 <p>ang_offset :
-theta :  float
+theta : float
 phi : float
 tau : float
 _filename : string</p>
@@ -283,8 +283,8 @@ _filename : string</p>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.svd" title="pylayers.antprop.channel.ADPchannel.svd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">svd</span></code></a>()</td>
 <td>perform singular value decomposition of the PADP</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.toafp" title="pylayers.antprop.channel.ADPchannel.toafp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toafp</span></code></a>()</td>
-<td></td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.toafp" title="pylayers.antprop.channel.ADPchannel.toafp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toafp</span></code></a>(fmin)</td>
+<td>angular delay profile -&gt; angular frequency profile</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.ADPchannel.tomap" title="pylayers.antprop.channel.ADPchannel.tomap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tomap</span></code></a>(L,&nbsp;**kwargs)</td>
 <td>surimpose PADP on the Layout</td>
@@ -313,7 +313,7 @@ _filename : string</p>
 <p>adp : ADPchannel</p>
 <p>rhoE  : energy ratio of padp Eadp/Eself
 rhoEc : energy ratio of centered padp Ecadp/Ecself
-rho   : normalized intercorrelation  :  &lt;self-mean(self),adp-mean(adp)&gt;/Eself 
+rho   : normalized intercorrelation  :  &lt;self-mean(self),adp-mean(adp)&gt;/Eself
 rhon  : intercorrelation of normalized padp   &lt;self_normalized,adp_normalized&gt;</p>
 <p>This can be used to compare a measured PADP with a Ray tracing PADP</p>
 </dd></dl>
@@ -327,6 +327,27 @@ rhon  : intercorrelation of normalized padp   &lt;self_normalized,adp_normalized
 <dt id="pylayers.antprop.channel.ADPchannel.imshow">
 <code class="descname">imshow</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#ADPchannel.imshow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ADPchannel.imshow" title="Permalink to this definition">¶</a></dt>
 <dd><p>show Angular Delay Profile</p>
+<dl class="docutils">
+<dt>origin: string</dt>
+<dd>‘lower’</dd>
+</dl>
+<p>vmax : -65,
+vmin : -120,
+interpolation : string</p>
+<blockquote>
+<div>‘nearest’,</div></blockquote>
+<p>alpha:1,
+imin = 0
+imax = -1
+dB   = True
+fig  = []
+ax   = []
+fonts = 18
+label = ‘’
+blos = True
+orientation = -1
+bcolorbar = False
+ang_offset = 450</p>
 </dd></dl>
 
 <dl class="method">
@@ -408,14 +429,16 @@ figsize
 typ : string
 Ndec : int</p>
 <blockquote>
-<div>decimation factor</div></blockquote>
+<div>decimation factor (1)</div></blockquote>
 <dl class="docutils">
 <dt>imax <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>max value</dd>
+<dd>max value 150</dd>
+<dt>vmin <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>-120</dd>
+<dt>vmax <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>-50</dd>
 </dl>
-<p>vmin : float
-vmax : float
-cmap : colormap
+<p>cmap : colormap
 title : PADP</p>
 <p>fig , ax , pc (colormash)</p>
 </dd></dl>
@@ -432,8 +455,9 @@ title : PADP</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.channel.ADPchannel.toafp">
-<code class="descname">toafp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#ADPchannel.toafp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ADPchannel.toafp" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">toafp</code><span class="sig-paren">(</span><em>fmin</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#ADPchannel.toafp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ADPchannel.toafp" title="Permalink to this definition">¶</a></dt>
+<dd><p>angular delay profile -&gt; angular frequency profile</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.channel.ADPchannel.tomap">
@@ -485,7 +509,7 @@ Ny  :3000,
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Apr 28, 2018.
+      Last updated on May 31, 2018.
 
     </p>
   </div>

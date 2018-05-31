@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from pylayers.gis.layout import *
-L = Layout('WHERE1.ini')
+L = Layout('WHERE1.lay')
 L.loadfur('Furw1.ini')
 fig = plt.figure()
 ax = fig.gca()
