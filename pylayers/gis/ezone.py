@@ -809,9 +809,22 @@ class Ezone(PyLayers):
         L = 6.9+20*np.log10(np.sqrt(w**2+1)+w)
         LFS = 32.4 + 20*np.log10(d[-1])+20*np.log10(kwargs['fGHz'])
         Ltot = -(LFS+L)
-        ellFresnel = geu.ellipse2D(pa, pb, lmbda, 100)
+        ellFresnel = geu.ellipse2D(pa, pb, lmbda/2, 100 ,unit = 'meter')
 
-        return(height,height_old, d, dh, nu,numax, m, hlos, ellFresnel,LFS,L)
+        data ={}
+        data= {'height':height,
+               'height_old':height_old,
+             'd':d,
+             'dh':dh,
+             'nu':nu,
+             'numax':numax,
+             'm':m,
+             'hlos':hlos,
+             'ellFresnel':ellFresnel[0],
+             'LFS':LFS,
+             'L':L }
+
+        return data
 
 
     def route(self, pa, pb, **kwargs):

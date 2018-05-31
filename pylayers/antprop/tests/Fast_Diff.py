@@ -1,4 +1,3 @@
-
 # coding: utf-8
 
 # This notebook is an implementation from the paper "Fast UTD Diffraction Coefficient Using Only One Suare Root" from Jean Francois Legendre and Thierry Marsault.

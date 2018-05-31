@@ -1338,7 +1338,7 @@ def cover(X, Y, Z, Ha, Hb, fGHz, K, method='deygout'):
     L = np.zeros((Nphi, Nr, Nf))
     L0 = np.zeros(Nf)
     # loop over azimut
-    for ip in xrange(Nphi):
+    for ip in range(Nphi):
         # loop over range
         # il : 2 ... Nr-2
         # uk : 0 ....Nr-1
