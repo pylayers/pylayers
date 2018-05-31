@@ -233,14 +233,14 @@ import matplotlib.pyplot as plt
     Attributes
     ----------
 
-    a : array 
-        transfer function coefficients denominator 
+    a : array
+        transfer function coefficients denominator
     b : array
-        transfer function coefficients numerator 
+        transfer function coefficients numerator
     p : array dtype=complex
-        transfer function poles 
+        transfer function poles
     z : array dtype=complex
-        transfer function zeros 
+        transfer function zeros
 
     Methods
     -------
@@ -335,19 +335,19 @@ import matplotlib.pyplot as plt
         F   = DF()
         F.p = np.hstack((rpa1,rpa2))
         F.z = np.hstack((rpb1,rpb2))
-        
+
         F.simplify()
 
         return(F)
 
 
 <div class="viewcode-block" id="DF.simplify"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.simplify">[docs]</a>    def simplify(self,tol=1e-16):
-        &quot;&quot;&quot; simplify transfer function 
+        &quot;&quot;&quot; simplify transfer function
 
         Parameters
         ----------
-        tol : float 
-            tolerance for simplification 
+        tol : float
+            tolerance for simplification
 
         &quot;&quot;&quot;
         ip = []
@@ -363,9 +363,9 @@ import matplotlib.pyplot as plt
         self.z = np.delete(self.z,iz)</div>
 
 <div class="viewcode-block" id="DF.flipc"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.DF.DF.flipc">[docs]</a>    def flipc(self):
-        &quot;&quot;&quot; flip coefficient 
-        
-        This is equivalent to the transformation 
+        &quot;&quot;&quot; flip coefficient
+
+        This is equivalent to the transformation
 
         z -&gt; 1/z
 
@@ -382,16 +382,18 @@ import matplotlib.pyplot as plt
         Returns
         -------
 
+        DF :
+
 
         Notes
         -----
 
         if $$H(z)=\\frac{1+b_1z^1+...+b_Nz^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$
-        
-        it returns 
+
+        it returns
 
         $$H_m(z)=\\frac{b_N+b_{N-1}z^1+...+z^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$
-        
+
         &quot;&quot;&quot;
 
         if self.fir:
@@ -419,10 +421,10 @@ import matplotlib.pyplot as plt
 
         Examples
         --------
-        
+
         .. plot::
             :include-source:
-            
+
             &gt;&gt;&gt; import matplotlib.pyplot as plt
             &gt;&gt;&gt; df = DF(b=np.array([1,1],a=np.array([1,-1]))
             &gt;&gt;&gt; N = 100 
@@ -531,7 +533,7 @@ import matplotlib.pyplot as plt
             self.H   = bs.FUsignal(w/np.pi,h)
             xlabel = &#39;Relative frequency&#39;
 
-        
+
         if kwargs[&#39;display&#39;]:
             if &#39;fig&#39; not in kwargs:
                 fig = plt.figure()
@@ -704,7 +706,7 @@ if __name__ == &quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Apr 29, 2018.
+      Last updated on May 31, 2018.
 
     </p>
   </div>

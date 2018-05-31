@@ -1158,8 +1158,14 @@
 <tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ext2qt</span></code>([extent,&nbsp;lL0])</td>
 <td>convert an extent region into a list of qt regions</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">haversine</span></code>(lat1,&nbsp;lon1,&nbsp;lat2,&nbsp;lon2)</td>
-<td></td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_google_elev_profile</span></code>(node0,&nbsp;node1[,&nbsp;…])</td>
+<td>return elevation profile between 2 nodes using google elevation API data</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_osm_elev_profile</span></code>(node0,&nbsp;node1[,&nbsp;nb_samples])</td>
+<td>return elevation profile between 2 nodes using google elevation API data</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">haversine</span></code>(lat1,&nbsp;lon1,&nbsp;lat2,&nbsp;lon2[,&nbsp;mode])</td>
+<td>lat 1 (Na) lon 1 (Na) lat 2 (Nb) lon 2 (Nb)</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_axes_locatable</span></code>(axes)</td>
 <td></td>
@@ -4378,76 +4384,79 @@ devdf  : device data frame</p>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">fftshift</span></code>(x[,&nbsp;axes])</td>
 <td>Shift the zero-frequency component to the center of the spectrum.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pylayers.measures.parker.smparker.gettty.html#pylayers.measures.parker.smparker.gettty" title="pylayers.measures.parker.smparker.gettty"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gettty</span></code></a>()</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmin</span></code>(func,&nbsp;x0[,&nbsp;args,&nbsp;xtol,&nbsp;ftol,&nbsp;maxiter,&nbsp;…])</td>
+<td>Minimize a function using the downhill simplex algorithm.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pylayers.measures.parker.smparker.gettty.html#pylayers.measures.parker.smparker.gettty" title="pylayers.measures.parker.smparker.gettty"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gettty</span></code></a>()</td>
 <td>get tty and handles port conflicts</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">hfft</span></code>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">hfft</span></code>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
 <td>Compute the FFT of a signal which has Hermitian symmetry (real spectrum).</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ifft</span></code>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ifft</span></code>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
 <td>Compute the one-dimensional inverse discrete Fourier Transform.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ifft2</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ifft2</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
 <td>Compute the 2-dimensional inverse discrete Fourier Transform.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ifftn</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ifftn</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
 <td>Compute the N-dimensional inverse discrete Fourier Transform.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ifftshift</span></code>(x[,&nbsp;axes])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ifftshift</span></code>(x[,&nbsp;axes])</td>
 <td>The inverse of <cite>fftshift</cite>.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ihfft</span></code>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ihfft</span></code>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
 <td>Compute the inverse FFT of a signal which has Hermitian symmetry.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">irfft</span></code>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">irfft</span></code>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
 <td>Compute the inverse of the n-point DFT for real input.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">irfft2</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">irfft2</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
 <td>Compute the 2-dimensional inverse FFT of a real array.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">irfftn</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">irfftn</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
 <td>Compute the inverse of the N-dimensional FFT of real input.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">k2xyz</span></code>(ik,&nbsp;sh)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">k2xyz</span></code>(ik,&nbsp;sh)</td>
 <td>Parameters ———-</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadmat</span></code>(file_name[,&nbsp;mdict,&nbsp;appendmat])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadmat</span></code>(file_name[,&nbsp;mdict,&nbsp;appendmat])</td>
 <td>Load MATLAB file.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_axes_locatable</span></code>(axes)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_axes_locatable</span></code>(axes)</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">new_class</span></code>(name[,&nbsp;bases,&nbsp;kwds,&nbsp;exec_body])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">new_class</span></code>(name[,&nbsp;bases,&nbsp;kwds,&nbsp;exec_body])</td>
 <td>Create a class object dynamically using the appropriate metaclass.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">prepare_class</span></code>(name[,&nbsp;bases,&nbsp;kwds])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">prepare_class</span></code>(name[,&nbsp;bases,&nbsp;kwds])</td>
 <td>Call the __prepare__ method of the appropriate metaclass.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">rfft</span></code>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">rfft</span></code>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
 <td>Compute the one-dimensional discrete Fourier Transform for real input.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">rfft2</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">rfft2</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
 <td>Compute the 2-dimensional FFT of a real array.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">rfftfreq</span></code>(n[,&nbsp;d])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">rfftfreq</span></code>(n[,&nbsp;d])</td>
 <td>Return the Discrete Fourier Transform sample frequencies (for usage with rfft, irfft).</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">rfftn</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">rfftn</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
 <td>Compute the N-dimensional discrete Fourier Transform for real input.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">sleep</span></code>(seconds)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">sleep</span></code>(seconds)</td>
 <td>Delay execution for a given number of seconds.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">svd</span></code>(a[,&nbsp;full_matrices,&nbsp;compute_uv])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">svd</span></code>(a[,&nbsp;full_matrices,&nbsp;compute_uv])</td>
 <td>Singular Value Decomposition.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">test</span></code></td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">test</span></code></td>
 <td>Run tests for module using nose.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">weights</span></code>(nx,&nbsp;nz,&nbsp;kx,&nbsp;kz,&nbsp;Kx,&nbsp;Kz)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">weights</span></code>(nx,&nbsp;nz,&nbsp;kx,&nbsp;kz,&nbsp;Kx,&nbsp;Kz)</td>
 <td>Practical Demonstration of Limited Feedback Beamforming for mmWave Systems</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">xyztok</span></code>(iz,&nbsp;iy,&nbsp;ix[,&nbsp;Nx,&nbsp;Ny])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">xyztok</span></code>(iz,&nbsp;iy,&nbsp;ix[,&nbsp;Nx,&nbsp;Ny])</td>
 <td></td>
 </tr>
 </tbody>
@@ -6055,7 +6064,7 @@ window : string</p>
 <em class="property">class </em><code class="descclassname">pylayers.signal.DF.</code><code class="descname">DF</code><span class="sig-paren">(</span><em>b=array([1])</em>, <em>a=array([1])</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/DF.html#DF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.DF.DF" title="Permalink to this definition">¶</a></dt>
 <dd><p>Digital Filter Class</p>
 <dl class="docutils">
-<dt>a <span class="classifier-delimiter">:</span> <span class="classifier">array </span></dt>
+<dt>a <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
 <dd>transfer function coefficients denominator</dd>
 <dt>b <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
 <dd>transfer function coefficients numerator</dd>
@@ -6171,6 +6180,7 @@ Fmax : maximal phase filter</dd>
 <dt id="pylayers.signal.DF.DF.match">
 <code class="descname">match</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/DF.html#DF.match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.DF.DF.match" title="Permalink to this definition">¶</a></dt>
 <dd><p>return a match filter</p>
+<p>DF :</p>
 <p>if $$H(z)=\frac{1+b_1z^1+…+b_Nz^{-N}}{1+a_1z^1+…+a_Mz^{-M}}$$</p>
 <p>it returns</p>
 <p>$$H_m(z)=\frac{b_N+b_{N-1}z^1+…+z^{-N}}{1+a_1z^1+…+a_Mz^{-M}}$$</p>
@@ -6195,7 +6205,7 @@ desired = (0.0001,1,0.0001))</p>
 <code class="descname">simplify</code><span class="sig-paren">(</span><em>tol=1e-16</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/DF.html#DF.simplify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.DF.DF.simplify" title="Permalink to this definition">¶</a></dt>
 <dd><p>simplify transfer function</p>
 <dl class="docutils">
-<dt>tol <span class="classifier-delimiter">:</span> <span class="classifier">float </span></dt>
+<dt>tol <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
 <dd>tolerance for simplification</dd>
 </dl>
 </dd></dl>
@@ -8006,7 +8016,7 @@ devdf  : device data frame</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Apr 28, 2018.
+      Last updated on May 31, 2018.
 
     </p>
   </div>

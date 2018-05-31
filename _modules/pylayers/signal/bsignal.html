@@ -2642,7 +2642,7 @@ import scipy.stats as st
 
         te = 1.0 / feGHz
         Tww = 10 * Tp
-        Ni = round(Tww / (2 * te))
+        Ni = int(round(Tww / (2 * te)))
         # Tww/2 multiple de te
         Tww = 2 * te * Ni
         x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
@@ -2709,7 +2709,7 @@ import scipy.stats as st
             if len(x) == 0:
                 te = 1.0 / fe
                 Tw = 10. / band
-                Ni = round(Tw / (2 * te))
+                Ni = int(round(Tw / (2 * te)))
                 # Tww/2 multiple de te
                 Tww = 2 * te * Ni
                 x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
@@ -3098,7 +3098,7 @@ import scipy.stats as st
             EMH2  = MH2.sum(axis=-1)*(self.x[1]-self.x[0])
 
         if mode==&#39;center&#39;:
-            EMH2  = MH2[...,len(self.x)/2]
+            EMH2  = MH2[...,int(len(self.x)/2)]
 
         if mode==&#39;first&#39;:
             EMH2  = MH2[...,0]
@@ -4060,7 +4060,7 @@ if __name__ == &quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Apr 29, 2018.
+      Last updated on May 31, 2018.
 
     </p>
   </div>

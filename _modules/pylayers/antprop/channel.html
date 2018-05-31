@@ -232,6 +232,8 @@ import pylayers.antprop.antenna as ant
 from pylayers.util.project import *
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from mpl_toolkits.mplot3d import Axes3D
+from scipy.optimize import fmin
+import copy
 
 try:
     import h5py
@@ -261,22 +263,39 @@ except:
     offset : float angle in radians
         azimuth offset w.r.t global frame
 
+    Methods
+    -------
+
+    norm2
+    construct
+    electrical_delay
+    loadmes
+    toadp
+    estimate
+    peak
+    specular_model
+
     &quot;&quot;&quot;
     def __init__(self,x = np.array([]),
                       y = np.array([]),
                       tx = np.array([]),
                       rx = np.array([]),
-                      az = np.array([])
+                      az = np.array([]),
+                      label = &#39;&#39;,
+                      _filename = &#39;&#39;,
+                      refinement = False,
+                      ang_offset = 0
                       ):
         bs.FUsignal.__init__(self,x=x,y=y,label=&#39;AFP&#39;)
         if len(self.x)!=0:
-            self.fcGHz = self.x[len(self.x)/2]
+            self.fcGHz = self.x[int(len(self.x)/2)]
         self.tx = tx
         self.rx = rx
-        self.ang_offset = 0
-        self.refinement = False
+        self.label = label
+        self.ang_offset = ang_offset
+        self.refinement = refinement
         self.az = az
-        self._filename = &#39;&#39;
+        self._filename = _filename
 
     def __add__(self,other):
         assert(self.y.shape == other.y.shape)
@@ -284,7 +303,7 @@ except:
         assert((self.az == other.az).all())
         A = AFPchannel()
         A.x = self.x
-        A.fcGHz = A.x[len(A.x)/2]
+        A.fcGHz = A.x[int(len(A.x)/2)]
         A.az = self.az
         A.y = self.y + other.y
         return A
@@ -295,7 +314,7 @@ except:
         assert((self.az == other.az).all())
         A = AFPchannel()
         A.x = self.x
-        A.fcGHz = A.x[len(A.x)/2]
+        A.fcGHz = A.x[int(len(A.x)/2)]
         A.az = self.az
         Amod = np.abs(self.y)-np.abs(other.y)
         A.y = Amod*np.exp(1j*np.angle(self.y))
@@ -303,7 +322,7 @@ except:
 
     def __repr__(self):
         cv = 180/np.pi
-        s = &#39;Angular Frequency Profile object \n&#39;
+        s = &#39;Angular Frequency Profile: &#39;+self.label+&#39;\n&#39;
         s = s + &#39;Tx : &#39;+str(self.tx)+&#39;\n&#39;
         s = s + &#39;Rx : &#39;+str(self.rx)+&#39;\n&#39;
         return s
@@ -407,7 +426,7 @@ except:
         #
 
         self.x = np.linspace(self.fmin,self.fmax,self.Nf)
-        self.fcGHz = self.x[len(self.x)/2]
+        self.fcGHz = self.x[int(len(self.x)/2)]
         self.y = amp*np.exp(1j*ang*np.pi/180.)*cal_trf[None,:]*window
         #
         # if extension is txt file comes from ESPOO measurement
@@ -425,11 +444,11 @@ except:
             self.az[u] = self.az[u] + 2*np.pi</div>
 
 <div class="viewcode-block" id="AFPchannel.electrical_delay"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.AFPchannel.html#pylayers.antprop.channel.AFPchannel.electrical_delay">[docs]</a>    def  electrical_delay(self,tauns=0):
-        &quot;&quot;&quot; electrical delay 
+        &quot;&quot;&quot; electrical delay
 
         Parameters
         ----------
-        tauns : float 
+        tauns : float
 
         &quot;&quot;&quot;
         self.y = self.y * np.exp(-2*1j*np.pi*self.x*tauns)</div>
@@ -461,17 +480,67 @@ except:
                          ang_offset = self.ang_offset)
         return adp</div>
 
+    def get_path(self):
+        E = float(self.norm2())
+        tEk = [E/200.,E]
+        A = copy.copy(self)
+        for k in range(10):
+        #while ((tEk[-1]&gt;tEk[0]) and (tEk[-1]&gt;E/100)):
+            xe,C,A = A.estimate()
+            Energy = A.norm2()
+            print(xe)
+            tEk.append(Energy)
+            try:
+                txe = np.vstack((txe,xe))
+            except:
+                txe = xe[None,:]
+        return(txe)
+
+
 <div class="viewcode-block" id="AFPchannel.estimate"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.AFPchannel.html#pylayers.antprop.channel.AFPchannel.estimate">[docs]</a>    def estimate(self,taumax=200,phimax=2*np.pi):
+        &quot;&quot;&quot; estimate specular model parameters
+
+        Parameters
+        ----------
+
+        taumax : float
+        phimax : float
+
+        See Also
+        --------
+
+        specular_model
+
+        &quot;&quot;&quot;
         def cost(xk,f,phi):
             B = AFPchannel()
+            #B.specular_model2(xk,f,phi)
             B.specular_model(xk,f,phi)
             C = self - B
             return C.norm2()
         x_0 = self.peak()
-        x_est = optimize.fmin_l_bfgs_b(cost,x_0,args=(self.x,self.az),disp=0,approx_grad=1,bounds=((0,2*x_0[0]),(0,taumax),(0,phimax)))[0]
+        x_est = optimize.fmin_l_bfgs_b(cost,
+                                       x_0,
+                                       args=(self.x,self.az),
+                                       disp=0,
+                                       approx_grad=1,
+                                       bounds=((0,2*x_0[0]),
+                                               (0,taumax),
+                                               (0,phimax)))[0]
+        #x_est = optimize.fmin_l_bfgs_b(cost,
+        #                               x_0,
+        #                               args=(self.x,self.az),
+        #                               disp=0,
+        #                               approx_grad=1,
+        #                               bounds=((0,2*x_0[0]),
+        #                                       (0,2),
+        #                                       (0,2),
+        #                                       (0,taumax),
+        #                                       (0,phimax)))[0]
         #x_est = optimize.fmin(cost,x_0,args=(self.x,self.az))
         Ck = AFPchannel()
         Ck.specular_model(x_est,self.x,self.az)
+        #Ck.specular_model2(x_est,self.x,self.az)
         D = self - Ck
         return x_est,Ck, D</div>
 
@@ -479,6 +548,7 @@ except:
         adpself = self.toadp()
         ak,tauk,phik = adpself.peak()
         x = np.array([ak,tauk,phik])
+        #x = np.array([ak,1,0,tauk,phik])
         return(x)</div>
 
 <div class="viewcode-block" id="AFPchannel.specular_model"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.AFPchannel.html#pylayers.antprop.channel.AFPchannel.specular_model">[docs]</a>    def specular_model(self,x,fGHz,phi,wH=[],HPBW=10*np.pi/180,GmaxdB=21):
@@ -510,7 +580,7 @@ except:
 
 
         &quot;&quot;&quot;
-        K = len(x)/3
+        K = int(len(x)/3)
         assert(len(x)==3*K)
         ak = x[0:K][:,None,None]
         tk = x[K:2*K][:,None,None]
@@ -519,15 +589,70 @@ except:
         if wH ==[]:
             wH = np.ones(len(fGHz))
         tf  = ak*np.exp(-2*1j*np.pi*fGHz[None,:,None]*tk)*wH[None,:,None]
-        dphi = pk-phi[None,None,:]
+        dphi = pk - phi[None,None,:]
         Gmax = 10**(GmaxdB/10.)
         g = np.exp(-(2*np.sqrt(np.log(2))*dphi/HPBW)**2)
         tfg = tf*g
         self.x = fGHz
-        self.fcGHz = self.x[len(self.x)/2]
+        self.fcGHz = self.x[int(len(self.x)/2)]
         # self.y : angle(0) fGHz(1)
         self.y = np.sum(tfg,axis=0).T
-        self.az = phi</div></div>
+        self.az = phi</div>
+        #h    = np.fft.ifft(H)
+
+    def specular_model2(self,x,fGHz,phi,wH=[],HPBW=10*np.pi/180,GmaxdB=21):
+        &quot;&quot;&quot; Creates an AFP from a discrete specular model
+
+        Parameters
+        ----------
+        x : [a0,a1,..,aK,tau0,tau1,...,tauk,phi0,...,phiK]
+        fGHz :
+        phi :
+        wH : windowing on frequency axis
+        HPBW : Half Power Beamwidth
+
+        Examples
+        --------
+        &gt;&gt;&gt; import numpy as np
+        &gt;&gt;&gt; rs = np.random.seed(1)
+        &gt;&gt;&gt; E = st.expon(0.5)
+        &gt;&gt;&gt; K = 5
+        &gt;&gt;&gt; tauk = 250*np.random.rand(K)
+        &gt;&gt;&gt; alphak = E.rvs(K)
+        &gt;&gt;&gt; phik  = 2*np.pi*np.random.rand(K)
+        &gt;&gt;&gt; xk   = np.hstack((alphak,tauk,phik))
+        &gt;&gt;&gt; A = AFPchannel()
+        &gt;&gt;&gt; fGHz = np.linspace(27,29,2001)
+        &gt;&gt;&gt; wH = np.ones(len(fGHz))
+        &gt;&gt;&gt; phi = np.linspace(0,2*np.pi,73)
+        &gt;&gt;&gt; A.specular_model(xk,fGHz,phi,wH)
+
+
+        &quot;&quot;&quot;
+        K = int(len(x)/3)
+        Nf = len(fGHz)
+        assert(len(x)==5*K)
+        ak = x[0:1*K][:,None,None]
+        bk = x[1*K:2*K][:,None,None]
+        ck = x[2*K:3*K][:,None,None]
+        tk = x[3*K:4*K][:,None,None]
+        pk = x[4*K:5*K][:,None,None]
+        # tf : paths (0) , freq (1), angle (2)
+        if wH ==[]:
+            wH = np.ones(len(fGHz))
+
+        a = ak * bk*(fGHz[None,:,None]-fGHz[int(Nf/2)])**ck
+        tf = a*np.exp(-2*1j*np.pi*fGHz[None,:,None]*tk)*wH[None,:,None]
+        dphi = pk - phi[None,None,:]
+        Gmax = 10**(GmaxdB/10.)
+
+        g = np.exp(-(2*np.sqrt(np.log(2))*dphi/HPBW)**2)
+        tfg = tf*g
+        self.x = fGHz
+        self.fcGHz = self.x[int(len(self.x)/2)]
+        # self.y : angle(0) fGHz(1)
+        self.y = np.sum(tfg,axis=0).T
+        self.az = phi</div>
         #h    = np.fft.ifft(H)
 
 
@@ -540,7 +665,7 @@ except:
     az : array
         azimuth in radian
     ang_offset :
-    theta :  float
+    theta : float
     phi : float
     tau : float
     _filename : string
@@ -549,14 +674,14 @@ except:
 
     &quot;&quot;&quot;
     def __init__(self,
-            x=np.array([]),
-            y=np.array([]),
-            az=np.array([]),
-            tx=np.array([]),
-            rx=np.array([]),
+            x = np.array([]),
+            y = np.array([]),
+            az = np.array([]),
+            tx = np.array([]),
+            rx = np.array([]),
             fcGHz=28,
             _filename=&#39;&#39;,
-            refinement=False,
+            refinement = False,
             ang_offset = 0,
             ):
         &quot;&quot;&quot;
@@ -585,13 +710,16 @@ except:
         self.rx = rx
         self._filename = _filename
         self.fcGHz = fcGHz
+        self.refinement = refinement
         self.ang_offset = ang_offset
         if ((len(self.tx) !=0 ) and (len(self.rx)!= 0)):
             v = self.tx - self.rx
             distLOS = np.linalg.norm(v)
             self.taulos_geo = distLOS/0.3
             self.anglos_geo = np.arctan2(v[1],v[0])*180/np.pi
-            LFS = -(32.4+20*np.log10(fcGHz)+20*np.log10(distLOS))
+            if self.anglos_geo&lt;0:
+                self.anglos_geo += 360
+            LFS = -(32.4 + 20*np.log10(fcGHz) + 20*np.log10(distLOS))
             self.alphalos_geo = 10**(LFS/10.)
 
             if self.anglos_geo&lt;0:
@@ -608,10 +736,16 @@ except:
     def __repr__(self):
         cv = 180/np.pi
         s = &#39;Angular Delay Profile object \n&#39;
+        stx = &quot;%.2f, %.2f, %.2f&quot; % (self.tx[0],self.tx[1],self.tx[2])
+        srx = &quot;%.2f, %.2f, %.2f&quot; % (self.rx[0],self.rx[1],self.rx[2])
+        s = s + &#39;Tx : &#39;+ stx + &#39;\n&#39;
+        s = s + &#39;Rx : &#39;+ srx + &#39;\n&#39;
         s = s + &#39;Angular offset (degrees) : &#39;+str(cv*self.ang_offset)+&#39;\n&#39;
-        s = s + &#39;agmin : &#39;+str(self.az[0]*cv)+&#39; agmax : &#39;+str(self.az[-1]*cv)+&#39;\n&#39;
+        s = s + &#39;agstart : &#39;+str(self.az[0]*cv)+&#39; agstop : &#39;+str(self.az[-1]*cv)+&#39;\n&#39;
         if hasattr(self,&#39;alphalos_geo&#39;):
-            s = s + &#39;alpha (geo): &#39;+ str(self.alphalos_geo)+&#39; (est): &#39;+str(self.alphapeak_est**2)+ &#39; GdB : &#39;+str(10*np.log10(self.alphapeak_est**2/self.alphalos_geo))+&#39; \n&#39;
+            alphalosdB = 10*np.log10(self.alphalos_geo)
+            alphapeak_estdB = 20*np.log10(self.alphapeak_est)
+            s = s + &#39;alpha (geo): &#39;+ &#39;%.2f dB&#39; % alphalosdB+&#39; (est): &#39;+ &#39;%.2f dB&#39; % alphapeak_estdB + &#39; GdB : &#39;+str(10*np.log10(self.alphapeak_est**2/self.alphalos_geo))+&#39; \n&#39;
             s = s + &#39;tau (geo): &#39;+ str(self.taulos_geo)+&#39; (est): &#39;+str(self.taupeak_est)+&#39; \n&#39;
             s = s + &#39;ang (geo): &#39;+ str(self.anglos_geo)+&#39; (est): &#39;+str(self.angpeak_est)+&#39;\n&#39;
         return(s)
@@ -661,12 +795,12 @@ except:
 
         rhoE  : energy ratio of padp Eadp/Eself
         rhoEc : energy ratio of centered padp Ecadp/Ecself
-        rho   : normalized intercorrelation  :  &lt;self-mean(self),adp-mean(adp)&gt;/Eself 
-        rhon  : intercorrelation of normalized padp   &lt;self_normalized,adp_normalized&gt; 
+        rho   : normalized intercorrelation  :  &lt;self-mean(self),adp-mean(adp)&gt;/Eself
+        rhon  : intercorrelation of normalized padp   &lt;self_normalized,adp_normalized&gt;
 
         Notes
         -----
-        This can be used to compare a measured PADP with a Ray tracing PADP 
+        This can be used to compare a measured PADP with a Ray tracing PADP
 
 
         &quot;&quot;&quot;
@@ -728,6 +862,28 @@ except:
 
 <div class="viewcode-block" id="ADPchannel.imshow"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.ADPchannel.html#pylayers.antprop.channel.ADPchannel.imshow">[docs]</a>    def imshow(self,**kwargs):
         &quot;&quot;&quot; show Angular Delay Profile
+
+        Parameters
+        ----------
+        origin: string
+            &#39;lower&#39;
+        vmax : -65,
+        vmin : -120,
+        interpolation : string 
+             &#39;nearest&#39;,
+        alpha:1,
+        imin = 0
+        imax = -1
+        dB   = True
+        fig  = []
+        ax   = []
+        fonts = 18
+        label = &#39;&#39;
+        blos = True
+        orientation = -1
+        bcolorbar = False
+        ang_offset = 450
+
         &quot;&quot;&quot;
         defaults = {&#39;origin&#39;:&#39;lower&#39;,
                     &#39;vmax&#39; : -65,
@@ -756,7 +912,8 @@ except:
             fig = plt.figure()
         if ax==[]:
             ax = fig.add_subplot(111)
-        rd2deg = 180/np.pi
+
+        #rd2deg = 180/np.pi
         #extent = (self.az[-1]*rd2deg+agoffset,
         #          self.az[0]*rd2deg+agoffset,
         #          self.x[imin],self.x[imax])
@@ -764,19 +921,24 @@ except:
         #          self.az[-1]*rd2deg,
         #          self.x[imin],self.x[imax])
 
-        extent = (45,270,self.x[imin],self.x[imax])
-        padp = np.abs(self.y)[:,imin:imax].T
+        agmin = self.az.min()*180/np.pi
+        agmax = self.az.max()*180/np.pi
+        extent = (agmin,agmax,self.x[imin],self.x[imax])
+        if orientation==-1:
+            padp = np.abs(self.y)[::-1,imin:imax].T
+        else:
+            padp = np.abs(self.y)[:,imin:imax].T
         if dB:
             padp  = 20*np.log10(padp)
             im = ax.imshow(padp,extent=extent,aspect=&#39;auto&#39;,**kwargs)
             #plt.axis(&#39;equal&#39;)
 
         if blos:
-            a1 = ang_offset + orientation*self.angpeak_est
-            ax.scatter(a1,self.taupeak_est,marker=&#39;*&#39;,s=70,color=&#39;k&#39;)
+            a1 = ang_offset + self.angpeak_est
+            ax.scatter(a1,self.taupeak_est,marker=&#39;*&#39;,s=70,color=&#39;r&#39;)
             if hasattr(self,&#39;anglos_geo&#39;):
-                a2 = ang_offset + orientation*self.anglos_geo
-                ax.scatter(a2,self.taulos_geo,marker=&#39;D&#39;,s=70,color=&#39;k&#39;)
+                a2 = ang_offset + self.anglos_geo
+                ax.scatter(a2,self.taulos_geo,marker=&#39;D&#39;,s=70,color=&#39;g&#39;)
 
         if bcolorbar:
             cbar = plt.colorbar(im)
@@ -857,15 +1019,14 @@ except:
 
         &quot;&quot;&quot;
 
-
         Na = self.y.shape[0]
         # integration over frequency
-        # adp (angle) 
+        # adp (angle)
         Gtyp = (Gmax+Gmin)/2.
         Py   = np.real(self.y*np.conj(self.y))
         pdp0 = np.sum(Py,axis=0)
         pdp0dB = 10*np.log10(pdp0)
-        u    = pdp0dB&gt;threshdB
+        u = pdp0dB &gt; threshdB
         adp  = np.sum(Py[:,u],axis=1)
         #mPya = np.median(Py,axis=0)
         #mPya = np.mean(Py,axis=0)
@@ -881,14 +1042,15 @@ except:
         else:
             ax = ax
         #ax.plot(self.az*180/np.pi,10*np.log10(adp),color=&#39;r&#39;,label=r&#39;$10\log_{10}(\sum_{\tau} PADP(\phi,\tau))$&#39;,linewidth=1.5)
-        ag = np.linspace(45,260,len(adp))
+        #ag = np.linspace(45,260,len(adp))
+        ag = self.az*180/np.pi
         ax.plot(ag, #360self.az*180/np.pi,
                 10*np.log10(adp)-Gtyp,
                 color=color,
                 label=label,
                 linewidth=1.5)
-        #ax.vlines(self.tau,ymin=-130,ymax=-40,linestyles=&#39;dashed&#39;,color=&#39;blue&#39;)
-        ax.hlines(-120,xmin=45,xmax=260,linestyles=&#39;dashed&#39;,color=&#39;black&#39;)
+        ax.vlines(self.anglos_geo,ymin=-130,ymax=-40,linestyles=&#39;dashed&#39;,color=&#39;red&#39;)
+        ax.hlines(-120,xmin=ag[0],xmax=ag[-1],linestyles=&#39;dashed&#39;,color=&#39;black&#39;)
         #ax.set_ylim(-80,-60)
         if xlabel:
             ax.set_xlabel(&#39;Angle [deg]&#39;,fontsize=fontsize)
@@ -1185,7 +1347,7 @@ except:
         # omnidirectional free space path loss
         # spdp : square root of power delay profile
         spdp = TUchannel(x=self.x,y=np.sqrt(pdp))
-        u  = np.where(pdp==max(pdp))[0]
+        u = np.where(pdp==max(pdp))[0]
         FS = -(32.4+20*np.log10(self.x*0.3)+20*np.log10(self.fcGHz))
         AttmaxdB = 20*np.log10(alpha)
         #Gmax = AttmaxdB-FS[u]
@@ -1603,11 +1765,13 @@ except:
         figsize
         typ : string
         Ndec : int
-            decimation factor
+            decimation factor (1)
         imax : int
-            max value
+            max value 150
         vmin : float
+            -120
         vmax : float
+            -50
         cmap : colormap
         title : PADP
 
@@ -1656,9 +1820,9 @@ except:
         rho,theta = np.meshgrid(self.x*cvel,self.az)
         # convert y data in desired format
         dt,ylabels = self.cformat(**kwargs)
-        val = dt[:,0::Ndec][:,0:imax/Ndec]
-        th  = theta[:,0::Ndec][:,0:imax/Ndec]
-        rh  = rho[:,0::Ndec][:,0:imax/Ndec]
+        val = dt[:,0::Ndec][:,0:int(imax/Ndec)]
+        th  = theta[:,0::Ndec][:,0:int(imax/Ndec)]
+        rh  = rho[:,0::Ndec][:,0:int(imax/Ndec)]
         #vmin = np.min(val)
         #vmax = np.max(val)
         #Dynamic = max_val-vmin
@@ -1672,7 +1836,20 @@ except:
         #ax.axis(&#39;equal&#39;)
 
 
-<div class="viewcode-block" id="ADPchannel.toafp"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.ADPchannel.html#pylayers.antprop.channel.ADPchannel.toafp">[docs]</a>    def toafp(self):
+<div class="viewcode-block" id="ADPchannel.toafp"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.ADPchannel.html#pylayers.antprop.channel.ADPchannel.toafp">[docs]</a>    def toafp(self,fmin):
+        &quot;&quot;&quot; angular delay profile -&gt; angular frequency profile
+        &quot;&quot;&quot;
+        x = np.linspace(0,(len(self.x)-1)/(self.x[-1]-self.x[0]),len(self.x))+fmin
+        y = np.fft.fft(self.y,axis=1)
+        afp = AFPchannel(x=x,
+                         y=y,
+                         az=self.az,
+                         tx=self.tx,
+                         rx=self.rx,
+                         _filename = self._filename,
+                         refinement = self.refinement,
+                         ang_offset = self.ang_offset)
+
         return afp</div></div>
 
 <div class="viewcode-block" id="TBchannel"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.TBchannel.html#pylayers.antprop.channel.TBchannel">[docs]</a>class TBchannel(bs.TBsignal):
@@ -1705,20 +1882,16 @@ except:
         tau0 : float
 
         &quot;&quot;&quot;
-        t = self.x
-        y = self.y
-
-        #cdf, vary = self.ecdf()
 
         u = np.max(self.y*self.y)
         v = 10**(np.log10(u)-threshold_dB/10.)
 
-        uf = np.where(self.y*self.y&gt;v)
+        uf = np.where(self.y*self.y &gt; v)
 
         num = np.sum(self.y[uf]*self.y[uf]*self.x[uf[-1]])
         den = np.sum(self.y[uf]*self.y[uf])
         taum = num/den
-    
+
 
         return(taum)</div>
 
@@ -2817,7 +2990,7 @@ except:
     def __init__(self,
                 x ,
                 y ,
-                **kwargs):      
+                **kwargs):
         &quot;&quot;&quot; class constructor
 
         Parameters
@@ -2825,8 +2998,8 @@ except:
 
         x  :  , nfreq
             frequency GHz
-        y  :  Nm x Nr x Nt x Nf 
-            measured channel 
+        y  :  Nm x Nr x Nt x Nf
+            measured channel
 
         &quot;&quot;&quot;
         defaults = {
@@ -2841,7 +3014,7 @@ except:
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]
-        
+
         self.calibrated = kwargs.pop(&#39;calibrated&#39;)
         self.label = kwargs.pop(&#39;label&#39;)
         self.filename = kwargs.pop(&#39;filename&#39;)
@@ -2856,10 +3029,9 @@ except:
 
         bs.FUsignal.__init__(self,x=x,y=y,label=&#39;Mchannel&#39;)
 
-    
-        
+
     def __repr__(self):
-        st = bs.FUsignal.__repr__(self)  
+        st = bs.FUsignal.__repr__(self)
         if self.calibrated:
             st = st + &#39;Calibrated&#39;
         else:
@@ -2889,7 +3061,6 @@ except:
         # Hd : nm x nt x nr x nf
         Hd  = np.conj(self.y.swapaxes(1,2))
 
-        
         if HdH:
             #T : nm x nt x nt x nf
             T = np.einsum(&#39;uijk,ujlk-&gt;uilk&#39;,Hd,H)
@@ -2902,7 +3073,7 @@ except:
         #S   : nm x nf x (nr|nt)
         #V   : nm x nf x (nr|nt) x (nr|nt)
         U,S,V  = la.svd(T)
-        
+
 
         return (U,S,V)</div>
 
@@ -2929,9 +3100,11 @@ except:
         Notes
         -----
 
-        The returned value is homogeneous to bit/s the aggregated capacity is obtrained by a simple summation 
-        of the returned quantity. To obtain the sum rate or the spectral efficiency in (bit/s/Hz ) the returned 
-        value should be divided by the frequency step dfGHz
+        The returned value is homogeneous to bit/s the aggregated capacity is
+        obtrained by a simple summation
+        of the returned quantity. To obtain the sum rate or the spectral
+        efficiency in (bit/s/Hz ) the returned value should be divided by the
+        frequency step dfGHz
 
         &quot;&quot;&quot;
 
@@ -2940,7 +3113,6 @@ except:
         BGHz  = fGHz[-1]-fGHz[0]
         dfGHz = fGHz[1]-fGHz[0]
 
-    
         if type(Pt)==float:
             Pt=np.array([Pt])
 
@@ -2961,20 +3133,20 @@ except:
 
         U,S,V = self.eig(HdH=True)
 
-        
+
         Ps  = Pt/(self.Nt)
-      
+
 
         Pb  = N0*BGHz*1e9   # Watt
 
 
-        # S : nm x nf x nr 
+        # S : nm x nf x nr
         # rho : nm x nf x nr x power
         #
         rho  = (Ps[None,None,None,:]/Pb)*S[:,:,:,None]
-        
+
         CB   = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=2)
-       
+
         return(rho,CB)</div>
 
 <div class="viewcode-block" id="Mchannel.WFcapacity"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.Mchannel.html#pylayers.antprop.channel.Mchannel.WFcapacity">[docs]</a>    def WFcapacity(self,Pt=np.array([1e-3]),Tp=273):
@@ -3108,8 +3280,8 @@ except:
 
     The transmission channel TChannel is obtained through combination of the propagation
     channel and the antenna transfer functions from both transmitter and receiver.
-    This channel contains all the spatial information for each individual ray. 
-    Warning : This is a frequency domain channel deriving from bs.FUsignal 
+    This channel contains all the spatial information for each individual ray.
+    Warning : This is a frequency domain channel deriving from bs.FUsignal
 
     Attributes
     ----------
@@ -3176,7 +3348,7 @@ except:
         self.isFriis = False
         self.windowed = False
         self.calibrated = False
-        self.filcal=&quot;calibration.mat&quot;
+        self.filcal = &quot;calibration.mat&quot;
         bs.FUsignal.__init__(self,x=x,y=y,label=&#39;Channel&#39;)
 
 
@@ -3403,7 +3575,7 @@ except:
 
         &quot;&quot;&quot;
         if W!=[]:
-            U = W * self 
+            U = W * self
         else:
             U = self
 
@@ -3416,9 +3588,6 @@ except:
         &quot;&quot;&quot; apply waveform (time domain ) to obtain the
             rays impulses response
 
-            this is the 2015 vectorized method for applying 
-            wav on Tchannel
-
         Parameters
         ----------
 
@@ -3427,13 +3596,11 @@ except:
         Returns
         -------
 
-        rir  : array, 
+        rir  : array,
             impulse response for each ray separately
             the size of the array is (nb_rays, support_length)
-            support_length is calculated in regard of the 
+            support_length is calculated in regard of the
             delays of the channel
-
-            
 
         Notes
         ------
@@ -3462,9 +3629,9 @@ except:
         Parameters
         ----------
 
-        BWGHz : Bandwidth 
+        BWGHz : Bandwidth
         Nf    : Number of frequency points
-        fftshift : boolean 
+        fftshift : boolean
 
         See Also
         --------
@@ -3475,9 +3642,9 @@ except:
         fGHz  = np.linspace(0,BWGHz,Nf)
         dfGHz = fGHz[1]-fGHz[0]
         tauns = np.linspace(0,1/dfGHz,Nf)
-        # E : r x nr x nt x f 
+        # E : r x nr x nt x f
         E    = np.exp(-2*1j*np.pi*self.taud[:,None,None,None]*fGHz[None,None,None,:])
-        # self.y : r x nr x nt x f 
+        # self.y : r x nr x nt x f
         if self.y.shape[3]==E.shape[3]:
             H    = np.sum(E*self.y,axis=0)
         else:
@@ -3485,7 +3652,7 @@ except:
                 H    = np.sum(E*self.y,axis=0)
             else:
                 H    = np.sum(E*self.y[:,:,:,0][:,:,:,None],axis=0)
-        # back in time - last axis is frequency (axis=2) 
+        # back in time - last axis is frequency (axis=2)
         cir  = np.fft.ifft(H,axis=2)
         if fftshift:
             cir = np.fft.fftshift(cir,axes=2)
@@ -3496,7 +3663,7 @@ except:
         return(cir)</div>
 
 <div class="viewcode-block" id="Tchannel.get_cir"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.Tchannel.html#pylayers.antprop.channel.Tchannel.get_cir">[docs]</a>    def get_cir(self,Wgam=[]):
-        &quot;&quot;&quot; get Channel impulse response of the channel 
+        &quot;&quot;&quot; get Channel impulse response of the channel
             for a given waveform
 
         Parameters
@@ -3521,7 +3688,7 @@ except:
         rir = self.applywav(Wgam)
         cir = np.sum(rir.y,axis=0)
         return bs.TUsignal(rir.x, cir)</div>
-        
+
 
 <div class="viewcode-block" id="Tchannel.applywavC"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.Tchannel.html#pylayers.antprop.channel.Tchannel.applywavC">[docs]</a>    def applywavC(self, w, dxw):
         &quot;&quot;&quot; apply waveform method C
@@ -3569,8 +3736,8 @@ except:
         Parameters
         ----------
 
-        fcGHz : center frequency 
-        WMHz  : bandwidth in MHz 
+        fcGHz : center frequency
+        WMHz  : bandwidth in MHz
         Nf    : Number of frequency points
 
         &quot;&quot;&quot;
@@ -3591,7 +3758,7 @@ except:
         # self.taud : (,Nray)
 
         # complex amplitude in baseband
-        # Nray x Nr x Nt x Nf1 
+        # Nray x Nr x Nt x Nf1
         abb  = self.y*np.exp(-2 * 1j * np.pi *self.taud[:,None,None,None] * fcGHz )
         fMHz = np.linspace(-WMHz/2.,WMHz/2,Nf)
         E = np.exp(-2*1j*fMHz[None,None,None,:]*1e-3*self.taud[:,None,None,None])
@@ -3606,8 +3773,8 @@ except:
         Parameters
         ----------
 
-        fcGHz : center frequency 
-        WGHz  : bandwidth 
+        fcGHz : center frequency
+        WGHz  : bandwidth
         Ntap  : int
 
         &quot;&quot;&quot;
@@ -3636,8 +3803,6 @@ except:
         htapi = np.sum(htap,axis=0)
 
         return htapi</div>
-
-
 
 <div class="viewcode-block" id="Tchannel.applywavB"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.Tchannel.html#pylayers.antprop.channel.Tchannel.applywavB">[docs]</a>    def applywavB(self, Wgam):
         &quot;&quot;&quot; apply waveform method B (time domain )
@@ -3724,7 +3889,7 @@ except:
         normalize: bool
             energy normalized
         reverse : bool
-            inverse theta and phi represenation
+            inverse theta and phi representation
         polar : bool
             polar representation
         cmap: matplotlib.cmap
@@ -3741,12 +3906,13 @@ except:
         defaults = {
                     &#39;fig&#39;: [],
                     &#39;ax&#39;: [],
-                    &#39;phi&#39;:(-180, 180),
-                    &#39;normalize&#39;:False,
+                    &#39;phi&#39;: (-180, 180),
                     &#39;reverse&#39; : True,
-                    &#39;cmap&#39;:plt.cm.hot_r,
-                    &#39;mode&#39;:&#39;center&#39;,
-                    &#39;s&#39;:30,
+                    &#39;cmap&#39;: plt.cm.hot_r,
+                    &#39;vmin&#39;: [],
+                    &#39;vmax&#39;: [],
+                    &#39;mode&#39;: &#39;center&#39;,
+                    &#39;s&#39;: 30,
                     &#39;fontsize&#39;:12,
                     &#39;edgecolors&#39;:&#39;none&#39;,
                     &#39;b3d&#39;:False,
@@ -3775,22 +3941,24 @@ except:
         ax = kwargs.pop(&#39;ax&#39;)
         colorbar = kwargs.pop(&#39;colorbar&#39;)
         reverse = kwargs.pop(&#39;reverse&#39;)
-        normalize = kwargs.pop(&#39;normalize&#39;)
-        mode =kwargs.pop(&#39;mode&#39;)
+        mode = kwargs.pop(&#39;mode&#39;)
         title =kwargs.pop(&#39;title&#39;)
         xa = kwargs.pop(&#39;xa&#39;)
         xb = kwargs.pop(&#39;xb&#39;)
+        b3d = kwargs.pop(&#39;b3d&#39;)
+        vmin = kwargs.pop(&#39;vmin&#39;)
+        vmax = kwargs.pop(&#39;vmax&#39;)
+
         if fig == []:
             fig = plt.figure()
 
 
         Etot = self.energy(mode=mode) + 1e-15
+        EtotdB = 10*np.log10(Etot)
+        EtotdB = np.minimum(EtotdB,vmax)
+        EtotdB = np.maximum(EtotdB,vmin)
 
 
-        if normalize:
-            Emax = max(Etot)
-            Etot = Etot / Emax
-        #
         # col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
         # WARNING polar plot require radian angles
         #
@@ -3815,13 +3983,18 @@ except:
             al = 180. / np.pi
             alb = 180. / np.pi
 
-        col = 10 * np.log10(Etot)
+        col = (EtotdB - vmin)/(vmax-vmin)
         kwargs[&#39;c&#39;] = col
+        kwargs[&#39;s&#39;] = 200*col
+        kwargs[&#39;vmin&#39;] = 0.
+        kwargs[&#39;vmax&#39;] = 1.
+
         if len(col) != len(di):
             print(&quot;len(col):&quot;, len(col))
             print(&quot;len(di):&quot;, len(di))
         if ax == []:
             ax = fig.add_subplot(111, polar=polar)
+
         if reverse :
             scat = ax.scatter(di[:, 1] * al, di[:, 0] * alb, **kwargs)
             ax.axis((phi[0], phi[1], the[0], the[1]))
@@ -3835,12 +4008,10 @@ except:
 
         if title:
             ax.set_title(d, fontsize=fontsize+2)
+
         if colorbar:
             b = plt.colorbar(scat,cax=ax)
-            if normalize:
-                b.set_label(&#39;dB&#39;)
-            else:
-                b.set_label(&#39;Path Loss (dB)&#39;)
+            b.set_label(&#39;Path Loss (dB)&#39;)
 
             for t in b.ax.get_yticklabels():
                 t.set_fontsize(fontsize)
@@ -4101,7 +4272,7 @@ except:
             Etot = bs.FUsignal.energy(self,axis=1,mode=mode,Friis=False)
         else:
             Etot = bs.FUsignal.energy(self,axis=1,mode=mode,Friis=True)
-            
+
         if sumray:
             Etot = np.sum(Etot,axis=0)
         return Etot</div>
@@ -4196,18 +4367,24 @@ except:
         Returns
         -------
 
-        RSSI: float
-        RSSI value in dB
+        PrdB: float
+            RSSI value in dB
+            $$10\log_10 |a_k|^2$$
+
+        PrpdB : float
+            RSSI in a tap over a frequency band ufreq
+            $$10\log_10 |a_k e^{-2j \pi f \tau|^2$$
+
 
         Notes
         -----
 
-        This function will be deprecated by energy function
+            This function will be deprecated by energy function
 
         &quot;&quot;&quot;
         # Amplitude
         Ak    = self.y[:, ufreq]
-        # Power 
+        # Power
         Pr    = np.sum(Ak*np.conj(Ak))
         # Complex amplitude
         akp   = Ak*np.exp(-2*1j*np.pi*self.x[ufreq]*self.taud)
@@ -4621,7 +4798,7 @@ except:
 
         Returns
         -------
-        
+
         rir : TUsignal
 
 
@@ -4641,7 +4818,6 @@ except:
 
         t0 = self.s.x[0]
         te = self.s.x[-1]
-       
 
         shy = self.s.y.shape
         dx = self.s.x[1]-self.s.x[0]
@@ -4651,15 +4827,15 @@ except:
         # convert tau in an integer offset
         # taumin ray is not shifted
         itau = np.floor((tau-taumin)/dx).astype(int)
-        
+
         U = np.ones((shy[0],shy[-1]),dtype=int)
-        CU = np.cumsum(U,axis=1)-1 #-1 to start @ value 0 
+        CU = np.cumsum(U,axis=1)-1 #-1 to start @ value 0
 
         rir  = np.zeros((shy[0],N))
         col1 = np.repeat(np.arange(shy[0],dtype=int),shy[-1])
         col2 = (CU+itau[:,None]).ravel()
         index = np.vstack((col1,col2)).T
-    
+
         rir[index[:,0],index[:,1]] = self.s.y.ravel()
         t = np.linspace(t0+taumin,te+taumax,N)
         return bs.TUsignal(x=t, y=rir)</div>
@@ -4909,7 +5085,95 @@ except:
         # inverse Fourier transform
 
         pdp = self.ift(ffts=1)
-        return pdp</div></div>
+        return pdp</div>
+
+
+    def scatterers(self,pMS,pBS,mode=&#39;sbounce&#39;):
+        &quot;&quot;&quot;
+
+        Parameters
+        ----------
+
+        mode: Boolean
+              - image | sbounce (single bounce)
+
+        pMS : np.array (,3)
+
+        pBS : np.array (,3)
+        ang_offset : float  (degrees)
+
+        Returns
+        -------
+
+        xs: estimated x scatterer coordinate
+        ys: estimated y scatterer coordinate
+
+        &quot;&quot;&quot;
+        def fun(p_s,pBS,PMs,tau,phi):
+            &quot;&quot;&quot; function to be minimized
+
+            Parameters
+            ----------
+
+            p_s: np.array (,2)
+                 2D scatterer coordinates containing the xs and ys coordinates
+
+            tau   : float (in ns)
+                    estimated delay
+            phi   : float (in deg.)
+                    estimated angle
+
+            pMS : np.array (,2)
+                  containing the x and y MS coordinates
+            pBS : np.array (,2)
+                  containing the x and y and z BS coordinates
+
+            &quot;&quot;&quot;
+
+            d0  = np.sqrt((pBS[0] - p_s[0])**2 +
+                          (pBS[1] - p_s[1])**2 +
+                          (pBS[2] - p_s[2])**2 )  # distance between the BS and the estimated scatterer
+            d1  = np.sqrt((pMS[0] - p_s[0])**2 +
+                          (pMS[1] - p_s[1])**2 +
+                          (pMS[2] - p_s[2])**2) # distance between the estimated scatterer and the MS
+            xs = p_s[0]
+            ys = p_s[1]
+            zs = p_s[2]
+
+            # Equations to be minimized
+
+            r_fres = 0.3*tau
+            eq1 = r_fres - (d0 + d1)
+            eq2 = xs - pBS[0] - d0 * np.cos(phi)
+            eq3 = ys - pBS[1] - d0 * np.sin(phi)
+
+            return np.abs(eq1) + np.abs(eq2) + np.abs(eq3)
+
+        Nscat = np.shape(self.y)[0]
+        phi = self.doa[:,1]
+        tau = self.taud
+
+        if mode == &#39;image&#39;: # image principal mode
+            xs = pBS[0] + tau*0.3*np.cos(phi)
+            ys = pBS[1] + tau*0.3*np.sin(phi)
+
+        if mode==&#39;sbounce&#39;: # single bounce mode
+            xs = np.array([])
+            ys = np.array([])
+            zs = np.array([])
+
+            for k in range(Nscat): # loop over the all detected MPCs
+                #zguess = (pMS[0:2] + pBS[0:2])/2. # Initial guess
+                zguess = (pMS + pBS)/2. # Initial guess
+
+                #z  = fmin(fun,zguess,(pBS[0:2],pMS[0:2],tau[k],phi[k]),disp=False) # minimizing Eq.
+                z  = fmin(fun,zguess,(pBS,pMS,tau[k],phi[k]),disp=False) # minimizing Eq.
+                xs = np.append(xs,z[0])
+                ys = np.append(ys,z[1])
+                zs = np.append(zs,z[2])
+
+        return(xs,ys,zs)</div>
+
 
 <div class="viewcode-block" id="Ctilde"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.Ctilde.html#pylayers.antprop.channel.Ctilde">[docs]</a>class Ctilde(PyLayers):
     &quot;&quot;&quot; container for the 4 components of the polarimetric ray channel
@@ -5420,7 +5684,7 @@ except:
                     &#39;cmap&#39;:plt.cm.hot_r,
                     &#39;mode&#39;:&#39;center&#39;,
                     &#39;s&#39;:30,
-                    &#39;fontsize&#39;:12,
+                    &#39;fontsize&#39;:22,
                     &#39;edgecolors&#39;:&#39;none&#39;,
                     &#39;b3d&#39;:False,
                     &#39;polar&#39;:False,
@@ -6206,7 +6470,7 @@ if __name__ == &quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Apr 29, 2018.
+      Last updated on May 31, 2018.
 
     </p>
   </div>

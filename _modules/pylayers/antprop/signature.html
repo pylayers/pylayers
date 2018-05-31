@@ -212,7 +212,6 @@ from __future__ import print_function
     :members:
 
 &quot;&quot;&quot;
-import doctest
 import os
 import glob
 import doctest
@@ -1084,10 +1083,10 @@ logger = logging.getLogger(__name__)
             fh5.close()
             raise NameError(&#39;Signature: issue when reading h5py file&#39;)
 
-        if kwargs.has_key(&#39;L&#39;):
-            self.L=kwargs[&#39;L&#39;]
+        if &#39;L&#39; in kwargs:
+            self.L = kwargs[&#39;L&#39;]
         else:
-            self.L=layout.Layout(Lname)
+            self.L = layout.Layout(Lname)
             try:
                 self.L.dumpr()
             except:
@@ -2877,7 +2876,11 @@ logger = logging.getLogger(__name__)
             # 1 : 2 points (linking the nidment) a=0,b=1
             # 2 : nb of found signatures/nidments
             # 3 : nb interactions
-            pt = np.nan*np.empty((2,2,nsig,ninter))
+
+            try:
+                pt = np.nan*np.zeros((2,2,nsig,ninter))
+            except:
+                pdb.set_trace()
 
             #1 negative points
             # seek for diffraction 
@@ -3841,7 +3844,7 @@ if __name__ == &quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Apr 29, 2018.
+      Last updated on May 31, 2018.
 
     </p>
   </div>

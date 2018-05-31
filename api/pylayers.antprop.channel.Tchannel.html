@@ -230,7 +230,7 @@
 <p>Handle the transmission channel</p>
 <p>The transmission channel TChannel is obtained through combination of the propagation
 channel and the antenna transfer functions from both transmitter and receiver.
-This channel contains all the spatial information for each individual ray. 
+This channel contains all the spatial information for each individual ray.
 Warning : This is a frequency domain channel deriving from bs.FUsignal</p>
 <blockquote>
 <div>ray transfer functions  (nray,nfreq)</div></blockquote>
@@ -311,7 +311,7 @@ rssi(ufreq)</p>
 <td>time superposition</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.Tchannel.get_cir" title="pylayers.antprop.channel.Tchannel.get_cir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_cir</span></code></a>([Wgam])</td>
-<td>get Channel impulse response of the channel      for a given waveform</td>
+<td>get Channel impulse response of the channel     for a given waveform</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.Tchannel.getcir" title="pylayers.antprop.channel.Tchannel.getcir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getcir</span></code></a>([BWGHz,&nbsp;Nf,&nbsp;fftshift])</td>
 <td>get the channel impulse response</td>
@@ -390,17 +390,14 @@ rssi(ufreq)</p>
 <code class="descname">applywav</code><span class="sig-paren">(</span><em>Wgam=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Tchannel.applywav"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.applywav" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
 <dt>apply waveform (time domain ) to obtain the</dt>
-<dd><p class="first">rays impulses response</p>
-<p class="last">this is the 2015 vectorized method for applying 
-wav on Tchannel</p>
-</dd>
+<dd>rays impulses response</dd>
 </dl>
 <p>Wgam : waveform</p>
 <dl class="docutils">
-<dt>rir <span class="classifier-delimiter">:</span> <span class="classifier">array, </span></dt>
+<dt>rir <span class="classifier-delimiter">:</span> <span class="classifier">array,</span></dt>
 <dd>impulse response for each ray separately
 the size of the array is (nb_rays, support_length)
-support_length is calculated in regard of the 
+support_length is calculated in regard of the
 delays of the channel</dd>
 </dl>
 <blockquote>
@@ -455,8 +452,8 @@ w is apply on the overall CIR</p>
 <dt id="pylayers.antprop.channel.Tchannel.baseband">
 <code class="descname">baseband</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Tchannel.baseband"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.baseband" title="Permalink to this definition">¶</a></dt>
 <dd><p>Channel transfer function in baseband</p>
-<p>fcGHz : center frequency 
-WMHz  : bandwidth in MHz 
+<p>fcGHz : center frequency
+WMHz  : bandwidth in MHz
 Nf    : Number of frequency points</p>
 </dd></dl>
 
@@ -486,8 +483,8 @@ mode : string</p>
 <dt id="pylayers.antprop.channel.Tchannel.chantap">
 <code class="descname">chantap</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Tchannel.chantap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.chantap" title="Permalink to this definition">¶</a></dt>
 <dd><p>channel tap</p>
-<p>fcGHz : center frequency 
-WGHz  : bandwidth 
+<p>fcGHz : center frequency
+WGHz  : bandwidth
 Ntap  : int</p>
 </dd></dl>
 
@@ -605,7 +602,7 @@ ffts = 1  apply fftshift</p>
 <dt id="pylayers.antprop.channel.Tchannel.get_cir">
 <code class="descname">get_cir</code><span class="sig-paren">(</span><em>Wgam=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Tchannel.get_cir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.get_cir" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
-<dt>get Channel impulse response of the channel </dt>
+<dt>get Channel impulse response of the channel</dt>
 <dd>for a given waveform</dd>
 </dl>
 <p>Wgam : waveform</p>
@@ -619,7 +616,7 @@ ffts = 1  apply fftshift</p>
 <dt id="pylayers.antprop.channel.Tchannel.getcir">
 <code class="descname">getcir</code><span class="sig-paren">(</span><em>BWGHz=1</em>, <em>Nf=40000</em>, <em>fftshift=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Tchannel.getcir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.getcir" title="Permalink to this definition">¶</a></dt>
 <dd><p>get the channel impulse response</p>
-<p>BWGHz : Bandwidth 
+<p>BWGHz : Bandwidth
 Nf    : Number of frequency points
 fftshift : boolean</p>
 <p>pylayers.simul.link.DLink.plt_cir</p>
@@ -775,7 +772,7 @@ phi: tuple (-180, 180)</p>
 <dt>normalize: bool</dt>
 <dd>energy normalized</dd>
 <dt>reverse <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd>inverse theta and phi represenation</dd>
+<dd>inverse theta and phi representation</dd>
 <dt>polar <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
 <dd>polar representation</dd>
 </dl>
@@ -823,9 +820,16 @@ ffts : fftshift indicator</p>
 <dt>ufreq <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
 <dd>index in the frequency range</dd>
 </dl>
-<p>RSSI: float
-RSSI value in dB</p>
-<p>This function will be deprecated by energy function</p>
+<dl class="docutils">
+<dt>PrdB: float</dt>
+<dd>RSSI value in dB
+$$10log_10 <a href="#id3"><span class="problematic" id="id4">|</span></a>a_k|^2$$</dd>
+<dt>PrpdB <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>RSSI in a tap over a frequency band ufreq
+$$10log_10 <a href="#id5"><span class="problematic" id="id6">|</span></a>a_k e^{-2j pi f       au|^2$$</dd>
+</dl>
+<blockquote>
+<div>This function will be deprecated by energy function</div></blockquote>
 </dd></dl>
 
 <dl class="method">
@@ -966,7 +970,7 @@ Nray   :  int</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Apr 28, 2018.
+      Last updated on May 31, 2018.
 
     </p>
   </div>
