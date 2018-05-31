@@ -16,7 +16,7 @@ if sys.version_info.major==2:
     import ConfigParser
 else:
     from  urllib.request import urlopen
-    import configparser
+    import configparser as ConfigParser
 from   matplotlib.path import Path
 from   matplotlib.patches import PathPatch
 import matplotlib.pyplot as plt

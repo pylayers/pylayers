@@ -6209,20 +6209,31 @@ def ellipse2D(pa, pb, l, N , unit='meter'):
 
     """
     d = np.sqrt(np.dot(pb-pa, pb-pa))
+    print('d = :',d)
     if unit=='ns':
         l = l*0.3
     a = (d/2. + l/2.)
-    # this is the familiar asymptotic approximation valid if l << d
-    b_approx = np.sqrt(d*l/2)
+    # b_approx : this is the familiar asymptotic approximation valid if l << d
+    # b_approx = np.sqrt(d*l/2)
+
     b =  0.5*np.sqrt(l*(2*d+l))
 
     pg = (pa+pb)/2.
     u = (pb-pa)/d
     z = np.array([0, 0, 1])
     v = np.cross(z, u)[0:2]
-    ag = np.linspace(0, 2*np.pi, N)
-    p = pg[:, None] + a*u[:, None]*np.cos(ag[None, :]) + b*v[:, None]*np.sin(ag[None, :])
-    return p,ag
+    phi = np.linspace(-np.pi, np.pi, N)
+    p = pg[:, None] + a*u[:, None]*np.cos(phi[None, :]) + b*v[:,None]*np.sin(phi[None, :])
+    lap = pa[:,None] - p
+    lbp = pb[:,None] - p
+    pab = (pb-pa)/np.linalg.norm(pb-pa)
+    pab_ = np.dot(pab[:,None],np.ones((1,lap.shape[1])))
+    lap = lap/np.linalg.norm(lap,axis=0)
+    lbp = lbp/np.linalg.norm(lbp,axis=0)
+    alpha = np.arccos(np.sum(lap*lbp,axis=0))/2
+    varphi = np.arccos(np.sum(-lbp*pab_,axis=0))*np.sign(phi)
+
+    return p,phi,alpha,varphi,a,b
 
 if __name__ == "__main__":
     plt.ion()

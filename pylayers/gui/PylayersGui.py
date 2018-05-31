@@ -115,10 +115,10 @@ class QIPythonWidget(RichJupyterWidget):
         self.kernel_manager.kernel.shell.push(variableDict)
     def clearTerminal(self):
         """ Clears the terminal """
-        self._control.clear()    
+        self._control.clear()
     def printText(self,text):
         """ Prints some plain text to the console """
-        self._append_plain_text(text)        
+        self._append_plain_text(text)
     def executeCommand(self,command):
         """ Execute a command in the frame of the console widget """
         self._execute(command,False)

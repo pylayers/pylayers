@@ -2412,7 +2412,7 @@ class Layout(pro.PyLayers):
         self.g2npy()
         #
         self._hash = hashlib.md5(open(filelay, 'rb').read()).hexdigest()
-        
+
 
     def loadfur(self, _filefur):
         """ loadfur load a furniture file
@@ -2455,6 +2455,7 @@ class Layout(pro.PyLayers):
         config.read(filefur)
         furname = config.sections()
         self.lfur = []
+
         for name in furname:
             F = fur.Furniture()
             F.load(_filefur, name)
@@ -5319,7 +5320,7 @@ class Layout(pro.PyLayers):
                           'overlay_axis'], alpha=self.display['alpha'], origin='lower')
 
         if kwargs['ndlist'] == []:
-            tn = np.array(self.Gs.node.keys())
+            tn = np.array(list(self.Gs.node.keys()))
             u = np.nonzero(tn < 0)[0]
             ndlist = tn[u]
 
@@ -5415,10 +5416,12 @@ class Layout(pro.PyLayers):
         ax.set_title(self.display['title'])
         #fig = plt.gcf()
         #ax  = fig.axes[0]
-        if self.display['ticksoff']:
-            ax.xaxis.set_ticks([])
-            for loc, spine in ax.spines.iteritems():
-                spine.set_color('none')
+        #
+        # TODO Not working in python 3
+        #if self.display['ticksoff']:
+        #    ax.xaxis.set_ticks([])
+        #    for loc, spine in ax.spines.iteritems():
+        #        spine.set_color('none')
 
         if kwargs['furniture']:
             if 'lfur' in self.__dict__:
