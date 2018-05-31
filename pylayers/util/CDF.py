@@ -73,7 +73,9 @@ class CDF(object):
             if d.has_key('bound'):
                 bound = d['bound']
             else:
-                bound = np.linspace(d['values'].min(),d['values'].max(),len(d['values']*0.1))
+                bound = np.linspace(d['values'].min(),
+                                    d['values'].max()+0.1*d['values'].max(),
+                                    len(d['values']*0.1))
             values = d['values']
 
             Nv = len(values)
@@ -96,7 +98,7 @@ class CDF(object):
         if 'ax' not in kwargs:
             ax = f.add_subplot(111)
         else:
-            ax == kwargs['ax']
+            ax = kwargs['ax']
 
         leg = []
         c = []
