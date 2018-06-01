@@ -992,8 +992,8 @@ class Ezone(PyLayers):
 
         lon, lat = self.m(x, y, inverse=True)
 
-        rx = np.round((lon - self.extent[0]) / self.lonstep).astype(int)
-        ry = np.round((self.extent[3]-lat) / self.latstep).astype(int)
+        rx = np.floor((lon - self.extent[0]) / self.lonstep).astype(int)
+        ry = np.floor((self.extent[3]-lat) / self.latstep).astype(int)
 
         # height
         #cov = self.hgts[ry, rx]
