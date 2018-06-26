@@ -351,8 +351,7 @@ class Body(PyLayers):
 
 
         try:
-            #mocapprefix : retrieve where the prefix is the body name
-            ump = [self.name.lower() in p.lower() for p in self._s]
+            ump = [self.name.lower() in str(p).lower() for p in self._s]
             if sum(ump) >1:
                 # Handle case CorSer (serie=3,day=11)
                 self._mocap_prefix='Bernard:'
@@ -396,16 +395,15 @@ class Body(PyLayers):
 
         self._mocanodes = self._p
 
-
         for p in prefix:
             tmpnode=[]
             for n in self._mocanodes:
-                tmpnode.append(n.replace(p,''))
+                tmpnode.append(str(n).replace(p,''))
                 self._mocanodes = tmpnode
 
 
         # 2 remove multiple entries due to orientation marker
-        self._mocanodes = [n.split(':')[0] for n in self._mocanodes]
+        self._mocanodes = [str(n).split(':')[0] for n in self._mocanodes]
 
         for d in rd :
             if self.dev[d]['name'] == 'hikob':
@@ -442,6 +440,9 @@ class Body(PyLayers):
         # s, p, f, info = c3d.read_c3d(filename)
         self._s, self._p, self._f, info = c3d.ReadC3d(filename)
 
+        self._s = [ s.decode() for s in self._s ]
+        self._p = [ p.decode() for p in self._p ]
+
         if self._multi_subject_mocap:
             us = [us for us, s in enumerate(self._s) if self.name in s ]
             up = [up for up, p in enumerate(self._p) if self.name in p ]
@@ -457,7 +458,7 @@ class Body(PyLayers):
 
             self._f =self._f[:,up,:]
             self._s=[s for s in self._s if self.name in s ]
-            self._p=[p for p in self._p if self.name in p ]
+            self._p=[p  for p in self._p if self.name in p ]
 
 
 
@@ -606,13 +607,14 @@ class Body(PyLayers):
 
                     nodename = self.nodes_Id[i][k].replace(' ','')
                     try:
-                        idx = self._p.index(self._mocap_prefix + nodename)
+                        idx = self._p.index(str(self._mocap_prefix) + nodename)
                     except:
                         try:
                         # fixing naming in serie 15 add '_1'
-                            idx = self._p.index(self._mocap_prefix + nodename+'_1')
+                            idx = self._p.index(str(self._mocap_prefix) + nodename+'_1')
                         except:
-                            idx = self._p.index(self._mocap_prefix + nodename+'_2')
+                            pdb.set_trace()
+                            idx = self._p.index(str(self._mocap_prefix) + nodename+'_2')
                     try:
                         tmp = tmp +self._f[0:self.nframes, idx, :].T
                     except:

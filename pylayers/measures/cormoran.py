@@ -854,9 +854,11 @@ bernard
 
         files = os.listdir(dirname)
         if serie != '':
-            self._fileBS = filter(lambda x : 'S'+str(serie) in x ,files)[0]
+            #self._fileBS = filter(lambda x : 'S'+str(serie) in x ,files)[0]
+            self._fileBS = [ x for x in files if 'S'+str(serie) in x ][0]
         else:
-            filesc = filter(lambda x : 'Sc'+scenario in x ,files)
+            self._fileBS = [ x for x in files if 'R'+str(serie) in x ][0]
+            #filesc = filter(lambda x : 'Sc'+scenario in x ,files)
             self._fileBS = filter(lambda x : 'R'+str(run) in x ,filsc)[0]
 
         bespo = pd.read_csv(os.path.join(dirname,self._fileBS),index_col='ts')
@@ -933,7 +935,7 @@ bernard
             self.idHKB[self.dHKB[k]]=k
 
         if serie != '':
-            self._filehkb = filter(lambda x : 'S'+str(serie) in x ,files)[0]
+            self._filehkb = [ x for x in files if 'S'+str(serie) in x][0]
             tt = self._filehkb.split('_')
             if source == 'UR1':
                 self.scenario=tt[0].replace('Sc','')
@@ -950,11 +952,11 @@ bernard
                 self.video = tt[5].replace('.mat','')
 
         else:
-            filesc = filter(lambda x : 'Sc'+scenario in x ,files)
+            filesc = [ x for x in files if x in 'Sc'+scenario  ][0]
             if source=='UR1':
-                self._filehkb = filter(lambda x : 'R'+str(run) in x ,filsc)[0]
+                self._filehkb = [ x for x in filesc if x in 'R'+str(run)][0]
             else:
-                self._filehkb = filter(lambda x : 'r'+str(run) in x ,filsc)[0]
+                self._filehkb = [ x for x in filesc if x in 'r'+str(run)][0]
 
 
         data = io.loadmat(os.path.join(dirname,self._filehkb))
@@ -4213,7 +4215,7 @@ bernard
                     df_tmp['v']=np.sqrt(np.sum(df_tmp[['vx','vy','vz']]**2,axis=1))
                     df_tmp[['ax','ay','az']]=df_tmp[['vx','vy','vz']].diff()/(t[1]-t[0])
                     df_tmp['a']=np.sqrt(np.sum(df_tmp[['ax','ay','az']]**2,axis=1))
-                    df_tmp['id']=B[b].dev.keys()[d]
+                    df_tmp['id'] = list(B[b].dev.keys())[d]
                     df_tmp['subject']=B[b].name
                     try :
                         df = pd.concat([df,df_tmp])

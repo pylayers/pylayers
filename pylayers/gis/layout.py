@@ -1341,8 +1341,11 @@ class Layout(pro.PyLayers):
         lheight = array([v[1] for v in 
                     nx.get_node_attributes(self.Gs, 'z').values() 
                     if v[1] < 2000 ])
-        assert(len(lheight)>0),logging.error("no valid heights for segments")
-        self.maxheight = np.max(lheight)
+        #assert(len(lheight)>0),logging.error("no valid heights for segments")
+        if len(lheight)>0:
+            self.maxheight = np.max(lheight)
+        else:
+            self.maxheight = 3
         # self.maxheight=3.
         # calculate extremum of segments
         self.extrseg()
@@ -2572,7 +2575,10 @@ class Layout(pro.PyLayers):
 
         """
         # next free node
-        num = -( -min(self.Gs.node) + 1 )
+        if len(self.Gs.node)>0:
+            num = -( -min(self.Gs.node) + 1 )
+        else:
+            num = -1
         self.Gs.add_node(num)
         self.Gs.pos[num] = p
         self.Np = self.Np + 1
@@ -5621,7 +5627,7 @@ class Layout(pro.PyLayers):
 
             self.g2npy()
 
-        
+
             filediff = os.path.join(path, 'ddiff.gpickle')
             if os.path.isfile(filediff):
                 ddiff = read_gpickle(filediff)
@@ -5632,14 +5638,14 @@ class Layout(pro.PyLayers):
             filelnss = os.path.join(path, 'lnss.gpickle')
             if os.path.isfile(filelnss):
                 lnss = read_gpickle(filelnss)
-                setattr(self, 'lnss', lnss) 
-            else : 
+                setattr(self, 'lnss', lnss)
+            else :
                 self.lnss=[]
 
         filedca = os.path.join(path, 'dca.gpickle')
         if os.path.isfile(filedca):
             dca = read_gpickle(filedca)
-            setattr(self, 'dca',dca) 
+            setattr(self, 'dca',dca)
 
         filem = os.path.join(path, 'm.gpickle')
         if os.path.isfile(filem):
@@ -9969,7 +9975,7 @@ class Layout(pro.PyLayers):
 
         """
         # print"ispoint : pt ", pt
-        pts = np.array(self.Gs.pos.values()).T
+        pts = np.array(list(self.Gs.pos.values())).T
         ke = np.array(list(dict(self.Gs.pos).keys()))
         diff = pts - pt.reshape(2, 1)
         v = np.sqrt(np.sum(diff * diff, axis=0))
@@ -9977,7 +9983,8 @@ class Layout(pro.PyLayers):
         b = nz.prod()
         if b == 1:
             # if all layout points are different from pt
-            return(0,np.min(v))
+            #return(0,np.min(v))
+            return(0)
         else:
             nup = np.where(nz == False)[0]
             if len(nup) == 1:
@@ -11009,7 +11016,7 @@ class Layout(pro.PyLayers):
 
         return(p_Tx, p_Rx)
 
-    def boundary(self, percx=0.15, percy=0.15, xlim=(), force=False):
+    def boundary(self, percx=0.15, percy=0.15, xlim=(), force=False,minD=10):
         """ add a blank boundary around layout
 
         Parameters
@@ -11019,6 +11026,7 @@ class Layout(pro.PyLayers):
             percentage of Dx for x offset calculation (default 0.15)
         percy : float
            percentage of Dy for y offset calculation (default 0.15)
+        minD : miimum distance for boundary
 
         self.lboundary is the list of the nodes of the added boundary
         self.axn is the zone without the boundary extension
@@ -11049,8 +11057,8 @@ class Layout(pro.PyLayers):
                 ymin = xlim[2]
                 ymax = xlim[3]
 
-            Dx = xmax - xmin
-            Dy = ymax - ymin
+            Dx = np.maximum(xmax - xmin,minD)
+            Dy = np.maximum(ymax - ymin,minD)
             dx = Dx * percx
             dy = Dy * percy
 

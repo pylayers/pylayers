@@ -107,8 +107,10 @@ def getNumber(Str, length):
 
     sum = 0
     for i in range(length):
-        #sum = sum + ord(Str[i]) * (2 ** (8 * i))
-        sum = sum + Str[i] * (2 ** (8 * i))
+        if sys.version_info.major==2:
+            sum = sum + ord(Str[i]) * (2 ** (8 * i))
+        else:
+            sum = sum + Str[i] * (2 ** (8 * i))
     return sum, Str[length:]
 
 
@@ -487,15 +489,15 @@ def read_c3d(_filename='07_01.c3d',verbose=False):
             filepos = len(content_memory) - len(content)
             nextrec = filepos + offset - 2
 
-            type, content = getNumber(content, 1)
-            if type >= 128:
-                type = -(2 ** 8) + type
+            typ, content = getNumber(content, 1)
+            if typ >= 128:
+                typ = -(2 ** 8) + typ
             ParameterGroups[GroupNumber].parameter[
-                ParameterNumber - 1].type = type
+                ParameterNumber - 1].type = typ
 
             dimnum, content = getNumber(content, 1)
             if dimnum == 0:
-                datalength = abs(type)
+                datalength = abs(typ)
             else:
                 mult = 1
                 dimension = []
@@ -505,11 +507,12 @@ def read_c3d(_filename='07_01.c3d',verbose=False):
                     mult = mult * dimension[j]
                     ParameterGroups[GroupNumber].parameter[
                         ParameterNumber - 1].dim.append(dimension[j])
-                datalength = abs(type) * mult
+                datalength = abs(typ) * mult
 
             #print "ParameterNumber = ", ParameterNumber, " Group Number = ", GroupNumber
 
-            if type == -1:
+            if typ == -1:
+                pdb.set_trace()
                 data = ""
                 wordlength = dimension[0]
                 if dimnum == 2 and datalength > 0:
@@ -531,15 +534,14 @@ def read_c3d(_filename='07_01.c3d',verbose=False):
                 elif string.rstrip(ParameterName) == "LABEL_PREFIXES" and string.rstrip(GroupName) == "SUBJECTS":
                     if verbose:
                         print( "SUBJECTS = ", ParameterGroups[GroupNumber].parameter[ParameterNumber - 1].data)
-                    Subjects = ParameterGroups[
-                        GroupNumber].parameter[ParameterNumber - 1].data
+                    Subjects = ParameterGroups[ GroupNumber].parameter[ParameterNumber - 1].data
                 else:
                     #print  ParameterGroups[GroupNumber].parameter[ParameterNumber-1].data
                     pass
 
-            elif type == 1:
+            elif typ == 1:
                 data = []
-                Nparameters = datalength / abs(type)
+                Nparameters = datalength / abs(typ)
                 if verbose:
                     print( "Nparameters=", Nparameters)
                 for i in range(Nparameters):
@@ -550,9 +552,9 @@ def read_c3d(_filename='07_01.c3d',verbose=False):
                 #print ParameterGroups[GroupNumber].parameter[ParameterNumber-1].data
 
                 #print "type boolean"
-            elif type == 2 and datalength > 0:
+            elif typ == 2 and datalength > 0:
                 data = []
-                Nparameters = datalength / abs(type)
+                Nparameters = datalength / abs(typ)
                 for i in range(Nparameters):
                     ladata, content = getNumber(content, 2)
                     data.append(ladata)
@@ -569,9 +571,9 @@ def read_c3d(_filename='07_01.c3d',verbose=False):
 
                 #pass
                 #print "type integer"
-            elif type == 4 and datalength > 0:
+            elif typ == 4 and datalength > 0:
                 data = []
-                Nparameters = datalength / abs(type)
+                Nparameters = datalength / abs(typ)
                 for i in range(Nparameters):
                     ladata, content = getFloat(content)
                     data.append(ladata)
@@ -752,6 +754,14 @@ def ReadC3d(_filename='07_01.c3d', verbose=False):
 
     _filename : string
     verbose : boolean
+
+    Returns
+    -------
+
+    Subjects
+    Point
+    frames
+    dinfo
 
     """
 
@@ -942,14 +952,15 @@ def ReadC3d(_filename='07_01.c3d', verbose=False):
             filepos = len(content_memory) - len(content)
             nextrec = filepos + offset - 2
 
-            type, content = getNumber(content, 1)
-            if type >= 128:
-                type = -(2 ** 8) + type
+            typ, content = getNumber(content, 1)
+
+            if typ >= 128:
+                typ = -(2 ** 8) + typ
             ParameterGroups[GroupNumber].parameter[ParameterNumber - 1].type = type
 
             dimnum, content = getNumber(content, 1)
             if dimnum == 0:
-                datalength = abs(type)
+                datalength = abs(typ)
             else:
                 mult = 1
                 dimension = []
@@ -959,11 +970,10 @@ def ReadC3d(_filename='07_01.c3d', verbose=False):
                     mult = mult * dimension[j]
                     ParameterGroups[GroupNumber].parameter[
                         ParameterNumber - 1].dim.append(dimension[j])
-                datalength = abs(type) * mult
+                datalength = abs(typ) * mult
 
             #print "ParameterNumber = ", ParameterNumber, " Group Number = ", GroupNumber
-
-            if type == -1:
+            if typ == -1:
                 data = ""
                 wordlength = dimension[0]
                 if dimnum == 2 and datalength > 0:
@@ -977,13 +987,15 @@ def ReadC3d(_filename='07_01.c3d', verbose=False):
                     data = content[0:wordlength]
                     ParameterGroups[GroupNumber].parameter[ParameterNumber - 1].data.append(data)
                 #if string.rstrip(ParameterName) == "LABELS" and string.rstrip(GroupName) == "POINT":
-                if ParameterName.rstrip() == "LABELS" and GroupName.rstrip() == "POINT":
+                if ( ParameterName.rstrip().decode("utf-8") == "LABELS" and 
+                     GroupName.rstrip().decode("utf-8")  == "POINT"):
                     if verbose:
                         print( "POINT = ", ParameterGroups[GroupNumber].parameter[ParameterNumber
                                                                      - 1].data)
                     Point = ParameterGroups[GroupNumber].parameter[ParameterNumber - 1].data
                 #elif string.rstrip(ParameterName) == "LABEL_PREFIXES" and string.rstrip(GroupName) == "SUBJECTS":
-                elif ParameterName.rstrip() == "LABEL_PREFIXES" and GroupName.rstrip() == "SUBJECTS":
+                elif (ParameterName.rstrip().decode("utf-8") == "LABEL_PREFIXES" and 
+                         GroupName.rstrip().decode("utf-8") == "SUBJECTS"):
                     if verbose:
                         print( "SUBJECTS = ", ParameterGroups[GroupNumber].parameter[ParameterNumber - 1].data)
                     Subjects = ParameterGroups[GroupNumber].parameter[ParameterNumber - 1].data
@@ -991,18 +1003,18 @@ def ReadC3d(_filename='07_01.c3d', verbose=False):
                     #print  ParameterGroups[GroupNumber].parameter[ParameterNumber-1].data
                     pass
 
-            elif type == 1:
+            elif typ == 1:
                 data = []
-                Nparameters = int(datalength / abs(type))
+                Nparameters = int(datalength / abs(typ))
                 if verbose:
                     print( "Nparameters=", Nparameters)
                 for i in range(Nparameters):
                     ladata, content = getNumber(content, 1)
                     data.append(ladata)
                 ParameterGroups[GroupNumber].parameter[ParameterNumber - 1].data = data
-            elif type == 2 and datalength > 0:
+            elif typ == 2 and datalength > 0:
                 data = []
-                Nparameters = int(datalength / abs(type))
+                Nparameters = int(datalength / abs(typ))
                 for i in range(Nparameters):
                     ladata, content = getNumber(content, 2)
                     data.append(ladata)
@@ -1011,9 +1023,9 @@ def ReadC3d(_filename='07_01.c3d', verbose=False):
                 else:
                     ParameterGroups[GroupNumber].parameter[ParameterNumber - 1].data = data
 
-            elif type == 4 and datalength > 0:
+            elif typ == 4 and datalength > 0:
                 data = []
-                Nparameters = int(datalength / abs(type))
+                Nparameters = int(datalength / abs(typ))
                 for i in range(Nparameters):
                     ladata, content = getFloat(content,proctype)
                     data.append(ladata)
@@ -1038,7 +1050,6 @@ def ReadC3d(_filename='07_01.c3d', verbose=False):
         GroupNumber, content = getNumber(content, 1)
         if GroupNumber >= 128:
             GroupNumber = -(2 ** 8) + (GroupNumber)
-
     #buff = content_memory
     #buff = content[(NrecordDataBlock - 1) * 512:]
     fd = open(FullFileName,'rb')
@@ -1056,22 +1067,25 @@ def ReadC3d(_filename='07_01.c3d', verbose=False):
     else:
         frame1 = io.StringIO(str(buff[offset:offset+nbytes]))
 
-    pdb.set_trace()
+    if sys.version_info.major==2:
+        forma = str(nbytes)+'S1'
+        frames = np.array(frame1.read(nbytes))
+        y = frames.view(forma).reshape((nframe*npoints,16))
+    else:
+        forma = str(nbytes)+'S1'
     # détermineer le type S1
-    frames = np.array(frame1.read(nbytes))
-    forma = str(nbytes)+'S1'
-    y = frames.view(forma).reshape((nframe*npoints,16))
-
+        frames = np.array(frame1.read(nbytes)).astype(forma)
+        y = frames.reshape((nframe*npoints,16))
     if proctype>1:
         z = np.empty(shape=y.shape,dtype=y.dtype)
-        z[:,0:2]=y[:,2:4]
-        z[:,2:4]=y[:,0:2]
-        z[:,4:6]=y[:,6:8]
-        z[:,6:8]=y[:,4:6]
-        z[:,8:10]=y[:,10:12]
-        z[:,10:12]=y[:,8:10]
-        z[:,12:14]=y[:,14:16]
-        z[:,14:16]=y[:,12:14]
+        z[:,0:2] = y[:,2:4]
+        z[:,2:4] = y[:,0:2]
+        z[:,4:6] = y[:,6:8]
+        z[:,6:8] = y[:,4:6]
+        z[:,8:10] = y[:,10:12]
+        z[:,10:12] = y[:,8:10]
+        z[:,12:14] = y[:,14:16]
+        z[:,14:16] = y[:,12:14]
     else:
         z = y
 
@@ -1079,7 +1093,7 @@ def ReadC3d(_filename='07_01.c3d', verbose=False):
     frames = np.array(struct.unpack(sfloat,z)).reshape(nframe,npoints,4)
 
     frames =frames[:,:,0:3]
-    return(Subjects,Point,frames,dinfo)
+    return Subjects,Point,frames,dinfo
 
 
 if __name__ == '__main__':

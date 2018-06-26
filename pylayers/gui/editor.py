@@ -604,7 +604,7 @@ class NewLayout(QDialog):    # any super class is okay
     def new(self):
         self.parent.L=Layout()
 
-        if self.doverlay.has_key('overlay_file'):
+        if 'overlay_file' in self.doverlay:
             self.parent.L.display['overlay_file']=self.doverlay['overlay_file']
             flip =''
             if self.doverlay['flipv']:
