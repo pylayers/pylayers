@@ -208,13 +208,14 @@ class Layout(pro.PyLayers):
                  _filematini='matDB.ini',
                  _fileslabini='slabDB.ini',
                  _filefur='',
-                 bcheck  = False,          # to check Gs
-                 bbuild  = False,         # to build graphs
-                 bgraphs = False,         # to load graph
+                 bcheck=False,          # to check Gs
+                 bbuild=False,         # to build graphs
+                 bgraphs=False,         # to load graph
                  #bindoor=False,        # to allow indoor penetration for outdoor situations
                  #bdiffraction=False,   # to include diffraction in Gi 
                  bverbose=False,
                  bcartesian=True,
+                 xlim=(),
                  dist_m=400,
                  typ='indoor'):
         """ object constructor
@@ -235,6 +236,7 @@ class Layout(pro.PyLayers):
         build : boolean
         verbose : boolean
         cartesian : boolean
+        xlim : '(xmin,xmax,ymin,ymax) | () default'
         dist_m : int
         typ : string
             'indoor' | 'outdoor'
@@ -288,7 +290,7 @@ class Layout(pro.PyLayers):
             self.typ = typ
         else:
             print("Layout : unknown Layout typ")
-        # boolean 
+        # boolean
 
         self.isbuilt = False
         self.loadosm = False
@@ -326,7 +328,10 @@ class Layout(pro.PyLayers):
         self.display['overlay_file'] = ""
         self.display['overlay_axis'] = ""
         # self.display['layerset'] = self.sl.keys()
-        self.display['box'] = (-50, 50, -50, 50)
+        if xlim!=():
+            self.display['box']= xlim
+        else:
+            self.display['box'] = (-50, 50, -50, 50)
         self.name = {}
         self.ax = self.display['box']
         self.zmin = 0
@@ -386,8 +391,9 @@ class Layout(pro.PyLayers):
                 self.loadosm = True
 
             # add boundary if it not exist
-            if not self.hasboundary:
-                self.boundary()
+            #if (not self.hasboundary) or (xlim!=()):
+            #    self.boundary(xlim=xlim)
+
             self.subseg()
             self.updateshseg()
 
@@ -875,9 +881,9 @@ class Layout(pro.PyLayers):
             #
 
             # get all the nodes
-            ke = self.Gs.pos.keys()
-            x = np.array(map(lambda x: x[0], self.Gs.pos.values()))
-            y = np.array(map(lambda x: x[1], self.Gs.pos.values()))
+            ke = list(self.Gs.pos.keys())
+            x = np.array([ x[0] for x in  list(self.Gs.pos.values())])
+            y = np.array([ x[1] for x in  list(self.Gs.pos.values())])
             p = np.vstack((x, y))
             d1 = p - np.roll(p, 1, axis=1)
             sd1 = np.sum(np.abs(d1), axis=0)
@@ -11016,7 +11022,7 @@ class Layout(pro.PyLayers):
 
         return(p_Tx, p_Rx)
 
-    def boundary(self, percx=0.15, percy=0.15, xlim=(), force=False,minD=10):
+    def boundary(self, percx=0.15, percy=0.15, xlim=(), force=False, minD=10):
         """ add a blank boundary around layout
 
         Parameters
@@ -11027,6 +11033,8 @@ class Layout(pro.PyLayers):
         percy : float
            percentage of Dy for y offset calculation (default 0.15)
         minD : miimum distance for boundary
+        force : boolean 
+            force modification of boundaries
 
         self.lboundary is the list of the nodes of the added boundary
         self.axn is the zone without the boundary extension
@@ -11041,21 +11049,21 @@ class Layout(pro.PyLayers):
 
         """
         if not self.hasboundary or force:
-            if len(self.Gs.pos.values()) != 0:
-                xmax = max(p[0] for p in self.Gs.pos.values())
-                xmin = min(p[0] for p in self.Gs.pos.values())
-                ymax = max(p[1] for p in self.Gs.pos.values())
-                ymin = min(p[1] for p in self.Gs.pos.values())
-            elif xlim == ():
-                xmin = -20.
-                xmax = 20.
-                ymin = -10.
-                ymax = 10.
-            else:
+            if xlim!=():
                 xmin = xlim[0]
                 xmax = xlim[1]
                 ymin = xlim[2]
                 ymax = xlim[3]
+            elif len(self.Gs.pos.values()) != 0:
+                xmax = max(p[0] for p in self.Gs.pos.values())
+                xmin = min(p[0] for p in self.Gs.pos.values())
+                ymax = max(p[1] for p in self.Gs.pos.values())
+                ymin = min(p[1] for p in self.Gs.pos.values())
+            else:
+                xmin = -20.
+                xmax = 20.
+                ymin = -10.
+                ymax = 10.
 
             Dx = np.maximum(xmax - xmin,minD)
             Dy = np.maximum(ymax - ymin,minD)
@@ -11086,6 +11094,16 @@ class Layout(pro.PyLayers):
             self.display['box'] = self.ax
             self.hasboundary = True
             self.g2npy()
+        elif xlim!=():
+            # change points coordinates
+            self.Gs.pos[self.lboundary[0]]=(xlim[0],xlim[2])
+            self.Gs.pos[self.lboundary[1]]=(xlim[1],xlim[2])
+            self.Gs.pos[self.lboundary[2]]=(xlim[1],xlim[3])
+            self.Gs.pos[self.lboundary[3]]=(xlim[0],xlim[3])
+            self.ax = xlim
+            self.display['box'] = xlim
+            self.g2npy()
+
 
     def off_overlay(self, dx=0, dy=0):
         """ offset overlay image

@@ -379,6 +379,7 @@ class DLink(Link):
             # In outdoor situation we delete transmission node involving
             # an indoor cycle at the exception of AIR
             #
+
             cindoor = [p for p in self.L.Gt.nodes() if self.L.Gt.node[p]['indoor']]
 
             if self._L.typ =='outdoor':
@@ -387,7 +388,7 @@ class DLink(Link):
                 lT  =  [k for k in u if (len(k)==3)]
                 # lTi : transmission connected at least to an indoor cycle
                 lTi = [ k for k in lT if ((k[1]  in cindoor) or (k[2] in cindoor))]
-                # lTiw : those which are wall (not those above buildings)
+                # lTiw : those which are walls (not those above buildings)
                 lTiw = [ k for k in lTi if self.L.Gs.node[k[0]]['name']!='AIR' ]
 
                 self.L.Gi.remove_nodes_from(lTiw)
@@ -518,15 +519,15 @@ class DLink(Link):
     def a(self,position):
         if not self.L.ptin(position):
             # limit position in the visible region L.ax
-            if position[0] < self.L.ax[0]:
-                position[0] = self.L.ax[0]
-            if position[0] > self.L.ax[1]:
-                position[0] = self.L.ax[1]
-            if position[1] < self.L.ax[2]:
-                position[1] = self.L.ax[2]
-            if position[1] > self.L.ax[3]:
-                position[1] = self.L.ax[3]
-            # raise NameError ('Warning : point a is not inside the Layout')
+            #if position[0] < self.L.ax[0]:
+                #position[0] = self.L.ax[0]
+            # if position[0] > self.L.ax[1]:
+            #     position[0] = self.L.ax[1]
+            # if position[1] < self.L.ax[2]:
+            #     position[1] = self.L.ax[2]
+            # if position[1] > self.L.ax[3]:
+            #     position[1] = self.L.ax[3]
+            raise NameError ('Warning : point a is not inside the Layout')
             # raise NameError ('Warning : point a is not inside the Layout')
         if not self.L.pt2cy(position) == self.ca:
             self.ca = self.L.pt2cy(position)
@@ -542,15 +543,15 @@ class DLink(Link):
     @b.setter
     def b(self,position):
         if not self.L.ptin(position):
-            if position[0]<self.L.ax[0]:
-                position[0]=self.L.ax[0]
-            if position[0]>self.L.ax[1]:
-                position[0]=self.L.ax[1]
-            if position[1]<self.L.ax[2]:
-                position[1]=self.L.ax[2]
-            if position[1]>self.L.ax[3]:
-                position[1]=self.L.ax[3]
-            # raise NameError ('Warning : point b is not inside the Layout')
+            # if position[0]<self.L.ax[0]:
+            #     position[0]=self.L.ax[0]
+            # if position[0]>self.L.ax[1]:
+            #     position[0]=self.L.ax[1]
+            # if position[1]<self.L.ax[2]:
+            #     position[1]=self.L.ax[2]
+            # if position[1]>self.L.ax[3]:
+            #     position[1]=self.L.ax[3]
+            raise NameError ('Warning : point b is not inside the Layout')
         if not self.L.pt2cy(position) == self.cb:
             self.cb = self.L.pt2cy(position)
         self._b = position
@@ -799,15 +800,17 @@ class DLink(Link):
         print("Ray : "+str(iray))
         if not self.R.evaluated:
             self.R.eval()
+
         PM = self.R.info(iray,ifGHz=0,matrix=1)
         print("Propagation Channel 2x2 (C):")
         self.C.inforay(iray)
+
         if self.C.islocal:
             # back to global frame
             self.C.locbas()
             dist = self.C.tauk[iray]*0.3
             C = dist*np.array([[self.C.Ctt.y[iray,0],self.C.Ctp.y[iray,0]],
-                        [self.C.Cpt.y[iray,0],self.C.Cpt.y[iray,0]]] )
+                               [self.C.Cpt.y[iray,0],self.C.Cpt.y[iray,0]]] )
             b = np.allclose(PM,C)
             self.C.locbas()
 
@@ -1611,7 +1614,7 @@ class DLink(Link):
         #############
         # get 2D rays
         #############
-
+        pdb.set_trace()
         if self.dexist['ray2']['exist'] and not ('ray2' in kwargs['force']):
             logger.info(" Load r2d from %s", self.dexist['ray2']['grpname'])
             self.load(r2d,self.dexist['ray2']['grpname'], L=self.L)
@@ -2042,11 +2045,13 @@ class DLink(Link):
             #
             # Select group of interactions
             #
-            if type(kwargs['lr'])==float:
+            if type(kwargs['lr'])==list:
+                lr = kwargs['lr']
+            else:
                 if kwargs['lr']==-1:
                     lr  = np.arange(self.R.nray)
-            else:
-                lr = kwargs['lr']
+                else:
+                    lr = [ int(kwargs['lr']) ]
 
 
             #
@@ -2062,7 +2067,7 @@ class DLink(Link):
                     vmax = 10*np.log10(vmax)
             else:
                 vmin = kwargs['vmin']
-                vmax = kwargs['vmax'] 
+                vmax = kwargs['vmax']
 
 
             #
@@ -2165,6 +2170,7 @@ class DLink(Link):
         #
         # white scale
         #
+
         xe = 1
         ye = 3
         le = 1
@@ -2177,10 +2183,12 @@ class DLink(Link):
         ax.set_xlabel('x meters',fontsize = 24)
         ax.set_ylabel('y meters',fontsize = 24)
         #plt.savefig('Link.eps')
+
         if kwargs['bsave']:
             plt.savefig('Link'+str(kwargs['ix'])+'.png')
             plt.close()
 
+        plt.axis('auto')
         return fig,ax
 
     def _show3(self,rays=True, lay= True, ant= True, newfig= False, **kwargs):
@@ -2451,6 +2459,7 @@ class DLink(Link):
                     'taumin': 0,
                     'taumax': 160,
                     'bgrid':True,
+                    'cmap':'jet',
                     'ix' : 0,
                     'bsave' : False,
                     'fontsize':18

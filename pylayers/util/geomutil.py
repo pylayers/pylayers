@@ -5912,9 +5912,9 @@ def dmin3d(a, b, c, d):
 #     # XXX: maybe there's an orthonormalization routine in LAPACK, too,
 #     #      apart from QR. too lazy to check...
 #     n = V.shape[1]
-#     for k in xrange(n):
+#     for k in range(n):
 #         V[:,k] /= np.linalg.norm(V[:,k])
-#         for j in xrange(k+1, n):
+#         for j in range(k+1, n):
 #             V[:,j] -= np.vdot(V[:,j], V[:,k]) * V[:,k]
 #     return V
 
@@ -6028,7 +6028,7 @@ def qrdecomp(V):
     # V=V/nn
     lv = np.shape(V)[2]
     V2 = copy.deepcopy(V)
-    for k in xrange(lv):
+    for k in range(lv):
         V[:, :, k], R = np.linalg.qr(V[:, :, k])
     # check where the vector along cylinder axis is colinear with the 1st basis axis
     # col = np.einsum('ij,ij->j',V[:,0,:],V2[:,0,:])
@@ -6070,7 +6070,7 @@ def check_point_unicity(A):
 
     """
     similar = []
-    for ua in xrange(len(A)):
+    for ua in range(len(A)):
         rA = np.roll(A, -ua, axis=0)
         # print rA
         if any((A[ua] == x).all() for x in rA[1:]):

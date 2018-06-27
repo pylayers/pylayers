@@ -48,7 +48,7 @@ import operator
 logger = logging.getLogger(__name__)
 
 class Rays(PyLayers, dict):
-    """ Class hendling a set of rays
+    """ Class handling a set of rays
 
     Attributes
     ----------
@@ -235,7 +235,7 @@ class Rays(PyLayers, dict):
             s = s + "based "
         if self.filled:
             s = s + "filled "
-        
+
         s = s + '\n'
         s = s + 'N2Drays : '+ str(nray2D) + '\n'
         if hasattr(self,'nb_origin_sig'):

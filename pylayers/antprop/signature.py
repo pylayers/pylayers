@@ -2137,18 +2137,20 @@ class Signatures(PyLayers,dict):
 
         In the same time the signature of the ray is stored in the Rays object
 
-        Todo : Find the best memory implemntation
+        Todo : Find the best memory implementation
 
         See Also
         --------
 
         Signature.sig2ray
+        Signature.raysv
 
         """
 
-        if type(ptx)==int:
+        if type(ptx) == int:
             ptx = np.array(self.L.Gt.pos[ptx])
-        if type(prx)==int:
+
+        if type(prx) == int:
             prx = np.array(self.L.Gt.pos[prx])
 
         rays = Rays(ptx,prx)
@@ -2326,7 +2328,6 @@ class Signatures(PyLayers,dict):
         # if source and target are in the same merged cycle
         # and ptx != prx
         #
-
         los = shg.LineString(((ptx[0], ptx[1]), (prx[0], prx[1])))
 
         # convex cycle of each point
@@ -2338,27 +2339,28 @@ class Signatures(PyLayers,dict):
         polycrx = self.L.Gt.node[cyprx]['polyg']
 
         # The Line of sight situation is detected here
-        # dtxtx : distance between Tx and Rx
+        # dtxtx : square distance between Tx and Rx
         dtxrx = np.sum((ptx-prx)*(ptx-prx))
         if dtxrx>1e-15:
             if polyctx.contains(los):
                 rays.los = True
-
             else:
                 rays.los = False
 
         M = self.image2(ptx)
         R = self.backtrace(ptx,prx,M)
+
         #
         # Add LOS ray in ray 2D
         #
+
         if rays.los:
             R[0]= {'sig':np.zeros(shape=(0,0,1)),'pt': np.zeros(shape=(2,1,0))}
 
         rays.update(R)
         rays.nb_origin_sig = len(self.keys())
         rays.origin_sig_name = self.filename
-        #pdb.set_trace()
+
         return rays
 
     def backtrace(self, tx, rx, M):
