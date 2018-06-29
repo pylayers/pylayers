@@ -1,9 +1,9 @@
 from pylayers.antprop.aarray import *
 import matplotlib.pyplot as plt 
 import pdb 
-print '--------------'
-print 'antprop/test_subarray.py'
-print '--------------'
+print('--------------')
+print('antprop/test_subarray.py')
+print('--------------')
 fcGHz = 60
 lamda = 0.3/fcGHz
 N1   = [ 4,4,1]

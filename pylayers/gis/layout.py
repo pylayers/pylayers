@@ -3396,14 +3396,19 @@ class Layout(pro.PyLayers):
     def check2(self):
         """ Layout checking
 
+        Returns
+        -------
+
+        tseg ; list of segment shapely
+
         """
 
         tseg = []
 
-        for k in self.Gs.node.keys():
+        for k in list(self.Gs.node.keys()):
             if k > 0:
                 #v1.1 lnp = self.Gs.neighbors(k)
-                lnp = self.Gs[k].keys()
+                lnp = list(self.Gs[k].keys())
                 p1 = self.Gs.pos[lnp[0]]
                 p2 = self.Gs.pos[lnp[1]]
                 tseg.append(sh.LineString([(p1[0], p1[1]), (p2[0], p2[1])]))
@@ -3434,8 +3439,8 @@ class Layout(pro.PyLayers):
         1. Remove nodes which are not connected
 
         """
-
-        for n in self.Gs.node.keys():
+        lk = list(self.Gs.node.keys())
+        for n in lk:
             if ((n < 0) & (self.Gs.degree(n) == 0)):
                 self.Gs.remove_node(n)
                 del self.Gs.pos[n]
@@ -3443,8 +3448,7 @@ class Layout(pro.PyLayers):
                     self.Gv.remove_node(n)
                 except:
                     pass
-
-        self.Np = len(np.nonzero(np.array(self.Gs.node.keys()) < 0)[0])
+        self.Np = len(np.nonzero(np.array(list(self.Gs.node.keys())) < 0)[0])
         self.g2npy()
 
     def info_segment(self, s1):
@@ -5514,7 +5518,9 @@ class Layout(pro.PyLayers):
         # add hash to node 0 of Gs
 
         filelay = pyu.getlong(self._filename, pro.pstruc['DIRLAY'])
-        _hash = hashlib.md5(open(filelay, 'rb').read()).hexdigest()
+        fd = open(filelay,'rb')
+        _hash = hashlib.md5(fd.read()).hexdigest()
+        fd.close()
         self.Gt.add_node(0, hash=_hash)
 
         # There is a dumpw after each build
@@ -11027,7 +11033,7 @@ class Layout(pro.PyLayers):
         percy : float
            percentage of Dy for y offset calculation (default 0.15)
         minD : miimum distance for boundary
-        force : boolean 
+        force : boolean
             force modification of boundaries
 
         self.lboundary is the list of the nodes of the added boundary

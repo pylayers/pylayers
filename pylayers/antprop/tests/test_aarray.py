@@ -1,8 +1,8 @@
 from pylayers.antprop.aarray import *
 import matplotlib.pyplot as plt 
-print '--------------'
-print 'antprop/test_aarray.py'
-print '--------------'
+print('--------------')
+print('antprop/test_aarray.py')
+print('--------------')
 #
 # This is a uniform array (10 x 10) 
 #

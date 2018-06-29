@@ -37,6 +37,19 @@ class TestLayout(unittest.TestCase):
         print(data1)
         print(data2)
 
+    def test_boundary(self):
+        L = Layout('defstr.lay')
+        L.boundary()
+
+    def test_build(self):
+        L = Layout('defstr.lay')
+        L.build()
+
+    def test_cleanup(self):
+        L1.add_fnod(p=(10,10))
+        L1.cleanup()
+        self.assertEqual(L1.Np,12)
+
     def test_load(self):
         self.assertEqual(L1.Np,12)
         self.assertEqual(L1.Ns,15)
@@ -44,6 +57,13 @@ class TestLayout(unittest.TestCase):
     def test_check(self):
         bc,ds = L1.check()
         self.assertTrue(bc)
+
+    def test_check2(self):
+        L = Layout('defstr.lay')
+        L.build()
+        tseg = L.check2()
+        L.build()
+        L.check_Gi()
 
     def test_have_subseg(self):
         self.assertTrue(L1.have_subseg(1))
@@ -82,10 +102,7 @@ if __name__ == '__main__':
 # add_pnod
 # add_pons
 # add_segment
-# angleonlink
-# angleonlink3
 # angleonlinkold
-# boundary
 # build
 # buildGi
 # buildGr
@@ -95,7 +112,6 @@ if __name__ == '__main__':
 # check
 # check2
 # check_Gi
-# cleanup
 # clip
 # closest_edge
 # _convex_hull
@@ -178,7 +194,6 @@ if __name__ == '__main__':
 # seginframe
 # seginframe2
 # seginline
-# seg_intersection
 # segpt
 # seguv
 # show

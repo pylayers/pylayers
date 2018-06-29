@@ -3768,15 +3768,15 @@ def intersect3(a, b, pg, u1, u2, l1, l2,binter=False):
     Parameters
     ----------
 
-    a  : np.array (3,Nseg) of floats  
-        transmiter coordinates 
-    b  : np.array (3,Nseg) of floats  
-        receiver coordinates 
-    pg  : np.array (3,Nscreen) of floats 
-        center of gravity of the screen 
-    u1  : np.array (3,Nscreen) of floats 
+    a  : np.array (3,Nseg) of floats
+        transmiter coordinates
+    b  : np.array (3,Nseg) of floats
+        receiver coordinates
+    pg  : np.array (3,Nscreen) of floats
+        center of gravity of the screen
+    u1  : np.array (3,Nscreen) of floats
         unitary vector along first dimension
-    u2  : np.array (3,Nscreen) of floats 
+    u2  : np.array (3,Nscreen) of floats
         unitary vector along second dimension
     l1   : np.array (,Nscreen)
         length along first dimension in meters
