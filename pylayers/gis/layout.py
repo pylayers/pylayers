@@ -9681,158 +9681,6 @@ class Layout(pro.PyLayers):
 
 
 
-    def editor(self):
-        """ invoke interactive layout graphical editor
-
-        Notes
-        -----
-
-        point edition
-
-            m  toggle point edition mode  (CP : Create Point)
-
-                lclic same x
-                rclic same y
-                cclic free point
-
-        segment edition
-
-            [0-f] - display one of the 16 first layers
-            x : save structure
-            o : toggle overlay
-
-        """
-
-        fig = plt.gcf()
-        ax = fig.add_subplot(111)
-        self.display['nodes'] = True
-        self.display['ednodes'] = True
-        self.display['subsegnb'] = True
-        self.display['transition'] = True
-        self.display['ticksoff'] = True
-
-        #self.af = SelectL2(self,fig=fig,ax=ax)
-        self.af = SelectL(self, fig=fig, ax=ax)
-
-        fig, ax = self.af.show(fig, ax, clear=True)
-
-        self.cid1 = fig.canvas.mpl_connect('button_press_event',
-                                           self.af.OnClick)
-        self.cid2 = fig.canvas.mpl_connect('button_release_event',
-                                           self.af.OnClickRelease)
-        self.cid3 = fig.canvas.mpl_connect('motion_notify_event',
-                                           self.af.OnMotion)
-        self.cid4 = fig.canvas.mpl_connect('key_press_event',
-                                           self.af.OnPress)
-        self.cid5 = fig.canvas.mpl_connect('key_release_event',
-                                           self.af.OnRelease)
-
-        plt.draw()
-        plt.axis('tight')
-        plt.show()
-
-#        """
-#        """
-#
-#        # import gtk
-#        from matplotlib.figure import Figure
-#        from matplotlib.backends.backend_gtkagg import FigureCanvasGTKAgg as FigureCanvas
-#        from matplotlib.backends.backend_gtkagg import NavigationToolbar2GTKAgg as NavigationToolbar
-#        from matplotlib.backend_bases import key_press_handler
-#
-#        win = gtk.Window()
-#        win.show_all()
-#
-#
-#        win = gtk.Window()
-#        win.connect("destroy", lambda x: gtk.main_quit())
-#        win.set_default_size(400,300)
-#        win.set_title("Embedding in GTK")
-#
-#        vbox = gtk.VBox()
-#        win.add(vbox)
-#
-#        fig = Figure()
-#        ax = fig.add_subplot(111)
-#
-#        fig,ax = self.showG('s',fig=fig,ax=ax)
-#
-#        canvas = FigureCanvas(fig)  # a gtk.DrawingArea
-#        canvas.show()
-#        vbox.pack_start(canvas)
-#        toolbar = NavigationToolbar(canvas, win)
-#        vbox.pack_start(toolbar, False, False)
-#
-#
-#        def on_key_event(event):
-#            print('you pressed %s'%event.key)
-#            key_press_handler(event, canvas, toolbar)
-#
-#        canvas.mpl_connect('key_press_event', on_key_event)
-#
-#        win.show_all()
-#        gtk.main()
-
-    def editorTk(self):
-        """ invoke interactive layout graphical editor
-
-        Notes
-        -----
-
-        point edition
-
-            m  toggle point edition mode  (CP : Create Point)
-
-                lclic same x
-                rclic same y
-                cclic free point
-
-        segment edition
-
-            [0-f] - display one of the 16 first layers
-            x : save structure
-            o : toggle overlay
-
-        """
-
-        #import matplotlib
-        # matplotlib.use('TkAgg')
-
-        from matplotlib.backend_bases import key_press_handler
-        from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
-        from matplotlib.figure import Figure
-        import Tkinter as Tk
-
-        root = Tk.Tk()
-        root.wm_title('Pylayers Layout Editor')
-
-        fig = Figure()
-        ax = fig.add_subplot(111)
-        # ax.plot(np.arange(10))
-
-        canvas = FigureCanvasTkAgg(fig, master=root)
-        canvas.show()
-        canvas.get_tk_widget().pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
-
-        toolbar = NavigationToolbar2TkAgg(canvas, root)
-        toolbar.update()
-        canvas._tkcanvas.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
-
-        button = Tk.Button(master=root, text='Quit', command=sys.exit)
-        button.pack(side=Tk.BOTTOM)
-
-        self.display['nodes'] = True
-        self.display['ednodes'] = True
-
-        select = SelectL(self, canvas)
-
-        # self.af.show(clear=True)
-
-        self.cid1 = canvas.mpl_connect('button_press_event', select.OnClick)
-        self.cid2 = canvas.mpl_connect('key_press_event', select.OnPress)
-        # ax.axis('tight')
-        canvas.show()
-        Tk.mainloop()
 
     def info(self):
         """ gives information about the Layout
@@ -9871,8 +9719,16 @@ class Layout(pro.PyLayers):
             print("no Gr graph")
 
     def facets3D(self, edlist, name='Layer', subseg=False):
-        """
-        facets3d(edlist,name)
+        """ create facet 3D for geomview
+
+        Parameters
+        ----------
+
+        edlist
+        name : string
+        subseg : boolean 
+
+
         """
 
         filename = name + '.list'

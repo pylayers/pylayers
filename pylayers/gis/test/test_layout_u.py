@@ -125,8 +125,6 @@ if __name__ == '__main__':
 # dumpr
 # dumpw
 # ed2nd
-# editor
-# editorTk
 # edit_seg
 # exportosm
 # extrseg
