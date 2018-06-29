@@ -887,9 +887,12 @@ class Layout(pro.PyLayers):
 
             # get all the nodes
             ke = list(self.Gs.pos.keys())
-            x = np.array([ x[0] for x in  list(self.Gs.pos.values())])
-            y = np.array([ x[1] for x in  list(self.Gs.pos.values())])
+            lpos = list(self.Gs.pos.values())
+
+            x = np.array([ pp[0] for pp in  lpos ] )
+            y = np.array([ pp[1] for pp in  lpos ] )
             p = np.vstack((x, y))
+
             d1 = p - np.roll(p, 1, axis=1)
             sd1 = np.sum(np.abs(d1), axis=0)
             if not sd1.all() != 0:
@@ -3277,22 +3280,26 @@ class Layout(pro.PyLayers):
 
 
     def seg_intersection(self,**kwargs):
-        '''
-            determine if a segment intersects any other segment of the layout
+        ''' determine if a segment intersects any other segment of the layout
 
             Parameters
             ----------
 
             shLine : a shapely LineString
-            OR
-            ta,he : tail/head coordinates of a segment
+            or
+            ta,he : tail/head of a segment
 
-            Return
-            ------
-            
+            Returns
+            -------
+
             llay_seg : list of layout's segments intersected
             lshP : list of shapely points of intersections.
-            
+
+            See Also
+            --------
+
+            editor.py
+
         '''
 
         if ('ta' in kwargs) and ('he' in kwargs):
@@ -3303,20 +3310,19 @@ class Layout(pro.PyLayers):
         # WARNING : use crosses instead of interesects
         # otherwise 2 segment connected to a same node
         # are considered as intersecting
-        binter = [seg.crosses(x) for x in self._shseg.values()]
+        binter = [seg.crosses(x) for x in list(self._shseg.values())]
         if np.sum(binter) > 0:
             uinter = np.where(binter)[0]
             llay_seg = []
             lshP = []
             for k in uinter:
-                # layout segment 
-                llay_seg.append(self._shseg.keys()[k])
+                # layout segment
+                llay_seg.append(list(self._shseg.keys())[k])
                 lay_shseg = self._shseg[llay_seg[-1]]
                 # intersection shapely point
                 lshP.append(seg.intersection(lay_shseg))
 
             return(llay_seg,lshP)
-
         else:
             return ([],[])
 
@@ -9947,18 +9953,21 @@ class Layout(pro.PyLayers):
 
         boolean
 
+        See Also
+        --------
+
+        editor.py
+
         """
         # transpose point numbering
 
-        upnt = [ x for x in self.Gs.nodes() if x >0 ]
-        try:
-            ta = np.nonzero(np.array(upnt) == ta)[0][0]
-            he = np.nonzero(np.array(upnt) == he)[0][0]
-        except:
-            import ipdb
-            ipdb.set_trace()
-        res = filter(lambda x: (((x[0] == ta) & (x[1] == he))
-                                | ((x[0] == he) & (x[1] == ta))), zip(self.tahe[0], self.tahe[1]))
+        upnt = [ x for x in self.Gs.nodes() if x < 0 ]
+        ta = np.nonzero(np.array(upnt) == ta)[0][0]
+        he = np.nonzero(np.array(upnt) == he)[0][0]
+        res = [x for x in zip(self.tahe[0], self.tahe[1])
+              if (((x[0] == ta) & (x[1] == he)) |
+                  ((x[0] == he) & (x[1] == ta)))  ]
+
         if len(res) > 0:
             return True
         else:

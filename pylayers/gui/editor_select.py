@@ -1413,7 +1413,7 @@ class SelectL2(object):
                                             z=(0,self.L.maxheight))
             # crossing segments case
             elif len(ltseg) == 0:
-                
+
                 # 1. Split segment and rely to a new central point
 
                 for us, s  in enumerate(liseg):
