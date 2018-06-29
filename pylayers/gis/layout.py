@@ -9999,11 +9999,12 @@ class Layout(pro.PyLayers):
         """
         # print"ispoint : pt ", pt
         pts = np.array(list(self.Gs.pos.values())).T
-        ke = np.array(list(dict(self.Gs.pos).keys()))
+        ke = np.array(list(self.Gs.pos.keys()))
         diff = pts - pt.reshape(2, 1)
         v = np.sqrt(np.sum(diff * diff, axis=0))
         nz = (v > tol)
         b = nz.prod()
+        pdb.set_trace()
         if b == 1:
             # if all layout points are different from pt
             #return(0,np.min(v))
