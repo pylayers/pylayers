@@ -9950,7 +9950,7 @@ class Layout(pro.PyLayers):
         """
         # transpose point numbering
 
-        upnt = filter(lambda x: x < 0, self.Gs.nodes())
+        upnt = [ x for x in self.Gs.nodes() if x >0 ]
         try:
             ta = np.nonzero(np.array(upnt) == ta)[0][0]
             he = np.nonzero(np.array(upnt) == he)[0][0]
