@@ -2612,10 +2612,8 @@ class Layout(pro.PyLayers):
         s2   : edge number 2
 
         """
-        #v1.1 np1 = self.Gs.neighbors(s1)
-        #np2 = self.Gs.neighbors(s2)
-        np1 = self.Gs[s1].keys()
-        np2 = self.Gs[s2].keys()
+        np1 = list(self.Gs[s1].keys())
+        np2 = list(self.Gs[s2].keys())
         xA = self.Gs.pos[np1[0]][0]
         yA = self.Gs.pos[np1[0]][1]
         xB = self.Gs.pos[np1[1]][0]
@@ -2626,17 +2624,12 @@ class Layout(pro.PyLayers):
         yD = self.Gs.pos[np2[1]][1]
         xP = self.Gs.pos[np0][0]
         yP = self.Gs.pos[np0][1]
-        # printxA,yA
-        # printxB,yB
-        # printxC,yC
-        # printxD,yD
-        # printxP,yP
+
         A = np.array([[xB - xA, xD - xC], [yB - yA, yD - yC]])
         b = np.array([xP - xA, yP - yA])
         x = sp.linalg.solve(A, b)
         if ((x[0] > 0.) & (x[0] < 1.0)):
-            self.add_pons(e1, 1 - x[0])
-        # printx
+            self.add_pons(s1, 1 - x[0])
 
     def add_pons(self, ns, alpha=0.5):
         """ add point on segment
@@ -3937,7 +3930,6 @@ class Layout(pro.PyLayers):
         #
         # warning : seglist contains the segment number in tahe not in Gs
         #
-        #
 
         seglist  = np.unique(self.seginframe2(p1[0:2], p2[0:2])).astype(int)
         #seglist  = np.unique(self.seginframe(p1[0:2], p2[0:2]))
@@ -3956,36 +3948,20 @@ class Layout(pro.PyLayers):
         # [(link id,number of seg),...]
         # nl = zip(np.arange(nlink),llink)n
 
-        npta = self.tahe[0, seglist[upos]]
-        nphe = self.tahe[1, seglist[upos]]
+        seglist = seglist[upos]
+
+        npta = self.tahe[0, seglist]
+        nphe = self.tahe[1, seglist]
 
         Pta = self.pt[:, npta]
         Phe = self.pt[:, nphe]
 
-
-        # #
-        # # This part should possibly be improved
-        # #
-
-        # for i, nl in enumerate(llink):
-        #     try:
-        #         # P1 = np.hstack((P1,np.outer(p1[:,i],np.ones(nl))))
-        #         # P2 = np.hstack((P2,np.outer(p2[:,i],np.ones(nl))))
-        #         ilink = np.hstack(
-        #             (ilink, array([-1]), i * np.ones(nl, dtype='int')))
-        #     except:
-        #         # P1 = np.outer(p1[:,i],np.ones(nl))
-        #         # P2 = np.outer(p2[:,i],np.ones(nl))
-        #         ilink = i * np.ones(nl, dtype='int')
-
-        # check for intersection P1P2 PtaPhe
-        # bo = geu.intersect(P1[0:-1], P2[0:-1], Pta, Phe)
         Nscreen = len(npta)
         # get segment height bounds
         zmin = np.array([self.Gs.node[x]['z'][0]
-                         for x in self.tsg[seglist[upos]]])
+                         for x in self.tsg[seglist]])
         zmax = np.array([self.Gs.node[x]['z'][1]
-                         for x in self.tsg[seglist[upos]]])
+                         for x in self.tsg[seglist]])
         # centroid of the screen
         Pg = np.vstack(((Phe + Pta) / 2., (zmax + zmin) / 2.))
         Ptahe = Phe - Pta
@@ -4010,13 +3986,13 @@ class Layout(pro.PyLayers):
         data = np.zeros(Nseg, dtype=[('i', 'i8'), ('s', 'i8'), ('a', np.float32)])
 
         data['i'] = ubo[0]
-        data['s'] = self.tsg[ubo[1]]
+        data['s'] = self.tsg[seglist[ubo[1]]]
 
         #
         # Calculate angle of incidence refered from segment normal
         #
 
-        norm = self.normal[:, ubo[1]]
+        norm = self.normal[:, seglist[ubo[1]]]
         # vector along the link
         uu = un[:, ubo[0]]
         unn = abs(np.sum(uu * norm, axis=0))
@@ -4038,8 +4014,8 @@ class Layout(pro.PyLayers):
         Returns
         -------
 
-        data['i'] 
-        data['s'] : list of segment number 
+        data['i']
+        data['s'] : list of segment number
         data['a'] : angle (in radians) between segment and LOS axis
 
         Examples
@@ -4102,7 +4078,7 @@ class Layout(pro.PyLayers):
         Pta = self.pt[:, npta]
         Phe = self.pt[:, nphe]
 
-        
+
         #
         # This part should possibly be improved
         #
@@ -4148,7 +4124,8 @@ class Layout(pro.PyLayers):
         data['i'] = idxlnk
         data['s'] = seglist
         data['a'] = angle
-        return(data)
+
+        return data
 
     def angleonlinkold(self, p1=np.array([0, 0]), p2=np.array([10, 3])):
         """ angleonlink(self,p1,p2) returns seglist between p1 and p2
@@ -4438,7 +4415,7 @@ class Layout(pro.PyLayers):
                 >>> p1 = np.array([[0,0,0],[0,0,0]])
                 >>> p2 = np.array([[10,10,10],[10,10,10]])
                 >>> seglist = L.seginframe2(p1,p2)
-                >>> edlist  = [ L.tsg[x] for x in  seglist)
+                >>> edlist  = [ L.tsg[x] for x in  seglist ]
                 >>> fig,ax = L.showG('s',edlist=edlist)
 
         """
@@ -8636,7 +8613,7 @@ class Layout(pro.PyLayers):
                     'lvis': ['nn', 'ne', 'ee'],
                     'linter': ['RR', 'TT', 'RT', 'TR', 'RD', 'DR', 'TD', 'DT', 'DD'],
                     'show0': False,
-                    'axis': False,
+                    'axis': True,
                     'overlay': False,
                     'diffraction': False
                     }

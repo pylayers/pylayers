@@ -18,6 +18,25 @@ class TestLayout(unittest.TestCase):
                          width=1.,
                          length=1.,
                          angle=0.)
+
+    def test_add_nfpe(self):
+        L = Layout('defstr.lay')
+        L.add_nfpe(-8,7,6)
+        self.assertEqual(L.Np,13)
+
+    def test_angleonlink(self):
+        data1 = L1.angleonlink(np.array([2,2.5]),np.array([8,4]))
+        data2 = L1.angleonlink3(np.array([2,2.5,1.5]),np.array([8,4,1.5]))
+        print(data1)
+        print(data2)
+        # The 3d intersection releaves ambiguity on vertical segments
+        # Problem at jonction between seg here 2 segments are found 
+        #
+        data1 = L1.angleonlink(np.array([2,2]),np.array([8,4]))
+        data2 = L1.angleonlink3(np.array([2,2,1.5]),np.array([8,4,1.5]))
+        print(data1)
+        print(data2)
+
     def test_load(self):
         self.assertEqual(L1.Np,12)
         self.assertEqual(L1.Ns,15)
@@ -60,10 +79,6 @@ class TestLayout(unittest.TestCase):
 if __name__ == '__main__':
     unittest.main()
 
-# add_furniture
-# add_furniture_file
-# add_nfpe
-# _addoutcy
 # add_pnod
 # add_pons
 # add_segment

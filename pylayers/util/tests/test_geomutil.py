@@ -7,19 +7,19 @@ from numpy.testing import (TestCase, assert_almost_equal, assert_raises, assert_
 
 class Tesgeu(TestCase):
     def test_onb(self):
-        print "testing geomutil.onb"
+        print("testing geomutil.onb")
         A = np.array([[0,0,0,0],[1,2,3,4],[0,0,0,0]])
         B = np.array([[0,0,0,0],[1,2,3,4],[10,10,10,10]])
         v = np.array([[1,1,1,1],[0,0,0,0],[0,0,0,0]])
         T = geu.onb(A, B,v)
-        print np.shape(T)
-        print T[:,0,:]
-        print T[:,1,:]
-        print T[:,2,:]
+        print( np.shape(T))
+        print( T[:,0,:])
+        print( T[:,1,:])
+        print( T[:,2,:])
         assert_equal(np.shape(T),(4,3,3))
 
     def test_ispoint(self):
-        print "testing geomutil.ispoint"
+        print("testing geomutil.ispoint")
         tpts= (np.array([[1,2,3],[5,6,7]]),np.array([-1,-2,-3]))
         pt = np.array([[1],[5]])
         k = geu.ispoint(tpts,pt)
@@ -35,7 +35,7 @@ class Tesgeu(TestCase):
         assert_equal(k,0)
 
     def test_ptconvex2(self):
-        print "testing geomutil.ptconvex2"
+        print("testing geomutil.ptconvex2")
 
         points = shg.MultiPoint([(0, 0), (0, 1), (3.2, 1), (3.2, 0.7), (0.4, 0.7), (0.4, 0)])
         polyg  = geu.Polygon(points)
@@ -49,7 +49,7 @@ class Tesgeu(TestCase):
         assert_equal(ccave,[-1, -2, -3, -4, -6] )
 
     def test_is_aligned(self):
-        print "testing is_aligned"
+        print("testing is_aligned")
         p1 = np.array([0,0])
         p2 = np.array([1,0])
         p3 = np.array([3,0])
@@ -68,7 +68,7 @@ class Tesgeu(TestCase):
         assert not b4
 
     def test_MATP(self):
-        print "test_MATP"
+        print("test_MATP")
         vl = np.array([0,0,1])  # beam in z direction 
         pl = np.array([1,0,0])  # polar along x
 
@@ -134,7 +134,7 @@ class Tesgeu(TestCase):
 
 
     def test_intersect3(self):
-        print "test_intersect3"
+        print("test_intersect3")
         a = np.array([[1,0,1]]).T
         b = np.array([[10,0,1]]).T
         pg = np.array([[5,0,0]]).T
@@ -152,10 +152,10 @@ pb = np.array([10,6])
 N = 100
 l = 1
 p = geu.ellipse2D(pa,pb,l,N)
-plt.plot(pa[0],pa[1],'ob')
-plt.plot(pb[0],pb[1],'or')
-plt.plot(p[0,:],p[1,:])
-plt.axis('equal')
+#plt.plot(pa[0],pa[1],'ob')
+#plt.plot(pb[0],pb[1],'or')
+#plt.plot(p[0,:],p[1,:])
+#plt.axis('equal')
 
 if __name__ == "__main__":
     run_module_suite()
