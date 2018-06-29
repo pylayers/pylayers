@@ -391,8 +391,8 @@ class Layout(pro.PyLayers):
                 self.loadosm = True
 
             # add boundary if it not exist
-            #if (not self.hasboundary) or (xlim!=()):
-            #    self.boundary(xlim=xlim)
+            if (not self.hasboundary) or (xlim!=()):
+                self.boundary(xlim=xlim)
 
             self.subseg()
             self.updateshseg()
@@ -413,8 +413,8 @@ class Layout(pro.PyLayers):
             # check if the graph gpickle files have been built
             if bconsistent:
                 #
-                # build and save graphs 
-                # 
+                # build and save graphs
+                #
                 if bbuild:
                     # ans = raw_input('Do you want to build the layout (y/N) ? ')
                     # if ans.lower()=='y'
@@ -422,7 +422,7 @@ class Layout(pro.PyLayers):
                     self.lbltg.append('s')
                     self.dumpw()
                 #
-                # load graphs from file 
+                # load graphs from file
                 #
                 elif bgraphs:
                     if os.path.splitext(self._filename)[1]=='.ini':
@@ -747,23 +747,26 @@ class Layout(pro.PyLayers):
 
         See Also
         --------
+        Portage vers networkx 2. inacheve
 
         __add__
 
         """
 
-        newpoint = dict((k - offp, v)
-                        for k, v in self.Gs.node.items() if k < 0)
-        assert (np.array(newpoint.keys()) < 0).all()
-        newseg = dict((k + offs, v) for k, v in self.Gs.node.items() if k > 0)
-        assert (np.array(newseg.keys()) > 0).all()
-        newpoint.update(newseg)
-        self.Gs.node = newpoint
+        newpoint = dict((k - offp, v) for k, v in self.Gs.node.items() if k < 0)
+        assert (np.array(list(newpoint.keys())) < 0).all()
 
-        newppoint = dict((k - offp, v)
-                         for k, v in self.Gs.pos.items() if k < 0)
+        newseg = dict((k + offs, v) for k, v in self.Gs.node.items() if k > 0)
+        assert (np.array(list(newseg.keys())) > 0).all()
+
+        newpoint.update(newseg)
+        nx.set_node_attributes(self.Gs,newpoint)
+        #self.Gs.node = newpoint
+
+        newppoint = dict((k - offp, v) for k, v in self.Gs.pos.items() if k < 0)
         newpseg = dict((k + offs, v) for k, v in self.Gs.pos.items() if k > 0)
         newppoint.update(newpseg)
+
         self.Gs.pos = newppoint
 
         # adjascence list of segments
@@ -782,8 +785,10 @@ class Layout(pro.PyLayers):
         dpt = dict(zip(lpt, nladjp))
         dseg = dict(zip(lseg, nladjs))
         dseg.update(dpt)
-        self.Gs.adj = dseg
-        self.Gs.edge = dseg
+        print("Todo create a dictionnary of edges")
+        nx.set_edge_attributes(self.Gs,dseg)
+        # self.Gs.adj = dseg
+        # self.Gs.edge = dseg
 
     def check(self, level=0, epsilon = 0.64):
         """ Check Layout consistency
@@ -1813,7 +1818,7 @@ class Layout(pro.PyLayers):
         Notes
         -----
 
-        See Also 
+        See Also
         --------
 
         layout.loadosm
@@ -2420,8 +2425,9 @@ class Layout(pro.PyLayers):
         # convert graph Gs to numpy arrays for faster post processing
         self.g2npy()
         #
-        self._hash = hashlib.md5(open(filelay, 'rb').read()).hexdigest()
-
+        fd = open(filelay,'rb')
+        self._hash = hashlib.md5(fd.read()).hexdigest()
+        fd.close()
 
     def loadfur(self, _filefur):
         """ loadfur load a furniture file
@@ -2637,6 +2643,7 @@ class Layout(pro.PyLayers):
 
         ns  : int
             segment number
+
         alpha : parameterization of the point
             alpha = 0 (tail) alpha = 1 (head)
 
@@ -2648,7 +2655,7 @@ class Layout(pro.PyLayers):
 
         """
         # v1.1 nop = self.Gs.neighbors(ns)
-        nop = self.Gs[ns]
+        nop = list(self.Gs[ns])
         namens = self.Gs.node[ns]['name']
         zminns = self.Gs.node[ns]['z'][0]
         zmaxns = self.Gs.node[ns]['z'][1]
@@ -3533,17 +3540,17 @@ class Layout(pro.PyLayers):
         Parameters
         ----------
 
-            e1 : int 
+            e1 : int
 
         Returns
         -------
 
-            have_subseg_bool : boolean 
+            have_subseg_bool : boolean
 
 
         """
         dk = self.Gs.node[e1]
-        if 'ss_name' in dk:
+        if len(dk['iso'])>0:
             return True
         else:
             return False
@@ -5493,17 +5500,17 @@ class Layout(pro.PyLayers):
         if verbose:
             Buildpbar.update(1)
         if 't' in graph:
-            self.buildGt(difftol=difftol,verbose=verbose,tqdmpos=1)
+            self.buildGt(difftol=difftol, verbose=verbose, tqdmpos=1)
             self.lbltg.extend('t')
         if verbose:
             Buildpbar.update(1)
         if 'v' in graph:
-            self.buildGv(verbose=verbose,tqdmpos=1)
+            self.buildGv(verbose=verbose, tqdmpos=1)
             self.lbltg.extend('v')
         if verbose:
             Buildpbar.update(1)
         if 'i' in graph:
-            self.buildGi(verbose=verbose,tqdmpos=1)
+            self.buildGi(verbose=verbose, tqdmpos=1)
             if not multi:
                 self.outputGi(verbose=verbose,tqdmpos=1)
             else:
@@ -8634,7 +8641,7 @@ class Layout(pro.PyLayers):
 
         if kwargs['aw'] != []:
             kwargs['airwalls'] = kwargs['aw']
-        # overriding first argument graph
+
         if 'graph' in kwargs:
             graph = kwargs['graph']
 
@@ -8684,6 +8691,7 @@ class Layout(pro.PyLayers):
             #
             # Draw segment slab per slab with proper linewidth and color
             #
+
             for lmat in sllist:
                 #print(lmat)
                 lseg = self.name[lmat]

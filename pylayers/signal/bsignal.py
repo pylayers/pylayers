@@ -721,38 +721,21 @@ class Bsignal(PyLayers):
 
         """
 
-        defaults = {'iy'  :  -1,
-                  'vline' : np.array([]),
-                  'hline' : np.array([]),
-                  'unit1' : 'V',
-                  'unit2' : 'V',
-                  'separated' : True,
-                  'dist'  : False ,
-                  'xmin'  :-1e15,
-                  'xmax'  : 1e15,
-                  'logx'  : False,
-                  'logy'  : False,
-                  'idx'   :[0,0,0,0,0,0,0]
-                 }
-
-        for key, value in defaults.items():
-            if key not in kwargs:
-                 kwargs[key] = value
-
-        iy = kwargs.pop('iy') 
-        vline = kwargs.pop('vline')
-        hline = kwargs.pop('hline')
-        idx = kwargs.pop('idx')
-        unit1 = kwargs.pop('unit1')
-        unit2 = kwargs.pop('unit2')
-        xmin = kwargs.pop('xmin')
-        xmax = kwargs.pop('xmax')
-        dist = kwargs.pop('dist')
+        iy = kwargs.pop('iy',-1)
+        vline = kwargs.pop('vline',np.array([]))
+        hline = kwargs.pop('hline',np.array([]))
+        idx = kwargs.pop('idx',[0,0,0,0,0,0,0])
+        unit1 = kwargs.pop('unit1','V')
+        unit2 = kwargs.pop('unit2','V')
+        xmin = kwargs.pop('xmin',-1e15)
+        xmax = kwargs.pop('xmax',1e15)
+        dist = kwargs.pop('dist',False)
+        logx = kwargs.pop('logx',False)
+        logy = kwargs.pop('logy',False)
         # filtering kwargs argument for plot function
         args = {}
         for k in kwargs:
-            if k not in defaults.keys():
-                args[k]=kwargs[k]
+            args[k]=kwargs[k]
 
         conversion = 1.0
         if ((unit1 == 'V') & (unit2 == 'mV')):
@@ -773,7 +756,7 @@ class Bsignal(PyLayers):
         #
         # if ndim(y) > 1
         #
-        
+
         if ndim == 4:
             Nmeas = self.y.shape[0]
             Nr = self.y.shape[1]
@@ -782,8 +765,8 @@ class Bsignal(PyLayers):
             if iy==-1:
                 fig,ax = plt.subplots(Nr,Nt)
                 if ((Nr==1) and (Nt==1)):
-                    ax = np.array([[ax]])    
-        
+                    ax = np.array([[ax]])
+
                 for k in range(Nr):
                     for l in range(Nt):
                         for ix in idx:
@@ -794,7 +777,7 @@ class Bsignal(PyLayers):
                 ax = np.array([[plt.gca()]])
                 yx = self.y[iy[0],iy[1],iy[2],u]
                 fig,a = mulcplot(self.x[u],yx*conversion,fig=fig,ax=ax[0,0],**args)
-               
+
 
         if ndim == 3:
             shy = self.y.shape
@@ -808,6 +791,7 @@ class Bsignal(PyLayers):
             fig,ax = mulcplot(self.x[u],yx*conversion,**args)
         if ndim == 1:
             fig,ax = mulcplot(self.x[u],self.y[u]*conversion,**args)
+
         #
         # Draw vertical and horizontal lines
         #
@@ -1522,8 +1506,8 @@ class TBsignal(Bsignal):
         Parameters
         ----------
 
-        Tns : 
-        Tsns : 
+        Tns :
+        Tsns :
 
 
         """
@@ -1843,7 +1827,7 @@ class TUsignal(TBsignal, Usignal):
         return(S)
 
     def fftsh(self):
-        """ return an FHsignal 
+        """ returns an FHsignal
 
         Warnings
         --------
@@ -1936,7 +1920,7 @@ class TUsignal(TBsignal, Usignal):
         #    u2.y = u2.y.reshape(1,M2)
 
         # get left shape and number of points on the last axis (time)
-        
+
         shl1 = u1.y.shape[0:-1]
         M1 = u1.y.shape[-1]
 
@@ -2400,9 +2384,39 @@ class TUsignal(TBsignal, Usignal):
 #            if k not in kwargs:
 #                kwargs[k]=defaults[k]
 #
-#        if kwargs['fGHz']!=[]:
 
-                    
+    def Impulse(self,**kwargs):
+        """
+        Create a Gaussian impulse (Usignal)
+
+        Parameters
+        ----------
+
+        fcGHz : float
+        WGHz : float
+        threshdB : float
+        feGHz : float
+
+        """
+
+        fcGHz = kwargs.pop('fcGHz',26)
+        fsGHz = kwargs.pop('feGHz',100)
+        t0 = kwargs.pop('t0',1)
+
+        Ts = 1.0 / fsGHz
+        Tww = 10 * t0
+
+        Ni = int(round(Tww / (2 * Ts)))
+        Tww = 2 * Ts * Ni
+
+        x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
+
+        y = np.exp(-(x / (np.sqrt(2)*t0)) ** 2) * np.cos(2 * np.pi * fcGHz * x)
+        self.x = x
+        self.y = y[None,:]
+
+        self.fcGHz = fcGHz
+
     def EnImpulse(self,**kwargs):
         """
         Create an energy normalized Gaussian impulse (Usignal)
@@ -2419,7 +2433,7 @@ class TUsignal(TBsignal, Usignal):
         defaults = {'fcGHz' : 4,
                     'WGHz' : 3,
                     'threshdB' : 10,
-                    'feGHz' : 20
+                    'fsGHz' : 20
                    }
 
         for k in defaults:
@@ -2428,18 +2442,18 @@ class TUsignal(TBsignal, Usignal):
 
         WGHz = kwargs.pop('WGHz')
         fcGHz = kwargs.pop('fcGHz')
-        feGHz = kwargs.pop('feGHz')
+        fsGHz = kwargs.pop('fsGHz')
         threshdB = kwargs.pop('threshdB')
 
         #TUsignal.__init__(self)
         Tp = (2 / (WGHz * np.pi)) * np.sqrt(abs(threshdB) * np.log(10) /20.)
         coeff = np.sqrt(2 * np.sqrt(2)/ (Tp * np.sqrt(np.pi)))
 
-        te = 1.0 / feGHz
+        ts = 1.0 / fsGHz
         Tww = 10 * Tp
-        Ni = int(round(Tww / (2 * te)))
-        # Tww/2 multiple de te
-        Tww = 2 * te * Ni
+        Ni = int(round(Tww / (2 * ts)))
+        # Tww/2 multiple de ts
+        Tww = 2 * ts * Ni
         x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
 
         y = coeff * np.exp(-(x / Tp) ** 2) * np.cos(2 * np.pi * fcGHz * x)
@@ -2447,26 +2461,6 @@ class TUsignal(TBsignal, Usignal):
         self.y = y[None,:]
         self.Tp = Tp
         self.fcGHz = fcGHz
-
-    #    def demo():
-    #        """ small demo in the docsting
-    #
-    #        Examples
-    #        --------
-    #
-    #        >>> from pylayers.signal.bsignal import *
-    #        >>> ip    = EnImpulse(fc=4,band=3,thresh=10,fe=100)
-    #        >>> Eip1  = ip.energy()
-    #        >>> ESDu  = ip.esd(mode='unilateral')
-    #        >>> ESDb  = ip.esd(mode='bilateral')
-    #        >>> df    = ESDu.dx()
-    #        >>> Eipu  = sum(ESDu.y)*df
-    #        >>> Eipb  = sum(ESDb.y)*df
-    #        >>> erru  = Eip1-Eipu
-    #        >>> errb  = Eip1-Eipb
-    #
-    #        """
-    #        pass
 
 
     def MaskImpulse(self,**kwargs):
@@ -2512,13 +2506,6 @@ class TUsignal(TBsignal, Usignal):
             y = A * np.exp(-(x / tau) ** 2) * np.cos(2 * np.pi * fc * x)
             self.x = x
             self.y = y
-
-    #    def show(self):
-    #        plt.subplot(211)
-    #        self.plot()
-    #        plt.subplot(212)
-    #        P = self.psd(self.Tp, self.R)
-    #        P.plotdB(mask=True)
 
 
 class FBsignal(Bsignal):
@@ -2592,7 +2579,7 @@ class FBsignal(Bsignal):
             default True
         iy : index of y value to be displayed
         typ : string
-            ['l10','l20','d','r','du','ru']
+            ['l10','m,'l20','d','r','du','ru']
         xlabels
         ylabels
 

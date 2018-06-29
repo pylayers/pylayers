@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-""" Qt Standalone Layout editor 
+""" Qt Standalone Layout editor
 
 .. automodule::
     :members:
@@ -12,7 +12,7 @@ if 'QT_API' in os.environ:
     if os.environ['QT_API'] != 'pyqt':
         saveQTAPI = os.environ['QT_API']
         os.environ['QT_API'] = 'pyqt'
-else: 
+else:
     saveQTAPI = ''
     os.environ['QT_API'] = 'pyqt'
 
@@ -360,7 +360,7 @@ class PropertiesWin(QDialog):    # any super class is okay
                 widkey = k
                 break
         # here it is supposed that larger key number are at the lowest level
-        lw = self.dwidget.keys()
+        lw = list(self.dwidget.keys())
         lw.sort()
         ulw = lw.index(k)
 
@@ -1525,7 +1525,7 @@ class AppForm(QMainWindow):
         try:
             self.layerselector=QComboBox()
             self.slabDB = sb.SlabDB('slabDB.ini')
-            self.slabname= self.slabDB.keys()
+            self.slabname= list(self.slabDB.keys())
             self.slabname.sort()
             for s in self.slabname:
                 self.layerselector.addItem(s)

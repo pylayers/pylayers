@@ -1614,7 +1614,6 @@ class DLink(Link):
         #############
         # get 2D rays
         #############
-        pdb.set_trace()
         if self.dexist['ray2']['exist'] and not ('ray2' in kwargs['force']):
             logger.info(" Load r2d from %s", self.dexist['ray2']['grpname'])
             self.load(r2d,self.dexist['ray2']['grpname'], L=self.L)
@@ -1687,7 +1686,7 @@ class DLink(Link):
             raise NameError('No rays have been found. Try to re-run the simulation with a higher S.cutoff ')
         try:
             pbar.update(20)
-        except: 
+        except:
             pass
         ############
         # Ctilde
@@ -1729,7 +1728,7 @@ class DLink(Link):
         self.H = H
         try:
             pbar.update(20)
-        except: 
+        except:
             pass
 
         if kwargs['applywav']:
@@ -1739,7 +1738,7 @@ class DLink(Link):
                 self.ir = self.H.get_cir(self.wav.sfg)
         try:
             pbar.update(20)
-        except: 
+        except:
             pass
         self.checkh5()
 
@@ -2193,8 +2192,6 @@ class DLink(Link):
 
     def _show3(self,rays=True, lay= True, ant= True, newfig= False, **kwargs):
         """ display the simulation scene using Mayavi
-            using Mayavi
-
 
         Parameters
         ----------
@@ -2262,18 +2259,7 @@ class DLink(Link):
             # evaluate antenna if required
             if not Atx.evaluated:
                 Atx.eval()
-#            try:
-#                Atx._show3(T=Ttx.reshape(3,3),
-#                           po=ptx,
-#                           title=False,
-#                           bcolorbar=False,
-#                           bnewfig=False,
-#                           bcircle = False,
-#                           name = Atx._filename,
-#                           scale= scale,
-#                           binteract=False)
-#            except:
-#                Atx.eval()
+
             Atx._show3(T=Ttx.reshape(3,3),
                         po=ptx,
                         title=False,
@@ -2283,20 +2269,10 @@ class DLink(Link):
                         name = Atx._filename,
                         scale= scale,
                         binteract=False)
+
             if not Arx.evaluated:
                 Arx.eval()
-#            try:
-#                Arx._show3(T=Trx.reshape(3,3),
-#                            po=prx,
-#                            title=False,
-#                            bcolorbar=False,
-#                            bnewfig=False,
-#                            bcircle = False,
-#                            name = Arx._filename,
-#                            scale= scale,
-#                            binteract=False)
-#            except:
-                #Arx.eval()
+
             Arx._show3(T=Trx.reshape(3,3),
                         po=prx,
                         title=False,
@@ -2307,32 +2283,12 @@ class DLink(Link):
                         scale= scale,
                         binteract=False)
         if lay:
-            # check if indoor/outdoor, outdoor or indoor situations
-            # a_in = self.L.Gt.node[self.ca]['indoor']
-            # b_in = self.L.Gt.node[self.cb]['indoor']
-
-            # if (a_in) & (b_in):
-            #     # indoor
-            #     show_ceil=False
-            #     opacity = 0.7
-            #     ceil_opacity = 0.
-            # elif ((not a_in) & (not b_in)):
-            #     # outdoor
-            #     show_ceil=True
-            #     opacity = 1.
-            #     ceil_opacity = 1.
-            # else:
-            #     # indoor/outdoor
-            #     show_ceil=True
-            #     opacity = 0.7
-            #     ceil_opacity = 0.7
-
             if self.L.typ == 'outdoor':
-                show_ceil=True
+                show_ceil = False
                 opacity = 1.
                 ceil_opacity = 1.
             elif self.L.typ == 'indoor':
-                show_ceil=False
+                show_ceil = True
                 opacity = 0.7
                 ceil_opacity = 0.
 

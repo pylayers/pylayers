@@ -3016,27 +3016,25 @@ class Mchannel(bs.FUsignal):
         return(rho,Cwf)
 
     def plot2(self,fig=[],ax=[],mode='time'):
-        
+
         if fig ==[]:
-            fig = plt.gcf()  
+            fig = plt.gcf()
         if ax ==[]:
             ax = plt.gca()
-        
+
         if mode=='time':
             cir = self.ift(ffts=1)
             y = cir.y
-            x = cir.x 
+            x = cir.x
         else:
             y = self.y
-            x = self.x    
+            x = self.x
 
         my = np.mean(np.abs(y),axis=0)
         yc = np.abs(y)-my[None,...] # TD centered      ; TDc.shape : (85, 4, 8, 801)
 
         yc2 = np.abs(yc)**2 # square of TD centered     ; TDc2.shape : (85, 4, 8, 801)
         vary = np.mean(yc2,axis=0) #variance of TD  ; varTD.shape : (4, 8, 801)
-        
-        
 
         cpt = 0
         for r in range(self.Nr):
@@ -3047,7 +3045,6 @@ class Mchannel(bs.FUsignal):
                 #l1, = ax.plot(self.x,np.sqrt(vary[r,t,:]),linewidth=1,alpha=1)
                 #l2, = ax.plot(self.x,my[r,t,:],color='r',linewidth=1,alpha=1)
                 l2, = ax.plot(x,my[r,t,:],linewidth=1,alpha=1)
-                
                 ticksx = ax.axes.get_xticklabels()
                 ticksy = ax.axes.get_yticklabels()
                 plt.setp(ticksx, visible=True)
@@ -3380,8 +3377,7 @@ class Tchannel(bs.FUsignal):
 
 
     def applywav(self, Wgam=[]):
-        """ apply waveform (time domain ) to obtain the
-            rays impulses response
+        """ apply waveform (time domain ) to obtain the rays impulses response
 
         Parameters
         ----------
@@ -4604,9 +4600,8 @@ class Tchannel(bs.FUsignal):
 
 
         """
-
         tau = self.taud + self.taue
-        taumin = min(tau) 
+        taumin = min(tau)
         taumax = max(tau)
         dtau = (taumax-taumin)
         self.s = self.ift(Nz, ffts)

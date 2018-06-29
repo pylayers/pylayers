@@ -62,7 +62,7 @@ class Waveform(dict):
                 'fGHz':[],
                 'WGHz': 0.499,
                 'fcGHz': 4.493,
-                'feGHz': 100,
+                'fsGHz': 100,
                 'threshdB': 3,
                 'twns': 30}
 
@@ -90,16 +90,16 @@ class Waveform(dict):
         elif self['typ'] == 'W1offset':
             [st,sf]=self.fromfile2()
         elif self['typ'] == 'blackmann':
-            sf = FUsignal(x=fGHz,y=np.blackman(len(fGHz)))
+            sf = bs.FUsignal(x=fGHz,y=np.blackman(len(fGHz)))
+            st = sf.ift()
+        elif self['typ'] == 'rect':
+            sf = bs.FUsignal(x=fGHz,y=np.ones(len(fGHz)))
             st = sf.ift()
         elif self['typ'] == 'hamming':
-            sf = FUsignal(x=fGHz,y=np.ones(len(fGHz)))
-            st = sf.ift()
-        elif self['typ'] == 'hamming':
-            sf = FUsignal(x=fGHz,y=np.hamming(len(fGHz)))
+            sf = bs.FUsignal(x=fGHz,y=np.hamming(len(fGHz)))
             st = sf.ift()
         elif self['typ'] == 'ref156':
-            [st,sf]=self.ref156() 
+            [st,sf] = self.ref156()
         else:
             logging.critical('waveform typ not recognized, check your config \
                              file')
@@ -121,7 +121,7 @@ class Waveform(dict):
         -------
 
         >>> from pylayers.signal.waveform import *
-        >>> w = Waveform(typ='generic',WGHz=0.499,fcGHz=4.49,feGHz=100,threshdB=3,twns=30)
+        >>> w = Waveform(typ='generic',WGHz=0.499,fcGHz=4.49,fsGHz=100,threshdB=3,twns=30)
         >>> w.show()
         >>> plt.show()
 
@@ -161,16 +161,16 @@ class Waveform(dict):
         fcGHz = self['fcGHz']
         WGHz = self['WGHz']
         thresh = self['threshdB']
-        feGHz = self['feGHz']
-        te = 1.0/feGHz
+        fsGHz = self['fsGHz']
+        ts = 1.0/fsGHz
 
-        self['te'] = te
-        Np = feGHz*Tw
+        self['ts'] = ts
+        Np = fsGHz*Tw
         self['Np'] = Np
-        #x      = np.linspace(-0.5*Tw+te/2,0.5*Tw+te/2,Np,endpoint=False)
-        #x     = arange(-Tw,Tw,te)
+        #x = np.linspace(-0.5*Tw+ts/2,0.5*Tw+ts/2,Np,endpoint=False)
+        #x = arange(-Tw,Tw,ts)
         w = bs.TUsignal()
-        w.EnImpulse(fcGHz=fcGHz,WGHz=WGHz,threshdB=thresh,feGHz=feGHz)
+        w.EnImpulse(fcGHz=fcGHz,WGHz=WGHz,threshdB=thresh,fsGHz=fsGHz)
         #W = w.ft()
         W = w.ft()
         return (w,W)
@@ -181,7 +181,7 @@ class Waveform(dict):
         Parameters
         ----------
 
-        beta : float 
+        beta : float
             roll-off factor
         Tns = 1/499.2MHz
 
@@ -192,11 +192,12 @@ class Waveform(dict):
 
         """
         Tw = self['twns']
-        fe = self['feGHz']
-        te = 1./fe
+        fs = self['fsGHz']
+        Np = Tw*fs
+        Ts = 1./fs
         beta = 0.5
         Tns = 1./0.4992
-        x = np.linspace(-0.5*Tw+te/2, 0.5*Tw+te/2, Np, endpoint=False)
+        x = np.linspace(-0.5*Tw+Ts/2, 0.5*Tw+Ts/2, Np, endpoint=False)
         z = x/Tns
         t1 = np.sin(np.pi*(1-beta)*z)
         t2 = np.cos(np.pi*(1+beta)*z)
@@ -205,7 +206,7 @@ class Waveform(dict):
 
         st = bs.TUsignal()
         st.x = x
-        st.y = y
+        st.y = y[None,:]
         sf = st.ftshift()
 
         return(st,sf)
@@ -227,7 +228,7 @@ class Waveform(dict):
 
         ts = M.RAW_DATA.timetx[0]
         tns = ts*1e9
-        te = tns[1]-tns[0]
+        ts = tns[1]-tns[0]
 
         y  = M.RAW_DATA.tx[0]
 
@@ -242,8 +243,8 @@ class Waveform(dict):
 
         yzp = np.zeros(len(yap)-len(ybp)-1)
 
-        tnsp = np.arange(0, tns[-1]-tns[u]+0.5*te, te)
-        tnsm = np.arange(-(tns[-1]-tns[u]), 0, te)
+        tnsp = np.arange(0, tns[-1]-tns[u]+0.5*ts, ts)
+        tnsm = np.arange(-(tns[-1]-tns[u]), 0, ts)
 
         y = np.hstack((yzp, np.hstack((ybp, yap))))
         tns = np.hstack((tnsm, tnsp))
@@ -276,7 +277,7 @@ class Waveform(dict):
 
         ts = M.RAW_DATA.timetx[0]
         tns = ts*1e9
-        te = tns[1]-tns[0]
+        Ts = tns[1]-tns[0]
 
         y  = M.RAW_DATA.tx[0]
 
@@ -291,10 +292,10 @@ class Waveform(dict):
 
         yzp = np.zeros(len(y)-1)
 
-#        tnsp = np.arange(0,tns[-1]-tns[u]+0.5*te,te)
-#        tnsm = np.arange(-(tns[-1]-tns[u]),0,te)
+#        tnsp = np.arange(0,tns[-1]-tns[u]+0.5*ts,ts)
+#        tnsm = np.arange(-(tns[-1]-tns[u]),0,ts)
         N = len(ts)-1
-        tnsm = np.linspace(-tns[-1],-te,N)
+        tnsm = np.linspace(-tns[-1],-Ts,N)
         y = np.hstack((yzp,y))
         tns = np.hstack((tnsm,tns))
 
@@ -349,9 +350,9 @@ class Waveform(dict):
         ----------
 
         th_ratio : float
-            threshold ratio 
+            threshold ratio
             threshold = max(abs())/th_ratio
-        Npt : Number of points 
+        Npt : Number of points
 
         """
         u=np.where(np.abs(self.sf.y)>np.max(np.abs(self.sf.y))/th_ratio)
@@ -373,7 +374,7 @@ class Waveform(dict):
              'fc (GHz)',
              'W (GHz)',
              'thresh (dB)',
-             'fe (GHz) integer value'),
+             'fs (GHz) integer value'),
             ( self['twns'] ,
             self['fcGHz'] ,
             self['WGHz'] ,
@@ -385,7 +386,7 @@ class Waveform(dict):
             self.parameters['fcGHz']    = eval(wavegui[1])
             self.parameters['WGHz']  = eval(wavegui[2])
             self.parameters['threshdB'] = eval(wavegui[3])
-            self.parameters['feGHz']    = eval(wavegui[4])
+            self.parameters['fsGHz']    = eval(wavegui[4])
 
             [st,sf]       = self.ip_generic()
             self.st       = st

@@ -1491,6 +1491,8 @@ class SelectL2(object):
         """ split seg into 2 seg with same length
         """
         pt_new = geu.ptonseg(self.pta1, self.phe1, self.ptsel)
+        print(pt_new)
+        print(self.pta1)
         pd1 = pt_new - self.pta1
         pd2 = self.phe1 - self.pta1
         alpha = np.sqrt(np.dot(pd1, pd1)) / np.sqrt(np.dot(pd2, pd2))
