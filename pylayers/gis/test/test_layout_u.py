@@ -4,6 +4,20 @@ from pylayers.gis.layout import *
 L1 = Layout('defstr.lay')
 class TestLayout(unittest.TestCase):
 
+    def test_add_fnod(self):
+        L = Layout('defstr.lay')
+        L.add_fnod(p=(10,10))
+        self.assertEqual(L.Np,13)
+
+    def test_add_furniture(self):
+        L = Layout('defstr.lay')
+        L.add_furniture(name='R1_C',
+                         matname='PARTITION', origin=(5., 5.),
+                         zmin=0.,
+                         height=1.,
+                         width=1.,
+                         length=1.,
+                         angle=0.)
     def test_load(self):
         self.assertEqual(L1.Np,12)
         self.assertEqual(L1.Ns,15)
@@ -45,3 +59,137 @@ class TestLayout(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+# add_furniture
+# add_furniture_file
+# add_nfpe
+# _addoutcy
+# add_pnod
+# add_pons
+# add_segment
+# angleonlink
+# angleonlink3
+# angleonlinkold
+# boundary
+# build
+# buildGi
+# buildGr
+# buildGt
+# buildGv
+# buildGw
+# check
+# check2
+# check_Gi
+# cleanup
+# clip
+# closest_edge
+# _convex_hull
+# cy2pt
+# cycleinline
+# _delaunay
+# del_points
+# del_segment
+# diag
+# distwall
+# dumpr
+# dumpw
+# ed2nd
+# editor
+# editorTk
+# edit_seg
+# exportosm
+# extrseg
+# facet3D
+# facets3D
+# filterGi
+# _find_diffractions
+# find_edgelist
+# g2npy
+# geomfile
+# getangles
+# get_diffslab
+# get_paths
+# get_points
+# get_Sg_pos
+# get_zone
+# have_subseg
+# importosm
+# importres
+# importshp
+# info
+# info_segment
+# intercy
+# _interlist
+# isindoor
+# ispoint
+# isseg
+# layerongrid
+# layeronlink
+# load
+# loadfur
+# load_modif
+# ls
+# mask
+# _merge_polygons
+# merge_segment
+# nd2seg
+# numseg
+# off_overlay
+# offset_index
+# onseg
+# outputGi
+# outputGi_mp
+# outputGi_new
+# plot
+# plot_segments
+# pltlines
+# pltpoly
+# pltvnodes
+# point_touches_seg
+# polysh2geu
+# pt2cy
+# pt2ro
+# ptGs2cy
+# ptin
+# randTxRx
+# repair
+# room2nodes
+# room2segments
+# rotate
+# save
+# scl_overlay
+# seg2pts
+# seg2ro
+# seginframe
+# seginframe2
+# seginline
+# seg_intersection
+# segpt
+# seguv
+# show
+# show3
+# _show3
+# showG
+# _showGi
+# showGs
+# _showGt
+# _showGv
+# show_layer
+# show_nodes
+# show_seg1
+# show_segment
+# showSig
+# signature
+# subseg
+# thwall
+# translate
+# _triangle
+# _triangle_old
+# updateshseg
+# _updGsncy
+# visilist
+# visi_papb
+# _visual_check
+# waypointGw
+# wedge
+# wedge2

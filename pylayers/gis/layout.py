@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 #
 #
-#   LAYOUT  Module
+#   Layout  Module
 #
-#
+#   unittesting in tests/tes_layout_u.py 
 #
 """
 .. currentmodule:: pylayers.gis.layout
@@ -3105,10 +3105,10 @@ class Layout(pro.PyLayers):
         n2 = self.add_fnod(p2)
         n3 = self.add_fnod(p3)
         # adding segments
-        self.add_segment(n0, n1, matname, [zmin, zmin + height])
-        self.add_segment(n1, n2, matname, [zmin, zmin + height])
-        self.add_segment(n2, n3, matname, [zmin, zmin + height])
-        self.add_segment(n3, n0, matname, [zmin, zmin + height])
+        self.add_segment(n0, n1, name=matname, z=(zmin, zmin + height))
+        self.add_segment(n1, n2, name=matname, z=(zmin, zmin + height))
+        self.add_segment(n2, n3, name=matname, z=(zmin, zmin + height))
+        self.add_segment(n3, n0, name=matname, z=(zmin, zmin + height))
 
     def add_furniture_file(self, _filefur, typ=''):
         """  add pieces of furniture from .ini files
