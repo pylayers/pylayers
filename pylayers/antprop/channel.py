@@ -3746,6 +3746,10 @@ class Tchannel(bs.FUsignal):
 
         Etot = self.energy(mode=mode) + 1e-15
         EtotdB = 10*np.log10(Etot)
+        if vmax == []:
+            vmax = EtotdB.max()
+        if vmin == []:
+            vmin = EtotdB.min()
         EtotdB = np.minimum(EtotdB,vmax)
         EtotdB = np.maximum(EtotdB,vmin)
 
@@ -3773,8 +3777,7 @@ class Tchannel(bs.FUsignal):
         else :
             al = 180. / np.pi
             alb = 180. / np.pi
-
-        col = (EtotdB - vmin)/(vmax-vmin)
+        col = ((EtotdB - vmin)/(vmax-vmin)).squeeze()
         kwargs['c'] = col
         kwargs['s'] = 200*col
         kwargs['vmin'] = 0.
