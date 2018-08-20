@@ -1973,7 +1973,7 @@ class Layout(pro.PyLayers):
                 if (cond1 and (not cond5) and (not cond6)) or cond7: 
                     d = copy.deepcopy(self.Gs.node[n])
                     # v1.1 d['connect'] = nx.neighbors(self.Gs, n)
-                    d['connect'] = self.Gs[n].keys()
+                    d['connect'] = list(self.Gs[n].keys())
                     try:
                         if d['transition']:
                             pass
