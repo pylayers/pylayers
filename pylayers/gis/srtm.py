@@ -16,7 +16,7 @@ import glob
 """Load and process SRTM data."""
 
 #import xml.dom.minidom
-from HTMLParser import HTMLParser
+from html.parser import HTMLParser
 import ftplib
 import sys
 if sys.version_info.major==2:

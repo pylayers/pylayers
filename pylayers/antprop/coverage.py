@@ -103,6 +103,7 @@ class Coverage(PyLayers):
 
         # get the Layout
         filename = self.layoutopt['filename']
+        print(filename)
         if filename.endswith('lay'):
             self.typ = 'indoor'
             self.L = Layout(filename)
