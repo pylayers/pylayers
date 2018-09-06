@@ -740,7 +740,7 @@ def getosm(address='Rennes', latlon=0, dist_m=400,
         lnodes_id+=ways.w[iw][0]
     # list of all nodes of coords
     lnodes_id   = np.unique(np.array(lnodes_id))
-    lnodes_full = np.unique(np.array(coords.latlon.keys()))
+    lnodes_full = np.unique(np.array(list(coords.latlon.keys())))
     mask = np.in1d(lnodes_full,lnodes_id,invert=True)
     # nodes not involved in buildings
     lexcluded = lnodes_full[mask]
@@ -749,24 +749,24 @@ def getosm(address='Rennes', latlon=0, dist_m=400,
     for iw in ways.w:
         ways.way[iw].tags = {}
         # material
-        if ways.w[iw][1].has_key('material'):
+        if 'material' in ways.w[iw][1]:
             ways.way[iw].tags['name']=ways.w[iw][1]['material']
-        elif ways.w[iw][1].has_key('building:material'):
+        elif 'building:material' in ways.w[iw][1]:
             ways.way[iw].tags['name']=ways.w[iw][1]['building:material']
         else:
             ways.way[iw].tags['name']='WALL'
 
         # min_height
-        if ways.w[iw][1].has_key('building:min_height'):
+        if 'building:min_height' in ways.w[iw][1]:
             min_height = eval(ways.w[iw][1]['building:min_height'])
         else:
             min_height = 0
         # height
-        if ways.w[iw][1].has_key('height'):
+        if 'height' in ways.w[iw][1]:
             ways.way[iw].tags['z'] = (min_height, eval(ways.w[iw][1]['height']))
-        elif ways.w[iw][1].has_key('building:height'):
+        elif 'building:height' in ways.w[iw][1]:
             ways.way[iw].tags['z'] = (min_height, eval(ways.w[iw][1]['building:height']))
-        elif ways.w[iw][1].has_key('building:levels'):
+        elif 'building:levels' in ways.w[iw][1]:
             nb_levels = eval(ways.w[iw][1]['building:levels'])
             if type(nb_levels)!=int:
                 try:
@@ -774,7 +774,7 @@ def getosm(address='Rennes', latlon=0, dist_m=400,
                 except:
                     nb_levels=2
             ways.way[iw].tags['z']=(min_height,nb_levels*level_height)
-        elif ways.w[iw][1].has_key('levels'):
+        elif 'levels' in ways.w[iw][1]:
             nb_levels = eval(ways.w[iw][1]['levels'])
             if type(nb_levels)!=int:
                 try:

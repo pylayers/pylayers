@@ -1650,8 +1650,8 @@ class Layout(pro.PyLayers):
 
         kp = [k for k in coords.xy]
 
-        x = np.array(map(lambda x: coords.xy[x][0], kp))
-        y = np.array(map(lambda x: coords.xy[x][1], kp))
+        x = np.array(list(map(lambda x: coords.xy[x][0], kp)))
+        y = np.array(list(map(lambda x: coords.xy[x][1], kp)))
         ux = np.argsort(x)
         x_prev = -100
         y_prev = -100
@@ -1739,9 +1739,11 @@ class Layout(pro.PyLayers):
                 #
                 #v1.1 u1 = np.array(nx.neighbors(self.Gs, nta))
                 #v1.1 u2 = np.array(nx.neighbors(self.Gs, nhe))
-                u1 = np.array(self.Gs[nta])
-                u2 = np.array(self.Gs[nhe])
-                inter_u1_u2 = np.intersect1d(u1, u2)
+                # import ipdb
+                # ipdb.set_trace()
+                # u1 = np.array(self.Gs.node[nta])
+                # u2 = np.array(self.Gs.node[nhe])
+                # inter_u1_u2 = np.intersect1d(u1, u2)
                 #
                 # Create  a new segment (iso segments are managed in add_segment)
                 #
@@ -1976,7 +1978,7 @@ class Layout(pro.PyLayers):
                 if (cond1 and (not cond5) and (not cond6)) or cond7: 
                     d = copy.deepcopy(self.Gs.node[n])
                     # v1.1 d['connect'] = nx.neighbors(self.Gs, n)
-                    d['connect'] = self.Gs[n].keys()
+                    d['connect'] = list(self.Gs[n].keys())
                     try:
                         if d['transition']:
                             pass

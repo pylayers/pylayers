@@ -399,9 +399,12 @@ class DLink(Link):
                         output = self.L.Gi[e[0]][e[1]]['output']
                     except:
                         pdb.set_trace()
+                    tbd = []
                     for l in output.keys():
                         if l in lTiw:
-                            del output[l]
+                            tbd.append(l)
+                    for d in tbd : 
+                        del output[d]
 
                     self.L.Gi[e[0]][e[1]]['output']=output
             #self.L.dumpw()
@@ -2341,6 +2344,7 @@ class DLink(Link):
         pos = eval('self.'+ant)
 
         #if not antenna.full_evaluated:
+        # if not antenna.full_evaluated:
         if not antenna.evaluated:
             antenna.eval()
 
