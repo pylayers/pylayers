@@ -837,6 +837,19 @@ class Ezone(PyLayers):
             lon,lat
         pb : np.array (Nx2)
             lon,lat
+        Nr  :
+        Ha  : float
+            antenna a height
+        Hb  : float
+            antenna b height
+        fGHz : float
+            frequency
+        K   : float 
+            K facteur (default 4/3)
+        method :
+        source :
+        binterb : boolean
+            interpolation (default True)
 
         Returns
         -------
@@ -855,7 +868,7 @@ class Ezone(PyLayers):
         fGHz = kwargs.pop('fGHz',0.868)
         K = kwargs.pop('K',1.333)
         method = kwargs.pop('method','deygout')
-        source = kwargs.pop('source','deygout')
+        source = kwargs.pop('source','srtm')
         binterp = kwargs.pop('binterp',True)
         divider = kwargs.pop('divider',[])
 

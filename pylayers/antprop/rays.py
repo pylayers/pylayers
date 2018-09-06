@@ -635,7 +635,7 @@ class Rays(PyLayers, dict):
 
 
         lr=[]
-        for ur,r in enumerate(xrange(self.nray)):
+        for ur,r in enumerate(range(self.nray)):
             li = self.ray2ityp(r)
             nRli = li.count('R')
             nTli = li.count('T')

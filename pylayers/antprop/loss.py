@@ -1285,7 +1285,7 @@ def route(X, Y, Z, Ha, Hb, fGHz, K, method='deygout'):
     L = np.zeros((Nphi, Nf))
     L0 = np.zeros(Nf)
     # loop over azimut
-    for ip in xrange(Nphi):
+    for ip in range(Nphi):
         x = X[ip, :]
         y = Y[ip, :]
         z = Z[ip, :]
