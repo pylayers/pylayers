@@ -3,7 +3,7 @@
 #
 #   Layout  Module
 #
-#   unittesting in tests/tes_layout_u.py 
+#   unittesting in tests/test_layout_u.py
 #
 """
 .. currentmodule:: pylayers.gis.layout
@@ -966,6 +966,11 @@ class Layout(pro.PyLayers):
         xmax : float
         ymin : float
         ymax : float
+
+        Returns
+        -------
+
+        seglist : list of segment number
 
         Notes
         -----
@@ -9244,7 +9249,7 @@ class Layout(pro.PyLayers):
             raise NameError(str(pt) + " is not in any cycle")
 
     def cy2pt(self, cy=0, h=1.2):
-        """return a point into a given cycle
+        """returns a point into a given cycle
 
         Parameters
         ----------
@@ -9259,6 +9264,7 @@ class Layout(pro.PyLayers):
         -------
 
         point  : nd.array
+            3d point
 
         See Also
         --------

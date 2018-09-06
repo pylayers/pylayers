@@ -2340,7 +2340,8 @@ class DLink(Link):
         rot = eval('self.T'+ant).reshape(3,3)
         pos = eval('self.'+ant)
 
-        if not antenna.full_evaluated:
+        #if not antenna.full_evaluated:
+        if not antenna.evaluated:
             antenna.eval()
 
 

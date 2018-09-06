@@ -1,6 +1,5 @@
 import unittest
 from pylayers.gis.layout import *
-
 L1 = Layout('defstr.lay')
 class TestLayout(unittest.TestCase):
 
@@ -96,6 +95,18 @@ class TestLayout(unittest.TestCase):
         pt2 = L1.Gs.pos[-7]
         liseg,lipsh = L1.seg_intersection(**{'ta':pt1,'he':pt2})
 
+    def test_clip(self):
+        seglist =  L1.clip(2,8,2,4)
+        self.assertEqual(sum(seglist),10)
+
+    def test_cy2pt(self):
+        L = Layout('defstr.lay')
+        L.build()
+        pt = L.cy2pt(2)
+
+    def test_geomfile(self):
+        L1.geomfile()
+
 if __name__ == '__main__':
     unittest.main()
 
@@ -109,11 +120,6 @@ if __name__ == '__main__':
 # buildGt
 # buildGv
 # buildGw
-# check
-# check2
-# check_Gi
-# clip
-# closest_edge
 # _convex_hull
 # cy2pt
 # cycleinline

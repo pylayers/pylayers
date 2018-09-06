@@ -6,15 +6,15 @@ import pylayers.signal.waveform as wvf
 from pylayers.simul.link import *
 import matplotlib.pyplot as plt
 import time
-print "======================="
-print " start test_reciprocity.py "
-print "======================="
-S1 = DLink(L='defstr.ini')
-S2 = DLink(L='defstr.ini')
-S1.a=array([759,1114,1.0])
-S1.b=array([767,1114,1.5])
-S2.a=array([767,1114,1.5])
-S2.b=array([759,1114,1.0])
+print( "=======================")
+print( " start test_reciprocity.py ")
+print( "=======================")
+S1 = DLink(L='defstr.lay')
+S2 = DLink(L='defstr.lay')
+S1.a=array([2,2,1.0])
+S1.b=array([8,4,1.5])
+S2.a=array([8,4,1.5])
+S2.b=array([2,2,1.0])
 fGHz =np.arange(2,11,0.1)
 wav = wvf.Waveform(fcGHz=5,bandGHz=3)
 #

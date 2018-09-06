@@ -1,4 +1,3 @@
-from pylayers.simul.simulem import *
 from pylayers.antprop.rays import *
 from pylayers.antprop.channel import *
 from pylayers.antprop.signature import *
@@ -20,13 +19,12 @@ import pylayers.signal.waveform as wvf
 # Generation de la CIR
 from pylayers.simul.link import *
 # Sauvegarde
-import cPickle as pickle
 import scipy.io as sio
 import time
 
 
 S = Simul()
-S.layout('TA-Office.ini')
+S.layout('TA-Office.lay')
 AnchorNodes = {1:{'name':'Tag_1','coord':[35, 3, 1.64]},
                2:{'name':'Tag_2','coord':[39, 6, 1.64]},
                3:{'name':'Tag_2','coord':[30, 13, 1.64]},
@@ -69,7 +67,7 @@ wav.show(fig=fig)
 #fGHz = wav.bandwidth(th_ratio=100,Npt=200)
 fGHz = np.linspace(2.5,7.5,60)
 
-L=Layout('TA-Office.ini')
+L=Layout('TA-Office.lay')
 link = DLink(force=True,L=L, fGHz=fGHz, verbose=False)
 link.fGHz=fGHz
 
@@ -79,7 +77,7 @@ link.b = S.rx.position[:,22]
 
 
 
-print "eval ..."
+print("eval ...")
 #tic1 = time.clock()
 #(ak,tauk)= link.eval(force=['sig','R','Ct','H'],alg=2015,ra_ceil_height_meter=3,ra_number_mirror_cf=1,verbose=False)
 #tic2 = time.clock()
@@ -95,7 +93,7 @@ tic5 = time.clock()
 #print "Algo 5 (new procone) :",tic5-tic4,len(link.Si),len(link.Si.keys())
 (ak,tauk)= link.eval(force=['sig','R','Ct','H'],alg=1,ra_ceil_height_meter=3,ra_number_mirror_cf=1,verbose=False,cutoff=4)
 tic6 = time.clock()
-print "Algo 7  :",tic6-tic5,len(link.Si),len(link.Si.keys())
+print("Algo 7  :",tic6-tic5,len(link.Si),len(link.Si.keys()))
 #print "apply ..."
 #ciro = link.H.applywav(wav.sfg)
 #

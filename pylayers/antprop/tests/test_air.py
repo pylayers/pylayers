@@ -76,7 +76,7 @@ BiN_1 = DL1.R[1]['BiN'][:,:,0]
 N0 = Bo0_0
 N1 = Bi_0[:,:,0]
 A = np.dot(N1.T,N0)
-print A
+print( A)
 M0 = Bo0_1
 I  = np.eye(3)
 M1 = Bi_1[:,:,0]
@@ -86,7 +86,7 @@ T1 = np.dot(M1.T,M0)
 T2 = np.dot(I,T1)
 T3 = np.dot(M2,T2)
 T4 = np.dot(M3.T,T3)
-print T4 
+print( T4 )
 #print np.dot(M2.T,M1)
 A1 = DL0.R[1]['B'][:,:,0,0]
 A2 = DL0.R[1]['B'][:,:,1,0]
@@ -99,7 +99,7 @@ B2 = DL1.R[2]['B'][:,:,1,0]
 B3 = DL1.R[2]['B'][:,:,2,0]
 R1  = DL1.R.I.I[0,2,:,:]
 res1 = np.dot(B3,np.dot(R1,np.dot(B2,B1)))
-print res0-res1
+print( res0-res1)
 #U = Bi_1[:,:,0]
 #V = Bo_1[:,:,0]
 #B = np.dot(Bi_1[:,:,0].T,Bo0_1)
