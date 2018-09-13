@@ -21,8 +21,10 @@ import ftplib
 import sys
 if sys.version_info.major==2:
     import urllib2
+    _PY3=False
 else:
-    import urllib3 as urllib2
+    from urllib.request import urlopen
+    _PY3=True
 import re
 import pickle
 import os.path
@@ -135,15 +137,19 @@ class SRTMDownloader:
         30may2010  GJ ORIGINAL VERSION
         """
         print("createFileListHTTP")
-        conn = urllib2.Request('http://'+self.server+'/'+self.directory)
-        r1 = urllib2.urlopen(conn)
+        if _PY3:
+            r1 = urlopen('http://'+self.server+'/'+self.directory)
+        else:
+            conn = urllib2.Request('http://'+self.server+'/'+self.directory)
+            r1 = urllib2.urlopen(conn)
         #if r1.status==200:
         #    print "status200 received ok"
         #else:
         #    print "oh no = status=%d %s" \
         #          % (r1.status,r1.reason)
-
         data = r1.read()
+        if isinstance(data,bytes):
+            data=data.decode()
         parser = parseHTMLDirectoryListing()
         parser.feed(data)
         continents = parser.getDirListing()
@@ -151,9 +157,14 @@ class SRTMDownloader:
 
         for continent in continents:
             print("Downloading file list for", continent)
-            conn = urllib2.Request('http://'+self.server+'/'+self.directory+'/'+continent)
-            r1 = urllib2.urlopen(conn)
+            if _PY3:
+                r1 = urlopen('http://'+self.server+'/'+self.directory+'/'+continent)
+            else:
+                conn = urllib2.Request('http://'+self.server+'/'+self.directory+'/'+continent)
+                r1 = urllib2.urlopen(conn)
             data = r1.read()
+            if isinstance(data,bytes):
+                data=data.decode()
             parser = parseHTMLDirectoryListing()
             parser.feed(data)
             files = parser.getDirListing()
@@ -221,8 +232,12 @@ class SRTMDownloader:
                 ftp.close()
         else:
             #Use HTTP
-            conn = urllib2.Request('http://'+self.server+'/'+self.directory+'/'+continent+'/'+filename)
-            r1 = urllib2.urlopen(conn)
+            if _PY3:
+                r1 = urlopen('http://'+self.server+'/'+self.directory+'/'+continent+'/'+filename)
+            else:
+
+                conn = urllib2.Request('http://'+self.server+'/'+self.directory+'/'+continent+'/'+filename)
+                r1 = urllib2.urlopen(conn)
             data = r1.read()
             self.ftpfile = open(os.path.join(self.cachedir,filename), 'wb')
             self.ftpfile.write(data)
