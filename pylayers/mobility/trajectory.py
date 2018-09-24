@@ -116,7 +116,7 @@ class Trajectories(PyLayers,list):
 
         filename = pyu.getlong(_filename, pstruc['DIRNETSAVE'])
         if os.path.exists(filename):
-            fil = pd.HDFStore(filename)
+            fil = pd.io.pytables.HDFStore(filename)
         else:
             raise NameError(filename + ' not found')
         if not append:
