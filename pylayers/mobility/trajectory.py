@@ -884,7 +884,7 @@ def importsn(_filename='pos.csv'):
     dt = pd.read_csv(filename)
     dtk = dt.keys()
     N = len(dtk)
-    Ntraj = (N-1)/3
+    Ntraj = int((N-1)/3)
     lt = []
     for it in range(Ntraj):
         x = dt[dtk[3*it+1]].values

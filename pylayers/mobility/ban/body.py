@@ -925,7 +925,6 @@ class Body(PyLayers):
         sk = traj.distance(t) # covered distance along trajectory at time t
         smax = self.smocap[-1]
 
-
         ks = int(np.floor(sk/smax)) # number of full MOCAP sequences of frames
 
         df = sk - ks*smax  # covered distance into the sequence
@@ -1270,7 +1269,7 @@ class Body(PyLayers):
                         c1=self.sl[:,1].astype(int)
                         pta = self.d[:,c0,0]
                         phe = self.d[:,c1,0]
-                        
+
                         de = self._f[0,self.dev[dev]['uc3d'][0],:][np.newaxis]
                         dtad = np.sqrt(np.sum((pta-de.T)**2,axis=0))
                         dhed = np.sqrt(np.sum((phe-de.T)**2,axis=0))
@@ -2059,8 +2058,8 @@ class Body(PyLayers):
 
 
 
-        Todo 
-        
+        Todo
+
         """
 
         defaults = {'frameId' : 0,
@@ -2877,7 +2876,7 @@ if __name__ == '__main__':
 
 
 
-class Cylinder(object):
+
     """ Class for handling interfering bodies in CORMORAN measurement data
         navigation series day 12/06/2014
     """
@@ -3098,7 +3097,7 @@ class Cylinder(object):
 
         anim = range(5000,self.nframes,10)
 
-        
+
         while True:
             for k in anim:#range(len(t)):
                 self.settopos(t=t[k],cs=True)

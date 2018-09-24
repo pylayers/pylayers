@@ -50,11 +50,10 @@ import matplotlib.pylab as plt
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.collections as mc
 import sys
+import io
 
 if sys.version_info.major==2:
     from cStringIO import StringIO
-else:
-    import io
 
 from matplotlib.collections import LineCollection
 import mpl_toolkits.mplot3d.art3d as cc
@@ -167,7 +166,7 @@ def read_header(_filename='serie_017.c3d'):
     CameraInfo = []
     ResidualError = []
     print ("FileName = ", FullFileName)
-    fid = open(FullFileName, 'rb')
+    fid = io.open(FullFileName, 'rb')
     # native format (PC-intel)
     content = fid.read()
     content_memory = content
@@ -203,7 +202,7 @@ def read_header(_filename='serie_017.c3d'):
 
     if proctype==2:
         fclose(fid);
-        fid=fopen(FullFileName,'r','d')  # DEC VAX D floating point and VAX ordering
+        fid = io.fopen(FullFileName,'r','d')  # DEC VAX D floating point and VAX ordering
 
     #%NrecordFirstParameterblock=fread(fid,1,'int8');     % Reading record number of parameter section
     #%key1=fread(fid,1,'int8');                           % key = 80;
@@ -280,7 +279,7 @@ def read_c3d(_filename='07_01.c3d',verbose=False):
     #ind=findstr(FullFileName,'\');
     #if ind>0, FileName=FullFileName(ind(length(ind))+1:length(FullFileName)); else FileName=FullFileName; end
         print( "FileName = ", FullFileName)
-    fid = open(FullFileName, 'rb')
+    fid = io.open(FullFileName, 'rb')
     # native format (PC-intel)
     content = fid.read()
     content_memory = content
@@ -512,7 +511,6 @@ def read_c3d(_filename='07_01.c3d',verbose=False):
             #print "ParameterNumber = ", ParameterNumber, " Group Number = ", GroupNumber
 
             if typ == -1:
-                pdb.set_trace()
                 data = ""
                 wordlength = dimension[0]
                 if dimnum == 2 and datalength > 0:
@@ -783,7 +781,7 @@ def ReadC3d(_filename='07_01.c3d', verbose=False):
     if verbose:
         print( "FileName = ", FullFileName)
 
-    fid = open(FullFileName,'rb')
+    fid = io.open(FullFileName,'rb')
     content = fid.read()
     content_memory = content
     NrecordFirstParameterblock, content = getNumber(content, 1)
@@ -902,7 +900,7 @@ def ReadC3d(_filename='07_01.c3d', verbose=False):
 
     NparameterRecords, content = getNumber(content, 1)
     if verbose:
-        printi( "NparameterRecords=", NparameterRecords)
+        print( "NparameterRecords=", NparameterRecords)
     proctype, content = getNumber(content, 1)
     proctype = proctype - 83                      # proctype: 1(INTEL-PC); 2(DEC-VAX); 3(MIPS-SUN/SGI)
 
@@ -987,14 +985,14 @@ def ReadC3d(_filename='07_01.c3d', verbose=False):
                     data = content[0:wordlength]
                     ParameterGroups[GroupNumber].parameter[ParameterNumber - 1].data.append(data)
                 #if string.rstrip(ParameterName) == "LABELS" and string.rstrip(GroupName) == "POINT":
-                if ( ParameterName.rstrip().decode("utf-8") == "LABELS" and 
+                if ( ParameterName.rstrip().decode("utf-8") == "LABELS" and
                      GroupName.rstrip().decode("utf-8")  == "POINT"):
                     if verbose:
                         print( "POINT = ", ParameterGroups[GroupNumber].parameter[ParameterNumber
                                                                      - 1].data)
                     Point = ParameterGroups[GroupNumber].parameter[ParameterNumber - 1].data
                 #elif string.rstrip(ParameterName) == "LABEL_PREFIXES" and string.rstrip(GroupName) == "SUBJECTS":
-                elif (ParameterName.rstrip().decode("utf-8") == "LABEL_PREFIXES" and 
+                elif (ParameterName.rstrip().decode("utf-8") == "LABEL_PREFIXES" and
                          GroupName.rstrip().decode("utf-8") == "SUBJECTS"):
                     if verbose:
                         print( "SUBJECTS = ", ParameterGroups[GroupNumber].parameter[ParameterNumber - 1].data)
@@ -1052,10 +1050,9 @@ def ReadC3d(_filename='07_01.c3d', verbose=False):
             GroupNumber = -(2 ** 8) + (GroupNumber)
     #buff = content_memory
     #buff = content[(NrecordDataBlock - 1) * 512:]
-    fd = open(FullFileName,'rb')
+    fd = io.open(FullFileName,'rb')
     buff = fd.read()
     fd.close()
-
     offset = (NrecordDataBlock -1)*512
 
     nframe = EndFrame - StartFrame + 1
@@ -1065,17 +1062,18 @@ def ReadC3d(_filename='07_01.c3d', verbose=False):
     if sys.version_info.major==2:
         frame1 = StringIO(buff[offset:offset+nbytes])
     else:
-        frame1 = io.StringIO(str(buff[offset:offset+nbytes]))
+        frame1 = np.frombuffer(buff[offset:offset+nbytes],dtype='int8')
 
     if sys.version_info.major==2:
         forma = str(nbytes)+'S1'
         frames = np.array(frame1.read(nbytes))
         y = frames.view(forma).reshape((nframe*npoints,16))
     else:
-        forma = str(nbytes)+'S1'
-    # détermineer le type S1
-        frames = np.array(frame1.read(nbytes)).astype(forma)
-        y = frames.reshape((nframe*npoints,16))
+        y = frame1.reshape((nframe*npoints,16))
+
+    #
+    # reorganize floating point representation
+    #
     if proctype>1:
         z = np.empty(shape=y.shape,dtype=y.dtype)
         z[:,0:2] = y[:,2:4]
@@ -1089,10 +1087,13 @@ def ReadC3d(_filename='07_01.c3d', verbose=False):
     else:
         z = y
 
-    sfloat = str(nfloat)+'f'
-    frames = np.array(struct.unpack(sfloat,z)).reshape(nframe,npoints,4)
+    if sys.version_info.major==2:
+        sfloat = str(nfloat)+'f'
+        frames = np.array(struct.unpack(sfloat,z)).reshape(nframe,npoints,4)
+    else:
+        frames = np.frombuffer(z,dtype='float32').reshape(nframe,npoints,4)
 
-    frames =frames[:,:,0:3]
+    frames = frames[:,:,0:3]
     return Subjects,Point,frames,dinfo
 
 

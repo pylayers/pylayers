@@ -1,7 +1,6 @@
-#!/usr/bin/python
 # -*- coding: latin1 -*-
 from __future__ import print_function
-from __future__ import division, print_function, absolute_import 
+from __future__ import division, print_function, absolute_import
 import os
 import sys
 import string

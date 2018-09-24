@@ -437,7 +437,7 @@ class Pattern(PyLayers):
         uf=np.ndarray(shape=0,dtype=int)
         for k in self.param['fGHz']:
             uf = np.hstack((uf,np.where(self._fGHz<=k)[0][-1]))
-        
+
 
         theta = self.theta
         phi = self.phi

@@ -94,15 +94,8 @@ def getchannel(emplacement = 'trunku',intersection = 1):
     GdB = GdB_dist.rvs()
     G = 10**(GdB/10.0)
     alphak = np.sqrt(G)*alphak
-
-
     alphak = intersection*alphak
 
     return alphak,tauk
-
-
-
-
-
 
 
