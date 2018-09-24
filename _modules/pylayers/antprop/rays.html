@@ -253,7 +253,7 @@ import operator
 logger = logging.getLogger(__name__)
 
 <div class="viewcode-block" id="Rays"><a class="viewcode-back" href="../../../api/pylayers.antprop.rays.Rays.html#pylayers.antprop.rays.Rays">[docs]</a>class Rays(PyLayers, dict):
-    &quot;&quot;&quot; Class hendling a set of rays
+    &quot;&quot;&quot; Class handling a set of rays
 
     Attributes
     ----------
@@ -440,7 +440,7 @@ logger = logging.getLogger(__name__)
             s = s + &quot;based &quot;
         if self.filled:
             s = s + &quot;filled &quot;
-        
+
         s = s + &#39;\n&#39;
         s = s + &#39;N2Drays : &#39;+ str(nray2D) + &#39;\n&#39;
         if hasattr(self,&#39;nb_origin_sig&#39;):
@@ -840,7 +840,7 @@ logger = logging.getLogger(__name__)
 
 
         lr=[]
-        for ur,r in enumerate(xrange(self.nray)):
+        for ur,r in enumerate(range(self.nray)):
             li = self.ray2ityp(r)
             nRli = li.count(&#39;R&#39;)
             nTli = li.count(&#39;T&#39;)
@@ -4098,7 +4098,7 @@ if __name__ == &quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on May 31, 2018.
+      Last updated on Sep 24, 2018.
 
     </p>
   </div>

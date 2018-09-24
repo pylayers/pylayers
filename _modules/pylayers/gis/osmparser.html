@@ -945,7 +945,7 @@ import pdb
         lnodes_id+=ways.w[iw][0]
     # list of all nodes of coords
     lnodes_id   = np.unique(np.array(lnodes_id))
-    lnodes_full = np.unique(np.array(coords.latlon.keys()))
+    lnodes_full = np.unique(np.array(list(coords.latlon.keys())))
     mask = np.in1d(lnodes_full,lnodes_id,invert=True)
     # nodes not involved in buildings
     lexcluded = lnodes_full[mask]
@@ -954,24 +954,24 @@ import pdb
     for iw in ways.w:
         ways.way[iw].tags = {}
         # material
-        if ways.w[iw][1].has_key(&#39;material&#39;):
+        if &#39;material&#39; in ways.w[iw][1]:
             ways.way[iw].tags[&#39;name&#39;]=ways.w[iw][1][&#39;material&#39;]
-        elif ways.w[iw][1].has_key(&#39;building:material&#39;):
+        elif &#39;building:material&#39; in ways.w[iw][1]:
             ways.way[iw].tags[&#39;name&#39;]=ways.w[iw][1][&#39;building:material&#39;]
         else:
             ways.way[iw].tags[&#39;name&#39;]=&#39;WALL&#39;
 
         # min_height
-        if ways.w[iw][1].has_key(&#39;building:min_height&#39;):
+        if &#39;building:min_height&#39; in ways.w[iw][1]:
             min_height = eval(ways.w[iw][1][&#39;building:min_height&#39;])
         else:
             min_height = 0
         # height
-        if ways.w[iw][1].has_key(&#39;height&#39;):
+        if &#39;height&#39; in ways.w[iw][1]:
             ways.way[iw].tags[&#39;z&#39;] = (min_height, eval(ways.w[iw][1][&#39;height&#39;]))
-        elif ways.w[iw][1].has_key(&#39;building:height&#39;):
+        elif &#39;building:height&#39; in ways.w[iw][1]:
             ways.way[iw].tags[&#39;z&#39;] = (min_height, eval(ways.w[iw][1][&#39;building:height&#39;]))
-        elif ways.w[iw][1].has_key(&#39;building:levels&#39;):
+        elif &#39;building:levels&#39; in ways.w[iw][1]:
             nb_levels = eval(ways.w[iw][1][&#39;building:levels&#39;])
             if type(nb_levels)!=int:
                 try:
@@ -979,7 +979,7 @@ import pdb
                 except:
                     nb_levels=2
             ways.way[iw].tags[&#39;z&#39;]=(min_height,nb_levels*level_height)
-        elif ways.w[iw][1].has_key(&#39;levels&#39;):
+        elif &#39;levels&#39; in ways.w[iw][1]:
             nb_levels = eval(ways.w[iw][1][&#39;levels&#39;])
             if type(nb_levels)!=int:
                 try:
@@ -1213,7 +1213,7 @@ import pdb
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on May 31, 2018.
+      Last updated on Sep 24, 2018.
 
     </p>
   </div>

@@ -267,7 +267,7 @@ from pylayers.measures import mesuwb
                 &#39;fGHz&#39;:[],
                 &#39;WGHz&#39;: 0.499,
                 &#39;fcGHz&#39;: 4.493,
-                &#39;feGHz&#39;: 100,
+                &#39;fsGHz&#39;: 100,
                 &#39;threshdB&#39;: 3,
                 &#39;twns&#39;: 30}
 
@@ -295,16 +295,16 @@ from pylayers.measures import mesuwb
         elif self[&#39;typ&#39;] == &#39;W1offset&#39;:
             [st,sf]=self.fromfile2()
         elif self[&#39;typ&#39;] == &#39;blackmann&#39;:
-            sf = FUsignal(x=fGHz,y=np.blackman(len(fGHz)))
+            sf = bs.FUsignal(x=fGHz,y=np.blackman(len(fGHz)))
+            st = sf.ift()
+        elif self[&#39;typ&#39;] == &#39;rect&#39;:
+            sf = bs.FUsignal(x=fGHz,y=np.ones(len(fGHz)))
             st = sf.ift()
         elif self[&#39;typ&#39;] == &#39;hamming&#39;:
-            sf = FUsignal(x=fGHz,y=np.ones(len(fGHz)))
-            st = sf.ift()
-        elif self[&#39;typ&#39;] == &#39;hamming&#39;:
-            sf = FUsignal(x=fGHz,y=np.hamming(len(fGHz)))
+            sf = bs.FUsignal(x=fGHz,y=np.hamming(len(fGHz)))
             st = sf.ift()
         elif self[&#39;typ&#39;] == &#39;ref156&#39;:
-            [st,sf]=self.ref156() 
+            [st,sf] = self.ref156()
         else:
             logging.critical(&#39;waveform typ not recognized, check your config \
                              file&#39;)
@@ -326,7 +326,7 @@ from pylayers.measures import mesuwb
         -------
 
         &gt;&gt;&gt; from pylayers.signal.waveform import *
-        &gt;&gt;&gt; w = Waveform(typ=&#39;generic&#39;,WGHz=0.499,fcGHz=4.49,feGHz=100,threshdB=3,twns=30)
+        &gt;&gt;&gt; w = Waveform(typ=&#39;generic&#39;,WGHz=0.499,fcGHz=4.49,fsGHz=100,threshdB=3,twns=30)
         &gt;&gt;&gt; w.show()
         &gt;&gt;&gt; plt.show()
 
@@ -366,16 +366,16 @@ from pylayers.measures import mesuwb
         fcGHz = self[&#39;fcGHz&#39;]
         WGHz = self[&#39;WGHz&#39;]
         thresh = self[&#39;threshdB&#39;]
-        feGHz = self[&#39;feGHz&#39;]
-        te = 1.0/feGHz
+        fsGHz = self[&#39;fsGHz&#39;]
+        ts = 1.0/fsGHz
 
-        self[&#39;te&#39;] = te
-        Np = feGHz*Tw
+        self[&#39;ts&#39;] = ts
+        Np = fsGHz*Tw
         self[&#39;Np&#39;] = Np
-        #x      = np.linspace(-0.5*Tw+te/2,0.5*Tw+te/2,Np,endpoint=False)
-        #x     = arange(-Tw,Tw,te)
+        #x = np.linspace(-0.5*Tw+ts/2,0.5*Tw+ts/2,Np,endpoint=False)
+        #x = arange(-Tw,Tw,ts)
         w = bs.TUsignal()
-        w.EnImpulse(fcGHz=fcGHz,WGHz=WGHz,threshdB=thresh,feGHz=feGHz)
+        w.EnImpulse(fcGHz=fcGHz,WGHz=WGHz,threshdB=thresh,fsGHz=fsGHz)
         #W = w.ft()
         W = w.ft()
         return (w,W)</div>
@@ -386,7 +386,7 @@ from pylayers.measures import mesuwb
         Parameters
         ----------
 
-        beta : float 
+        beta : float
             roll-off factor
         Tns = 1/499.2MHz
 
@@ -397,11 +397,12 @@ from pylayers.measures import mesuwb
 
         &quot;&quot;&quot;
         Tw = self[&#39;twns&#39;]
-        fe = self[&#39;feGHz&#39;]
-        te = 1./fe
+        fs = self[&#39;fsGHz&#39;]
+        Np = Tw*fs
+        Ts = 1./fs
         beta = 0.5
         Tns = 1./0.4992
-        x = np.linspace(-0.5*Tw+te/2, 0.5*Tw+te/2, Np, endpoint=False)
+        x = np.linspace(-0.5*Tw+Ts/2, 0.5*Tw+Ts/2, Np, endpoint=False)
         z = x/Tns
         t1 = np.sin(np.pi*(1-beta)*z)
         t2 = np.cos(np.pi*(1+beta)*z)
@@ -410,7 +411,7 @@ from pylayers.measures import mesuwb
 
         st = bs.TUsignal()
         st.x = x
-        st.y = y
+        st.y = y[None,:]
         sf = st.ftshift()
 
         return(st,sf)</div>
@@ -432,7 +433,7 @@ from pylayers.measures import mesuwb
 
         ts = M.RAW_DATA.timetx[0]
         tns = ts*1e9
-        te = tns[1]-tns[0]
+        ts = tns[1]-tns[0]
 
         y  = M.RAW_DATA.tx[0]
 
@@ -447,8 +448,8 @@ from pylayers.measures import mesuwb
 
         yzp = np.zeros(len(yap)-len(ybp)-1)
 
-        tnsp = np.arange(0, tns[-1]-tns[u]+0.5*te, te)
-        tnsm = np.arange(-(tns[-1]-tns[u]), 0, te)
+        tnsp = np.arange(0, tns[-1]-tns[u]+0.5*ts, ts)
+        tnsm = np.arange(-(tns[-1]-tns[u]), 0, ts)
 
         y = np.hstack((yzp, np.hstack((ybp, yap))))
         tns = np.hstack((tnsm, tnsp))
@@ -481,7 +482,7 @@ from pylayers.measures import mesuwb
 
         ts = M.RAW_DATA.timetx[0]
         tns = ts*1e9
-        te = tns[1]-tns[0]
+        Ts = tns[1]-tns[0]
 
         y  = M.RAW_DATA.tx[0]
 
@@ -496,10 +497,10 @@ from pylayers.measures import mesuwb
 
         yzp = np.zeros(len(y)-1)
 
-#        tnsp = np.arange(0,tns[-1]-tns[u]+0.5*te,te)
-#        tnsm = np.arange(-(tns[-1]-tns[u]),0,te)
+#        tnsp = np.arange(0,tns[-1]-tns[u]+0.5*ts,ts)
+#        tnsm = np.arange(-(tns[-1]-tns[u]),0,ts)
         N = len(ts)-1
-        tnsm = np.linspace(-tns[-1],-te,N)
+        tnsm = np.linspace(-tns[-1],-Ts,N)
         y = np.hstack((yzp,y))
         tns = np.hstack((tnsm,tns))
 
@@ -554,9 +555,9 @@ from pylayers.measures import mesuwb
         ----------
 
         th_ratio : float
-            threshold ratio 
+            threshold ratio
             threshold = max(abs())/th_ratio
-        Npt : Number of points 
+        Npt : Number of points
 
         &quot;&quot;&quot;
         u=np.where(np.abs(self.sf.y)&gt;np.max(np.abs(self.sf.y))/th_ratio)
@@ -578,7 +579,7 @@ from pylayers.measures import mesuwb
              &#39;fc (GHz)&#39;,
              &#39;W (GHz)&#39;,
              &#39;thresh (dB)&#39;,
-             &#39;fe (GHz) integer value&#39;),
+             &#39;fs (GHz) integer value&#39;),
             ( self[&#39;twns&#39;] ,
             self[&#39;fcGHz&#39;] ,
             self[&#39;WGHz&#39;] ,
@@ -590,7 +591,7 @@ from pylayers.measures import mesuwb
             self.parameters[&#39;fcGHz&#39;]    = eval(wavegui[1])
             self.parameters[&#39;WGHz&#39;]  = eval(wavegui[2])
             self.parameters[&#39;threshdB&#39;] = eval(wavegui[3])
-            self.parameters[&#39;feGHz&#39;]    = eval(wavegui[4])
+            self.parameters[&#39;fsGHz&#39;]    = eval(wavegui[4])
 
             [st,sf]       = self.ip_generic()
             self.st       = st
@@ -644,7 +645,7 @@ if __name__ == &quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on May 31, 2018.
+      Last updated on Sep 24, 2018.
 
     </p>
   </div>

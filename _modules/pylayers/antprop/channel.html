@@ -3221,27 +3221,25 @@ except:
         return(rho,Cwf)</div>
 
 <div class="viewcode-block" id="Mchannel.plot2"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.Mchannel.html#pylayers.antprop.channel.Mchannel.plot2">[docs]</a>    def plot2(self,fig=[],ax=[],mode=&#39;time&#39;):
-        
+
         if fig ==[]:
-            fig = plt.gcf()  
+            fig = plt.gcf()
         if ax ==[]:
             ax = plt.gca()
-        
+
         if mode==&#39;time&#39;:
             cir = self.ift(ffts=1)
             y = cir.y
-            x = cir.x 
+            x = cir.x
         else:
             y = self.y
-            x = self.x    
+            x = self.x
 
         my = np.mean(np.abs(y),axis=0)
         yc = np.abs(y)-my[None,...] # TD centered      ; TDc.shape : (85, 4, 8, 801)
 
         yc2 = np.abs(yc)**2 # square of TD centered     ; TDc2.shape : (85, 4, 8, 801)
         vary = np.mean(yc2,axis=0) #variance of TD  ; varTD.shape : (4, 8, 801)
-        
-        
 
         cpt = 0
         for r in range(self.Nr):
@@ -3252,7 +3250,6 @@ except:
                 #l1, = ax.plot(self.x,np.sqrt(vary[r,t,:]),linewidth=1,alpha=1)
                 #l2, = ax.plot(self.x,my[r,t,:],color=&#39;r&#39;,linewidth=1,alpha=1)
                 l2, = ax.plot(x,my[r,t,:],linewidth=1,alpha=1)
-                
                 ticksx = ax.axes.get_xticklabels()
                 ticksy = ax.axes.get_yticklabels()
                 plt.setp(ticksx, visible=True)
@@ -3585,8 +3582,7 @@ except:
 
 
 <div class="viewcode-block" id="Tchannel.applywav"><a class="viewcode-back" href="../../../api/pylayers.antprop.channel.Tchannel.html#pylayers.antprop.channel.Tchannel.applywav">[docs]</a>    def applywav(self, Wgam=[]):
-        &quot;&quot;&quot; apply waveform (time domain ) to obtain the
-            rays impulses response
+        &quot;&quot;&quot; apply waveform (time domain ) to obtain the rays impulses response
 
         Parameters
         ----------
@@ -3955,6 +3951,10 @@ except:
 
         Etot = self.energy(mode=mode) + 1e-15
         EtotdB = 10*np.log10(Etot)
+        if vmax == []:
+            vmax = EtotdB.max()
+        if vmin == []:
+            vmin = EtotdB.min()
         EtotdB = np.minimum(EtotdB,vmax)
         EtotdB = np.maximum(EtotdB,vmin)
 
@@ -3982,8 +3982,7 @@ except:
         else :
             al = 180. / np.pi
             alb = 180. / np.pi
-
-        col = (EtotdB - vmin)/(vmax-vmin)
+        col = ((EtotdB - vmin)/(vmax-vmin)).squeeze()
         kwargs[&#39;c&#39;] = col
         kwargs[&#39;s&#39;] = 200*col
         kwargs[&#39;vmin&#39;] = 0.
@@ -4809,9 +4808,8 @@ except:
 
 
         &quot;&quot;&quot;
-
         tau = self.taud + self.taue
-        taumin = min(tau) 
+        taumin = min(tau)
         taumax = max(tau)
         dtau = (taumax-taumin)
         self.s = self.ift(Nz, ffts)
@@ -6470,7 +6468,7 @@ if __name__ == &quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on May 31, 2018.
+      Last updated on Sep 24, 2018.
 
     </p>
   </div>

@@ -30,8 +30,7 @@
   <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="Body" href="pylayers.mobility.ban.body.Body.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -87,7 +86,7 @@
               
             
             
-              <ul class="current">
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -139,18 +138,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="references.html#body-class">40.1&nbsp;&nbsp;&nbsp;Body Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="references.html#cylinder-class">40.2&nbsp;&nbsp;&nbsp;Cylinder Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="references.html#id135">40.3&nbsp;&nbsp;&nbsp;Functions</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="references.html#id136">40.4&nbsp;&nbsp;&nbsp;Classes</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="pylayers.mobility.ban.body.Body.html">Body</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Cylinder</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="references.html#id137">40.5&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
@@ -197,8 +185,6 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-          <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-        
       <li>Cylinder</li>
     
     
@@ -220,81 +206,6 @@
             
   <div class="section" id="cylinder">
 <h1>Cylinder<a class="headerlink" href="#cylinder" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="pylayers.mobility.ban.body.Cylinder">
-<em class="property">class </em><code class="descclassname">pylayers.mobility.ban.body.</code><code class="descname">Cylinder</code><span class="sig-paren">(</span><em>name='Meriem_Cylindre:'</em>, <em>_filemocap='Nav_serie_006.c3d'</em>, <em>unit='mm'</em>, <em>color='white'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Cylinder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Cylinder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Class for handling interfering bodies in CORMORAN measurement data
-navigation series day 12/06/2014</p>
-<p class="rubric">Methods Summary</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Cylinder.anim" title="pylayers.mobility.ban.body.Cylinder.anim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">anim</span></code></a>()</td>
-<td>animate cylinder</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Cylinder.init_traj" title="pylayers.mobility.ban.body.Cylinder.init_traj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_traj</span></code></a>()</td>
-<td>create trajectory object from given trajectory or mocap</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="references.html#pylayers.mobility.ban.body.Cylinder.loadC3D" title="pylayers.mobility.ban.body.Cylinder.loadC3D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadC3D</span></code></a>([filename,&nbsp;nframes,&nbsp;unit])</td>
-<td>load nframes of motion capture C3D file</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.mobility.ban.body.Cylinder.settopos" title="pylayers.mobility.ban.body.Cylinder.settopos"><code class="xref py py-obj docutils literal notranslate"><span class="pre">settopos</span></code></a>(t,&nbsp;**kwargs)</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods Documentation</p>
-<dl class="method">
-<dt id="pylayers.mobility.ban.body.Cylinder.anim">
-<code class="descname">anim</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Cylinder.anim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Cylinder.anim" title="Permalink to this definition">¶</a></dt>
-<dd><p>animate cylinder</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.mobility.trajectory import *
-&gt;&gt;&gt; from pylayers.mobility.ban.body import *
-&gt;&gt;&gt; from pylayers.gis.layout import *
-&gt;&gt;&gt; T=Trajectories()
-&gt;&gt;&gt; T.loadh5()
-&gt;&gt;&gt; L=Layout(T.Lfilename)
-&gt;&gt;&gt; B = Body()
-&gt;&gt;&gt; B.settopos(T[0],t=0,cs=True) 
-&gt;&gt;&gt; L._show3()
-&gt;&gt;&gt; B.anim(B)
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.mobility.ban.body.Cylinder.init_traj">
-<code class="descname">init_traj</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Cylinder.init_traj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Cylinder.init_traj" title="Permalink to this definition">¶</a></dt>
-<dd><p>create trajectory object from given trajectory or mocap</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.mobility.ban.body.Cylinder.loadC3D">
-<code class="descname">loadC3D</code><span class="sig-paren">(</span><em>filename='Nav_serie_006.c3d'</em>, <em>nframes=-1</em>, <em>unit='cm'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Cylinder.loadC3D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Cylinder.loadC3D" title="Permalink to this definition">¶</a></dt>
-<dd><p>load nframes of motion capture C3D file</p>
-<dl class="docutils">
-<dt>filename <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
-<dd>file name</dd>
-<dt>nframes <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>number of frames</dd>
-<dt>unit <span class="classifier-delimiter">:</span> <span class="classifier">str (mm|cm|mm</span></dt>
-<dd>unit of c3d file</dd>
-<dt>rot <span class="classifier-delimiter">:</span> <span class="classifier">list [‘x’,’y’,’z’]</span></dt>
-<dd>swap axes of the c3d file</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.mobility.ban.body.Cylinder.settopos">
-<code class="descname">settopos</code><span class="sig-paren">(</span><em>t</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Cylinder.settopos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Cylinder.settopos" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </div>
 
 
@@ -303,20 +214,13 @@ navigation series day 12/06/2014</p>
           </div>
           <footer>
   
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-      
-        <a href="pylayers.mobility.ban.body.Body.html" class="btn btn-neutral" title="Body" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on May 31, 2018.
+      Last updated on Sep 24, 2018.
 
     </p>
   </div>

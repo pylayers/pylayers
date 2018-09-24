@@ -206,9 +206,9 @@
 <span></span># -*- coding: utf-8 -*-
 #
 #
-#   LAYOUT  Module
+#   Layout  Module
 #
-#
+#   unittesting in tests/test_layout_u.py
 #
 &quot;&quot;&quot;
 .. currentmodule:: pylayers.gis.layout
@@ -413,13 +413,14 @@ import pylayers.util.project as pro
                  _filematini=&#39;matDB.ini&#39;,
                  _fileslabini=&#39;slabDB.ini&#39;,
                  _filefur=&#39;&#39;,
-                 bcheck  = False,          # to check Gs
-                 bbuild  = False,         # to build graphs
-                 bgraphs = False,         # to load graph
+                 bcheck=False,          # to check Gs
+                 bbuild=False,         # to build graphs
+                 bgraphs=False,         # to load graph
                  #bindoor=False,        # to allow indoor penetration for outdoor situations
                  #bdiffraction=False,   # to include diffraction in Gi 
                  bverbose=False,
                  bcartesian=True,
+                 xlim=(),
                  dist_m=400,
                  typ=&#39;indoor&#39;):
         &quot;&quot;&quot; object constructor
@@ -440,6 +441,7 @@ import pylayers.util.project as pro
         build : boolean
         verbose : boolean
         cartesian : boolean
+        xlim : &#39;(xmin,xmax,ymin,ymax) | () default&#39;
         dist_m : int
         typ : string
             &#39;indoor&#39; | &#39;outdoor&#39;
@@ -493,7 +495,7 @@ import pylayers.util.project as pro
             self.typ = typ
         else:
             print(&quot;Layout : unknown Layout typ&quot;)
-        # boolean 
+        # boolean
 
         self.isbuilt = False
         self.loadosm = False
@@ -531,7 +533,10 @@ import pylayers.util.project as pro
         self.display[&#39;overlay_file&#39;] = &quot;&quot;
         self.display[&#39;overlay_axis&#39;] = &quot;&quot;
         # self.display[&#39;layerset&#39;] = self.sl.keys()
-        self.display[&#39;box&#39;] = (-50, 50, -50, 50)
+        if xlim!=():
+            self.display[&#39;box&#39;]= xlim
+        else:
+            self.display[&#39;box&#39;] = (-50, 50, -50, 50)
         self.name = {}
         self.ax = self.display[&#39;box&#39;]
         self.zmin = 0
@@ -591,8 +596,9 @@ import pylayers.util.project as pro
                 self.loadosm = True
 
             # add boundary if it not exist
-            if not self.hasboundary:
-                self.boundary()
+            if (not self.hasboundary) or (xlim!=()):
+                self.boundary(xlim=xlim)
+
             self.subseg()
             self.updateshseg()
 
@@ -612,8 +618,8 @@ import pylayers.util.project as pro
             # check if the graph gpickle files have been built
             if bconsistent:
                 #
-                # build and save graphs 
-                # 
+                # build and save graphs
+                #
                 if bbuild:
                     # ans = raw_input(&#39;Do you want to build the layout (y/N) ? &#39;)
                     # if ans.lower()==&#39;y&#39;
@@ -621,7 +627,7 @@ import pylayers.util.project as pro
                     self.lbltg.append(&#39;s&#39;)
                     self.dumpw()
                 #
-                # load graphs from file 
+                # load graphs from file
                 #
                 elif bgraphs:
                     if os.path.splitext(self._filename)[1]==&#39;.ini&#39;:
@@ -946,23 +952,26 @@ import pylayers.util.project as pro
 
         See Also
         --------
+        Portage vers networkx 2. inacheve
 
         __add__
 
         &quot;&quot;&quot;
 
-        newpoint = dict((k - offp, v)
-                        for k, v in self.Gs.node.items() if k &lt; 0)
-        assert (np.array(newpoint.keys()) &lt; 0).all()
-        newseg = dict((k + offs, v) for k, v in self.Gs.node.items() if k &gt; 0)
-        assert (np.array(newseg.keys()) &gt; 0).all()
-        newpoint.update(newseg)
-        self.Gs.node = newpoint
+        newpoint = dict((k - offp, v) for k, v in self.Gs.node.items() if k &lt; 0)
+        assert (np.array(list(newpoint.keys())) &lt; 0).all()
 
-        newppoint = dict((k - offp, v)
-                         for k, v in self.Gs.pos.items() if k &lt; 0)
+        newseg = dict((k + offs, v) for k, v in self.Gs.node.items() if k &gt; 0)
+        assert (np.array(list(newseg.keys())) &gt; 0).all()
+
+        newpoint.update(newseg)
+        nx.set_node_attributes(self.Gs,newpoint)
+        #self.Gs.node = newpoint
+
+        newppoint = dict((k - offp, v) for k, v in self.Gs.pos.items() if k &lt; 0)
         newpseg = dict((k + offs, v) for k, v in self.Gs.pos.items() if k &gt; 0)
         newppoint.update(newpseg)
+
         self.Gs.pos = newppoint
 
         # adjascence list of segments
@@ -981,8 +990,10 @@ import pylayers.util.project as pro
         dpt = dict(zip(lpt, nladjp))
         dseg = dict(zip(lseg, nladjs))
         dseg.update(dpt)
-        self.Gs.adj = dseg
-        self.Gs.edge = dseg</div>
+        print(&quot;Todo create a dictionnary of edges&quot;)
+        nx.set_edge_attributes(self.Gs,dseg)</div>
+        # self.Gs.adj = dseg
+        # self.Gs.edge = dseg
 
 <div class="viewcode-block" id="Layout.check"><a class="viewcode-back" href="../../../api/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.check">[docs]</a>    def check(self, level=0, epsilon = 0.64):
         &quot;&quot;&quot; Check Layout consistency
@@ -1080,10 +1091,13 @@ import pylayers.util.project as pro
             #
 
             # get all the nodes
-            ke = self.Gs.pos.keys()
-            x = np.array(map(lambda x: x[0], self.Gs.pos.values()))
-            y = np.array(map(lambda x: x[1], self.Gs.pos.values()))
+            ke = list(self.Gs.pos.keys())
+            lpos = list(self.Gs.pos.values())
+
+            x = np.array([ pp[0] for pp in  lpos ] )
+            y = np.array([ pp[1] for pp in  lpos ] )
             p = np.vstack((x, y))
+
             d1 = p - np.roll(p, 1, axis=1)
             sd1 = np.sum(np.abs(d1), axis=0)
             if not sd1.all() != 0:
@@ -1157,6 +1171,11 @@ import pylayers.util.project as pro
         xmax : float
         ymin : float
         ymax : float
+
+        Returns
+        -------
+
+        seglist : list of segment number
 
         Notes
         -----
@@ -1546,8 +1565,11 @@ import pylayers.util.project as pro
         lheight = array([v[1] for v in 
                     nx.get_node_attributes(self.Gs, &#39;z&#39;).values() 
                     if v[1] &lt; 2000 ])
-        assert(len(lheight)&gt;0),logging.error(&quot;no valid heights for segments&quot;)
-        self.maxheight = np.max(lheight)
+        #assert(len(lheight)&gt;0),logging.error(&quot;no valid heights for segments&quot;)
+        if len(lheight)&gt;0:
+            self.maxheight = np.max(lheight)
+        else:
+            self.maxheight = 3
         # self.maxheight=3.
         # calculate extremum of segments
         self.extrseg()</div>
@@ -1833,8 +1855,8 @@ import pylayers.util.project as pro
 
         kp = [k for k in coords.xy]
 
-        x = np.array(map(lambda x: coords.xy[x][0], kp))
-        y = np.array(map(lambda x: coords.xy[x][1], kp))
+        x = np.array(list(map(lambda x: coords.xy[x][0], kp)))
+        y = np.array(list(map(lambda x: coords.xy[x][1], kp)))
         ux = np.argsort(x)
         x_prev = -100
         y_prev = -100
@@ -1922,9 +1944,11 @@ import pylayers.util.project as pro
                 #
                 #v1.1 u1 = np.array(nx.neighbors(self.Gs, nta))
                 #v1.1 u2 = np.array(nx.neighbors(self.Gs, nhe))
-                u1 = np.array(self.Gs[nta])
-                u2 = np.array(self.Gs[nhe])
-                inter_u1_u2 = np.intersect1d(u1, u2)
+                # import ipdb
+                # ipdb.set_trace()
+                # u1 = np.array(self.Gs.node[nta])
+                # u2 = np.array(self.Gs.node[nhe])
+                # inter_u1_u2 = np.intersect1d(u1, u2)
                 #
                 # Create  a new segment (iso segments are managed in add_segment)
                 #
@@ -2009,7 +2033,7 @@ import pylayers.util.project as pro
         Notes
         -----
 
-        See Also 
+        See Also
         --------
 
         layout.loadosm
@@ -2159,7 +2183,7 @@ import pylayers.util.project as pro
                 if (cond1 and (not cond5) and (not cond6)) or cond7: 
                     d = copy.deepcopy(self.Gs.node[n])
                     # v1.1 d[&#39;connect&#39;] = nx.neighbors(self.Gs, n)
-                    d[&#39;connect&#39;] = self.Gs[n].keys()
+                    d[&#39;connect&#39;] = list(self.Gs[n].keys())
                     try:
                         if d[&#39;transition&#39;]:
                             pass
@@ -2616,8 +2640,9 @@ import pylayers.util.project as pro
         # convert graph Gs to numpy arrays for faster post processing
         self.g2npy()
         #
-        self._hash = hashlib.md5(open(filelay, &#39;rb&#39;).read()).hexdigest()</div>
-
+        fd = open(filelay,&#39;rb&#39;)
+        self._hash = hashlib.md5(fd.read()).hexdigest()
+        fd.close()</div>
 
 <div class="viewcode-block" id="Layout.loadfur"><a class="viewcode-back" href="../../../api/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.loadfur">[docs]</a>    def loadfur(self, _filefur):
         &quot;&quot;&quot; loadfur load a furniture file
@@ -2777,7 +2802,10 @@ import pylayers.util.project as pro
 
         &quot;&quot;&quot;
         # next free node
-        num = -( -min(self.Gs.node) + 1 )
+        if len(self.Gs.node)&gt;0:
+            num = -( -min(self.Gs.node) + 1 )
+        else:
+            num = -1
         self.Gs.add_node(num)
         self.Gs.pos[num] = p
         self.Np = self.Np + 1
@@ -2796,10 +2824,8 @@ import pylayers.util.project as pro
         s2   : edge number 2
 
         &quot;&quot;&quot;
-        #v1.1 np1 = self.Gs.neighbors(s1)
-        #np2 = self.Gs.neighbors(s2)
-        np1 = self.Gs[s1].keys()
-        np2 = self.Gs[s2].keys()
+        np1 = list(self.Gs[s1].keys())
+        np2 = list(self.Gs[s2].keys())
         xA = self.Gs.pos[np1[0]][0]
         yA = self.Gs.pos[np1[0]][1]
         xB = self.Gs.pos[np1[1]][0]
@@ -2810,17 +2836,12 @@ import pylayers.util.project as pro
         yD = self.Gs.pos[np2[1]][1]
         xP = self.Gs.pos[np0][0]
         yP = self.Gs.pos[np0][1]
-        # printxA,yA
-        # printxB,yB
-        # printxC,yC
-        # printxD,yD
-        # printxP,yP
+
         A = np.array([[xB - xA, xD - xC], [yB - yA, yD - yC]])
         b = np.array([xP - xA, yP - yA])
         x = sp.linalg.solve(A, b)
         if ((x[0] &gt; 0.) &amp; (x[0] &lt; 1.0)):
-            self.add_pons(e1, 1 - x[0])</div>
-        # printx
+            self.add_pons(s1, 1 - x[0])</div>
 
 <div class="viewcode-block" id="Layout.add_pons"><a class="viewcode-back" href="../../../api/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.add_pons">[docs]</a>    def add_pons(self, ns, alpha=0.5):
         &quot;&quot;&quot; add point on segment
@@ -2830,6 +2851,7 @@ import pylayers.util.project as pro
 
         ns  : int
             segment number
+
         alpha : parameterization of the point
             alpha = 0 (tail) alpha = 1 (head)
 
@@ -2841,7 +2863,7 @@ import pylayers.util.project as pro
 
         &quot;&quot;&quot;
         # v1.1 nop = self.Gs.neighbors(ns)
-        nop = self.Gs[ns]
+        nop = list(self.Gs[ns])
         namens = self.Gs.node[ns][&#39;name&#39;]
         zminns = self.Gs.node[ns][&#39;z&#39;][0]
         zmaxns = self.Gs.node[ns][&#39;z&#39;][1]
@@ -3288,10 +3310,10 @@ import pylayers.util.project as pro
         n2 = self.add_fnod(p2)
         n3 = self.add_fnod(p3)
         # adding segments
-        self.add_segment(n0, n1, matname, [zmin, zmin + height])
-        self.add_segment(n1, n2, matname, [zmin, zmin + height])
-        self.add_segment(n2, n3, matname, [zmin, zmin + height])
-        self.add_segment(n3, n0, matname, [zmin, zmin + height])</div>
+        self.add_segment(n0, n1, name=matname, z=(zmin, zmin + height))
+        self.add_segment(n1, n2, name=matname, z=(zmin, zmin + height))
+        self.add_segment(n2, n3, name=matname, z=(zmin, zmin + height))
+        self.add_segment(n3, n0, name=matname, z=(zmin, zmin + height))</div>
 
 <div class="viewcode-block" id="Layout.add_furniture_file"><a class="viewcode-back" href="../../../api/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.add_furniture_file">[docs]</a>    def add_furniture_file(self, _filefur, typ=&#39;&#39;):
         &quot;&quot;&quot;  add pieces of furniture from .ini files
@@ -3463,22 +3485,26 @@ import pylayers.util.project as pro
 
 
 <div class="viewcode-block" id="Layout.seg_intersection"><a class="viewcode-back" href="../../../api/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.seg_intersection">[docs]</a>    def seg_intersection(self,**kwargs):
-        &#39;&#39;&#39;
-            determine if a segment intersects any other segment of the layout
+        &#39;&#39;&#39; determine if a segment intersects any other segment of the layout
 
             Parameters
             ----------
 
             shLine : a shapely LineString
-            OR
-            ta,he : tail/head coordinates of a segment
+            or
+            ta,he : tail/head of a segment
 
-            Return
-            ------
-            
+            Returns
+            -------
+
             llay_seg : list of layout&#39;s segments intersected
             lshP : list of shapely points of intersections.
-            
+
+            See Also
+            --------
+
+            editor.py
+
         &#39;&#39;&#39;
 
         if (&#39;ta&#39; in kwargs) and (&#39;he&#39; in kwargs):
@@ -3489,20 +3515,19 @@ import pylayers.util.project as pro
         # WARNING : use crosses instead of interesects
         # otherwise 2 segment connected to a same node
         # are considered as intersecting
-        binter = [seg.crosses(x) for x in self._shseg.values()]
+        binter = [seg.crosses(x) for x in list(self._shseg.values())]
         if np.sum(binter) &gt; 0:
             uinter = np.where(binter)[0]
             llay_seg = []
             lshP = []
             for k in uinter:
-                # layout segment 
-                llay_seg.append(self._shseg.keys()[k])
+                # layout segment
+                llay_seg.append(list(self._shseg.keys())[k])
                 lay_shseg = self._shseg[llay_seg[-1]]
                 # intersection shapely point
                 lshP.append(seg.intersection(lay_shseg))
 
             return(llay_seg,lshP)
-
         else:
             return ([],[])</div>
 
@@ -3583,14 +3608,19 @@ import pylayers.util.project as pro
 <div class="viewcode-block" id="Layout.check2"><a class="viewcode-back" href="../../../api/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.check2">[docs]</a>    def check2(self):
         &quot;&quot;&quot; Layout checking
 
+        Returns
+        -------
+
+        tseg ; list of segment shapely
+
         &quot;&quot;&quot;
 
         tseg = []
 
-        for k in self.Gs.node.keys():
+        for k in list(self.Gs.node.keys()):
             if k &gt; 0:
                 #v1.1 lnp = self.Gs.neighbors(k)
-                lnp = self.Gs[k].keys()
+                lnp = list(self.Gs[k].keys())
                 p1 = self.Gs.pos[lnp[0]]
                 p2 = self.Gs.pos[lnp[1]]
                 tseg.append(sh.LineString([(p1[0], p1[1]), (p2[0], p2[1])]))
@@ -3621,8 +3651,8 @@ import pylayers.util.project as pro
         1. Remove nodes which are not connected
 
         &quot;&quot;&quot;
-
-        for n in self.Gs.node.keys():
+        lk = list(self.Gs.node.keys())
+        for n in lk:
             if ((n &lt; 0) &amp; (self.Gs.degree(n) == 0)):
                 self.Gs.remove_node(n)
                 del self.Gs.pos[n]
@@ -3630,8 +3660,7 @@ import pylayers.util.project as pro
                     self.Gv.remove_node(n)
                 except:
                     pass
-
-        self.Np = len(np.nonzero(np.array(self.Gs.node.keys()) &lt; 0)[0])
+        self.Np = len(np.nonzero(np.array(list(self.Gs.node.keys())) &lt; 0)[0])
         self.g2npy()</div>
 
 <div class="viewcode-block" id="Layout.info_segment"><a class="viewcode-back" href="../../../api/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.info_segment">[docs]</a>    def info_segment(self, s1):
@@ -3726,17 +3755,17 @@ import pylayers.util.project as pro
         Parameters
         ----------
 
-            e1 : int 
+            e1 : int
 
         Returns
         -------
 
-            have_subseg_bool : boolean 
+            have_subseg_bool : boolean
 
 
         &quot;&quot;&quot;
         dk = self.Gs.node[e1]
-        if &#39;ss_name&#39; in dk:
+        if len(dk[&#39;iso&#39;])&gt;0:
             return True
         else:
             return False</div>
@@ -4117,7 +4146,6 @@ import pylayers.util.project as pro
         #
         # warning : seglist contains the segment number in tahe not in Gs
         #
-        #
 
         seglist  = np.unique(self.seginframe2(p1[0:2], p2[0:2])).astype(int)
         #seglist  = np.unique(self.seginframe(p1[0:2], p2[0:2]))
@@ -4136,36 +4164,20 @@ import pylayers.util.project as pro
         # [(link id,number of seg),...]
         # nl = zip(np.arange(nlink),llink)n
 
-        npta = self.tahe[0, seglist[upos]]
-        nphe = self.tahe[1, seglist[upos]]
+        seglist = seglist[upos]
+
+        npta = self.tahe[0, seglist]
+        nphe = self.tahe[1, seglist]
 
         Pta = self.pt[:, npta]
         Phe = self.pt[:, nphe]
 
-
-        # #
-        # # This part should possibly be improved
-        # #
-
-        # for i, nl in enumerate(llink):
-        #     try:
-        #         # P1 = np.hstack((P1,np.outer(p1[:,i],np.ones(nl))))
-        #         # P2 = np.hstack((P2,np.outer(p2[:,i],np.ones(nl))))
-        #         ilink = np.hstack(
-        #             (ilink, array([-1]), i * np.ones(nl, dtype=&#39;int&#39;)))
-        #     except:
-        #         # P1 = np.outer(p1[:,i],np.ones(nl))
-        #         # P2 = np.outer(p2[:,i],np.ones(nl))
-        #         ilink = i * np.ones(nl, dtype=&#39;int&#39;)
-
-        # check for intersection P1P2 PtaPhe
-        # bo = geu.intersect(P1[0:-1], P2[0:-1], Pta, Phe)
         Nscreen = len(npta)
         # get segment height bounds
         zmin = np.array([self.Gs.node[x][&#39;z&#39;][0]
-                         for x in self.tsg[seglist[upos]]])
+                         for x in self.tsg[seglist]])
         zmax = np.array([self.Gs.node[x][&#39;z&#39;][1]
-                         for x in self.tsg[seglist[upos]]])
+                         for x in self.tsg[seglist]])
         # centroid of the screen
         Pg = np.vstack(((Phe + Pta) / 2., (zmax + zmin) / 2.))
         Ptahe = Phe - Pta
@@ -4190,13 +4202,13 @@ import pylayers.util.project as pro
         data = np.zeros(Nseg, dtype=[(&#39;i&#39;, &#39;i8&#39;), (&#39;s&#39;, &#39;i8&#39;), (&#39;a&#39;, np.float32)])
 
         data[&#39;i&#39;] = ubo[0]
-        data[&#39;s&#39;] = self.tsg[ubo[1]]
+        data[&#39;s&#39;] = self.tsg[seglist[ubo[1]]]
 
         #
         # Calculate angle of incidence refered from segment normal
         #
 
-        norm = self.normal[:, ubo[1]]
+        norm = self.normal[:, seglist[ubo[1]]]
         # vector along the link
         uu = un[:, ubo[0]]
         unn = abs(np.sum(uu * norm, axis=0))
@@ -4218,8 +4230,8 @@ import pylayers.util.project as pro
         Returns
         -------
 
-        data[&#39;i&#39;] 
-        data[&#39;s&#39;] : list of segment number 
+        data[&#39;i&#39;]
+        data[&#39;s&#39;] : list of segment number
         data[&#39;a&#39;] : angle (in radians) between segment and LOS axis
 
         Examples
@@ -4282,7 +4294,7 @@ import pylayers.util.project as pro
         Pta = self.pt[:, npta]
         Phe = self.pt[:, nphe]
 
-        
+
         #
         # This part should possibly be improved
         #
@@ -4328,7 +4340,8 @@ import pylayers.util.project as pro
         data[&#39;i&#39;] = idxlnk
         data[&#39;s&#39;] = seglist
         data[&#39;a&#39;] = angle
-        return(data)</div>
+
+        return data</div>
 
 <div class="viewcode-block" id="Layout.angleonlinkold"><a class="viewcode-back" href="../../../api/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.angleonlinkold">[docs]</a>    def angleonlinkold(self, p1=np.array([0, 0]), p2=np.array([10, 3])):
         &quot;&quot;&quot; angleonlink(self,p1,p2) returns seglist between p1 and p2
@@ -4618,7 +4631,7 @@ import pylayers.util.project as pro
                 &gt;&gt;&gt; p1 = np.array([[0,0,0],[0,0,0]])
                 &gt;&gt;&gt; p2 = np.array([[10,10,10],[10,10,10]])
                 &gt;&gt;&gt; seglist = L.seginframe2(p1,p2)
-                &gt;&gt;&gt; edlist  = [ L.tsg[x] for x in  seglist)
+                &gt;&gt;&gt; edlist  = [ L.tsg[x] for x in  seglist ]
                 &gt;&gt;&gt; fig,ax = L.showG(&#39;s&#39;,edlist=edlist)
 
         &quot;&quot;&quot;
@@ -5686,17 +5699,17 @@ import pylayers.util.project as pro
         if verbose:
             Buildpbar.update(1)
         if &#39;t&#39; in graph:
-            self.buildGt(difftol=difftol,verbose=verbose,tqdmpos=1)
+            self.buildGt(difftol=difftol, verbose=verbose, tqdmpos=1)
             self.lbltg.extend(&#39;t&#39;)
         if verbose:
             Buildpbar.update(1)
         if &#39;v&#39; in graph:
-            self.buildGv(verbose=verbose,tqdmpos=1)
+            self.buildGv(verbose=verbose, tqdmpos=1)
             self.lbltg.extend(&#39;v&#39;)
         if verbose:
             Buildpbar.update(1)
         if &#39;i&#39; in graph:
-            self.buildGi(verbose=verbose,tqdmpos=1)
+            self.buildGi(verbose=verbose, tqdmpos=1)
             if not multi:
                 self.outputGi(verbose=verbose,tqdmpos=1)
             else:
@@ -5717,7 +5730,9 @@ import pylayers.util.project as pro
         # add hash to node 0 of Gs
 
         filelay = pyu.getlong(self._filename, pro.pstruc[&#39;DIRLAY&#39;])
-        _hash = hashlib.md5(open(filelay, &#39;rb&#39;).read()).hexdigest()
+        fd = open(filelay,&#39;rb&#39;)
+        _hash = hashlib.md5(fd.read()).hexdigest()
+        fd.close()
         self.Gt.add_node(0, hash=_hash)
 
         # There is a dumpw after each build
@@ -5826,7 +5841,7 @@ import pylayers.util.project as pro
 
             self.g2npy()
 
-        
+
             filediff = os.path.join(path, &#39;ddiff.gpickle&#39;)
             if os.path.isfile(filediff):
                 ddiff = read_gpickle(filediff)
@@ -5837,14 +5852,14 @@ import pylayers.util.project as pro
             filelnss = os.path.join(path, &#39;lnss.gpickle&#39;)
             if os.path.isfile(filelnss):
                 lnss = read_gpickle(filelnss)
-                setattr(self, &#39;lnss&#39;, lnss) 
-            else : 
+                setattr(self, &#39;lnss&#39;, lnss)
+            else :
                 self.lnss=[]
 
         filedca = os.path.join(path, &#39;dca.gpickle&#39;)
         if os.path.isfile(filedca):
             dca = read_gpickle(filedca)
-            setattr(self, &#39;dca&#39;,dca) 
+            setattr(self, &#39;dca&#39;,dca)
 
         filem = os.path.join(path, &#39;m.gpickle&#39;)
         if os.path.isfile(filem):
@@ -8816,7 +8831,7 @@ import pylayers.util.project as pro
                     &#39;lvis&#39;: [&#39;nn&#39;, &#39;ne&#39;, &#39;ee&#39;],
                     &#39;linter&#39;: [&#39;RR&#39;, &#39;TT&#39;, &#39;RT&#39;, &#39;TR&#39;, &#39;RD&#39;, &#39;DR&#39;, &#39;TD&#39;, &#39;DT&#39;, &#39;DD&#39;],
                     &#39;show0&#39;: False,
-                    &#39;axis&#39;: False,
+                    &#39;axis&#39;: True,
                     &#39;overlay&#39;: False,
                     &#39;diffraction&#39;: False
                     }
@@ -8827,7 +8842,7 @@ import pylayers.util.project as pro
 
         if kwargs[&#39;aw&#39;] != []:
             kwargs[&#39;airwalls&#39;] = kwargs[&#39;aw&#39;]
-        # overriding first argument graph
+
         if &#39;graph&#39; in kwargs:
             graph = kwargs[&#39;graph&#39;]
 
@@ -8877,6 +8892,7 @@ import pylayers.util.project as pro
             #
             # Draw segment slab per slab with proper linewidth and color
             #
+
             for lmat in sllist:
                 #print(lmat)
                 lseg = self.name[lmat]
@@ -9440,7 +9456,7 @@ import pylayers.util.project as pro
             raise NameError(str(pt) + &quot; is not in any cycle&quot;)</div>
 
 <div class="viewcode-block" id="Layout.cy2pt"><a class="viewcode-back" href="../../../api/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.cy2pt">[docs]</a>    def cy2pt(self, cy=0, h=1.2):
-        &quot;&quot;&quot;return a point into a given cycle
+        &quot;&quot;&quot;returns a point into a given cycle
 
         Parameters
         ----------
@@ -9455,6 +9471,7 @@ import pylayers.util.project as pro
         -------
 
         point  : nd.array
+            3d point
 
         See Also
         --------
@@ -9877,158 +9894,6 @@ import pylayers.util.project as pro
 
 
 
-<div class="viewcode-block" id="Layout.editor"><a class="viewcode-back" href="../../../api/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.editor">[docs]</a>    def editor(self):
-        &quot;&quot;&quot; invoke interactive layout graphical editor
-
-        Notes
-        -----
-
-        point edition
-
-            m  toggle point edition mode  (CP : Create Point)
-
-                lclic same x
-                rclic same y
-                cclic free point
-
-        segment edition
-
-            [0-f] - display one of the 16 first layers
-            x : save structure
-            o : toggle overlay
-
-        &quot;&quot;&quot;
-
-        fig = plt.gcf()
-        ax = fig.add_subplot(111)
-        self.display[&#39;nodes&#39;] = True
-        self.display[&#39;ednodes&#39;] = True
-        self.display[&#39;subsegnb&#39;] = True
-        self.display[&#39;transition&#39;] = True
-        self.display[&#39;ticksoff&#39;] = True
-
-        #self.af = SelectL2(self,fig=fig,ax=ax)
-        self.af = SelectL(self, fig=fig, ax=ax)
-
-        fig, ax = self.af.show(fig, ax, clear=True)
-
-        self.cid1 = fig.canvas.mpl_connect(&#39;button_press_event&#39;,
-                                           self.af.OnClick)
-        self.cid2 = fig.canvas.mpl_connect(&#39;button_release_event&#39;,
-                                           self.af.OnClickRelease)
-        self.cid3 = fig.canvas.mpl_connect(&#39;motion_notify_event&#39;,
-                                           self.af.OnMotion)
-        self.cid4 = fig.canvas.mpl_connect(&#39;key_press_event&#39;,
-                                           self.af.OnPress)
-        self.cid5 = fig.canvas.mpl_connect(&#39;key_release_event&#39;,
-                                           self.af.OnRelease)
-
-        plt.draw()
-        plt.axis(&#39;tight&#39;)
-        plt.show()</div>
-
-#        &quot;&quot;&quot;
-#        &quot;&quot;&quot;
-#
-#        # import gtk
-#        from matplotlib.figure import Figure
-#        from matplotlib.backends.backend_gtkagg import FigureCanvasGTKAgg as FigureCanvas
-#        from matplotlib.backends.backend_gtkagg import NavigationToolbar2GTKAgg as NavigationToolbar
-#        from matplotlib.backend_bases import key_press_handler
-#
-#        win = gtk.Window()
-#        win.show_all()
-#
-#
-#        win = gtk.Window()
-#        win.connect(&quot;destroy&quot;, lambda x: gtk.main_quit())
-#        win.set_default_size(400,300)
-#        win.set_title(&quot;Embedding in GTK&quot;)
-#
-#        vbox = gtk.VBox()
-#        win.add(vbox)
-#
-#        fig = Figure()
-#        ax = fig.add_subplot(111)
-#
-#        fig,ax = self.showG(&#39;s&#39;,fig=fig,ax=ax)
-#
-#        canvas = FigureCanvas(fig)  # a gtk.DrawingArea
-#        canvas.show()
-#        vbox.pack_start(canvas)
-#        toolbar = NavigationToolbar(canvas, win)
-#        vbox.pack_start(toolbar, False, False)
-#
-#
-#        def on_key_event(event):
-#            print(&#39;you pressed %s&#39;%event.key)
-#            key_press_handler(event, canvas, toolbar)
-#
-#        canvas.mpl_connect(&#39;key_press_event&#39;, on_key_event)
-#
-#        win.show_all()
-#        gtk.main()
-
-<div class="viewcode-block" id="Layout.editorTk"><a class="viewcode-back" href="../../../api/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.editorTk">[docs]</a>    def editorTk(self):
-        &quot;&quot;&quot; invoke interactive layout graphical editor
-
-        Notes
-        -----
-
-        point edition
-
-            m  toggle point edition mode  (CP : Create Point)
-
-                lclic same x
-                rclic same y
-                cclic free point
-
-        segment edition
-
-            [0-f] - display one of the 16 first layers
-            x : save structure
-            o : toggle overlay
-
-        &quot;&quot;&quot;
-
-        #import matplotlib
-        # matplotlib.use(&#39;TkAgg&#39;)
-
-        from matplotlib.backend_bases import key_press_handler
-        from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
-        from matplotlib.figure import Figure
-        import Tkinter as Tk
-
-        root = Tk.Tk()
-        root.wm_title(&#39;Pylayers Layout Editor&#39;)
-
-        fig = Figure()
-        ax = fig.add_subplot(111)
-        # ax.plot(np.arange(10))
-
-        canvas = FigureCanvasTkAgg(fig, master=root)
-        canvas.show()
-        canvas.get_tk_widget().pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
-
-        toolbar = NavigationToolbar2TkAgg(canvas, root)
-        toolbar.update()
-        canvas._tkcanvas.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
-
-        button = Tk.Button(master=root, text=&#39;Quit&#39;, command=sys.exit)
-        button.pack(side=Tk.BOTTOM)
-
-        self.display[&#39;nodes&#39;] = True
-        self.display[&#39;ednodes&#39;] = True
-
-        select = SelectL(self, canvas)
-
-        # self.af.show(clear=True)
-
-        self.cid1 = canvas.mpl_connect(&#39;button_press_event&#39;, select.OnClick)
-        self.cid2 = canvas.mpl_connect(&#39;key_press_event&#39;, select.OnPress)
-        # ax.axis(&#39;tight&#39;)
-        canvas.show()
-        Tk.mainloop()</div>
 
 <div class="viewcode-block" id="Layout.info"><a class="viewcode-back" href="../../../api/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.info">[docs]</a>    def info(self):
         &quot;&quot;&quot; gives information about the Layout
@@ -10067,8 +9932,16 @@ import pylayers.util.project as pro
             print(&quot;no Gr graph&quot;)</div>
 
 <div class="viewcode-block" id="Layout.facets3D"><a class="viewcode-back" href="../../../api/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.facets3D">[docs]</a>    def facets3D(self, edlist, name=&#39;Layer&#39;, subseg=False):
-        &quot;&quot;&quot;
-        facets3d(edlist,name)
+        &quot;&quot;&quot; create facet 3D for geomview
+
+        Parameters
+        ----------
+
+        edlist
+        name : string
+        subseg : boolean 
+
+
         &quot;&quot;&quot;
 
         filename = name + &#39;.list&#39;
@@ -10132,18 +10005,21 @@ import pylayers.util.project as pro
 
         boolean
 
+        See Also
+        --------
+
+        editor.py
+
         &quot;&quot;&quot;
         # transpose point numbering
 
-        upnt = filter(lambda x: x &lt; 0, self.Gs.nodes())
-        try:
-            ta = np.nonzero(np.array(upnt) == ta)[0][0]
-            he = np.nonzero(np.array(upnt) == he)[0][0]
-        except:
-            import ipdb
-            ipdb.set_trace()
-        res = filter(lambda x: (((x[0] == ta) &amp; (x[1] == he))
-                                | ((x[0] == he) &amp; (x[1] == ta))), zip(self.tahe[0], self.tahe[1]))
+        upnt = [ x for x in self.Gs.nodes() if x &lt; 0 ]
+        ta = np.nonzero(np.array(upnt) == ta)[0][0]
+        he = np.nonzero(np.array(upnt) == he)[0][0]
+        res = [x for x in zip(self.tahe[0], self.tahe[1])
+              if (((x[0] == ta) &amp; (x[1] == he)) |
+                  ((x[0] == he) &amp; (x[1] == ta)))  ]
+
         if len(res) &gt; 0:
             return True
         else:
@@ -10174,15 +10050,16 @@ import pylayers.util.project as pro
 
         &quot;&quot;&quot;
         # print&quot;ispoint : pt &quot;, pt
-        pts = np.array(self.Gs.pos.values()).T
-        ke = np.array(list(dict(self.Gs.pos).keys()))
+        pts = np.array(list(self.Gs.pos.values())).T
+        ke = np.array(list(self.Gs.pos.keys()))
         diff = pts - pt.reshape(2, 1)
         v = np.sqrt(np.sum(diff * diff, axis=0))
         nz = (v &gt; tol)
         b = nz.prod()
         if b == 1:
             # if all layout points are different from pt
-            return(0,np.min(v))
+            #return(0,np.min(v))
+            return(0)
         else:
             nup = np.where(nz == False)[0]
             if len(nup) == 1:
@@ -11214,7 +11091,7 @@ import pylayers.util.project as pro
 
         return(p_Tx, p_Rx)</div>
 
-<div class="viewcode-block" id="Layout.boundary"><a class="viewcode-back" href="../../../api/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.boundary">[docs]</a>    def boundary(self, percx=0.15, percy=0.15, xlim=(), force=False):
+<div class="viewcode-block" id="Layout.boundary"><a class="viewcode-back" href="../../../api/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.boundary">[docs]</a>    def boundary(self, percx=0.15, percy=0.15, xlim=(), force=False, minD=10):
         &quot;&quot;&quot; add a blank boundary around layout
 
         Parameters
@@ -11224,6 +11101,9 @@ import pylayers.util.project as pro
             percentage of Dx for x offset calculation (default 0.15)
         percy : float
            percentage of Dy for y offset calculation (default 0.15)
+        minD : miimum distance for boundary
+        force : boolean
+            force modification of boundaries
 
         self.lboundary is the list of the nodes of the added boundary
         self.axn is the zone without the boundary extension
@@ -11238,24 +11118,24 @@ import pylayers.util.project as pro
 
         &quot;&quot;&quot;
         if not self.hasboundary or force:
-            if len(self.Gs.pos.values()) != 0:
-                xmax = max(p[0] for p in self.Gs.pos.values())
-                xmin = min(p[0] for p in self.Gs.pos.values())
-                ymax = max(p[1] for p in self.Gs.pos.values())
-                ymin = min(p[1] for p in self.Gs.pos.values())
-            elif xlim == ():
-                xmin = -20.
-                xmax = 20.
-                ymin = -10.
-                ymax = 10.
-            else:
+            if xlim!=():
                 xmin = xlim[0]
                 xmax = xlim[1]
                 ymin = xlim[2]
                 ymax = xlim[3]
+            elif len(self.Gs.pos.values()) != 0:
+                xmax = max(p[0] for p in self.Gs.pos.values())
+                xmin = min(p[0] for p in self.Gs.pos.values())
+                ymax = max(p[1] for p in self.Gs.pos.values())
+                ymin = min(p[1] for p in self.Gs.pos.values())
+            else:
+                xmin = -20.
+                xmax = 20.
+                ymin = -10.
+                ymax = 10.
 
-            Dx = xmax - xmin
-            Dy = ymax - ymin
+            Dx = np.maximum(xmax - xmin,minD)
+            Dy = np.maximum(ymax - ymin,minD)
             dx = Dx * percx
             dy = Dy * percy
 
@@ -11282,7 +11162,17 @@ import pylayers.util.project as pro
             self.ax = (xmin - dx, xmax + dx, ymin - dy, ymax + dy)
             self.display[&#39;box&#39;] = self.ax
             self.hasboundary = True
+            self.g2npy()
+        elif xlim!=():
+            # change points coordinates
+            self.Gs.pos[self.lboundary[0]]=(xlim[0],xlim[2])
+            self.Gs.pos[self.lboundary[1]]=(xlim[1],xlim[2])
+            self.Gs.pos[self.lboundary[2]]=(xlim[1],xlim[3])
+            self.Gs.pos[self.lboundary[3]]=(xlim[0],xlim[3])
+            self.ax = xlim
+            self.display[&#39;box&#39;] = xlim
             self.g2npy()</div>
+
 
 <div class="viewcode-block" id="Layout.off_overlay"><a class="viewcode-back" href="../../../api/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.off_overlay">[docs]</a>    def off_overlay(self, dx=0, dy=0):
         &quot;&quot;&quot; offset overlay image
@@ -11582,7 +11472,7 @@ if __name__ == &quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on May 31, 2018.
+      Last updated on Sep 24, 2018.
 
     </p>
   </div>

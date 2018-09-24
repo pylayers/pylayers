@@ -584,6 +584,7 @@ logger = logging.getLogger(__name__)
             # In outdoor situation we delete transmission node involving
             # an indoor cycle at the exception of AIR
             #
+
             cindoor = [p for p in self.L.Gt.nodes() if self.L.Gt.node[p][&#39;indoor&#39;]]
 
             if self._L.typ ==&#39;outdoor&#39;:
@@ -592,7 +593,7 @@ logger = logging.getLogger(__name__)
                 lT  =  [k for k in u if (len(k)==3)]
                 # lTi : transmission connected at least to an indoor cycle
                 lTi = [ k for k in lT if ((k[1]  in cindoor) or (k[2] in cindoor))]
-                # lTiw : those which are wall (not those above buildings)
+                # lTiw : those which are walls (not those above buildings)
                 lTiw = [ k for k in lTi if self.L.Gs.node[k[0]][&#39;name&#39;]!=&#39;AIR&#39; ]
 
                 self.L.Gi.remove_nodes_from(lTiw)
@@ -603,9 +604,12 @@ logger = logging.getLogger(__name__)
                         output = self.L.Gi[e[0]][e[1]][&#39;output&#39;]
                     except:
                         pdb.set_trace()
+                    tbd = []
                     for l in output.keys():
                         if l in lTiw:
-                            del output[l]
+                            tbd.append(l)
+                    for d in tbd : 
+                        del output[d]
 
                     self.L.Gi[e[0]][e[1]][&#39;output&#39;]=output
             #self.L.dumpw()
@@ -723,15 +727,15 @@ logger = logging.getLogger(__name__)
     def a(self,position):
         if not self.L.ptin(position):
             # limit position in the visible region L.ax
-            if position[0] &lt; self.L.ax[0]:
-                position[0] = self.L.ax[0]
-            if position[0] &gt; self.L.ax[1]:
-                position[0] = self.L.ax[1]
-            if position[1] &lt; self.L.ax[2]:
-                position[1] = self.L.ax[2]
-            if position[1] &gt; self.L.ax[3]:
-                position[1] = self.L.ax[3]
-            # raise NameError (&#39;Warning : point a is not inside the Layout&#39;)
+            #if position[0] &lt; self.L.ax[0]:
+                #position[0] = self.L.ax[0]
+            # if position[0] &gt; self.L.ax[1]:
+            #     position[0] = self.L.ax[1]
+            # if position[1] &lt; self.L.ax[2]:
+            #     position[1] = self.L.ax[2]
+            # if position[1] &gt; self.L.ax[3]:
+            #     position[1] = self.L.ax[3]
+            raise NameError (&#39;Warning : point a is not inside the Layout&#39;)
             # raise NameError (&#39;Warning : point a is not inside the Layout&#39;)
         if not self.L.pt2cy(position) == self.ca:
             self.ca = self.L.pt2cy(position)
@@ -747,15 +751,15 @@ logger = logging.getLogger(__name__)
     @b.setter
     def b(self,position):
         if not self.L.ptin(position):
-            if position[0]&lt;self.L.ax[0]:
-                position[0]=self.L.ax[0]
-            if position[0]&gt;self.L.ax[1]:
-                position[0]=self.L.ax[1]
-            if position[1]&lt;self.L.ax[2]:
-                position[1]=self.L.ax[2]
-            if position[1]&gt;self.L.ax[3]:
-                position[1]=self.L.ax[3]
-            # raise NameError (&#39;Warning : point b is not inside the Layout&#39;)
+            # if position[0]&lt;self.L.ax[0]:
+            #     position[0]=self.L.ax[0]
+            # if position[0]&gt;self.L.ax[1]:
+            #     position[0]=self.L.ax[1]
+            # if position[1]&lt;self.L.ax[2]:
+            #     position[1]=self.L.ax[2]
+            # if position[1]&gt;self.L.ax[3]:
+            #     position[1]=self.L.ax[3]
+            raise NameError (&#39;Warning : point b is not inside the Layout&#39;)
         if not self.L.pt2cy(position) == self.cb:
             self.cb = self.L.pt2cy(position)
         self._b = position
@@ -1004,15 +1008,17 @@ logger = logging.getLogger(__name__)
         print(&quot;Ray : &quot;+str(iray))
         if not self.R.evaluated:
             self.R.eval()
+
         PM = self.R.info(iray,ifGHz=0,matrix=1)
         print(&quot;Propagation Channel 2x2 (C):&quot;)
         self.C.inforay(iray)
+
         if self.C.islocal:
             # back to global frame
             self.C.locbas()
             dist = self.C.tauk[iray]*0.3
             C = dist*np.array([[self.C.Ctt.y[iray,0],self.C.Ctp.y[iray,0]],
-                        [self.C.Cpt.y[iray,0],self.C.Cpt.y[iray,0]]] )
+                               [self.C.Cpt.y[iray,0],self.C.Cpt.y[iray,0]]] )
             b = np.allclose(PM,C)
             self.C.locbas()</div>
 
@@ -1816,7 +1822,6 @@ logger = logging.getLogger(__name__)
         #############
         # get 2D rays
         #############
-
         if self.dexist[&#39;ray2&#39;][&#39;exist&#39;] and not (&#39;ray2&#39; in kwargs[&#39;force&#39;]):
             logger.info(&quot; Load r2d from %s&quot;, self.dexist[&#39;ray2&#39;][&#39;grpname&#39;])
             self.load(r2d,self.dexist[&#39;ray2&#39;][&#39;grpname&#39;], L=self.L)
@@ -1889,7 +1894,7 @@ logger = logging.getLogger(__name__)
             raise NameError(&#39;No rays have been found. Try to re-run the simulation with a higher S.cutoff &#39;)
         try:
             pbar.update(20)
-        except: 
+        except:
             pass
         ############
         # Ctilde
@@ -1931,7 +1936,7 @@ logger = logging.getLogger(__name__)
         self.H = H
         try:
             pbar.update(20)
-        except: 
+        except:
             pass
 
         if kwargs[&#39;applywav&#39;]:
@@ -1941,7 +1946,7 @@ logger = logging.getLogger(__name__)
                 self.ir = self.H.get_cir(self.wav.sfg)
         try:
             pbar.update(20)
-        except: 
+        except:
             pass
         self.checkh5()</div>
 
@@ -2247,11 +2252,13 @@ logger = logging.getLogger(__name__)
             #
             # Select group of interactions
             #
-            if type(kwargs[&#39;lr&#39;])==float:
+            if type(kwargs[&#39;lr&#39;])==list:
+                lr = kwargs[&#39;lr&#39;]
+            else:
                 if kwargs[&#39;lr&#39;]==-1:
                     lr  = np.arange(self.R.nray)
-            else:
-                lr = kwargs[&#39;lr&#39;]
+                else:
+                    lr = [ int(kwargs[&#39;lr&#39;]) ]
 
 
             #
@@ -2267,7 +2274,7 @@ logger = logging.getLogger(__name__)
                     vmax = 10*np.log10(vmax)
             else:
                 vmin = kwargs[&#39;vmin&#39;]
-                vmax = kwargs[&#39;vmax&#39;] 
+                vmax = kwargs[&#39;vmax&#39;]
 
 
             #
@@ -2370,6 +2377,7 @@ logger = logging.getLogger(__name__)
         #
         # white scale
         #
+
         xe = 1
         ye = 3
         le = 1
@@ -2382,16 +2390,16 @@ logger = logging.getLogger(__name__)
         ax.set_xlabel(&#39;x meters&#39;,fontsize = 24)
         ax.set_ylabel(&#39;y meters&#39;,fontsize = 24)
         #plt.savefig(&#39;Link.eps&#39;)
+
         if kwargs[&#39;bsave&#39;]:
             plt.savefig(&#39;Link&#39;+str(kwargs[&#39;ix&#39;])+&#39;.png&#39;)
             plt.close()
 
+        plt.axis(&#39;auto&#39;)
         return fig,ax</div>
 
     def _show3(self,rays=True, lay= True, ant= True, newfig= False, **kwargs):
         &quot;&quot;&quot; display the simulation scene using Mayavi
-            using Mayavi
-
 
         Parameters
         ----------
@@ -2459,18 +2467,7 @@ logger = logging.getLogger(__name__)
             # evaluate antenna if required
             if not Atx.evaluated:
                 Atx.eval()
-#            try:
-#                Atx._show3(T=Ttx.reshape(3,3),
-#                           po=ptx,
-#                           title=False,
-#                           bcolorbar=False,
-#                           bnewfig=False,
-#                           bcircle = False,
-#                           name = Atx._filename,
-#                           scale= scale,
-#                           binteract=False)
-#            except:
-#                Atx.eval()
+
             Atx._show3(T=Ttx.reshape(3,3),
                         po=ptx,
                         title=False,
@@ -2480,20 +2477,10 @@ logger = logging.getLogger(__name__)
                         name = Atx._filename,
                         scale= scale,
                         binteract=False)
+
             if not Arx.evaluated:
                 Arx.eval()
-#            try:
-#                Arx._show3(T=Trx.reshape(3,3),
-#                            po=prx,
-#                            title=False,
-#                            bcolorbar=False,
-#                            bnewfig=False,
-#                            bcircle = False,
-#                            name = Arx._filename,
-#                            scale= scale,
-#                            binteract=False)
-#            except:
-                #Arx.eval()
+
             Arx._show3(T=Trx.reshape(3,3),
                         po=prx,
                         title=False,
@@ -2504,32 +2491,12 @@ logger = logging.getLogger(__name__)
                         scale= scale,
                         binteract=False)
         if lay:
-            # check if indoor/outdoor, outdoor or indoor situations
-            # a_in = self.L.Gt.node[self.ca][&#39;indoor&#39;]
-            # b_in = self.L.Gt.node[self.cb][&#39;indoor&#39;]
-
-            # if (a_in) &amp; (b_in):
-            #     # indoor
-            #     show_ceil=False
-            #     opacity = 0.7
-            #     ceil_opacity = 0.
-            # elif ((not a_in) &amp; (not b_in)):
-            #     # outdoor
-            #     show_ceil=True
-            #     opacity = 1.
-            #     ceil_opacity = 1.
-            # else:
-            #     # indoor/outdoor
-            #     show_ceil=True
-            #     opacity = 0.7
-            #     ceil_opacity = 0.7
-
             if self.L.typ == &#39;outdoor&#39;:
-                show_ceil=True
+                show_ceil = False
                 opacity = 1.
                 ceil_opacity = 1.
             elif self.L.typ == &#39;indoor&#39;:
-                show_ceil=False
+                show_ceil = True
                 opacity = 0.7
                 ceil_opacity = 0.
 
@@ -2581,7 +2548,9 @@ logger = logging.getLogger(__name__)
         rot = eval(&#39;self.T&#39;+ant).reshape(3,3)
         pos = eval(&#39;self.&#39;+ant)
 
-        if not antenna.full_evaluated:
+        #if not antenna.full_evaluated:
+        # if not antenna.full_evaluated:
+        if not antenna.evaluated:
             antenna.eval()
 
 
@@ -2656,6 +2625,7 @@ logger = logging.getLogger(__name__)
                     &#39;taumin&#39;: 0,
                     &#39;taumax&#39;: 160,
                     &#39;bgrid&#39;:True,
+                    &#39;cmap&#39;:&#39;jet&#39;,
                     &#39;ix&#39; : 0,
                     &#39;bsave&#39; : False,
                     &#39;fontsize&#39;:18
@@ -2900,7 +2870,7 @@ if (__name__ == &quot;__main__&quot;):
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on May 31, 2018.
+      Last updated on Sep 24, 2018.
 
     </p>
   </div>

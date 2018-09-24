@@ -2342,18 +2342,20 @@ logger = logging.getLogger(__name__)
 
         In the same time the signature of the ray is stored in the Rays object
 
-        Todo : Find the best memory implemntation
+        Todo : Find the best memory implementation
 
         See Also
         --------
 
         Signature.sig2ray
+        Signature.raysv
 
         &quot;&quot;&quot;
 
-        if type(ptx)==int:
+        if type(ptx) == int:
             ptx = np.array(self.L.Gt.pos[ptx])
-        if type(prx)==int:
+
+        if type(prx) == int:
             prx = np.array(self.L.Gt.pos[prx])
 
         rays = Rays(ptx,prx)
@@ -2531,7 +2533,6 @@ logger = logging.getLogger(__name__)
         # if source and target are in the same merged cycle
         # and ptx != prx
         #
-
         los = shg.LineString(((ptx[0], ptx[1]), (prx[0], prx[1])))
 
         # convex cycle of each point
@@ -2543,27 +2544,28 @@ logger = logging.getLogger(__name__)
         polycrx = self.L.Gt.node[cyprx][&#39;polyg&#39;]
 
         # The Line of sight situation is detected here
-        # dtxtx : distance between Tx and Rx
+        # dtxtx : square distance between Tx and Rx
         dtxrx = np.sum((ptx-prx)*(ptx-prx))
         if dtxrx&gt;1e-15:
             if polyctx.contains(los):
                 rays.los = True
-
             else:
                 rays.los = False
 
         M = self.image2(ptx)
         R = self.backtrace(ptx,prx,M)
+
         #
         # Add LOS ray in ray 2D
         #
+
         if rays.los:
             R[0]= {&#39;sig&#39;:np.zeros(shape=(0,0,1)),&#39;pt&#39;: np.zeros(shape=(2,1,0))}
 
         rays.update(R)
         rays.nb_origin_sig = len(self.keys())
         rays.origin_sig_name = self.filename
-        #pdb.set_trace()
+
         return rays</div>
 
 <div class="viewcode-block" id="Signatures.backtrace"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.Signatures.html#pylayers.antprop.signature.Signatures.backtrace">[docs]</a>    def backtrace(self, tx, rx, M):
@@ -3844,7 +3846,7 @@ if __name__ == &quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on May 31, 2018.
+      Last updated on Sep 24, 2018.
 
     </p>
   </div>

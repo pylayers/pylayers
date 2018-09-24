@@ -280,7 +280,7 @@ show</p>
 <dd><p>Determine effective bandwidth of the waveform.</p>
 <dl class="docutils">
 <dt>th_ratio <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>threshold ratio 
+<dd>threshold ratio
 threshold = max(abs())/th_ratio</dd>
 </dl>
 <p>Npt : Number of points</p>
@@ -329,7 +329,7 @@ link ( from the Friis formula) is introduced in this function.</p>
 <code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/waveform.html#Waveform.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.waveform.Waveform.info" title="Permalink to this definition">¶</a></dt>
 <dd><p>display information about waveform</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.signal.waveform import *
-&gt;&gt;&gt; w = Waveform(typ=&#39;generic&#39;,WGHz=0.499,fcGHz=4.49,feGHz=100,threshdB=3,twns=30)
+&gt;&gt;&gt; w = Waveform(typ=&#39;generic&#39;,WGHz=0.499,fcGHz=4.49,fsGHz=100,threshdB=3,twns=30)
 &gt;&gt;&gt; w.show()
 &gt;&gt;&gt; plt.show()
 </pre></div>
@@ -355,7 +355,7 @@ link ( from the Friis formula) is introduced in this function.</p>
 <code class="descname">ref156</code><span class="sig-paren">(</span><em>beta=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/waveform.html#Waveform.ref156"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.waveform.Waveform.ref156" title="Permalink to this definition">¶</a></dt>
 <dd><p>reference pulse of IEEE 802.15.6 UWB standard</p>
 <dl class="docutils">
-<dt>beta <span class="classifier-delimiter">:</span> <span class="classifier">float </span></dt>
+<dt>beta <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
 <dd>roll-off factor</dd>
 </dl>
 <p>Tns = 1/499.2MHz</p>
@@ -399,7 +399,7 @@ link ( from the Friis formula) is introduced in this function.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on May 31, 2018.
+      Last updated on Sep 24, 2018.
 
     </p>
   </div>

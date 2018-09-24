@@ -1059,9 +1059,11 @@ bernard
 
         files = os.listdir(dirname)
         if serie != &#39;&#39;:
-            self._fileBS = filter(lambda x : &#39;S&#39;+str(serie) in x ,files)[0]
+            #self._fileBS = filter(lambda x : &#39;S&#39;+str(serie) in x ,files)[0]
+            self._fileBS = [ x for x in files if &#39;S&#39;+str(serie) in x ][0]
         else:
-            filesc = filter(lambda x : &#39;Sc&#39;+scenario in x ,files)
+            self._fileBS = [ x for x in files if &#39;R&#39;+str(serie) in x ][0]
+            #filesc = filter(lambda x : &#39;Sc&#39;+scenario in x ,files)
             self._fileBS = filter(lambda x : &#39;R&#39;+str(run) in x ,filsc)[0]
 
         bespo = pd.read_csv(os.path.join(dirname,self._fileBS),index_col=&#39;ts&#39;)
@@ -1138,7 +1140,7 @@ bernard
             self.idHKB[self.dHKB[k]]=k
 
         if serie != &#39;&#39;:
-            self._filehkb = filter(lambda x : &#39;S&#39;+str(serie) in x ,files)[0]
+            self._filehkb = [ x for x in files if &#39;S&#39;+str(serie) in x][0]
             tt = self._filehkb.split(&#39;_&#39;)
             if source == &#39;UR1&#39;:
                 self.scenario=tt[0].replace(&#39;Sc&#39;,&#39;&#39;)
@@ -1155,11 +1157,11 @@ bernard
                 self.video = tt[5].replace(&#39;.mat&#39;,&#39;&#39;)
 
         else:
-            filesc = filter(lambda x : &#39;Sc&#39;+scenario in x ,files)
+            filesc = [ x for x in files if x in &#39;Sc&#39;+scenario  ][0]
             if source==&#39;UR1&#39;:
-                self._filehkb = filter(lambda x : &#39;R&#39;+str(run) in x ,filsc)[0]
+                self._filehkb = [ x for x in filesc if x in &#39;R&#39;+str(run)][0]
             else:
-                self._filehkb = filter(lambda x : &#39;r&#39;+str(run) in x ,filsc)[0]
+                self._filehkb = [ x for x in filesc if x in &#39;r&#39;+str(run)][0]
 
 
         data = io.loadmat(os.path.join(dirname,self._filehkb))
@@ -4418,7 +4420,7 @@ bernard
                     df_tmp[&#39;v&#39;]=np.sqrt(np.sum(df_tmp[[&#39;vx&#39;,&#39;vy&#39;,&#39;vz&#39;]]**2,axis=1))
                     df_tmp[[&#39;ax&#39;,&#39;ay&#39;,&#39;az&#39;]]=df_tmp[[&#39;vx&#39;,&#39;vy&#39;,&#39;vz&#39;]].diff()/(t[1]-t[0])
                     df_tmp[&#39;a&#39;]=np.sqrt(np.sum(df_tmp[[&#39;ax&#39;,&#39;ay&#39;,&#39;az&#39;]]**2,axis=1))
-                    df_tmp[&#39;id&#39;]=B[b].dev.keys()[d]
+                    df_tmp[&#39;id&#39;] = list(B[b].dev.keys())[d]
                     df_tmp[&#39;subject&#39;]=B[b].name
                     try :
                         df = pd.concat([df,df_tmp])
@@ -5507,7 +5509,7 @@ bernard
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on May 31, 2018.
+      Last updated on Sep 24, 2018.
 
     </p>
   </div>

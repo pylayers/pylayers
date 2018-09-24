@@ -556,8 +556,7 @@ except:
 
 
         try:
-            #mocapprefix : retrieve where the prefix is the body name
-            ump = [self.name.lower() in p.lower() for p in self._s]
+            ump = [self.name.lower() in str(p).lower() for p in self._s]
             if sum(ump) &gt;1:
                 # Handle case CorSer (serie=3,day=11)
                 self._mocap_prefix=&#39;Bernard:&#39;
@@ -601,16 +600,15 @@ except:
 
         self._mocanodes = self._p
 
-
         for p in prefix:
             tmpnode=[]
             for n in self._mocanodes:
-                tmpnode.append(n.replace(p,&#39;&#39;))
+                tmpnode.append(str(n).replace(p,&#39;&#39;))
                 self._mocanodes = tmpnode
 
 
         # 2 remove multiple entries due to orientation marker
-        self._mocanodes = [n.split(&#39;:&#39;)[0] for n in self._mocanodes]
+        self._mocanodes = [str(n).split(&#39;:&#39;)[0] for n in self._mocanodes]
 
         for d in rd :
             if self.dev[d][&#39;name&#39;] == &#39;hikob&#39;:
@@ -647,6 +645,9 @@ except:
         # s, p, f, info = c3d.read_c3d(filename)
         self._s, self._p, self._f, info = c3d.ReadC3d(filename)
 
+        self._s = [ s.decode() for s in self._s ]
+        self._p = [ p.decode() for p in self._p ]
+
         if self._multi_subject_mocap:
             us = [us for us, s in enumerate(self._s) if self.name in s ]
             up = [up for up, p in enumerate(self._p) if self.name in p ]
@@ -662,7 +663,7 @@ except:
 
             self._f =self._f[:,up,:]
             self._s=[s for s in self._s if self.name in s ]
-            self._p=[p for p in self._p if self.name in p ]
+            self._p=[p  for p in self._p if self.name in p ]
 
 
 
@@ -811,13 +812,14 @@ except:
 
                     nodename = self.nodes_Id[i][k].replace(&#39; &#39;,&#39;&#39;)
                     try:
-                        idx = self._p.index(self._mocap_prefix + nodename)
+                        idx = self._p.index(str(self._mocap_prefix) + nodename)
                     except:
                         try:
                         # fixing naming in serie 15 add &#39;_1&#39;
-                            idx = self._p.index(self._mocap_prefix + nodename+&#39;_1&#39;)
+                            idx = self._p.index(str(self._mocap_prefix) + nodename+&#39;_1&#39;)
                         except:
-                            idx = self._p.index(self._mocap_prefix + nodename+&#39;_2&#39;)
+                            pdb.set_trace()
+                            idx = self._p.index(str(self._mocap_prefix) + nodename+&#39;_2&#39;)
                     try:
                         tmp = tmp +self._f[0:self.nframes, idx, :].T
                     except:
@@ -1127,7 +1129,6 @@ except:
 
         sk = traj.distance(t) # covered distance along trajectory at time t
         smax = self.smocap[-1]
-
 
         ks = int(np.floor(sk/smax)) # number of full MOCAP sequences of frames
 
@@ -1473,7 +1474,7 @@ except:
                         c1=self.sl[:,1].astype(int)
                         pta = self.d[:,c0,0]
                         phe = self.d[:,c1,0]
-                        
+
                         de = self._f[0,self.dev[dev][&#39;uc3d&#39;][0],:][np.newaxis]
                         dtad = np.sqrt(np.sum((pta-de.T)**2,axis=0))
                         dhed = np.sqrt(np.sum((phe-de.T)**2,axis=0))
@@ -2262,8 +2263,8 @@ except:
 
 
 
-        Todo 
-        
+        Todo
+
         &quot;&quot;&quot;
 
         defaults = {&#39;frameId&#39; : 0,
@@ -3080,7 +3081,7 @@ if __name__ == &#39;__main__&#39;:
 
 
 
-<div class="viewcode-block" id="Cylinder"><a class="viewcode-back" href="../../../../api/references.html#pylayers.mobility.ban.body.Cylinder">[docs]</a>class Cylinder(object):
+
     &quot;&quot;&quot; Class for handling interfering bodies in CORMORAN measurement data
         navigation series day 12/06/2014
     &quot;&quot;&quot;
@@ -3110,7 +3111,7 @@ if __name__ == &#39;__main__&#39;:
 
         return(st)
 
-<div class="viewcode-block" id="Cylinder.loadC3D"><a class="viewcode-back" href="../../../../api/references.html#pylayers.mobility.ban.body.Cylinder.loadC3D">[docs]</a>    def loadC3D(self, filename=&#39;Nav_serie_006.c3d&#39;, nframes=-1 ,unit=&#39;cm&#39;):
+    def loadC3D(self, filename=&#39;Nav_serie_006.c3d&#39;, nframes=-1 ,unit=&#39;cm&#39;):
         &quot;&quot;&quot; load nframes of motion capture C3D file
 
         Parameters
@@ -3188,10 +3189,10 @@ if __name__ == &#39;__main__&#39;:
         self.Tmocap = self.nframes / info[&#39;VideoFrameRate&#39;]
 
         # time base of the motion capture file (sec)
-        self.time = np.linspace(0,self.Tmocap,self.nframes)</div>
+        self.time = np.linspace(0,self.Tmocap,self.nframes)
 
 
-<div class="viewcode-block" id="Cylinder.settopos"><a class="viewcode-back" href="../../../../api/pylayers.mobility.ban.body.Cylinder.html#pylayers.mobility.ban.body.Cylinder.settopos">[docs]</a>    def settopos(self,t,**kwargs):
+    def settopos(self,t,**kwargs):
 
         ut = np.where(t&lt;=self.time)[0][0]
         self.topos =self.d[:,:,ut]
@@ -3199,9 +3200,9 @@ if __name__ == &#39;__main__&#39;:
         self.bottom = copy.copy(self.top)
         self.bottom[2]=0
         self.toposradius =self.radius[ut]
-        self.toposFrameId = ut</div>
+        self.toposFrameId = ut
 
-<div class="viewcode-block" id="Cylinder.init_traj"><a class="viewcode-back" href="../../../../api/references.html#pylayers.mobility.ban.body.Cylinder.init_traj">[docs]</a>    def init_traj(self):
+    def init_traj(self):
         &quot;&quot;&quot; create trajectory object from given trajectory or mocap 
         &quot;&quot;&quot;
 
@@ -3215,7 +3216,7 @@ if __name__ == &#39;__main__&#39;:
         self.traj = tr.Trajectory()
         self.traj.generate(t=self.time,pt=self.pg.T,name=self.name)
         self.smocap = np.cumsum(np.sqrt(np.sum(d*d,axis=0)))
-        self.vmocap = self.smocap[-1]/self.Tmocap</div>
+        self.vmocap = self.smocap[-1]/self.Tmocap
 
 
     def _show3(self,**kwargs):
@@ -3279,7 +3280,7 @@ if __name__ == &#39;__main__&#39;:
 
 
     #@mlab.animate(delay=100)
-<div class="viewcode-block" id="Cylinder.anim"><a class="viewcode-back" href="../../../../api/references.html#pylayers.mobility.ban.body.Cylinder.anim">[docs]</a>    def anim(self):
+    def anim(self):
         &quot;&quot;&quot; animate cylinder
 
         Example
@@ -3301,7 +3302,7 @@ if __name__ == &#39;__main__&#39;:
 
         anim = range(5000,self.nframes,10)
 
-        
+
         while True:
             for k in anim:#range(len(t)):
                 self.settopos(t=t[k],cs=True)
@@ -3309,7 +3310,7 @@ if __name__ == &#39;__main__&#39;:
                 X=np.vstack((self.top,self.bottom))
                 # s = np.hstack((cylrad,cylrad))
                 self._mayapts.mlab_source.set(x=X[:,0], y=X[:,1], z=X[:,2])
-                yield</div></div>
+                yield
 </pre></div>
 
            </div>
@@ -3323,7 +3324,7 @@ if __name__ == &#39;__main__&#39;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on May 31, 2018.
+      Last updated on Sep 24, 2018.
 
     </p>
   </div>

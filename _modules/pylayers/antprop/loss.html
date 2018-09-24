@@ -1490,7 +1490,7 @@ from numba import jit
     L = np.zeros((Nphi, Nf))
     L0 = np.zeros(Nf)
     # loop over azimut
-    for ip in xrange(Nphi):
+    for ip in range(Nphi):
         x = X[ip, :]
         y = Y[ip, :]
         z = Z[ip, :]
@@ -1543,7 +1543,7 @@ from numba import jit
     L = np.zeros((Nphi, Nr, Nf))
     L0 = np.zeros(Nf)
     # loop over azimut
-    for ip in xrange(Nphi):
+    for ip in range(Nphi):
         # loop over range
         # il : 2 ... Nr-2
         # uk : 0 ....Nr-1
@@ -2298,7 +2298,7 @@ if __name__==&quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on May 31, 2018.
+      Last updated on Sep 24, 2018.
 
     </p>
   </div>

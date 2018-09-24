@@ -218,7 +218,7 @@
 <h1>Layout<a class="headerlink" href="#layout" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pylayers.gis.layout.Layout">
-<em class="property">class </em><code class="descclassname">pylayers.gis.layout.</code><code class="descname">Layout</code><span class="sig-paren">(</span><em>string=''</em>, <em>_filematini='matDB.ini'</em>, <em>_fileslabini='slabDB.ini'</em>, <em>_filefur=''</em>, <em>bcheck=False</em>, <em>bbuild=False</em>, <em>bgraphs=False</em>, <em>bverbose=False</em>, <em>bcartesian=True</em>, <em>dist_m=400</em>, <em>typ='indoor'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pylayers.gis.layout.</code><code class="descname">Layout</code><span class="sig-paren">(</span><em>string=''</em>, <em>_filematini='matDB.ini'</em>, <em>_fileslabini='slabDB.ini'</em>, <em>_filefur=''</em>, <em>bcheck=False</em>, <em>bbuild=False</em>, <em>bgraphs=False</em>, <em>bverbose=False</em>, <em>bcartesian=True</em>, <em>xlim=()</em>, <em>dist_m=400</em>, <em>typ='indoor'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="pylayers.util.project.PyLayers.html#pylayers.util.project.PyLayers" title="pylayers.util.project.PyLayers"><code class="xref py py-class docutils literal notranslate"><span class="pre">pylayers.util.project.PyLayers</span></code></a></p>
 <p>Handling Layout</p>
 <p>Gs     : Graph of points and segment (structure)
@@ -331,7 +331,7 @@ zmin</p>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.angleonlinkold" title="pylayers.gis.layout.Layout.angleonlinkold"><code class="xref py py-obj docutils literal notranslate"><span class="pre">angleonlinkold</span></code></a>([p1,&nbsp;p2])</td>
 <td>angleonlink(self,p1,p2) returns seglist between p1 and p2</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.boundary" title="pylayers.gis.layout.Layout.boundary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">boundary</span></code></a>([percx,&nbsp;percy,&nbsp;xlim,&nbsp;force])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.boundary" title="pylayers.gis.layout.Layout.boundary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">boundary</span></code></a>([percx,&nbsp;percy,&nbsp;xlim,&nbsp;force,&nbsp;minD])</td>
 <td>add a blank boundary around layout</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.build" title="pylayers.gis.layout.Layout.build"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build</span></code></a>([graph,&nbsp;verbose,&nbsp;difftol,&nbsp;multi])</td>
@@ -374,7 +374,7 @@ zmin</p>
 <td>not implemented</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.cy2pt" title="pylayers.gis.layout.Layout.cy2pt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cy2pt</span></code></a>([cy,&nbsp;h])</td>
-<td>return a point into a given cycle</td>
+<td>returns a point into a given cycle</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.cycleinline" title="pylayers.gis.layout.Layout.cycleinline"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cycleinline</span></code></a>(c1,&nbsp;c2)</td>
 <td>returns the intersection between a given line and all segments</td>
@@ -400,11 +400,11 @@ zmin</p>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.edit_seg" title="pylayers.gis.layout.Layout.edit_seg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edit_seg</span></code></a>(e1[,&nbsp;data])</td>
 <td>edit segment</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.editor" title="pylayers.gis.layout.Layout.editor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">editor</span></code></a>()</td>
-<td>invoke interactive layout graphical editor</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout.editor</span></code></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.editorTk" title="pylayers.gis.layout.Layout.editorTk"><code class="xref py py-obj docutils literal notranslate"><span class="pre">editorTk</span></code></a>()</td>
-<td>invoke interactive layout graphical editor</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout.editorTk</span></code></td>
+<td></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.exportosm" title="pylayers.gis.layout.Layout.exportosm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exportosm</span></code></a>()</td>
 <td>export layout in osm file format</td>
@@ -416,7 +416,7 @@ zmin</p>
 <td>calculate 3D facet from segment</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.facets3D" title="pylayers.gis.layout.Layout.facets3D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">facets3D</span></code></a>(edlist[,&nbsp;name,&nbsp;subseg])</td>
-<td>facets3d(edlist,name)</td>
+<td>create facet 3D for geomview</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.filterGi" title="pylayers.gis.layout.Layout.filterGi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filterGi</span></code></a>([situ])</td>
 <td>filter Gi to manage indoor/outdoor situations</td>
@@ -786,8 +786,8 @@ iso : list of isosegment</p>
 <dd><p>angleonlink(self,p1,p2) return (seglist,angle) between p1 and p2</p>
 <p>p1 : np.array (2 x Np) or (2,)
 p2 : np.array (2 x Np) or (2,)</p>
-<p>data[‘i’] 
-data[‘s’] : list of segment number 
+<p>data[‘i’]
+data[‘s’] : list of segment number
 data[‘a’] : angle (in radians) between segment and LOS axis</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.gis.layout import *
 &gt;&gt;&gt; L = Layout(&#39;DLR.lay&#39;)
@@ -859,7 +859,7 @@ p2 : np.array (3 x N) or (3,)</p>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.boundary">
-<code class="descname">boundary</code><span class="sig-paren">(</span><em>percx=0.15</em>, <em>percy=0.15</em>, <em>xlim=()</em>, <em>force=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.boundary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.boundary" title="Permalink to this definition">¶</a></dt>
+<code class="descname">boundary</code><span class="sig-paren">(</span><em>percx=0.15</em>, <em>percy=0.15</em>, <em>xlim=()</em>, <em>force=False</em>, <em>minD=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.boundary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.boundary" title="Permalink to this definition">¶</a></dt>
 <dd><p>add a blank boundary around layout</p>
 <dl class="docutils">
 <dt>percx <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
@@ -867,6 +867,10 @@ p2 : np.array (3 x N) or (3,)</p>
 <dt>percy <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
 <dd>percentage of Dy for y offset calculation (default 0.15)</dd>
 </dl>
+<p>minD : miimum distance for boundary
+force : boolean</p>
+<blockquote>
+<div>force modification of boundaries</div></blockquote>
 <p>self.lboundary is the list of the nodes of the added boundary
 self.axn is the zone without the boundary extension
 self.ax  is updated</p>
@@ -999,6 +1003,7 @@ tqdmpos : progressbar</p>
 <dt id="pylayers.gis.layout.Layout.check2">
 <code class="descname">check2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.check2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.check2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Layout checking</p>
+<p>tseg ; list of segment shapely</p>
 </dd></dl>
 
 <dl class="method">
@@ -1023,6 +1028,7 @@ tqdmpos : progressbar</p>
 xmax : float
 ymin : float
 ymax : float</p>
+<p>seglist : list of segment number</p>
 <blockquote>
 <div><ol class="arabic simple">
 <li>Determine all segments outside the clipping zone</li>
@@ -1044,14 +1050,17 @@ the AAS (Allowed Angular Sector)</p>
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.cy2pt">
 <code class="descname">cy2pt</code><span class="sig-paren">(</span><em>cy=0</em>, <em>h=1.2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.cy2pt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.cy2pt" title="Permalink to this definition">¶</a></dt>
-<dd><p>return a point into a given cycle</p>
+<dd><p>returns a point into a given cycle</p>
 <dl class="docutils">
 <dt>cy <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
 <dd>cycle number</dd>
 <dt>h <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
 <dd>point height</dd>
 </dl>
-<p>point  : nd.array</p>
+<dl class="docutils">
+<dt>point <span class="classifier-delimiter">:</span> <span class="classifier">nd.array</span></dt>
+<dd>3d point</dd>
+</dl>
 <p>Layout.pt2cy</p>
 </dd></dl>
 
@@ -1179,44 +1188,6 @@ added :</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pylayers.gis.layout.Layout.editor">
-<code class="descname">editor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.editor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.editor" title="Permalink to this definition">¶</a></dt>
-<dd><p>invoke interactive layout graphical editor</p>
-<p>point edition</p>
-<blockquote>
-<div><p>m  toggle point edition mode  (CP : Create Point)</p>
-<blockquote>
-<div>lclic same x
-rclic same y
-cclic free point</div></blockquote>
-</div></blockquote>
-<p>segment edition</p>
-<blockquote>
-<div>[0-f] - display one of the 16 first layers
-x : save structure
-o : toggle overlay</div></blockquote>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.gis.layout.Layout.editorTk">
-<code class="descname">editorTk</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.editorTk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.editorTk" title="Permalink to this definition">¶</a></dt>
-<dd><p>invoke interactive layout graphical editor</p>
-<p>point edition</p>
-<blockquote>
-<div><p>m  toggle point edition mode  (CP : Create Point)</p>
-<blockquote>
-<div>lclic same x
-rclic same y
-cclic free point</div></blockquote>
-</div></blockquote>
-<p>segment edition</p>
-<blockquote>
-<div>[0-f] - display one of the 16 first layers
-x : save structure
-o : toggle overlay</div></blockquote>
-</dd></dl>
-
-<dl class="method">
 <dt id="pylayers.gis.layout.Layout.exportosm">
 <code class="descname">exportosm</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.exportosm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.exportosm" title="Permalink to this definition">¶</a></dt>
 <dd><p>export layout in osm file format</p>
@@ -1255,7 +1226,10 @@ layout.check</p>
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.facets3D">
 <code class="descname">facets3D</code><span class="sig-paren">(</span><em>edlist</em>, <em>name='Layer'</em>, <em>subseg=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.facets3D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.facets3D" title="Permalink to this definition">¶</a></dt>
-<dd><p>facets3d(edlist,name)</p>
+<dd><p>create facet 3D for geomview</p>
+<p>edlist
+name : string
+subseg : boolean</p>
 </dd></dl>
 
 <dl class="method">
@@ -1540,6 +1514,7 @@ else 0 is return</p>
 <p>ta  : int &lt;0
 he  : int &lt;0</p>
 <p>boolean</p>
+<p>editor.py</p>
 </dd></dl>
 
 <dl class="method">
@@ -1703,6 +1678,7 @@ dy : float</p>
 <dd><p>offset points and segment index</p>
 <p>offp : offset points
 offs : offset segments</p>
+<p>Portage vers networkx 2. inacheve</p>
 <p>__add__</p>
 </dd></dl>
 
@@ -1982,10 +1958,11 @@ to corresponding termination points array in pt</p>
 <code class="descname">seg_intersection</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.seg_intersection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.seg_intersection" title="Permalink to this definition">¶</a></dt>
 <dd><p>determine if a segment intersects any other segment of the layout</p>
 <p>shLine : a shapely LineString
-OR
-ta,he : tail/head coordinates of a segment</p>
+or
+ta,he : tail/head of a segment</p>
 <p>llay_seg : list of layout’s segments intersected
 lshP : list of shapely points of intersections.</p>
+<p>editor.py</p>
 </dd></dl>
 
 <dl class="method">
@@ -2036,11 +2013,14 @@ array([ 1,  3,  7,  8, 14, 15, 16, 17, 18, 20, 21, 23, 24, 26, 27, 29, 30,
 &gt;&gt;&gt; p1 = np.array([[0,0,0],[0,0,0]])
 &gt;&gt;&gt; p2 = np.array([[10,10,10],[10,10,10]])
 &gt;&gt;&gt; seglist = L.seginframe2(p1,p2)
-&gt;&gt;&gt; edlist  = [ L.tsg[x] for x in  seglist)
+&gt;&gt;&gt; edlist  = [ L.tsg[x] for x in  seglist ]
 &gt;&gt;&gt; fig,ax = L.showG(&#39;s&#39;,edlist=edlist)
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../api/pylayers-gis-layout-Layout-2.py">Source code</a>)</p>
+<p>(<a class="reference external" href="../api/pylayers-gis-layout-Layout-2.py">Source code</a>, <a class="reference external" href="../api/pylayers-gis-layout-Layout-2.png">png</a>, <a class="reference external" href="../api/pylayers-gis-layout-Layout-2.hires.png">hires.png</a>, <a class="reference external" href="../api/pylayers-gis-layout-Layout-2.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/pylayers-gis-layout-Layout-2.png" src="../_images/pylayers-gis-layout-Layout-2.png" />
+</div>
 </div></blockquote>
 </dd></dl>
 
@@ -2521,7 +2501,7 @@ nroom2</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on May 31, 2018.
+      Last updated on Sep 24, 2018.
 
     </p>
   </div>

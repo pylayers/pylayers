@@ -926,38 +926,21 @@ import scipy.stats as st
 
         &quot;&quot;&quot;
 
-        defaults = {&#39;iy&#39;  :  -1,
-                  &#39;vline&#39; : np.array([]),
-                  &#39;hline&#39; : np.array([]),
-                  &#39;unit1&#39; : &#39;V&#39;,
-                  &#39;unit2&#39; : &#39;V&#39;,
-                  &#39;separated&#39; : True,
-                  &#39;dist&#39;  : False ,
-                  &#39;xmin&#39;  :-1e15,
-                  &#39;xmax&#39;  : 1e15,
-                  &#39;logx&#39;  : False,
-                  &#39;logy&#39;  : False,
-                  &#39;idx&#39;   :[0,0,0,0,0,0,0]
-                 }
-
-        for key, value in defaults.items():
-            if key not in kwargs:
-                 kwargs[key] = value
-
-        iy = kwargs.pop(&#39;iy&#39;) 
-        vline = kwargs.pop(&#39;vline&#39;)
-        hline = kwargs.pop(&#39;hline&#39;)
-        idx = kwargs.pop(&#39;idx&#39;)
-        unit1 = kwargs.pop(&#39;unit1&#39;)
-        unit2 = kwargs.pop(&#39;unit2&#39;)
-        xmin = kwargs.pop(&#39;xmin&#39;)
-        xmax = kwargs.pop(&#39;xmax&#39;)
-        dist = kwargs.pop(&#39;dist&#39;)
+        iy = kwargs.pop(&#39;iy&#39;,-1)
+        vline = kwargs.pop(&#39;vline&#39;,np.array([]))
+        hline = kwargs.pop(&#39;hline&#39;,np.array([]))
+        idx = kwargs.pop(&#39;idx&#39;,[0,0,0,0,0,0,0])
+        unit1 = kwargs.pop(&#39;unit1&#39;,&#39;V&#39;)
+        unit2 = kwargs.pop(&#39;unit2&#39;,&#39;V&#39;)
+        xmin = kwargs.pop(&#39;xmin&#39;,-1e15)
+        xmax = kwargs.pop(&#39;xmax&#39;,1e15)
+        dist = kwargs.pop(&#39;dist&#39;,False)
+        logx = kwargs.pop(&#39;logx&#39;,False)
+        logy = kwargs.pop(&#39;logy&#39;,False)
         # filtering kwargs argument for plot function
         args = {}
         for k in kwargs:
-            if k not in defaults.keys():
-                args[k]=kwargs[k]
+            args[k]=kwargs[k]
 
         conversion = 1.0
         if ((unit1 == &#39;V&#39;) &amp; (unit2 == &#39;mV&#39;)):
@@ -978,7 +961,7 @@ import scipy.stats as st
         #
         # if ndim(y) &gt; 1
         #
-        
+
         if ndim == 4:
             Nmeas = self.y.shape[0]
             Nr = self.y.shape[1]
@@ -987,8 +970,8 @@ import scipy.stats as st
             if iy==-1:
                 fig,ax = plt.subplots(Nr,Nt)
                 if ((Nr==1) and (Nt==1)):
-                    ax = np.array([[ax]])    
-        
+                    ax = np.array([[ax]])
+
                 for k in range(Nr):
                     for l in range(Nt):
                         for ix in idx:
@@ -999,7 +982,7 @@ import scipy.stats as st
                 ax = np.array([[plt.gca()]])
                 yx = self.y[iy[0],iy[1],iy[2],u]
                 fig,a = mulcplot(self.x[u],yx*conversion,fig=fig,ax=ax[0,0],**args)
-               
+
 
         if ndim == 3:
             shy = self.y.shape
@@ -1013,6 +996,7 @@ import scipy.stats as st
             fig,ax = mulcplot(self.x[u],yx*conversion,**args)
         if ndim == 1:
             fig,ax = mulcplot(self.x[u],self.y[u]*conversion,**args)
+
         #
         # Draw vertical and horizontal lines
         #
@@ -1727,8 +1711,8 @@ import scipy.stats as st
         Parameters
         ----------
 
-        Tns : 
-        Tsns : 
+        Tns :
+        Tsns :
 
 
         &quot;&quot;&quot;
@@ -2048,7 +2032,7 @@ import scipy.stats as st
         return(S)</div>
 
 <div class="viewcode-block" id="TUsignal.fftsh"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.bsignal.TUsignal.fftsh">[docs]</a>    def fftsh(self):
-        &quot;&quot;&quot; return an FHsignal 
+        &quot;&quot;&quot; returns an FHsignal
 
         Warnings
         --------
@@ -2141,7 +2125,7 @@ import scipy.stats as st
         #    u2.y = u2.y.reshape(1,M2)
 
         # get left shape and number of points on the last axis (time)
-        
+
         shl1 = u1.y.shape[0:-1]
         M1 = u1.y.shape[-1]
 
@@ -2605,9 +2589,39 @@ import scipy.stats as st
 #            if k not in kwargs:
 #                kwargs[k]=defaults[k]
 #
-#        if kwargs[&#39;fGHz&#39;]!=[]:
 
-                    
+<div class="viewcode-block" id="TUsignal.Impulse"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.bsignal.TUsignal.Impulse">[docs]</a>    def Impulse(self,**kwargs):
+        &quot;&quot;&quot;
+        Create a Gaussian impulse (Usignal)
+
+        Parameters
+        ----------
+
+        fcGHz : float
+        WGHz : float
+        threshdB : float
+        feGHz : float
+
+        &quot;&quot;&quot;
+
+        fcGHz = kwargs.pop(&#39;fcGHz&#39;,26)
+        fsGHz = kwargs.pop(&#39;feGHz&#39;,100)
+        t0 = kwargs.pop(&#39;t0&#39;,1)
+
+        Ts = 1.0 / fsGHz
+        Tww = 10 * t0
+
+        Ni = int(round(Tww / (2 * Ts)))
+        Tww = 2 * Ts * Ni
+
+        x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
+
+        y = np.exp(-(x / (np.sqrt(2)*t0)) ** 2) * np.cos(2 * np.pi * fcGHz * x)
+        self.x = x
+        self.y = y[None,:]
+
+        self.fcGHz = fcGHz</div>
+
 <div class="viewcode-block" id="TUsignal.EnImpulse"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.bsignal.TUsignal.EnImpulse">[docs]</a>    def EnImpulse(self,**kwargs):
         &quot;&quot;&quot;
         Create an energy normalized Gaussian impulse (Usignal)
@@ -2624,7 +2638,7 @@ import scipy.stats as st
         defaults = {&#39;fcGHz&#39; : 4,
                     &#39;WGHz&#39; : 3,
                     &#39;threshdB&#39; : 10,
-                    &#39;feGHz&#39; : 20
+                    &#39;fsGHz&#39; : 20
                    }
 
         for k in defaults:
@@ -2633,18 +2647,18 @@ import scipy.stats as st
 
         WGHz = kwargs.pop(&#39;WGHz&#39;)
         fcGHz = kwargs.pop(&#39;fcGHz&#39;)
-        feGHz = kwargs.pop(&#39;feGHz&#39;)
+        fsGHz = kwargs.pop(&#39;fsGHz&#39;)
         threshdB = kwargs.pop(&#39;threshdB&#39;)
 
         #TUsignal.__init__(self)
         Tp = (2 / (WGHz * np.pi)) * np.sqrt(abs(threshdB) * np.log(10) /20.)
         coeff = np.sqrt(2 * np.sqrt(2)/ (Tp * np.sqrt(np.pi)))
 
-        te = 1.0 / feGHz
+        ts = 1.0 / fsGHz
         Tww = 10 * Tp
-        Ni = int(round(Tww / (2 * te)))
-        # Tww/2 multiple de te
-        Tww = 2 * te * Ni
+        Ni = int(round(Tww / (2 * ts)))
+        # Tww/2 multiple de ts
+        Tww = 2 * ts * Ni
         x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
 
         y = coeff * np.exp(-(x / Tp) ** 2) * np.cos(2 * np.pi * fcGHz * x)
@@ -2652,26 +2666,6 @@ import scipy.stats as st
         self.y = y[None,:]
         self.Tp = Tp
         self.fcGHz = fcGHz</div>
-
-    #    def demo():
-    #        &quot;&quot;&quot; small demo in the docsting
-    #
-    #        Examples
-    #        --------
-    #
-    #        &gt;&gt;&gt; from pylayers.signal.bsignal import *
-    #        &gt;&gt;&gt; ip    = EnImpulse(fc=4,band=3,thresh=10,fe=100)
-    #        &gt;&gt;&gt; Eip1  = ip.energy()
-    #        &gt;&gt;&gt; ESDu  = ip.esd(mode=&#39;unilateral&#39;)
-    #        &gt;&gt;&gt; ESDb  = ip.esd(mode=&#39;bilateral&#39;)
-    #        &gt;&gt;&gt; df    = ESDu.dx()
-    #        &gt;&gt;&gt; Eipu  = sum(ESDu.y)*df
-    #        &gt;&gt;&gt; Eipb  = sum(ESDb.y)*df
-    #        &gt;&gt;&gt; erru  = Eip1-Eipu
-    #        &gt;&gt;&gt; errb  = Eip1-Eipb
-    #
-    #        &quot;&quot;&quot;
-    #        pass
 
 
 <div class="viewcode-block" id="TUsignal.MaskImpulse"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.bsignal.TUsignal.MaskImpulse">[docs]</a>    def MaskImpulse(self,**kwargs):
@@ -2717,13 +2711,6 @@ import scipy.stats as st
             y = A * np.exp(-(x / tau) ** 2) * np.cos(2 * np.pi * fc * x)
             self.x = x
             self.y = y</div></div>
-
-    #    def show(self):
-    #        plt.subplot(211)
-    #        self.plot()
-    #        plt.subplot(212)
-    #        P = self.psd(self.Tp, self.R)
-    #        P.plotdB(mask=True)
 
 
 <div class="viewcode-block" id="FBsignal"><a class="viewcode-back" href="../../../api/references.html#pylayers.signal.bsignal.FBsignal">[docs]</a>class FBsignal(Bsignal):
@@ -2797,7 +2784,7 @@ import scipy.stats as st
             default True
         iy : index of y value to be displayed
         typ : string
-            [&#39;l10&#39;,&#39;l20&#39;,&#39;d&#39;,&#39;r&#39;,&#39;du&#39;,&#39;ru&#39;]
+            [&#39;l10&#39;,&#39;m,&#39;l20&#39;,&#39;d&#39;,&#39;r&#39;,&#39;du&#39;,&#39;ru&#39;]
         xlabels
         ylabels
 
@@ -4060,7 +4047,7 @@ if __name__ == &quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on May 31, 2018.
+      Last updated on Sep 24, 2018.
 
     </p>
   </div>
