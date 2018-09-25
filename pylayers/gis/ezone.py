@@ -1018,7 +1018,7 @@ class Ezone(PyLayers):
 
         L = loss.cover(x, y, height, Ht, Hr, fGHz, K, method='deygout')
         self.triang = triang
-        self.cover  = L 
+        self.coverage  = L 
         return triang, L
 
 #        # adding effect of earth equivalent curvature
@@ -1099,7 +1099,7 @@ class Ezone(PyLayers):
         #
         fig, ax = gkml.gearth_fig(self.extent,self.extent_c)
         tc = ax.tripcolor(self.triang,
-                          -self.cover.flatten(),
+                          -self.coverage.flatten(),
                           shading='gouraud',
                           cmap='jet',
                           vmax=-60,
@@ -1285,7 +1285,7 @@ class Ezone(PyLayers):
                     'source':'srtm',
                     'alpha':0.5,
                     'facecolor':'black',
-                    'cmap':plt.cm.jet
+                    'cmap': 'gist_earth'
                    }
 
         divider = []
