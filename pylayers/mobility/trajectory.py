@@ -19,9 +19,6 @@ import scipy as sp
 import pdb
 import matplotlib.pyplot as plt
 import pylayers.util.pyutil as pyu
-from pylayers.util.project import *
-
-from pylayers.gis.layout import Layout
 import pandas as pd
 import copy
 import time
@@ -29,8 +26,8 @@ import doctest
 from datetime import datetime
 from matplotlib.widgets import Slider, CheckButtons
 import matplotlib.animation as animation
-
-
+from pylayers.util.project import *
+from pylayers.gis.layout import Layout
 
 
 class Trajectories(PyLayers,list):
@@ -51,7 +48,7 @@ class Trajectories(PyLayers,list):
         """
 
         if hasattr(self,'Lfilename'):
-            s = 'Trajectories performed in Layout : ' + self.Lfilename + '\n\n'
+            s = 'Trajectories performed in Layout : ' + str(self.Lfilename) + '\n\n'
         else:
             s = ''
 
@@ -115,20 +112,27 @@ class Trajectories(PyLayers,list):
         """
 
         filename = pyu.getlong(_filename, pstruc['DIRNETSAVE'])
+
         if os.path.exists(filename):
             fil = pd.io.pytables.HDFStore(filename)
         else:
             raise NameError(filename + ' not found')
         if not append:
             [self.pop(0) for i in range(len(self))]
+
         for k in fil.keys():
             df = fil[k]
-            df = df.set_index('t')
+            #df = df.set_index('t')
+            df.index = pd.to_datetime(df.t)
             ID = fil.get_storer(k).attrs.ID
             name = fil.get_storer(k).attrs.name
             typ = fil.get_storer(k).attrs.typ
             layout = fil.get_storer(k).attrs.layout
-            v=np.array((df.vx.values,df.vy.values))
+            #
+            # velocity
+            #
+            v = np.array((df.vx.values,df.vy.values))
+            #
             d = np.sqrt(np.sum(v*v,axis=0))
             s = np.cumsum(d)
             df['s'] = s
@@ -276,7 +280,6 @@ class Trajectories(PyLayers,list):
         fig, ax = plt.subplots()
         fig.subplots_adjust(bottom=0.2, left=0.3)
 
-        t = np.arange(0, len(self[0].index), self[0].ts)
         L = Layout(self.Lfilename)
         fig, ax = L.showG('s', fig=fig, ax=ax)
 
@@ -295,6 +298,7 @@ class Trajectories(PyLayers,list):
                              color=colors[iT], visible=True))
                 labels.append(T.name + ':' + T.ID)
 
+        #if type(self[0]) is datetime.
         t = self[0].time()
 
         # init boolean value for visible in checkbutton
@@ -369,15 +373,27 @@ class Trajectory(PyLayers,pd.DataFrame):
 
 
     """
+
     def __init__(self, df={}, ID='0', name='', typ=''):
-        """ initialization
+        """ trajectory initialization
         """
-        
+
         super(Trajectory, self).__init__(df)
-        self.ID = ID
-        self.name = name
-        self.typ = typ
+        if type(ID) is str:
+            self.ID = ID
+        else:
+            self.ID = ID.decode('utf-8')
+        if type(name) is str:
+            self.name = name
+        else:
+            self.name = name.decode('utf-8')
+
+        if type(typ) is str:
+            self.typ = typ
+        else:
+            self.typ = typ.decode('utf-8')
         self.has_values = self.update()
+
     def __repr__(self):
         try:
             # total distance
@@ -385,15 +401,18 @@ class Trajectory(PyLayers,pd.DataFrame):
             # total time
             T = self.tmax-self.tmin
             st = ''
-            typ = self.typ
+            typ = str(self.typ)
+
             if not isinstance(self.ID,str):
                 ID = str(self.ID)
             else:
                 ID = self.ID
+
             if typ == 'ag':
-                string ='Trajectory of agent ' + self.name + ' with ID ' + ID
+                string ='Trajectory of agent ' + str(self.name) + ' with ID ' + ID
             else :
-                string ='Access point ' + self.name + ' with ID ' + ID
+                string ='Access point ' + str(self.name) + ' with ID ' + ID
+
             st = st + string + '\n'
             st = st + '-'*len(string) + '\n'
 
@@ -421,8 +440,6 @@ class Trajectory(PyLayers,pd.DataFrame):
         df = super(Trajectory, self).copy(deep=deep)
         return Trajectory(df=df,ID=self.ID,name=self.name,typ=self.typ)
 
-
-
     def update(self):
         """ update class member data
 
@@ -441,12 +458,11 @@ class Trajectory(PyLayers,pd.DataFrame):
             True if Trajectory has values, False otherwise
 
         """
-
         if len(self.values) != 0:
-            self.tmin = self.index.min().value*1e-9
-            self.tmax = self.index.max().value*1e-9
+            self.tmin = self.t.min()
+            self.tmax = self.t.max()
             try:
-                self.ts = (self.index[-1].value*1e-9)-(self.index[-2].value*1e-9)
+                self.ts = (self.index[-1]*1e-9)-(self.index[-2]*1e-9)
             except:
                 self.ts = np.nan
 
@@ -536,12 +552,14 @@ class Trajectory(PyLayers,pd.DataFrame):
             'az': a[:, 2],
             's': s[:-1],
             't':t[:-2]}
+
         super(Trajectory, self).__init__(df, columns=['x', 'y', 'z', 'vx', 'vy',
                                          'vz', 'ax', 'ay', 'az', 's','t'],
                                         index=td[:-2])
         self.ID = kwargs['ID']
         self.name = kwargs['name']
         self.typ = kwargs['typ']
+        self.time()
         self.update()
         return self
 
@@ -587,7 +605,7 @@ class Trajectory(PyLayers,pd.DataFrame):
             ustop = np.where(tnew <=tstop)[0][-1]
             tnew=tnew[0:ustop]
 
-        # generate requieres 3 measures at least 
+        # generate needs  at least 3 measures
         xnew = fx(tnew)
         ynew = fy(tnew)
         T = Trajectory()
@@ -599,12 +617,10 @@ class Trajectory(PyLayers,pd.DataFrame):
                    pt=np.vstack((xnew,ynew,np.random.randn(len(tnew)),)).T,
                    unit='s',
                    sf=sf)
+
         T.update()
 
         return T
-
-
-
 
     def rescale(self,speedkmph=3):
         """ same length but specified speed
@@ -692,12 +708,11 @@ class Trajectory(PyLayers,pd.DataFrame):
         """
 
         lt = self.index
-        # t = (lt.microsecond*1e-6+lt.second+lt.minute*60)*10**(unit)
-        # return (t)
         self.t = (lt.microsecond*1e-6+
                  lt.second+
                  lt.minute*60+
                  lt.hour*3600)*10**(unit)
+
         return  self.t
 
 
@@ -862,6 +877,7 @@ class Trajectory(PyLayers,pd.DataFrame):
         #     ax.text(self['x'][k],self['y'][k],str(self.index[k].strftime("%M:%S")))
         #     ax.plot(self['x'][k],self['y'][k],'*r')
         #     plt.draw()
+
 def importsn(_filename='pos.csv'):
     """ import simulnet csv file
 
@@ -891,7 +907,7 @@ def importsn(_filename='pos.csv'):
         y = dt[dtk[3*it+2]].values
         z = np.zeros(len(x))
         pt = np.vstack((x, y, z))
-        T=Trajectory()
+        T = Trajectory()
         lt.append(T.generate(t=dt['time'].values, pt=pt.T, unit='s'))
 
     return(lt)

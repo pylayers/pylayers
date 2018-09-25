@@ -56,8 +56,8 @@ import pdb
 import os
 
 
-#~class Simul(SimulationRT):  # Sympy 2
-class Simul(object):  # Sympy 3
+#~class Simul(SimulationRT):  # Simpy 2
+class Simul(object):  # Simpy 3
     """
 
     Attributes
@@ -92,9 +92,9 @@ class Simul(object):  # Sympy 3
 
     def __init__(self):
 
-        #SimulationRT.__init__(self)  # Sympy 2
-        sympy.RealtimeEnvironment.__init__(self)  #simpy 3
-        self.initialize()
+        #SimulationRT.__init__(self)  # Simpy 2
+        simpy.RealtimeEnvironment.__init__(self)  #simpy 3
+        #self.initialize()
 
         self.config = ConfigParser.ConfigParser()
         filename = pyu.getlong('simulnet.ini', pstruc['DIRSIMUL'])

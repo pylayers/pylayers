@@ -346,6 +346,9 @@ class Layout(pro.PyLayers):
         # Layout main argument
         #   If no .ini extension provided it is added
         #
+        if type(string) is bytes:
+            string = string.decode('utf-8')
+
         arg, ext = os.path.splitext(string)
         if arg != '':
             if ext == '.ini':
@@ -383,7 +386,7 @@ class Layout(pro.PyLayers):
             elif loadres:
                 self.importres(_fileres=string)
                 self.sl = sb.SlabDB()
-            elif '(' in string:  # load from osmapi latlon in string
+            elif '(' in str(string):  # load from osmapi latlon in string
                 self.importosm(latlon=string, dist_m=dist_m, cart=True, typ=self.typ)
                 self.loadosm = True
             else:  # load from address geocoding
@@ -1102,7 +1105,6 @@ class Layout(pro.PyLayers):
         self.upnt = np.array((upnt))
 
         # association
-        # pdb.set_trace()
 
         # utmp = np.array(zip(-self.upnt,np.arange(len(self.upnt))))
         # mutmp = max(utmp[:,0])
@@ -1313,7 +1315,6 @@ class Layout(pro.PyLayers):
             #     # stridess is different from 0 only for subsegments
             #     self.stridess[ks] = 0                   # initialize stridess[ks]
             #     #if index==155:
-            #     #    pdb.set_trace()
             #     if self.Gs.node[ks].has_key('ss_name'): # if segment has sub segment
             #         nss = len(self.Gs.node[ks]['ss_name'])  # retrieve number of sseg
             #         self.stridess[ks]=index-1           # update stridess[ks] dict
@@ -1340,7 +1341,6 @@ class Layout(pro.PyLayers):
         self.s2pc = self.s2pc.tocsr()
         # for k in self.tsg:
         #     assert(np.array(self.s2pc[k,:].todense())==self.seg2pts(k).T).all(),pdb.set_trace()
-        #pdb.set_trace()
         #
         # This is wrong and asume a continuous indexation of points
         # TODO FIX : This problem cleanly
@@ -1405,7 +1405,6 @@ class Layout(pro.PyLayers):
             nv = np.sqrt(np.sum(v * v, axis=1))
             # if at least one point is in the radius the poygon is kept
             if (nv < kwargs['dist_m']).any():
-                # pdb.set_trace()
                 npoint = len(p)
                 for k, point in enumerate(p):
                     # add a new node unless it is the last already existing
@@ -1546,7 +1545,6 @@ class Layout(pro.PyLayers):
                 previous_node_index = current_node_index
             # last segment
             #ns = self.add_segment(previous_node_index, starting_node_index, name='WALL', z=z1)
-        #pdb.set_trace()
 
     def importosm(self, **kwargs):
         """ import layout from osm file or osmapi
@@ -1740,7 +1738,6 @@ class Layout(pro.PyLayers):
                 #v1.1 u1 = np.array(nx.neighbors(self.Gs, nta))
                 #v1.1 u2 = np.array(nx.neighbors(self.Gs, nhe))
                 # import ipdb
-                # ipdb.set_trace()
                 # u1 = np.array(self.Gs.node[nta])
                 # u2 = np.array(self.Gs.node[nhe])
                 # inter_u1_u2 = np.intersect1d(u1, u2)
@@ -5118,7 +5115,6 @@ class Layout(pro.PyLayers):
         if (kwargs['sig']==[]):
             nx.draw_networkx_edges(self.Gi,self.Gi.pos,edgelist=[edinter],width=2,edge_color='g',arrow=False,ax=ax2)
         nx.draw_networkx_edges(self.Gi,self.Gi.pos,edgelist=edgelist,width=2,edge_color='r',arrow=False,ax=ax2)
-        #pdb.set_trace()
         if (kwargs['sig']==[]):
             nx.draw_networkx_edge_labels(self.Gi,self.Gi.pos,edge_labels=dprob,ax=ax2,fontsize=kwargs['fontsize'])
         if cy!=[]:
@@ -5208,7 +5204,6 @@ class Layout(pro.PyLayers):
 
         G = self.Gt
 
-        # pdb.set_trace()
         for k, nc in enumerate(G.node.keys()):
             if nc!=0:
                 poly = G.node[nc]['polyg']
@@ -5624,7 +5619,6 @@ class Layout(pro.PyLayers):
                 pass
 
         # retrieve md5 sum of the original ini file
-        # pdb.set_trace()
         if 's' in graphs:
             #self._hash = self.Gs.node.pop(0)['hash']
             # self._hash = self.Gs.node[0]['hash']
@@ -6252,7 +6246,6 @@ class Layout(pro.PyLayers):
         # delete temporary graph
         del G
 
-        # pdb.set_trace()
 
         # create graph Gt
         self.Gt = nx.Graph(name='Gt')
@@ -7262,7 +7255,6 @@ class Layout(pro.PyLayers):
         for n in self.Gv.node:
             # espoo_journal debug
             #if n == 530:
-            #    pdb.set_trace()
             if verbose:
                 pbartmp.update(cpt)
 
@@ -7463,7 +7455,6 @@ class Layout(pro.PyLayers):
         if verbose :
             Gipbar.update(66.)
         # updating the list of interactions of a given cycle
-        # pdb.set_trace()
         pbartmp = pbar(verbose,total=100.,
                        desc ='update interraction list',
                        leave=False,
@@ -7886,7 +7877,7 @@ class Layout(pro.PyLayers):
                 # nb_nstr1 = np.array([self.s2pu[nstr1,0],self.s2pu[nstr1,1]])
                 # nb_nstr0 = self.s2pu[nstr0,:].toarray()[0]
                 # nb_nstr1 = self.s2pu[nstr1,:].toarray()[0]
-                
+
                 # first interaction is a point
                 if nstr0<0:
                     nb_nstr0 = [nstr0]
@@ -7906,8 +7897,9 @@ class Layout(pro.PyLayers):
                     p1 = Gspos(num1[0])[0,:]
                     pc = Gspos(common_point[0])[0,:]
 
-                    v0 = p0-pc 
-                    v1 = p1-pc 
+                    v0 = p0 - pc
+                    v1 = p1 - pc
+
                     v0n = v0/np.sqrt(np.sum(v0*v0))
                     v1n = v1/np.sqrt(np.sum(v1*v1))
                     if np.dot(v0n,v1n)<=0:
@@ -9613,10 +9605,10 @@ class Layout(pro.PyLayers):
         d_id = max(self.Gr.nodes())  # for numerotation of Gw nodes
         d_id_index = d_id + 1
 
-        for e in self.Gr.edges_iter():  # iterator on Gr edges
+        for e in self.Gr.edges():  # iterator on Gr edges
 
-            self.Gw.add_node(e[0], {'room': e[0], 'door': False})
-            self.Gw.add_node(e[1], {'room': e[1], 'door': False})
+            self.Gw.add_node(e[0], room=e[0], door=False)
+            self.Gw.add_node(e[1], room=e[1], door= False)
 
             # transitions of room e[0]
             # trans1 = self.Gr.node[e[0]]['segment']
@@ -9625,7 +9617,7 @@ class Layout(pro.PyLayers):
             # Id = np.intersect1d(trans1, trans2)[0]  # list of common doors
             # import ipdb
             # ipdb.set_trace()
-            Ids = self.Gr.edge[e[0]][e[1]]['segment']
+            Ids = self.Gr[e[0]][e[1]]['segment']
             # here is supposed that 2 room may have more than 1 door in common
             for Id in Ids:
                 #v1.1 unode = self.Gs.neighbors(Id)  # get edge number of common doors
@@ -9638,10 +9630,10 @@ class Layout(pro.PyLayers):
                 sl = self.sl[name]
                 thick = (sum(sl['lthick']) / 2.) + 0.2
 
-                # for ""doors"" extra waypoints points are added 
+                # for ""doors"" extra waypoints points are added
                 # in front and back of the aperture.
                 # this is not done for AIR slabs
-                if 'AIR' not in name : 
+                if 'AIR' not in name:
 
                     # middle of the common door
                     pdoor0 = (np.array(up0) + pn[:2] * thick +
@@ -9657,28 +9649,28 @@ class Layout(pro.PyLayers):
                     if self.Gr.node[e[0]]['polyg'].contains(P0):
                         upd0 = d_id_index
                         self.Gw.pos[upd0] = pdoor0
-                        self.Gw.add_node(upd0, {'room': e[0], 'door': True})
+                        self.Gw.add_node(upd0, room=e[0], door=True)
                         # if self.seginline(pdoor0,ep0).shape[1] <= 1:
                         self.Gw.add_edges_from([(e[0],upd0)])
                         d_id_index = d_id_index + 1
 
                         upd1 = d_id_index
                         self.Gw.pos[upd1] = pdoor1
-                        self.Gw.add_node(upd1, {'room': e[1], 'door': True})
+                        self.Gw.add_node(upd1, room=e[1], door=True)
                         # if self.seginline(pdoor1,ep1).shape[1] <= 1:
                         self.Gw.add_edges_from([(e[1],upd1)])
                         d_id_index = d_id_index + 1
                     else:
                         upd0 = d_id_index
                         self.Gw.pos[upd0] = pdoor0
-                        self.Gw.add_node(upd0, {'room': e[1], 'door': True})
+                        self.Gw.add_node(upd0, room=e[1], door=True)
                         # if self.seginline(pdoor0,ep1).shape[1] <= 1:
                         self.Gw.add_edges_from([(e[1],upd0)])
                         d_id_index = d_id_index + 1
 
                         upd1 = d_id_index
                         self.Gw.pos[upd1] = pdoor1
-                        self.Gw.add_node(upd1, {'room': e[0], 'door': True})
+                        self.Gw.add_node(upd1, room=e[0], door=True)
                         # if self.seginline(pdoor1,ep0).shape[1] <= 1:
                         self.Gw.add_edges_from([(e[0],upd1)])
                         d_id_index = d_id_index + 1

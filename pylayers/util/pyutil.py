@@ -160,6 +160,11 @@ def getlong(shortname,directory):
 
     """
 
+    if (type(shortname) is bytes) or (type(shortname) is np.bytes_) :
+        shortname = shortname.decode('utf-8')
+
+    if (type(directory) is bytes) or (type(shortname) is np.bytes_) :
+        directory = directory.decode('utf-8')
 
     try:
         basename
