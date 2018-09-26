@@ -54,7 +54,8 @@ if sys.version_info.major==2:
     from SimPy.SimulationRT import Process, hold, SimEvent, Simulation, waitevent
 else:
     import configparser as ConfigParser
-    from  simpy import Process
+    import simpy
+    #from  simpy import Process
 
 from random import uniform,gauss
 from pylayers.network.network import  Node,Network

@@ -136,7 +136,7 @@ class Agent(object):
                     'wstd': ['rat1'],
                     'world': world(),
                     'save': [],
-                    'sim': Simulation(),
+                    'sim': simpy.Environment(),
                     'epwr': {},
                     'sens': {},
                     'dcond': {},

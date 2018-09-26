@@ -63,7 +63,8 @@ if sys.version_info.major==2:
     from SimPy.SimulationRT import Process,hold
 else:
     import configparser as ConfigParser
-    from simpy import Process
+    import simpy 
+    #from simpy import process
 
 import copy
 import pdb
@@ -200,7 +201,7 @@ class Network(PyLayers,nx.MultiDiGraph):
         value = list of nodes id
     wstde : dictionnary
         keys  = wstd
-        value = list of edges id 
+        value = list of edges id
     SubNet : dictionnary
         keys  = wstd
         value = Subgraph of the given wstd
@@ -214,17 +215,14 @@ class Network(PyLayers,nx.MultiDiGraph):
     _get_wstd(self)  : Get wstd from nodes of the network
     _connect(self)  : Connect each node from a wireless standard
     create(self)   : compute get_wstd(),get_pos() and connect()
-    update_LDP(self,n1,n2,wstd,LDP=None,value=[])    : update Location Dependent Parameter  
-    compute_LDP(self,wstd) : compute the LDP value thanks to a ElectroMag Solver 
+    update_LDP(self,n1,n2,wstd,LDP=None,value=[])    : update Location Dependent Parameter
+    compute_LDP(self,wstd) : compute the LDP value thanks to a ElectroMag Solver
     update_pos(self,n,p=np.array)  : update node (or node list) position
     get_pos(self,wstd=None)         : get node positions
     pp(self)                    : pretty print on std out all edtges informations
-    show(rat=None,legend=True)     : Display network for all rat or specified in Rat. 
+    show(rat=None,legend=True)     : Display network for all rat or specified in Rat.
 
     """
-
-
-
     def __init__(self,owner='sim',EMS=EMSolver(),PN=False):
         """ object constructor
 
@@ -1869,17 +1867,6 @@ class Network(PyLayers,nx.MultiDiGraph):
 #        pdb.set_trace()
 #        self.node=N.node
 
-
-
-
-
-
-
-
-
-
-
-
 class PNetwork(Process):
     """
     Process version of the Network class
@@ -1899,7 +1886,7 @@ class PNetwork(Process):
                 setattr(self, key, args[key])
             else:
                 setattr(self, key, value)
-                args[key]=value  
+                args[key]=value
         self.args=args
 
         Process.__init__(self,name='PNetwork',sim=self.sim)
@@ -1913,13 +1900,11 @@ class PNetwork(Process):
            self.net.db = Database(sql_opt['host'],sql_opt['user'],sql_opt['passwd'],sql_opt['dbname'])
 
 
-
-
     def run(self):
 
 
         ####################################################################################
-        # first iteration requested to correctely initiatilzing Personnal Networks's Subnets 
+        # first iteration requested to correctely initiatilzing Personnal Networks's Subnets
         for wstd in self.net.wstd.iterkeys():
             self.net.compute_LDPs(wstd)
         for n in self.net.nodes():
@@ -1927,11 +1912,9 @@ class PNetwork(Process):
             self.net.node[n]['PN']._get_SubNet()
             # Add access point position in each personal network (PN)
             [self.net.node[n]['PN'].node[n2].update({'pe':self.net.node[n2]['p']}) for n2 in self.net.node[n]['PN'].node.iterkeys() if self.net.node[n]['PN'].node[n2]['typ'] == 'ap']
-                
+
         ####################################################################################
         self.pos=self.net.get_pos()
-
-
 
         if 'csv' in self.save:
             nbnodes = len(self.net.nodes())
@@ -1953,7 +1936,7 @@ class PNetwork(Process):
             ############### compute LDP
             for wstd in self.net.wstd.iterkeys():
                 self.net.compute_LDPs(wstd)
-            
+
             if self.show_sg:
                 ############### compute Signature (Sg)
                 tx=self.net.node.keys()[0]
