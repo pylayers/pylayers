@@ -2047,7 +2047,8 @@ class DLink(Link):
             #
             # Select group of interactions
             #
-            if type(kwargs['lr'])==list:
+            if ((type(kwargs['lr']) is list) or 
+               (type(kwargs['lr']) is np.ndarray)):
                 lr = kwargs['lr']
             else:
                 if kwargs['lr']==-1:
