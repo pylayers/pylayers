@@ -106,6 +106,27 @@ def dqt(ud16,lL0):
 
     return(lL)
 
+def lab2ext(lab,lL0):
+    """ label to extent
+
+    Parameters
+    ----------
+    lab : string
+        i0-0 to i255-255
+    lL0 : tuple
+        (lon0,lat0)
+
+    """
+    lab=lab.replace('i','')
+    ilon = int(lab.split('-')[0])
+    ilat = int(lab.split('-')[1])
+    lonmin = lL0[0] + ilon/256
+    lonmax = lL0[0] + (ilon+1)/256
+    latmin = lL0[1] + ilat/256
+    latmax = lL0[1] + (ilat+1)/256
+
+    ext = (lonmin,lonmax,latmin,latmax)
+    return ext
 
 def ext2qt(extent=np.array([-1.8,-1.7,48.4,48.5]),lL0=np.array([-2,48])):
     """ convert an extent region into a list of qt regions
@@ -147,6 +168,7 @@ def ext2qt(extent=np.array([-1.8,-1.7,48.4,48.5]),lL0=np.array([-2,48])):
     il  = np.arange(eval(ill[0]),eval(iur[0]))
     iL  = np.arange(eval(ill[1]),eval(iur[1]))
     ltile = []
+
     for l in il:
         for L in iL:
             ltile.append('i'+str(l)+'-'+str(L))
