@@ -1876,8 +1876,6 @@ class DLink(Link):
         #return(afp)
 
 
-
-
     def select(self):
         fig,ax = self.show()
         self.cid = fig.canvas.mpl_connect('button_press_event',self.OnClick)
