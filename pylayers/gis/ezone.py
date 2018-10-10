@@ -294,10 +294,10 @@ class DEM(PyLayers):
 
 
         data = np.fromfile(filehgt,dtype='>i2')
-        self.hgt = data.reshape(1201,1201)
+        self.hgts = data.reshape(1201,1201)
 
         data = np.fromfile(filelcv,dtype='>i1')
-        self.lcv = data.reshape(1201,1201)
+        self.lcvs = data.reshape(1201,1201)
 
     def loadaster(self,fileaster=[]):
         """ load Aster files

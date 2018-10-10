@@ -2326,6 +2326,7 @@ class DLink(Link):
         mlab.view(focalpoint=fp)#,distance=15*dab-55)
         self._maya_fig.scene.disable_render = False
         mlab.orientation_axes()
+        mlab.show()
         return self._maya_fig
         #return(self._maya_fig)
 

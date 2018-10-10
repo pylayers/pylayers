@@ -39,12 +39,12 @@ class Tesgeu(TestCase):
 
         points = shg.MultiPoint([(0, 0), (0, 1), (3.2, 1), (3.2, 0.7), (0.4, 0.7), (0.4, 0)])
         polyg  = geu.Polygon(points)
-        cvex, ccave  = polyg.ptconvex2() 
+        cvex, ccave  = polyg.ptconvex2()
         assert_equal(cvex,[-5] )
         assert_equal(ccave,[-1, -2, -3, -4, -6] )
         points = shg.MultiPoint([(0, 0), (0, 1), (-3.2, 1), (-3.2, 0.7), (-0.4, 0.7), (-0.4, 0)])
         polyg  = geu.Polygon(points)
-        cvex, ccave  = polyg.ptconvex2() 
+        cvex, ccave  = polyg.ptconvex2()
         assert_equal(cvex,[-5] )
         assert_equal(ccave,[-1, -2, -3, -4, -6] )
 

@@ -111,7 +111,7 @@ class Pattern(PyLayers):
         --------
 
         >>> from pylayers.antprop.aarray import *
-        >>> A0=Antenna('Omni',param={'pol':'t','GmaxdB':0})
+        >>> A0=Antenna('Omni', param={'pol':'t','GmaxdB':0})
         >>> A1=Antenna('Gauss')
         >>> A2=Antenna('3gpp')
         >>> A3=ULArray()
@@ -137,12 +137,12 @@ class Pattern(PyLayers):
                 kwargs[k] = defaults[k]
 
         if 'fGHz' not in kwargs:
-            # case antenna has been measured 
+            # case antenna has been measured
             if hasattr(self,'_fGHz'):
                 self.fGHz=self._fGHz
             elif 'fGHz' not in self.__dict__:
                 self.fGHz = np.array([2.4])
-            
+
         else:
             if type(kwargs['fGHz'])==np.ndarray:
                 self.fGHz = kwargs['fGHz']
