@@ -409,7 +409,7 @@ class Rays(PyLayers, dict):
             if a not in notattr:
                 if type(a)==str:
                     a.encode('utf-8')
-                    print("   ",a)
+                    # print("   ",a)
                     f.attrs[a] = getattr(self,a)
 
         for k in self.keys():
@@ -3512,7 +3512,7 @@ class Rays(PyLayers, dict):
                 ltran = []
                 if bB:
                     print('rotation matrix#', 'type: B0')
-                    
+
                     B0 = self.B0.data[ir,:,:]
                     addr = self.ir2a(ir)
                     Bo0 = self[addr[0]]['Bo0'][:,:,addr[1]] 
@@ -3528,7 +3528,7 @@ class Rays(PyLayers, dict):
                     I = self.I.I[ifGHz, ray[iidx], :, :]
                     print(I)
                     lmat.append(I)
-                   
+
                     if bB:
                         print('rotation matrix#',[ray[iidx]], 'type: B')
                         B = self.B.data[ray[iidx], :, :]

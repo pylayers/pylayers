@@ -932,8 +932,6 @@ class DLink(Link):
             self.L.build()
             self.L.dumpw()
 
-
-
         # self.a = self.L.cy2pt(self.ca)
         # self.b = self.L.cy2pt(self.cb)
 
@@ -1125,7 +1123,7 @@ class DLink(Link):
 
             #if type(grpname)==str:
             #    grpname.encode('utf-8')
-            print(key,grpname)
+            #print(key,grpname)
             #if key=='ray':
             #    pdb.set_trace()
             obj._saveh5(self.filename,grpname)
@@ -1148,12 +1146,8 @@ class DLink(Link):
         kwargs :
         layout for sig and rays
 
-        Examples
-        --------
-
 
         """
-
 
         obj._loadh5(self.filename,grpname,**kwargs)
         logger.debug(str(obj.__class__).split('.')[-1] + ' from '+ grpname + ' loaded')
