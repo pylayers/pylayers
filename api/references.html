@@ -95,6 +95,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_layout.html">8 Random Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_issue314.html">Exemple of issue 314</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
@@ -1166,16 +1167,19 @@
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">haversine</span></code>(lat1,&nbsp;lon1,&nbsp;lat2,&nbsp;lon2[,&nbsp;mode])</td>
 <td>lat 1 (Na) lon 1 (Na) lat 2 (Nb) lon 2 (Nb)</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_axes_locatable</span></code>(axes)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">lab2ext</span></code>(lab,&nbsp;lL0)</td>
+<td>label to extent</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_axes_locatable</span></code>(axes)</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pylayers.gis.ezone.maxloc.html#pylayers.gis.ezone.maxloc" title="pylayers.gis.ezone.maxloc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maxloc</span></code></a>(f[,&nbsp;threshold])</td>
+<tr class="row-even"><td><a class="reference internal" href="pylayers.gis.ezone.maxloc.html#pylayers.gis.ezone.maxloc" title="pylayers.gis.ezone.maxloc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maxloc</span></code></a>(f[,&nbsp;threshold])</td>
 <td>determine local maximum above a threshold</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">minsec2dec</span></code>(old)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">minsec2dec</span></code>(old)</td>
 <td>convert latlon from DMS (minute second) to DD (decimal)</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pylayers.gis.ezone.zone.html#pylayers.gis.ezone.zone" title="pylayers.gis.ezone.zone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">zone</span></code></a>(pt[,&nbsp;rm])</td>
+<tr class="row-even"><td><a class="reference internal" href="pylayers.gis.ezone.zone.html#pylayers.gis.ezone.zone" title="pylayers.gis.ezone.zone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">zone</span></code></a>(pt[,&nbsp;rm])</td>
 <td>extract a region from a point and a radius</td>
 </tr>
 </tbody>
@@ -6334,7 +6338,7 @@ rxr</p>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code>(**kwargs)</td>
 <td>Class Node</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">PLocalization</span></code></td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">PLocalization</span></code>([loc,&nbsp;tx,&nbsp;loc_updt_time,&nbsp;sim])</td>
 <td></td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Person</span></code>([ID,&nbsp;interval,&nbsp;roomId,&nbsp;L,&nbsp;net,&nbsp;wld,&nbsp;…])</td>
@@ -7959,7 +7963,7 @@ devdf  : device data frame</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Sep 24, 2018.
+      Last updated on Oct 17, 2018.
 
     </p>
   </div>

@@ -93,6 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html">8 Random Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_issue314.html">Exemple of issue 314</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
@@ -261,8 +262,8 @@ import pdb
 import os
 
 
-#~class Simul(SimulationRT):  # Sympy 2
-<div class="viewcode-block" id="Simul"><a class="viewcode-back" href="../../../api/pylayers.simul.simulnet.Simul.html#pylayers.simul.simulnet.Simul">[docs]</a>class Simul(object):  # Sympy 3
+#~class Simul(SimulationRT):  # Simpy 2
+<div class="viewcode-block" id="Simul"><a class="viewcode-back" href="../../../api/pylayers.simul.simulnet.Simul.html#pylayers.simul.simulnet.Simul">[docs]</a>class Simul(object):  # Simpy 3
     &quot;&quot;&quot;
 
     Attributes
@@ -297,9 +298,9 @@ import os
 
     def __init__(self):
 
-        #SimulationRT.__init__(self)  # Sympy 2
-        sympy.RealtimeEnvironment.__init__(self)  #simpy 3
-        self.initialize()
+        #SimulationRT.__init__(self)  # Simpy 2
+        simpy.RealtimeEnvironment.__init__(self)  #simpy 3
+        #self.initialize()
 
         self.config = ConfigParser.ConfigParser()
         filename = pyu.getlong(&#39;simulnet.ini&#39;, pstruc[&#39;DIRSIMUL&#39;])
@@ -611,7 +612,7 @@ if __name__ == &#39;__main__&#39;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Sep 24, 2018.
+      Last updated on Oct 17, 2018.
 
     </p>
   </div>

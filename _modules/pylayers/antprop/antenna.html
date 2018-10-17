@@ -93,6 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html">8 Random Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_issue314.html">Exemple of issue 314</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
@@ -316,7 +317,7 @@ else:
         --------
 
         &gt;&gt;&gt; from pylayers.antprop.aarray import *
-        &gt;&gt;&gt; A0=Antenna(&#39;Omni&#39;,param={&#39;pol&#39;:&#39;t&#39;,&#39;GmaxdB&#39;:0})
+        &gt;&gt;&gt; A0=Antenna(&#39;Omni&#39;, param={&#39;pol&#39;:&#39;t&#39;,&#39;GmaxdB&#39;:0})
         &gt;&gt;&gt; A1=Antenna(&#39;Gauss&#39;)
         &gt;&gt;&gt; A2=Antenna(&#39;3gpp&#39;)
         &gt;&gt;&gt; A3=ULArray()
@@ -342,12 +343,12 @@ else:
                 kwargs[k] = defaults[k]
 
         if &#39;fGHz&#39; not in kwargs:
-            # case antenna has been measured 
+            # case antenna has been measured
             if hasattr(self,&#39;_fGHz&#39;):
                 self.fGHz=self._fGHz
             elif &#39;fGHz&#39; not in self.__dict__:
                 self.fGHz = np.array([2.4])
-            
+
         else:
             if type(kwargs[&#39;fGHz&#39;])==np.ndarray:
                 self.fGHz = kwargs[&#39;fGHz&#39;]
@@ -6089,7 +6090,7 @@ if (__name__ == &quot;__main__&quot;):
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Sep 24, 2018.
+      Last updated on Oct 17, 2018.
 
     </p>
   </div>

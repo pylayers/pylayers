@@ -93,6 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html">8 Random Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_issue314.html">Exemple of issue 314</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
@@ -271,6 +272,7 @@ logger = logging.getLogger(__name__)
 
     def __add__(self,l):
         &quot;&quot;&quot; merge ak and tauk of 2 Links
+
         &quot;&quot;&quot;
         L  = Link()
         tk = np.hstack((self.H.tk,l.H.tk))
@@ -1329,10 +1331,11 @@ logger = logging.getLogger(__name__)
 
             #if type(grpname)==str:
             #    grpname.encode(&#39;utf-8&#39;)
-            try:
-                obj._saveh5(self.filename,grpname)
-            except:
+            print(key,grpname)
+            if key==&#39;ray&#39;:
                 pdb.set_trace()
+            obj._saveh5(self.filename,grpname)
+
 
         logger.debug(str(obj.__class__).split(&#39;.&#39;)[-1] + &#39; from &#39;+ grpname + &#39; saved&#39;)</div>
 
@@ -2081,8 +2084,6 @@ logger = logging.getLogger(__name__)
         #return(afp)
 
 
-
-
 <div class="viewcode-block" id="DLink.select"><a class="viewcode-back" href="../../../api/pylayers.simul.link.DLink.html#pylayers.simul.link.DLink.select">[docs]</a>    def select(self):
         fig,ax = self.show()
         self.cid = fig.canvas.mpl_connect(&#39;button_press_event&#39;,self.OnClick)
@@ -2252,7 +2253,8 @@ logger = logging.getLogger(__name__)
             #
             # Select group of interactions
             #
-            if type(kwargs[&#39;lr&#39;])==list:
+            if ((type(kwargs[&#39;lr&#39;]) is list) or 
+               (type(kwargs[&#39;lr&#39;]) is np.ndarray)):
                 lr = kwargs[&#39;lr&#39;]
             else:
                 if kwargs[&#39;lr&#39;]==-1:
@@ -2532,6 +2534,7 @@ logger = logging.getLogger(__name__)
         mlab.view(focalpoint=fp)#,distance=15*dab-55)
         self._maya_fig.scene.disable_render = False
         mlab.orientation_axes()
+        mlab.show()
         return self._maya_fig
         #return(self._maya_fig)
 
@@ -2870,7 +2873,7 @@ if (__name__ == &quot;__main__&quot;):
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Sep 24, 2018.
+      Last updated on Oct 17, 2018.
 
     </p>
   </div>

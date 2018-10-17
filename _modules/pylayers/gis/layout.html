@@ -93,6 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html">8 Random Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_issue314.html">Exemple of issue 314</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
@@ -551,6 +552,9 @@ import pylayers.util.project as pro
         # Layout main argument
         #   If no .ini extension provided it is added
         #
+        if type(string) is bytes:
+            string = string.decode(&#39;utf-8&#39;)
+
         arg, ext = os.path.splitext(string)
         if arg != &#39;&#39;:
             if ext == &#39;.ini&#39;:
@@ -588,7 +592,7 @@ import pylayers.util.project as pro
             elif loadres:
                 self.importres(_fileres=string)
                 self.sl = sb.SlabDB()
-            elif &#39;(&#39; in string:  # load from osmapi latlon in string
+            elif &#39;(&#39; in str(string):  # load from osmapi latlon in string
                 self.importosm(latlon=string, dist_m=dist_m, cart=True, typ=self.typ)
                 self.loadosm = True
             else:  # load from address geocoding
@@ -1307,7 +1311,6 @@ import pylayers.util.project as pro
         self.upnt = np.array((upnt))
 
         # association
-        # pdb.set_trace()
 
         # utmp = np.array(zip(-self.upnt,np.arange(len(self.upnt))))
         # mutmp = max(utmp[:,0])
@@ -1518,7 +1521,6 @@ import pylayers.util.project as pro
             #     # stridess is different from 0 only for subsegments
             #     self.stridess[ks] = 0                   # initialize stridess[ks]
             #     #if index==155:
-            #     #    pdb.set_trace()
             #     if self.Gs.node[ks].has_key(&#39;ss_name&#39;): # if segment has sub segment
             #         nss = len(self.Gs.node[ks][&#39;ss_name&#39;])  # retrieve number of sseg
             #         self.stridess[ks]=index-1           # update stridess[ks] dict
@@ -1545,7 +1547,6 @@ import pylayers.util.project as pro
         self.s2pc = self.s2pc.tocsr()
         # for k in self.tsg:
         #     assert(np.array(self.s2pc[k,:].todense())==self.seg2pts(k).T).all(),pdb.set_trace()
-        #pdb.set_trace()
         #
         # This is wrong and asume a continuous indexation of points
         # TODO FIX : This problem cleanly
@@ -1610,7 +1611,6 @@ import pylayers.util.project as pro
             nv = np.sqrt(np.sum(v * v, axis=1))
             # if at least one point is in the radius the poygon is kept
             if (nv &lt; kwargs[&#39;dist_m&#39;]).any():
-                # pdb.set_trace()
                 npoint = len(p)
                 for k, point in enumerate(p):
                     # add a new node unless it is the last already existing
@@ -1751,7 +1751,6 @@ import pylayers.util.project as pro
                 previous_node_index = current_node_index</div>
             # last segment
             #ns = self.add_segment(previous_node_index, starting_node_index, name=&#39;WALL&#39;, z=z1)
-        #pdb.set_trace()
 
 <div class="viewcode-block" id="Layout.importosm"><a class="viewcode-back" href="../../../api/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.importosm">[docs]</a>    def importosm(self, **kwargs):
         &quot;&quot;&quot; import layout from osm file or osmapi
@@ -1945,7 +1944,6 @@ import pylayers.util.project as pro
                 #v1.1 u1 = np.array(nx.neighbors(self.Gs, nta))
                 #v1.1 u2 = np.array(nx.neighbors(self.Gs, nhe))
                 # import ipdb
-                # ipdb.set_trace()
                 # u1 = np.array(self.Gs.node[nta])
                 # u2 = np.array(self.Gs.node[nhe])
                 # inter_u1_u2 = np.intersect1d(u1, u2)
@@ -5323,7 +5321,6 @@ import pylayers.util.project as pro
         if (kwargs[&#39;sig&#39;]==[]):
             nx.draw_networkx_edges(self.Gi,self.Gi.pos,edgelist=[edinter],width=2,edge_color=&#39;g&#39;,arrow=False,ax=ax2)
         nx.draw_networkx_edges(self.Gi,self.Gi.pos,edgelist=edgelist,width=2,edge_color=&#39;r&#39;,arrow=False,ax=ax2)
-        #pdb.set_trace()
         if (kwargs[&#39;sig&#39;]==[]):
             nx.draw_networkx_edge_labels(self.Gi,self.Gi.pos,edge_labels=dprob,ax=ax2,fontsize=kwargs[&#39;fontsize&#39;])
         if cy!=[]:
@@ -5413,7 +5410,6 @@ import pylayers.util.project as pro
 
         G = self.Gt
 
-        # pdb.set_trace()
         for k, nc in enumerate(G.node.keys()):
             if nc!=0:
                 poly = G.node[nc][&#39;polyg&#39;]
@@ -5829,7 +5825,6 @@ import pylayers.util.project as pro
                 pass
 
         # retrieve md5 sum of the original ini file
-        # pdb.set_trace()
         if &#39;s&#39; in graphs:
             #self._hash = self.Gs.node.pop(0)[&#39;hash&#39;]
             # self._hash = self.Gs.node[0][&#39;hash&#39;]
@@ -6457,7 +6452,6 @@ import pylayers.util.project as pro
         # delete temporary graph
         del G
 
-        # pdb.set_trace()
 
         # create graph Gt
         self.Gt = nx.Graph(name=&#39;Gt&#39;)
@@ -7467,7 +7461,6 @@ import pylayers.util.project as pro
         for n in self.Gv.node:
             # espoo_journal debug
             #if n == 530:
-            #    pdb.set_trace()
             if verbose:
                 pbartmp.update(cpt)
 
@@ -7668,7 +7661,6 @@ import pylayers.util.project as pro
         if verbose :
             Gipbar.update(66.)
         # updating the list of interactions of a given cycle
-        # pdb.set_trace()
         pbartmp = pbar(verbose,total=100.,
                        desc =&#39;update interraction list&#39;,
                        leave=False,
@@ -8091,7 +8083,7 @@ import pylayers.util.project as pro
                 # nb_nstr1 = np.array([self.s2pu[nstr1,0],self.s2pu[nstr1,1]])
                 # nb_nstr0 = self.s2pu[nstr0,:].toarray()[0]
                 # nb_nstr1 = self.s2pu[nstr1,:].toarray()[0]
-                
+
                 # first interaction is a point
                 if nstr0&lt;0:
                     nb_nstr0 = [nstr0]
@@ -8111,8 +8103,9 @@ import pylayers.util.project as pro
                     p1 = Gspos(num1[0])[0,:]
                     pc = Gspos(common_point[0])[0,:]
 
-                    v0 = p0-pc 
-                    v1 = p1-pc 
+                    v0 = p0 - pc
+                    v1 = p1 - pc
+
                     v0n = v0/np.sqrt(np.sum(v0*v0))
                     v1n = v1/np.sqrt(np.sum(v1*v1))
                     if np.dot(v0n,v1n)&lt;=0:
@@ -9818,10 +9811,10 @@ import pylayers.util.project as pro
         d_id = max(self.Gr.nodes())  # for numerotation of Gw nodes
         d_id_index = d_id + 1
 
-        for e in self.Gr.edges_iter():  # iterator on Gr edges
+        for e in self.Gr.edges():  # iterator on Gr edges
 
-            self.Gw.add_node(e[0], {&#39;room&#39;: e[0], &#39;door&#39;: False})
-            self.Gw.add_node(e[1], {&#39;room&#39;: e[1], &#39;door&#39;: False})
+            self.Gw.add_node(e[0], room=e[0], door=False)
+            self.Gw.add_node(e[1], room=e[1], door= False)
 
             # transitions of room e[0]
             # trans1 = self.Gr.node[e[0]][&#39;segment&#39;]
@@ -9830,7 +9823,7 @@ import pylayers.util.project as pro
             # Id = np.intersect1d(trans1, trans2)[0]  # list of common doors
             # import ipdb
             # ipdb.set_trace()
-            Ids = self.Gr.edge[e[0]][e[1]][&#39;segment&#39;]
+            Ids = self.Gr[e[0]][e[1]][&#39;segment&#39;]
             # here is supposed that 2 room may have more than 1 door in common
             for Id in Ids:
                 #v1.1 unode = self.Gs.neighbors(Id)  # get edge number of common doors
@@ -9843,10 +9836,10 @@ import pylayers.util.project as pro
                 sl = self.sl[name]
                 thick = (sum(sl[&#39;lthick&#39;]) / 2.) + 0.2
 
-                # for &quot;&quot;doors&quot;&quot; extra waypoints points are added 
+                # for &quot;&quot;doors&quot;&quot; extra waypoints points are added
                 # in front and back of the aperture.
                 # this is not done for AIR slabs
-                if &#39;AIR&#39; not in name : 
+                if &#39;AIR&#39; not in name:
 
                     # middle of the common door
                     pdoor0 = (np.array(up0) + pn[:2] * thick +
@@ -9862,28 +9855,28 @@ import pylayers.util.project as pro
                     if self.Gr.node[e[0]][&#39;polyg&#39;].contains(P0):
                         upd0 = d_id_index
                         self.Gw.pos[upd0] = pdoor0
-                        self.Gw.add_node(upd0, {&#39;room&#39;: e[0], &#39;door&#39;: True})
+                        self.Gw.add_node(upd0, room=e[0], door=True)
                         # if self.seginline(pdoor0,ep0).shape[1] &lt;= 1:
                         self.Gw.add_edges_from([(e[0],upd0)])
                         d_id_index = d_id_index + 1
 
                         upd1 = d_id_index
                         self.Gw.pos[upd1] = pdoor1
-                        self.Gw.add_node(upd1, {&#39;room&#39;: e[1], &#39;door&#39;: True})
+                        self.Gw.add_node(upd1, room=e[1], door=True)
                         # if self.seginline(pdoor1,ep1).shape[1] &lt;= 1:
                         self.Gw.add_edges_from([(e[1],upd1)])
                         d_id_index = d_id_index + 1
                     else:
                         upd0 = d_id_index
                         self.Gw.pos[upd0] = pdoor0
-                        self.Gw.add_node(upd0, {&#39;room&#39;: e[1], &#39;door&#39;: True})
+                        self.Gw.add_node(upd0, room=e[1], door=True)
                         # if self.seginline(pdoor0,ep1).shape[1] &lt;= 1:
                         self.Gw.add_edges_from([(e[1],upd0)])
                         d_id_index = d_id_index + 1
 
                         upd1 = d_id_index
                         self.Gw.pos[upd1] = pdoor1
-                        self.Gw.add_node(upd1, {&#39;room&#39;: e[0], &#39;door&#39;: True})
+                        self.Gw.add_node(upd1, room=e[0], door=True)
                         # if self.seginline(pdoor1,ep0).shape[1] &lt;= 1:
                         self.Gw.add_edges_from([(e[0],upd1)])
                         d_id_index = d_id_index + 1
@@ -11472,7 +11465,7 @@ if __name__ == &quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Sep 24, 2018.
+      Last updated on Oct 17, 2018.
 
     </p>
   </div>

@@ -93,6 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html">8 Random Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_issue314.html">Exemple of issue 314</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
@@ -466,7 +467,7 @@ logger = logging.getLogger(__name__)
                     s = s+&#39;\n&#39;
                 #pdb.set_trace()
                 #s = s + str(sk) + &#39;rays with&#39; + str(k) + &#39; interactions&#39;
-        
+
 
         return(s)
 
@@ -591,46 +592,47 @@ logger = logging.getLogger(__name__)
         filenameh5=pyu.getlong(filenameh5,pstruc[&#39;DIRLNK&#39;])
         # try/except to avoid loosing the h5 file if
         # read/write error
-        try:
+        #try:
 
-            fh5=h5py.File(filenameh5,&#39;a&#39;)
-            if self.is3D:
-                if not grpname in fh5[&#39;ray&#39;].keys():
-                    fh5[&#39;ray&#39;].create_group(grpname)
-                else :
-                    print(&#39;ray/&#39;+grpname +&#39;already exists in &#39;+filenameh5)
-                f = fh5[&#39;ray/&#39;+grpname]
+        fh5=h5py.File(filenameh5,&#39;a&#39;)
+        if self.is3D:
+            if not grpname in fh5[&#39;ray&#39;].keys():
+                fh5[&#39;ray&#39;].create_group(grpname)
+            else :
+                print(&#39;ray/&#39;+grpname +&#39;already exists in &#39;+filenameh5)
+            f = fh5[&#39;ray/&#39;+grpname]
 
 
-            else:
-                if not grpname in fh5[&#39;ray2&#39;].keys():
-                    fh5[&#39;ray2&#39;].create_group(grpname)
-                else :
-                    print(&#39;ray2/&#39;+grpname +&#39;already exists in &#39;+filenameh5)
-                f = fh5[&#39;ray2/&#39;+grpname]
-            # keys not saved as attribute of h5py file
-            notattr = [&#39;I&#39;,&#39;B&#39;,&#39;B0&#39;,&#39;dis&#39;]
-            for a in self.__dict__.keys():
-                if a not in notattr:
-                    if type(a)==str:
-                        a.encode(&#39;utf-8&#39;)
-                        f.attrs[a] = getattr(self,a)
+        else:
+            if not grpname in fh5[&#39;ray2&#39;].keys():
+                fh5[&#39;ray2&#39;].create_group(grpname)
+            else :
+                print(&#39;ray2/&#39;+grpname +&#39;already exists in &#39;+filenameh5)
+            f = fh5[&#39;ray2/&#39;+grpname]
+        # keys not saved as attribute of h5py file
+        notattr = [&#39;I&#39;,&#39;B&#39;,&#39;B0&#39;,&#39;dis&#39;]
+        for a in self.__dict__.keys():
+            if a not in notattr:
+                if type(a)==str:
+                    a.encode(&#39;utf-8&#39;)
+                    print(&quot;   &quot;,a)
+                    f.attrs[a] = getattr(self,a)
 
-            for k in self.keys():
-                f.create_group(str(k))
-                for kk in self[k].keys():
-                    if kk == &#39;sig2d&#39;:
-                        # Need to find an efficient way to save the signatures
-                        # 2d which have created the rays
-                        pass
-                    elif kk == &#39;nbrays&#39;:
-                        f[str(k)].create_dataset(kk,shape=(1,),data=np.array([self[k][kk]]))
-                    else:
-                        f[str(k)].create_dataset(kk,shape=np.shape(self[k][kk]),data=self[k][kk])
-            fh5.close()
-        except:
-            fh5.close()
-            raise NameError(&#39;Rays: issue when writting h5py file&#39;)
+        for k in self.keys():
+            f.create_group(str(k))
+            for kk in self[k].keys():
+                if kk == &#39;sig2d&#39;:
+                    # Need to find an efficient way to save the signatures
+                    # 2d which have created the rays
+                    pass
+                elif kk == &#39;nbrays&#39;:
+                    f[str(k)].create_dataset(kk,shape=(1,),data=np.array([self[k][kk]]))
+                else:
+                    f[str(k)].create_dataset(kk,shape=np.shape(self[k][kk]),data=self[k][kk])
+        fh5.close()
+        #except:
+        #    fh5.close()
+        #    raise NameError(&#39;Rays: issue when writting h5py file&#39;)
 
     def _loadh5(self,filenameh5,grpname,**kwargs):
         &quot;&quot;&quot; load rays  h5py format compliant with Links Class
@@ -917,7 +919,7 @@ logger = logging.getLogger(__name__)
         for unr,nr in enumerate(lnr):
             #r.nray2D = 
             #r.nb_origin_sig = 1
-            
+
             ni = self.ray2nbi(nr)
             ur = np.where(self[ni][&#39;rayidx&#39;]==nr)[0][0]
 
@@ -2425,13 +2427,13 @@ logger = logging.getLogger(__name__)
                 # create a numpy array to relate the ray index to its corresponding
                 # number of interactions
                 #pdb.set_trace()
-                _ray2nbi = np.ones((nbray),dtype=int)
+                _ray2nbi = np.ones((nbray), dtype=int)
 
 
                 try:
-                    self._ray2nbi=np.hstack((self._ray2nbi,_ray2nbi))
+                    self._ray2nbi = np.hstack((self._ray2nbi,_ray2nbi))
                 except:
-                    self._ray2nbi=_ray2nbi
+                    self._ray2nbi = _ray2nbi
 
 
                 self._ray2nbi[self[k][&#39;rayidx&#39;]]  = k
@@ -2677,9 +2679,9 @@ logger = logging.getLogger(__name__)
                 self.raypt = 1
                 self._ray2nbi = ze
         self._luw = np.unique(luw).tolist()
-        self.isbased=True</div>
+        self.isbased = True</div>
 
-<div class="viewcode-block" id="Rays.fillinter"><a class="viewcode-back" href="../../../api/pylayers.antprop.rays.Rays.html#pylayers.antprop.rays.Rays.fillinter">[docs]</a>    def fillinter(self,L,append=False):
+<div class="viewcode-block" id="Rays.fillinter"><a class="viewcode-back" href="../../../api/pylayers.antprop.rays.Rays.html#pylayers.antprop.rays.Rays.fillinter">[docs]</a>    def fillinter(self, L, append=False):
         &quot;&quot;&quot;  fill ray interactions
 
         Parameters
@@ -4098,7 +4100,7 @@ if __name__ == &quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Sep 24, 2018.
+      Last updated on Oct 17, 2018.
 
     </p>
   </div>

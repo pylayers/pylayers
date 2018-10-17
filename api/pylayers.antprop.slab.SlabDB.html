@@ -94,6 +94,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_layout.html">8 Random Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_issue314.html">Exemple of issue 314</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
@@ -224,7 +225,7 @@
 <h1>SlabDB<a class="headerlink" href="#slabdb" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pylayers.antprop.slab.SlabDB">
-<em class="property">class </em><code class="descclassname">pylayers.antprop.slab.</code><code class="descname">SlabDB</code><span class="sig-paren">(</span><em>fileslab=''</em>, <em>filemat=''</em>, <em>ds={}</em>, <em>dm={'AIR': {'mur': (1+0j)</em>, <em>'sigma': 0.0</em>, <em>'roughness': 0.0</em>, <em>'epr': (1+0j)}</em>, <em>'METAL': {'mur': (1+0j)</em>, <em>'sigma': 10000000</em>, <em>'roughness': 0.0</em>, <em>'epr': (1+0j)}</em>, <em>'_AIR': {'mur': (1+0j)</em>, <em>'sigma': 0.0</em>, <em>'roughness': 0.0</em>, <em>'epr': (1+0j)}}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#SlabDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pylayers.antprop.slab.</code><code class="descname">SlabDB</code><span class="sig-paren">(</span><em>fileslab=''</em>, <em>filemat=''</em>, <em>ds={}</em>, <em>dm={'AIR': {'epr': (1+0j)</em>, <em>'mur': (1+0j)</em>, <em>'roughness': 0.0</em>, <em>'sigma': 0.0}</em>, <em>'METAL': {'epr': (1+0j)</em>, <em>'mur': (1+0j)</em>, <em>'roughness': 0.0</em>, <em>'sigma': 10000000}</em>, <em>'_AIR': {'epr': (1+0j)</em>, <em>'mur': (1+0j)</em>, <em>'roughness': 0.0</em>, <em>'sigma': 0.0}}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#SlabDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
 <p>Slab data base</p>
 <p>DB : slab dictionnary</p>
@@ -412,7 +413,7 @@ fGHz : np.array</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Sep 24, 2018.
+      Last updated on Oct 17, 2018.
 
     </p>
   </div>
