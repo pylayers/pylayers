@@ -3506,7 +3506,6 @@ class Signature(PyLayers,object):
             >>> l4 = ax.plot(Y[0,:],Y[1,:],'xk')
             >>> ray = np.hstack((np.hstack((tx.reshape(2,1),Y)),rx.reshape(2,1)))
             >>> l5 = ax.plot(ray[0,:],ray[1,:],color='#999999',alpha=0.6,linewidth=0.6)
-            >>> 
             >>> plt.show()
 
         Notes

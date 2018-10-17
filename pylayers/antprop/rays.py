@@ -261,7 +261,7 @@ class Rays(PyLayers, dict):
                     s = s+'\n'
                 #pdb.set_trace()
                 #s = s + str(sk) + 'rays with' + str(k) + ' interactions'
-        
+
 
         return(s)
 
@@ -386,46 +386,47 @@ class Rays(PyLayers, dict):
         filenameh5=pyu.getlong(filenameh5,pstruc['DIRLNK'])
         # try/except to avoid loosing the h5 file if
         # read/write error
-        try:
+        #try:
 
-            fh5=h5py.File(filenameh5,'a')
-            if self.is3D:
-                if not grpname in fh5['ray'].keys():
-                    fh5['ray'].create_group(grpname)
-                else :
-                    print('ray/'+grpname +'already exists in '+filenameh5)
-                f = fh5['ray/'+grpname]
+        fh5=h5py.File(filenameh5,'a')
+        if self.is3D:
+            if not grpname in fh5['ray'].keys():
+                fh5['ray'].create_group(grpname)
+            else :
+                print('ray/'+grpname +'already exists in '+filenameh5)
+            f = fh5['ray/'+grpname]
 
 
-            else:
-                if not grpname in fh5['ray2'].keys():
-                    fh5['ray2'].create_group(grpname)
-                else :
-                    print('ray2/'+grpname +'already exists in '+filenameh5)
-                f = fh5['ray2/'+grpname]
-            # keys not saved as attribute of h5py file
-            notattr = ['I','B','B0','dis']
-            for a in self.__dict__.keys():
-                if a not in notattr:
-                    if type(a)==str:
-                        a.encode('utf-8')
-                        f.attrs[a] = getattr(self,a)
+        else:
+            if not grpname in fh5['ray2'].keys():
+                fh5['ray2'].create_group(grpname)
+            else :
+                print('ray2/'+grpname +'already exists in '+filenameh5)
+            f = fh5['ray2/'+grpname]
+        # keys not saved as attribute of h5py file
+        notattr = ['I','B','B0','dis']
+        for a in self.__dict__.keys():
+            if a not in notattr:
+                if type(a)==str:
+                    a.encode('utf-8')
+                    print("   ",a)
+                    f.attrs[a] = getattr(self,a)
 
-            for k in self.keys():
-                f.create_group(str(k))
-                for kk in self[k].keys():
-                    if kk == 'sig2d':
-                        # Need to find an efficient way to save the signatures
-                        # 2d which have created the rays
-                        pass
-                    elif kk == 'nbrays':
-                        f[str(k)].create_dataset(kk,shape=(1,),data=np.array([self[k][kk]]))
-                    else:
-                        f[str(k)].create_dataset(kk,shape=np.shape(self[k][kk]),data=self[k][kk])
-            fh5.close()
-        except:
-            fh5.close()
-            raise NameError('Rays: issue when writting h5py file')
+        for k in self.keys():
+            f.create_group(str(k))
+            for kk in self[k].keys():
+                if kk == 'sig2d':
+                    # Need to find an efficient way to save the signatures
+                    # 2d which have created the rays
+                    pass
+                elif kk == 'nbrays':
+                    f[str(k)].create_dataset(kk,shape=(1,),data=np.array([self[k][kk]]))
+                else:
+                    f[str(k)].create_dataset(kk,shape=np.shape(self[k][kk]),data=self[k][kk])
+        fh5.close()
+        #except:
+        #    fh5.close()
+        #    raise NameError('Rays: issue when writting h5py file')
 
     def _loadh5(self,filenameh5,grpname,**kwargs):
         """ load rays  h5py format compliant with Links Class
@@ -712,7 +713,7 @@ class Rays(PyLayers, dict):
         for unr,nr in enumerate(lnr):
             #r.nray2D = 
             #r.nb_origin_sig = 1
-            
+
             ni = self.ray2nbi(nr)
             ur = np.where(self[ni]['rayidx']==nr)[0][0]
 
@@ -2220,13 +2221,13 @@ class Rays(PyLayers, dict):
                 # create a numpy array to relate the ray index to its corresponding
                 # number of interactions
                 #pdb.set_trace()
-                _ray2nbi = np.ones((nbray),dtype=int)
+                _ray2nbi = np.ones((nbray), dtype=int)
 
 
                 try:
-                    self._ray2nbi=np.hstack((self._ray2nbi,_ray2nbi))
+                    self._ray2nbi = np.hstack((self._ray2nbi,_ray2nbi))
                 except:
-                    self._ray2nbi=_ray2nbi
+                    self._ray2nbi = _ray2nbi
 
 
                 self._ray2nbi[self[k]['rayidx']]  = k
@@ -2472,9 +2473,9 @@ class Rays(PyLayers, dict):
                 self.raypt = 1
                 self._ray2nbi = ze
         self._luw = np.unique(luw).tolist()
-        self.isbased=True
+        self.isbased = True
 
-    def fillinter(self,L,append=False):
+    def fillinter(self, L, append=False):
         """  fill ray interactions
 
         Parameters

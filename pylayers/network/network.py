@@ -63,7 +63,7 @@ if sys.version_info.major==2:
     from SimPy.SimulationRT import Process,hold
 else:
     import configparser as ConfigParser
-    import simpy 
+    import simpy
     #from simpy import process
 
 import copy
@@ -1867,7 +1867,8 @@ class Network(PyLayers,nx.MultiDiGraph):
 #        pdb.set_trace()
 #        self.node=N.node
 
-class PNetwork(Process):
+class PNetwork():
+#class PNetwork(Process):
     """
     Process version of the Network class
     """

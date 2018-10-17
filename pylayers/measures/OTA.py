@@ -7,22 +7,32 @@ deg_to_rad = np.pi/180.
 rad_to_deg = 180./np.pi
 
 class OTA(object):
-    def __init__(self,theta,phi,R=0.66,H=1.5):
+    def __init__(self, theta, phi, R=0.66, H=1.5):
         theta = theta*deg_to_rad
         phi = phi*deg_to_rad
-        x = (R*np.sin(theta[:,None])*np.cos(phi[None,:])).ravel()
-        y = (R*np.sin(theta[:,None])*np.sin(phi[None,:])).ravel()
-        z = (H + R*np.cos(theta[:,None])*np.ones(len(phi))[None,:] ).ravel()
-        self.p  = np.vstack((x,y,z))
-        self.th = (theta[:,None]*np.ones(len(phi))[None,:]).ravel()
-        self.ph = (np.ones(len(theta))[:,None]*phi[None,:]).ravel()
+        x = (R*np.sin(theta[:, None])*np.cos(phi[None, :])).ravel()
+        y = (R*np.sin(theta[:, None])*np.sin(phi[None, :])).ravel()
+        z = (H + R*np.cos(theta[:, None])*np.ones(len(phi))[None, :] ).ravel()
+        self.p = np.vstack((x, y, z))
+        self.th = (theta[:, None]*np.ones(len(phi))[None, :]).ravel()
+        self.ph = (np.ones(len(theta))[:,None]*phi[None,: ]).ravel()
     def __repr__(self):
         st = ''
         for k in range(self.th.shape[0]):
-            st = st+ str(k+1)+' '+str(self.th[k]*rad_to_deg)+' '+str(self.ph[k]*rad_to_deg)+'\n'
+            st = st + str(k+1)+' '+str(self.th[k]*rad_to_deg)+' '+str(self.ph[k]*rad_to_deg)+'\n'
         return(st)
-    
-    def load(self,filename):
+
+    def load(self, filename):
+        """ load an OTA file
+
+
+        self.M: np.array
+            (f x Nx x Ny x Ant) 
+        self.vmax
+        self.vmaxdB
+        self.vmindB
+
+        """
         U = spio.loadmat(filename)
         #print U.keys()
         self.fGHz = U['freq'].ravel()/1e9
@@ -32,18 +42,18 @@ class OTA(object):
             try:
                 self.M = np.concatenate((self.M,X),axis=3)
             except:
-                self.M = X 
+                self.M = X
         self.vmax = np.max(np.abs(self.M))
         self.vmaxdB = 20*np.log10(np.max(np.abs(self.M)))
         self.vmindB = self.vmaxdB-30
 
 
     def set_grid(self,rx,ry,rz):
-        """ set grid  
-        
-        rx : range along x 
-        ry : range along y  
-        rz : range along z  
+        """ set grid
+
+        rx : range along x
+        ry : range along y
+        rz : range along z
 
         """
 
@@ -61,31 +71,33 @@ class OTA(object):
                         self.pg = pt
 
 
-    def show(self,
-            ax = [],
-            fGHz=2,
-            ka=1,
-            kind='ad',
-            config=True,
-            grid = True,
-            label=False,
-            colorbar = False,
-            alpha=1,
-            s=10):
+    def show(self, **kwargs):
+        ax = kwargs.pop('ax', [])
+        fGHz = kwargs.pop('fGHz', 2)
+        ka = kwargs.pop('ka', 1)
+        kind = kwargs.pop('kind', 'ad')
+        config = kwargs.pop('config', True)
+        grid = kwargs.pop('grid', True)
+        label = kwargs.pop('label', False)
+        colorbar = kwargs.pop('colorbar', False)
+        alpha = kwargs.pop('alpha', 1)
+        s = kwargs.pop('s', 10)
+
+
         if ax == []:
             ax = plt.gca()
         else:
             pass
         # determine frequency index
-        if hasattr(self,'fGHz'):
+        if hasattr(self, 'fGHz'):
             abdf = np.abs(self.fGHz-fGHz)
             kf = np.where(abdf==np.min(abdf))
             fGHz = self.fGHz[kf]
             #print('Freq (GHz) : ',fGHz)
-        
+
         # display config
         if config:
-            if ka>0:
+            if ka> 0:
                 ax.plot(self.p[0,ka-1],self.p[1,ka-1],'or')
                 if label:
                     ax.annotate(str(ka),xy=(self.p[0,ka-1],self.p[1,ka-1]),fontsize=18)
@@ -118,9 +130,8 @@ class OTA(object):
                 val = np.angle(self.M[kf,:,:,ka-1])*rad_to_deg
                 vmax = 180
                 vmin = -180
-
             #sca=ax.scatter(self.pg[:,0],self.pg[:,1],c=val.T[::-1,::-1],s=s,alpha=alpha,linewidth=0,vmin=vmin,vmax=vmax)
-            sca=ax.scatter(self.pg[:,0],self.pg[:,1],c=val,s=s,alpha=alpha,linewidth=0,vmin=vmin,vmax=vmax)
+            sca=ax.scatter(self.pg[:,0],self.pg[:,1],c=val.ravel(),s=s,alpha=alpha,linewidth=0,vmin=vmin,vmax=vmax)
         elif hasattr(self,'pg'):
             sca=ax.scatter(self.pg[:,0],self.pg[:,1],c='k',s=3,alpha=0.5)
         else:
@@ -136,7 +147,7 @@ class OTA(object):
         fig = plt.gcf()
         return(fig,ax)
 
-            
+
 
 if __name__=="__main__":
     # specify the config

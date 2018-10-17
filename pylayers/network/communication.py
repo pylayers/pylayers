@@ -99,7 +99,8 @@ class dcond(dict):
 
 
 
-class TX(Process):
+#class TX(Process):
+class TX():
     """
        TX process ( not used for now)
         Each agent use the TX process for querying LDP/information/message passing data
@@ -294,7 +295,8 @@ class TX(Process):
                         self.devt[eval(key)].signal()
 
 
-class RX(Process):
+#class RX(Process):
+class RX():
     """ RX process
 
     Each agent has a RX process to receive information asynchronously.

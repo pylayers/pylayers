@@ -66,6 +66,7 @@ class Link(PyLayers):
 
     def __add__(self,l):
         """ merge ak and tauk of 2 Links
+
         """
         L  = Link()
         tk = np.hstack((self.H.tk,l.H.tk))
@@ -1124,10 +1125,11 @@ class DLink(Link):
 
             #if type(grpname)==str:
             #    grpname.encode('utf-8')
-            try:
-                obj._saveh5(self.filename,grpname)
-            except:
-                pdb.set_trace()
+            print(key,grpname)
+            #if key=='ray':
+            #    pdb.set_trace()
+            obj._saveh5(self.filename,grpname)
+
 
         logger.debug(str(obj.__class__).split('.')[-1] + ' from '+ grpname + ' saved')
 
