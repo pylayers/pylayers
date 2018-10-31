@@ -11,10 +11,12 @@ from osmapi import OsmApi
 import geocoder as geo
 import sys
 import urllib
+
 if sys.version_info.major==2:
     from  urllib2 import urlopen
 else:
     from  urllib.request import urlopen
+
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 import pylayers.util.geomutil as geu
@@ -671,9 +673,7 @@ class FloorPlan(nx.DiGraph):
 #     getbdg
 #
 #
-def getosm(address='Rennes', latlon=0, dist_m=400,
-           cart=False,
-           level_height = 3.45, typical_height = 10):
+def getosm(**kwargs):
     """ get osm region from osmapi
 
     Parameters
@@ -682,26 +682,35 @@ def getosm(address='Rennes', latlon=0, dist_m=400,
     address : string
     latlon : tuple or 0
     dist_m : float
-    cart : boolean
+    bcart : boolean
     level_height :  float
         typical level height for deriving building height from # levels
     typical_height : float
         typical height for building when no information
 
+    Returns
+    -------
+
+        coords,nodes,ways,dpoly,m
     Notes
     -----
 
     if latlon tuple is precised it has priority over the string
 
     """
+    address = kwargs.pop('address', 'Rennes')
+    latlon = kwargs.pop('latlon', 0)
+    dist_m = kwargs.pop('dist_m', 400)
+    bcart = kwargs.pop('bcart', False)
+    level_height = kwargs.pop('level_height', 3.45)
+    typical_height = kwargs.pop('typical_height', 10)
 
     rad_to_deg = (180/np.pi)
-    deg_to_rad = (np.pi/180)
 
-    if latlon==0:
+    if latlon == 0:
         place = geo.google(address)
         try:
-            lat,lon = place.latlng
+            lat, lon = place.latlng
         except:
             print(place)
     else:
@@ -713,10 +722,10 @@ def getosm(address='Rennes', latlon=0, dist_m=400,
     Osm = OsmApi()
 
     #
-    # Get Map around the specified coordinates
+    # get map around the specified coordinates
     #
 
-    osmmap  = Osm.Map(lon-alpha,lat-alpha,lon+alpha,lat+alpha)
+    osmmap = Osm.Map(lon-alpha, lat-alpha, lon+alpha, lat+alpha)
 
     #print(osmmap)
 
@@ -728,7 +737,7 @@ def getosm(address='Rennes', latlon=0, dist_m=400,
     coords.clean()
     coords.from_nodes(nodes)
 
-    m = coords.cartesian(cart=cart)
+    m = coords.cartesian(cart=bcart)
 
     ways = Ways()
     ways.clean()

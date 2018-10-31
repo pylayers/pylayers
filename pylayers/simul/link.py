@@ -744,36 +744,35 @@ class DLink(Link):
 
 
     def __repr__(self):
-        """ __repr__
-        """
 
         if hasattr(self,'filename'):
             s = 'filename: ' + self.filename +'\n'
-            s = s + 'Layout : ' + self.Lname + '\n\n'
-            s = s + 'Node a   \n'
+            #s = s + 'Layout file: ' + self.Lname + '\n'
+            s = s + 'Node A   \n'
             s = s + '------  \n'
             s = s + '\tcoord : ' + str (self.a) + "  in cycle " + str(self.ca) + '\n'
-            s = s + '\tantenna : ' + str (self.Aa.typ) + '\n'
+            s = s + '\tantenna type: ' + str (self.Aa.typ) + '\n'
             if (self.Ta!=np.eye(3)).any():
                 s = s + '\trotation matrice : \n ' + str (self.Ta) + '\n\n'
-            s = s + 'Node b   \n'
+            s = s + 'Node B   \n'
             s = s + '------  \n'
             s = s + '\tcoord : ' + str (self.b) + " in cycle " + str(self.cb) + '\n'
             s = s + '\tantenna : ' + str (self.Ab.typ) + '\n'
             if (self.Ta!=np.eye(3)).any():
                 s = s + 'rotation matrice : \n ' + str (self.Tb) + '\n\n'
-            s = s + '\n---------------- \n'
-            s = s + 'distance : ' + str("%6.3f" % np.sqrt(np.sum((self.a-self.b)**2))) + ' m \n'
-            s = s + 'delay : ' + str("%6.3f" % (np.sqrt(np.sum((self.a-self.b)**2))/0.3)) + ' ns\n'
+            s = s + '---------------- \n'
+            s = s + 'distance AB : ' + str("%6.3f" % np.sqrt(np.sum((self.a-self.b)**2))) + ' m \n'
+            s = s + 'delay AB : ' + str("%6.3f" % (np.sqrt(np.sum((self.a-self.b)**2))/0.3)) + ' ns\n'
             rd2deg = 180/np.pi
             if not np.allclose(self.a,self.b):
                 vsba = self.b-self.a
                 a1 = geu.angledir(vsba[None,:])
                 a2 = geu.angledir(-vsba[None,:])
-                s = s + 'azimuth (a | b ) : %.2f ' % (a1[0,1]*rd2deg) +' deg  | %.2f' % (a2[0,1]*rd2deg) + ' deg\n'
-                s = s + 'elevation (a | b ) : %.2f' % (a1[0,0]*rd2deg) + ' deg | %.2f ' % (a2[0,0]*rd2deg) + ' deg\n'
-                s = s + 'tilt (a |  b ) : '+str((a1[0,0]-np.pi/2)*rd2deg)+ ' deg  | '+ str((a2[0,0]-np.pi/2)*rd2deg)+ ' deg\n'
+                s = s + 'azimuth (A | B) : %.2f ' % (a1[0,1]*rd2deg) +' deg  | %.2f' % (a2[0,1]*rd2deg) + ' deg\n'
+                s = s + 'elevation (A | B) : %.2f' % (a1[0,0]*rd2deg) + ' deg | %.2f ' % (a2[0,0]*rd2deg) + ' deg\n'
+                s = s + 'tilt (A |  B) : '+str((a1[0,0]-np.pi/2)*rd2deg)+ ' deg  | '+ str((a2[0,0]-np.pi/2)*rd2deg)+ ' deg\n'
             #s = s + 'Frequency range :  \n'
+            s = s + '------------- \n'
             Nf = len(self.fGHz)
             s = s + 'fGHz : %.2f, %.2f, %g ' %(self.fGHz[0],self.fGHz[-1],Nf) +'\n'
             if Nf>1:
@@ -784,9 +783,21 @@ class DLink(Link):
             else:
                 fcGHz = self.fGHz[0]
             L  = 32.4+20*np.log(d)+20*np.log10(fcGHz)
-            s = s + '\n------------- \n'
+            s = s + '------------- \n'
             s = s + 'cutoff/threshold : %g / %.2f' %(self.cutoff, self.threshold)+'\n'
             s = s + 'max delay /dist: %.2f ns / %.2f m' %(self.delay_excess_max_ns,self.delay_excess_max_ns*0.3)+'\n'
+            s = s + '-------------- \n'
+            if hasattr(self,'Si'):
+                s = s + '# Si : ' + str(len(self.Si))
+            if hasattr(self,'r2d'):
+                s = s + '\n# r2d : ' + str(len(self.r2d))
+            if hasattr(self,'R'):
+                s = s + '\n# R : ' + str(len(self.R))
+            if hasattr(self,'C'):
+                s = s + '\n# C.Ctt.y : ' + str(self.C.Ctt.y.shape)
+                s = s + '\n# C.Ctp.y : ' + str(self.C.Ctp.y.shape)
+                s = s + '\n# C.Cpt.y : ' + str(self.C.Cpt.y.shape)
+                s = s + '\n# C.Cpp.y : ' + str(self.C.Cpp.y.shape)
         else:
             s = 'No Layout specified'
         return s

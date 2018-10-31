@@ -12,17 +12,117 @@ import json
 .. autosummary::
 
 """
+def enctile(lon,lat):
+    """ encode tile prefix from (lon,lat)
 
-def ent(lL,lL0):
+    Parameters
+    ----------
+
+    lon : float
+        longitude (degrees)
+    lat : float
+        latitude (degrees)
+
+    Returns
+    -------
+
+    prefix : string
+        srtm prefix filename
+
+    Examples
+    --------
+
+        >>> from pylayers.gis.gisutil import *
+        >>> assert enctile(-1.5,48.5)=='N48W002'
+        >>> assert enctile(0.5,48.5)=='N48E000'
+
+    """
+    if lon>0:
+        slon='E'
+    else:
+        slon='W'
+
+    if lat>0:
+        slat='N'
+    else:
+        slat='S'
+    # rounding and integer to string  conversion
+    if lat>0:
+        clat = str(np.floor(abs(lat)).astype('int'))
+    else:
+        clat = str(np.ceil(abs(lat)).astype('int'))
+    if lon>0:
+        clon = str(np.floor(abs(lon)).astype('int'))
+    else:
+        clon = str(np.ceil(abs(lon)).astype('int'))
+    # 2 char formating
+    if len(clon)<2:
+        clon ='00'+clon
+    else:
+        clon='0'+clon
+    if len(clat)<2:
+        clat ='0'+clat
+
+    tilename = slat+clat+slon+clon
+    return tilename
+
+def dectile(prefix='N48W002'):
+    """ decode tile name
+
+    Parameters
+    ----------
+
+    prefix : string
+
+    Returns
+    -------
+
+    extent : tuple
+
+        (lonmin,lonmax,latmin,latmax)
+
+    Examples
+    --------
+
+    >>> from pylayers.gis.gisutil import *
+    >>> dectile('N48W002')
+    (-2.0, -1.0, 48,49)
+
+    """
+    if prefix[0] == 'N':
+        latmin = int(prefix[1:3])
+        latmax = latmin+1
+    if prefix[0] == 'S':
+        latmin = -int(prefix[1:3])
+        latmax = latmin+1
+
+    if prefix[3] == 'W':
+        st = prefix[4:]
+        if st[0] == '0':
+            lonmin = -int(st[1:])
+        else:
+            lonmin = -int(st)
+        lonmax = lonmin+1
+
+    if prefix[3] == 'E':
+        st = prefix[4:]
+        if st[0] == '0':
+            lonmin = int(st[1:])
+        else:
+            lonmin = int(st)
+
+        lonmax = lonmin+1
+    return (lonmin, lonmax, latmin, latmax)
+
+
+def ent(lL):
     """ encode lon Lat in natural integer
 
     Parameters
     ----------
 
-    lL : nd.array (2xN)
+    lL : nd.array (N,2)
         longitude latitude array
-    lL0 : nd.array (,2)
-        lower left corner of the 1 degree tile
 
 
     Returns
@@ -41,18 +141,19 @@ def ent(lL,lL0):
 
     >>> from pylayers.gis.gisutil import *
     >>> lL= np.array([[-2,48],[-1,49]])
-    >>> lL0 = np.array([-2,48])
-    >>> ent(lL,lL0)
+    >>> ent(lL)
 
     """
     # offset from the lower left corner
-    d = lL-lL0
+    if len(lL.shape) != 2:
+        lL = lL[None, :]
+    d = lL-np.floor(lL)
     dui8 = np.floor(d*255).astype('uint8')
-    lab = [ 'i'+str(x[0])+'-'+str(x[1]) for x in dui8 ] 
+    lab = ['i'+str(x[0])+'-'+str(x[1]) for x in dui8]
     return(lab)
 
 
-def eqt(lL,lL0):
+def eqt(lL):
     """ encode lon Lat in quad tree integer
 
     Parameters
@@ -60,33 +161,40 @@ def eqt(lL,lL0):
 
     lL : nd.array (2xN)
         longitude Latitude
-    lL0 : nd.array (,2)
-        lower left corner of the 1degree tile
+
+    Returns
+    -------
+    ud16 : array of uint16
 
     """
     N = lL.shape[1]
     # offset from the lower left corner
-    d = lL-lL0[:,None]
+    d = lL-np.floor(lL)
     dui8 = np.floor(d*256).astype('uint8')
-    ndui8 = np.unpackbits(dui8).reshape(2,N,8)
-    d16 = np.empty((N,16)).astype('int')
-    d16[:,1::2]=ndui8[0,:,:]
-    d16[:,0::2]=ndui8[1,:,:]
-    ud8 = np.packbits(d16,axis=1)
-    ud16 = (ud8[:,0]*256+ud8[:,1]).astype('uint16')
-    return(ud16 )
+    ndui8 = np.unpackbits(dui8).reshape(2, N, 8)
+    d16 = np.empty((N, 16)).astype('int')
+    d16[:, 1::2] = ndui8[0, :, :]
+    d16[:, 0::2] = ndui8[1, :, :]
+    ud8 = np.packbits(d16, axis=1)
+    ud16 = (ud8[:, 0]*256+ud8[:, 1]).astype('uint16')
+    return(ud16)
 
 
-def dqt(ud16,lL0):
+def dqt(ud16, lL0):
     """ decode quad tree integer to lon Lat
 
     Parameters
     ----------
 
-    lL : nd.array (2xN)
+    ud16 : nd.array (2xN)
         longitude Latitude
     lL0 : nd.array (,2)
         lower left corner of the 1degree tile
+
+    Returns
+    -------
+
+    lL : longitude, Latitude
 
     """
 
@@ -94,9 +202,9 @@ def dqt(ud16,lL0):
     # offset from the lower left corner
     #d = lL-lL0[:,None]
     #dui8 = np.floor(d*256).astype('uint8')
-    uh8  = ud16/256
-    ul8  = ud16-uh8*256
-    ud8 =  (np.vstack((uh8,ul8)).T).astype('uint8')
+    uh8 = ud16/256
+    ul8 = ud16-uh8*256
+    ud8 = (np.vstack((uh8,ul8)).T).astype('uint8')
     ud16 = np.unpackbits(ud8).reshape(N,16)
     ndu8 = np.empty((2,N,8)).astype('int')
     ndu8[0,:,:]=ud16[:,1::2]
@@ -106,15 +214,23 @@ def dqt(ud16,lL0):
 
     return(lL)
 
-def lab2ext(lab,lL0):
+
+def lab2ext(lab, lL0):
     """ label to extent
 
     Parameters
     ----------
+
     lab : string
-        i0-0 to i255-255
+        'i0-0' to 'i255-255'
     lL0 : tuple
         (lon0,lat0)
+
+    Returns
+    -------
+
+    ext : extent
+        (lonmin,lonmax,latmin,Latmax)
 
     """
     lab=lab.replace('i','')
@@ -125,12 +241,20 @@ def lab2ext(lab,lL0):
     latmin = lL0[1] + ilat/256
     latmax = lL0[1] + (ilat+1)/256
 
-    ext = (lonmin,lonmax,latmin,latmax)
+    ext = (lonmin, lonmax, latmin, latmax)
     return ext
+
+def lL2ext(lL):
+    """ convert a lonLat into its qt extent
+
+    """
+    label = ent(lL)
+    ext = [lab2ext(x , np.floor(lL)) for x in label]
+    return ext
+
 
 def ext2qt(extent=np.array([-1.8,-1.7,48.4,48.5]),lL0=np.array([-2,48])):
     """ convert an extent region into a list of qt regions
-
 
     Parameters
     ----------
@@ -162,7 +286,7 @@ def ext2qt(extent=np.array([-1.8,-1.7,48.4,48.5]),lL0=np.array([-2,48])):
     LM = extent[3]
 
     lL = np.array([[lm,Lm],[lM,LM]])
-    uf8 = ent(lL,lL0)
+    uf8 = ent(lL)
     ill = uf8[0].replace('i','').split('-')
     iur = uf8[1].replace('i','').split('-')
     il  = np.arange(eval(ill[0]),eval(iur[0]))
@@ -178,6 +302,11 @@ def ext2qt(extent=np.array([-1.8,-1.7,48.4,48.5]),lL0=np.array([-2,48])):
 
 def arr2lp(arr):
     """ convert zeros separated array to list of array
+
+    Returns
+    -------
+
+    lp : list or arrays
 
     """
     lp=[]
@@ -202,8 +331,8 @@ if __name__=='__main__':
     lL0 = np.array([-2,48])
     lL = lL0[:,None] + np.random.rand(2,5)
     print(lL)
-    ud16 = eqt(lL,lL0)
-    un8  = ent(lL,lL0)
+    ud16 = eqt(lL)
+    un8  = ent(lL)
     lLb  = dqt(ud16,lL0)
 
 
@@ -282,27 +411,27 @@ def distance_on_earth(lat1, long1, lat2, long2):
     # Convert latitude and longitude to 
     # spherical coordinates in radians.
     degrees_to_radians = np.pi/180.0
-         
+
     # phi = 90 - latitude
     phi1 = (90.0 - lat1)*degrees_to_radians
     phi2 = (90.0 - lat2)*degrees_to_radians
-         
+
     # theta = longitude
     theta1 = long1*degrees_to_radians
     theta2 = long2*degrees_to_radians
-         
+
     # Compute spherical distance from spherical coordinates.
-         
+
     # For two locations in spherical coordinates 
     # (1, theta, phi) and (1, theta', phi')
     # cosine( arc length ) = 
     #    sin phi sin phi' cos(theta-theta') + cos phi cos phi'
     # distance = rho * arc length
-     
+
     cos = (np.sin(phi1)*np.sin(phi2)*np.cos(theta1 - theta2) + 
            np.cos(phi1)*np.cos(phi2))
     arc = np.arccos( cos )
- 
+
     # Remember to multiply arc by the radius of the earth 
     # in your favorite set of units to get length.
     return arc*R
@@ -372,7 +501,7 @@ def haversine(lat1, lon1, lat2, lon2,mode = 'normal'):
     return R * c
 
 def get_google_elev_profile(node0,node1,nb_samples=10):
-    """ 
+    """
         return elevation profile between 2 nodes
         using google elevation API data
 
@@ -381,23 +510,24 @@ def get_google_elev_profile(node0,node1,nb_samples=10):
 
             node0 = [lon,lat]
             node1 = [lon,lat]
-            nb_samples = int 
+            nb_samples = int
 
-        Return
-        ------
+        Returns
+        -------
 
         profile : np.ndarray (nb_samples)
             elevation for the nb_sambples between node0 and node1
 
 
 
-    """ 
+    """
     ELEVATION_BASE_URL = 'https://maps.googleapis.com/maps/api/elevation/json?'
     
     n0  = str(node0[0]) + ',' + str(node0[1])
     n1  = str(node1[0]) + ',' + str(node1[1])
     url = ELEVATION_BASE_URL + 'path=' + n0 + '|' + n1 +'&samples=' + str(nb_samples)
-    response = simplejson.load(urllib.urlopen(url))
+    response = simplejson.load(urllib.request.urlopen(url))
+    print(response['status'])
     if response['status'] =='OK':
         profile = []
         for k in range(nb_samples):

@@ -1566,11 +1566,11 @@ class Layout(pro.PyLayers):
         -----
 
         The best and recommended manner to edit a layout is to use the
-        josm editor in association with the piclayer plugin. 
-        This plugin allows to place a geo-adjusted image in the background 
-        which is very convenient for editing floorplan of buildings.. 
+        josm editor in association with the piclayer plugin.
+        This plugin allows to place a geo-adjusted image in the background
+        which is very convenient for editing floorplan of buildings.
 
-        In josm editor, nodes are numbered with negative indexes, while in 
+        In josm editor, nodes are numbered with negative indexes, while in
         pylayers they have a positive index.
 
         See Also
@@ -2198,7 +2198,7 @@ class Layout(pro.PyLayers):
             self.zceil = eval(di['indoor']['zceil'])
             self.zfloor = eval(di['indoor']['zfloor'])
 
-        # old format 
+        # old format
         if self.typ == 'floorplan':
             self.zceil = eval(di['floorplan']['zceil'])
             self.zfloor = eval(di['floorplan']['zfloor'])
@@ -2208,10 +2208,10 @@ class Layout(pro.PyLayers):
             self.typ = 'indoor'
         #
         # [outdoor]
-        #   TODO add a DEM file 
+        #   TODO add a DEM file
         #
         if self.typ == 'outdoor':
-            if 'outdoor' in di: 
+            if 'outdoor' in di:
                 if 'zceil' in di['outdoor']:
                     self.zceil = eval(di['outdoor']['zceil'])
                 else:
@@ -2219,13 +2219,13 @@ class Layout(pro.PyLayers):
             else:
                 self.zceil  =  3000    # upper limit for AIR walls
 
-            if 'outdoor' in di: 
+            if 'outdoor' in di:
                 if 'zfloor' in di['outdoor']:
                     self.zfloor = eval(di['outdoor']['zfloor'])
                 else:
-                    self.zfloor = 0 
+                    self.zfloor = 0
             else:
-                self.zfloor = 0 
+                self.zfloor = 0
         #
         #
         # manage ini file with latlon coordinates
