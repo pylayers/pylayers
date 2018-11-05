@@ -690,8 +690,8 @@ def getosm(**kwargs):
 
     Returns
     -------
-
         coords,nodes,ways,dpoly,m
+
     Notes
     -----
 

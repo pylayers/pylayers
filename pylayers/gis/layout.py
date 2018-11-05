@@ -5781,10 +5781,10 @@ class Layout(pro.PyLayers):
         -----------
 
         lines : shapely lines
-        fig
-        ax 
-        color  : string 
-        alpha  : float 
+        fig : matplotlib figure
+        ax : figure axis
+        color  : string
+        alpha  : float
             transparency
 
         See Also
@@ -5805,6 +5805,8 @@ class Layout(pro.PyLayers):
 
     def pltpoly(self, poly, fig=[], ax=[], color='r', alpha=0.2):
         """  plot a polygon with a specified color and transparency
+
+        TODO : To be deplaced in an ither class
         """
         if fig == []:
             fig = plt.gcf()
@@ -5818,15 +5820,15 @@ class Layout(pro.PyLayers):
         plt.axis(self.ax)
         plt.draw()
 
-    def pltvnodes(self, vn, fig=[], ax=[],):
-        """ plot vnodes 
+    def pltvnodes(self, vn, fig=[], ax=[]):
+        """ plot vnodes
 
         Parameters
         ----------
 
         vn : list of nodes
-        fig : 
-        ax : 
+        fig :
+        ax :
 
         """
         if fig == []:
@@ -7067,22 +7069,22 @@ class Layout(pro.PyLayers):
                 polyg = self.Gt.node[icycle]['polyg']
 
                 # plt.show(polyg.plot(fig=plt.gcf(),ax=plt.gca())
-                
+
                 # take a single segment between 2 points 
-                
+
                 vnodes = polyg.vnodes
 
                 # list of index of points in vodes
                 unodes = np.where(vnodes<0)[0]
-                
+
                 # list of position of an incomplete list of segments 
                 # used rule : after a point there is always a segment 
                 useg = np.mod(unodes+1,len(vnodes))
-                
+
                 # list of points 
                 #npt  = filter(lambda x: x < 0, vnodes)
                 npt = [ x for x in vnodes if x <0 ]
-                
+
                 nseg_full = [x for x in vnodes if x > 0]
                 # nseg : incomplete list of segments
                 #
@@ -7093,7 +7095,7 @@ class Layout(pro.PyLayers):
                 else:
                     nseg = vnodes[useg]
 
-                
+
                 # # nseg_full : full list of segments
                 # #nseg_full = filter(lambda x: x > 0, vnodes)
 
@@ -7240,7 +7242,7 @@ class Layout(pro.PyLayers):
 
         self.Gi = nx.DiGraph(name='Gi')
         self.Gi.pos = {}
-        
+
         #
         # 1 ) Create nodes of Gi and their positions
         #
@@ -7413,7 +7415,7 @@ class Layout(pro.PyLayers):
                                 #     print("li2",li2)
                                 #if cy == 91:
                                 #    print("     ",li2)
-                                
+
                                 for i1 in li1:
                                     for i2 in li2:
                                         if (i1[0] != i2[0]):
@@ -10605,8 +10607,9 @@ class Layout(pro.PyLayers):
         Parameters
         ---------
 
-        fig 
-        ax 
+        show : boolean
+        fig :figure
+        ax  :
         labels : list
         nodes : boolean
 
@@ -10655,7 +10658,8 @@ class Layout(pro.PyLayers):
 
         if kwargs['nodes']:
             ax.scatter(vv[:, 0], vv[:, 1])
-        ML = sh.MultiLineString(self._shseg.values())
+
+        ML = sh.MultiLineString(list(self._shseg.values()))
 
         self.pltlines(ML, color='k', fig=fig, ax=ax)
 
