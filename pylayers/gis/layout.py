@@ -184,7 +184,7 @@ class Layout(pro.PyLayers):
     _filename 
     _hash
 
-    _shseg : keys / segment index 
+    _shseg : keys / segment index
              values / shapely LineString
     dca    : keys / Gt node 
              values / list of air wall 
@@ -381,7 +381,7 @@ class Layout(pro.PyLayers):
                     newfile = True
                     print("new file - creating a void Layout", self._filename)
             elif loadosm:  # load .osm file
-                self.importosm(_fileosm=string, cart=True,typ=self.typ)
+                self.importosm(_fileosm=string, cart=True, typ=self.typ)
                 self.loadosm = True
             elif loadres:
                 self.importres(_fileres=string)
@@ -1611,7 +1611,7 @@ class Layout(pro.PyLayers):
             coords, nodes, ways, dpoly, m = osm.getosm(address = address,
                                                        latlon = latlon,
                                                        dist_m = dist_m,
-                                                       cart = cart)
+                                                       bcart = cart)
             self.typ = 'outdoor'
             if cart:
                 self.coordinates='cart'
@@ -2260,7 +2260,7 @@ class Layout(pro.PyLayers):
                     self.display[k] = di['display'][k]
         # self.ax = self.display['box']
         #
-        # [points] 
+        # [points]
         #
         # update points section
         for nn in di['points']:
@@ -2829,7 +2829,7 @@ class Layout(pro.PyLayers):
             self.display['layers'].append(name)
 
         # update shseg
-        self._shseg.update({num:sh.LineString((self.Gs.pos[n1],self.Gs.pos[n2]))})
+        self._shseg.update({num:sh.LineString((self.Gs.pos[n1], self.Gs.pos[n2]))})
 
         return(num)
 
@@ -5194,7 +5194,7 @@ class Layout(pro.PyLayers):
         ax : matlplotlib axes
         roomlist : list
             list of room numbers
-        mode : string 
+        mode : string
             'indoor','open','area','start'
 
         """
