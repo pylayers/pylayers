@@ -17,10 +17,10 @@ try:
     from mayavi import mlab
 except:
     print('Layout:Mayavi is not installed')
+
 import pdb
 import sys
 import os
-import logging
 import copy
 import glob
 import time
@@ -99,7 +99,7 @@ import pylayers.gis.furniture as fur
 import pylayers.gis.osmparser as osm
 from pylayers.gis.selectl import SelectL
 import pylayers.util.graphutil as gph
-import pylayers.util.project as pro
+from pylayers.util.project import *
 
 def pbar(verbose,**kwargs):
     if verbose:
@@ -107,7 +107,7 @@ def pbar(verbose,**kwargs):
         return pbar
 
 
-class Layout(pro.PyLayers):
+class Layout(PyLayers):
     """ Handling Layout
 
     Attributes
@@ -173,23 +173,23 @@ class Layout(pro.PyLayers):
 
     s2pc : segment to point coordinates
     s2pu : segment to point index
-    sgsg 
+    sgsg
 
-    sl 
+    sl
 
 
     typ  : 'indoor' | 'outdoor'
     coordinates : 'cart','lonlat'
     version
-    _filename 
+    _filename
     _hash
 
     _shseg : keys / segment index
              values / shapely LineString
-    dca    : keys / Gt node 
-             values / list of air wall 
+    dca    : keys / Gt node
+             values / list of air wall
     degree : keys / point degree
-             values / array of index 
+             values / array of index
     display : dictionnary for controling various visualization
     dsseg :
 
@@ -204,26 +204,13 @@ class Layout(pro.PyLayers):
 
     """
 
-    def __init__(self, string='',
-                 _filematini='matDB.ini',
-                 _fileslabini='slabDB.ini',
-                 _filefur='',
-                 bcheck=False,          # to check Gs
-                 bbuild=False,         # to build graphs
-                 bgraphs=False,         # to load graph
-                 #bindoor=False,        # to allow indoor penetration for outdoor situations
-                 #bdiffraction=False,   # to include diffraction in Gi 
-                 bverbose=False,
-                 bcartesian=True,
-                 xlim=(),
-                 dist_m=400,
-                 typ='indoor'):
+    def __init__(self, string='', **kwargs):
         """ object constructor
 
         Parameters
         ----------
 
-        arg : string
+        string : string
             layout file name, address or '(lat,lon)'
         _filematini :
             material dB file name
@@ -231,7 +218,7 @@ class Layout(pro.PyLayers):
             slab dB file name
         _filefur :
             furniture file name
-        force : booleanlo
+        force : boolean
         check : boolean
         build : boolean
         verbose : boolean
@@ -241,15 +228,23 @@ class Layout(pro.PyLayers):
         typ : string
             'indoor' | 'outdoor'
 
-
         """
 
-        # mat = sb.MatDB()
-        # mat.load(_filematini)
+        _filematini = kwargs.pop('_filematini', 'matDB.ini')
+        _fileslabini = kwargs.pop('_fileslabini', 'slabDB.ini')
+        _filefur = kwargs.pop('_filefur','')
+        bcheck = kwargs.pop('bcheck', False)           # to check Gs
+        bbuild = kwargs.pop('bbuild', False)            # to build graphs
+        bgraphs = kwargs.pop('bgraphs', False)         # to load graph
+        bverbose = kwargs.pop('bverbose', False)
+        bcartesian = kwargs.pop('bcartesian',True)
 
-        # self.sl = sb.SlabDB()
-        # self.sl.mat = mat
-        # self.sl.load(_fileslabini)
+        # bindoor=False,        # to allow indoor penetration for outdoor situations
+        # bdiffraction=False,   # to include diffraction in Gi
+
+        xlim = ()
+        dist_m = 400,
+        typ = 'indoor'
 
         self.labels = {}
 
@@ -260,7 +255,11 @@ class Layout(pro.PyLayers):
 
         #
         # Initializing graphs
-        #
+        #  s : structure
+        #  t : topology
+        #  i : interaction
+        #  r : rooms
+        #  m : mobility
 
         self.Gs = nx.Graph(name='Gs')
         self.Gr = nx.Graph(name='Gr')
@@ -275,6 +274,7 @@ class Layout(pro.PyLayers):
 
 
         self._shseg = {}
+
         #
         # related files
         #
@@ -328,7 +328,7 @@ class Layout(pro.PyLayers):
         self.display['overlay_file'] = ""
         self.display['overlay_axis'] = ""
         # self.display['layerset'] = self.sl.keys()
-        if xlim!=():
+        if xlim != ():
             self.display['box']= xlim
         else:
             self.display['box'] = (-50, 50, -50, 50)
@@ -349,7 +349,10 @@ class Layout(pro.PyLayers):
         if type(string) is bytes:
             string = string.decode('utf-8')
 
+        logger.info('analyze input string')
         arg, ext = os.path.splitext(string)
+
+
         if arg != '':
             if ext == '.ini':
                 self._filename = string
@@ -365,18 +368,45 @@ class Layout(pro.PyLayers):
                 loadres = True
             else:
                 self.typ = 'outdoor'
-        else:  # No argument
+        else:  # No argument new file
             self._filename = 'newfile.lay'
             newfile = True
             self.sl = sb.SlabDB(fileslab=_fileslabini, filemat=_filematini)
             self.zfloor = 0.
             self.zceil = self.maxheight
 
+        #
+        # build directory to store graphs
+        #
+
+        if os.path.splitext(self._filename)[1]=='.lay':
+            dirname = self._filename.replace('.lay','')
+            path = os.path.join(basename, 'struc', 'gpickle', dirname)
+
         if not newfile:
             if loadlay:
-                filename = pyu.getlong(self._filename, pro.pstruc['DIRLAY'])
+                filename = pyu.getlong(self._filename, pstruc['DIRLAY'])
                 if os.path.exists(filename):  # which exists
-                    self.load()
+                    fd = open(filename,'rb')
+                    self._hash = hashlib.md5(fd.read()).hexdigest()
+                    fd.close()
+                    if os.path.exists(os.path.join(path,'Gs.gpickle')):
+                        if os.path.exists(os.path.join(path,'.hash')):
+                            fd = open(os.path.join(path,'.hash'),'r')
+                            hashGs = fd.read()
+                            fd.close()
+                            if hashGs==self._hash:
+                                logger.info('load from Gs graph')
+                                self.hasboundary = True
+                                self.dumpr('s')
+                            else:
+                                logger.info('load from .lay file')
+                                self.load_fast()
+                    else:
+                        logger.info('load from .lay file')
+                        self.load_fast()
+
+                    #self.load()
                 else:  # which do not exist
                     newfile = True
                     print("new file - creating a void Layout", self._filename)
@@ -394,10 +424,14 @@ class Layout(pro.PyLayers):
                 self.loadosm = True
 
             # add boundary if it not exist
+            logger.info('creates boundary')
             if (not self.hasboundary) or (xlim!=()):
                 self.boundary(xlim=xlim)
 
+            logger.info('call subseg ')
             self.subseg()
+
+            logger.info('call updateshseg ')
             self.updateshseg()
 
             try:
@@ -409,6 +443,7 @@ class Layout(pro.PyLayers):
             # check layout
             #
             bconsistent = True
+
             if bcheck:
                 bconsistent,dseg = self.check()
 
@@ -428,14 +463,6 @@ class Layout(pro.PyLayers):
                 # load graphs from file
                 #
                 elif bgraphs:
-                    if os.path.splitext(self._filename)[1]=='.ini':
-                        dirname = self._filename.replace('.ini','')
-                    if os.path.splitext(self._filename)[1]=='.lay':
-                        dirname = self._filename.replace('.lay','')
-                    path = os.path.join(pro.basename,
-                                        'struc',
-                                        'gpickle',
-                                        dirname)
                     if os.path.exists(path):
                         # load graph Gt
                         # and compare the self._hash from ini file
@@ -459,6 +486,7 @@ class Layout(pro.PyLayers):
                         self.build()
                         self.lbltg.append('s')
                         self.dumpw()
+        logger.info('end of __init__')
 
     def __repr__(self):
         st = '\n'
@@ -724,13 +752,13 @@ class Layout(pro.PyLayers):
         """
 
         if typ == 'lay':
-            pathname = os.path.join(pro.pstruc['DIRLAY'], '*.' + typ)
+            pathname = os.path.join(pstruc['DIRLAY'], '*.' + typ)
         if typ == 'osm':
-            pathname = os.path.join(pro.pstruc['DIROSM'], '*.' + typ)
+            pathname = os.path.join(pstruc['DIROSM'], '*.' + typ)
         if typ == 'wrl':
-            pathname = os.path.join(pro.pstruc['DIRWRL'], '*.' + typ)
+            pathname = os.path.join(pstruc['DIRWRL'], '*.' + typ)
 
-        lfile_l = glob.glob(os.path.join(pro.basename, pathname))
+        lfile_l = glob.glob(os.path.join(basename, pathname))
         lfile_s = []
         for fi in lfile_l:
             fis = pyu.getshort(fi)
@@ -1031,19 +1059,19 @@ class Layout(pro.PyLayers):
         Notes
         -----
 
-        This function updates the following arrays:
+        This function updates the following arrays in self:
 
-        + self.pt   (2xNp)
-        + self.pg   center of gravity
-        + self.tahe (2xNs)
-        + self.tgs  : graph to segment
-        + self.tsg  : segment to graph
-        + self.dca  : dictionnary of cycle with an airwall
-        + self.s2pu : sparse_lil_matrix
-        + self.s2pc : sparse_lil_matrix
-        + self.lsss : list of iso segments
-        + self.maxheight :
-        + self.normal :
+        + pt   (2xNp)
+        + pg   center of gravity
+        + tahe (2xNs)
+        + tgs  : graph to segment
+        + tsg  : segment to graph
+        + dca  : dictionnary of cycle with an airwall (_AIR)
+        + s2pu : sparse_lil_matrix
+        + s2pc : sparse_lil_matrix
+        + lsss : list of iso segments
+        + maxheight :
+        + normal :
 
         assert self.pt[self.iupnt[-1]] == self.pt[:,self.iupnt[-1]]
 
@@ -1058,15 +1086,13 @@ class Layout(pro.PyLayers):
         # nodes include points and segments
 
         # segment index
-        # useg = filter(lambda x: x > 0, nodes)
-        useg = [n for n in nodes if n >0]
+        useg = [n for n in nodes if n > 0]
 
         # points index
-        # upnt = filter(lambda x: x < 0, nodes)
         upnt = [n for n in nodes if n < 0]
 
 
-        # matrix segment-segment
+        # sparse matrix segment-segment
         # usage
         # self.sgsg[seg1,seg2] => return common point
 
@@ -1075,6 +1101,7 @@ class Layout(pro.PyLayers):
 
         # loop over segments
         # a segment is always connected to 2 nodes
+        logger.info('g2npy : loop over segments')
         for s in useg:
             # get point index of the segment
             # s > 0
@@ -1170,8 +1197,7 @@ class Layout(pro.PyLayers):
             degmax = 1
 
         self.degree = {}
-        if verbose:
-            print('Start node degree determination')
+        logger.info('g2npy : Start node degree determination')
         for deg in range(degmax + 1):
             #num = filter(lambda x: degpnt[x] == deg, range(
             #    len(degpnt)))  # position of degree 1 point
@@ -1181,11 +1207,7 @@ class Layout(pro.PyLayers):
             npt = np.array([upnt[x] for x in num])
             self.degree[deg] = npt
 
-        if verbose:
-            print('Node degree determination  : Done')
-        #
-        # convert geometric information in numpy array
-        #
+        logger.info('g2npy : convert geometric information in numpy array')
 
         self.pt = np.array(np.zeros([2, len(upnt)]), dtype=float)
         self.tahe = np.array(np.zeros([2, len(useg)]), dtype=int)
@@ -1196,45 +1218,30 @@ class Layout(pro.PyLayers):
         self.pt[0, :] = np.array([self.Gs.pos[k][0] for k in upnt])
         self.pt[1, :] = np.array([self.Gs.pos[k][1] for k in upnt])
 
-        if verbose:
-            print('pt in np.array  : Done')
-
         self.pg = np.sum(self.pt, axis=1) / np.shape(self.pt)[1]
         ptc = self.pt-self.pg[:,None]
         dptc = np.sqrt(np.sum(ptc*ptc,axis=0))
         self.radius  = dptc.max()
         self.pg = np.hstack((self.pg, 0.))
 
-        # ntail = map(lambda x: nx.neighbors(self.Gs, x)[0], useg)
-        # nhead = map(lambda x: nx.neighbors(self.Gs, x)[1], useg)
-        # v1.1 ntahe = np.array([nx.neighbors(self.Gs, x) for x in useg])
-        #ntahe = np.array([dict(self.Gs[x]).keys() for x in useg])
         ntahe = np.array([ [n for n in nx.neighbors(self.Gs,x) ]  for x in useg ])
-        #nhead = [ [n for n in nx.neighbors(self.Gs,x) for x in useg ]
         ntail = ntahe[:,0]
         nhead = ntahe[:,1]
 
-        # create sparse matrix from a Gs segment node to its 2 extremal points (tahe) index
         mlgsn = max(self.Gs.nodes())+1
         self.s2pu = sparse.lil_matrix((mlgsn,2),dtype='int')
         self.s2pu[useg,:] = ntahe
+
         # convert to compressed row sparse matrix
         # to be more efficient on row slicing
+
         self.s2pu = self.s2pu.tocsr()
 
-
-        # tic = time.time()
-        # self.tahe[0, :] = np.array(
-        #      map(lambda x: np.nonzero(np.array(upnt) == x)[0][0], ntail))
-        # self.tahe[1, :] = np.array(
-        #    map(lambda x: np.nonzero(np.array(upnt) == x)[0][0], nhead))
-
         aupnt = np.array(upnt)
+        logger.info('g2npy : build tail head tahe')
         self.tahe[0, :] = np.array([np.where(aupnt==x)[0][0] for x in ntail ])
         self.tahe[1, :] = np.array([np.where(aupnt==x)[0][0] for x in nhead ])
 
-        if verbose:
-            print('tahe in numpy array : Done')
         #
         # transcoding array between graph numbering (discontinuous) and numpy numbering (continuous)
         #
@@ -1378,11 +1385,11 @@ class Layout(pro.PyLayers):
         _fileshp :
 
         """
-        defaults = {'pref': [np.array([25481100, 6676890]), np.array([60.2043716, 24.6591147])],
-                    'dist_m': 250,
-                    'latlon': True,
-                    'bd': [24, 60, 25, 61],
-                    }
+
+        pref = kwargs.pop('pref', [np.array([25481100, 6676890]), np.array([60.2043716, 24.6591147])])
+        dist_m  = kwargs.pop('dist_m',250)
+        latlon = kwargs.pop('latlon',True)
+        bd = kwargs.pop('bd', [24, 60, 25, 61])
 
         for k in defaults:
             if k not in kwargs:
@@ -1393,6 +1400,7 @@ class Layout(pro.PyLayers):
         verts = []
         for poly in polys.iterShapes():
             verts.append(poly.points)
+
         npt = -1
         ns = 0
         xmin = 1e16
@@ -1401,10 +1409,10 @@ class Layout(pro.PyLayers):
         ymax = -1e16
         self.name['WALL'] = []
         for p in verts:
-            v = np.array(p) - kwargs['pref'][0][None, :]
+            v = np.array(p) - pref[0][None, :]
             nv = np.sqrt(np.sum(v * v, axis=1))
             # if at least one point is in the radius the poygon is kept
-            if (nv < kwargs['dist_m']).any():
+            if (nv < dist_m).any():
                 npoint = len(p)
                 for k, point in enumerate(p):
                     # add a new node unless it is the last already existing
@@ -1446,12 +1454,12 @@ class Layout(pro.PyLayers):
                          urcrnrlon=kwargs['bd'][2], urcrnrlat=kwargs['bd'][3],
                          resolution='i', projection='cass', lon_0=24.5, lat_0=60.5)
 
-        if kwargs['latlon']:
-            lat_ref = kwargs['pref'][1][0]
-            lon_ref = kwargs['pref'][1][1]
+        if latlon:
+            lat_ref = pref[1][0]
+            lon_ref = pref[1][1]
             x_ref, y_ref = self.m(lon_ref, lat_ref)
-            Dx = kwargs['pref'][0][0] - x_ref
-            Dy = kwargs['pref'][0][1] - y_ref
+            Dx = pref[0][0] - x_ref
+            Dy = pref[0][1] - y_ref
             pos = np.array(self.Gs.pos.values())
             for k, keys in enumerate(self.Gs.pos.keys()):
                 self.Gs.pos[keys] = self.m(
@@ -1463,14 +1471,18 @@ class Layout(pro.PyLayers):
         """ import res format
 
         col1 : x1 coordinates
-        col2 : y1 coordinates 
+        col2 : y1 coordinates
         col3 : x2 coordinates
         col4 : y2 coordinates
         col5 : building height
         col6 : building number
-        col7 : building class 
-        col8 : ground height  
+        col7 : building class
+        col8 : ground height
 
+        Notes
+        -----
+
+        COST231 data Munich_buildongs.res
         """
         fileres = pyu.getlong(_fileres, os.path.join('struc', 'res'))
         D  = np.fromfile(fileres,dtype='int',sep=' ')
@@ -1483,25 +1495,25 @@ class Layout(pro.PyLayers):
         # list of coordinates
         lcoords = []
         # list of ring
-        lring = [] 
+        lring = []
         # list of (z_ground, height_building)
-        zring = [] 
-        # 
+        zring = []
+        #
         bdg_old = 1
         for e in range(N2):
             # p1 point coordinate
             p1 = ([D[e,0],D[e,1]])
             # p2 point coordinate
             p2 = ([D[e,2],D[e,3]])
-            # (ground height,building height) 
+            # (ground height,building height)
             #z  = (D[e,7]-500,D[e,4])
-            # (ground height,building height+ground_height) 
+            # (ground height,building height+ground_height)
             z  = (D[e,7],D[e,4]+D[e,7])
             # building number
-            bdg =  D[e,5] 
-            # building class 
-            bdc =  D[e,6] 
-            # detect change of building 
+            bdg =  D[e,5]
+            # building class
+            bdc =  D[e,6]
+            # detect change of building
             if (bdg_old-bdg)!=0:
                 ring = sh.LinearRing(lcoords)
                 poly = sh.Polygon(ring)
@@ -1608,15 +1620,15 @@ class Layout(pro.PyLayers):
         self.zfloor = 1e10
 
         if kwargs['_fileosm'] == '':  # by using osmapi address or latlon
-            coords, nodes, ways, dpoly, m = osm.getosm(address = address,
-                                                       latlon = latlon,
-                                                       dist_m = dist_m,
-                                                       bcart = cart)
+            coords, nodes, ways, dpoly, m = osm.getosm(address=address,
+                                                       latlon=latlon,
+                                                       dist_m=dist_m,
+                                                       bcart=cart)
             self.typ = 'outdoor'
             if cart:
-                self.coordinates='cart'
+                self.coordinates = 'cart'
             else:
-                self.coordinates='latlon'
+                self.coordinates = 'latlon'
             if kwargs['latlon'] == '0':
                 self._filename = kwargs['address'].replace(' ', '_') + '.lay'
             else:
@@ -1686,7 +1698,7 @@ class Layout(pro.PyLayers):
                 nta = tahe[l]
                 nhe = tahe[l + 1]
                 #
-                # if a node is duplicate recover the original node
+                # if a node is duplicated recover the original node
                 #
                 if nta in dup:
                     nta = dup[nta]
@@ -1716,16 +1728,16 @@ class Layout(pro.PyLayers):
                 if 'z' in d:
                     z = d['z']
                 else:
-                    if self.typ=='indoor':
+                    if self.typ == 'indoor':
                         z = (0, 3)
-                    if self.typ=='outdoor':
+                    if self.typ == 'outdoor':
                         z = (0, 3000)
 
                 zmin = z[0]
                 zmax = z[1]
-                if zmin<self.zfloor:
+                if zmin < self.zfloor:
                     self.zfloor = zmin
-                if zmax>self.zceil:
+                if zmax > self.zceil:
                     self.zceil = zmax
 
                 if 'offset' in d:
@@ -1896,6 +1908,11 @@ class Layout(pro.PyLayers):
 
         fd.write("</osm>\n")
         fd.close()
+
+    def savepickle(self):
+        """ save graph in pickle format
+        """
+        pass
 
     def save(self):
         """ save Layout structure in a .lay file
@@ -2103,7 +2120,7 @@ class Layout(pro.PyLayers):
         else:
             fileout = self._filename
 
-        filelay = pyu.getlong(fileout, pro.pstruc['DIRLAY'])
+        filelay = pyu.getlong(fileout, pstruc['DIRLAY'])
         print(filelay)
         fd = open(filelay, "w")
         config.write(fd)
@@ -2113,8 +2130,8 @@ class Layout(pro.PyLayers):
         # self.g2npy()
         self._hash = hashlib.md5(open(filelay, 'rb').read()).hexdigest()
 
-    def load(self):
-        """ load a layout  from a .lay file
+    def load_fast(self):
+        """ load a layout from a .lay file
 
         The filename is in self._filename
 
@@ -2146,12 +2163,12 @@ class Layout(pro.PyLayers):
 
 
         """
-
+        logger.info('load lay file')
         # di : dictionnary which reflects the content of ini file
         di = {}
         config = ConfigParser.RawConfigParser()
         config.optionxform = str
-        filelay = pyu.getlong(self._filename, pro.pstruc['DIRLAY'])
+        filelay = pyu.getlong(self._filename, pstruc['DIRLAY'])
         config.read(filelay)
 
 
@@ -2174,7 +2191,359 @@ class Layout(pro.PyLayers):
         #
         # [info]
         #    format     {cart,latlon}
-        #    version    int 
+        #    version    int
+        #    type       {'indoor','outdoor'}
+        if 'version' in di['info']:
+            self.version = di['info']['version']
+
+        if 'type' in di['info']:
+            self.typ = di['info']['type']
+
+        self.name = {}
+
+        if ((self.typ!='indoor') &
+            (self.typ!='outdoor') &
+            (self.typ!='floorplan')):
+            print("invalid file type in ",self._filename)
+            return(None)
+
+        #
+        # [indoor]
+        #   zceil
+        #   zfloor
+        #
+        if self.typ == 'indoor':
+            self.zceil = eval(di['indoor']['zceil'])
+            self.zfloor = eval(di['indoor']['zfloor'])
+
+        # old format
+        if self.typ == 'floorplan':
+            self.zceil = eval(di['floorplan']['zceil'])
+            self.zfloor = eval(di['floorplan']['zfloor'])
+
+        # from format 1.3 floorplan is call indoor
+        if self.typ=='floorplan':
+            self.typ = 'indoor'
+        #
+        # [outdoor]
+        #   TODO add a DEM file
+        #
+        if self.typ == 'outdoor':
+            if 'outdoor' in di:
+                if 'zceil' in di['outdoor']:
+                    self.zceil = eval(di['outdoor']['zceil'])
+                else:
+                    self.zceil  =  3000    # upper limit for AIR wall
+
+                if 'zfloor' in di['outdoor']:
+                    self.zfloor = eval(di['outdoor']['zfloor'])
+                else:
+                    self.zfloor = 0
+            else:
+                self.zfloor = 0
+                self.zceil  =  3000    # upper limit for AIR walls
+
+        #
+        #
+        # manage ini file with latlon coordinates
+        #
+        # if the format is latlon, coordinates are converted into
+        # cartesian coordinates with the coords.cartesian method
+        #
+
+        logger.info('load latlon coordinates and convert')
+        if 'format' in di['info']:
+            if di['info']['format'] == 'latlon':
+                or_coord_format = 'latlon'
+                coords = osm.Coords()
+                coords.clean()
+                coords.latlon = {i: np.array(
+                    eval(di['points'][i])) for i in di['points']}
+                coords.boundary = np.hstack((np.min(np.array(coords.latlon.values()), axis=0),
+                                             np.max(np.array(coords.latlon.values()), axis=0)))
+                coords.cartesian(cart=True)
+            else:
+                or_coord_format = 'cart'
+        else:
+            or_coord_format = 'cart'
+
+        #
+        # update display section
+        #
+        logger.info('load_fast : update display section')
+        if 'display' in di:
+            for k in di['display']:
+                try:
+                    self.display[k] = eval(di['display'][k])
+                except:
+                    self.display[k] = di['display'][k]
+
+        # self.ax = self.display['box']
+        #
+        # [points]
+        #
+        # update points section
+
+        logger.info('load_fast : reading points')
+        lnodeindex = [ eval(x) for x in di['points']]
+        self.Gs.add_nodes_from(lnodeindex)  # add point node
+        self.Gs.pos = { eval(i) : eval(di['points'][i]) for i in di['points']}
+
+        #    #
+        #    # limitation of point precision is important for avoiding
+        #    # topological problems in shapely.
+        #    # Layout precision is hard limited to millimeter precision.
+        #    #
+
+        #self.Gs.pos[nodeindex] = (
+        #    round(1000 * x) / 1000., round(1000 * y) / 1000.)
+        #self.labels[nodeindex] = nn
+
+        #
+        # [segments]
+        #
+        # update segments section
+
+        self.name['AIR'] = []
+        self.name['_AIR'] = []
+        #
+        # get the maximum index
+        #
+        maxnum = max([eval(x) for x in di['segments'].keys()])
+        logger.info('load_fast : reading segments')
+
+        lsegnum = np.sort([ eval(x) for x in di['segments'].keys() ])
+        maxnum = lsegnum[-1]
+
+        for k in lsegnum:
+            d = eval(di['segments'][str(k)])
+            nta = d['connect'][0]
+            nhe = d['connect'][1]
+            name = d['name']
+
+            z = d['z']
+
+            if not 'transition' in d:
+                transition = False
+            else:
+                transition = d['transition']
+
+            if not 'offset' in d:
+                offset = 0
+            else:
+                offset = d['offset']
+
+            # add new segment
+            #
+            # The segment number is the same as in the .lay file
+            #
+            # Very useful feature
+            #
+
+            if self.typ=='indoor':
+                boutdoor = False
+            else:
+                boutdoor = True
+
+            num = self.add_segment(nta, nhe,
+                                   num = k,
+                                   name = name,
+                                   transition = transition,
+                                   offset = offset,
+                                   z = z,
+                                   maxnum = maxnum,
+                                   boutdoor = boutdoor)
+
+        # only for indoor
+        # exploit iso for segment completion (AIR type)
+        #  Complement single segment which do not reach zceil or zfloor with
+        #  an iso segment with AIR property
+        #
+        #if (self.typ == 'indoor') or (self.typ == 'outdoor'):
+
+        if (self.typ == 'indoor'):
+            segdone = []
+            logger.info('segments completion')
+            for key in di['segments']:
+                iseg = eval(key)
+                d = eval(di['segments'][key])
+                nta = d['connect'][0]
+                nhe = d['connect'][1]
+                # if not already done
+                if iseg not in segdone:
+                    # get all the iso from the segment key
+                    iso = copy.copy(self.Gs.node[iseg]['iso'])
+                    # append key to iso
+                    iso.append(iseg)
+                    # stack all the intervals in increasing order
+                    ziso = []
+                    for ns in iso:
+                        ziso.append(self.Gs.node[ns]['z'])
+
+                    # get the complementary intervals
+                    if self.typ == 'outdoor':
+                        zmin = 1e6
+                        zmax = -1e6
+                        for iz in ziso:
+                            zmin = np.minimum(zmin,min(iz))
+                            zmax = np.maximum(zmax,max(iz))
+                        ziso = [(zmin,zmax)]
+
+                    # pyutil compint (get complementary interval)
+                    zair = pyu.compint(ziso,self.zfloor,self.zceil)
+
+                    # add AIR wall in the intervals
+                    for za in zair:
+                        num = self.add_segment(nta, nhe,
+                                name='AIR',
+                                offset=0,
+                                z=(za[0], za[1]))
+                    segdone = segdone + iso
+
+        #
+        # add _AIR wall around the layout
+        #
+
+        self.boundary(bg2npy = False)
+
+        # compliant with config file without  material/slab information
+        #
+        # {latlon]
+        #
+        if config.has_section('latlon'):
+            llcrnrlon = eval(config.get('latlon', 'llcrnrlon'))
+            llcrnrlat = eval(config.get('latlon', 'llcrnrlat'))
+            urcrnrlon = eval(config.get('latlon', 'urcrnrlon'))
+            urcrnrlat = eval(config.get('latlon', 'urcrnrlat'))
+            projection = config.get('latlon','projection')
+            lon_0 = (llcrnrlon+urcrnrlon)/2.
+            lat_0 = (llcrnrlat+urcrnrlat)/2.
+
+            # Construction of Basemap for coordinates transformation
+            self.m = Basemap(llcrnrlon=llcrnrlon,
+                             llcrnrlat=llcrnrlat,
+                             urcrnrlon=urcrnrlon,
+                             urcrnrlat=urcrnrlat,
+                             resolution='i',
+                             projection=projection,
+                             lon_0=lon_0,
+                             lat_0=lat_0)
+
+            self.extent = (llcrnrlon,urcrnrlon,llcrnrlat,urcrnrlat)
+            self.pll = self.m(self.extent[0],self.extent[2])
+            self.pur = self.m(self.extent[1],self.extent[3])
+            self.extent_c = (self.pll[0],self.pur[0],self.pll[1],self.pur[1])
+
+
+        if config.has_section('files'):
+            # self.filematini=config.get('files','materials')
+            # self.fileslabini=config.get('files','slab')
+            self.filefur = config.get('files', 'furniture')
+
+        if config.has_section('slabs'):
+            #filemat = self._filename.replace('ini', 'mat')
+            #fileslab = self._filename.replace('ini', 'slab')
+
+            ds = di['slabs']
+            dm = di['materials']
+
+            for k in ds:
+                ds[k] = eval(ds[k])
+            for k in dm:
+                dm[k] = eval(dm[k])
+
+            self.sl = sb.SlabDB(ds=ds, dm=dm)
+
+        # In this section we handle the ini file format evolution
+
+        if 'fileoverlay' in self.display:
+            self.display['overlay_file'] = self.display.pop('fileoverlay')
+            self.display['overlay_axis'] = self.display['box']
+            self.save()
+
+        if 'inverse' in self.display:
+            self.display['overlay_flip'] = ""
+            self.display.pop('inverse')
+            self.save()
+
+        # convert graph Gs to numpy arrays for faster post processing
+        logger.info('graph 2 numpy : g2npy')
+        self.g2npy()
+
+        # This hash should be saved with the gpickle file
+
+        logger.info('save the hash')
+        dirname = self._filename.replace('.lay','')
+        path = os.path.join(basename, 'struc', 'gpickle', dirname)
+        fd = open(os.path.join(path,'.hash'),'w')
+        fd.write(self._hash)
+        fd.close()
+        logger.info('dump a pickle of Gs')
+        self.lbltg = ['s']
+        self.dumpw()
+
+    def load(self):
+        """ load a layout from a .lay file
+
+        The filename is in self._filename
+
+        Format version 1.3
+        ------------------
+
+        [info]
+        format = {cart | latlon}
+        version =
+        type = {indoor | outdoor}
+
+        [points]
+        -1 = (x,y)
+
+        [segments]
+        1 = {'slab':'',transition:boolean,'connect:[-1,-2],'z':(0,3)}
+
+        [slabs]
+        WALL = {'lthick':[,],'lmat':[,],'color:'','linewidth':float}
+
+        [materials]
+        BRICK = {'mur':complex,'epsr':complex,'sigma':float,'roughness':}
+
+        [indoor]
+        zceil =
+        zfloor =
+
+        [latlon]
+
+
+        """
+        logger.info('load lay file')
+        # di : dictionnary which reflects the content of ini file
+        di = {}
+        config = ConfigParser.RawConfigParser()
+        config.optionxform = str
+        filelay = pyu.getlong(self._filename, pstruc['DIRLAY'])
+        config.read(filelay)
+
+
+        sections = config.sections()
+        for section in sections:
+            di[section] = {}
+            options = config.options(section)
+            for option in options:
+                try:
+                    di[section][option] = config.get(section, option)
+                except:
+                    print(section, option)
+
+        self.Np = len(di['points'])
+        self.Ns = len(di['segments'])
+        self.Gs = nx.Graph(name='Gs')
+        self.Gs.pos = {}
+        self.labels = {}
+
+        #
+        # [info]
+        #    format     {cart,latlon}
+        #    version    int
         #    type       {'indoor','outdoor'}
         if 'version' in di['info']:
             self.version = di['info']['version']
@@ -2215,17 +2584,16 @@ class Layout(pro.PyLayers):
                 if 'zceil' in di['outdoor']:
                     self.zceil = eval(di['outdoor']['zceil'])
                 else:
-                    self.zceil  =  3000    # upper limit for AIR walls
-            else:
-                self.zceil  =  3000    # upper limit for AIR walls
+                    self.zceil  =  3000    # upper limit for AIR wall
 
-            if 'outdoor' in di:
                 if 'zfloor' in di['outdoor']:
                     self.zfloor = eval(di['outdoor']['zfloor'])
                 else:
                     self.zfloor = 0
             else:
                 self.zfloor = 0
+                self.zceil  =  3000    # upper limit for AIR walls
+
         #
         #
         # manage ini file with latlon coordinates
@@ -2234,6 +2602,7 @@ class Layout(pro.PyLayers):
         # cartesian coordinates with the coords.cartesian method
         #
 
+        logger.info('load coordinates')
         if 'format' in di['info']:
             if di['info']['format'] == 'latlon':
                 or_coord_format = 'latlon'
@@ -2252,17 +2621,21 @@ class Layout(pro.PyLayers):
         #
         # update display section
         #
+
+        logger.info('update display section')
         if 'display' in di:
             for k in di['display']:
                 try:
                     self.display[k] = eval(di['display'][k])
                 except:
                     self.display[k] = di['display'][k]
+
         # self.ax = self.display['box']
         #
         # [points]
         #
         # update points section
+        logger.info('reading points')
         for nn in di['points']:
             nodeindex = eval(nn)
             if or_coord_format == 'latlon':
@@ -2292,6 +2665,7 @@ class Layout(pro.PyLayers):
         # get the maximum index
         #
         maxnum = max([eval(x) for x in di['segments'].keys()])
+        logger.info('reading segments')
         for key in di['segments']:
 
             d = eval(di['segments'][key])
@@ -2322,7 +2696,7 @@ class Layout(pro.PyLayers):
             num = self.add_segment(nta, nhe,
                                    num = eval(key),
                                    name = name,
-                                   transition = transition, 
+                                   transition = transition,
                                    offset = offset,
                                    z = z)
 
@@ -2332,6 +2706,7 @@ class Layout(pro.PyLayers):
         #  an iso segment with AIR property
         #
         segdone = []
+        logger.info('segments completion')
         for key in di['segments']:
             iseg = eval(key)
             d = eval(di['segments'][key])
@@ -2355,9 +2730,11 @@ class Layout(pro.PyLayers):
                         zmin = np.minimum(zmin,min(iz))
                         zmax = np.maximum(zmax,max(iz))
                     ziso = [(zmin,zmax)]
+
+                # pyutil compint (get complementary interval)
                 zair = pyu.compint(ziso,self.zfloor,self.zceil)
                 # add AIR wall in the intervals
-                for za in zair: 
+                for za in zair:
                     num = self.add_segment(nta, nhe,
                             name='AIR',
                             offset=0,
@@ -2430,6 +2807,7 @@ class Layout(pro.PyLayers):
             self.save()
 
         # convert graph Gs to numpy arrays for faster post processing
+        logger.info('g2npy')
         self.g2npy()
         #
         fd = open(filelay,'rb')
@@ -2472,7 +2850,7 @@ class Layout(pro.PyLayers):
 
 
         """
-        filefur = pyu.getlong(_filefur, pro.pstruc['DIRFUR'])
+        filefur = pyu.getlong(_filefur, pstruc['DIRFUR'])
         config = ConfigParser.ConfigParser()
         config.read(filefur)
         furname = config.sections()
@@ -2500,7 +2878,7 @@ class Layout(pro.PyLayers):
         """
 
         newfile = False
-        filename = pyu.getlong(_filename, pro.pstruc['DIRLAY'])
+        filename = pyu.getlong(_filename, pstruc['DIRLAY'])
         if os.path.exists(filename):  # which exists
             self.loadini(arg)
         else:  # which do not exist
@@ -2672,16 +3050,8 @@ class Layout(pro.PyLayers):
         self.add_segment(num, nop[1], name=namens, z=[
                          zminns, zmaxns], offset=0)
 
-    def add_segment(self,
-                    n1,
-                    n2,
-                    num=-1,
-                    maxnum=-1,
-                    transition = False,
-                    name='PARTITION',
-                    z=(0.0, 40000000),
-                    offset=0,
-                    verbose=True):
+
+    def add_segment(self,n1,n2,**kwargs):
         """  add segment between node n1 and node n2
 
         Parameters
@@ -2690,13 +3060,15 @@ class Layout(pro.PyLayers):
         n1  : integer < 0
         n2  : integer < 0
         num : segment index (-1 default not given)
-        maxnum : maximum number (-1 default not given) 
+        maxnum : maximum number (-1 default not given)
         name : string
             layer name 'PARTITION'
         z : tuple of 2 floats
             default = (0,40000000)
         offset : float
             [-1,1] default (0)
+        bootdoor : boolean
+            if outdoor add an _AIR wall above the segment
 
         Returns
         -------
@@ -2720,13 +3092,22 @@ class Layout(pro.PyLayers):
 
         """
 
+        num = kwargs.pop('num', -1)
+        maxnum = kwargs.pop('maxnum', -1)
+        transition = kwargs.pop('transition', False)
+        name = kwargs.pop('name', 'PARTITION')
+        offset = kwargs.pop('offset', 0)
+        verbose = kwargs.pop('verbose', True)
+        boutdoor = kwargs.pop('boutdoor', False)
+        zmax = kwargs.pop('zmax', 3000)
+        z = kwargs.pop('z', (0.0, zmax))
         # if 2 points are selected
 
         if ((n1 < 0) & (n2 < 0) & (n1 != n2)):
             nseg = [s for s in self.Gs.node if s > 0]
             if num==-1:
                 if len(nseg) > 0:
-                    num = max(maxnum+1,max(nseg) + 1)   # index not given 
+                    num = max(maxnum+1, max(nseg) + 1)   # index not given 
                 else: # first segment index not given
                     num = 1
             else:
@@ -2740,6 +3121,10 @@ class Layout(pro.PyLayers):
         if (name == '_AIR'):
             # if name == 'AIR':
             transition = True
+
+        #
+        # unit vector along horizontal segment
+        #
 
         p1 = np.array(self.Gs.pos[n1])
         p2 = np.array(self.Gs.pos[n2])
@@ -2762,26 +3147,49 @@ class Layout(pro.PyLayers):
 
         #v1.1 nbnta = self.Gs.neighbors(n1)
         #nbnhe = self.Gs.neighbors(n2)
-
-        same_seg = list(set(nbnta).intersection(nbnhe))
-
-        #
-        # Impossible to have duplicated _AIR
-        #
-        # Warning : The 3 following lines are very important
-        # it breaks buildGt if commented
-        # Please do not comment them.
-        #
-
-        if (name == '_AIR'):
-            if len(same_seg) > 0:
-                return None
-
-        #
+                #
         # add a segment node to Gs
         #
 
-        self.Gs.add_node(num, name=name,
+        if boutdoor == True:
+
+            self.Gs.add_node(num, name=name,
+                         z = z,
+                         norm = norm,
+                         transition = transition,
+                         offset = offset,
+                         connect = [n1, n2],
+                         iso = [num + maxnum],
+                         ncycles = []
+                         )
+
+            self.Gs.add_node(num + maxnum, name='AIR',
+                         z = (z[1], zmax),
+                         norm = norm,
+                         transition = True,
+                         offset = offset,
+                         connect = [n1, n2],
+                         iso = [num],
+                         ncycles = [])
+        else:
+            #
+            # BAD IDEA : Not scalable
+            #
+            same_seg = list(set(nbnta).intersection(nbnhe))
+
+            #
+            # Impossible to have duplicated _AIR
+            #
+            # Warning : The 3 following lines are very important
+            # it breaks buildGt if commented
+            # Please do not comment them.
+            #
+
+            if (name == '_AIR'):
+                if len(same_seg) > 0:
+                    return None
+
+            self.Gs.add_node(num, name=name,
                          z = z,
                          norm = norm,
                          transition = transition,
@@ -2791,14 +3199,14 @@ class Layout(pro.PyLayers):
                          ncycles = []
                          )
 
-        #
-        # update iso of the 2 segments
-        #
-        for k in same_seg:
-            if num not in self.Gs.node[k]['iso']:
-                self.Gs.node[k]['iso'].append(num)
-            if k not in self.Gs.node[num]['iso']:
-                self.Gs.node[num]['iso'].append(k)
+            #
+            # update iso of the 2 segments
+            #
+            for k in same_seg:
+                if num not in self.Gs.node[k]['iso']:
+                    self.Gs.node[k]['iso'].append(num)
+                if k not in self.Gs.node[num]['iso']:
+                    self.Gs.node[num]['iso'].append(k)
 
         #
         # Segment point position is placed at the middle of segment
@@ -2813,17 +3221,33 @@ class Layout(pro.PyLayers):
         self.Gs.add_edge(n1, num)
         self.Gs.add_edge(n2, num)
 
+        if boutdoor:
+
+            self.Gs.add_edge(n1, num + maxnum)
+            self.Gs.add_edge(n2, num + maxnum)
         #
         # Update current total number of segments
         #
-        self.Ns = self.Ns + 1
+            self.Ns = self.Ns + 2
+            try:
+                self.name[name].append(num)
+                self.name['AIR'].append(num + maxnum)
+            except:
+                self.name[name] = [num]
+                self.name['AIR'] = [num+ maxnum]
+            # update label
+            self.labels[num] = str(num)
+            self.labels[num + maxnum] = str(num + maxnum)
+
+        else:
+            self.Ns = self.Ns + 1
         # update slab name <-> edge number dictionnary
-        try:
-            self.name[name].append(num)
-        except:
-            self.name[name] = [num]
-        # update label
-        self.labels[num] = str(num)
+            try:
+                self.name[name].append(num)
+            except:
+                self.name[name] = [num]
+            # update label
+            self.labels[num] = str(num)
 
         if name not in self.display['layers']:
             self.display['layers'].append(name)
@@ -2887,10 +3311,10 @@ class Layout(pro.PyLayers):
 
         # create new segment p1 - p2
 
-        self.add_segment(p1_index,p2_index,z=zn1,name=namen1)
+        self.add_segment(p1_index, p2_index, z=zn1, name=namen1)
 
         # create new segment p3 - p4
-        self.add_segment(p3_index,p4_index,z=zn1,name=namen1)
+        self.add_segment(p3_index, p4_index, z=zn1, name=namen1)
 
         # create new segment p2 - p3 with complementary heights
 
@@ -3117,7 +3541,7 @@ class Layout(pro.PyLayers):
 
         """
 
-        filefur = pyu.getlong(_filefur, pro.pstruc['DIRFUR'])
+        filefur = pyu.getlong(_filefur, pstruc['DIRFUR'])
         config = ConfigParser.ConfigParser()
         config.read(filefur)
         furname = config.sections()
@@ -3305,8 +3729,9 @@ class Layout(pro.PyLayers):
             seg = kwargs['shLine']
 
         # WARNING : use crosses instead of interesects
-        # otherwise 2 segment connected to a same node
+        # otherwise 2 segments connected to a same node
         # are considered as intersecting
+
         binter = [seg.crosses(x) for x in list(self._shseg.values())]
         if np.sum(binter) > 0:
             uinter = np.where(binter)[0]
@@ -3322,9 +3747,6 @@ class Layout(pro.PyLayers):
             return(llay_seg,lshP)
         else:
             return ([],[])
-
-
-
 
 
     def mask(self):
@@ -5317,7 +5739,7 @@ class Layout(pro.PyLayers):
             else:
                 if self.display['overlay_file'] != '':
                     image = Image.open(os.path.join(
-                        pro.basename, pro.pstruc['DIRIMAGE'], self.display['overlay_file']))
+                        basename, pstruc['DIRIMAGE'], self.display['overlay_file']))
                     imok = True
             if imok:
                 if 'v' in self.display['overlay_flip']:
@@ -5519,7 +5941,7 @@ class Layout(pro.PyLayers):
 
         # add hash to node 0 of Gs
 
-        filelay = pyu.getlong(self._filename, pro.pstruc['DIRLAY'])
+        filelay = pyu.getlong(self._filename, pstruc['DIRLAY'])
         fd = open(filelay,'rb')
         _hash = hashlib.md5(fd.read()).hexdigest()
         fd.close()
@@ -5532,16 +5954,18 @@ class Layout(pro.PyLayers):
             Buildpbar.update(1)
 
     def dumpw(self):
-        """ write a dump of given Graph
+        """ pickle dump of specified Graphs
 
         Notes
         -----
 
+        graphs which are in lbltg are saved in pickle format
+
         't' : Gt
-        'r' : Gr
         's' : Gs
         'v' : Gv
         'i' : Gi
+        'r' : Gr
 
         """
         # create layout directory
@@ -5549,7 +5973,7 @@ class Layout(pro.PyLayers):
             dirname = self._filename.replace('.ini','')
         if os.path.splitext(self._filename)[1]=='.lay':
             dirname = self._filename.replace('.lay','')
-        path = os.path.join(pro.basename, 'struc', 'gpickle', dirname)
+        path = os.path.join(basename, 'struc', 'gpickle', dirname)
 
         if not os.path.isdir(path):
             os.mkdir(path)
@@ -5565,8 +5989,14 @@ class Layout(pro.PyLayers):
             except:
                 raise NameError(
                     'G' + g + ' graph cannot be saved, probably because it has not been built')
-        # save dictionnary which maps string interaction to [interaction node,
-        # interaction type]
+
+        if 's' in self.lbltg:
+            if hasattr(self,'sl'):
+                write_gpickle(getattr(self, 'sl'),
+                          os.path.join(path, 'sl.gpickle'))
+
+        # save dictionnary which maps string interaction to
+        # [interaction node, interaction type]
         if 't' in self.lbltg:
             if hasattr(self,'ddiff'):
                 write_gpickle(getattr(self, 'ddiff'),
@@ -5602,12 +6032,12 @@ class Layout(pro.PyLayers):
             dirname = self._filename.replace('.ini','')
         if os.path.splitext(self._filename)[1]=='.lay':
             dirname = self._filename.replace('.lay','')
-        path = os.path.join(pro.basename, 'struc', 'gpickle', dirname)
+        path = os.path.join(basename, 'struc', 'gpickle', dirname)
         for g in graphs:
             try:
                 # if g in ['v','i']:
                 #     gname1 ='G'+g
-                #     setattr(self, gname1, read_gpickle(os.path.join(pro.basename,'struc','gpickle','G'+g+'_'+self._filename+'.gpickle')))
+                #     setattr(self, gname1, read_gpickle(os.path.join(basename,'struc','gpickle','G'+g+'_'+self._filename+'.gpickle')))
                 # else:
                 gname = 'G' + g
                 filename = os.path.join(path, 'G' + g + '.gpickle')
@@ -5628,8 +6058,13 @@ class Layout(pro.PyLayers):
                 self.name[name] = [
                     x for x in lseg if self.Gs.node[x]['name'] == name]
 
+            # TODO not necessary useful to call g2npy
             self.g2npy()
-
+            # TODO use a pickle file instead of gpickle
+            filesl = os.path.join(path, 'sl.gpickle')
+            if os.path.isfile(filesl):
+                sl = read_gpickle(filesl)
+                setattr(self, 'sl', sl)
 
             filediff = os.path.join(path, 'ddiff.gpickle')
             if os.path.isfile(filediff):
@@ -6076,7 +6511,7 @@ class Layout(pro.PyLayers):
 
         return T, map_vertices
 
-    def buildGt(self, check=True,difftol=0.01,verbose=False,tqdmpos=0):
+    def buildGt(self, check=True, difftol=0.01, verbose=False, tqdmpos=0):
         """ build graph of convex cycles
 
         Parameters
@@ -6108,6 +6543,7 @@ class Layout(pro.PyLayers):
         Gtpbar = pbar(verbose,total=100., desc ='BuildGt',position=tqdmpos)
         pbartmp = pbar(verbose,total=100., desc ='Triangulation',leave=True,position=tqdmpos+1)
 
+        logger.info('buildGt : Triangulation')
         T, map_vertices = self._triangle()
 
         if verbose:
@@ -6122,6 +6558,7 @@ class Layout(pro.PyLayers):
                         leave=True,
                         position=tqdmpos+1)
 
+        logger.info('buildGt : create list of Polygons')
         lTP = [geu.Polygon(x) for x in ptri]
         if verbose:
             pbartmp.update(100.)
@@ -6137,6 +6574,7 @@ class Layout(pro.PyLayers):
         # get_points(p) : get points from polygon
         # this is for limiting the search region for large Layout
         #
+        logger.info('buildGt : setvnodes_new on each polygon')
         [ polygon.setvnodes_new(self.get_points(polygon), self) for polygon in lTP ]
 
         if verbose:
@@ -6149,25 +6587,27 @@ class Layout(pro.PyLayers):
         # luaw  : list of tuples
         # ( polygon , array of _AIR segments)
         pbartmp = pbar(verbose,total=100.,
-                        desc ='Buiild list of airwalls',
+                        desc ='Build list of airwalls',
                         leave=True,
                         position=tqdmpos+1)
+
+        logger.info('buildGt : get list of airwalls')
         luaw = [(p, np.where(p.vnodes == 0)[0]) for p in lTP]
         if verbose:
             pbartmp.update(100.)
             Gtpbar.update(100./12.)
 
-
-
         #
         # For a triangle polygon the number of vnodes
         # creates new _AIR segments
         #
+
         cpt = 1./(len(luaw)+1)
         _airseg = []
 
         pbartmp = pbar(verbose,total=100., desc ='Add airwalls',leave=True,position=tqdmpos+1)
 
+        logger.info('buildGt : add new airwalls segment')
         for p, uaw in luaw:
             # for each vnodes == 0, add an _AIR
             if verbose :
@@ -6175,18 +6615,20 @@ class Layout(pro.PyLayers):
             for aw in uaw:
                 modpt = len(p.vnodes)
                 _airseg.append(self.add_segment(p.vnodes[np.mod(aw - 1, modpt)],
-                                                p.vnodes[
-                                                    np.mod(aw + 1, modpt)], name='_AIR',
+                                                p.vnodes[np.mod(aw + 1, modpt)],
+                                                name='_AIR',
                                                 z=(0, 40000000),
                                                 verbose=False))
             # update polygon segments with new added airwalls
             p.setvnodes_new(self.get_points(p),self)
+
         if verbose:
             Gtpbar.update(100./12.)
 
 
         pbartmp = pbar(verbose,total=100., desc ='Update Graph',leave=True,position=tqdmpos+1)
-
+        
+        logger.info('buildGt : temporary graph')
 
         tri = T['triangles']
         nbtri = len(T['triangles'])
@@ -6226,6 +6668,7 @@ class Layout(pro.PyLayers):
 
         # find nodes of degree 2 (corresponding to segments linked to a
         # triangle centroid)
+
         rn = []
         rn.extend([un for un in n0 if nx.degree(G, un) == 2])
         rn.extend([un for un in n1 if nx.degree(G, un) == 2])
@@ -6248,7 +6691,7 @@ class Layout(pro.PyLayers):
         # delete temporary graph
         del G
 
-
+        logger.info('buildGt : creates graph Gt')
         # create graph Gt
         self.Gt = nx.Graph(name='Gt')
         self.Gt.add_edges_from(uE)
@@ -6263,6 +6706,7 @@ class Layout(pro.PyLayers):
 
         self.Gt.add_nodes_from(nno)
         self.Gt.pos = {}
+
         self.Gt.pos.update({n: np.array(
             self.Gt.node[n]['polyg'].centroid.xy).squeeze() for n in self.Gt.nodes()})
 
@@ -8959,7 +9403,7 @@ class Layout(pro.PyLayers):
             imok = False
             if self.display['overlay_file'] != '':
                 image = Image.open(os.path.join(
-                    pro.basename, pro.pstruc['DIRIMAGE'], self.display['overlay_file']))
+                    basename, pstruc['DIRIMAGE'], self.display['overlay_file']))
                 imok = True
             if imok:
                 if 'v' in self.display['overlay_flip']:
@@ -9734,7 +10178,7 @@ class Layout(pro.PyLayers):
         """
 
         filename = name + '.list'
-        filestruc = pyu.getlong(filename, pro.pstruc['DIRGEOM'])
+        filestruc = pyu.getlong(filename, pstruc['DIRGEOM'])
         fos = open(filestruc, "w")
         fos.write("LIST{\n")
         for e in edlist:
@@ -9944,7 +10388,7 @@ class Layout(pro.PyLayers):
             nsseg = 0
 
         filename = 'fa' + str(s) + '.off'
-        filestruc = pyu.getlong(filename, pro.pstruc['DIRGEOM'])
+        filestruc = pyu.getlong(filename, pstruc['DIRGEOM'])
         fos = open(filestruc, "w")
         fos.write("OFF\n")
         fos.write("%d %d \n\n" % (1 + (nsseg + 1) * 4, nsseg + 1))
@@ -10106,7 +10550,7 @@ class Layout(pro.PyLayers):
         _filename, ext = os.path.splitext(self._filename)
         _filegeom = _filename + '.off'
         self.filegeom = _filegeom
-        filegeom = pyu.getlong(_filegeom, pro.pstruc['DIRGEOM'])
+        filegeom = pyu.getlong(_filegeom, pstruc['DIRGEOM'])
         fos = open(filegeom, "w")
         fos.write("OFF\n")
         fos.write("%d %d \n\n" % (npt + 1, en + cen))
@@ -10305,7 +10749,7 @@ class Layout(pro.PyLayers):
 #         _filename,ext = os.path.splitext(self._filename)
 #         _filegeom = _filename+'.off'
 #         self.filegeom=_filegeom
-#         filegeom = pyu.getlong(_filegeom, pro.pstruc['DIRGEOM'])
+#         filegeom = pyu.getlong(_filegeom, pstruc['DIRGEOM'])
 #         fos = open(filegeom, "w")
 #         fos.write("OFF\n")
 #         fos.write("%d %d \n\n" % (npt + 1, en + cen))
@@ -10500,7 +10944,7 @@ class Layout(pro.PyLayers):
 
         pg = self.geomfile(centered=centered)
 
-        filename = pyu.getlong(self.filegeom, pro.pstruc['DIRGEOM'])
+        filename = pyu.getlong(self.filegeom, pstruc['DIRGEOM'])
         if (bdis):
             #chaine = "geomview -nopanel -b 1 1 1 " + filename + " 2>/dev/null &"
             chaine = "geomview  -b 1 1 1 " + filename + " 2>/dev/null &"
@@ -10882,7 +11326,7 @@ class Layout(pro.PyLayers):
 
         return(p_Tx, p_Rx)
 
-    def boundary(self, percx=0.15, percy=0.15, xlim=(), force=False, minD=10):
+    def boundary(self, **kwargs) :
         """ add a blank boundary around layout
 
         Parameters
@@ -10892,9 +11336,13 @@ class Layout(pro.PyLayers):
             percentage of Dx for x offset calculation (default 0.15)
         percy : float
            percentage of Dy for y offset calculation (default 0.15)
-        minD : miimum distance for boundary
+        xlim : tuple
+        minD : minimum distance for boundary
         force : boolean
-            force modification of boundaries
+            force modification of boundaries even if one boundary already
+            exists
+        minD : int
+            minimal distance over x and y
 
         self.lboundary is the list of the nodes of the added boundary
         self.axn is the zone without the boundary extension
@@ -10907,9 +11355,23 @@ class Layout(pro.PyLayers):
         >>> L = Layout('defstr.lay')
         >>> L.boundary()
 
+        Notes
+        -----
+
+        This function calls g2npy
+
         """
+
+        percx = kwargs.pop('percx',0.15)
+        percy = kwargs.pop('percy',0.15)
+        xlim = kwargs.pop('xlim',())
+        force = kwargs.pop('force', False)
+        minD = kwargs.pop('minD', 10)
+        bg2npy = kwargs.pop('bg2npy', True)
+
         if not self.hasboundary or force:
-            if xlim!=():
+
+            if xlim != ():
                 xmin = xlim[0]
                 xmax = xlim[1]
                 ymin = xlim[2]
@@ -10925,8 +11387,8 @@ class Layout(pro.PyLayers):
                 ymin = -10.
                 ymax = 10.
 
-            Dx = np.maximum(xmax - xmin,minD)
-            Dy = np.maximum(ymax - ymin,minD)
+            Dx = np.maximum(xmax - xmin, minD)
+            Dy = np.maximum(ymax - ymin, minD)
             dx = Dx * percx
             dy = Dy * percy
 
@@ -10953,15 +11415,18 @@ class Layout(pro.PyLayers):
             self.ax = (xmin - dx, xmax + dx, ymin - dy, ymax + dy)
             self.display['box'] = self.ax
             self.hasboundary = True
-            self.g2npy()
+
         elif xlim!=():
+
             # change points coordinates
-            self.Gs.pos[self.lboundary[0]]=(xlim[0],xlim[2])
-            self.Gs.pos[self.lboundary[1]]=(xlim[1],xlim[2])
-            self.Gs.pos[self.lboundary[2]]=(xlim[1],xlim[3])
-            self.Gs.pos[self.lboundary[3]]=(xlim[0],xlim[3])
+            self.Gs.pos[self.lboundary[0]] = (xlim[0], xlim[2])
+            self.Gs.pos[self.lboundary[1]] = (xlim[1], xlim[2])
+            self.Gs.pos[self.lboundary[2]] = (xlim[1], xlim[3])
+            self.Gs.pos[self.lboundary[3]] = (xlim[0], xlim[3])
             self.ax = xlim
             self.display['box'] = xlim
+
+        if bg2npy:
             self.g2npy()
 
 

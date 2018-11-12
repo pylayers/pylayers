@@ -1,7 +1,7 @@
 #-*- coding:Utf-8 -*-
 from __future__ import print_function
 """
-.. curentmodule:: pylayers.util.project 
+.. curentmodule:: pylayers.util.project
 
 .. autosummary::
 
@@ -13,13 +13,21 @@ import shutil
 import pkgutil
 import pdb
 import seaborn as sns
+import logging
 
+LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s %(message)s'
+logging.basicConfig(filename = 'logtest.log',
+                    level = logging.DEBUG,
+                    format = LOG_FORMAT,
+                    filemode = 'w')
+logger = logging.getLogger()
 class PyLayers(object):
     """ Generic PyLayers Meta Class
 
     """
 
 #        sns.set_style("white")
+
 
     def help(self,letter='az',typ='mt'):
         """ generic help
