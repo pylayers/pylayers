@@ -368,6 +368,7 @@ class Layout(PyLayers):
                 loadres = True
             else:
                 self.typ = 'outdoor'
+                self._filename = arg.replace(' ','_')+'.lay' 
         else:  # No argument new file
             self._filename = 'newfile.lay'
             newfile = True
@@ -379,7 +380,7 @@ class Layout(PyLayers):
         # build directory to store graphs
         #
 
-        if os.path.splitext(self._filename)[1]=='.lay':
+        if os.path.splitext(self._filename)[1] == '.lay':
             dirname = self._filename.replace('.lay','')
             path = os.path.join(basename, 'struc', 'gpickle', dirname)
 
@@ -393,8 +394,10 @@ class Layout(PyLayers):
                     if os.path.exists(os.path.join(path,'Gs.gpickle')):
                         if os.path.exists(os.path.join(path,'.hash')):
                             fd = open(os.path.join(path,'.hash'),'r')
-                            hashGs = fd.read()
+                            lines = fd.readlines()
                             fd.close()
+                            hashGs = lines[0].replace('\n','')
+                            self.segboundary = eval(lines[1])
                             if hashGs==self._hash:
                                 logger.info('load from Gs graph')
                                 self.hasboundary = True
@@ -420,7 +423,8 @@ class Layout(PyLayers):
                 self.importosm(latlon=string, dist_m=dist_m, cart=True, typ=self.typ)
                 self.loadosm = True
             else:  # load from address geocoding
-                self.importosm(address=string, dist_m=dist_m, cart=True,typ=self.typ)
+                pdb.set_trace()
+                self.importosm(address=string, dist_m=dist_m, cart=True, typ=self.typ)
                 self.loadosm = True
 
             # add boundary if it not exist
@@ -2477,6 +2481,7 @@ class Layout(PyLayers):
         path = os.path.join(basename, 'struc', 'gpickle', dirname)
         fd = open(os.path.join(path,'.hash'),'w')
         fd.write(self._hash)
+        fd.write('\n'+str(self.segboundary))
         fd.close()
         logger.info('dump a pickle of Gs')
         self.lbltg = ['s']
@@ -6607,7 +6612,7 @@ class Layout(PyLayers):
 
         pbartmp = pbar(verbose,total=100., desc ='Add airwalls',leave=True,position=tqdmpos+1)
 
-        logger.info('buildGt : add new airwalls segment')
+        logger.info('buildGt : add new airwalls segments')
         for p, uaw in luaw:
             # for each vnodes == 0, add an _AIR
             if verbose :
