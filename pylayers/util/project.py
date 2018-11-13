@@ -15,11 +15,14 @@ import pdb
 import seaborn as sns
 import logging
 
-LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s %(message)s'
+LOG_FORMAT = '%(asctime)s - %(module)s %(funcName)s %(lineno)d - %(levelname)s %(message)s'
 logging.basicConfig(filename = 'logtest.log',
                     level = logging.DEBUG,
                     format = LOG_FORMAT,
                     filemode = 'w')
+#logging.basicConfig(level = logging.DEBUG,
+#                    format = LOG_FORMAT,
+#                    filemode = 'w')
 logger = logging.getLogger()
 class PyLayers(object):
     """ Generic PyLayers Meta Class

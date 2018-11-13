@@ -708,9 +708,10 @@ def getosm(**kwargs):
     rad_to_deg = (180/np.pi)
 
     if latlon == 0:
-        place = geo.google(address)
+        resp = geo.arcgis(address)
         try:
-            lat, lon = place.latlng
+            lat = resp.geojson['features'][0]['properties']['lat']
+            lon = resp.geojson['features'][0]['properties']['lng']
         except:
             print(place)
     else:

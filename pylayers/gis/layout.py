@@ -233,6 +233,7 @@ class Layout(PyLayers):
         _filematini = kwargs.pop('_filematini', 'matDB.ini')
         _fileslabini = kwargs.pop('_fileslabini', 'slabDB.ini')
         _filefur = kwargs.pop('_filefur','')
+        dist_m = kwargs.pop('dist_m',50) # minimal distance
         bcheck = kwargs.pop('bcheck', False)           # to check Gs
         bbuild = kwargs.pop('bbuild', False)            # to build graphs
         bgraphs = kwargs.pop('bgraphs', False)         # to load graph
@@ -243,7 +244,6 @@ class Layout(PyLayers):
         # bdiffraction=False,   # to include diffraction in Gi
 
         xlim = ()
-        dist_m = 400,
         typ = 'indoor'
 
         self.labels = {}
@@ -286,6 +286,7 @@ class Layout(PyLayers):
         self.hasboundary = False
         self.coordinates = 'cart'
         self.version = '1.3'
+
         if typ in ['indoor','outdoor','floorplan']:
             self.typ = typ
         else:
@@ -332,6 +333,7 @@ class Layout(PyLayers):
             self.display['box']= xlim
         else:
             self.display['box'] = (-50, 50, -50, 50)
+
         self.name = {}
         self.ax = self.display['box']
         self.zmin = 0
@@ -368,7 +370,7 @@ class Layout(PyLayers):
                 loadres = True
             else:
                 self.typ = 'outdoor'
-                self._filename = arg.replace(' ','_')+'.lay' 
+                self._filename = arg.replace(' ','_')+'.lay'
         else:  # No argument new file
             self._filename = 'newfile.lay'
             newfile = True
@@ -405,6 +407,9 @@ class Layout(PyLayers):
                             else:
                                 logger.info('load from .lay file')
                                 self.load_fast()
+                        else:
+                            logger.info('load from .lay file')
+                            self.load_fast()
                     else:
                         logger.info('load from .lay file')
                         self.load_fast()
@@ -423,7 +428,6 @@ class Layout(PyLayers):
                 self.importosm(latlon=string, dist_m=dist_m, cart=True, typ=self.typ)
                 self.loadosm = True
             else:  # load from address geocoding
-                pdb.set_trace()
                 self.importosm(address=string, dist_m=dist_m, cart=True, typ=self.typ)
                 self.loadosm = True
 
@@ -490,6 +494,7 @@ class Layout(PyLayers):
                         self.build()
                         self.lbltg.append('s')
                         self.dumpw()
+        self.get_boundary()
         logger.info('end of __init__')
 
     def __repr__(self):
@@ -536,14 +541,14 @@ class Layout(PyLayers):
         if hasattr(self,'Gw'):
             st = st + "Gw : "+str(len(self.Gw.node))+' : '+str(len(self.Gw.edges()))+'\n'
         st = st + "----------------\n\n"
-        if hasattr(self, 'degree'):
-            for k in self.degree:
-                if (k < 2) or (k > 3):
-                    st = st + 'degree ' + \
-                        str(k) + ' : ' + str(self.degree[k]) + "\n"
-                else:
-                    st = st + 'number of node points of degree ' + \
-                        str(k) + ' : ' + str(len(self.degree[k])) + "\n"
+        # if hasattr(self, 'degree'):
+        #     for k in self.degree:
+        #         if (k < 2) or (k > 3):
+        #             st = st + 'degree ' + \
+        #                 str(k) + ' : ' + str(self.degree[k]) + "\n"
+        #         else:
+        #             st = st + 'number of node points of degree ' + \
+        #                 str(k) + ' : ' + str(len(self.degree[k])) + "\n"
         st = st + "\n"
         st = st + "xrange : " + str(self.ax[0:2]) + "\n"
         st = st + "yrange : " + str(self.ax[2:]) + "\n"
@@ -1134,7 +1139,15 @@ class Layout(PyLayers):
 
         # conversion in numpy array
         self.upnt = np.array((upnt))
+        self.useg = np.array((useg))
 
+        l1 =  [(x, self.Gs.node[x]['name']) for x in self.useg ]
+        for l in l1:
+            try:
+                self.name[l[1]].append(l[0])
+            except:
+                self.name[l[1]] = [l[0]]
+                
         # association
 
         # utmp = np.array(zip(-self.upnt,np.arange(len(self.upnt))))
@@ -1411,6 +1424,7 @@ class Layout(PyLayers):
         ymin = 1e16
         xmax = -1e16
         ymax = -1e16
+
         self.name['WALL'] = []
         for p in verts:
             v = np.array(p) - pref[0][None, :]
@@ -5213,6 +5227,13 @@ class Layout(PyLayers):
             15
         alpha : float
             transparancy
+
+        See Also
+        --------
+
+        show_segment
+        showGs
+
         """
         if fig == []:
             fig = plt.figure()
@@ -5310,6 +5331,11 @@ class Layout(PyLayers):
         font_size : int
             Default 15
 
+        See Also
+        --------
+
+        show_nodes
+
         """
 
         defaults = {'fig': [],
@@ -5368,8 +5394,7 @@ class Layout(PyLayers):
                                       color='b', font_size=kwargs['font_size'],
                                       node_shape=kwargs['node_shape'], fig=fig, ax=ax)
         if kwargs['dnodes']:
-            fig, ax = self.show_nodes(
-                ndlist=kwargs['edlist'], color='b', fig=fig, ax=ax)
+            fig, ax = self.show_nodes(ndlist=kwargs['edlist'], color='b', fig=fig, ax=ax)
 
         return fig, ax
 
@@ -5396,6 +5421,11 @@ class Layout(PyLayers):
         dlabels :
             display labels ( False )
         font_size
+
+        See Also
+        --------
+
+        show_segment
 
 
         """
@@ -5916,18 +5946,22 @@ class Layout(PyLayers):
         if verbose:
             Buildpbar.update(1)
         if 't' in graph:
+            logger.info('buildGt')
             self.buildGt(difftol=difftol, verbose=verbose, tqdmpos=1)
             self.lbltg.extend('t')
         if verbose:
             Buildpbar.update(1)
         if 'v' in graph:
+            logger.info('buildGv')
             self.buildGv(verbose=verbose, tqdmpos=1)
             self.lbltg.extend('v')
         if verbose:
             Buildpbar.update(1)
         if 'i' in graph:
+            logger.info('buildGi')
             self.buildGi(verbose=verbose, tqdmpos=1)
             if not multi:
+                logger.info('outputGi')
                 self.outputGi(verbose=verbose,tqdmpos=1)
             else:
                 self.outputGi_mp()
@@ -11051,7 +11085,7 @@ class Layout(PyLayers):
         return sigarr
 
     def plot(self, **kwargs):
-        """ plot the layout with shapely polygons
+        """ plot the layout with shapely MultiLineString
 
         Parameters
         ---------
@@ -11062,6 +11096,11 @@ class Layout(PyLayers):
         labels : list
         nodes : boolean
 
+        Returns
+        -------
+
+        fig, ax
+
         Examples
         --------
 
@@ -11069,30 +11108,28 @@ class Layout(PyLayers):
         >>> L.plot(show=True)
 
         """
-        defaults = {'show': False,
-                    'fig': [],
-                    'ax': [],
-                    'labels': [],
-                    'nodes': False
-                    }
 
-        for key, value in defaults.items():
-            if key not in kwargs:
-                kwargs[key] = value
+        #fig = kwargs.pop('fig', plt.gcf())
+        #ax = kwargs.pop('ax', plt.gca())
 
-        if kwargs['fig'] == []:
-            fig = plt.gcf()
-        if kwargs['ax'] == []:
-            ax = plt.gca()
 
-        if isinstance(kwargs['labels'], list):
-            labels = kwargs['labels']
-        elif kwargs['labels'] == True:
-            labels = ['s', 't', 'v', 'i', 'w']
-        elif isinstance(kwargs['labels'], str):
-            labels = kwargs['labels']
-        else:
-            labels = []
+        fig, ax = plt.subplots(facecolor='none')
+
+        bnodes = kwargs.pop('bnodes', False)
+        bsegs = kwargs.pop('bsegs', True)
+
+        ax.axis(self.ax)
+        fig.canvas.draw()
+
+        xc = (self.ax[0] + self.ax[1])/2
+        yc = (self.ax[2] + self.ax[3])/2
+
+        # if isinstance(labels, bool):
+        #     labels = ['s', 't', 'v', 'i', 'w']
+        # elif isinstance(labels, str):
+        #     labels = labels
+        # else:
+        #     labels = []
 
         k = list(self.Gs.pos.keys())
         v = list(self.Gs.pos.values())
@@ -11102,17 +11139,24 @@ class Layout(PyLayers):
 
         w = [str(x) for x in kk]
 
-        if 's' in labels:
-            [ax.text(vv[i, 0], vv[i, 1], w[i]) for i in range(len(w))]
+        #if 's' in labels:
+        #    [ax.text(vv[i, 0], vv[i, 1], w[i]) for i in range(len(w))]
 
-        if kwargs['nodes']:
-            ax.scatter(vv[:, 0], vv[:, 1])
+        if bnodes:
+            col = ax.scatter([xc], [yc], color=[0,0,1], alpha=0)
+            for xy in vv:
+                col.set_offsets(xy)
+                ax.draw_artist(col)
 
-        ML = sh.MultiLineString(list(self._shseg.values()))
+            #ax.scatter(vv[:, 0], vv[:, 1])
 
-        self.pltlines(ML, color='k', fig=fig, ax=ax)
-
+        if bsegs:
+            ML = sh.MultiLineString(list(self._shseg.values()))
+            self.pltlines(ML, color='k', fig=fig, ax=ax)
+        
+        plt.show()
         return fig, ax
+
 
     def get_Sg_pos(self, sigarr):
         """ return position of the signatures
@@ -11330,6 +11374,16 @@ class Layout(PyLayers):
         p_Rx = np.array([Rx_x, Rx_y])
 
         return(p_Tx, p_Rx)
+
+    def get_boundary(self):
+        """ get and update Layout boundary
+
+        """
+        xmax = max(p[0] for p in self.Gs.pos.values())
+        xmin = min(p[0] for p in self.Gs.pos.values())
+        ymax = max(p[1] for p in self.Gs.pos.values())
+        ymin = min(p[1] for p in self.Gs.pos.values())
+        self.ax = (xmin,xmax,ymin,ymax)
 
     def boundary(self, **kwargs) :
         """ add a blank boundary around layout
