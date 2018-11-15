@@ -8173,24 +8173,7 @@ class Layout(PyLayers):
                         Mpta = geu.mirror(pta, pseg1[:, 0], pseg1[:, 1])
                         Mphe = geu.mirror(phe, pseg1[:, 0], pseg1[:, 1])
                         typ, prob = cn.belong_seg(Mpta, Mphe, prob=False)
-                        # printi0,i1
-                        # if ((i0 == (6, 0)) & (i1 == (7, 0))):
-                        #    pdb.set_trace()
-                        # if bs.any():
-                        #    plu.displot(pta[:,bs],phe[:,bs],color='g')
-                        # if ~bs.any():
-                        #    plu.displot(pta[:,~bs],phe[:,~bs],color='m')
-                        #    plt.show()
-                        #    pdb.set_trace())
-                    ########
-                    # SOMETIMES PROBA IS 0 WHEReAS SEG IS SEEN
-                    ###########
-                    # # keep segment with prob above a threshold
-                    # isegkeep = isegments[prob>0]
-                    # # dict   {numint : proba}
-                    # dsegprob = {k:v for k,v in zip(isegkeep,prob[prob>0])}
-                    # 4 lines are replaced by
-                    # keep segment with prob above a threshold
+                    # keep segment with typ <> 0
                     utypseg = typ != 0
                     isegkeep = isegments[utypseg]
                     # dict   {numint : proba}

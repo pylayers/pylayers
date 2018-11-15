@@ -94,7 +94,93 @@ class Cone(PyLayers):
         self.angle = np.arccos(self.dot)
         self.pcone = self.angle/(1.0*np.pi)
 
-    def belong_seg(self,pta,phe,prob=True,visu=False):
+    def belong_seg(self,pta,phe):
+        """ test if segment belong to cone
+
+        Parameters
+        ----------
+
+        pta : np.array (2xNseg)
+        phe : np.array (2xNseg)
+
+        Returns
+        -------
+
+        typ   : int
+            0 : no visibility
+            1 : full visibility
+            2 : he.v
+            3 : ta.v
+            4 : ta.u
+            5 : he.u
+            6 : inside
+
+
+        Notes
+        -----
+
+        A segment belongs to the cone if not all termination points
+        lie in the same side outside the cone.
+
+        See Also
+        --------
+
+        outside_point
+
+        """
+
+        vc  = (self.u + self.v)/2
+        w = vc/np.sqrt(np.dot(vc,vc))
+        w = w.reshape(2,1)
+
+        ptama = pta - self.apex[:, None]
+        phema = phe - self.apex[:, None]
+
+        dtaw = np.sum(ptama*w, axis=0)
+        dhew = np.sum(phema*w, axis=0)
+
+        #blta = (dtaw >= 0) | (np.isclose(dtaw, 0.))
+        #blhe = (dhew >= 0) | (np.isclose(dhew, 0.))
+        #
+        # TODO Check if the isclose is important
+        #
+        blta = (dtaw >= 0)
+        blhe = (dhew >= 0)
+
+        boup = blta & blhe
+
+        typ   = np.zeros(np.shape(pta)[1]).astype('int')
+
+        btaor, btaol = self.outside_point(pta)
+        bheor, bheol = self.outside_point(phe)
+
+        bfull = ((btaol & bheor) | (btaor & bheol)) & boup
+
+        typ[bfull] = 1
+
+        #(he-apex).v
+        btalhein  = (btaol & ~bheol & ~bheor)&boup
+        typ[btalhein] = 2
+
+        #(ta-apex).v
+        bheltain  = (bheol & ~btaol & ~btaor)&boup
+        typ[bheltain] = 3
+
+        #ta.u
+        bhertain  = (bheor & ~btaol & ~btaor)&boup
+        typ[bhertain] = 4
+
+        #he.u
+        btarhein  = (btaor & ~bheol & ~bheor)&boup
+        typ[btarhein] = 5
+
+        #ta.he
+        btainhein  = (~btaol & ~btaor & ~bheol & ~bheor)&boup
+        typ[btainhein] = 6
+
+        return typ
+
+   def belong_seg_old(self,pta,phe,prob=True,visu=False):
         """ test if segment belong to cone
 
         Parameters
@@ -130,7 +216,7 @@ class Cone(PyLayers):
         outside_point
 
         """
-        if visu: 
+        if visu:
             f,a = self.show()
             plu.displot(pta,phe,fig=f,ax=a)
             plt.show()
@@ -149,7 +235,7 @@ class Cone(PyLayers):
         #blta = (dtaw >= 0) | (np.isclose(dtaw, 0.))
         #blhe = (dhew >= 0) | (np.isclose(dhew, 0.))
         #
-        # TODO Check if the isclose is important 
+        # TODO Check if the isclose is important
         #
         blta = (dtaw >= 0)
         blhe = (dhew >= 0)
@@ -241,6 +327,8 @@ class Cone(PyLayers):
         typ[btainhein] = 6
 
         return(typ,proba)
+
+
 
     def above_seg(self):
         """
