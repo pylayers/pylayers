@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#   Layout  Module
+#   Layout Module
 #
 #   unittesting in tests/test_layout_u.py
 #
@@ -1368,9 +1368,9 @@ class Layout(PyLayers):
         #
         # This is wrong and asume a continuous indexation of points
         # TODO FIX : This problem cleanly
-        # 
+        #
         # self.p2pc is only used in Gspos in outputGi_func only caled in case of 
-        # multiprocessing 
+        # multiprocessing
         #
         # The temporary fix is to comment the 5 next lines
         #
@@ -1381,8 +1381,8 @@ class Layout(PyLayers):
         # normal_ss = self.normal[:,self.tgs[self.lsss]]
         # self.normal = np.hstack((self.normal,normal_ss))
         # if problem here check file format 'z' should be a string
-        lheight = array([v[1] for v in 
-                    nx.get_node_attributes(self.Gs, 'z').values() 
+        lheight = array([v[1] for v in
+                    nx.get_node_attributes(self.Gs, 'z').values()
                     if v[1] < 2000 ])
         #assert(len(lheight)>0),logging.error("no valid heights for segments")
         if len(lheight)>0:
@@ -5909,7 +5909,7 @@ class Layout(PyLayers):
 
         return fig, ax
 
-    def build(self, graph='tvirw',verbose=False,difftol=0.15,multi=False):
+    def build(self, graph='tvirw', verbose=False, difftol=0.15, multi=False):
         """ build graphs
 
         Parameters
@@ -8016,9 +8016,7 @@ class Layout(PyLayers):
         self.Gi = rGi
         self.Gi.pos = rGi.pos
 
-
-
-    def outputGi(self,verbose=False,tqdmpos=0.):
+    def outputGi(self, verbose=False, tqdmpos=0.):
         """ filter output of Gi edges
 
         Parameters
@@ -8052,6 +8050,8 @@ class Layout(PyLayers):
         Nedges = len(self.Gi.edges())
         cpt = 100./Nedges
         # print "Gi Nedges :",Nedges
+        cn = cone.Cone()
+
         for k, e in enumerate(self.Gi.edges()):
 
             # if (k%100)==0:
@@ -8077,7 +8077,7 @@ class Layout(PyLayers):
                 # v1.1 i2 = nx.neighbors(self.Gi, i1)
                 i2 = list(dict(self.Gi[i1]).keys())
                 # create a Cone object
-                cn = cone.Cone()
+                #cn = cone.Cone()
                 # if starting from segment
                 if nstr0 > 0:
                     pseg0 = self.seg2pts(nstr0).reshape(2, 2).T
@@ -8100,7 +8100,7 @@ class Layout(PyLayers):
                 # Avoid to have the same diffaction point after reflection 
                 # exemple :  (-10,),(245,12),(-10,) impossible 
                 #                                 nstr0  nstr1 
-                if nstr0<0: 
+                if nstr0<0:
                     ipoints = [x for x in ipoints if x[0]!=nstr0] 
                 #ipoints = filter(lambda x: len(x) == 1, i2)
                 pipoints = np.array([self.Gs.pos[ip[0]] for ip in ipoints]).T
@@ -8121,6 +8121,7 @@ class Layout(PyLayers):
                 # v1.1 nb_nstr1 = self.Gs.neighbors(nstr1)
                 nb_nstr0 = self.Gs[nstr0]
                 nb_nstr1 = self.Gs[nstr1]
+
                 common_point = np.intersect1d(nb_nstr0,nb_nstr1)
 
                 if len(common_point) == 1:
@@ -8161,7 +8162,7 @@ class Layout(PyLayers):
                         #if ((e[0]==(53,17)) and (e[1]==(108,17,18))):
                         #    typ, prob = cn.belong_seg(pta, phe,visu=True)
                         #else:
-                        typ, prob = cn.belong_seg(pta, phe)
+                        typ, prob = cn.belong_seg(pta, phe, prob=False)
                         # if bs.any():
                         #    plu.displot(pta[:,bs],phe[:,bs],color='g')
                         # if ~bs.any():
@@ -8171,7 +8172,7 @@ class Layout(PyLayers):
                     if len(i1) == 2:
                         Mpta = geu.mirror(pta, pseg1[:, 0], pseg1[:, 1])
                         Mphe = geu.mirror(phe, pseg1[:, 0], pseg1[:, 1])
-                        typ, prob = cn.belong_seg(Mpta, Mphe)
+                        typ, prob = cn.belong_seg(Mpta, Mphe, prob=False)
                         # printi0,i1
                         # if ((i0 == (6, 0)) & (i1 == (7, 0))):
                         #    pdb.set_trace()
@@ -8193,14 +8194,14 @@ class Layout(PyLayers):
                     utypseg = typ != 0
                     isegkeep = isegments[utypseg]
                     # dict   {numint : proba}
-                    dsegprob = {k: v for k, v in zip(isegkeep, prob[utypseg])}
+                    #dsegprob = {k: v for k, v in zip(isegkeep, prob[utypseg])}
                     #########
                     # output = filter(lambda x: x[0] in isegkeep, i2)
                     output = [x for x in i2 if x[0] in isegkeep]
                     # probint = map(lambda x: dsegprob[x[0]], output)
-                    probint = [dsegprob[x[0]] for x in output]
+                    #probint = [dsegprob[x[0]] for x in output]
                     # dict interaction : proba
-                    dintprob = {k: v for k, v in zip(output, probint)}
+                    #dintprob = {k: v for k, v in zip(output, probint)}
 
                     # keep all segment above nstr1 and in Cone if T
                     # keep all segment below nstr1 and in Cone if R
@@ -8224,10 +8225,12 @@ class Layout(PyLayers):
 
                 # v1.1 output = nx.neighbors(self.Gi, (nstr1,))
                 output = self.Gi[(nstr1,)]
-                nout = len(output)
-                probint = np.ones(nout)  # temporarybns
-                dintprob = {k: v for k, v in zip(output, probint)}
-            self.Gi.add_edge(i0, i1, output=dintprob)
+                #nout = len(output)
+                #probint = np.ones(nout)  # temporarybns
+                #dintprob = {k: v for k, v in zip(output, probint)}
+
+            #self.Gi.add_edge(i0, i1, output=dintprob)
+            self.Gi.add_edge(i0, i1, output=output)
 
 
     def outputGi_new(self,verbose=False,tqdmpos=0.):
@@ -8270,7 +8273,7 @@ class Layout(PyLayers):
         #s2pu = self.s2pu.toarray()
         #p2pc = self.p2pc.toarray()
         #A = self.Gi_A.toarray()
-        
+
         assert('Gi' in self.__dict__)
 
         oGipbar = pbar(verbose,total=100.,leave=False,desc='OutputGi',position=tqdmpos)
@@ -8339,7 +8342,7 @@ class Layout(PyLayers):
 
 
                 ipoints = [x for x in i2 if len(x)==1 ]
-                
+
                 #ipoints = filter(lambda x: len(x) == 1, i2)
                 # pipoints = np.array([self.Gs.pos[ip[0]] for ip in ipoints]).T
                 pipoints = np.array([Gspos(ip[0]) for ip in ipoints]).T
@@ -8421,7 +8424,7 @@ class Layout(PyLayers):
                     #     ipdb.set_trace()
                     # i1 : interaction T
                     if li1 == 3:
-                        typ, prob = cn.belong_seg(pta, phe)
+                        typ, prob = cn.belong_seg(pta, phe, prob=False)
                         # if bs.any():
                         #    plu.displot(pta[:,bs],phe[:,bs],color='g')
                         # if ~bs.any():
@@ -8431,7 +8434,7 @@ class Layout(PyLayers):
                     elif li1 == 2:
                         Mpta = geu.mirror(pta, pseg1[:, 0], pseg1[:, 1])
                         Mphe = geu.mirror(phe, pseg1[:, 0], pseg1[:, 1])
-                        typ, prob = cn.belong_seg(Mpta, Mphe)
+                        typ, prob = cn.belong_seg(Mpta, Mphe, prob=False)
                         # printi0,i1
                         # if ((i0 == (6, 0)) & (i1 == (7, 0))):
                         #    pdb.set_trace()
@@ -8486,7 +8489,7 @@ class Layout(PyLayers):
                 uout = self.Gi_no.index((nstr1,))
                 ui = np.where(self.Gi_A[uout,:].toarray()!=0)[1]
                 output = [self.Gi_no[u] for u in ui]
-                
+
                 nout = len(output)
                 probint = np.ones(nout)  # temporarybns
                 dintprob = {k: v for k, v in zip(output,probint)}
@@ -11143,17 +11146,20 @@ class Layout(PyLayers):
         #    [ax.text(vv[i, 0], vv[i, 1], w[i]) for i in range(len(w))]
 
         if bnodes:
-            col = ax.scatter([xc], [yc], color=[0,0,1], alpha=0)
-            for xy in vv:
-                col.set_offsets(xy)
-                ax.draw_artist(col)
+            point = ax.scatter([xc], [yc], color=[0,0,1], alpha=1)
+            point.set_offsets(vv)
+            ax.draw_artist(point)
 
             #ax.scatter(vv[:, 0], vv[:, 1])
 
         if bsegs:
             ML = sh.MultiLineString(list(self._shseg.values()))
-            self.pltlines(ML, color='k', fig=fig, ax=ax)
-        
+            pt = np.array([l.xy for l in ML])
+            line, = plt.plot(pt[0,0],pt[0,1],color='r')
+            line.set_data(pt)
+
+            #self.pltlines(ML, color='k', fig=fig, ax=ax)
+
         plt.show()
         return fig, ax
 

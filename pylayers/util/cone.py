@@ -52,10 +52,10 @@ class Cone(PyLayers):
         if np.cross(an,bn) > 0:
             self.u = an
             self.v = bn
-        else:  
+        else:
             self.u = bn
             self.v = an
-        
+
         # -1 < gamma < 1
         self.dot = np.dot(self.u,self.v)
         self.cross = np.cross(self.u,self.v)
@@ -63,11 +63,11 @@ class Cone(PyLayers):
         if self.cross!=0:
             self.degenerated = False
         else:
-            self.degenerated = True    
+            self.degenerated = True
 
         # update cone angle and probability
         self.upd_angle()
-        
+
     def  __repr__(self):  
         st = 'Cone object \n'
         st = st+'----------------\n'
@@ -83,14 +83,14 @@ class Cone(PyLayers):
             st = st + "   seg0 : " + str(tuple(self.seg0))+'\n'
             st = st + "   seg1 : " + str(tuple(self.seg1))+'\n'
         return(st)
-        
+
 
     def upd_angle(self):
-        """update cone angle attribute 
+        """update cone angle attribute
            and associated probability of the Cone object
 
         """
-        
+
         self.angle = np.arccos(self.dot)
         self.pcone = self.angle/(1.0*np.pi)
 
@@ -106,18 +106,18 @@ class Cone(PyLayers):
         Returns
         -------
 
-        typ   : int 
-            0 : no visibility 
-            1 : full visibility 
-            2 : he.v 
+        typ   : int
+            0 : no visibility
+            1 : full visibility
+            2 : he.v
             3 : ta.v
-            4 : ta.u  
-            5 : he.u  
-            6 : inside 
+            4 : ta.u
+            5 : he.u
+            6 : inside
         proba : float
-            geometric probability 
+            geometric probability
 
-            
+
         Notes
         -----
 
@@ -136,29 +136,23 @@ class Cone(PyLayers):
             plt.show()
 
 
-        vc  = (self.u+self.v)/2
-        #vcn = vc/np.sqrt(np.dot(vc,vc))
+        vc  = (self.u + self.v)/2
         w = vc/np.sqrt(np.dot(vc,vc))
         w = w.reshape(2,1)
-        #w  = np.array([vcn[1],-vcn[0]])
 
-        ptama = pta - self.apex[:,None]
-        phema = phe - self.apex[:,None]
+        ptama = pta - self.apex[:, None]
+        phema = phe - self.apex[:, None]
 
-        dtaw = np.sum(ptama*w,axis=0)
-        dhew = np.sum(phema*w,axis=0)
+        dtaw = np.sum(ptama*w, axis=0)
+        dhew = np.sum(phema*w, axis=0)
 
-        blta = (dtaw>=0)|(np.isclose(dtaw,0.))
-        blhe = (dhew>=0)|(np.isclose(dhew,0.))
-        #if 'seg1' in self.__dict__:
-        #    pa =  self.seg1[:,0].reshape(2,1)
-        #    pb = (self.seg1[:,0]+w).reshape(2,1)
-        #else:
-        #    pa = self.apex.reshape(2,1)
-        #    pb = pa+w.reshape(2,1)
-        #blta = geu.isleft(pa,pb,pta)
-        #blhe = geu.isleft(pa,pb,phe)
-        # segment candidate for being above segment 1 (,Nseg)
+        #blta = (dtaw >= 0) | (np.isclose(dtaw, 0.))
+        #blhe = (dhew >= 0) | (np.isclose(dhew, 0.))
+        #
+        # TODO Check if the isclose is important 
+        #
+        blta = (dtaw >= 0)
+        blhe = (dhew >= 0)
         boup = blta & blhe
         # type of segment
         if prob:
@@ -166,22 +160,18 @@ class Cone(PyLayers):
         else :
             proba =[]
         typ   = np.zeros(np.shape(pta)[1])
-        # is tail out ? bo1 | bo2  
-        # btaol : boolean tail out left 
-        # btaor : boolean tail out right 
-        # bheol : boolean head out left 
-        # bheor : boolean head out right #
-        # among upper segment check position wrt cone
-        #btaol,btaor = self.outside_point(pta)
-        #bheol,bheor = self.outside_point(phe)
-        btaor,btaol = self.outside_point(pta)
-        bheor,bheol = self.outside_point(phe)
+
+        btaor, btaol = self.outside_point(pta)
+        bheor, bheol = self.outside_point(phe)
+
         # tail and head are they out cone on the same side ? 
         # if the two termination points are not on the same side of the cone
         # --> segment is in.
         # boin = (~((btaol&bheol)|(btaor&bheor)))&boup
         # full interception (proba to reach = 1) 
-        bfull = ((btaol&bheor)|(btaor&bheol))&boup
+
+        bfull = ((btaol & bheor) | (btaor & bheol)) & boup
+
         if prob :
             proba[bfull] = 1
         typ[bfull] = 1
@@ -258,7 +248,7 @@ class Cone(PyLayers):
         vc  = (self.u+self.v)/2
         vcn = vc/np.sqrt(dot(vc,vc))
         w  = np.array([vcn[1],-vcn[0]])
-        self.pa =  self.seg1[:,0].reshape(2,1)  
+        self.pa =  self.seg1[:,0].reshape(2,1)
         self.pb = (self.seg1[:,0]+w).reshape(2,1)
 
     def outside_point(self,p):
@@ -447,8 +437,6 @@ class Cone(PyLayers):
 
         pylayers.gis.layout.Layout.buildGi
 
-
-
         """
         # bv : (4,1)
 
@@ -463,32 +451,32 @@ class Cone(PyLayers):
 
         # check for connected segments (This could be determined earlier) 
         # a0 = a1 | b1
-        # b0 = a1 | b1 
+        # b0 = a1 | b1
 
         # check segment orientation (crossing)
-      
+
         if not (geu.ccw(a0,b0,b1) ^
                 geu.ccw(b0,b1,a1) ):
             v0 = (b1 - a0)
             v1 = (a1 - b0)
             twisted = True
-        else:    
+        else:
             v0 = (a1 - a0)
             v1 = (b1 - b0)
             twisted = False
-        
-        v0n = v0/np.sqrt(np.dot(v0,v0))
-        v1n = v1/np.sqrt(np.dot(v1,v1))
+
+        v0n = v0/np.sqrt(np.dot(v0, v0))
+        v1n = v1/np.sqrt(np.dot(v1, v1))
 
         if np.cross(v0n,v1n) > 0:
             self.u = v0n
             self.v = v1n
             inversion = False
-        else:  
+        else:
             self.u = v1n
             self.v = v0n
-            inversion = True 
-        
+            inversion = True
+
         if  (not twisted) & (not inversion) :
             #reverse seg1
             #print "reverse seg1"
@@ -498,10 +486,10 @@ class Cone(PyLayers):
             #print "reverse seg0"
             self.seg0 = self.seg0[:,::-1]
         if twisted & inversion:
-            #reverse seg0 and seg1   
+            #reverse seg0 and seg1
             #print "reverse seg0"
             #print "reverse seg1"
-            self.seg0 = self.seg0[:,::-1]      
+            self.seg0 = self.seg0[:,::-1]
             self.seg1 = self.seg1[:,::-1]
 
         self.dot = np.dot(self.u,self.v)
@@ -509,13 +497,13 @@ class Cone(PyLayers):
 
         if self.cross < 1e-15:
             self.degenerated=True
-        else:    
-            a0u = np.dot(self.seg0[:,0],self.u)
-            a0v = np.dot(self.seg0[:,0],self.v)
-            b0u = np.dot(self.seg0[:,1],self.u)
-            b0v = np.dot(self.seg0[:,1],self.v)
+        else:
+            a0u = np.dot(self.seg0[:,0], self.u)
+            a0v = np.dot(self.seg0[:,0], self.v)
+            b0u = np.dot(self.seg0[:,1], self.u)
+            b0v = np.dot(self.seg0[:,1], self.v)
 
-            kb  = ((b0v-a0v)-self.dot*(b0u-a0u))/(self.dot*self.dot-1)
+            kb  = ((b0v-a0v) - self.dot*(b0u-a0u))/(self.dot*self.dot-1)
             self.apex = self.seg0[:,1] + kb*self.v
         self.upd_angle()
 
@@ -532,7 +520,7 @@ class Cone(PyLayers):
         -----
 
         The only way for the cone to be degenerated is when the two segments are on the same line.
-        
+
         Examples
         --------
 
@@ -584,7 +572,9 @@ class Cone(PyLayers):
         self.u = u/np.sqrt(np.dot(u,u))
 
         self.dot = np.dot(self.u,self.v)
+
         self.cross = np.cross(self.u,self.v)
+
         if self.cross<0:
             self.u , self.v = self.v , self.u
             self.dot = np.dot(self.u,self.v)
@@ -593,7 +583,7 @@ class Cone(PyLayers):
         if self.cross < 1e-15:
             self.degenerated=True
 
-        
+
         self.upd_angle()
 
 

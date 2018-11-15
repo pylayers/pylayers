@@ -133,12 +133,16 @@ def gidl(g):
     gr = g.subgraph(edlist)
     for k in gr.edges():
         #print(k)
-        di = gr[k[0]][k[1]]
-        ke = di['output'].keys()
-        va = di['output'].values()
-        keva = zip(ke,va)
-        keva_valid = [ x for x in keva if len(x[0])>1]
-        gr[k[0]][k[1]]['output'] = dict(keva_valid)
+        #di = gr[k[0]][k[1]]
+        #ke = di['output'].keys()
+        ke  = gr[k[0]][k[1]]['output']
+        #ke = di['output'].keys()
+        #va = di['output'].values()
+        #keva = zip(ke,va)
+        #keva_valid = [ x for x in keva if len(x[0])>1]
+        ke_valid = [ x for x in ke if len(x)>1 ]
+        #gr[k[0]][k[1]]['output'] = dict(keva_valid)
+        gr[k[0]][k[1]]['output'] = ke_valid
 
     dpos = {k:g.pos[k] for k in edlist}
     gr.pos=dpos
@@ -1088,7 +1092,7 @@ class Signatures(PyLayers,dict):
         else:
             return False
 
-
+    #@profile
     def run(self,**kwargs):
         """ evaluate signatures between cycle of tx and cycle of rx
 
@@ -1257,18 +1261,16 @@ class Signatures(PyLayers,dict):
             #
             # TODO : It concerns self[1] : only one interaction (i.e several single reflection or diffraction)
             #
-            if (s in lit) or (s[-1]==self.target):
-                #anstr = np.array(map(lambda x: x[0],visited))
+            if (s in lit) or (s[-1] == self.target):
                 anstr = np.array([ x[0] for x in visited ])
-                #typ  = np.array(map(lambda x: len(x),visited))
-                typ =np.array([len(x) for x in visited ])
+                typ = np.array([len(x) for x in visited ])
 
                 assert(len(typ)==1)
                 try:
-                    self[len(typ)] = np.vstack((self[len(typ)],anstr,typ))
+                    self[len(typ)] = np.vstack((self[len(typ)], anstr, typ))
                     self.ratio[len(typ)] = np.append(self.ratio[len(typ)],1.)
                 except:
-                    self[len(typ)] = np.vstack((anstr,typ))
+                    self[len(typ)] = np.vstack((anstr, typ))
                     self.ratio[len(typ)] = np.array([1.])
                 # update signature counter
                 cptsig +=1
@@ -1318,9 +1320,11 @@ class Signatures(PyLayers,dict):
                 # cond3 : test the cutoff condition not get to the limit
                 # continue if True
                 cond3 = not(len(visited) > (self.cutoff + sum(lawp)))
+
                 uD = [ k for k in range(len(visited)) if len(visited[k])==1 ]
                 uR = [ k for k in range(len(visited)) if len(visited[k])==2 ]
                 uT = [ k for k in range(len(visited)) if len(visited[k])==3 ]
+
                 if cond1:
                     condD = True
                     condR = True
@@ -1375,9 +1379,6 @@ class Signatures(PyLayers,dict):
                         # update number of useful segments
                         # if there is airwall in visited
                         nstr = interaction[0]
-                        #
-                        #
-                        #
                         # Testing the type of interaction at rank -2
                         # R is a list which contains a rotation matrix
                         # and a translation vector for doing the mirroring
@@ -1427,11 +1428,12 @@ class Signatures(PyLayers,dict):
                         # dtarget :  distance between th and target
                         #
                         pt_th = np.sum(th,axis=0)/2.
-                        d_target = np.linalg.norm(pt_target-pt_th)
+                        d_target = np.linalg.norm(pt_target - pt_th)
 
                         #
                         # mirroring th until the previous point
                         #
+
                         th_mirror = copy.copy(th)
 
                         while np.any(r[0] != np.eye(2)):
@@ -1542,16 +1544,16 @@ class Signatures(PyLayers,dict):
                                 #angle_cone = np.arccos(vrdotvl)
                                 # prepare lines and seg argument for intersection checking
                                 if angle_cone!=0:
-                                    linel = (vl[0],vl[1]-vl[0])
-                                    liner = (vr[0],vr[1]-vr[0])
+                                    linel = (vl[0], vl[1]-vl[0])
+                                    liner = (vr[0], vr[1]-vr[0])
                                     # from origin mirrored segment to be tested
-                                    seg   = (th_mirror[0],th_mirror[1])
+                                    seg   = (th_mirror[0], th_mirror[1])
 
                                     # apex calculation
-                                    a0u = np.dot(pta0,vr_n)
-                                    a0v = np.dot(pta0,vl_n)
-                                    b0u = np.dot(phe0,vr_n)
-                                    b0v = np.dot(phe0,vl_n)
+                                    a0u = np.dot(pta0, vr_n)
+                                    a0v = np.dot(pta0, vl_n)
+                                    b0u = np.dot(phe0, vr_n)
+                                    b0v = np.dot(phe0, vl_n)
                                     #import warnings
                                     #warnings.filterwarnings("error")
                                     try:
@@ -1703,7 +1705,7 @@ class Signatures(PyLayers,dict):
                         #     pdb.set_trace()
                         #print d_excess,dist_excess_max
                         #if (ratio2 > self.threshold) and (d_excess<dist_excess_max):
-                        if (ratio2 > self.threshold) and (d_excess<dist_excess_max):
+                        if (ratio2 > self.threshold) and (d_excess < dist_excess_max):
                         #if (ratio > self.threshold):
                             #
                             # Update sequence of mirrored points
@@ -1773,12 +1775,15 @@ class Signatures(PyLayers,dict):
                                         ax.collections.remove(Ef)
                                     except:
                                         pass
-
-                            outint = Gi[visited[-2]][interaction]['output'].keys()
+                            #
+                            # output is no longer a dict but a list
+                            #
+                            outint = Gi[visited[-2]][interaction]['output']
+                            #outint = Gi[visited[-2]][interaction]['output'].keys()
                             #
                             # proint not used 
                             #
-                            proint = Gi[visited[-2]][interaction]['output'].values()
+                            # proint = Gi[visited[-2]][interaction]['output'].values()
                             nexti  = [it for it in outint ]
                             stack.append(iter(nexti))
                         # 1590 ratio <= threshold
@@ -1791,17 +1796,17 @@ class Signatures(PyLayers,dict):
                     # 1389 condR and condT and condD
                     else:
                         pass
-                # 1388 cond1 and cond2 and cond3  
+                # 1388 cond1 and cond2 and cond3
                 else:
-                    # if at least 2 interactions 
-                    # and antepenultiem is a reflexion  
+                    # if at least 2 interactions
+                    # and antepenultiem is a reflexion
                     if len(visited)>1:
                         if ((len(visited[-2])==2) or len(visited[-2])==1):
                             R.pop()
                     last = visited.pop()
                     #
-                    # Poping 
-                    #      tahe 
+                    # Poping
+                    #      tahe
                     #      lawp
                     #      stack
                     #if (tahe[-1][0]==tahe[-1][1]).all():

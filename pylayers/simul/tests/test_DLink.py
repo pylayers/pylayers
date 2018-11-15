@@ -21,7 +21,7 @@ filename = 'defstr.lay'
 logger.info(" Load layout %s",filename)
 #filename = 'TC2_METIS.lay'
 #filename = 'W2PTIN.lay'
-L = Layout(filename)
+L = Layout(filename, bbuild=True)
 # set the link
 logger.info(" Creates DLink %f,%f,%d",fcGHz,WMHz,Nf)
 #
@@ -37,10 +37,11 @@ DL.L.build()
 #DL.ca= 2
 #DL.cb= 5
 #DL.b = np.array([761.5,1113,1.2])
-DL.Aa=Antenna(typ='Omni')
-DL.Ab=Antenna(typ='Omni')
+DL.Aa = Antenna(typ='Omni')
+DL.Ab = Antenna(typ='Omni')
 DL.a[2]=1.5
 DL.b[2]=1.5
+pdb.set_trace()
 #DL.b=np.array([766,1115,1.8])
 tic = time.time()
 #DL.eval(verbose=True,force=True,bt=False,cutoff=4,threshold=0.1,ra_vectorized=False)

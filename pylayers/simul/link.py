@@ -353,7 +353,7 @@ class DLink(Link):
 
         if isinstance(self._L,str):
             self._Lname = self._L
-            self._L = Layout(self._Lname,bgraphs=True,bcheck=False)
+            self._L = Layout(self._Lname, bgraphs=True, bcheck=False)
         else:
             self._Lname = self._L._filename
 
@@ -404,7 +404,7 @@ class DLink(Link):
                     for l in output.keys():
                         if l in lTiw:
                             tbd.append(l)
-                    for d in tbd : 
+                    for d in tbd: 
                         del output[d]
 
                     self.L.Gi[e[0]][e[1]]['output']=output
@@ -910,7 +910,6 @@ class DLink(Link):
             nodes = [n for n in nodes if n!=0 ]
 
         # draw the link extremities randomly
-
         np.random.seed(self.seed)
         ia = np.random.randint(0,len(nodes))
         ib = np.random.randint(0,len(nodes))
