@@ -97,7 +97,7 @@ class Way(object):
         return(fig,ax)
 
 class Coords(object):
-    """ Coords describes a set of points in OSM 
+    """ Coords describes a set of points in OSM
 
     Attributes
     ----------
@@ -110,7 +110,7 @@ class Coords(object):
     minlat :
     maxlat :
     boundary : np.array
-        (minlon,minlat,maxlon,maxlat) 
+        (minlon,minlat,maxlon,maxlat)
 
     Notes
     -----
@@ -124,7 +124,7 @@ class Coords(object):
     maxlon = -1000
     minlat = 1000
     maxlat = -1000
-    
+
     def __init__(self,idx=[],latlon=[]):
         """
         """
@@ -139,7 +139,7 @@ class Coords(object):
         st = st+ 'Ncoords = '+ str(len(self.xy))+'\n'
 
         return(st)
-    
+
     def filter(self,lexcluded):
         for ix in lexcluded:
             self.latlon.pop(-np.abs(ix))
@@ -179,25 +179,26 @@ class Coords(object):
             self.cpt += 1
         self.boundary=np.array([self.minlon,self.minlat,self.maxlon,self.maxlat])
 
-    def cartesian(self,cart=False,delta=0):
+    def cartesian(self,cart=False,delta=0,projection='cass'):
         """ convert Latitude/Longitude in cartesian
 
         Parameters
         ----------
-        cart : Boolean 
-            conversion to cartesian 
-        delta : offset 
+        cart : Boolean
+            conversion to cartesian
+        delta : offset
             default 0 : in this case the origin corresponds to the lower left point
- 
+        projection = ['aeqd','gnom','ortho','geos','nsper','moll','lcc','laea','cass']
+
         Notes
         -----
 
         This method converts latlon coordinates into cartesian x,y coordinates in
-        Cassini projection relatively to specified latlon boundary 
+        Cassini projection relatively to specified latlon boundary
         The basemap objet for back and forth coordinates conversion is returned.
 
-        The transformation is centered on the mean of latitude and longitude. 
-        The cartesian origin (0,0) correspond to the lower left corner (lonmin,latmin) 
+        The transformation is centered on the mean of latitude and longitude.
+        The cartesian origin (0,0) correspond to the lower left corner (lonmin,latmin)
 
         Returns
         -------
@@ -219,7 +220,7 @@ class Coords(object):
 
         m = Basemap(llcrnrlon=bd[0]-delta, llcrnrlat=bd[1]-delta,
                     urcrnrlon=bd[2]+delta, urcrnrlat=bd[3]+delta,
-                resolution='i', projection='cass', lon_0=lon_0, lat_0=lat_0)
+                resolution='i', projection = projection, lon_0=lon_0, lat_0=lat_0)
 
         for kid in self.latlon:
             if cart:
@@ -801,6 +802,18 @@ def getosm(**kwargs):
 
     return coords,nodes,ways,dpoly,m
 
+def osmparse_new(_filename,**kwargs):
+    """ new osmparser without requirement for imposm
+
+    Returns
+    -------
+
+    coords : Coords
+    nodes  : Nodes
+    ways   : Ways
+    relations : Relations
+
+    """
 
 def osmparse(_filename,typ='indoor',verbose=False,c=True,n=True,w=True,r=True,cart=False):
     """ parse osm files
@@ -831,6 +844,7 @@ def osmparse(_filename,typ='indoor',verbose=False,c=True,n=True,w=True,r=True,ca
     nodes  : Nodes
     ways   : Ways
     relations : Relations
+    m : Basemap
 
     """
 
