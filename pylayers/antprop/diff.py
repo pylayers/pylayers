@@ -117,14 +117,15 @@ def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2):
 #--------------------------------------------------
 # grazing angle Go et Gn
 #--------------------------------------------------
-    
+
     Gsofto,Gsoftn = G(N,phi0,Rsofto,Rsoftn)
 
     Ghardo,Ghardn = G(N,phi0,Rhardo,Rhardn)
 
 #--------------------------------------------------
-#calcul des 4 termes du coeff diff
+# calculate  the 4 terms of the diffraction coeff 
 #--------------------------------------------------
+
     sign  =  1.0
     D1     = Dfunc(sign,k,N,phi-phi0,si,sd,beta)
 
@@ -140,13 +141,14 @@ def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2):
 #--------------------------------------
 #n>=1 : exterior wedge
 #--------------------------------------
+
     Dsoft =np.empty(np.shape(D1),dtype=complex)
     Dhard =np.empty(np.shape(D1),dtype=complex)
 
     #c1 = BN>=1.0
 
-    Dsoft = D1+D2+Rsoftn*D3+Rsofto*D4
-    Dhard = D1+D2+Rhardn*D3+Rhardo*D4
+    Dsoft = D1 + D2 + Rsoftn*D3 + Rsofto*D4
+    Dhard = D1 + D2 + Rhardn*D3 + Rhardo*D4
 #    Dsoft = D2-D4
 #    Dhard = D2+D4
     #Dsoft = D1+D2-D3-D4
@@ -276,7 +278,7 @@ def Dfunc(sign,k,N,dphi,si,sd,beta=np.pi/2):
 
 
     """
-    
+
 
     cste = (1.0-1.0*1j)*(1.0/(4.0*N*np.sqrt(k*np.pi)*np.sin(beta)))
     rnn = (dphi+np.pi*sign)/(2.0*N*np.pi)
@@ -308,6 +310,184 @@ def Dfunc(sign,k,N,dphi,si,sd,beta=np.pi/2):
 
     return(Di)
 
+def TAlbani(a,b,w):
+    """
+    Returns
+    -------
+
+    T1 tidle{T}
+    T2 tilde(tilde{T})
+
+    Notes
+    -----
+
+    From : M.Albani et al "Diffraction at a thick screen including corrugations on the top
+    face"
+
+    """
+    wa = w * a
+    wb = w * b
+    s  = np.sqrt(1-w**2)
+    f1 = 2*np.pi*1j*a*b/s
+    f2 = -4*np.pi*(a*b)**2/(w*s)
+
+    bpwa = b + wa
+    apwb = a + wb
+    bmwa = b - wa
+    amwb = a - wb
+    Gabp = GFresnelI(a,bpwa/s)
+    Gbap = GFresnelI(b,apwb/s)
+    Gabm = GFresnelI(a,bmwa/s)
+    Gbam = GFresnelI(b,amwb/s)
+
+    T1 = f1 *( Gabp + Gbap + Gabm + Gbam )
+    T2 = f2 *( Gabp + Gbap - Gabm - Gbam )
+
+    return T1,T2
+
+def GFresnelI(x,y):
+    """ calculates Generalized Fresnel Integral
+
+    Parameters
+    ----------
+
+    x : array
+        real argument
+    y : array
+        real argument
+
+
+    Notes
+    -----
+
+    Implementation from
+    Capolino and Maci
+
+    "Simplified Closed form expressions for computing the generalized Fresnel
+    Integral and their application to vertex diffraction" May 1995
+
+    """
+    G = np.zeros(len(x)).astype(complex)
+    xneg = np.where(x<0)
+    yneg = np.where(y<0)
+    x[xneg] = -x[xneg]
+    y[yneg] = -y[yneg]
+    # avoid frontiers between zones
+    ueq1  = np.where(x==y)
+    ueq2  = np.where(x==(y/4))
+    ueq3  = np.where(y==(x/4))
+    x[ueq1] = x[ueq1] + 1e-15
+    x[ueq2] = x[ueq2] + 1e-15
+    x[ueq3] = x[ueq3] + 1e-15
+
+    # Region 1
+    u1 = np.where((x<0.4) & (y<0.4))
+    if (len(u1[0])>0):
+        x1 = x[u1]
+        y1 = y[u1]
+        F1 = FreF1(y1)
+        t1 = np.exp(1j*np.pi/4)/np.sqrt(np.pi)*F1
+        t2 = (1/np.pi) * ((1+1j*y1**2) * np.arctan(x1/y1)-1j*x1*y1)
+        G[u1] = 0.5 * np.exp(1j*x1**2) * (t1 - t2)
+
+    # Region 2
+    u2 = np.where(((x>0.4) & (x<24)) & (x>(4*y)))
+    if (len(u2[0])>0):
+        #print("u2")
+        x2 = x[u2]
+        y2 = y[u2]
+        F2 = FreF1(x2)
+        t1 =(1/(2*np.pi))*(y2/x2)*(1-2*1j*x2*F2)
+        t2 =(1/(6*np.pi))
+        t3 =((y2/x2)**3)
+        t4 = (1-2*1j*x2**2-4*x2**3*F2)
+        G[u2] = t1-t2*t3*t4
+
+    # Region 3
+    u3 = np.where((x>24) & (x>y))
+    if (len(u3[0])>0):
+        #print("u3")
+        x3 = x[u3]
+        y3 = y[u3]
+        F3 = FreF1(x3)
+        G[u3] = (1/(2*np.pi)) * ( y3/(x3 **2 + y3 **2) ) * F3
+
+    # Region 4
+    u4 = np.where( ((x>(y/4)) & (x<y)) & ( (y<24) & (y > 0.4)))
+    if len(u4[0])>0:
+        #print("u4")
+        x4 = x[u4]
+        y4 = y[u4]
+        F4 = FreF1(y4)
+        t1 = 1j*np.exp(-1j*y4**2)*F4**2
+        t2 = ICapolino(x4,y4)
+        G[u4] = (1/(2*np.pi))*np.exp(1j*x4**2)*(t1 + t2)
+
+    # Region 5
+    u5 = np.where( (x<(y/4))  & ( (y<24) & (y > 0.4)))
+    if len(u5[0]) >0:
+        print("u5")
+        x5 = x[u5]
+        y5 = y[u5]
+        G[u5] = (1j/np.pi) * FreF1(x5)*FreF1(y5) - GFresnelI(y5,x5)
+
+    # Region 6
+    u6 = np.where((y>24) & (y>x))
+    if len(u6[0]) >0:
+        x6 = x[u6]
+        y6 = y[u6]
+        G[u6] = (1j/np.pi) * FreF1(x6)*FreF1(y6) - GFresnelI(y6,x6)
+
+    # Region 7
+    u7 = np.where( ((y>(x/4)) & (y<x)) & ( (x<24) & (x > 0.4)))
+    if len(u7[0]) >0:
+        x7 = x[u7]
+        y7 = y[u7]
+        G[u7] = (1j/np.pi) * FreF1(x7)*FreF1(y7) - GFresnelI(y7,x7)
+
+    G[xneg] = -G[xneg]
+    G[yneg] = -G[yneg]
+
+    return G
+
+def ICapolino(x,y):
+    """ I(x,y) in Capolino paper
+
+    Parameters
+    ----------
+
+    x : array
+        real argument
+    y : array
+        real argument
+
+    Notes
+    -----
+
+    I(x,y) = \int_{x/y}^{1}  exp(-j \sigma^2 y^2) /( \sigma^2 + 1)
+
+   """
+   #def Integrand(sigma, y):
+   #    return np.exp(-1j*sigma[None,:]**2*y[:,None]**2)/(1+sigma[None,:]**2)
+   #sigma = np.linspace(x/y,1,N)
+    a0 = 0.98926061 # 14 a
+    a1 = 0.12808114 # 14 b
+    a2 = -1.59843183 # 14 c
+    a3 = 1.35987246  # 14 e
+    a4 = -0.37895149 # 14 f
+
+    ex = np.exp(-1j*x**2)
+    ey = np.exp(-1j*y**2)
+    fac = (1j/(2*y**2))
+    xsy = x/y
+    I0 = (1/y) * ( FreF1(x)*ex - FreF1(y)*ey )
+    I1 =  fac * (-ex + ey )
+    I2 = fac * (- xsy * ex + ey - I0)
+    I3 = fac * (- xsy**2 * ex + ey - 2*I1)
+    I4 = fac * (- xsy**3 * ex + ey - 3*I2)
+
+    return a0*I0 + a1*I1 + a2*I2 + a3*I3 + a4*I4
+
 def  FresnelI(x) :
     """ calculates Fresnel integral
 
@@ -316,6 +496,11 @@ def  FresnelI(x) :
 
     x : array
         real argument
+
+    Notes
+    -----
+
+    Calculate I(x) = \int_0^{\sqrt{x}} exp(- j t^2) dt 
 
     """
 
@@ -391,6 +576,10 @@ def  FresnelI(x) :
 
     return y
 
+def FreF1(x):
+    f1 = np.exp(1j*x**2)
+    C1 = np.sqrt((np.pi/8))*(1-1j)
+    return f1*(C1-FresnelI(x**2))
 
 def FreF(x) :
     """ F function from Pathack
@@ -448,9 +637,13 @@ def FreF(x) :
 def FreF2(x):
     """ F function using numpy fresnel function
 
+
+    F(x) = 2j _sqrt(x) exp(j x) \int_\{sqrt{x}^{\+infty} e^{-j u ^2} du
+
     Parameters
     ----------
-    Not working for large argument
+
+    Not working properly for large argument
 
     """
     y     = np.zeros(x.shape,dtype=complex)

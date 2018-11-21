@@ -6,8 +6,8 @@ from pylayers.antprop.diff import *
 # Metalic case : MacNamara Page 202
 #
 x = np.logspace(-4,1,100)
-y,ys,yl=FreF(x)
-y2=FreF2(x)
+y,ys,yl = FreF(x)
+y2 = FreF2(x)
 plt.ion()
 fig,ax1=plt.subplots(figsize=(10,5))
 ax1.semilogx(x,np.abs(ys),'k.',label='module FreF')

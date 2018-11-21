@@ -180,7 +180,7 @@ class Cone(PyLayers):
 
         return typ
 
-   def belong_seg_old(self,pta,phe,prob=True,visu=False):
+    def belong_seg_old(self,pta,phe,prob=True,visu=False):
         """ test if segment belong to cone
 
         Parameters

@@ -706,9 +706,9 @@ class Layout(PyLayers):
         if hasattr(self,'s2pc'):
             st = st + "s2pc : "+"from a Gs segment node to its 2 extremal points (tahe) coordinates\n"
         if hasattr(self,'s2pu'):
-            st = st + "s2pc : "+"from a Gs segment node to its 2 extremal points (tahe) index\n"
+            st = st + "s2pu : "+"from a Gs segment node to its 2 extremal points (tahe) index\n"
         if hasattr(self,'p2pu'):
-            st = st + "p2pc : "+"from a Gs point node to its coordinates\n"
+            st = st + "p2pu : "+"from a Gs point node to its coordinates\n"
         st = st + "\nUseful lists"+"\n----------------\n"
         #if hasattr(self,'iupnt'):
         #    st = st + "iupnt : get point index in self.pt from point id  "+"\n"
@@ -1147,7 +1147,7 @@ class Layout(PyLayers):
                 self.name[l[1]].append(l[0])
             except:
                 self.name[l[1]] = [l[0]]
-                
+
         # association
 
         # utmp = np.array(zip(-self.upnt,np.arange(len(self.upnt))))
@@ -1357,10 +1357,10 @@ class Layout(PyLayers):
         ptail = self.pt[:,self.tahe[0,:]]
         phead = self.pt[:,self.tahe[1,:]]
         A = np.vstack((ptail,phead)).T
-        self.s2pc[self.tsg,:]=A
+        self.s2pc[self.tsg,:] = A
 
 
-        # convert to compressed row sparse matrix 
+        # convert to compressed row sparse matrix
         # to be more efficient on row slicing
         self.s2pc = self.s2pc.tocsr()
         # for k in self.tsg:
@@ -1369,7 +1369,7 @@ class Layout(PyLayers):
         # This is wrong and asume a continuous indexation of points
         # TODO FIX : This problem cleanly
         #
-        # self.p2pc is only used in Gspos in outputGi_func only caled in case of 
+        # self.p2pc is only used in Gspos in outputGi_func only caled in case of
         # multiprocessing
         #
         # The temporary fix is to comment the 5 next lines
@@ -3472,8 +3472,7 @@ class Layout(PyLayers):
                                     self.name['AIR'],
                                     self.Gs[x]), lpnt)
 
-        pts = np.array(map(lambda x: self.seg2pts(
-            [x[0], x[1]]).reshape(4, 2), aseg))
+        pts = np.array(map(lambda x: self.seg2pts([x[0], x[1]]).reshape(4, 2), aseg))
         #map(lambda x: pt ,pts)
         N = np.shape(pts)[0]
         sector = []
@@ -4725,7 +4724,8 @@ class Layout(PyLayers):
         return(vn)
 
     def seg2pts(self, aseg):
-        """ convert segments array from Gs numerotation 
+        """ convert segments array from Gs numerotation
+
         to corresponding termination points array in pt
 
         Parameters
@@ -4749,7 +4749,10 @@ class Layout(PyLayers):
         >>> aseg = np.array([1,3,6])
         >>> pt =  L.seg2pts(aseg)
 
-        OBSOLETE : Use self.s2pc instead
+        Notes
+        -----
+
+        surprisingly self.s2pc is slower than this function
 
         """
 
@@ -4758,16 +4761,15 @@ class Layout(PyLayers):
 
         assert(len(np.where(aseg < 0)[0]) == 0)
         utahe = self.tgs[aseg]
-        if (utahe>=0).all():
-            tahe = self.tahe[:, utahe]
-            ptail = self.pt[:, tahe[0, :]]
-            phead = self.pt[:, tahe[1, :]]
-            pth = np.vstack((ptail, phead))
-
-            pth = pth.reshape(pth.shape[0], pth.shape[-1])
-            return pth
-        else:
-            pdb.set_trace()
+        #if (utahe>=0).all():
+        tahe = self.tahe[:, utahe]
+        ptail = self.pt[:, tahe[0, :]]
+        phead = self.pt[:, tahe[1, :]]
+        pth = np.vstack((ptail, phead))
+        pth = pth.reshape(pth.shape[0], pth.shape[-1])
+        return pth
+        #else:
+        #    pdb.set_trace()
 
     def segpt(self, ptlist=np.array([0])):
         """ return the seg list of a sequence of point number
@@ -5909,6 +5911,7 @@ class Layout(PyLayers):
 
         return fig, ax
 
+    #@profile
     def build(self, graph='tvirw', verbose=False, difftol=0.15, multi=False):
         """ build graphs
 
@@ -8016,6 +8019,7 @@ class Layout(PyLayers):
         self.Gi = rGi
         self.Gi.pos = rGi.pos
 
+    #@profile
     def outputGi(self, verbose=False, tqdmpos=0.):
         """ filter output of Gi edges
 
@@ -8073,6 +8077,7 @@ class Layout(PyLayers):
             if nstr1 > 0:
                 # central interaction is a segment
                 pseg1 = self.seg2pts(nstr1).reshape(2, 2).T
+                #pseg1 = self.s2pc[nstr1].toarray().reshape(2, 2).T
                 # list all potential successors of interaction i1
                 # v1.1 i2 = nx.neighbors(self.Gi, i1)
                 i2 = list(dict(self.Gi[i1]).keys())
@@ -8081,6 +8086,7 @@ class Layout(PyLayers):
                 # if starting from segment
                 if nstr0 > 0:
                     pseg0 = self.seg2pts(nstr0).reshape(2, 2).T
+                    #pseg0 = self.s2pc[nstr0].toarray().reshape(2, 2).T
                     # if nstr0 and nstr1 are connected segments
                     # v1.1 if (len(np.intersect1d(nx.neighbors(self.Gs, nstr0), nx.neighbors(self.Gs, nstr1))) == 0):
                     if (len(np.intersect1d(self.Gs[nstr0], self.Gs[nstr1])) == 0):
@@ -8122,7 +8128,8 @@ class Layout(PyLayers):
                 nb_nstr0 = self.Gs[nstr0]
                 nb_nstr1 = self.Gs[nstr1]
 
-                common_point = np.intersect1d(nb_nstr0,nb_nstr1)
+                #common_point = np.intersect1d(nb_nstr0,nb_nstr1)
+                common_point = np.array([x for x in nb_nstr0 if x in nb_nstr1]).astype('int')
 
                 if len(common_point) == 1:
                     num0 = [x for x in nb_nstr0 if x != common_point]
@@ -8162,7 +8169,8 @@ class Layout(PyLayers):
                         #if ((e[0]==(53,17)) and (e[1]==(108,17,18))):
                         #    typ, prob = cn.belong_seg(pta, phe,visu=True)
                         #else:
-                        typ, prob = cn.belong_seg(pta, phe, prob=False)
+                        #typ, prob = cn.belong_seg_old(pta, phe, prob=False)
+                        typ = cn.belong_seg(pta, phe)
                         # if bs.any():
                         #    plu.displot(pta[:,bs],phe[:,bs],color='g')
                         # if ~bs.any():
@@ -8172,7 +8180,8 @@ class Layout(PyLayers):
                     if len(i1) == 2:
                         Mpta = geu.mirror(pta, pseg1[:, 0], pseg1[:, 1])
                         Mphe = geu.mirror(phe, pseg1[:, 0], pseg1[:, 1])
-                        typ, prob = cn.belong_seg(Mpta, Mphe, prob=False)
+                        typ = cn.belong_seg(Mpta, Mphe)
+                        #typ, prob = cn.belong_seg_old(Mpta, Mphe, prob=False)
                     # keep segment with typ <> 0
                     utypseg = typ != 0
                     isegkeep = isegments[utypseg]
@@ -8417,7 +8426,8 @@ class Layout(PyLayers):
                     elif li1 == 2:
                         Mpta = geu.mirror(pta, pseg1[:, 0], pseg1[:, 1])
                         Mphe = geu.mirror(phe, pseg1[:, 0], pseg1[:, 1])
-                        typ, prob = cn.belong_seg(Mpta, Mphe, prob=False)
+                        #typ, prob = cn.belong_seg_old(Mpta, Mphe, prob=False)
+                        typ = cn.belong_seg(Mpta, Mphe)
                         # printi0,i1
                         # if ((i0 == (6, 0)) & (i1 == (7, 0))):
                         #    pdb.set_trace()
