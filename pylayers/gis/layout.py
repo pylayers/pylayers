@@ -12,7 +12,6 @@
 
 """
 from __future__ import print_function
-import ipdb
 try:
     from tvtk.api import tvtk
     from mayavi import mlab
@@ -3455,7 +3454,7 @@ class Layout(pro.PyLayers):
         -----
 
         1. Remove nodes which are not connected
-
+        2. Remove supperimposed segments
         """
         lk = list(self.Gs.node.keys())
         for n in lk:
@@ -3467,6 +3466,21 @@ class Layout(pro.PyLayers):
                 except:
                     pass
         self.Np = len(np.nonzero(np.array(list(self.Gs.node.keys())) < 0)[0])
+        
+        aseg_conn=[]
+        for seg in self.Gs.nodes():
+            if seg >0:
+                n0,n1 = list(nx.neighbors(self.Gs,seg))
+                aseg_conn.append([seg,n0,n1])
+        aseg_conn = np.array(aseg_conn)
+
+        # aseg_conn=np.array([[list(nx.neighbors(self.Gs,x))] for x in self.Gs.nodes() if x >0])
+        uni,upos=np.unique(aseg_conn[:,1:],axis=0,return_index=True)
+        utbd = [x for x in range(len(aseg_conn)) if not x in upos] 
+        tbd = aseg_conn[utbd,0]
+        for k in tbd:
+            self.del_segment(k)
+
         self.g2npy()
 
     def info_segment(self, s1):
@@ -10361,7 +10375,7 @@ class Layout(pro.PyLayers):
 
         sc = tvtk.UnsignedCharArray()
         sc.from_array(color)
-
+        
         # manage floor
 
         # if Gt doesn't exists
