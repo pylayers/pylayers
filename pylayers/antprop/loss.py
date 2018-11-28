@@ -773,7 +773,6 @@ def PL(fGHz,pts,p,n=2.0,dB=True,d0=1):
 
     return(PL)
 
-
 def Losst(L,fGHz,p1,p2,dB=True):
     """  calculate Losses between links p1 p2
 

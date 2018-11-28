@@ -884,7 +884,7 @@ class Coverage(PyLayers):
                      'a' :-1,
                      'db':True,
                      'cmap' :cm.jet,
-                     'best':False
+                     'best':True
                    }
 
         title = self.dap[list(self.dap.keys())[0]].s.name+ ' : '
