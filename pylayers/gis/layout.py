@@ -1629,8 +1629,19 @@ class Layout(pro.PyLayers):
             #coords, nodes, ways, relations, m = osm.osmparse(fileosm, typ=self.typ)
             # typ outdoor parse ways.buildings
             # typ indoor parse ways.ways
-            coords, nodes, ways, relations, m = osm.osmparse(fileosm)
-            self.coordinates = 'latlon'
+            # coords, nodes, ways, relations, m = osm.osmparse(fileosm)
+            coords, nodes, ways, dpoly, m = osm.getosm(address = address,
+                                                       latlon = latlon,
+                                                       dist_m = dist_m,
+                                                       cart = cart,
+                                                       file=kwargs['_fileosm'],indoor=self.typ)
+            if cart:
+                self.coordinates='cart'
+            else:
+                self.coordinates='latlon'
+
+
+            # self.coordinates = 'latlon'
             self._filename = kwargs['_fileosm'].replace('osm', 'lay')
 
         # 2 valid typ : 'indoor' and 'building'
@@ -1799,7 +1810,6 @@ class Layout(pro.PyLayers):
         for k in self.sl.keys():
             if k not in self.name:
                 self.name[k] = []
-
         # convert graph Gs to numpy arrays for speed up post processing
         self.g2npy()
 
@@ -3441,7 +3451,7 @@ class Layout(pro.PyLayers):
         -----
 
         1. Remove nodes which are not connected
-
+        2. Remove supperimposed segments
         """
         lk = list(self.Gs.node.keys())
         for n in lk:
@@ -3453,6 +3463,21 @@ class Layout(pro.PyLayers):
                 except:
                     pass
         self.Np = len(np.nonzero(np.array(list(self.Gs.node.keys())) < 0)[0])
+        
+        aseg_conn=[]
+        for seg in self.Gs.nodes():
+            if seg >0:
+                n0,n1 = list(nx.neighbors(self.Gs,seg))
+                aseg_conn.append([seg,n0,n1])
+        aseg_conn = np.array(aseg_conn)
+
+        # aseg_conn=np.array([[list(nx.neighbors(self.Gs,x))] for x in self.Gs.nodes() if x >0])
+        uni,upos=np.unique(aseg_conn[:,1:],axis=0,return_index=True)
+        utbd = [x for x in range(len(aseg_conn)) if not x in upos] 
+        tbd = aseg_conn[utbd,0]
+        for k in tbd:
+            self.del_segment(k)
+
         self.g2npy()
 
     def info_segment(self, s1):
@@ -10344,7 +10369,7 @@ class Layout(pro.PyLayers):
 
         sc = tvtk.UnsignedCharArray()
         sc.from_array(color)
-
+        
         # manage floor
 
         # if Gt doesn't exists
