@@ -12,6 +12,7 @@
 
 """
 from __future__ import print_function
+import ipdb
 try:
     from tvtk.api import tvtk
     from mayavi import mlab
@@ -1631,8 +1632,19 @@ class Layout(pro.PyLayers):
             #coords, nodes, ways, relations, m = osm.osmparse(fileosm, typ=self.typ)
             # typ outdoor parse ways.buildings
             # typ indoor parse ways.ways
-            coords, nodes, ways, relations, m = osm.osmparse(fileosm)
-            self.coordinates = 'latlon'
+            # coords, nodes, ways, relations, m = osm.osmparse(fileosm)
+            coords, nodes, ways, dpoly, m = osm.getosm(address = address,
+                                                       latlon = latlon,
+                                                       dist_m = dist_m,
+                                                       cart = cart,
+                                                       file=kwargs['_fileosm'],indoor=True)
+            if cart:
+                self.coordinates='cart'
+            else:
+                self.coordinates='latlon'
+
+
+            # self.coordinates = 'latlon'
             self._filename = kwargs['_fileosm'].replace('osm', 'lay')
 
         # 2 valid typ : 'indoor' and 'building'
@@ -1802,7 +1814,6 @@ class Layout(pro.PyLayers):
         for k in self.sl.keys():
             if k not in self.name:
                 self.name[k] = []
-
         # convert graph Gs to numpy arrays for speed up post processing
         self.g2npy()
 

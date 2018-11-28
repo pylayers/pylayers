@@ -33,6 +33,7 @@ from mpl_toolkits.basemap import Basemap
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from mpl_toolkits.axes_grid1.colorbar import colorbar
 import smopy
+import copy
 
 def maxloc(f, threshold=-np.sqrt(2)):
     """ determine local maximum above a threshold
@@ -1151,7 +1152,7 @@ class Ezone(PyLayers):
         latmax = np.max(triang.y)
         extent = (lonmin, lonmax, latmin, latmax)
         print(extent)
-        mp = smopy.Map((extent[2]+0.1, extent[0]+0.1, extent[3]-0.1,extent[1]-0.1), z=12)
+        mp = smopy.Map((extent[2]+0.1, extent[0]+0.1, extent[3]-0.1,extent[1]-0.1), z=10)
         if bbuild:
             f, ax, d = self.show(fig=f,
                                  ax=ax,
@@ -1163,11 +1164,12 @@ class Ezone(PyLayers):
                                  extent=self.extent)
 
         #ax = plt.gca()
+        triang_ = copy.deepcopy(triang)
         if mp!=[]:
-            triang.x,triang.y = mp.to_pixels(triang.y, triang.x)
+            triang_.x,triang_.y = mp.to_pixels(triang_.y, triang_.x)
         #ax = mp.show_mpl(figsize=(10,10))
         ax = plt.gca()
-        tc = ax.tripcolor(triang,
+        tc = ax.tripcolor(triang_,
                           val.flatten(),
                           #shading='gouraud',
                           #shading='flat',
