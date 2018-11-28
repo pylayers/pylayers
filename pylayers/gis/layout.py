@@ -1636,7 +1636,7 @@ class Layout(pro.PyLayers):
                                                        latlon = latlon,
                                                        dist_m = dist_m,
                                                        cart = cart,
-                                                       file=kwargs['_fileosm'],indoor=True)
+                                                       file=kwargs['_fileosm'],indoor=self.typ)
             if cart:
                 self.coordinates='cart'
             else:
