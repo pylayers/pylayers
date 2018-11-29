@@ -864,7 +864,6 @@ def osmparse_new(_filename,**kwargs):
 
     """
 
-<<<<<<< HEAD
 def osmparse(_filename,typ='indoor',verbose=False,c=True,n=True,w=True,r=True,cart=False):
     """ parse osm files
 
