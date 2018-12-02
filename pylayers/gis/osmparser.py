@@ -23,12 +23,6 @@ import pylayers.util.geomutil as geu
 from mpl_toolkits.basemap import Basemap
 from matplotlib.collections import PolyCollection
 import matplotlib.pyplot as plt
-# imposm is required for handling osm files
-# the installation of imposm is not straightforward
-# try:
-#     from imposm.parser import OSMParser
-# except:
-#     print("Warning : imposm seems not to be installed")
 import networkx as nx
 import numpy as np
 import xml.etree.ElementTree as xml
@@ -54,8 +48,8 @@ class Way(object):
         refs  :
         tags  :
         coords :
-        nodes_sign : int 
-            if data comes from osm nodes are >0 in ways sequence 
+        nodes_sign : int
+            if data comes from osm nodes are >0 in ways sequence
             if data comes from josm editor nodes are <0 ways sequence
 
         """
@@ -684,7 +678,6 @@ class FloorPlan(nx.DiGraph):
         return fig,ax
 #
 #  Functions
-#     osmparse
 #     getbdg
 #
 #
@@ -710,13 +703,21 @@ def getosm(**kwargs):
     Notes
     -----
 
-    if latlon tuple is precised it has priority over the string
+    There are 3 ways to read an OpenStreeMap structure
+
+    1 - From an osm file ex : filename = 'B11.osm'
+    2 - From an osm 
+
+    if latlon tuple is precised, it has priority over the address string
 
     """
-    address = kwargs.pop('address', 'Rennes')
+
+    filename = kwargs.pop('filename','')
+    address = kwargs.pop('address','Rennes')
     latlon = kwargs.pop('latlon', 0)
     dist_m = kwargs.pop('dist_m', 400)
     bcart = kwargs.pop('bcart', False)
+
     level_height = kwargs.pop('level_height', 3.45)
     typical_height = kwargs.pop('typical_height', 10)
 
@@ -733,21 +734,26 @@ def getosm(**kwargs):
         lon = latlon[1]
 
     r_earth = 6370e3
+
     alpha = (dist_m/r_earth)*rad_to_deg
+
     Osm = OsmApi()
 
     #
     # get map around the specified coordinates
     #
-    if file != '':
-        e = xml.parse(file).getroot()
+
+    if filename != '':
+        e = xml.parse(filename).getroot()
         osmmap=[]
         lnode_key=['id','lat','lon','visiblity']
         lway_key=['id','visiblity']
+
         for i in e:
             d={}
             d['type']=i.tag
             d['data']=i.attrib
+
             if d['type'] == 'node':
                 for k in lnode_key:
                     try:
@@ -758,6 +764,7 @@ def getosm(**kwargs):
                         if not 'action' in d['data']:
                             d['data'][k]=-d['data'][k]
                 d['data']['tag'] = {}
+
             elif d['type'] == 'way':
                 lk = i.getchildren()
                 nd=[]
@@ -850,248 +857,6 @@ def getosm(**kwargs):
         dpoly[iw].coorddeter()
 
     return coords,nodes,ways,dpoly,m
-
-def osmparse_new(_filename,**kwargs):
-    """ new osmparser without requirement for imposm
-
-    Returns
-    -------
-
-    coords : Coords
-    nodes  : Nodes
-    ways   : Ways
-    relations : Relations
-
-    """
-
-def osmparse(_filename,typ='indoor',verbose=False,c=True,n=True,w=True,r=True,cart=False):
-    """ parse osm files
-
-    Parameters
-    ----------
-
-    typ : string
-        indoor | outdoor
-    verbose : boolean
-        default : False
-    c : boolean
-        read coords
-    n : boolean
-        read nodes
-    w : boolean
-        read  ways
-    r : boolean
-        read relations
-    if c:
-        coords = Coords()
-        coords.clean()
-
-    Returns
-    -------
-
-    coords : Coords
-    nodes  : Nodes
-    ways   : Ways
-    relations : Relations
-    m : Basemap
-
-    """
-
-    if (('/' in _filename) or ('//' in _filename)):
-        filename = _filename
-    else:
-        filename = pyu.getlong(_filename,os.path.join('gis','osm'))
-    #
-    # Read coords and create basemap converter
-    #
-    if c:
-        coords = Coords()
-        coords.clean()
-        coords_parser = OSMParser(concurrency=4, coords_callback=coords.coords)
-        if verbose:
-            print("parsing coords")
-
-        coords_parser.parse(filename)
-
-        m = coords.cartesian(cart=cart)
-
-        if verbose:
-            print(str(coords.cpt))
-    else:
-        coords = None
-    #
-    # Read nodes
-    #
-    if n:
-        nodes = Nodes()
-        nodes.clean()
-        nodes_parser = OSMParser(concurrency=4, nodes_callback=nodes.nodes)
-
-        if verbose:
-            print("parsing nodes")
-
-        nodes_parser.parse(filename)
-
-        if verbose:
-            print(str(nodes.cpt))
-    else:
-        nodes = None
-
-    #
-    # Read ways
-    #
-    if w:
-        ways = Ways()
-        ways.clean()
-        if typ=='outdoor':
-            ways_parser = OSMParser(concurrency=4, ways_callback=ways.building)
-        if typ=='indoor':
-            ways_parser = OSMParser(concurrency=4, ways_callback=ways.ways)
-        if verbose:
-            print("parsing ways")
-        ways_parser.parse(filename)
-
-        if verbose:
-            print(str(ways.cpt))
-
-        # convert lat,lon in cartesian
-        ways.eval(coords)
-    else:
-        ways = None
-
-    #
-    # Read relations
-    #
-    if r:
-        relations = Relations()
-        relations.clean()
-        relations_parser = OSMParser(concurrency=4,relations_callback=relations.relations)
-
-        if verbose:
-            print("parsing relations")
-        relations_parser.parse(filename)
-
-        if verbose:
-            print(str(relations.cpt))
-    else:
-        relations = None
-
-    return coords,nodes,ways,relations,m
-=======
-# def osmparse(_filename,typ='indoor',verbose=False,c=True,n=True,w=True,r=True,cart=False):
-#     """ parse osm files
-
-#     Parameters
-#     ----------
-
-#     typ : string
-#         indoor | outdoor
-#     verbose : boolean
-#         default : False
-#     c : boolean
-#         read coords
-#     n : boolean
-#         read nodes
-#     w : boolean
-#         read  ways
-#     r : boolean
-#         read relations
-#     if c:
-#         coords = Coords()
-#         coords.clean()
-
-#     Returns
-#     -------
-
-#     coords : Coords
-#     nodes  : Nodes
-#     ways   : Ways
-#     relations : Relations
-
-#     """
-
-#     if (('/' in _filename) or ('//' in _filename)):
-#         filename = _filename
-#     else:
-#         filename = pyu.getlong(_filename,os.path.join('gis','osm'))
-#     #
-#     # Read coords and create basemap converter
-#     #
-#     if c:
-#         coords = Coords()
-#         coords.clean()
-#         coords_parser = OSMParser(concurrency=4, coords_callback=coords.coords)
-#         if verbose:
-#             print("parsing coords")
-
-#         coords_parser.parse(filename)
-
-#         m = coords.cartesian(cart=cart)
-
-#         if verbose:
-#             print(str(coords.cpt))
-#     else:
-#         coords = None
-#     #
-#     # Read nodes
-#     #
-#     if n:
-#         nodes = Nodes()
-#         nodes.clean()
-#         nodes_parser = OSMParser(concurrency=4, nodes_callback=nodes.nodes)
-
-#         if verbose:
-#             print("parsing nodes")
-
-#         nodes_parser.parse(filename)
-
-#         if verbose:
-#             print(str(nodes.cpt))
-#     else:
-#         nodes = None
-
-#     #
-#     # Read ways
-#     #
-#     if w:
-#         ways = Ways()
-#         ways.clean()
-#         if typ=='outdoor':
-#             ways_parser = OSMParser(concurrency=4, ways_callback=ways.building)
-#         if typ=='indoor':
-#             ways_parser = OSMParser(concurrency=4, ways_callback=ways.ways)
-#         if verbose:
-#             print("parsing ways")
-#         ways_parser.parse(filename)
-
-#         if verbose:
-#             print(str(ways.cpt))
-
-#         # convert lat,lon in cartesian
-#         ways.eval(coords)
-#     else:
-#         ways = None
-
-#     #
-#     # Read relations
-#     #
-#     if r:
-#         relations = Relations()
-#         relations.clean()
-#         relations_parser = OSMParser(concurrency=4,relations_callback=relations.relations)
-
-#         if verbose:
-#             print("parsing relations")
-#         relations_parser.parse(filename)
-
-#         if verbose:
-#             print(str(relations.cpt))
-#     else:
-#         relations = None
-
-#     return coords,nodes,ways,relations,m
->>>>>>> e0acd90ffc4c7b47b989993278f8a92372697a70
-
 
 def extract(alat,alon,fileosm,fileout):
     """ extraction of an osm sub region using osmconvert

@@ -1591,11 +1591,14 @@ class Layout(pro.PyLayers):
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
-        self.typ = kwargs['typ']
-        address = kwargs['address']
-        latlon = eval(kwargs['latlon'])
-        dist_m = kwargs['dist_m']
-        cart = kwargs['cart']
+        self._fileosm = kwargs.pop('_filesosm','')
+        self.typ = kwargs.pop('typ','indoor')
+        address = kwargs.pop('address','Rennes')
+        latlon =  kwargs.pop('latlon',(48.4,-1.7))
+        if type(latlon) == 'str':
+            latlon = eval(latlon)
+        dist_m = kwargs.pop('dist_m',200)
+        cart = kwargs.pop('cart',False)
 
         #
         #  zceil ansd zfloor are obtained from actual data
@@ -1607,7 +1610,7 @@ class Layout(pro.PyLayers):
         self.zceil = -1e10
         self.zfloor = 1e10
 
-        if kwargs['_fileosm'] == '':  # by using osmapi address or latlon
+        if self._fileosm == '':  # by using osmapi address or latlon
             coords, nodes, ways, dpoly, m = osm.getosm(address = address,
                                                        latlon = latlon,
                                                        dist_m = dist_m,
@@ -1625,16 +1628,15 @@ class Layout(pro.PyLayers):
                     str(lat).replace('.', '_') + '_lon_' + \
                     str(lon).replace('.', '_') + '.ini'
         else:  # by reading an osm file
-            fileosm = pyu.getlong(kwargs['_fileosm'], os.path.join('struc', 'osm'))
+            # The osm file is supposed to be in $PROJECT/struc/osm directory
+            fileosm = pyu.getlong(self._fileosm, os.path.join('struc', 'osm'))
             #coords, nodes, ways, relations, m = osm.osmparse(fileosm, typ=self.typ)
             # typ outdoor parse ways.buildings
             # typ indoor parse ways.ways
             # coords, nodes, ways, relations, m = osm.osmparse(fileosm)
-            coords, nodes, ways, dpoly, m = osm.getosm(address = address,
-                                                       latlon = latlon,
-                                                       dist_m = dist_m,
-                                                       cart = cart,
-                                                       file=kwargs['_fileosm'],indoor=self.typ)
+            coords, nodes, ways, dpoly, m = osm.getosm(cart = cart,
+                                                       filename = fileosm,
+                                                       indoor = self.typ)
             if cart:
                 self.coordinates='cart'
             else:
