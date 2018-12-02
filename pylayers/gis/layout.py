@@ -203,35 +203,21 @@ class Layout(pro.PyLayers):
     zmin
 
     """
-
-    def __init__(self, string='',
-                 _filematini='matDB.ini',
-                 _fileslabini='slabDB.ini',
-                 _filefur='',
-                 bcheck=False,          # to check Gs
-                 bbuild=False,         # to build graphs
-                 bgraphs=False,         # to load graph
-                 #bindoor=False,        # to allow indoor penetration for outdoor situations
-                 #bdiffraction=False,   # to include diffraction in Gi 
-                 bverbose=False,
-                 bcartesian=True,
-                 xlim=(),
-                 dist_m=400,
-                 typ='indoor'):
+    def __init__(self,arg='',**kwargs):
         """ object constructor
 
         Parameters
         ----------
 
-        arg : string
-            layout file name, address or '(lat,lon)'
-        _filematini :
+        arg : string or tuple
+            layout file name, address or (lat,lon) or '(lat,lon)'
+        mat :
             material dB file name
-        _fileslabini :
+        slab :
             slab dB file name
-        _filefur :
+        fur :
             furniture file name
-        force : booleanlo
+        force : boolean
         check : boolean
         build : boolean
         verbose : boolean
@@ -243,13 +229,19 @@ class Layout(pro.PyLayers):
 
 
         """
+        self.arg = arg
 
-        # mat = sb.MatDB()
-        # mat.load(_filematini)
-
-        # self.sl = sb.SlabDB()
-        # self.sl.mat = mat
-        # self.sl.load(_fileslabini)
+        self._filematini = kwargs.pop('mat','matDB.ini')
+        self._fileslabini = kwargs.pop('slab','slabDB.ini')
+        self._filefur = kwargs.pop('fur','')
+        self.bcheck = kwargs.pop('bcheck',False)
+        self.bbuild = kwargs.pop('bbuild',False)
+        self.bgraphs = kwargs.pop('bgraphs',False)
+        self.bverbose = kwargs.pop('bverbose',False)
+        self.bcartesian = kwargs.pop('bcartesian',True)
+        self.xlim = kwargs.pop('xlim',())
+        self.dist_m = kwargs.pop('dist_m',400)
+        self.typ = kwargs.pop('typ','outdoor')
 
         self.labels = {}
 
@@ -260,7 +252,7 @@ class Layout(pro.PyLayers):
 
         #
         # Initializing graphs
-        #
+        # Gs Gr Gt Gm
 
         self.Gs = nx.Graph(name='Gs')
         self.Gr = nx.Graph(name='Gr')
@@ -272,25 +264,13 @@ class Layout(pro.PyLayers):
         self.lbltg = []
 
         self.Gt.pos = {}
-
-
         self._shseg = {}
-        #
-        # related files
-        #
-
-        self.fileslabini = _fileslabini
-        self.filematini = _filematini
-        self.filefur = _filefur
 
         self.hasboundary = False
         self.coordinates = 'cart'
         self.version = '1.3'
-        if typ in ['indoor','outdoor','floorplan']:
-            self.typ = typ
-        else:
-            print("Layout : unknown Layout typ")
-        # boolean
+
+        assert(self.typ in ['indoor','outdoor','floorplan'])
 
         self.isbuilt = False
         self.loadosm = False
@@ -328,10 +308,12 @@ class Layout(pro.PyLayers):
         self.display['overlay_file'] = ""
         self.display['overlay_axis'] = ""
         # self.display['layerset'] = self.sl.keys()
-        if xlim!=():
-            self.display['box']= xlim
+
+        if self.xlim!=():
+            self.display['box']= self.xlim
         else:
             self.display['box'] = (-50, 50, -50, 50)
+
         self.name = {}
         self.ax = self.display['box']
         self.zmin = 0
@@ -346,16 +328,16 @@ class Layout(pro.PyLayers):
         # Layout main argument
         #   If no .ini extension provided it is added
         #
-        if type(string) is bytes:
-            string = string.decode('utf-8')
+        if type(self.arg) is bytes:
+            self.arg = self.arg.decode('utf-8')
 
-        arg, ext = os.path.splitext(string)
+        arg, ext = os.path.splitext(self.arg)
         if arg != '':
             if ext == '.ini':
-                self._filename = string
+                self._filename = self.arg
                 loadlay = True
             if ext == '.lay':
-                self._filename = string
+                self._filename = self.arg
                 loadlay = True
             elif ext == '.osm':
                 self._filename = arg + '.lay'
@@ -368,7 +350,7 @@ class Layout(pro.PyLayers):
         else:  # No argument
             self._filename = 'newfile.lay'
             newfile = True
-            self.sl = sb.SlabDB(fileslab=_fileslabini, filemat=_filematini)
+            self.sl = sb.SlabDB(fileslab=self._fileslabini, filemat=self._filematini)
             self.zfloor = 0.
             self.zceil = self.maxheight
 
@@ -381,21 +363,21 @@ class Layout(pro.PyLayers):
                     newfile = True
                     print("new file - creating a void Layout", self._filename)
             elif loadosm:  # load .osm file
-                self.importosm(fileosm=string, cart=True, typ=self.typ)
+                self.importosm(fileosm=self.arg, cart=True, typ=self.typ)
                 self.loadosm = True
             elif loadres:
-                self.importres(_fileres=string)
+                self.importres(_fileres=self.arg)
                 self.sl = sb.SlabDB()
-            elif '(' in str(string):  # load from osmapi latlon in string
-                self.importosm(latlon=string, dist_m=dist_m, cart=True, typ=self.typ)
+            elif '(' in str(string):  # load from osmapi latlon (string or tuple
+                self.importosm(latlon=self.arg, dist_m=dist_m, cart=True, typ=self.typ)
                 self.loadosm = True
             else:  # load from address geocoding
-                self.importosm(address=string, dist_m=dist_m, cart=True,typ=self.typ)
+                self.importosm(address=self.arg, dist_m=dist_m, cart=True, typ=self.typ)
                 self.loadosm = True
 
             # add boundary if it not exist
-            if (not self.hasboundary) or (xlim!=()):
-                self.boundary(xlim=xlim)
+            if (not self.hasboundary) or (self.xlim != ()):
+                self.boundary(xlim = self.xlim)
 
             self.subseg()
             self.updateshseg()
@@ -408,17 +390,17 @@ class Layout(pro.PyLayers):
             #
             # check layout
             #
-            bconsistent = True
-            if bcheck:
-                bconsistent,dseg = self.check()
+            self.bconsistent = True
+            if self.bcheck:
+                self.bconsistent,dseg = self.check()
 
             # if Layout is correctly described
             # check if the graph gpickle files have been built
-            if bconsistent:
+            if self.bconsistent:
                 #
                 # build and save graphs
                 #
-                if bbuild:
+                if self.bbuild:
                     # ans = raw_input('Do you want to build the layout (y/N) ? ')
                     # if ans.lower()=='y'
                     self.build()
@@ -427,9 +409,7 @@ class Layout(pro.PyLayers):
                 #
                 # load graphs from file
                 #
-                elif bgraphs:
-                    if os.path.splitext(self._filename)[1]=='.ini':
-                        dirname = self._filename.replace('.ini','')
+                elif self.bgraphs:
                     if os.path.splitext(self._filename)[1]=='.lay':
                         dirname = self._filename.replace('.lay','')
                     path = os.path.join(pro.basename,
@@ -515,8 +495,10 @@ class Layout(pro.PyLayers):
         st = st + "\n"
         st = st + "xrange : " + str(self.ax[0:2]) + "\n"
         st = st + "yrange : " + str(self.ax[2:]) + "\n"
-        st = st + "center : " + "( %.2f,%.2f)" % (self.pg[0],self.pg[1]) + "\n"
-        st = st + "radius : %.2f " % self.radius + "\n"
+        if hasattr(self,'pg'):
+            st = st + "center : " + "( %.2f,%.2f)" % (self.pg[0],self.pg[1]) + "\n"
+        if hasattr(self,'radius'):
+            st = st + "radius : %.2f " % self.radius + "\n"
         # st = st + "\nUseful dictionnaries" + "\n----------------\n"
         # if hasattr(self,'dca'):
         #     st = st + "dca {cycle : []} cycle with an airwall" +"\n"
@@ -1605,7 +1587,8 @@ class Layout(pro.PyLayers):
             coords, nodes, ways, dpoly, m = osm.getosm(address = address,
                                                        latlon = latlon,
                                                        dist_m = dist_m,
-                                                       bcart = cart)
+                                                       bcart = cart,
+                                                       typ = self.typ)
             self.typ = 'outdoor'
             if cart:
                 self.coordinates='cart'
@@ -1627,7 +1610,7 @@ class Layout(pro.PyLayers):
             # coords, nodes, ways, relations, m = osm.osmparse(fileosm)
             coords, nodes, ways, dpoly, m = osm.getosm(cart = cart,
                                                        filename = fileosm,
-                                                       indoor = self.typ)
+                                                       typ = self.typ)
             if cart:
                 self.coordinates = 'cart'
             else:
@@ -1635,7 +1618,7 @@ class Layout(pro.PyLayers):
 
 
             # self.coordinates = 'latlon'
-            self._filename = kwargs['_fileosm'].replace('osm', 'lay')
+            self._filename = self._fileosm.replace('osm', 'lay')
 
         # 2 valid typ : 'indoor' and 'building'
 
@@ -1772,7 +1755,7 @@ class Layout(pro.PyLayers):
         self.pur = self.m(self.extent[1],self.extent[3])
         self.extent_c = (self.pll[0],self.pur[0],self.pll[1],self.pur[1])
 
-        if ((kwargs['cart']) and (self.coordinates!='cart')):
+        if (cart and (self.coordinates!='cart')):
              x, y = self.m(lon, lat)
              self.Gs.pos = {k: (x[i], y[i]) for i, k in enumerate(self.Gs.pos)}
              self.coordinates = 'cart'
@@ -1792,10 +1775,10 @@ class Layout(pro.PyLayers):
         # 5) load slabs database
 
         mat = sb.MatDB()
-        mat.load(self.filematini)
+        mat.load(self._filematini)
         self.sl = sb.SlabDB()
         self.sl.mat = mat
-        self.sl.load(self.fileslabini)
+        self.sl.load(self._fileslabini)
 
         #
         # update self.name with existing slabs database entries
