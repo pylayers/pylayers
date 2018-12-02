@@ -706,41 +706,42 @@ def getosm(**kwargs):
     There are 3 ways to read an OpenStreeMap structure
 
     1 - From an osm file ex : filename = 'B11.osm'
-    2 - From an osm 
+    2 - From an osm (lat,lon) string or tuple of float
+    3 - From an osm address string
 
     if latlon tuple is precised, it has priority over the address string
 
     """
 
     filename = kwargs.pop('filename','')
-    address = kwargs.pop('address','Rennes')
-    latlon = kwargs.pop('latlon', 0)
-    dist_m = kwargs.pop('dist_m', 400)
-    bcart = kwargs.pop('bcart', False)
+    bcart = kwargs.pop('cart', False)
 
-    level_height = kwargs.pop('level_height', 3.45)
-    typical_height = kwargs.pop('typical_height', 10)
+    if filename == '':
+        address = kwargs.pop('address','Rennes')
+        latlon = kwargs.pop('latlon', 0)
+        dist_m = kwargs.pop('dist_m', 400)
+        level_height = kwargs.pop('level_height', 3.45)
+        typical_height = kwargs.pop('typical_height', 10)
 
-    rad_to_deg = (180/np.pi)
+        rad_to_deg = (180/np.pi)
+        if latlon == 0:
+            place = geo.osm(address)
+            try:
+                lat, lon = place.latlng
+            except:
+                print(place)
+        else:
+            lat = latlon[0]
+            lon = latlon[1]
 
-    if latlon==0:
-        place = geo.osm(address)
-        try:
-            lat, lon = place.latlng
-        except:
-            print(place)
-    else:
-        lat = latlon[0]
-        lon = latlon[1]
+        r_earth = 6370e3
 
-    r_earth = 6370e3
-
-    alpha = (dist_m/r_earth)*rad_to_deg
+        alpha = (dist_m/r_earth)*rad_to_deg
 
     Osm = OsmApi()
 
     #
-    # get map around the specified coordinates
+    # get map from osm file
     #
 
     if filename != '':
@@ -797,7 +798,7 @@ def getosm(**kwargs):
     ways = Ways()
     ways.clean()
     if indoor:
-        ways.readmap(osmmap,coords,typ='')
+        ways.readmap(osmmap, coords, typ='')
     else:
         ways.readmap(osmmap,coords)
     # list of nodes involved in buildings
@@ -848,7 +849,7 @@ def getosm(**kwargs):
                     nb_levels=max(nb_levels)
                 except:
                     nb_levels=2
-            ways.way[iw].tags['z']=(min_height,nb_levels*level_height)
+            ways.way[iw].tags['z'] =(min_height,nb_levels*level_height)
         else:
             ways.way[iw].tags['z'] = (0,typical_height)
 

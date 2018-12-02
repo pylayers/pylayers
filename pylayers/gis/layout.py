@@ -381,7 +381,7 @@ class Layout(pro.PyLayers):
                     newfile = True
                     print("new file - creating a void Layout", self._filename)
             elif loadosm:  # load .osm file
-                self.importosm(_fileosm=string, cart=True, typ=self.typ)
+                self.importosm(fileosm=string, cart=True, typ=self.typ)
                 self.loadosm = True
             elif loadres:
                 self.importres(_fileres=string)
@@ -1552,7 +1552,7 @@ class Layout(pro.PyLayers):
         Parameters
         ----------
 
-        _fileosm : string
+        fileosm : string
         address : string
             address to be geocoded
         latlon : tuple
@@ -1579,25 +1579,8 @@ class Layout(pro.PyLayers):
         pylayers.gis.osmparser.osmparse
 
         """
-        defaults = {'_fileosm': '',
-                    'address': 'Rennes',
-                    'typ': 'indoor',
-                    'latlon': '0',
-                    'dist_m': 200,
-                    'cart': False
-                    }
 
-        for k in defaults:
-            if k not in kwargs:
-                kwargs[k] = defaults[k]
-
-        self._fileosm = kwargs.pop('_filesosm','')
-        self.typ = kwargs.pop('typ','indoor')
-        address = kwargs.pop('address','Rennes')
-        latlon =  kwargs.pop('latlon',(48.4,-1.7))
-        if type(latlon) == 'str':
-            latlon = eval(latlon)
-        dist_m = kwargs.pop('dist_m',200)
+        self._fileosm = kwargs.pop('fileosm','')
         cart = kwargs.pop('cart',False)
 
         #
@@ -1611,6 +1594,14 @@ class Layout(pro.PyLayers):
         self.zfloor = 1e10
 
         if self._fileosm == '':  # by using osmapi address or latlon
+
+            self.typ = kwargs.pop('typ','indoor')
+            address = kwargs.pop('address','Rennes')
+            latlon =  kwargs.pop('latlon',(48.4,-1.7))
+            if type(latlon) == 'str':
+                 latlon = eval(latlon)
+            dist_m = kwargs.pop('dist_m',200)
+
             coords, nodes, ways, dpoly, m = osm.getosm(address = address,
                                                        latlon = latlon,
                                                        dist_m = dist_m,
@@ -1638,9 +1629,9 @@ class Layout(pro.PyLayers):
                                                        filename = fileosm,
                                                        indoor = self.typ)
             if cart:
-                self.coordinates='cart'
+                self.coordinates = 'cart'
             else:
-                self.coordinates='latlon'
+                self.coordinates = 'latlon'
 
 
             # self.coordinates = 'latlon'
