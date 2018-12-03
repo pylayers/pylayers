@@ -12,7 +12,7 @@ import geocoder as geo
 import sys
 import urllib
 
-if sys.version_info.major==2:
+if sys.version_info.major == 2:
     from  urllib2 import urlopen
 else:
     from  urllib.request import urlopen
@@ -89,7 +89,7 @@ class Way(object):
         ax  : axes
 
         """
-        fig, ax = self.shp.plot(fig=fig,ax=ax)
+        fig, ax = self.shp.plot(fig=fig, ax=ax)
         return fig, ax
 
 class Coords(object):
@@ -249,6 +249,7 @@ class Coords(object):
             self.maxlat = max(lat,self.maxlat)
 
             self.cpt += 1
+
         self.boundary = np.array([self.minlon,
                                   self.minlat,
                                   self.maxlon,
@@ -269,7 +270,7 @@ class Nodes(object):
     def nodes(self,nodes):
         """  parse tagged nodes
         """
-        for osmid,tags,coords in nodes:
+        for osmid, tags, coords in nodes:
             self.node[osmid] = {}
             self.node[osmid]['tags'] = tags
             self.node[osmid]['lonlat'] = coords
@@ -312,7 +313,7 @@ class Ways(object):
     w : dict
     way : dict
     cpt : int
-        way counter 
+        way counter
 
 
     Methods
@@ -338,7 +339,7 @@ class Ways(object):
         st = ''
         for kid in self.w:
             st = st + str(self.w[kid])+'\n'
-        return st 
+        return st
 
     def clean(self):
         """ clean ways
@@ -348,7 +349,7 @@ class Ways(object):
         self.way = {}
         self.cpt = 0
 
-    def building(self, ways , height=8.5,min_heigh=0):
+    def building(self, ways, height=8.5, min_heigh=0):
         """ building callback function
 
         Parameters
@@ -385,7 +386,7 @@ class Ways(object):
                 else:
                     ntags['material'] = 'WALL'
 
-                self.w[osmid] = [refs,ntags]
+                self.w[osmid] = [refs, ntags]
                 self.cpt += 1
 
     def eval(self,coords):
@@ -401,11 +402,11 @@ class Ways(object):
         for osmid in self.w:
             refs = self.w[osmid][0]
             tags = self.w[osmid][1]
-            away =  Way(refs,tags,coords)
+            away =  Way(refs, tags, coords)
             if away.valid:
                 self.way[osmid] = away
 
-    def show(self,typ=2,**kwargs):
+    def show(self, typ=2, **kwargs):
         """ show all way
 
         Parameters
@@ -435,17 +436,16 @@ class Ways(object):
         latmax = -360
         for b in self.way:
             if typ==0:
-                if self.way.typ==0:
+                if self.way.typ == 0:
                     p =ways.way[b].shp
             if typ==1:
-                if self.way.typ==1:
+                if self.way.typ == 1:
                     p = self.way[b].shp
             if typ==2:
                 p = self.way[b].shp
 
             lpoly.append(p)
 
-        pdb.set_trace()
         city = PolyCollection(lpoly,closed=False)
 
         ax.axis((lonmin,lonmax,latmin,latmax))
@@ -541,19 +541,19 @@ class Ways(object):
             if item['type']=='way':
                 way = item['data']
                 osmid = way['id']
-                refs  = way['nd']
-                # nodes shouls have negative index (PyLayers convention)
-                refs_neg = [-x for x in refs if x > 0 ]
+                refs_neg = way['nd']
+                # nodes should have negative index (PyLayers convention)
                 tags  = way['tag']
+
                 if typ !='':
                     if typ in tags:
-                        self.w[osmid] = [refs_neg,tags]
+                        self.w[osmid] = [refs_neg, tags]
                         self.cpt += 1
                 else:
                     self.w[osmid] = [refs_neg,tags]
                     self.cpt += 1
+
         self.eval(coords)
-        pass
 
 class Relations(object):
     relation = {}
@@ -715,13 +715,13 @@ def getosm(**kwargs):
     filename = kwargs.pop('filename','')
     bcart = kwargs.pop('cart', False)
     typ = kwargs.pop('typ','indoor')
+    level_height = kwargs.pop('level_height', 3.45)
+    typical_height = kwargs.pop('typical_height', 10)
 
     if filename == '':
         address = kwargs.pop('address','Rennes')
         latlon = kwargs.pop('latlon', 0)
         dist_m = kwargs.pop('dist_m', 400)
-        level_height = kwargs.pop('level_height', 3.45)
-        typical_height = kwargs.pop('typical_height', 10)
 
         rad_to_deg = (180/np.pi)
         if latlon == 0:
@@ -746,17 +746,23 @@ def getosm(**kwargs):
 
     else:
     #
-    # get map from osm file
+    # get map from osm (xml) file
+    # type : 'node'
+    #        'ways'
     #
         e = xml.parse(filename).getroot()
+
         osmmap = []
-        lnode_key = ['id', 'lat', 'lon', 'visibility']
-        lway_key = ['id', 'visibility']
+
+        lnode_key = ['id', 'lat', 'lon']
+
+        lway_key = ['id']
 
         for i in e:
-            d={}
+            d = {}
             d['type'] = i.tag
             d['data'] = i.attrib
+            #print(i.tag)
 
             if d['type'] == 'node':
                 for k in lnode_key:
@@ -771,13 +777,16 @@ def getosm(**kwargs):
 
             elif d['type'] == 'way':
                 lk = i.getchildren()
-                nd=[]
+                nd = []
+                tag = {}
                 for k in lk:
-                    if 'ref' in k.keys():
+                    if k.tag == 'nd':
                         nd.append(eval(k.get('ref')))
+                    if k.tag == 'tag':
+                        tag[k.get('k')] = k.get('v')
                 d['data']['nd'] = nd
-                if not 'tag' in d['data']:
-                    d['data']['tag'] = {}
+                d['data']['tag'] = tag
+
                 # for k in lway_key:
                 #     lk = k.get_children()
                 #     print(lk)
@@ -785,7 +794,6 @@ def getosm(**kwargs):
                     # d['data'][k]=eval(d['data'][k])
                 # d['data']['visible']=eval(d['data']['visible'])
             osmmap.append(d)
-
     nodes = Nodes()
     nodes.clean()
     nodes.readmap(osmmap)
@@ -793,68 +801,71 @@ def getosm(**kwargs):
     coords = Coords()
     coords.clean()
     coords.from_nodes(nodes)
-
     m = coords.cartesian(cart=bcart)
 
     ways = Ways()
     ways.clean()
 
-    if typ=='indoor':
+    if typ == 'indoor':
         ways.readmap(osmmap, coords, typ='')
     else:
-        ways.readmap(osmmap,coords)
+        ways.readmap(osmmap, coords)
 
     # list of nodes involved in buildings
     lnodes_id=[]
     for iw in ways.w:
         lnodes_id+=ways.w[iw][0]
     # list of all nodes of coords
+
     lnodes_id   = np.unique(np.array(lnodes_id))
     lnodes_full = np.unique(np.array(list(coords.latlon.keys())))
-    mask = np.in1d(lnodes_full,lnodes_id,invert=True)
+    mask = np.in1d(lnodes_full, lnodes_id, invert=True)
+
     # nodes not involved in buildings
+
     if typ != 'indoor':
         lexcluded = lnodes_full[mask]
         coords.filter(lexcluded)
-    dpoly={}
-    for iw in ways.w:
-        ways.way[iw].tags = {}
-        # material
-        if 'material' in ways.w[iw][1]:
-            ways.way[iw].tags['name']=ways.w[iw][1]['material']
-        elif 'building:material' in ways.w[iw][1]:
-            ways.way[iw].tags['name']=ways.w[iw][1]['building:material']
-        else:
-            ways.way[iw].tags['name']='WALL'
 
-        # min_height
-        if 'building:min_height' in ways.w[iw][1]:
-            min_height = eval(ways.w[iw][1]['building:min_height'])
-        else:
-            min_height = 0
-        # height
-        if 'height' in ways.w[iw][1]:
-            ways.way[iw].tags['z'] = (min_height, eval(ways.w[iw][1]['height']))
-        elif 'building:height' in ways.w[iw][1]:
-            ways.way[iw].tags['z'] = (min_height, eval(ways.w[iw][1]['building:height']))
-        elif 'building:levels' in ways.w[iw][1]:
-            nb_levels = eval(ways.w[iw][1]['building:levels'])
-            if type(nb_levels)!=int:
-                try:
-                    nb_levels = max(nb_levels)
-                except:
-                    nb_levels=2
-            ways.way[iw].tags['z']=(min_height,nb_levels*level_height)
-        elif 'levels' in ways.w[iw][1]:
-            nb_levels = eval(ways.w[iw][1]['levels'])
-            if type(nb_levels)!=int:
-                try:
-                    nb_levels=max(nb_levels)
-                except:
-                    nb_levels=2
-            ways.way[iw].tags['z'] =(min_height,nb_levels*level_height)
-        else:
-            ways.way[iw].tags['z'] = (0,typical_height)
+    dpoly = {}
+    for iw in ways.w:
+        # ways.way[iw].tags = {}
+        # # material
+        # if 'material' in ways.w[iw][1]:
+        #     ways.way[iw].tags['name']=ways.w[iw][1]['material']
+        # elif 'building:material' in ways.w[iw][1]:
+        #     ways.way[iw].tags['name']=ways.w[iw][1]['building:material']
+        # else:
+        #     ways.way[iw].tags['name']='WALL'
+
+        # # min_height
+        # if 'building:min_height' in ways.w[iw][1]:
+        #     min_height = eval(ways.w[iw][1]['building:min_height'])
+        # else:
+        #     min_height = 0
+        # # height
+        # if 'height' in ways.w[iw][1]:
+        #     ways.way[iw].tags['z'] = (min_height, eval(ways.w[iw][1]['height']))
+        # elif 'building:height' in ways.w[iw][1]:
+        #     ways.way[iw].tags['z'] = (min_height, eval(ways.w[iw][1]['building:height']))
+        # elif 'building:levels' in ways.w[iw][1]:
+        #     nb_levels = eval(ways.w[iw][1]['building:levels'])
+        #     if type(nb_levels)!=int:
+        #         try:
+        #             nb_levels = max(nb_levels)
+        #         except:
+        #             nb_levels=2
+        #     ways.way[iw].tags['z']=(min_height,nb_levels*level_height)
+        # elif 'levels' in ways.w[iw][1]:
+        #     nb_levels = eval(ways.w[iw][1]['levels'])
+        #     if type(nb_levels)!=int:
+        #         try:
+        #             nb_levels=max(nb_levels)
+        #         except:
+        #             nb_levels=2
+        #     ways.way[iw].tags['z'] = (min_height,nb_levels*level_height)
+        # else:
+        #     ways.way[iw].tags['z'] = (0,typical_height)
 
         ptpoly = [coords.xy[x] for x in ways.w[iw][0]]
         dpoly[iw] = geu.Polygon(ptpoly,vnodes=ways.w[iw][0])

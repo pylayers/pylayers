@@ -173,15 +173,15 @@ class Layout(pro.PyLayers):
 
     s2pc : segment to point coordinates
     s2pu : segment to point index
-    sgsg 
+    sgsg
 
-    sl 
+    sl
 
 
     typ  : 'indoor' | 'outdoor'
     coordinates : 'cart','lonlat'
     version
-    _filename 
+    _filename
     _hash
 
     _shseg : keys / segment index
@@ -1579,7 +1579,7 @@ class Layout(pro.PyLayers):
 
             self.typ = kwargs.pop('typ','indoor')
             address = kwargs.pop('address','Rennes')
-            latlon =  kwargs.pop('latlon',(48.4,-1.7))
+            latlon = kwargs.pop('latlon',(48.4,-1.7))
             if type(latlon) == 'str':
                  latlon = eval(latlon)
             dist_m = kwargs.pop('dist_m',200)
@@ -1621,12 +1621,10 @@ class Layout(pro.PyLayers):
             self._filename = self._fileosm.replace('osm', 'lay')
 
         # 2 valid typ : 'indoor' and 'building'
-
         _np = 0  # _ to avoid name conflict with numpy alias
         _ns = 0
         ns = 0
         nss = 0
-
         # Reading points  (<0 index)
 
         # Reorganize points coordinates for detecting
@@ -1699,13 +1697,12 @@ class Layout(pro.PyLayers):
                 else:  # the default slab name is WALL
                         slab = "WALL"
 
-
                 if 'z' in d:
                     z = d['z']
                 else:
-                    if self.typ=='indoor':
+                    if self.typ == 'indoor':
                         z = (0, 3)
-                    if self.typ=='outdoor':
+                    if self.typ == 'outdoor':
                         z = (0, 3000)
 
                 zmin = z[0]
@@ -1740,6 +1737,7 @@ class Layout(pro.PyLayers):
         #
         lon = array([self.Gs.pos[k][0] for k in self.Gs.pos])
         lat = array([self.Gs.pos[k][1] for k in self.Gs.pos])
+
         # bd = [lon.min(), lat.min(), lon.max(), lat.max()]
         # lon_0 = (bd[0] + bd[2]) / 2.
         # lat_0 = (bd[1] + bd[3]) / 2.
@@ -1786,6 +1784,7 @@ class Layout(pro.PyLayers):
         for k in self.sl.keys():
             if k not in self.name:
                 self.name[k] = []
+
         # convert graph Gs to numpy arrays for speed up post processing
         self.g2npy()
 
@@ -2078,9 +2077,9 @@ class Layout(pro.PyLayers):
         # config.set("files",'materials',self.filematini)
         # config.set("files",'slab',self.fileslabini)
         #
-        # [ furniture ] 
+        # [ furniture ]
         #
-        config.set("files", 'furniture', self.filefur)
+        config.set("files", 'furniture', self._filefur)
         #
         # handling olf format ( to be removed later) 
         #
@@ -2387,7 +2386,7 @@ class Layout(pro.PyLayers):
         if config.has_section('files'):
             # self.filematini=config.get('files','materials')
             # self.fileslabini=config.get('files','slab')
-            self.filefur = config.get('files', 'furniture')
+            self._filefur = config.get('files', 'furniture')
 
         if config.has_section('slabs'):
             #filemat = self._filename.replace('ini', 'mat')
