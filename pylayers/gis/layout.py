@@ -368,11 +368,11 @@ class Layout(pro.PyLayers):
             elif loadres:
                 self.importres(_fileres=self.arg)
                 self.sl = sb.SlabDB()
-            elif '(' in str(string):  # load from osmapi latlon (string or tuple
+            elif '(' in str(arg):  # load from osmapi latlon (string or tuple
                 self.importosm(latlon=self.arg, dist_m=dist_m, cart=True, typ=self.typ)
                 self.loadosm = True
             else:  # load from address geocoding
-                self.importosm(address=self.arg, dist_m=dist_m, cart=True, typ=self.typ)
+                self.importosm(address=self.arg, dist_m=self.dist_m, cart=True, typ=self.typ)
                 self.loadosm = True
 
             # add boundary if it not exist
@@ -1579,25 +1579,31 @@ class Layout(pro.PyLayers):
 
             self.typ = kwargs.pop('typ','indoor')
             address = kwargs.pop('address','Rennes')
-            latlon = kwargs.pop('latlon',(48.4,-1.7))
+            latlon = kwargs.pop('latlon',0)
+
             if type(latlon) == 'str':
                  latlon = eval(latlon)
+
             dist_m = kwargs.pop('dist_m',200)
 
-            coords, nodes, ways, dpoly, m = osm.getosm(address = address,
-                                                       latlon = latlon,
-                                                       dist_m = dist_m,
-                                                       bcart = cart,
-                                                       typ = self.typ)
+
+            coords, nodes, ways, m , latlon = osm.getosm(address = address,
+                                                          latlon = latlon,
+                                                          dist_m = dist_m,
+                                                          bcart = cart,
+                                                          typ = self.typ)
             self.typ = 'outdoor'
             if cart:
                 self.coordinates='cart'
             else:
                 self.coordinates='latlon'
-            if kwargs['latlon'] == '0':
+
+            if latlon == '0':
                 self._filename = kwargs['address'].replace(' ', '_') + '.lay'
             else:
-                lat, lon = eval(kwargs['latlon'])
+                lat = latlon[0]
+                lon = latlon[1]
+
                 self._filename = 'lat_' + \
                     str(lat).replace('.', '_') + '_lon_' + \
                     str(lon).replace('.', '_') + '.ini'
@@ -1608,7 +1614,7 @@ class Layout(pro.PyLayers):
             # typ outdoor parse ways.buildings
             # typ indoor parse ways.ways
             # coords, nodes, ways, relations, m = osm.osmparse(fileosm)
-            coords, nodes, ways, dpoly, m = osm.getosm(cart = cart,
+            coords, nodes, ways, m = osm.getosm(cart = cart,
                                                        filename = fileosm,
                                                        typ = self.typ)
             if cart:
@@ -1635,6 +1641,7 @@ class Layout(pro.PyLayers):
 
         x = np.array(list(map(lambda x: coords.xy[x][0], kp)))
         y = np.array(list(map(lambda x: coords.xy[x][1], kp)))
+        pdb.set_trace()
         ux = np.argsort(x)
         x_prev = -100
         y_prev = -100

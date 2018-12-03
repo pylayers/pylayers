@@ -697,12 +697,18 @@ def getosm(**kwargs):
 
     Returns
     -------
-        coords,nodes,ways,dpoly,m
+
+        coords
+        nodes
+        ways
+        dpoly
+        m
+        latlon : tuple or 0 
 
     Notes
     -----
 
-    There are 3 ways to read an OpenStreeMap structure
+    There are 3 ways to read an Open Stree Map structure
 
     1 - From an osm file ex : filename = 'B11.osm'
     2 - From an osm (lat,lon) string or tuple of float
@@ -750,6 +756,7 @@ def getosm(**kwargs):
     # type : 'node'
     #        'ways'
     #
+        latlon = 0 
         e = xml.parse(filename).getroot()
 
         osmmap = []
@@ -827,51 +834,52 @@ def getosm(**kwargs):
         lexcluded = lnodes_full[mask]
         coords.filter(lexcluded)
 
-    dpoly = {}
-    for iw in ways.w:
-        # ways.way[iw].tags = {}
-        # # material
-        # if 'material' in ways.w[iw][1]:
-        #     ways.way[iw].tags['name']=ways.w[iw][1]['material']
-        # elif 'building:material' in ways.w[iw][1]:
-        #     ways.way[iw].tags['name']=ways.w[iw][1]['building:material']
-        # else:
-        #     ways.way[iw].tags['name']='WALL'
+    # dpoly = {}
+    # for iw in ways.w:
+    #     # ways.way[iw].tags = {}
+    #     # # material
+    #     # if 'material' in ways.w[iw][1]:
+    #     #     ways.way[iw].tags['name']=ways.w[iw][1]['material']
+    #     # elif 'building:material' in ways.w[iw][1]:
+    #     #     ways.way[iw].tags['name']=ways.w[iw][1]['building:material']
+    #     # else:
+    #     #     ways.way[iw].tags['name']='WALL'
 
-        # # min_height
-        # if 'building:min_height' in ways.w[iw][1]:
-        #     min_height = eval(ways.w[iw][1]['building:min_height'])
-        # else:
-        #     min_height = 0
-        # # height
-        # if 'height' in ways.w[iw][1]:
-        #     ways.way[iw].tags['z'] = (min_height, eval(ways.w[iw][1]['height']))
-        # elif 'building:height' in ways.w[iw][1]:
-        #     ways.way[iw].tags['z'] = (min_height, eval(ways.w[iw][1]['building:height']))
-        # elif 'building:levels' in ways.w[iw][1]:
-        #     nb_levels = eval(ways.w[iw][1]['building:levels'])
-        #     if type(nb_levels)!=int:
-        #         try:
-        #             nb_levels = max(nb_levels)
-        #         except:
-        #             nb_levels=2
-        #     ways.way[iw].tags['z']=(min_height,nb_levels*level_height)
-        # elif 'levels' in ways.w[iw][1]:
-        #     nb_levels = eval(ways.w[iw][1]['levels'])
-        #     if type(nb_levels)!=int:
-        #         try:
-        #             nb_levels=max(nb_levels)
-        #         except:
-        #             nb_levels=2
-        #     ways.way[iw].tags['z'] = (min_height,nb_levels*level_height)
-        # else:
-        #     ways.way[iw].tags['z'] = (0,typical_height)
+    #     # # min_height
+    #     # if 'building:min_height' in ways.w[iw][1]:
+    #     #     min_height = eval(ways.w[iw][1]['building:min_height'])
+    #     # else:
+    #     #     min_height = 0
+    #     # # height
+    #     # if 'height' in ways.w[iw][1]:
+    #     #     ways.way[iw].tags['z'] = (min_height, eval(ways.w[iw][1]['height']))
+    #     # elif 'building:height' in ways.w[iw][1]:
+    #     #     ways.way[iw].tags['z'] = (min_height, eval(ways.w[iw][1]['building:height']))
+    #     # elif 'building:levels' in ways.w[iw][1]:
+    #     #     nb_levels = eval(ways.w[iw][1]['building:levels'])
+    #     #     if type(nb_levels)!=int:
+    #     #         try:
+    #     #             nb_levels = max(nb_levels)
+    #     #         except:
+    #     #             nb_levels=2
+    #     #     ways.way[iw].tags['z']=(min_height,nb_levels*level_height)
+    #     # elif 'levels' in ways.w[iw][1]:
+    #     #     nb_levels = eval(ways.w[iw][1]['levels'])
+    #     #     if type(nb_levels)!=int:
+    #     #         try:
+    #     #             nb_levels=max(nb_levels)
+    #     #         except:
+    #     #             nb_levels=2
+    #     #     ways.way[iw].tags['z'] = (min_height,nb_levels*level_height)
+    #     # else:
+    #     #     ways.way[iw].tags['z'] = (0,typical_height)
 
-        ptpoly = [coords.xy[x] for x in ways.w[iw][0]]
-        dpoly[iw] = geu.Polygon(ptpoly,vnodes=ways.w[iw][0])
-        dpoly[iw].coorddeter()
+    #     ptpoly = [coords.xy[x] for x in ways.w[iw][0]]
+    #     dpoly[iw] = geu.Polygon(ptpoly,vnodes=ways.w[iw][0])
+    #     dpoly[iw].coorddeter()
 
-    return coords,nodes,ways,dpoly,m
+    #return coords,nodes,ways,dpoly,m
+    return coords, nodes, ways, m, (lat,lon)
 
 def extract(alat,alon,fileosm,fileout):
     """ extraction of an osm sub region using osmconvert

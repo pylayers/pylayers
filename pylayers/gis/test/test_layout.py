@@ -13,8 +13,8 @@ warnings.filterwarnings("error")
 L =  Layout()
 lL = L.ls()
 for tL in lL:
-    print  'Layout :     ',tL
-    print  '--------------------------'
+    print('Layout :     ',tL)
+    print( '--------------------------')
     if 'Munich' not in tL:
         L = Layout(tL,bbuild=0,bgraphs=0)
         f,a = L.showG('s')
