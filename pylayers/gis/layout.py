@@ -3481,7 +3481,15 @@ class Layout(pro.PyLayers):
         utbd = [x for x in range(len(aseg_conn)) if not x in upos] 
         tbd = aseg_conn[utbd,0]
         for k in tbd:
-            self.del_segment(k)
+            # check not already deleted in loop
+            if k in self.Gs:
+                if not self.have_subseg(k):
+                    self.del_segment(k)
+                else:
+                    for i in self.Gs.node[k]['iso']:
+                        if self.Gs.node[k]['z'] == self.Gs.node[i]['z']:
+                            self.del_segment(k)
+
 
         self.g2npy()
 
