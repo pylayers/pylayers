@@ -45,13 +45,15 @@ class TestLayout(unittest.TestCase):
         L.build()
 
     def test_cleanup(self):
-        L1.add_fnod(p=(10,10))
-        L1.cleanup()
-        self.assertEqual(L1.Np,12)
+        L = Layout('defstr.lay')
+        L.add_fnod(p=(10,10))
+        L.cleanup()
+        self.assertEqual(L.Np,12)
 
     def test_load(self):
-        self.assertEqual(L1.Np,12)
-        self.assertEqual(L1.Ns,15)
+        L = Layout('defstr.lay')
+        self.assertEqual(L.Np,12)
+        self.assertEqual(L.Ns,15)
 
     def test_check(self):
         bc,ds = L1.check()
@@ -106,6 +108,9 @@ class TestLayout(unittest.TestCase):
 
     def test_geomfile(self):
         L1.geomfile()
+
+    def test_DLRosm(self):
+        L = Layout('DLR.osm')
 
 if __name__ == '__main__':
     unittest.main()
