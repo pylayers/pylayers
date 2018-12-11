@@ -1339,8 +1339,8 @@ class Layout(pro.PyLayers):
         # normal_ss = self.normal[:,self.tgs[self.lsss]]
         # self.normal = np.hstack((self.normal,normal_ss))
         # if problem here check file format 'z' should be a string
-        lheight = array([v[1] for v in 
-                    nx.get_node_attributes(self.Gs, 'z').values() 
+        lheight = array([v[1] for v in
+                    nx.get_node_attributes(self.Gs, 'z').values()
                     if v[1] < 2000 ])
         #assert(len(lheight)>0),logging.error("no valid heights for segments")
         if len(lheight)>0:
@@ -1614,7 +1614,7 @@ class Layout(pro.PyLayers):
             # typ outdoor parse ways.buildings
             # typ indoor parse ways.ways
             # coords, nodes, ways, relations, m = osm.osmparse(fileosm)
-            coords, nodes, ways, m = osm.getosm(cart = cart,
+            coords, nodes, ways, m , (lat,lon) = osm.getosm(cart = cart,
                                                        filename = fileosm,
                                                        typ = self.typ)
             if cart:
@@ -1625,7 +1625,6 @@ class Layout(pro.PyLayers):
 
             # self.coordinates = 'latlon'
             self._filename = self._fileosm.replace('osm', 'lay')
-
         # 2 valid typ : 'indoor' and 'building'
         _np = 0  # _ to avoid name conflict with numpy alias
         _ns = 0
@@ -1641,7 +1640,6 @@ class Layout(pro.PyLayers):
 
         x = np.array(list(map(lambda x: coords.xy[x][0], kp)))
         y = np.array(list(map(lambda x: coords.xy[x][1], kp)))
-        pdb.set_trace()
         ux = np.argsort(x)
         x_prev = -100
         y_prev = -100
@@ -1711,12 +1709,18 @@ class Layout(pro.PyLayers):
                         z = (0, 3)
                     if self.typ == 'outdoor':
                         z = (0, 3000)
+                if type(z[0])==str:
+                    zmin = eval(z[0])
+                else:
+                    zmin = z[0]
+                if type(z[1])==str:
+                    zmax = eval(z[1])
+                else:
+                    zmax = z[1]
 
-                zmin = z[0]
-                zmax = z[1]
-                if zmin<self.zfloor:
+                if zmin < self.zfloor:
                     self.zfloor = zmin
-                if zmax>self.zceil:
+                if zmax > self.zceil:
                     self.zceil = zmax
 
                 if 'offset' in d:

@@ -39,7 +39,7 @@ class Way(object):
           1 LineString
 
     """
-    def __init__(self,refs,tags,coords):
+    def __init__(self, refs, tags, coords):
         """ object constructor
 
         Parameters
@@ -544,6 +544,13 @@ class Ways(object):
                 refs_neg = way['nd']
                 # nodes should have negative index (PyLayers convention)
                 tags  = way['tag']
+                if 'z' in tags:
+                   z = tags['z']
+                   if type(z) == str:
+                       z = eval(z)
+                   if type(z[0])==str:
+                       z = (eval(z[0]),eval(z[1]))
+                   tags['z'] = z
 
                 if typ !='':
                     if typ in tags:
@@ -756,7 +763,7 @@ def getosm(**kwargs):
     # type : 'node'
     #        'ways'
     #
-        latlon = 0 
+        latlon = 0
         e = xml.parse(filename).getroot()
 
         osmmap = []
@@ -801,6 +808,7 @@ def getosm(**kwargs):
                     # d['data'][k]=eval(d['data'][k])
                 # d['data']['visible']=eval(d['data']['visible'])
             osmmap.append(d)
+
     nodes = Nodes()
     nodes.clean()
     nodes.readmap(osmmap)
@@ -814,6 +822,8 @@ def getosm(**kwargs):
     ways.clean()
 
     if typ == 'indoor':
+        lat = coords.latlon[list(coords.latlon.keys())[0]][0]
+        lon = coords.latlon[list(coords.latlon.keys())[0]][1]
         ways.readmap(osmmap, coords, typ='')
     else:
         ways.readmap(osmmap, coords)
@@ -824,7 +834,7 @@ def getosm(**kwargs):
         lnodes_id+=ways.w[iw][0]
     # list of all nodes of coords
 
-    lnodes_id   = np.unique(np.array(lnodes_id))
+    lnodes_id  = np.unique(np.array(lnodes_id))
     lnodes_full = np.unique(np.array(list(coords.latlon.keys())))
     mask = np.in1d(lnodes_full, lnodes_id, invert=True)
 
