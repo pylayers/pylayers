@@ -203,20 +203,19 @@ class Layout(PyLayers):
     zmin
 
     """
-
-    def __init__(self, string='', **kwargs):
+    def __init__(self,arg='',**kwargs):
         """ object constructor
 
         Parameters
         ----------
 
-        string : string
-            layout file name, address or '(lat,lon)'
-        _filematini :
+        arg : string or tuple
+            layout file name, address or (lat,lon) or '(lat,lon)'
+        mat :
             material dB file name
-        _fileslabini :
+        slab :
             slab dB file name
-        _filefur :
+        fur :
             furniture file name
         force : boolean
         check : boolean
@@ -229,22 +228,19 @@ class Layout(PyLayers):
             'indoor' | 'outdoor'
 
         """
+        self.arg = arg
 
-        _filematini = kwargs.pop('_filematini', 'matDB.ini')
-        _fileslabini = kwargs.pop('_fileslabini', 'slabDB.ini')
-        _filefur = kwargs.pop('_filefur','')
-        dist_m = kwargs.pop('dist_m',50) # minimal distance
-        bcheck = kwargs.pop('bcheck', False)           # to check Gs
-        bbuild = kwargs.pop('bbuild', False)            # to build graphs
-        bgraphs = kwargs.pop('bgraphs', False)         # to load graph
-        bverbose = kwargs.pop('bverbose', False)
-        bcartesian = kwargs.pop('bcartesian',True)
-
-        # bindoor=False,        # to allow indoor penetration for outdoor situations
-        # bdiffraction=False,   # to include diffraction in Gi
-
-        xlim = ()
-        typ = 'indoor'
+        self._filematini = kwargs.pop('mat','matDB.ini')
+        self._fileslabini = kwargs.pop('slab','slabDB.ini')
+        self._filefur = kwargs.pop('fur','')
+        self.bcheck = kwargs.pop('bcheck',False)
+        self.bbuild = kwargs.pop('bbuild',False)
+        self.bgraphs = kwargs.pop('bgraphs',False)
+        self.bverbose = kwargs.pop('bverbose',False)
+        self.bcartesian = kwargs.pop('bcartesian',True)
+        self.xlim = kwargs.pop('xlim',())
+        self.dist_m = kwargs.pop('dist_m',400)
+        self.typ = kwargs.pop('typ','outdoor')
 
         self.labels = {}
 
@@ -271,27 +267,13 @@ class Layout(PyLayers):
         self.lbltg = []
 
         self.Gt.pos = {}
-
-
         self._shseg = {}
-
-        #
-        # related files
-        #
-
-        self.fileslabini = _fileslabini
-        self.filematini = _filematini
-        self.filefur = _filefur
 
         self.hasboundary = False
         self.coordinates = 'cart'
         self.version = '1.3'
 
-        if typ in ['indoor','outdoor','floorplan']:
-            self.typ = typ
-        else:
-            print("Layout : unknown Layout typ")
-        # boolean
+        assert(self.typ in ['indoor','outdoor','floorplan'])
 
         self.isbuilt = False
         self.loadosm = False
@@ -329,8 +311,9 @@ class Layout(PyLayers):
         self.display['overlay_file'] = ""
         self.display['overlay_axis'] = ""
         # self.display['layerset'] = self.sl.keys()
-        if xlim != ():
-            self.display['box']= xlim
+
+        if self.xlim!=():
+            self.display['box']= self.xlim
         else:
             self.display['box'] = (-50, 50, -50, 50)
 
@@ -348,19 +331,18 @@ class Layout(PyLayers):
         # Layout main argument
         #   If no .ini extension provided it is added
         #
-        if type(string) is bytes:
-            string = string.decode('utf-8')
+        if type(self.arg) is bytes:
+            self.arg = self.arg.decode('utf-8')
 
         logger.info('analyze input string')
-        arg, ext = os.path.splitext(string)
-
+        arg, ext = os.path.splitext(self.arg)
 
         if arg != '':
             if ext == '.ini':
-                self._filename = string
+                self._filename = self.arg
                 loadlay = True
             if ext == '.lay':
-                self._filename = string
+                self._filename = self.arg
                 loadlay = True
             elif ext == '.osm':
                 self._filename = arg + '.lay'
@@ -374,7 +356,7 @@ class Layout(PyLayers):
         else:  # No argument new file
             self._filename = 'newfile.lay'
             newfile = True
-            self.sl = sb.SlabDB(fileslab=_fileslabini, filemat=_filematini)
+            self.sl = sb.SlabDB(fileslab=self._fileslabini, filemat=self._filematini)
             self.zfloor = 0.
             self.zceil = self.maxheight
 
@@ -419,22 +401,21 @@ class Layout(PyLayers):
                     newfile = True
                     print("new file - creating a void Layout", self._filename)
             elif loadosm:  # load .osm file
-                self.importosm(_fileosm=string, cart=True, typ=self.typ)
+                self.importosm(fileosm=self.arg, cart=True, typ=self.typ)
                 self.loadosm = True
             elif loadres:
-                self.importres(_fileres=string)
+                self.importres(_fileres=self.arg)
                 self.sl = sb.SlabDB()
-            elif '(' in str(string):  # load from osmapi latlon in string
-                self.importosm(latlon=string, dist_m=dist_m, cart=True, typ=self.typ)
+            elif '(' in str(arg):  # load from osmapi latlon (string or tuple
+                self.importosm(latlon=self.arg, dist_m=dist_m, cart=True, typ=self.typ)
                 self.loadosm = True
             else:  # load from address geocoding
-                self.importosm(address=string, dist_m=dist_m, cart=True, typ=self.typ)
+                self.importosm(address=self.arg, dist_m=self.dist_m, cart=True, typ=self.typ)
                 self.loadosm = True
 
             # add boundary if it not exist
-            logger.info('creates boundary')
-            if (not self.hasboundary) or (xlim!=()):
-                self.boundary(xlim=xlim)
+            if (not self.hasboundary) or (self.xlim != ()):
+                self.boundary(xlim = self.xlim)
 
             logger.info('call subseg ')
             self.subseg()
@@ -450,18 +431,17 @@ class Layout(PyLayers):
             #
             # check layout
             #
-            bconsistent = True
-
-            if bcheck:
-                bconsistent,dseg = self.check()
+            self.bconsistent = True
+            if self.bcheck:
+                self.bconsistent, dseg = self.check()
 
             # if Layout is correctly described
             # check if the graph gpickle files have been built
-            if bconsistent:
+            if self.bconsistent:
                 #
                 # build and save graphs
                 #
-                if bbuild:
+                if self.bbuild:
                     # ans = raw_input('Do you want to build the layout (y/N) ? ')
                     # if ans.lower()=='y'
                     self.build()
@@ -470,7 +450,13 @@ class Layout(PyLayers):
                 #
                 # load graphs from file
                 #
-                elif bgraphs:
+                elif self.bgraphs:
+                    if os.path.splitext(self._filename)[1]=='.lay':
+                        dirname = self._filename.replace('.lay','')
+                    path = os.path.join(pro.basename,
+                                        'struc',
+                                        'gpickle',
+                                        dirname)
                     if os.path.exists(path):
                         # load graph Gt
                         # and compare the self._hash from ini file
@@ -552,8 +538,10 @@ class Layout(PyLayers):
         st = st + "\n"
         st = st + "xrange : " + str(self.ax[0:2]) + "\n"
         st = st + "yrange : " + str(self.ax[2:]) + "\n"
-        st = st + "center : " + "( %.2f,%.2f)" % (self.pg[0],self.pg[1]) + "\n"
-        st = st + "radius : %.2f " % self.radius + "\n"
+        if hasattr(self,'pg'):
+            st = st + "center : " + "( %.2f,%.2f)" % (self.pg[0],self.pg[1]) + "\n"
+        if hasattr(self,'radius'):
+            st = st + "radius : %.2f " % self.radius + "\n"
         # st = st + "\nUseful dictionnaries" + "\n----------------\n"
         # if hasattr(self,'dca'):
         #     st = st + "dca {cycle : []} cycle with an airwall" +"\n"
@@ -1582,7 +1570,7 @@ class Layout(PyLayers):
         Parameters
         ----------
 
-        _fileosm : string
+        fileosm : string
         address : string
             address to be geocoded
         latlon : tuple
@@ -1609,23 +1597,9 @@ class Layout(PyLayers):
         pylayers.gis.osmparser.osmparse
 
         """
-        defaults = {'_fileosm': '',
-                    'address': 'Rennes',
-                    'typ': 'indoor',
-                    'latlon': '0',
-                    'dist_m': 200,
-                    'cart': False
-                    }
 
-        for k in defaults:
-            if k not in kwargs:
-                kwargs[k] = defaults[k]
-
-        self.typ = kwargs['typ']
-        address = kwargs['address']
-        latlon = eval(kwargs['latlon'])
-        dist_m = kwargs['dist_m']
-        cart = kwargs['cart']
+        self._fileosm = kwargs.pop('fileosm','')
+        cart = kwargs.pop('cart',False)
 
         #
         #  zceil ansd zfloor are obtained from actual data
@@ -1637,39 +1611,61 @@ class Layout(PyLayers):
         self.zceil = -1e10
         self.zfloor = 1e10
 
-        if kwargs['_fileosm'] == '':  # by using osmapi address or latlon
-            coords, nodes, ways, dpoly, m = osm.getosm(address=address,
-                                                       latlon=latlon,
-                                                       dist_m=dist_m,
-                                                       bcart=cart)
+        if self._fileosm == '':  # by using osmapi address or latlon
+
+            self.typ = kwargs.pop('typ','indoor')
+            address = kwargs.pop('address','Rennes')
+            latlon = kwargs.pop('latlon',0)
+
+            if type(latlon) == 'str':
+                 latlon = eval(latlon)
+
+            dist_m = kwargs.pop('dist_m',200)
+
+
+            coords, nodes, ways, m , latlon = osm.getosm(address = address,
+                                                          latlon = latlon,
+                                                          dist_m = dist_m,
+                                                          bcart = cart,
+                                                          typ = self.typ)
             self.typ = 'outdoor'
             if cart:
                 self.coordinates = 'cart'
             else:
                 self.coordinates = 'latlon'
-            if kwargs['latlon'] == '0':
+
+            if latlon == '0':
                 self._filename = kwargs['address'].replace(' ', '_') + '.lay'
             else:
-                lat, lon = eval(kwargs['latlon'])
+                lat = latlon[0]
+                lon = latlon[1]
+
                 self._filename = 'lat_' + \
                     str(lat).replace('.', '_') + '_lon_' + \
                     str(lon).replace('.', '_') + '.ini'
         else:  # by reading an osm file
-            fileosm = pyu.getlong(kwargs['_fileosm'], os.path.join('struc', 'osm'))
+            # The osm file is supposed to be in $PROJECT/struc/osm directory
+            fileosm = pyu.getlong(self._fileosm, os.path.join('struc', 'osm'))
             #coords, nodes, ways, relations, m = osm.osmparse(fileosm, typ=self.typ)
             # typ outdoor parse ways.buildings
             # typ indoor parse ways.ways
-            coords, nodes, ways, relations, m = osm.osmparse(fileosm)
-            self.coordinates = 'latlon'
-            self._filename = kwargs['_fileosm'].replace('osm', 'lay')
+            # coords, nodes, ways, relations, m = osm.osmparse(fileosm)
+            coords, nodes, ways, m , (lat,lon) = osm.getosm(cart = cart,
+                                                       filename = fileosm,
+                                                       typ = self.typ)
+            if cart:
+                self.coordinates = 'cart'
+            else:
+                self.coordinates = 'latlon'
 
+
+            # self.coordinates = 'latlon'
+            self._filename = self._fileosm.replace('osm', 'lay')
         # 2 valid typ : 'indoor' and 'building'
-
         _np = 0  # _ to avoid name conflict with numpy alias
         _ns = 0
         ns = 0
         nss = 0
-
         # Reading points  (<0 index)
 
         # Reorganize points coordinates for detecting
@@ -1742,7 +1738,6 @@ class Layout(PyLayers):
                 else:  # the default slab name is WALL
                         slab = "WALL"
 
-
                 if 'z' in d:
                     z = d['z']
                 else:
@@ -1750,9 +1745,18 @@ class Layout(PyLayers):
                         z = (0, 3)
                     if self.typ == 'outdoor':
                         z = (0, 3000)
+                if type(z[0])==str:
+                    zmin = eval(z[0])
+                else:
+                    zmin = z[0]
+                if type(z[1])==str:
+                    zmax = eval(z[1])
+                else:
+                    zmax = z[1]
 
-                zmin = z[0]
-                zmax = z[1]
+                #zmin = z[0]
+                #zmax = z[1]
+
                 if zmin < self.zfloor:
                     self.zfloor = zmin
                 if zmax > self.zceil:
@@ -1783,6 +1787,7 @@ class Layout(PyLayers):
         #
         lon = array([self.Gs.pos[k][0] for k in self.Gs.pos])
         lat = array([self.Gs.pos[k][1] for k in self.Gs.pos])
+
         # bd = [lon.min(), lat.min(), lon.max(), lat.max()]
         # lon_0 = (bd[0] + bd[2]) / 2.
         # lat_0 = (bd[1] + bd[3]) / 2.
@@ -1798,7 +1803,7 @@ class Layout(PyLayers):
         self.pur = self.m(self.extent[1],self.extent[3])
         self.extent_c = (self.pll[0],self.pur[0],self.pll[1],self.pur[1])
 
-        if ((kwargs['cart']) and (self.coordinates!='cart')):
+        if (cart and (self.coordinates!='cart')):
              x, y = self.m(lon, lat)
              self.Gs.pos = {k: (x[i], y[i]) for i, k in enumerate(self.Gs.pos)}
              self.coordinates = 'cart'
@@ -1818,10 +1823,10 @@ class Layout(PyLayers):
         # 5) load slabs database
 
         mat = sb.MatDB()
-        mat.load(self.filematini)
+        mat.load(self._filematini)
         self.sl = sb.SlabDB()
         self.sl.mat = mat
-        self.sl.load(self.fileslabini)
+        self.sl.load(self._fileslabini)
 
         #
         # update self.name with existing slabs database entries
@@ -2127,9 +2132,9 @@ class Layout(PyLayers):
         # config.set("files",'materials',self.filematini)
         # config.set("files",'slab',self.fileslabini)
         #
-        # [ furniture ] 
+        # [ furniture ]
         #
-        config.set("files", 'furniture', self.filefur)
+        config.set("files", 'furniture', self._filefur)
         #
         # handling olf format ( to be removed later) 
         #
@@ -2797,7 +2802,7 @@ class Layout(PyLayers):
         if config.has_section('files'):
             # self.filematini=config.get('files','materials')
             # self.fileslabini=config.get('files','slab')
-            self.filefur = config.get('files', 'furniture')
+            self._filefur = config.get('files', 'furniture')
 
         if config.has_section('slabs'):
             #filemat = self._filename.replace('ini', 'mat')
@@ -3881,7 +3886,7 @@ class Layout(PyLayers):
         -----
 
         1. Remove nodes which are not connected
-
+        2. Remove supperimposed segments
         """
         lk = list(self.Gs.node.keys())
         for n in lk:
@@ -3893,6 +3898,21 @@ class Layout(PyLayers):
                 except:
                     pass
         self.Np = len(np.nonzero(np.array(list(self.Gs.node.keys())) < 0)[0])
+        
+        aseg_conn=[]
+        for seg in self.Gs.nodes():
+            if seg >0:
+                n0,n1 = list(nx.neighbors(self.Gs,seg))
+                aseg_conn.append([seg,n0,n1])
+        aseg_conn = np.array(aseg_conn)
+
+        # aseg_conn=np.array([[list(nx.neighbors(self.Gs,x))] for x in self.Gs.nodes() if x >0])
+        uni,upos=np.unique(aseg_conn[:,1:],axis=0,return_index=True)
+        utbd = [x for x in range(len(aseg_conn)) if not x in upos] 
+        tbd = aseg_conn[utbd,0]
+        for k in tbd:
+            self.del_segment(k)
+
         self.g2npy()
 
     def info_segment(self, s1):
@@ -10823,7 +10843,7 @@ class Layout(PyLayers):
 
         sc = tvtk.UnsignedCharArray()
         sc.from_array(color)
-
+        
         # manage floor
 
         # if Gt doesn't exists

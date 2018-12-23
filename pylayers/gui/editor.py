@@ -22,14 +22,14 @@ try:
 except:
     'Mayavi not installed'
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import QDialog,QMainWindow,QApplication,QAction
 import matplotlib
-matplotlib.use('Qt4Agg')
-matplotlib.rcParams['backend.qt4']='PyQt4'
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
+matplotlib.use('Qt5Agg')
+matplotlib.rcParams['backend.qt5']='PyQt5'
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 

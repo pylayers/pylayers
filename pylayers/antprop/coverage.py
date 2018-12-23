@@ -1040,8 +1040,10 @@ class Coverage(PyLayers):
                                vmin=vmin,
                                vmax=vmax)
 
-            for k in range(self.na):
-                ax.annotate(str(k),xy=(self.pa[0,k],self.pa[1,k]))
+            # for k in range(self.na):
+            #     ax.annotate(str(k),xy=(self.pa[0,k],self.pa[1,k]))
+            for k in self.dap.keys():
+                ax.annotate(str(self.dap[k]['name']),xy=(self.dap[k]['p'][0],self.dap[k]['p'][1]))
             ax.set_title(title)
 
             divider = make_axes_locatable(ax)
