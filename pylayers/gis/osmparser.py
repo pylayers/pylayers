@@ -710,7 +710,7 @@ def getosm(**kwargs):
         ways
         dpoly
         m
-        latlon : tuple or 0 
+        latlon : tuple or 0
 
     Notes
     -----
@@ -736,13 +736,13 @@ def getosm(**kwargs):
         latlon = kwargs.pop('latlon', 0)
         dist_m = kwargs.pop('dist_m', 400)
 
-    if latlon == 0:
-        resp = geo.arcgis(address)
-        try:
-            lat = resp.geojson['features'][0]['properties']['lat']
-            lon = resp.geojson['features'][0]['properties']['lng']
-        except:
-            print(place)
+        if latlon == 0:
+            resp = geo.arcgis(address)
+            try:
+                lat = resp.geojson['features'][0]['properties']['lat']
+                lon = resp.geojson['features'][0]['properties']['lng']
+            except:
+                print(place)
     #else:
     #    lat = latlon[0]
     #    lon = latlon[1]
@@ -758,10 +758,9 @@ def getosm(**kwargs):
         #     lat = latlon[0]
         #     lon = latlon[1]
 
-        # r_earth = 6370e3
+        r_earth = 6370e3
 
         alpha = (dist_m/r_earth)*rad_to_deg
-
     #
     # get map from OsmApi (Database query)
     #
@@ -831,6 +830,7 @@ def getosm(**kwargs):
 
     ways = Ways()
     ways.clean()
+
 
     if typ == 'indoor':
         lat = coords.latlon[list(coords.latlon.keys())[0]][0]

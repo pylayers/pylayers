@@ -480,7 +480,7 @@ class Layout(PyLayers):
                         self.build()
                         self.lbltg.append('s')
                         self.dumpw()
-        self.get_boundary()
+        #self.get_boundary()
         logger.info('end of __init__')
 
     def __repr__(self):
@@ -11165,10 +11165,11 @@ class Layout(PyLayers):
 
             #ax.scatter(vv[:, 0], vv[:, 1])
 
+        pdb.set_trace()
         if bsegs:
             ML = sh.MultiLineString(list(self._shseg.values()))
             pt = np.array([l.xy for l in ML])
-            line, = plt.plot(pt[0,0],pt[0,1],color='r')
+            line, = plt.plot(pt[0,0],pt[0,1],color='k')
             line.set_data(pt)
 
             #self.pltlines(ML, color='k', fig=fig, ax=ax)
