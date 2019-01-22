@@ -65,7 +65,7 @@ Among early pylayers contributors : Friedman Tchoffo Talom, Louis Marie Aubert, 
 
 ## Acknowledgements
 
-This work has been supported by the Bretagne Region council (Project LOCUS), by the french ANR project AUBADE and CORMORAN and by the European projects FP7 UCELLS, FP7 WHERE1, FP7 WHERE2.
+This work has been supported by the french ANR project AUBADE and CORMORAN and by the European projects FP7 UCELLS, FP7 WHERE1, FP7 WHERE2.
 
 <img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/logoUR1.jpg" width="100">
 <img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/logoIETR.jpg" width="100

@@ -271,7 +271,7 @@ class Coverage(PyLayers):
             except:
                 pass
 
-    def cover(self,sinr=True,snr=True,best=True):
+    def cover(self, sinr=True, snr=True, best=True):
         """ run the coverage calculation
 
         Parameters
@@ -332,7 +332,7 @@ class Coverage(PyLayers):
         except:
             pass
 
-    
+
         self.kB = 1.3806503e-23 # Boltzmann constant
         #
         # Loop opver access points

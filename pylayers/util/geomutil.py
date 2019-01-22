@@ -3062,6 +3062,7 @@ def normalize(vec):
 
     Returns
     -------
+
     vecn : ndarray (N x ndim)
         N normalized ndim vectors
 

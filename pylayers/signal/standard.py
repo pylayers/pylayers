@@ -211,7 +211,7 @@ class Wstandard(PyLayers,dict):
         return(st)
 
 
-    def load(self,stdname,_fileini='wstd.json'):
+    def load(self, stdname, _fileini='wstd.json'):
         """ load a standard from file
 
         Parameters
@@ -226,7 +226,7 @@ class Wstandard(PyLayers,dict):
 
         """
 
-        filename=pyu.getlong(_fileini,pstruc['DIRSIMUL'])
+        filename = pyu.getlong(_fileini,pstruc['DIRSIMUL'])
         fp = open(filename)
         stds = json.load(fp)
         fp.close()
