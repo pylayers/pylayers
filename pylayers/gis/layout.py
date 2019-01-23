@@ -5030,17 +5030,17 @@ class Layout(pro.PyLayers):
         Parameters
         ----------
         seed : float
-        alpha : float 
-            transparency 
-        sig : list of signatures (isequence of Gi nodes format) 
-        cycles : list 
-            [cystart,cyend] 
+        alpha : float
+            transparency
+        sig : list of signatures (isequence of Gi nodes format)
+        cycles : list
+            [cystart,cyend]
         ninter : int
             interaction index
         inter : tuple
-            interaction tuple 
+            interaction tuple
 
-        See Also 
+        See Also
         --------
 
         Signatures.siginter
@@ -5055,9 +5055,10 @@ class Layout(pro.PyLayers):
                     'fontsize':18,
                     'labels':False,
                     'inter':[]}
-        for k in defaults: 
+
+        for k in defaults:
             if k not in kwargs:
-                kwargs[k]=defaults[k] 
+                kwargs[k]=defaults[k]
 
         edges = self.Gi.edges()
         cy = kwargs['cycles']
@@ -5082,16 +5083,16 @@ class Layout(pro.PyLayers):
                     phe_start=np.hstack((phe_start,p1))
                     phe_stop=np.hstack((phe_stop,p2))
         elif kwargs['inter']!=[]:
-            edinter = kwargs['inter']
+            edinter = [kwargs['inter']
             outlist = self.Gi[edinter[0]][edinter[1]]['output']
             outprob = outlist.values()
-            edgelist = [(edinter[1],x) for x in outlist] 
+            edgelist = [(edinter[1],x) for x in outlist]
             dprob = dict(zip(edgelist,[str(x) for x in outprob]))
         elif kwargs['ninter']!=[]:
-            edinter = edges[kwargs['ninter']]
+            edinter = [ e for e in edges][kwargs['ninter']]
             outlist = self.Gi[edinter[0]][edinter[1]]['output']
             outprob = outlist.values()
-            edgelist = [(edinter[1],x) for x in outlist] 
+            edgelist = [(edinter[1],x) for x in outlist]
             dprob = dict(zip(edgelist,[str(x) for x in outprob]))
         else:
             pass
