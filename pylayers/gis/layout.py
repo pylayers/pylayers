@@ -5083,7 +5083,7 @@ class Layout(pro.PyLayers):
                     phe_start=np.hstack((phe_start,p1))
                     phe_stop=np.hstack((phe_stop,p2))
         elif kwargs['inter']!=[]:
-            edinter = [kwargs['inter']
+            edinter = kwargs['inter']
             outlist = self.Gi[edinter[0]][edinter[1]]['output']
             outprob = outlist.values()
             edgelist = [(edinter[1],x) for x in outlist]
