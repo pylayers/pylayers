@@ -3552,7 +3552,7 @@ class Tchannel(bs.FUsignal):
         # Nray x Nr x Nt x Nf1
         abb  = self.y*np.exp(-2 * 1j * np.pi *self.taud[:,None,None,None] * fcGHz )
         fMHz = np.linspace(-WMHz/2.,WMHz/2,Nf)
-        E = np.exp(-2*1j*fMHz[None,None,None,:]*1e-3*self.taud[:,None,None,None])
+        E = np.exp(-2*1j*np.pi*fMHz[None,None,None,:]*1e-3*self.taud[:,None,None,None])
         y = np.sum(abb*E,axis=0)
         H = bs.FUsignal(x=fMHz,y=y)
 
