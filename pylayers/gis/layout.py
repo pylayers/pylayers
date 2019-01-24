@@ -326,8 +326,10 @@ class Layout(pro.PyLayers):
 
         #
         # Layout main argument
-        #   If no .ini extension provided it is added
         #
+        if type(self.arg)==tuple:
+            self.arg = str(self.arg)
+
         if type(self.arg) is bytes:
             self.arg = self.arg.decode('utf-8')
 
@@ -369,7 +371,8 @@ class Layout(pro.PyLayers):
                 self.importres(_fileres=self.arg)
                 self.sl = sb.SlabDB()
             elif '(' in str(arg):  # load from osmapi latlon (string or tuple
-                self.importosm(latlon=self.arg, dist_m=self.dist_m, cart=True, typ=self.typ)
+                latlon = eval(self.arg)
+                self.importosm(latlon=latlon, dist_m=self.dist_m, cart=True, typ=self.typ)
                 self.loadosm = True
             else:  # load from address geocoding
                 self.importosm(address=self.arg, dist_m=self.dist_m, cart=True, typ=self.typ)
@@ -1586,12 +1589,12 @@ class Layout(pro.PyLayers):
 
             dist_m = kwargs.pop('dist_m',200)
 
-
             coords, nodes, ways, m , latlon = osm.getosm(address = address,
                                                           latlon = latlon,
                                                           dist_m = dist_m,
                                                           bcart = cart,
                                                           typ = self.typ)
+
             self.typ = 'outdoor'
             if cart:
                 self.coordinates='cart'

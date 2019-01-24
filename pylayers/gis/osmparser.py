@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- moding: utf-8 -*-
 """
 Module OSMParser
 
@@ -710,7 +710,7 @@ def getosm(**kwargs):
         ways
         dpoly
         m
-        latlon : tuple or 0 
+        latlon : tuple or 0
 
     Notes
     -----
@@ -813,6 +813,7 @@ def getosm(**kwargs):
     nodes.clean()
     nodes.readmap(osmmap)
 
+    pdb.set_trace()
     coords = Coords()
     coords.clean()
     coords.from_nodes(nodes)
@@ -840,9 +841,9 @@ def getosm(**kwargs):
 
     # nodes not involved in buildings
 
-    if typ != 'indoor':
-        lexcluded = lnodes_full[mask]
-        coords.filter(lexcluded)
+    #if typ != 'indoor':
+    #    lexcluded = lnodes_full[mask]
+    #    coords.filter(lexcluded)
 
     # dpoly = {}
     # for iw in ways.w:
