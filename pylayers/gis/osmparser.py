@@ -715,7 +715,7 @@ def getosm(**kwargs):
     Notes
     -----
 
-    There are 3 ways to read an Open Stree Map structure
+    There are 3 ways to read an Open Street Map structure
 
     1 - From an osm file ex : filename = 'B11.osm'
     2 - From an osm (lat,lon) string or tuple of float
@@ -737,6 +737,7 @@ def getosm(**kwargs):
         dist_m = kwargs.pop('dist_m', 400)
 
         rad_to_deg = (180/np.pi)
+
         if latlon == 0:
             place = geo.osm(address)
             try:
@@ -821,9 +822,10 @@ def getosm(**kwargs):
     ways = Ways()
     ways.clean()
 
+    lat = coords.latlon[list(coords.latlon.keys())[0]][0]
+    lon = coords.latlon[list(coords.latlon.keys())[0]][1]
+
     if typ == 'indoor':
-        lat = coords.latlon[list(coords.latlon.keys())[0]][0]
-        lon = coords.latlon[list(coords.latlon.keys())[0]][1]
         ways.readmap(osmmap, coords, typ='')
     else:
         ways.readmap(osmmap, coords)

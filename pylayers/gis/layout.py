@@ -1612,6 +1612,7 @@ class Layout(pro.PyLayers):
                     str(lat).replace('.', '_') + '_lon_' + \
                     str(lon).replace('.', '_') + '.ini'
         else:  # by reading an osm file
+
             # The osm file is supposed to be in $PROJECT/struc/osm directory
             fileosm = pyu.getlong(self._fileosm, os.path.join('struc', 'osm'))
             #coords, nodes, ways, relations, m = osm.osmparse(fileosm, typ=self.typ)
@@ -1629,7 +1630,7 @@ class Layout(pro.PyLayers):
 
             # self.coordinates = 'latlon'
             self._filename = self._fileosm.replace('osm', 'lay')
-        # 2 valid typ : 'indoor' and 'building'
+
         _np = 0  # _ to avoid name conflict with numpy alias
         _ns = 0
         ns = 0
@@ -1642,8 +1643,9 @@ class Layout(pro.PyLayers):
 
         kp = [k for k in coords.xy]
 
-        x = np.array(list(map(lambda x: coords.xy[x][0], kp)))
-        y = np.array(list(map(lambda x: coords.xy[x][1], kp)))
+        x = np.array([ coords.xy[x][0] for x in  kp ])
+        y = np.array([ coords.xy[x][1] for x in  kp ])
+
         ux = np.argsort(x)
         x_prev = -100
         y_prev = -100
