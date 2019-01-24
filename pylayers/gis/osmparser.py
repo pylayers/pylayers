@@ -389,7 +389,7 @@ class Ways(object):
                 self.w[osmid] = [refs, ntags]
                 self.cpt += 1
 
-    def eval(self,coords):
+    def toway(self,coords):
         """ convert into a Way object
 
         Parameters
@@ -398,7 +398,6 @@ class Ways(object):
         coords : osm coordinates
 
         """
-
         for osmid in self.w:
             refs = self.w[osmid][0]
             tags = self.w[osmid][1]
@@ -542,6 +541,7 @@ class Ways(object):
                 way = item['data']
                 osmid = way['id']
                 refs_neg = way['nd']
+                refs_neg = [ -x for x in refs_neg if x >0]
                 # nodes should have negative index (PyLayers convention)
                 tags  = way['tag']
                 if 'z' in tags:
@@ -560,7 +560,7 @@ class Ways(object):
                     self.w[osmid] = [refs_neg,tags]
                     self.cpt += 1
 
-        self.eval(coords)
+        self.toway(coords)
 
 class Relations(object):
     relation = {}
@@ -829,11 +829,11 @@ def getosm(**kwargs):
         ways.readmap(osmmap, coords, typ='')
     else:
         ways.readmap(osmmap, coords)
-
+    
     # list of nodes involved in buildings
     lnodes_id=[]
     for iw in ways.w:
-        lnodes_id+=ways.w[iw][0]
+        lnodes_id += ways.w[iw][0]
     # list of all nodes of coords
 
     lnodes_id  = np.unique(np.array(lnodes_id))
