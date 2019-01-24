@@ -200,18 +200,18 @@ class AntArray(Array, ant.Antenna):
             ['Omni','Hertz','Huygens','3gpp','Array'] or a filename of an antenna
             file in one of the supported file format (.vsh3 or .sh3)
 
-        tarr : string 
-            type of array 
+        tarr : string
+            type of array
 
-        N    : array of int 
+        N    : array of int
             Number of points per axis
 
-        dm : array of float 
+        dm : array of float
             Inter element distance (meters)
 
-        min : array of float 
+        min : array of float
 
-        max : array of float 
+        max : array of float
 
         S : coupling matrix
 

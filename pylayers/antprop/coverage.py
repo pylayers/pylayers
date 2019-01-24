@@ -95,10 +95,15 @@ class Coverage(PyLayers):
         self.config = ConfigParser.ConfigParser(allow_no_value=True)
         self.config.read(pyu.getlong(_fileini,pstruc['DIRSIMUL']))
 
+        # section layout
         self.layoutopt = dict(self.config.items('layout'))
+        # section sector
         self.gridopt   = dict(self.config.items('grid'))
+        # section ap (access point)
         self.apopt     = dict(self.config.items('ap'))
+        # section receiver  parameters
         self.rxopt     = dict(self.config.items('rx'))
+        # section receiver  parameters
         self.showopt   = dict(self.config.items('show'))
 
         # get the Layout

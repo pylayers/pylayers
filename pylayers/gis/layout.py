@@ -369,7 +369,7 @@ class Layout(pro.PyLayers):
                 self.importres(_fileres=self.arg)
                 self.sl = sb.SlabDB()
             elif '(' in str(arg):  # load from osmapi latlon (string or tuple
-                self.importosm(latlon=self.arg, dist_m=dist_m, cart=True, typ=self.typ)
+                self.importosm(latlon=self.arg, dist_m=self.dist_m, cart=True, typ=self.typ)
                 self.loadosm = True
             else:  # load from address geocoding
                 self.importosm(address=self.arg, dist_m=self.dist_m, cart=True, typ=self.typ)
@@ -3907,7 +3907,7 @@ class Layout(pro.PyLayers):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('DLR.lay')
+        >>> L = Layout('DLR2.lay')
         >>> p1 = np.array([0,0,1])
         >>> p2 = np.array([10,3,2])
         >>> data = L.angleonlink3(p1,p2)
@@ -3939,6 +3939,7 @@ class Layout(pro.PyLayers):
             p1 = np.outer(p1, np.ones(1))
             p2 = np.outer(p2, np.ones(1))
 
+        pdb.set_trace()
         # 3 x N
         u = p1 - p2
         # 1 x N
@@ -4055,7 +4056,6 @@ class Layout(pro.PyLayers):
 
         sh1 = np.shape(p1)
         sh2 = np.shape(p2)
-
         assert sh1[0] == 2
         assert sh2[0] == 2
 

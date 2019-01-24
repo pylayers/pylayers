@@ -7,15 +7,28 @@ deg_to_rad = np.pi/180.
 rad_to_deg = 180./np.pi
 
 class OTA(object):
-    def __init__(self, theta, phi, R=0.66, H=1.5):
-        theta = theta*deg_to_rad
-        phi = phi*deg_to_rad
-        x = (R*np.sin(theta[:, None])*np.cos(phi[None, :])).ravel()
-        y = (R*np.sin(theta[:, None])*np.sin(phi[None, :])).ravel()
-        z = (H + R*np.cos(theta[:, None])*np.ones(len(phi))[None, :] ).ravel()
+    """ Over The Air Simulator
+
+    config = 0 : spherical distribution of probes
+
+    """
+    def __init__(self,**kwargs):
+        typ = kwargs.pop('config','spherical')
+        theta=kwargs.pop('theta',np.array([90,60,30]))
+        phi = kwargs.pop('phi',np.array([45,135,225,315]))
+        R = kwargs.pop('R',0.66)
+        H = kwargs.pop('H',1.5)
+        if typ=='spherical':
+            theta = theta*deg_to_rad
+            phi = phi*deg_to_rad
+            x = (R*np.sin(theta[:, None])*np.cos(phi[None, :])).ravel()
+            y = (R*np.sin(theta[:, None])*np.sin(phi[None, :])).ravel()
+            z = (H + R*np.cos(theta[:, None])*np.ones(len(phi))[None, :] ).ravel()
+
         self.p = np.vstack((x, y, z))
         self.th = (theta[:, None]*np.ones(len(phi))[None, :]).ravel()
         self.ph = (np.ones(len(theta))[:,None]*phi[None,: ]).ravel()
+
     def __repr__(self):
         st = ''
         for k in range(self.th.shape[0]):

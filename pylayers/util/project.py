@@ -1,7 +1,7 @@
 #-*- coding:Utf-8 -*-
 from __future__ import print_function
 """
-.. curentmodule:: pylayers.util.project 
+.. curentmodule:: pylayers.util.project
 
 .. autosummary::
 
