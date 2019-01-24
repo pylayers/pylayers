@@ -1,0 +1,10 @@
+<map id="inheritanceeba027575f" name="inheritanceeba027575f">
+<area shape="rect" id="node1" href="pylayers.gis.osmparser.Coords.html#pylayers.gis.osmparser.Coords" target="_top" title="Coords describes a set of points in OSM" alt="" coords="11,252,83,277"/>
+<area shape="rect" id="node2" title="Base class for directed graphs." alt="" coords="136,203,211,228"/>
+<area shape="rect" id="node4" href="pylayers.gis.osmparser.FloorPlan.html#pylayers.gis.osmparser.FloorPlan" target="_top" title="FloorPlan class derived from nx.DigGraph" alt="" coords="259,203,341,228"/>
+<area shape="rect" id="node3" title="Base class for undirected graphs." alt="" coords="11,203,83,228"/>
+<area shape="rect" id="node5" href="pylayers.gis.osmparser.Nodes.html#pylayers.gis.osmparser.Nodes" target="_top" title="osm Nodes container" alt="" coords="11,153,83,179"/>
+<area shape="rect" id="node6" href="pylayers.gis.osmparser.Relations.html#pylayers.gis.osmparser.Relations" target="_top" title="Relations" alt="" coords="5,104,88,129"/>
+<area shape="rect" id="node7" href="pylayers.gis.osmparser.Way.html#pylayers.gis.osmparser.Way" target="_top" title="A Way is a polyline or a Polygon (if closed)" alt="" coords="11,55,83,80"/>
+<area shape="rect" id="node8" href="pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways" target="_top" title="Attributes" alt="" coords="11,5,83,31"/>
+</map>

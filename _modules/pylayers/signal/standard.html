@@ -417,7 +417,7 @@ from pylayers.util.project import *
         return(st)
 
 
-<div class="viewcode-block" id="Wstandard.load"><a class="viewcode-back" href="../../../api/pylayers.signal.standard.Wstandard.html#pylayers.signal.standard.Wstandard.load">[docs]</a>    def load(self,stdname,_fileini=&#39;wstd.json&#39;):
+<div class="viewcode-block" id="Wstandard.load"><a class="viewcode-back" href="../../../api/pylayers.signal.standard.Wstandard.html#pylayers.signal.standard.Wstandard.load">[docs]</a>    def load(self, stdname, _fileini=&#39;wstd.json&#39;):
         &quot;&quot;&quot; load a standard from file
 
         Parameters
@@ -432,7 +432,7 @@ from pylayers.util.project import *
 
         &quot;&quot;&quot;
 
-        filename=pyu.getlong(_fileini,pstruc[&#39;DIRSIMUL&#39;])
+        filename = pyu.getlong(_fileini,pstruc[&#39;DIRSIMUL&#39;])
         fp = open(filename)
         stds = json.load(fp)
         fp.close()
@@ -704,7 +704,7 @@ from pylayers.util.project import *
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Oct 17, 2018.
+      Last updated on Jan 24, 2019.
 
     </p>
   </div>

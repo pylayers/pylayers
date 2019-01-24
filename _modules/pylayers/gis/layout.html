@@ -379,18 +379,18 @@ import pylayers.util.project as pro
 
     s2pc : segment to point coordinates
     s2pu : segment to point index
-    sgsg 
+    sgsg
 
-    sl 
+    sl
 
 
     typ  : &#39;indoor&#39; | &#39;outdoor&#39;
     coordinates : &#39;cart&#39;,&#39;lonlat&#39;
     version
-    _filename 
+    _filename
     _hash
 
-    _shseg : keys / segment index 
+    _shseg : keys / segment index
              values / shapely LineString
     dca    : keys / Gt node 
              values / list of air wall 
@@ -409,35 +409,21 @@ import pylayers.util.project as pro
     zmin
 
     &quot;&quot;&quot;
-
-    def __init__(self, string=&#39;&#39;,
-                 _filematini=&#39;matDB.ini&#39;,
-                 _fileslabini=&#39;slabDB.ini&#39;,
-                 _filefur=&#39;&#39;,
-                 bcheck=False,          # to check Gs
-                 bbuild=False,         # to build graphs
-                 bgraphs=False,         # to load graph
-                 #bindoor=False,        # to allow indoor penetration for outdoor situations
-                 #bdiffraction=False,   # to include diffraction in Gi 
-                 bverbose=False,
-                 bcartesian=True,
-                 xlim=(),
-                 dist_m=400,
-                 typ=&#39;indoor&#39;):
+    def __init__(self,arg=&#39;&#39;,**kwargs):
         &quot;&quot;&quot; object constructor
 
         Parameters
         ----------
 
-        arg : string
-            layout file name, address or &#39;(lat,lon)&#39;
-        _filematini :
+        arg : string or tuple
+            layout file name, address or (lat,lon) or &#39;(lat,lon)&#39;
+        mat :
             material dB file name
-        _fileslabini :
+        slab :
             slab dB file name
-        _filefur :
+        fur :
             furniture file name
-        force : booleanlo
+        force : boolean
         check : boolean
         build : boolean
         verbose : boolean
@@ -449,13 +435,19 @@ import pylayers.util.project as pro
 
 
         &quot;&quot;&quot;
+        self.arg = arg
 
-        # mat = sb.MatDB()
-        # mat.load(_filematini)
-
-        # self.sl = sb.SlabDB()
-        # self.sl.mat = mat
-        # self.sl.load(_fileslabini)
+        self._filematini = kwargs.pop(&#39;mat&#39;,&#39;matDB.ini&#39;)
+        self._fileslabini = kwargs.pop(&#39;slab&#39;,&#39;slabDB.ini&#39;)
+        self._filefur = kwargs.pop(&#39;fur&#39;,&#39;&#39;)
+        self.bcheck = kwargs.pop(&#39;bcheck&#39;,False)
+        self.bbuild = kwargs.pop(&#39;bbuild&#39;,False)
+        self.bgraphs = kwargs.pop(&#39;bgraphs&#39;,False)
+        self.bverbose = kwargs.pop(&#39;bverbose&#39;,False)
+        self.bcartesian = kwargs.pop(&#39;bcartesian&#39;,True)
+        self.xlim = kwargs.pop(&#39;xlim&#39;,())
+        self.dist_m = kwargs.pop(&#39;dist_m&#39;,400)
+        self.typ = kwargs.pop(&#39;typ&#39;,&#39;outdoor&#39;)
 
         self.labels = {}
 
@@ -466,7 +458,7 @@ import pylayers.util.project as pro
 
         #
         # Initializing graphs
-        #
+        # Gs Gr Gt Gm
 
         self.Gs = nx.Graph(name=&#39;Gs&#39;)
         self.Gr = nx.Graph(name=&#39;Gr&#39;)
@@ -478,25 +470,13 @@ import pylayers.util.project as pro
         self.lbltg = []
 
         self.Gt.pos = {}
-
-
         self._shseg = {}
-        #
-        # related files
-        #
-
-        self.fileslabini = _fileslabini
-        self.filematini = _filematini
-        self.filefur = _filefur
 
         self.hasboundary = False
         self.coordinates = &#39;cart&#39;
         self.version = &#39;1.3&#39;
-        if typ in [&#39;indoor&#39;,&#39;outdoor&#39;,&#39;floorplan&#39;]:
-            self.typ = typ
-        else:
-            print(&quot;Layout : unknown Layout typ&quot;)
-        # boolean
+
+        assert(self.typ in [&#39;indoor&#39;,&#39;outdoor&#39;,&#39;floorplan&#39;])
 
         self.isbuilt = False
         self.loadosm = False
@@ -534,10 +514,12 @@ import pylayers.util.project as pro
         self.display[&#39;overlay_file&#39;] = &quot;&quot;
         self.display[&#39;overlay_axis&#39;] = &quot;&quot;
         # self.display[&#39;layerset&#39;] = self.sl.keys()
-        if xlim!=():
-            self.display[&#39;box&#39;]= xlim
+
+        if self.xlim!=():
+            self.display[&#39;box&#39;]= self.xlim
         else:
             self.display[&#39;box&#39;] = (-50, 50, -50, 50)
+
         self.name = {}
         self.ax = self.display[&#39;box&#39;]
         self.zmin = 0
@@ -550,18 +532,20 @@ import pylayers.util.project as pro
 
         #
         # Layout main argument
-        #   If no .ini extension provided it is added
         #
-        if type(string) is bytes:
-            string = string.decode(&#39;utf-8&#39;)
+        if type(self.arg)==tuple:
+            self.arg = str(self.arg)
 
-        arg, ext = os.path.splitext(string)
+        if type(self.arg) is bytes:
+            self.arg = self.arg.decode(&#39;utf-8&#39;)
+
+        arg, ext = os.path.splitext(self.arg)
         if arg != &#39;&#39;:
             if ext == &#39;.ini&#39;:
-                self._filename = string
+                self._filename = self.arg
                 loadlay = True
             if ext == &#39;.lay&#39;:
-                self._filename = string
+                self._filename = self.arg
                 loadlay = True
             elif ext == &#39;.osm&#39;:
                 self._filename = arg + &#39;.lay&#39;
@@ -574,7 +558,7 @@ import pylayers.util.project as pro
         else:  # No argument
             self._filename = &#39;newfile.lay&#39;
             newfile = True
-            self.sl = sb.SlabDB(fileslab=_fileslabini, filemat=_filematini)
+            self.sl = sb.SlabDB(fileslab=self._fileslabini, filemat=self._filematini)
             self.zfloor = 0.
             self.zceil = self.maxheight
 
@@ -587,21 +571,22 @@ import pylayers.util.project as pro
                     newfile = True
                     print(&quot;new file - creating a void Layout&quot;, self._filename)
             elif loadosm:  # load .osm file
-                self.importosm(_fileosm=string, cart=True,typ=self.typ)
+                self.importosm(fileosm=self.arg, cart=True, typ=self.typ)
                 self.loadosm = True
             elif loadres:
-                self.importres(_fileres=string)
+                self.importres(_fileres=self.arg)
                 self.sl = sb.SlabDB()
-            elif &#39;(&#39; in str(string):  # load from osmapi latlon in string
-                self.importosm(latlon=string, dist_m=dist_m, cart=True, typ=self.typ)
+            elif &#39;(&#39; in str(arg):  # load from osmapi latlon (string or tuple
+                latlon = eval(self.arg)
+                self.importosm(latlon=latlon, dist_m=self.dist_m, cart=True, typ=self.typ)
                 self.loadosm = True
             else:  # load from address geocoding
-                self.importosm(address=string, dist_m=dist_m, cart=True,typ=self.typ)
+                self.importosm(address=self.arg, dist_m=self.dist_m, cart=True, typ=self.typ)
                 self.loadosm = True
 
             # add boundary if it not exist
-            if (not self.hasboundary) or (xlim!=()):
-                self.boundary(xlim=xlim)
+            if (not self.hasboundary) or (self.xlim != ()):
+                self.boundary(xlim = self.xlim)
 
             self.subseg()
             self.updateshseg()
@@ -614,17 +599,17 @@ import pylayers.util.project as pro
             #
             # check layout
             #
-            bconsistent = True
-            if bcheck:
-                bconsistent,dseg = self.check()
+            self.bconsistent = True
+            if self.bcheck:
+                self.bconsistent,dseg = self.check()
 
             # if Layout is correctly described
             # check if the graph gpickle files have been built
-            if bconsistent:
+            if self.bconsistent:
                 #
                 # build and save graphs
                 #
-                if bbuild:
+                if self.bbuild:
                     # ans = raw_input(&#39;Do you want to build the layout (y/N) ? &#39;)
                     # if ans.lower()==&#39;y&#39;
                     self.build()
@@ -633,9 +618,7 @@ import pylayers.util.project as pro
                 #
                 # load graphs from file
                 #
-                elif bgraphs:
-                    if os.path.splitext(self._filename)[1]==&#39;.ini&#39;:
-                        dirname = self._filename.replace(&#39;.ini&#39;,&#39;&#39;)
+                elif self.bgraphs:
                     if os.path.splitext(self._filename)[1]==&#39;.lay&#39;:
                         dirname = self._filename.replace(&#39;.lay&#39;,&#39;&#39;)
                     path = os.path.join(pro.basename,
@@ -721,8 +704,10 @@ import pylayers.util.project as pro
         st = st + &quot;\n&quot;
         st = st + &quot;xrange : &quot; + str(self.ax[0:2]) + &quot;\n&quot;
         st = st + &quot;yrange : &quot; + str(self.ax[2:]) + &quot;\n&quot;
-        st = st + &quot;center : &quot; + &quot;( %.2f,%.2f)&quot; % (self.pg[0],self.pg[1]) + &quot;\n&quot;
-        st = st + &quot;radius : %.2f &quot; % self.radius + &quot;\n&quot;
+        if hasattr(self,&#39;pg&#39;):
+            st = st + &quot;center : &quot; + &quot;( %.2f,%.2f)&quot; % (self.pg[0],self.pg[1]) + &quot;\n&quot;
+        if hasattr(self,&#39;radius&#39;):
+            st = st + &quot;radius : %.2f &quot; % self.radius + &quot;\n&quot;
         # st = st + &quot;\nUseful dictionnaries&quot; + &quot;\n----------------\n&quot;
         # if hasattr(self,&#39;dca&#39;):
         #     st = st + &quot;dca {cycle : []} cycle with an airwall&quot; +&quot;\n&quot;
@@ -1277,6 +1262,7 @@ import pylayers.util.project as pro
         # self.sgsg[seg1,seg2] =&gt; return common point
 
         mno = max(self.Gs.nodes())
+
         self.sgsg = sparse.lil_matrix((mno+1,mno+1),dtype=&#39;int&#39;)
 
         # loop over segments
@@ -1563,8 +1549,8 @@ import pylayers.util.project as pro
         # normal_ss = self.normal[:,self.tgs[self.lsss]]
         # self.normal = np.hstack((self.normal,normal_ss))
         # if problem here check file format &#39;z&#39; should be a string
-        lheight = array([v[1] for v in 
-                    nx.get_node_attributes(self.Gs, &#39;z&#39;).values() 
+        lheight = array([v[1] for v in
+                    nx.get_node_attributes(self.Gs, &#39;z&#39;).values()
                     if v[1] &lt; 2000 ])
         #assert(len(lheight)&gt;0),logging.error(&quot;no valid heights for segments&quot;)
         if len(lheight)&gt;0:
@@ -1758,7 +1744,7 @@ import pylayers.util.project as pro
         Parameters
         ----------
 
-        _fileosm : string
+        fileosm : string
         address : string
             address to be geocoded
         latlon : tuple
@@ -1772,11 +1758,11 @@ import pylayers.util.project as pro
         -----
 
         The best and recommended manner to edit a layout is to use the
-        josm editor in association with the piclayer plugin. 
-        This plugin allows to place a geo-adjusted image in the background 
-        which is very convenient for editing floorplan of buildings.. 
+        josm editor in association with the piclayer plugin.
+        This plugin allows to place a geo-adjusted image in the background
+        which is very convenient for editing floorplan of buildings.
 
-        In josm editor, nodes are numbered with negative indexes, while in 
+        In josm editor, nodes are numbered with negative indexes, while in
         pylayers they have a positive index.
 
         See Also
@@ -1785,23 +1771,9 @@ import pylayers.util.project as pro
         pylayers.gis.osmparser.osmparse
 
         &quot;&quot;&quot;
-        defaults = {&#39;_fileosm&#39;: &#39;&#39;,
-                    &#39;address&#39;: &#39;Rennes&#39;,
-                    &#39;typ&#39;: &#39;indoor&#39;,
-                    &#39;latlon&#39;: &#39;0&#39;,
-                    &#39;dist_m&#39;: 200,
-                    &#39;cart&#39;: False
-                    }
 
-        for k in defaults:
-            if k not in kwargs:
-                kwargs[k] = defaults[k]
-
-        self.typ = kwargs[&#39;typ&#39;]
-        address = kwargs[&#39;address&#39;]
-        latlon = eval(kwargs[&#39;latlon&#39;])
-        dist_m = kwargs[&#39;dist_m&#39;]
-        cart = kwargs[&#39;cart&#39;]
+        self._fileosm = kwargs.pop(&#39;fileosm&#39;,&#39;&#39;)
+        cart = kwargs.pop(&#39;cart&#39;,False)
 
         #
         #  zceil ansd zfloor are obtained from actual data
@@ -1813,39 +1785,62 @@ import pylayers.util.project as pro
         self.zceil = -1e10
         self.zfloor = 1e10
 
-        if kwargs[&#39;_fileosm&#39;] == &#39;&#39;:  # by using osmapi address or latlon
-            coords, nodes, ways, dpoly, m = osm.getosm(address = address,
-                                                       latlon = latlon,
-                                                       dist_m = dist_m,
-                                                       cart = cart)
+        if self._fileosm == &#39;&#39;:  # by using osmapi address or latlon
+
+            self.typ = kwargs.pop(&#39;typ&#39;,&#39;indoor&#39;)
+            address = kwargs.pop(&#39;address&#39;,&#39;Rennes&#39;)
+            latlon = kwargs.pop(&#39;latlon&#39;,0)
+
+            if type(latlon) == &#39;str&#39;:
+                 latlon = eval(latlon)
+
+            dist_m = kwargs.pop(&#39;dist_m&#39;,200)
+
+            coords, nodes, ways, m , latlon = osm.getosm(address = address,
+                                                          latlon = latlon,
+                                                          dist_m = dist_m,
+                                                          bcart = cart,
+                                                          typ = self.typ)
+
             self.typ = &#39;outdoor&#39;
             if cart:
                 self.coordinates=&#39;cart&#39;
             else:
                 self.coordinates=&#39;latlon&#39;
-            if kwargs[&#39;latlon&#39;] == &#39;0&#39;:
+
+            if latlon == &#39;0&#39;:
                 self._filename = kwargs[&#39;address&#39;].replace(&#39; &#39;, &#39;_&#39;) + &#39;.lay&#39;
             else:
-                lat, lon = eval(kwargs[&#39;latlon&#39;])
+                lat = latlon[0]
+                lon = latlon[1]
+
                 self._filename = &#39;lat_&#39; + \
                     str(lat).replace(&#39;.&#39;, &#39;_&#39;) + &#39;_lon_&#39; + \
                     str(lon).replace(&#39;.&#39;, &#39;_&#39;) + &#39;.ini&#39;
         else:  # by reading an osm file
-            fileosm = pyu.getlong(kwargs[&#39;_fileosm&#39;], os.path.join(&#39;struc&#39;, &#39;osm&#39;))
+
+            # The osm file is supposed to be in $PROJECT/struc/osm directory
+            fileosm = pyu.getlong(self._fileosm, os.path.join(&#39;struc&#39;, &#39;osm&#39;))
             #coords, nodes, ways, relations, m = osm.osmparse(fileosm, typ=self.typ)
             # typ outdoor parse ways.buildings
             # typ indoor parse ways.ways
-            coords, nodes, ways, relations, m = osm.osmparse(fileosm)
-            self.coordinates = &#39;latlon&#39;
-            self._filename = kwargs[&#39;_fileosm&#39;].replace(&#39;osm&#39;, &#39;lay&#39;)
+            # coords, nodes, ways, relations, m = osm.osmparse(fileosm)
+            coords, nodes, ways, m , (lat,lon) = osm.getosm(cart = cart,
+                                                       filename = fileosm,
+                                                       typ = self.typ)
+            if cart:
+                self.coordinates = &#39;cart&#39;
+            else:
+                self.coordinates = &#39;latlon&#39;
 
-        # 2 valid typ : &#39;indoor&#39; and &#39;building&#39;
+
+            # self.coordinates = &#39;latlon&#39;
+            self._filename = self._fileosm.replace(&#39;osm&#39;, &#39;lay&#39;)
 
         _np = 0  # _ to avoid name conflict with numpy alias
         _ns = 0
         ns = 0
         nss = 0
-
         # Reading points  (&lt;0 index)
 
         # Reorganize points coordinates for detecting
@@ -1854,8 +1849,9 @@ import pylayers.util.project as pro
 
         kp = [k for k in coords.xy]
 
-        x = np.array(list(map(lambda x: coords.xy[x][0], kp)))
-        y = np.array(list(map(lambda x: coords.xy[x][1], kp)))
+        x = np.array([ coords.xy[x][0] for x in  kp ])
+        y = np.array([ coords.xy[x][1] for x in  kp ])
+
         ux = np.argsort(x)
         x_prev = -100
         y_prev = -100
@@ -1918,20 +1914,25 @@ import pylayers.util.project as pro
                 else:  # the default slab name is WALL
                         slab = &quot;WALL&quot;
 
-
                 if &#39;z&#39; in d:
                     z = d[&#39;z&#39;]
                 else:
-                    if self.typ==&#39;indoor&#39;:
+                    if self.typ == &#39;indoor&#39;:
                         z = (0, 3)
-                    if self.typ==&#39;outdoor&#39;:
+                    if self.typ == &#39;outdoor&#39;:
                         z = (0, 3000)
+                if type(z[0])==str:
+                    zmin = eval(z[0])
+                else:
+                    zmin = z[0]
+                if type(z[1])==str:
+                    zmax = eval(z[1])
+                else:
+                    zmax = z[1]
 
-                zmin = z[0]
-                zmax = z[1]
-                if zmin&lt;self.zfloor:
+                if zmin &lt; self.zfloor:
                     self.zfloor = zmin
-                if zmax&gt;self.zceil:
+                if zmax &gt; self.zceil:
                     self.zceil = zmax
 
                 if &#39;offset&#39; in d:
@@ -1959,6 +1960,7 @@ import pylayers.util.project as pro
         #
         lon = array([self.Gs.pos[k][0] for k in self.Gs.pos])
         lat = array([self.Gs.pos[k][1] for k in self.Gs.pos])
+
         # bd = [lon.min(), lat.min(), lon.max(), lat.max()]
         # lon_0 = (bd[0] + bd[2]) / 2.
         # lat_0 = (bd[1] + bd[3]) / 2.
@@ -1974,7 +1976,7 @@ import pylayers.util.project as pro
         self.pur = self.m(self.extent[1],self.extent[3])
         self.extent_c = (self.pll[0],self.pur[0],self.pll[1],self.pur[1])
 
-        if ((kwargs[&#39;cart&#39;]) and (self.coordinates!=&#39;cart&#39;)):
+        if (cart and (self.coordinates!=&#39;cart&#39;)):
              x, y = self.m(lon, lat)
              self.Gs.pos = {k: (x[i], y[i]) for i, k in enumerate(self.Gs.pos)}
              self.coordinates = &#39;cart&#39;
@@ -1994,10 +1996,10 @@ import pylayers.util.project as pro
         # 5) load slabs database
 
         mat = sb.MatDB()
-        mat.load(self.filematini)
+        mat.load(self._filematini)
         self.sl = sb.SlabDB()
         self.sl.mat = mat
-        self.sl.load(self.fileslabini)
+        self.sl.load(self._fileslabini)
 
         #
         # update self.name with existing slabs database entries
@@ -2298,9 +2300,9 @@ import pylayers.util.project as pro
         # config.set(&quot;files&quot;,&#39;materials&#39;,self.filematini)
         # config.set(&quot;files&quot;,&#39;slab&#39;,self.fileslabini)
         #
-        # [ furniture ] 
+        # [ furniture ]
         #
-        config.set(&quot;files&quot;, &#39;furniture&#39;, self.filefur)
+        config.set(&quot;files&quot;, &#39;furniture&#39;, self._filefur)
         #
         # handling olf format ( to be removed later) 
         #
@@ -2404,7 +2406,7 @@ import pylayers.util.project as pro
             self.zceil = eval(di[&#39;indoor&#39;][&#39;zceil&#39;])
             self.zfloor = eval(di[&#39;indoor&#39;][&#39;zfloor&#39;])
 
-        # old format 
+        # old format
         if self.typ == &#39;floorplan&#39;:
             self.zceil = eval(di[&#39;floorplan&#39;][&#39;zceil&#39;])
             self.zfloor = eval(di[&#39;floorplan&#39;][&#39;zfloor&#39;])
@@ -2414,10 +2416,10 @@ import pylayers.util.project as pro
             self.typ = &#39;indoor&#39;
         #
         # [outdoor]
-        #   TODO add a DEM file 
+        #   TODO add a DEM file
         #
         if self.typ == &#39;outdoor&#39;:
-            if &#39;outdoor&#39; in di: 
+            if &#39;outdoor&#39; in di:
                 if &#39;zceil&#39; in di[&#39;outdoor&#39;]:
                     self.zceil = eval(di[&#39;outdoor&#39;][&#39;zceil&#39;])
                 else:
@@ -2425,13 +2427,13 @@ import pylayers.util.project as pro
             else:
                 self.zceil  =  3000    # upper limit for AIR walls
 
-            if &#39;outdoor&#39; in di: 
+            if &#39;outdoor&#39; in di:
                 if &#39;zfloor&#39; in di[&#39;outdoor&#39;]:
                     self.zfloor = eval(di[&#39;outdoor&#39;][&#39;zfloor&#39;])
                 else:
-                    self.zfloor = 0 
+                    self.zfloor = 0
             else:
-                self.zfloor = 0 
+                self.zfloor = 0
         #
         #
         # manage ini file with latlon coordinates
@@ -2466,7 +2468,7 @@ import pylayers.util.project as pro
                     self.display[k] = di[&#39;display&#39;][k]
         # self.ax = self.display[&#39;box&#39;]
         #
-        # [points] 
+        # [points]
         #
         # update points section
         for nn in di[&#39;points&#39;]:
@@ -2607,7 +2609,7 @@ import pylayers.util.project as pro
         if config.has_section(&#39;files&#39;):
             # self.filematini=config.get(&#39;files&#39;,&#39;materials&#39;)
             # self.fileslabini=config.get(&#39;files&#39;,&#39;slab&#39;)
-            self.filefur = config.get(&#39;files&#39;, &#39;furniture&#39;)
+            self._filefur = config.get(&#39;files&#39;, &#39;furniture&#39;)
 
         if config.has_section(&#39;slabs&#39;):
             #filemat = self._filename.replace(&#39;ini&#39;, &#39;mat&#39;)
@@ -3035,7 +3037,7 @@ import pylayers.util.project as pro
             self.display[&#39;layers&#39;].append(name)
 
         # update shseg
-        self._shseg.update({num:sh.LineString((self.Gs.pos[n1],self.Gs.pos[n2]))})
+        self._shseg.update({num:sh.LineString((self.Gs.pos[n1], self.Gs.pos[n2]))})
 
         return(num)</div>
 
@@ -3647,7 +3649,7 @@ import pylayers.util.project as pro
         -----
 
         1. Remove nodes which are not connected
-
+        2. Remove supperimposed segments
         &quot;&quot;&quot;
         lk = list(self.Gs.node.keys())
         for n in lk:
@@ -3659,6 +3661,21 @@ import pylayers.util.project as pro
                 except:
                     pass
         self.Np = len(np.nonzero(np.array(list(self.Gs.node.keys())) &lt; 0)[0])
+        
+        aseg_conn=[]
+        for seg in self.Gs.nodes():
+            if seg &gt;0:
+                n0,n1 = list(nx.neighbors(self.Gs,seg))
+                aseg_conn.append([seg,n0,n1])
+        aseg_conn = np.array(aseg_conn)
+
+        # aseg_conn=np.array([[list(nx.neighbors(self.Gs,x))] for x in self.Gs.nodes() if x &gt;0])
+        uni,upos=np.unique(aseg_conn[:,1:],axis=0,return_index=True)
+        utbd = [x for x in range(len(aseg_conn)) if not x in upos] 
+        tbd = aseg_conn[utbd,0]
+        for k in tbd:
+            self.del_segment(k)
+
         self.g2npy()</div>
 
 <div class="viewcode-block" id="Layout.info_segment"><a class="viewcode-back" href="../../../api/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.info_segment">[docs]</a>    def info_segment(self, s1):
@@ -4102,7 +4119,7 @@ import pylayers.util.project as pro
         --------
 
         &gt;&gt;&gt; from pylayers.gis.layout import *
-        &gt;&gt;&gt; L = Layout(&#39;DLR.lay&#39;)
+        &gt;&gt;&gt; L = Layout(&#39;DLR2.lay&#39;)
         &gt;&gt;&gt; p1 = np.array([0,0,1])
         &gt;&gt;&gt; p2 = np.array([10,3,2])
         &gt;&gt;&gt; data = L.angleonlink3(p1,p2)
@@ -4134,6 +4151,7 @@ import pylayers.util.project as pro
             p1 = np.outer(p1, np.ones(1))
             p2 = np.outer(p2, np.ones(1))
 
+        pdb.set_trace()
         # 3 x N
         u = p1 - p2
         # 1 x N
@@ -4250,7 +4268,6 @@ import pylayers.util.project as pro
 
         sh1 = np.shape(p1)
         sh2 = np.shape(p2)
-
         assert sh1[0] == 2
         assert sh2[0] == 2
 
@@ -5225,17 +5242,17 @@ import pylayers.util.project as pro
         Parameters
         ----------
         seed : float
-        alpha : float 
-            transparency 
-        sig : list of signatures (isequence of Gi nodes format) 
-        cycles : list 
-            [cystart,cyend] 
+        alpha : float
+            transparency
+        sig : list of signatures (isequence of Gi nodes format)
+        cycles : list
+            [cystart,cyend]
         ninter : int
             interaction index
         inter : tuple
-            interaction tuple 
+            interaction tuple
 
-        See Also 
+        See Also
         --------
 
         Signatures.siginter
@@ -5250,9 +5267,10 @@ import pylayers.util.project as pro
                     &#39;fontsize&#39;:18,
                     &#39;labels&#39;:False,
                     &#39;inter&#39;:[]}
-        for k in defaults: 
+
+        for k in defaults:
             if k not in kwargs:
-                kwargs[k]=defaults[k] 
+                kwargs[k]=defaults[k]
 
         edges = self.Gi.edges()
         cy = kwargs[&#39;cycles&#39;]
@@ -5280,13 +5298,13 @@ import pylayers.util.project as pro
             edinter = kwargs[&#39;inter&#39;]
             outlist = self.Gi[edinter[0]][edinter[1]][&#39;output&#39;]
             outprob = outlist.values()
-            edgelist = [(edinter[1],x) for x in outlist] 
+            edgelist = [(edinter[1],x) for x in outlist]
             dprob = dict(zip(edgelist,[str(x) for x in outprob]))
         elif kwargs[&#39;ninter&#39;]!=[]:
-            edinter = edges[kwargs[&#39;ninter&#39;]]
+            edinter = [ e for e in edges][kwargs[&#39;ninter&#39;]]
             outlist = self.Gi[edinter[0]][edinter[1]][&#39;output&#39;]
             outprob = outlist.values()
-            edgelist = [(edinter[1],x) for x in outlist] 
+            edgelist = [(edinter[1],x) for x in outlist]
             dprob = dict(zip(edgelist,[str(x) for x in outprob]))
         else:
             pass
@@ -5400,7 +5418,7 @@ import pylayers.util.project as pro
         ax : matlplotlib axes
         roomlist : list
             list of room numbers
-        mode : string 
+        mode : string
             &#39;indoor&#39;,&#39;open&#39;,&#39;area&#39;,&#39;start&#39;
 
         &quot;&quot;&quot;
@@ -5987,10 +6005,10 @@ import pylayers.util.project as pro
         -----------
 
         lines : shapely lines
-        fig
-        ax 
-        color  : string 
-        alpha  : float 
+        fig : matplotlib figure
+        ax : figure axis
+        color  : string
+        alpha  : float
             transparency
 
         See Also
@@ -6011,6 +6029,8 @@ import pylayers.util.project as pro
 
 <div class="viewcode-block" id="Layout.pltpoly"><a class="viewcode-back" href="../../../api/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.pltpoly">[docs]</a>    def pltpoly(self, poly, fig=[], ax=[], color=&#39;r&#39;, alpha=0.2):
         &quot;&quot;&quot;  plot a polygon with a specified color and transparency
+
+        TODO : To be deplaced in an ither class
         &quot;&quot;&quot;
         if fig == []:
             fig = plt.gcf()
@@ -6024,15 +6044,15 @@ import pylayers.util.project as pro
         plt.axis(self.ax)
         plt.draw()</div>
 
-<div class="viewcode-block" id="Layout.pltvnodes"><a class="viewcode-back" href="../../../api/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.pltvnodes">[docs]</a>    def pltvnodes(self, vn, fig=[], ax=[],):
-        &quot;&quot;&quot; plot vnodes 
+<div class="viewcode-block" id="Layout.pltvnodes"><a class="viewcode-back" href="../../../api/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.pltvnodes">[docs]</a>    def pltvnodes(self, vn, fig=[], ax=[]):
+        &quot;&quot;&quot; plot vnodes
 
         Parameters
         ----------
 
         vn : list of nodes
-        fig : 
-        ax : 
+        fig :
+        ax :
 
         &quot;&quot;&quot;
         if fig == []:
@@ -7273,22 +7293,22 @@ import pylayers.util.project as pro
                 polyg = self.Gt.node[icycle][&#39;polyg&#39;]
 
                 # plt.show(polyg.plot(fig=plt.gcf(),ax=plt.gca())
-                
+
                 # take a single segment between 2 points 
-                
+
                 vnodes = polyg.vnodes
 
                 # list of index of points in vodes
                 unodes = np.where(vnodes&lt;0)[0]
-                
+
                 # list of position of an incomplete list of segments 
                 # used rule : after a point there is always a segment 
                 useg = np.mod(unodes+1,len(vnodes))
-                
+
                 # list of points 
                 #npt  = filter(lambda x: x &lt; 0, vnodes)
                 npt = [ x for x in vnodes if x &lt;0 ]
-                
+
                 nseg_full = [x for x in vnodes if x &gt; 0]
                 # nseg : incomplete list of segments
                 #
@@ -7299,7 +7319,7 @@ import pylayers.util.project as pro
                 else:
                     nseg = vnodes[useg]
 
-                
+
                 # # nseg_full : full list of segments
                 # #nseg_full = filter(lambda x: x &gt; 0, vnodes)
 
@@ -7446,7 +7466,7 @@ import pylayers.util.project as pro
 
         self.Gi = nx.DiGraph(name=&#39;Gi&#39;)
         self.Gi.pos = {}
-        
+
         #
         # 1 ) Create nodes of Gi and their positions
         #
@@ -7619,7 +7639,7 @@ import pylayers.util.project as pro
                                 #     print(&quot;li2&quot;,li2)
                                 #if cy == 91:
                                 #    print(&quot;     &quot;,li2)
-                                
+
                                 for i1 in li1:
                                     for i2 in li2:
                                         if (i1[0] != i2[0]):
@@ -10548,7 +10568,7 @@ import pylayers.util.project as pro
 
         sc = tvtk.UnsignedCharArray()
         sc.from_array(color)
-
+        
         # manage floor
 
         # if Gt doesn&#39;t exists
@@ -10811,8 +10831,9 @@ import pylayers.util.project as pro
         Parameters
         ---------
 
-        fig 
-        ax 
+        show : boolean
+        fig :figure
+        ax  :
         labels : list
         nodes : boolean
 
@@ -10861,7 +10882,8 @@ import pylayers.util.project as pro
 
         if kwargs[&#39;nodes&#39;]:
             ax.scatter(vv[:, 0], vv[:, 1])
-        ML = sh.MultiLineString(self._shseg.values())
+
+        ML = sh.MultiLineString(list(self._shseg.values()))
 
         self.pltlines(ML, color=&#39;k&#39;, fig=fig, ax=ax)
 
@@ -11465,7 +11487,7 @@ if __name__ == &quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Oct 17, 2018.
+      Last updated on Jan 24, 2019.
 
     </p>
   </div>

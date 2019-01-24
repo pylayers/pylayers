@@ -209,18 +209,24 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="exemple-of-issue-314">
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Click <a class="reference internal" href="#sphx-glr-download-auto-examples-plot-issue314-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="exemple-of-issue-314">
 <span id="sphx-glr-auto-examples-plot-issue314-py"></span><h1>Exemple of issue 314<a class="headerlink" href="#exemple-of-issue-314" title="Permalink to this headline">¶</a></h1>
-<p>This example illustrates how to get a region from open stree map database
+<p>This example illustrates how to get a region from
+open stree map database
 description from its coordinates.</p>
+<p>(57.696495, 12.006234) Near Gothenburg (Sweden)</p>
 <ul class="sphx-glr-horizontal">
-<li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_issue314_001.png"><img alt="../_images/sphx_glr_plot_issue314_001.png" src="../_images/sphx_glr_plot_issue314_001.png" style="width: 376.0px; height: 376.0px;" /></a>
+<li><img alt="../_images/sphx_glr_plot_issue314_001.png" class="sphx-glr-multi-img first" src="../_images/sphx_glr_plot_issue314_001.png" />
 </li>
-<li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_issue314_002.png"><img alt="../_images/sphx_glr_plot_issue314_002.png" src="../_images/sphx_glr_plot_issue314_002.png" style="width: 470.0px; height: 470.0px;" /></a>
+<li><img alt="../_images/sphx_glr_plot_issue314_002.png" class="sphx-glr-multi-img first" src="../_images/sphx_glr_plot_issue314_002.png" />
 </li>
 </ul>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/uguen/Bureau/P1/struc/lay/lat_57_696495_lon_12_006234.lay
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/uguen/Bureau/P1/struc/lay/lat_12_0065911_lon_57_6954186.lay
 </pre></div>
 </div>
 <div class="line-block">
@@ -228,7 +234,7 @@ description from its coordinates.</p>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="c1"># Load the layout from open street map</span>
-<span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;(57.696495, 12.006234)&#39;</span><span class="p">,</span><span class="n">dist_m</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">((</span><span class="mf">57.696495</span><span class="p">,</span> <span class="mf">12.006234</span><span class="p">),</span><span class="n">dist_m</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 <span class="c1"># Show the layout</span>
 <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -241,14 +247,14 @@ description from its coordinates.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 1 minutes  45.838 seconds)</p>
-<div class="sphx-glr-footer docutils container">
+<p><strong>Total running time of the script:</strong> ( 2 minutes  1.636 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-issue314-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../_downloads/plot_issue314.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_issue314.py</span></code></a></div>
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../_downloads/plot_issue314.ipynb" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_issue314.ipynb</span></code></a></div>
 </div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Generated by Sphinx-Gallery</a></p>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
 </div>
 
 
@@ -272,7 +278,7 @@ description from its coordinates.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Oct 17, 2018.
+      Last updated on Jan 24, 2019.
 
     </p>
   </div>

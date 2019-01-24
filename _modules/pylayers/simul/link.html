@@ -950,36 +950,35 @@ logger = logging.getLogger(__name__)
 
 
     def __repr__(self):
-        &quot;&quot;&quot; __repr__
-        &quot;&quot;&quot;
 
         if hasattr(self,&#39;filename&#39;):
             s = &#39;filename: &#39; + self.filename +&#39;\n&#39;
-            s = s + &#39;Layout : &#39; + self.Lname + &#39;\n\n&#39;
-            s = s + &#39;Node a   \n&#39;
+            #s = s + &#39;Layout file: &#39; + self.Lname + &#39;\n&#39;
+            s = s + &#39;Node A   \n&#39;
             s = s + &#39;------  \n&#39;
             s = s + &#39;\tcoord : &#39; + str (self.a) + &quot;  in cycle &quot; + str(self.ca) + &#39;\n&#39;
-            s = s + &#39;\tantenna : &#39; + str (self.Aa.typ) + &#39;\n&#39;
+            s = s + &#39;\tantenna type: &#39; + str (self.Aa.typ) + &#39;\n&#39;
             if (self.Ta!=np.eye(3)).any():
                 s = s + &#39;\trotation matrice : \n &#39; + str (self.Ta) + &#39;\n\n&#39;
-            s = s + &#39;Node b   \n&#39;
+            s = s + &#39;Node B   \n&#39;
             s = s + &#39;------  \n&#39;
             s = s + &#39;\tcoord : &#39; + str (self.b) + &quot; in cycle &quot; + str(self.cb) + &#39;\n&#39;
             s = s + &#39;\tantenna : &#39; + str (self.Ab.typ) + &#39;\n&#39;
             if (self.Ta!=np.eye(3)).any():
                 s = s + &#39;rotation matrice : \n &#39; + str (self.Tb) + &#39;\n\n&#39;
-            s = s + &#39;\n---------------- \n&#39;
-            s = s + &#39;distance : &#39; + str(&quot;%6.3f&quot; % np.sqrt(np.sum((self.a-self.b)**2))) + &#39; m \n&#39;
-            s = s + &#39;delay : &#39; + str(&quot;%6.3f&quot; % (np.sqrt(np.sum((self.a-self.b)**2))/0.3)) + &#39; ns\n&#39;
+            s = s + &#39;---------------- \n&#39;
+            s = s + &#39;distance AB : &#39; + str(&quot;%6.3f&quot; % np.sqrt(np.sum((self.a-self.b)**2))) + &#39; m \n&#39;
+            s = s + &#39;delay AB : &#39; + str(&quot;%6.3f&quot; % (np.sqrt(np.sum((self.a-self.b)**2))/0.3)) + &#39; ns\n&#39;
             rd2deg = 180/np.pi
             if not np.allclose(self.a,self.b):
                 vsba = self.b-self.a
                 a1 = geu.angledir(vsba[None,:])
                 a2 = geu.angledir(-vsba[None,:])
-                s = s + &#39;azimuth (a | b ) : %.2f &#39; % (a1[0,1]*rd2deg) +&#39; deg  | %.2f&#39; % (a2[0,1]*rd2deg) + &#39; deg\n&#39;
-                s = s + &#39;elevation (a | b ) : %.2f&#39; % (a1[0,0]*rd2deg) + &#39; deg | %.2f &#39; % (a2[0,0]*rd2deg) + &#39; deg\n&#39;
-                s = s + &#39;tilt (a |  b ) : &#39;+str((a1[0,0]-np.pi/2)*rd2deg)+ &#39; deg  | &#39;+ str((a2[0,0]-np.pi/2)*rd2deg)+ &#39; deg\n&#39;
+                s = s + &#39;azimuth (A | B) : %.2f &#39; % (a1[0,1]*rd2deg) +&#39; deg  | %.2f&#39; % (a2[0,1]*rd2deg) + &#39; deg\n&#39;
+                s = s + &#39;elevation (A | B) : %.2f&#39; % (a1[0,0]*rd2deg) + &#39; deg | %.2f &#39; % (a2[0,0]*rd2deg) + &#39; deg\n&#39;
+                s = s + &#39;tilt (A |  B) : &#39;+str((a1[0,0]-np.pi/2)*rd2deg)+ &#39; deg  | &#39;+ str((a2[0,0]-np.pi/2)*rd2deg)+ &#39; deg\n&#39;
             #s = s + &#39;Frequency range :  \n&#39;
+            s = s + &#39;------------- \n&#39;
             Nf = len(self.fGHz)
             s = s + &#39;fGHz : %.2f, %.2f, %g &#39; %(self.fGHz[0],self.fGHz[-1],Nf) +&#39;\n&#39;
             if Nf&gt;1:
@@ -990,9 +989,21 @@ logger = logging.getLogger(__name__)
             else:
                 fcGHz = self.fGHz[0]
             L  = 32.4+20*np.log(d)+20*np.log10(fcGHz)
-            s = s + &#39;\n------------- \n&#39;
+            s = s + &#39;------------- \n&#39;
             s = s + &#39;cutoff/threshold : %g / %.2f&#39; %(self.cutoff, self.threshold)+&#39;\n&#39;
             s = s + &#39;max delay /dist: %.2f ns / %.2f m&#39; %(self.delay_excess_max_ns,self.delay_excess_max_ns*0.3)+&#39;\n&#39;
+            s = s + &#39;-------------- \n&#39;
+            if hasattr(self,&#39;Si&#39;):
+                s = s + &#39;# Si : &#39; + str(len(self.Si))
+            if hasattr(self,&#39;r2d&#39;):
+                s = s + &#39;\n# r2d : &#39; + str(len(self.r2d))
+            if hasattr(self,&#39;R&#39;):
+                s = s + &#39;\n# R : &#39; + str(len(self.R))
+            if hasattr(self,&#39;C&#39;):
+                s = s + &#39;\n# C.Ctt.y : &#39; + str(self.C.Ctt.y.shape)
+                s = s + &#39;\n# C.Ctp.y : &#39; + str(self.C.Ctp.y.shape)
+                s = s + &#39;\n# C.Cpt.y : &#39; + str(self.C.Cpt.y.shape)
+                s = s + &#39;\n# C.Cpp.y : &#39; + str(self.C.Cpp.y.shape)
         else:
             s = &#39;No Layout specified&#39;
         return s
@@ -1137,8 +1148,6 @@ logger = logging.getLogger(__name__)
         except:
             self.L.build()
             self.L.dumpw()
-
-
 
         # self.a = self.L.cy2pt(self.ca)
         # self.b = self.L.cy2pt(self.cb)
@@ -1331,9 +1340,9 @@ logger = logging.getLogger(__name__)
 
             #if type(grpname)==str:
             #    grpname.encode(&#39;utf-8&#39;)
-            print(key,grpname)
-            if key==&#39;ray&#39;:
-                pdb.set_trace()
+            #print(key,grpname)
+            #if key==&#39;ray&#39;:
+            #    pdb.set_trace()
             obj._saveh5(self.filename,grpname)
 
 
@@ -1354,12 +1363,8 @@ logger = logging.getLogger(__name__)
         kwargs :
         layout for sig and rays
 
-        Examples
-        --------
-
 
         &quot;&quot;&quot;
-
 
         obj._loadh5(self.filename,grpname,**kwargs)
         logger.debug(str(obj.__class__).split(&#39;.&#39;)[-1] + &#39; from &#39;+ grpname + &#39; loaded&#39;)</div>
@@ -2873,7 +2878,7 @@ if (__name__ == &quot;__main__&quot;):
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Oct 17, 2018.
+      Last updated on Jan 24, 2019.
 
     </p>
   </div>

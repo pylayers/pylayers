@@ -151,7 +151,6 @@
 <li class="toctree-l3"><a class="reference internal" href="pylayers.gis.osmparser.extract.html">extract</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.gis.osmparser.getbdg.html">getbdg</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.gis.osmparser.getosm.html">getosm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.gis.osmparser.osmparse.html">osmparse</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#id8">5.2&nbsp;&nbsp;&nbsp;Classes</a><ul>
@@ -906,7 +905,7 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout" title="pylayers.gis.layout.Layout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout</span></code></a>([string,&nbsp;_filematini,&nbsp;_fileslabini,&nbsp;…])</td>
+<tr class="row-odd"><td><a class="reference internal" href="pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout" title="pylayers.gis.layout.Layout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout</span></code></a>([arg])</td>
 <td>Handling Layout</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">SelectL</span></code>(L,&nbsp;fig,&nbsp;ax)</td>
@@ -1039,13 +1038,10 @@
 <tr class="row-odd"><td><a class="reference internal" href="pylayers.gis.osmparser.getbdg.html#pylayers.gis.osmparser.getbdg" title="pylayers.gis.osmparser.getbdg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getbdg</span></code></a>(fileosm[,&nbsp;verbose])</td>
 <td>get building from osm file</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pylayers.gis.osmparser.getosm.html#pylayers.gis.osmparser.getosm" title="pylayers.gis.osmparser.getosm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getosm</span></code></a>([address,&nbsp;latlon,&nbsp;dist_m,&nbsp;cart,&nbsp;…])</td>
+<tr class="row-even"><td><a class="reference internal" href="pylayers.gis.osmparser.getosm.html#pylayers.gis.osmparser.getosm" title="pylayers.gis.osmparser.getosm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getosm</span></code></a>(**kwargs)</td>
 <td>get osm region from osmapi</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pylayers.gis.osmparser.osmparse.html#pylayers.gis.osmparser.osmparse" title="pylayers.gis.osmparser.osmparse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">osmparse</span></code></a>(_filename[,&nbsp;typ,&nbsp;verbose,&nbsp;c,&nbsp;n,&nbsp;w,&nbsp;…])</td>
-<td>parse osm files</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">urlopen</span></code>(url[,&nbsp;data,&nbsp;timeout,&nbsp;cafile,&nbsp;…])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">urlopen</span></code>(url[,&nbsp;data,&nbsp;timeout,&nbsp;cafile,&nbsp;…])</td>
 <td></td>
 </tr>
 </tbody>
@@ -1094,14 +1090,14 @@
 </div>
 <div class="section" id="id9">
 <h2>5.3&nbsp;&nbsp;&nbsp;Class Inheritance Diagram<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
-<img src="../_images/inheritance-68e058f8d548ffc986c1c050b51d2b48bccb99e0.png" alt="Inheritance diagram of pylayers.gis.osmparser.Coords, pylayers.gis.osmparser.FloorPlan, pylayers.gis.osmparser.Nodes, pylayers.gis.osmparser.Relations, pylayers.gis.osmparser.Way, pylayers.gis.osmparser.Ways" usemap="#inheritanceeba027575f" class="inheritance"/>
+<img src="../_images/inheritance-83e3deadce9f4b91e75c4af5af0f7a8d46898177.png" alt="Inheritance diagram of pylayers.gis.osmparser.Coords, pylayers.gis.osmparser.FloorPlan, pylayers.gis.osmparser.Nodes, pylayers.gis.osmparser.Relations, pylayers.gis.osmparser.Way, pylayers.gis.osmparser.Ways" usemap="#inheritanceeba027575f" class="inheritance"/>
 <map id="inheritanceeba027575f" name="inheritanceeba027575f">
-<area shape="rect" id="node1" href="pylayers.gis.osmparser.Coords.html#pylayers.gis.osmparser.Coords" target="_top" title="Coords describes a set of points in OSM " alt="" coords="9,252,81,277"/>
-<area shape="rect" id="node4" href="pylayers.gis.osmparser.FloorPlan.html#pylayers.gis.osmparser.FloorPlan" target="_top" title="FloorPlan class derived from nx.DigGraph" alt="" coords="255,203,335,228"/>
-<area shape="rect" id="node5" href="pylayers.gis.osmparser.Nodes.html#pylayers.gis.osmparser.Nodes" target="_top" title="osm Nodes container" alt="" coords="9,153,81,179"/>
-<area shape="rect" id="node6" href="pylayers.gis.osmparser.Relations.html#pylayers.gis.osmparser.Relations" target="_top" title="Relations" alt="" coords="5,104,84,129"/>
-<area shape="rect" id="node7" href="pylayers.gis.osmparser.Way.html#pylayers.gis.osmparser.Way" target="_top" title="A Way is a polyline or a Polygon (if closed)" alt="" coords="9,55,81,80"/>
-<area shape="rect" id="node8" href="pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways" target="_top" title="Attributes" alt="" coords="9,5,81,31"/>
+<area shape="rect" id="node1" href="pylayers.gis.osmparser.Coords.html#pylayers.gis.osmparser.Coords" target="_top" title="Coords describes a set of points in OSM" alt="" coords="11,252,83,277"/>
+<area shape="rect" id="node4" href="pylayers.gis.osmparser.FloorPlan.html#pylayers.gis.osmparser.FloorPlan" target="_top" title="FloorPlan class derived from nx.DigGraph" alt="" coords="259,203,341,228"/>
+<area shape="rect" id="node5" href="pylayers.gis.osmparser.Nodes.html#pylayers.gis.osmparser.Nodes" target="_top" title="osm Nodes container" alt="" coords="11,153,83,179"/>
+<area shape="rect" id="node6" href="pylayers.gis.osmparser.Relations.html#pylayers.gis.osmparser.Relations" target="_top" title="Relations" alt="" coords="5,104,88,129"/>
+<area shape="rect" id="node7" href="pylayers.gis.osmparser.Way.html#pylayers.gis.osmparser.Way" target="_top" title="A Way is a polyline or a Polygon (if closed)" alt="" coords="11,55,83,80"/>
+<area shape="rect" id="node8" href="pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways" target="_top" title="Attributes" alt="" coords="11,5,83,31"/>
 </map></div>
 </div>
 <div class="section" id="module-pylayers.gis.ezone">
@@ -1146,10 +1142,10 @@
 <tr class="row-even"><td><a class="reference internal" href="pylayers.gis.ezone.enctile.html#pylayers.gis.ezone.enctile" title="pylayers.gis.ezone.enctile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enctile</span></code></a>(lon,&nbsp;lat)</td>
 <td>encode tile prefix from (lon,lat)</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ent</span></code>(lL,&nbsp;lL0)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ent</span></code>(lL)</td>
 <td>encode lon Lat in natural integer</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">eqt</span></code>(lL,&nbsp;lL0)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">eqt</span></code>(lL)</td>
 <td>encode lon Lat in quad tree integer</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="pylayers.gis.ezone.expand.html#pylayers.gis.ezone.expand" title="pylayers.gis.ezone.expand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">expand</span></code></a>(A)</td>
@@ -1167,19 +1163,22 @@
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">haversine</span></code>(lat1,&nbsp;lon1,&nbsp;lat2,&nbsp;lon2[,&nbsp;mode])</td>
 <td>lat 1 (Na) lon 1 (Na) lat 2 (Nb) lon 2 (Nb)</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">lab2ext</span></code>(lab,&nbsp;lL0)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">lL2ext</span></code>(lL)</td>
+<td>convert a lonLat into its qt extent</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">lab2ext</span></code>(lab,&nbsp;lL0)</td>
 <td>label to extent</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_axes_locatable</span></code>(axes)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_axes_locatable</span></code>(axes)</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pylayers.gis.ezone.maxloc.html#pylayers.gis.ezone.maxloc" title="pylayers.gis.ezone.maxloc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maxloc</span></code></a>(f[,&nbsp;threshold])</td>
+<tr class="row-odd"><td><a class="reference internal" href="pylayers.gis.ezone.maxloc.html#pylayers.gis.ezone.maxloc" title="pylayers.gis.ezone.maxloc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maxloc</span></code></a>(f[,&nbsp;threshold])</td>
 <td>determine local maximum above a threshold</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">minsec2dec</span></code>(old)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">minsec2dec</span></code>(old)</td>
 <td>convert latlon from DMS (minute second) to DD (decimal)</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pylayers.gis.ezone.zone.html#pylayers.gis.ezone.zone" title="pylayers.gis.ezone.zone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">zone</span></code></a>(pt[,&nbsp;rm])</td>
+<tr class="row-odd"><td><a class="reference internal" href="pylayers.gis.ezone.zone.html#pylayers.gis.ezone.zone" title="pylayers.gis.ezone.zone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">zone</span></code></a>(pt[,&nbsp;rm])</td>
 <td>extract a region from a point and a radius</td>
 </tr>
 </tbody>
@@ -2076,7 +2075,7 @@
 <tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Interface</span></code>([fGHz,&nbsp;theta,&nbsp;name])</td>
 <td>Interface between 2 medium</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout</span></code>([string,&nbsp;_filematini,&nbsp;_fileslabini,&nbsp;…])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout</span></code>([arg])</td>
 <td>Handling Layout</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Mat</span></code>(name,&nbsp;**dm)</td>
@@ -2385,12 +2384,12 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">CheckButtons</span></code>(ax,&nbsp;labels,&nbsp;actives)</td>
-<td>A GUI neutral set of check buttons.</td>
+<td>A GUI neutral radio button.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="pylayers.antprop.coverage.Coverage.html#pylayers.antprop.coverage.Coverage" title="pylayers.antprop.coverage.Coverage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Coverage</span></code></a>([_fileini])</td>
 <td>Handle Layout Coverage</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout</span></code>([string,&nbsp;_filematini,&nbsp;_fileslabini,&nbsp;…])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout</span></code>([arg])</td>
 <td>Handling Layout</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">PyLayers</span></code></td>
@@ -2488,7 +2487,7 @@
 <tr class="row-even"><td><a class="reference internal" href="pylayers.simul.link.DLink.html#pylayers.simul.link.DLink" title="pylayers.simul.link.DLink"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DLink</span></code></a>(**kwargs)</td>
 <td>Deterministic Link Class</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout</span></code>([string,&nbsp;_filematini,&nbsp;_fileslabini,&nbsp;…])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout</span></code>([arg])</td>
 <td>Handling Layout</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="pylayers.simul.link.Link.html#pylayers.simul.link.Link" title="pylayers.simul.link.Link"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Link</span></code></a>()</td>
@@ -2627,15 +2626,15 @@
 <td>Class Agent</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">CheckButtons</span></code>(ax,&nbsp;labels,&nbsp;actives)</td>
-<td>A GUI neutral set of check buttons.</td>
+<td>A GUI neutral radio button.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">EMSolver</span></code></td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">EMSolver</span></code>([L])</td>
 <td>Invoque an electromagnetic solver</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Gcom</span></code>(net,&nbsp;sim)</td>
 <td>Communication graph</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout</span></code>([string,&nbsp;_filematini,&nbsp;_fileslabini,&nbsp;…])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout</span></code>([arg])</td>
 <td>Handling Layout</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Network</span></code>([owner,&nbsp;EMS,&nbsp;PN])</td>
@@ -2727,7 +2726,7 @@
 <td>A GUI neutral button.</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">CheckButtons</span></code>(ax,&nbsp;labels,&nbsp;actives)</td>
-<td>A GUI neutral set of check buttons.</td>
+<td>A GUI neutral radio button.</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">CorSer</span></code>([serie,&nbsp;day,&nbsp;source,&nbsp;layout])</td>
 <td>Handle CORMORAN measurement data</td>
@@ -2747,7 +2746,7 @@
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Device</span></code>([devname,&nbsp;ID,&nbsp;owner,&nbsp;typ])</td>
 <td>Device Class</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout</span></code>([string,&nbsp;_filematini,&nbsp;_fileslabini,&nbsp;…])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout</span></code>([arg])</td>
 <td>Handling Layout</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Link</span></code>()</td>
@@ -3209,7 +3208,7 @@
 <tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">LambdaType</span></code></td>
 <td>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">builtins.function</span></code></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout</span></code>([string,&nbsp;_filematini,&nbsp;_fileslabini,&nbsp;…])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout</span></code>([arg])</td>
 <td>Handling Layout</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="pylayers.measures.mesmimo.MIMO.html#pylayers.measures.mesmimo.MIMO" title="pylayers.measures.mesmimo.MIMO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MIMO</span></code></a>(**kwargs)</td>
@@ -4220,7 +4219,7 @@ devdf  : device data frame</p>
 <td>A GUI neutral button.</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">CheckButtons</span></code>(ax,&nbsp;labels,&nbsp;actives)</td>
-<td>A GUI neutral set of check buttons.</td>
+<td>A GUI neutral radio button.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer" title="pylayers.measures.cormoran.CorSer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CorSer</span></code></a>([serie,&nbsp;day,&nbsp;source,&nbsp;layout])</td>
 <td>Handle CORMORAN measurement data</td>
@@ -4231,7 +4230,7 @@ devdf  : device data frame</p>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">DF</span></code>([b,&nbsp;a])</td>
 <td>Digital Filter Class</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout</span></code>([string,&nbsp;_filematini,&nbsp;_fileslabini,&nbsp;…])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout</span></code>([arg])</td>
 <td>Handling Layout</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pool</span></code></td>
@@ -4360,89 +4359,95 @@ devdf  : device data frame</p>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code>(object[,&nbsp;dtype,&nbsp;copy,&nbsp;order,&nbsp;subok,&nbsp;ndmin])</td>
 <td>Create an array.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">coroutine</span></code>(func)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">bench</span></code></td>
+<td>Run benchmarks for module using nose.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">coroutine</span></code>(func)</td>
 <td>Convert regular generator function to a coroutine.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">fft</span></code>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">fft</span></code>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
 <td>Compute the one-dimensional discrete Fourier Transform.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">fft2</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">fft2</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
 <td>Compute the 2-dimensional discrete Fourier Transform</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">fftfreq</span></code>(n[,&nbsp;d])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">fftfreq</span></code>(n[,&nbsp;d])</td>
 <td>Return the Discrete Fourier Transform sample frequencies.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">fftn</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">fftn</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
 <td>Compute the N-dimensional discrete Fourier Transform.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">fftshift</span></code>(x[,&nbsp;axes])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">fftshift</span></code>(x[,&nbsp;axes])</td>
 <td>Shift the zero-frequency component to the center of the spectrum.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmin</span></code>(func,&nbsp;x0[,&nbsp;args,&nbsp;xtol,&nbsp;ftol,&nbsp;maxiter,&nbsp;…])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmin</span></code>(func,&nbsp;x0[,&nbsp;args,&nbsp;xtol,&nbsp;ftol,&nbsp;maxiter,&nbsp;…])</td>
 <td>Minimize a function using the downhill simplex algorithm.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pylayers.measures.parker.smparker.gettty.html#pylayers.measures.parker.smparker.gettty" title="pylayers.measures.parker.smparker.gettty"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gettty</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="pylayers.measures.parker.smparker.gettty.html#pylayers.measures.parker.smparker.gettty" title="pylayers.measures.parker.smparker.gettty"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gettty</span></code></a>()</td>
 <td>get tty and handles port conflicts</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">hfft</span></code>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
-<td>Compute the FFT of a signal that has Hermitian symmetry, i.e., a real spectrum.</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">hfft</span></code>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
+<td>Compute the FFT of a signal which has Hermitian symmetry (real spectrum).</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ifft</span></code>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ifft</span></code>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
 <td>Compute the one-dimensional inverse discrete Fourier Transform.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ifft2</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ifft2</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
 <td>Compute the 2-dimensional inverse discrete Fourier Transform.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ifftn</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ifftn</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
 <td>Compute the N-dimensional inverse discrete Fourier Transform.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ifftshift</span></code>(x[,&nbsp;axes])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ifftshift</span></code>(x[,&nbsp;axes])</td>
 <td>The inverse of <cite>fftshift</cite>.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ihfft</span></code>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
-<td>Compute the inverse FFT of a signal that has Hermitian symmetry.</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ihfft</span></code>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
+<td>Compute the inverse FFT of a signal which has Hermitian symmetry.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">irfft</span></code>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">irfft</span></code>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
 <td>Compute the inverse of the n-point DFT for real input.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">irfft2</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">irfft2</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
 <td>Compute the 2-dimensional inverse FFT of a real array.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">irfftn</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">irfftn</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
 <td>Compute the inverse of the N-dimensional FFT of real input.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">k2xyz</span></code>(ik,&nbsp;sh)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">k2xyz</span></code>(ik,&nbsp;sh)</td>
 <td>Parameters ———-</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadmat</span></code>(file_name[,&nbsp;mdict,&nbsp;appendmat])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadmat</span></code>(file_name[,&nbsp;mdict,&nbsp;appendmat])</td>
 <td>Load MATLAB file.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_axes_locatable</span></code>(axes)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_axes_locatable</span></code>(axes)</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">new_class</span></code>(name[,&nbsp;bases,&nbsp;kwds,&nbsp;exec_body])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">new_class</span></code>(name[,&nbsp;bases,&nbsp;kwds,&nbsp;exec_body])</td>
 <td>Create a class object dynamically using the appropriate metaclass.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">prepare_class</span></code>(name[,&nbsp;bases,&nbsp;kwds])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">prepare_class</span></code>(name[,&nbsp;bases,&nbsp;kwds])</td>
 <td>Call the __prepare__ method of the appropriate metaclass.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">rfft</span></code>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">rfft</span></code>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
 <td>Compute the one-dimensional discrete Fourier Transform for real input.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">rfft2</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">rfft2</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
 <td>Compute the 2-dimensional FFT of a real array.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">rfftfreq</span></code>(n[,&nbsp;d])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">rfftfreq</span></code>(n[,&nbsp;d])</td>
 <td>Return the Discrete Fourier Transform sample frequencies (for usage with rfft, irfft).</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">rfftn</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">rfftn</span></code>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
 <td>Compute the N-dimensional discrete Fourier Transform for real input.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">sleep</span></code>(seconds)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">sleep</span></code>(seconds)</td>
 <td>Delay execution for a given number of seconds.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">svd</span></code>(a[,&nbsp;full_matrices,&nbsp;compute_uv])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">svd</span></code>(a[,&nbsp;full_matrices,&nbsp;compute_uv])</td>
 <td>Singular Value Decomposition.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">test</span></code></td>
+<td>Run tests for module using nose.</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">weights</span></code>(nx,&nbsp;nz,&nbsp;kx,&nbsp;kz,&nbsp;Kx,&nbsp;Kz)</td>
 <td>Practical Demonstration of Limited Feedback Beamforming for mmWave Systems</td>
@@ -6326,7 +6331,7 @@ rxr</p>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">InterpenetrationConstraint</span></code></td>
 <td>Class InterpenetrationConstaint</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout</span></code>([string,&nbsp;_filematini,&nbsp;_fileslabini,&nbsp;…])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout</span></code>([arg])</td>
 <td>Handling Layout</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Localization</span></code>(**args)</td>
@@ -6846,7 +6851,7 @@ the body.</p>
 
 <dl class="method">
 <dt id="pylayers.mobility.ban.body.Body.settopos">
-<code class="descname">settopos</code><span class="sig-paren">(</span><em>traj=[]</em>, <em>t=0</em>, <em>cs=True</em>, <em>treadmill=False</em>, <em>p0=array([0.</em>, <em>0.])</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.settopos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.settopos" title="Permalink to this definition">¶</a></dt>
+<code class="descname">settopos</code><span class="sig-paren">(</span><em>traj=[]</em>, <em>t=0</em>, <em>cs=True</em>, <em>treadmill=False</em>, <em>p0=array([ 0.</em>, <em>0.])</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/mobility/ban/body.html#Body.settopos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.settopos" title="Permalink to this definition">¶</a></dt>
 <dd><p>translate the body on a time stamped trajectory</p>
 <p>traj : ndarray (3,N)
 t,x,y
@@ -7892,7 +7897,7 @@ devdf  : device data frame</p>
 <td>A GUI neutral button.</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">CheckButtons</span></code>(ax,&nbsp;labels,&nbsp;actives)</td>
-<td>A GUI neutral set of check buttons.</td>
+<td>A GUI neutral radio button.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.measures.cormoran.CorSer" title="pylayers.measures.cormoran.CorSer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CorSer</span></code></a>([serie,&nbsp;day,&nbsp;source,&nbsp;layout])</td>
 <td>Handle CORMORAN measurement data</td>
@@ -7903,7 +7908,7 @@ devdf  : device data frame</p>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">DF</span></code>([b,&nbsp;a])</td>
 <td>Digital Filter Class</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout</span></code>([string,&nbsp;_filematini,&nbsp;_fileslabini,&nbsp;…])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout</span></code>([arg])</td>
 <td>Handling Layout</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pool</span></code></td>
@@ -7963,7 +7968,7 @@ devdf  : device data frame</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Oct 17, 2018.
+      Last updated on Jan 24, 2019.
 
     </p>
   </div>

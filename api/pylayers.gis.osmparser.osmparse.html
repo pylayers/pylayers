@@ -30,8 +30,7 @@
   <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="getosm" href="pylayers.gis.osmparser.getosm.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -87,7 +86,7 @@
               
             
             
-              <ul class="current">
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -105,19 +104,7 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.selectl">3&nbsp;&nbsp;&nbsp;pylayers.gis.selectl Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.srtm">4&nbsp;&nbsp;&nbsp;pylayers.gis.srtm Module</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="references.html#module-pylayers.gis.osmparser">5&nbsp;&nbsp;&nbsp;pylayers.gis.osmparser Module</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="references.html#id7">5.1&nbsp;&nbsp;&nbsp;Functions</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="pylayers.gis.osmparser.buildingsparse.html">buildingsparse</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.gis.osmparser.extract.html">extract</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.gis.osmparser.getbdg.html">getbdg</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.gis.osmparser.getosm.html">getosm</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">osmparse</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="references.html#id8">5.2&nbsp;&nbsp;&nbsp;Classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="references.html#id9">5.3&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.osmparser">5&nbsp;&nbsp;&nbsp;pylayers.gis.osmparser Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.ezone">6&nbsp;&nbsp;&nbsp;pylayers.gis.ezone Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.antenna">7&nbsp;&nbsp;&nbsp;pylayers.antprop.antenna Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.aarray">8&nbsp;&nbsp;&nbsp;pylayers.antprop.aarray Module</a></li>
@@ -199,8 +186,6 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-          <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-        
       <li>osmparse</li>
     
     
@@ -222,33 +207,6 @@
             
   <div class="section" id="osmparse">
 <h1>osmparse<a class="headerlink" href="#osmparse" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="pylayers.gis.osmparser.osmparse">
-<code class="descclassname">pylayers.gis.osmparser.</code><code class="descname">osmparse</code><span class="sig-paren">(</span><em>_filename</em>, <em>typ='indoor'</em>, <em>verbose=False</em>, <em>c=True</em>, <em>n=True</em>, <em>w=True</em>, <em>r=True</em>, <em>cart=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#osmparse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.osmparse" title="Permalink to this definition">¶</a></dt>
-<dd><p>parse osm files</p>
-<dl class="docutils">
-<dt>typ <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
-<dd>indoor | outdoor</dd>
-<dt>verbose <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
-<dd>default : False</dd>
-<dt>c <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
-<dd>read coords</dd>
-<dt>n <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
-<dd>read nodes</dd>
-<dt>w <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
-<dd>read  ways</dd>
-<dt>r <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
-<dd>read relations</dd>
-<dt>if c:</dt>
-<dd>coords = Coords()
-coords.clean()</dd>
-</dl>
-<p>coords : Coords
-nodes  : Nodes
-ways   : Ways
-relations : Relations</p>
-</dd></dl>
-
 </div>
 
 
@@ -257,20 +215,13 @@ relations : Relations</p>
           </div>
           <footer>
   
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-      
-        <a href="pylayers.gis.osmparser.getosm.html" class="btn btn-neutral" title="getosm" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Oct 17, 2018.
+      Last updated on Jan 24, 2019.
 
     </p>
   </div>

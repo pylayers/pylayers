@@ -31,7 +31,6 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="osmparse" href="pylayers.gis.osmparser.osmparse.html" />
     <link rel="prev" title="getbdg" href="pylayers.gis.osmparser.getbdg.html" /> 
 
   
@@ -112,7 +111,6 @@
 <li class="toctree-l3"><a class="reference internal" href="pylayers.gis.osmparser.extract.html">extract</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.gis.osmparser.getbdg.html">getbdg</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">getosm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.gis.osmparser.osmparse.html">osmparse</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="references.html#id8">5.2&nbsp;&nbsp;&nbsp;Classes</a></li>
@@ -225,12 +223,12 @@
 <h1>getosm<a class="headerlink" href="#getosm" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pylayers.gis.osmparser.getosm">
-<code class="descclassname">pylayers.gis.osmparser.</code><code class="descname">getosm</code><span class="sig-paren">(</span><em>address='Rennes'</em>, <em>latlon=0</em>, <em>dist_m=400</em>, <em>cart=False</em>, <em>level_height=3.45</em>, <em>typical_height=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#getosm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.getosm" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pylayers.gis.osmparser.</code><code class="descname">getosm</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#getosm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.getosm" title="Permalink to this definition">¶</a></dt>
 <dd><p>get osm region from osmapi</p>
 <p>address : string
 latlon : tuple or 0
 dist_m : float
-cart : boolean
+bcart : boolean
 level_height :  float</p>
 <blockquote>
 <div>typical level height for deriving building height from # levels</div></blockquote>
@@ -238,7 +236,18 @@ level_height :  float</p>
 <dt>typical_height <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
 <dd>typical height for building when no information</dd>
 </dl>
-<p>if latlon tuple is precised it has priority over the string</p>
+<blockquote>
+<div>coords
+nodes
+ways
+dpoly
+m
+latlon : tuple or 0</div></blockquote>
+<p>There are 3 ways to read an Open Street Map structure</p>
+<p>1 - From an osm file ex : filename = ‘B11.osm’
+2 - From an osm (lat,lon) string or tuple of float
+3 - From an osm address string</p>
+<p>if latlon tuple is precised, it has priority over the address string</p>
 </dd></dl>
 
 </div>
@@ -251,8 +260,6 @@ level_height :  float</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="pylayers.gis.osmparser.osmparse.html" class="btn btn-neutral float-right" title="osmparse" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
       
         <a href="pylayers.gis.osmparser.getbdg.html" class="btn btn-neutral" title="getbdg" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
@@ -264,7 +271,7 @@ level_height :  float</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Oct 17, 2018.
+      Last updated on Jan 24, 2019.
 
     </p>
   </div>

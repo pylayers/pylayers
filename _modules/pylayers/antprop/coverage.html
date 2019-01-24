@@ -301,10 +301,15 @@ except:
         self.config = ConfigParser.ConfigParser(allow_no_value=True)
         self.config.read(pyu.getlong(_fileini,pstruc[&#39;DIRSIMUL&#39;]))
 
+        # section layout
         self.layoutopt = dict(self.config.items(&#39;layout&#39;))
+        # section sector
         self.gridopt   = dict(self.config.items(&#39;grid&#39;))
+        # section ap (access point)
         self.apopt     = dict(self.config.items(&#39;ap&#39;))
+        # section receiver  parameters
         self.rxopt     = dict(self.config.items(&#39;rx&#39;))
+        # section receiver  parameters
         self.showopt   = dict(self.config.items(&#39;show&#39;))
 
         # get the Layout
@@ -477,7 +482,7 @@ except:
             except:
                 pass</div>
 
-<div class="viewcode-block" id="Coverage.cover"><a class="viewcode-back" href="../../../api/pylayers.antprop.coverage.Coverage.html#pylayers.antprop.coverage.Coverage.cover">[docs]</a>    def cover(self,sinr=True,snr=True,best=True):
+<div class="viewcode-block" id="Coverage.cover"><a class="viewcode-back" href="../../../api/pylayers.antprop.coverage.Coverage.html#pylayers.antprop.coverage.Coverage.cover">[docs]</a>    def cover(self, sinr=True, snr=True, best=True):
         &quot;&quot;&quot; run the coverage calculation
 
         Parameters
@@ -538,7 +543,7 @@ except:
         except:
             pass
 
-    
+
         self.kB = 1.3806503e-23 # Boltzmann constant
         #
         # Loop opver access points
@@ -1246,8 +1251,10 @@ except:
                                vmin=vmin,
                                vmax=vmax)
 
-            for k in range(self.na):
-                ax.annotate(str(k),xy=(self.pa[0,k],self.pa[1,k]))
+            # for k in range(self.na):
+            #     ax.annotate(str(k),xy=(self.pa[0,k],self.pa[1,k]))
+            for k in self.dap.keys():
+                ax.annotate(str(self.dap[k][&#39;name&#39;]),xy=(self.dap[k][&#39;p&#39;][0],self.dap[k][&#39;p&#39;][1]))
             ax.set_title(title)
 
             divider = make_axes_locatable(ax)
@@ -1354,7 +1361,7 @@ if (__name__ == &quot;__main__&quot;):
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Oct 17, 2018.
+      Last updated on Jan 24, 2019.
 
     </p>
   </div>

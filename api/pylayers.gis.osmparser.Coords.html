@@ -275,7 +275,7 @@ boundary : np.array</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.cartesian" title="pylayers.gis.osmparser.Coords.cartesian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cartesian</span></code></a>([cart,&nbsp;delta])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.cartesian" title="pylayers.gis.osmparser.Coords.cartesian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cartesian</span></code></a>([cart,&nbsp;delta,&nbsp;projection])</td>
 <td>convert Latitude/Longitude in cartesian</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.osmparser.Coords.clean" title="pylayers.gis.osmparser.Coords.clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clean</span></code></a>()</td>
@@ -331,18 +331,19 @@ boundary : np.array</p>
 <p class="rubric">Methods Documentation</p>
 <dl class="method">
 <dt id="pylayers.gis.osmparser.Coords.cartesian">
-<code class="descname">cartesian</code><span class="sig-paren">(</span><em>cart=False</em>, <em>delta=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#Coords.cartesian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.Coords.cartesian" title="Permalink to this definition">¶</a></dt>
+<code class="descname">cartesian</code><span class="sig-paren">(</span><em>cart=False</em>, <em>delta=0</em>, <em>projection='cass'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#Coords.cartesian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.Coords.cartesian" title="Permalink to this definition">¶</a></dt>
 <dd><p>convert Latitude/Longitude in cartesian</p>
 <dl class="docutils">
-<dt>cart <span class="classifier-delimiter">:</span> <span class="classifier">Boolean </span></dt>
+<dt>cart <span class="classifier-delimiter">:</span> <span class="classifier">Boolean</span></dt>
 <dd>conversion to cartesian</dd>
-<dt>delta <span class="classifier-delimiter">:</span> <span class="classifier">offset </span></dt>
+<dt>delta <span class="classifier-delimiter">:</span> <span class="classifier">offset</span></dt>
 <dd>default 0 : in this case the origin corresponds to the lower left point</dd>
 </dl>
+<p>projection = [‘aeqd’,’gnom’,’ortho’,’geos’,’nsper’,’moll’,’lcc’,’laea’,’cass’]</p>
 <p>This method converts latlon coordinates into cartesian x,y coordinates in
-Cassini projection relatively to specified latlon boundary 
+a given projection (Default Cassini) relatively to specified latlon boundary
 The basemap objet for back and forth coordinates conversion is returned.</p>
-<p>The transformation is centered on the mean of latitude and longitude. 
+<p>The transformation is centered on the mean of latitude and longitude.
 The cartesian origin (0,0) correspond to the lower left corner (lonmin,latmin)</p>
 <p>m : Basemap converter</p>
 <p>If boundary is modified cartesian coordinates change.</p>
@@ -396,7 +397,7 @@ The cartesian origin (0,0) correspond to the lower left corner (lonmin,latmin)</
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Oct 17, 2018.
+      Last updated on Jan 24, 2019.
 
     </p>
   </div>

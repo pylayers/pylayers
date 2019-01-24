@@ -224,7 +224,7 @@
 <h1>enctile<a class="headerlink" href="#enctile" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pylayers.gis.ezone.enctile">
-<code class="descclassname">pylayers.gis.ezone.</code><code class="descname">enctile</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/ezone.html#enctile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.ezone.enctile" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pylayers.gis.ezone.</code><code class="descname">enctile</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/gisutil.html#enctile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.ezone.enctile" title="Permalink to this definition">¶</a></dt>
 <dd><p>encode tile prefix from (lon,lat)</p>
 <dl class="docutils">
 <dt>lon <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
@@ -236,7 +236,7 @@
 <dt>prefix <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
 <dd>srtm prefix filename</dd>
 </dl>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.gis.ezone import *
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.gis.gisutil import *
 &gt;&gt;&gt; assert enctile(-1.5,48.5)==&#39;N48W002&#39;
 &gt;&gt;&gt; assert enctile(0.5,48.5)==&#39;N48E000&#39;
 </pre></div>
@@ -257,7 +257,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Oct 17, 2018.
+      Last updated on Jan 24, 2019.
 
     </p>
   </div>

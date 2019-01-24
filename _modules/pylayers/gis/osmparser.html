@@ -204,7 +204,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pylayers.gis.osmparser</h1><div class="highlight"><pre>
-<span></span># -*- coding: utf-8 -*-
+<span></span># -*- moding: utf-8 -*-
 &quot;&quot;&quot;
 Module OSMParser
 
@@ -217,24 +217,22 @@ from osmapi import OsmApi
 import geocoder as geo
 import sys
 import urllib
-if sys.version_info.major==2:
+
+if sys.version_info.major == 2:
     from  urllib2 import urlopen
 else:
     from  urllib.request import urlopen
+
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 import pylayers.util.geomutil as geu
 from mpl_toolkits.basemap import Basemap
 from matplotlib.collections import PolyCollection
 import matplotlib.pyplot as plt
-# imposm is required for handling osm files
-# the installation of imposm is not straightforward
-try:
-    from imposm.parser import OSMParser
-except:
-    print(&quot;Warning : imposm seems not to be installed&quot;)
 import networkx as nx
 import numpy as np
+import xml.etree.ElementTree as xml
+
 import pdb
 
 # classes that handle the OSM data file format.
@@ -247,7 +245,7 @@ import pdb
           1 LineString
 
     &quot;&quot;&quot;
-    def __init__(self,refs,tags,coords):
+    def __init__(self, refs, tags, coords):
         &quot;&quot;&quot; object constructor
 
         Parameters
@@ -256,8 +254,8 @@ import pdb
         refs  :
         tags  :
         coords :
-        nodes_sign : int 
-            if data comes from osm nodes are &gt;0 in ways sequence 
+        nodes_sign : int
+            if data comes from osm nodes are &gt;0 in ways sequence
             if data comes from josm editor nodes are &lt;0 ways sequence
 
         &quot;&quot;&quot;
@@ -297,11 +295,11 @@ import pdb
         ax  : axes
 
         &quot;&quot;&quot;
-        fig,ax = self.shp.plot(fig=fig,ax=ax)
-        return(fig,ax)</div></div>
+        fig, ax = self.shp.plot(fig=fig, ax=ax)
+        return fig, ax</div></div>
 
 <div class="viewcode-block" id="Coords"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Coords.html#pylayers.gis.osmparser.Coords">[docs]</a>class Coords(object):
-    &quot;&quot;&quot; Coords describes a set of points in OSM 
+    &quot;&quot;&quot; Coords describes a set of points in OSM
 
     Attributes
     ----------
@@ -314,7 +312,7 @@ import pdb
     minlat :
     maxlat :
     boundary : np.array
-        (minlon,minlat,maxlon,maxlat) 
+        (minlon,minlat,maxlon,maxlat)
 
     Notes
     -----
@@ -328,7 +326,7 @@ import pdb
     maxlon = -1000
     minlat = 1000
     maxlat = -1000
-    
+
     def __init__(self,idx=[],latlon=[]):
         &quot;&quot;&quot;
         &quot;&quot;&quot;
@@ -343,7 +341,7 @@ import pdb
         st = st+ &#39;Ncoords = &#39;+ str(len(self.xy))+&#39;\n&#39;
 
         return(st)
-    
+
 <div class="viewcode-block" id="Coords.filter"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Coords.html#pylayers.gis.osmparser.Coords.filter">[docs]</a>    def filter(self,lexcluded):
         for ix in lexcluded:
             self.latlon.pop(-np.abs(ix))
@@ -357,10 +355,10 @@ import pdb
         self.cpt = 0
         self.latlon={}
         self.xy = {}
-        self.minlon =1000
-        self.maxlon =-1000
-        self.minlat =1000
-        self.maxlat =-1000</div>
+        self.minlon = 1000
+        self.maxlon = -1000
+        self.minlat = 1000
+        self.maxlat = -1000</div>
 
 <div class="viewcode-block" id="Coords.coords"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Coords.html#pylayers.gis.osmparser.Coords.coords">[docs]</a>    def coords(self, coords):
         &quot;&quot;&quot; calculates extrema of coords
@@ -381,33 +379,34 @@ import pdb
             self.maxlat = max(lat,self.maxlat)
 
             self.cpt += 1
+
         self.boundary=np.array([self.minlon,self.minlat,self.maxlon,self.maxlat])</div>
 
-<div class="viewcode-block" id="Coords.cartesian"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Coords.html#pylayers.gis.osmparser.Coords.cartesian">[docs]</a>    def cartesian(self,cart=False,delta=0):
+<div class="viewcode-block" id="Coords.cartesian"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Coords.html#pylayers.gis.osmparser.Coords.cartesian">[docs]</a>    def cartesian(self, cart=False, delta=0, projection=&#39;cass&#39;):
         &quot;&quot;&quot; convert Latitude/Longitude in cartesian
 
         Parameters
         ----------
-        cart : Boolean 
-            conversion to cartesian 
-        delta : offset 
+        cart : Boolean
+            conversion to cartesian
+        delta : offset
             default 0 : in this case the origin corresponds to the lower left point
- 
+        projection = [&#39;aeqd&#39;,&#39;gnom&#39;,&#39;ortho&#39;,&#39;geos&#39;,&#39;nsper&#39;,&#39;moll&#39;,&#39;lcc&#39;,&#39;laea&#39;,&#39;cass&#39;]
+
         Notes
         -----
 
         This method converts latlon coordinates into cartesian x,y coordinates in
-        Cassini projection relatively to specified latlon boundary 
+        a given projection (Default Cassini) relatively to specified latlon boundary
         The basemap objet for back and forth coordinates conversion is returned.
 
-        The transformation is centered on the mean of latitude and longitude. 
-        The cartesian origin (0,0) correspond to the lower left corner (lonmin,latmin) 
+        The transformation is centered on the mean of latitude and longitude.
+        The cartesian origin (0,0) correspond to the lower left corner (lonmin,latmin)
 
         Returns
         -------
 
         m : Basemap converter
-
 
 
         Warning
@@ -423,7 +422,7 @@ import pdb
 
         m = Basemap(llcrnrlon=bd[0]-delta, llcrnrlat=bd[1]-delta,
                     urcrnrlon=bd[2]+delta, urcrnrlat=bd[3]+delta,
-                resolution=&#39;i&#39;, projection=&#39;cass&#39;, lon_0=lon_0, lat_0=lat_0)
+                resolution=&#39;i&#39;, projection = projection, lon_0=lon_0, lat_0=lat_0)
 
         for kid in self.latlon:
             if cart:
@@ -436,12 +435,12 @@ import pdb
         return(m)</div>
 
 <div class="viewcode-block" id="Coords.from_nodes"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Coords.html#pylayers.gis.osmparser.Coords.from_nodes">[docs]</a>    def from_nodes(self,nodes):
-        &quot;&quot;&quot; read coordinates from nodes 
+        &quot;&quot;&quot; read coordinates from nodes
 
         Parameters
         ----------
 
-        nodes : Nodes 
+        nodes : Nodes
 
 
         &quot;&quot;&quot;
@@ -456,8 +455,12 @@ import pdb
             self.maxlat = max(lat,self.maxlat)
 
             self.cpt += 1
-        self.boundary=np.array([self.minlon,self.minlat,self.maxlon,self.maxlat])</div></div>
-        
+
+        self.boundary = np.array([self.minlon,
+                                  self.minlat,
+                                  self.maxlon,
+                                  self.maxlat])</div></div>
+
 
 
 <div class="viewcode-block" id="Nodes"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Nodes.html#pylayers.gis.osmparser.Nodes">[docs]</a>class Nodes(object):
@@ -473,14 +476,14 @@ import pdb
 <div class="viewcode-block" id="Nodes.nodes"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Nodes.html#pylayers.gis.osmparser.Nodes.nodes">[docs]</a>    def nodes(self,nodes):
         &quot;&quot;&quot;  parse tagged nodes
         &quot;&quot;&quot;
-        for osmid,tags,coords in nodes:
+        for osmid, tags, coords in nodes:
             self.node[osmid] = {}
             self.node[osmid][&#39;tags&#39;] = tags
             self.node[osmid][&#39;lonlat&#39;] = coords
             lon = coords[0]
             lat = coords[1]
             self.cpt += 1</div>
-    
+
     def __repr__(self):
         st = &#39;&#39;
         for kid in self.node:
@@ -492,11 +495,14 @@ import pdb
         self.cpt = 0</div>
 
 <div class="viewcode-block" id="Nodes.readmap"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Nodes.html#pylayers.gis.osmparser.Nodes.readmap">[docs]</a>    def readmap(self,osmmap):
-        &quot;&quot;&quot; read nodes from a map 
+        &quot;&quot;&quot; read nodes from a map
+
         &quot;&quot;&quot;
         for item in osmmap:
             if item[&#39;type&#39;]==&#39;node&#39;:
                 osmid = -item[&#39;data&#39;][&#39;id&#39;]
+                if osmid&gt;0:
+                    osmid = -osmid
                 lon = item[&#39;data&#39;][&#39;lon&#39;]
                 lat = item[&#39;data&#39;][&#39;lat&#39;]
                 self.node[osmid]={}
@@ -513,7 +519,7 @@ import pdb
     w : dict
     way : dict
     cpt : int
-        way counter 
+        way counter
 
 
     Methods
@@ -539,16 +545,17 @@ import pdb
         st = &#39;&#39;
         for kid in self.w:
             st = st + str(self.w[kid])+&#39;\n&#39;
-        return st 
+        return st
 
 <div class="viewcode-block" id="Ways.clean"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.clean">[docs]</a>    def clean(self):
-        &quot;&quot;&quot; clean ways 
+        &quot;&quot;&quot; clean ways
+
         &quot;&quot;&quot;
         self.w = {}
         self.way = {}
         self.cpt = 0</div>
 
-<div class="viewcode-block" id="Ways.building"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.building">[docs]</a>    def building(self, ways , height=8.5,min_heigh=0):
+<div class="viewcode-block" id="Ways.building"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.building">[docs]</a>    def building(self, ways, height=8.5, min_heigh=0):
         &quot;&quot;&quot; building callback function
 
         Parameters
@@ -585,10 +592,10 @@ import pdb
                 else:
                     ntags[&#39;material&#39;] = &#39;WALL&#39;
 
-                self.w[osmid] = [refs,ntags]
+                self.w[osmid] = [refs, ntags]
                 self.cpt += 1</div>
 
-<div class="viewcode-block" id="Ways.eval"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.eval">[docs]</a>    def eval(self,coords):
+    def toway(self,coords):
         &quot;&quot;&quot; convert into a Way object
 
         Parameters
@@ -597,15 +604,14 @@ import pdb
         coords : osm coordinates
 
         &quot;&quot;&quot;
-
         for osmid in self.w:
             refs = self.w[osmid][0]
             tags = self.w[osmid][1]
-            away =  Way(refs,tags,coords)
+            away =  Way(refs, tags, coords)
             if away.valid:
-                self.way[osmid] = away</div>
+                self.way[osmid] = away
 
-<div class="viewcode-block" id="Ways.show"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.show">[docs]</a>    def show(self,typ=2,**kwargs):
+<div class="viewcode-block" id="Ways.show"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.show">[docs]</a>    def show(self, typ=2, **kwargs):
         &quot;&quot;&quot; show all way
 
         Parameters
@@ -635,17 +641,16 @@ import pdb
         latmax = -360
         for b in self.way:
             if typ==0:
-                if self.way.typ==0:
+                if self.way.typ == 0:
                     p =ways.way[b].shp
             if typ==1:
-                if self.way.typ==1:
+                if self.way.typ == 1:
                     p = self.way[b].shp
             if typ==2:
                 p = self.way[b].shp
 
             lpoly.append(p)
 
-        pdb.set_trace()
         city = PolyCollection(lpoly,closed=False)
 
         ax.axis((lonmin,lonmax,latmin,latmax))
@@ -729,27 +734,39 @@ import pdb
         plt.axis(&#39;scaled&#39;)
         return(fig,ax)</div>
 
-<div class="viewcode-block" id="Ways.readmap"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.readmap">[docs]</a>    def readmap(self,osmmap,coords,typ=&#39;building&#39;):
-        &quot;&quot;&quot; read ways from a map 
-        
+<div class="viewcode-block" id="Ways.readmap"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.readmap">[docs]</a>    def readmap(self, osmmap, coords, typ=&#39;building&#39;):
+        &quot;&quot;&quot; read ways from a map
+
         osmmap : OSM Map in json from OsmAPI
         coords : coords object previously parsed
-        typ  : string 
-            outdoor or indoor
+        typ  : string
+
         &quot;&quot;&quot;
         for item in osmmap:
             if item[&#39;type&#39;]==&#39;way&#39;:
                 way = item[&#39;data&#39;]
                 osmid = way[&#39;id&#39;]
-                refs  = way[&#39;nd&#39;]
-                refs_neg = [-x for x in refs]
+                refs_neg = way[&#39;nd&#39;]
+                refs_neg = [ -x for x in refs_neg if x &gt;0]
+                # nodes should have negative index (PyLayers convention)
                 tags  = way[&#39;tag&#39;]
-                if typ in tags:
+                if &#39;z&#39; in tags:
+                   z = tags[&#39;z&#39;]
+                   if type(z) == str:
+                       z = eval(z)
+                   if type(z[0])==str:
+                       z = (eval(z[0]),eval(z[1]))
+                   tags[&#39;z&#39;] = z
+
+                if typ !=&#39;&#39;:
+                    if typ in tags:
+                        self.w[osmid] = [refs_neg, tags]
+                        self.cpt += 1
+                else:
                     self.w[osmid] = [refs_neg,tags]
                     self.cpt += 1
-        
-        self.eval(coords)
-        pass</div></div>
+
+        self.toway(coords)</div></div>
 
 <div class="viewcode-block" id="Relations"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Relations.html#pylayers.gis.osmparser.Relations">[docs]</a>class Relations(object):
     relation = {}
@@ -873,13 +890,10 @@ import pdb
         return fig,ax</div></div>
 #
 #  Functions
-#     osmparse
 #     getbdg
 #
 #
-<div class="viewcode-block" id="getosm"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.getosm.html#pylayers.gis.osmparser.getosm">[docs]</a>def getosm(address=&#39;Rennes&#39;, latlon=0, dist_m=400,
-           cart=False,
-           level_height = 3.45, typical_height = 10):
+<div class="viewcode-block" id="getosm"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.getosm.html#pylayers.gis.osmparser.getosm">[docs]</a>def getosm(**kwargs):
     &quot;&quot;&quot; get osm region from osmapi
 
     Parameters
@@ -888,43 +902,119 @@ import pdb
     address : string
     latlon : tuple or 0
     dist_m : float
-    cart : boolean
+    bcart : boolean
     level_height :  float
         typical level height for deriving building height from # levels
     typical_height : float
         typical height for building when no information
 
+    Returns
+    -------
+
+        coords
+        nodes
+        ways
+        dpoly
+        m
+        latlon : tuple or 0
+
     Notes
     -----
 
-    if latlon tuple is precised it has priority over the string
+    There are 3 ways to read an Open Street Map structure
+
+    1 - From an osm file ex : filename = &#39;B11.osm&#39;
+    2 - From an osm (lat,lon) string or tuple of float
+    3 - From an osm address string
+
+    if latlon tuple is precised, it has priority over the address string
 
     &quot;&quot;&quot;
 
-    rad_to_deg = (180/np.pi)
-    deg_to_rad = (np.pi/180)
+    filename = kwargs.pop(&#39;filename&#39;,&#39;&#39;)
+    bcart = kwargs.pop(&#39;cart&#39;, False)
+    typ = kwargs.pop(&#39;typ&#39;,&#39;indoor&#39;)
+    level_height = kwargs.pop(&#39;level_height&#39;, 3.45)
+    typical_height = kwargs.pop(&#39;typical_height&#39;, 10)
 
-    if latlon==0:
-        place = geo.google(address)
-        try:
-            lat,lon = place.latlng
-        except:
-            print(place)
+    if filename == &#39;&#39;:
+        address = kwargs.pop(&#39;address&#39;,&#39;Rennes&#39;)
+        latlon = kwargs.pop(&#39;latlon&#39;, 0)
+        dist_m = kwargs.pop(&#39;dist_m&#39;, 400)
+
+        rad_to_deg = (180/np.pi)
+
+        if latlon == 0:
+            place = geo.osm(address)
+            try:
+                lat, lon = place.latlng
+            except:
+                print(place)
+        else:
+            lat = latlon[0]
+            lon = latlon[1]
+
+        r_earth = 6370e3
+
+        alpha = (dist_m/r_earth)*rad_to_deg
+
+    #
+    # get map from OsmApi (Database query)
+    #
+        Osm = OsmApi()
+        osmmap = Osm.Map(lon-alpha, lat-alpha, lon+alpha, lat+alpha)
+
     else:
-        lat = latlon[0]
-        lon = latlon[1]
-
-    r_earth = 6370e3
-    alpha = (dist_m/r_earth)*rad_to_deg
-    Osm = OsmApi()
-
     #
-    # Get Map around the specified coordinates
+    # get map from osm (xml) file
+    # type : &#39;node&#39;
+    #        &#39;ways&#39;
     #
+        latlon = 0
+        e = xml.parse(filename).getroot()
 
-    osmmap  = Osm.Map(lon-alpha,lat-alpha,lon+alpha,lat+alpha)
+        osmmap = []
 
-    #print(osmmap)
+        lnode_key = [&#39;id&#39;, &#39;lat&#39;, &#39;lon&#39;]
+
+        lway_key = [&#39;id&#39;]
+
+        for i in e:
+            d = {}
+            d[&#39;type&#39;] = i.tag
+            d[&#39;data&#39;] = i.attrib
+            #print(i.tag)
+
+            if d[&#39;type&#39;] == &#39;node&#39;:
+                for k in lnode_key:
+                    try:
+                        d[&#39;data&#39;][k] = eval(d[&#39;data&#39;][k])
+                    except:
+                        pass
+                    if k == &#39;id&#39;:
+                        if not &#39;action&#39; in d[&#39;data&#39;]:
+                            d[&#39;data&#39;][k] = -d[&#39;data&#39;][k]
+                d[&#39;data&#39;][&#39;tag&#39;] = {}
+
+            elif d[&#39;type&#39;] == &#39;way&#39;:
+                lk = i.getchildren()
+                nd = []
+                tag = {}
+                for k in lk:
+                    if k.tag == &#39;nd&#39;:
+                        nd.append(eval(k.get(&#39;ref&#39;)))
+                    if k.tag == &#39;tag&#39;:
+                        tag[k.get(&#39;k&#39;)] = k.get(&#39;v&#39;)
+                d[&#39;data&#39;][&#39;nd&#39;] = nd
+                d[&#39;data&#39;][&#39;tag&#39;] = tag
+
+                # for k in lway_key:
+                #     lk = k.get_children()
+                #     print(lk)
+
+                    # d[&#39;data&#39;][k]=eval(d[&#39;data&#39;][k])
+                # d[&#39;data&#39;][&#39;visible&#39;]=eval(d[&#39;data&#39;][&#39;visible&#39;])
+            osmmap.append(d)
 
     nodes = Nodes()
     nodes.clean()
@@ -933,184 +1023,81 @@ import pdb
     coords = Coords()
     coords.clean()
     coords.from_nodes(nodes)
-
-    m = coords.cartesian(cart=cart)
+    m = coords.cartesian(cart=bcart)
 
     ways = Ways()
     ways.clean()
-    ways.readmap(osmmap,coords)
 
+    lat = coords.latlon[list(coords.latlon.keys())[0]][0]
+    lon = coords.latlon[list(coords.latlon.keys())[0]][1]
+
+    if typ == &#39;indoor&#39;:
+        ways.readmap(osmmap, coords, typ=&#39;&#39;)
+    else:
+        ways.readmap(osmmap, coords)
+    
     # list of nodes involved in buildings
     lnodes_id=[]
     for iw in ways.w:
-        lnodes_id+=ways.w[iw][0]
+        lnodes_id += ways.w[iw][0]
     # list of all nodes of coords
-    lnodes_id   = np.unique(np.array(lnodes_id))
+
+    lnodes_id  = np.unique(np.array(lnodes_id))
     lnodes_full = np.unique(np.array(list(coords.latlon.keys())))
-    mask = np.in1d(lnodes_full,lnodes_id,invert=True)
+    mask = np.in1d(lnodes_full, lnodes_id, invert=True)
+
     # nodes not involved in buildings
-    lexcluded = lnodes_full[mask]
-    coords.filter(lexcluded)
-    dpoly={}
-    for iw in ways.w:
-        ways.way[iw].tags = {}
-        # material
-        if &#39;material&#39; in ways.w[iw][1]:
-            ways.way[iw].tags[&#39;name&#39;]=ways.w[iw][1][&#39;material&#39;]
-        elif &#39;building:material&#39; in ways.w[iw][1]:
-            ways.way[iw].tags[&#39;name&#39;]=ways.w[iw][1][&#39;building:material&#39;]
-        else:
-            ways.way[iw].tags[&#39;name&#39;]=&#39;WALL&#39;
 
-        # min_height
-        if &#39;building:min_height&#39; in ways.w[iw][1]:
-            min_height = eval(ways.w[iw][1][&#39;building:min_height&#39;])
-        else:
-            min_height = 0
-        # height
-        if &#39;height&#39; in ways.w[iw][1]:
-            ways.way[iw].tags[&#39;z&#39;] = (min_height, eval(ways.w[iw][1][&#39;height&#39;]))
-        elif &#39;building:height&#39; in ways.w[iw][1]:
-            ways.way[iw].tags[&#39;z&#39;] = (min_height, eval(ways.w[iw][1][&#39;building:height&#39;]))
-        elif &#39;building:levels&#39; in ways.w[iw][1]:
-            nb_levels = eval(ways.w[iw][1][&#39;building:levels&#39;])
-            if type(nb_levels)!=int:
-                try:
-                    nb_levels = max(nb_levels)
-                except:
-                    nb_levels=2
-            ways.way[iw].tags[&#39;z&#39;]=(min_height,nb_levels*level_height)
-        elif &#39;levels&#39; in ways.w[iw][1]:
-            nb_levels = eval(ways.w[iw][1][&#39;levels&#39;])
-            if type(nb_levels)!=int:
-                try:
-                    nb_levels=max(nb_levels)
-                except:
-                    nb_levels=2
-            ways.way[iw].tags[&#39;z&#39;]=(min_height,nb_levels*level_height)
-        else:
-            ways.way[iw].tags[&#39;z&#39;] = (0,typical_height)
+    #if typ != &#39;indoor&#39;:
+    #    lexcluded = lnodes_full[mask]
+    #    coords.filter(lexcluded)
 
-        ptpoly = [coords.xy[x] for x in ways.w[iw][0]]
-        dpoly[iw] = geu.Polygon(ptpoly,vnodes=ways.w[iw][0])
-        dpoly[iw].coorddeter()
+    # dpoly = {}
+    # for iw in ways.w:
+    #     # ways.way[iw].tags = {}
+    #     # # material
+    #     # if &#39;material&#39; in ways.w[iw][1]:
+    #     #     ways.way[iw].tags[&#39;name&#39;]=ways.w[iw][1][&#39;material&#39;]
+    #     # elif &#39;building:material&#39; in ways.w[iw][1]:
+    #     #     ways.way[iw].tags[&#39;name&#39;]=ways.w[iw][1][&#39;building:material&#39;]
+    #     # else:
+    #     #     ways.way[iw].tags[&#39;name&#39;]=&#39;WALL&#39;
 
-    return coords,nodes,ways,dpoly,m</div>
+    #     # # min_height
+    #     # if &#39;building:min_height&#39; in ways.w[iw][1]:
+    #     #     min_height = eval(ways.w[iw][1][&#39;building:min_height&#39;])
+    #     # else:
+    #     #     min_height = 0
+    #     # # height
+    #     # if &#39;height&#39; in ways.w[iw][1]:
+    #     #     ways.way[iw].tags[&#39;z&#39;] = (min_height, eval(ways.w[iw][1][&#39;height&#39;]))
+    #     # elif &#39;building:height&#39; in ways.w[iw][1]:
+    #     #     ways.way[iw].tags[&#39;z&#39;] = (min_height, eval(ways.w[iw][1][&#39;building:height&#39;]))
+    #     # elif &#39;building:levels&#39; in ways.w[iw][1]:
+    #     #     nb_levels = eval(ways.w[iw][1][&#39;building:levels&#39;])
+    #     #     if type(nb_levels)!=int:
+    #     #         try:
+    #     #             nb_levels = max(nb_levels)
+    #     #         except:
+    #     #             nb_levels=2
+    #     #     ways.way[iw].tags[&#39;z&#39;]=(min_height,nb_levels*level_height)
+    #     # elif &#39;levels&#39; in ways.w[iw][1]:
+    #     #     nb_levels = eval(ways.w[iw][1][&#39;levels&#39;])
+    #     #     if type(nb_levels)!=int:
+    #     #         try:
+    #     #             nb_levels=max(nb_levels)
+    #     #         except:
+    #     #             nb_levels=2
+    #     #     ways.way[iw].tags[&#39;z&#39;] = (min_height,nb_levels*level_height)
+    #     # else:
+    #     #     ways.way[iw].tags[&#39;z&#39;] = (0,typical_height)
 
+    #     ptpoly = [coords.xy[x] for x in ways.w[iw][0]]
+    #     dpoly[iw] = geu.Polygon(ptpoly,vnodes=ways.w[iw][0])
+    #     dpoly[iw].coorddeter()
 
-<div class="viewcode-block" id="osmparse"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.osmparse.html#pylayers.gis.osmparser.osmparse">[docs]</a>def osmparse(_filename,typ=&#39;indoor&#39;,verbose=False,c=True,n=True,w=True,r=True,cart=False):
-    &quot;&quot;&quot; parse osm files
-
-    Parameters
-    ----------
-
-    typ : string
-        indoor | outdoor
-    verbose : boolean
-        default : False
-    c : boolean
-        read coords
-    n : boolean
-        read nodes
-    w : boolean
-        read  ways
-    r : boolean
-        read relations
-    if c:
-        coords = Coords()
-        coords.clean()
-
-    Returns
-    -------
-
-    coords : Coords
-    nodes  : Nodes
-    ways   : Ways
-    relations : Relations
-
-    &quot;&quot;&quot;
-
-    if ((&#39;/&#39; in _filename) or (&#39;//&#39; in _filename)):
-        filename = _filename
-    else:
-        filename = pyu.getlong(_filename,os.path.join(&#39;gis&#39;,&#39;osm&#39;))
-    #
-    # Read coords and create basemap converter
-    #
-    if c:
-        coords = Coords()
-        coords.clean()
-        coords_parser = OSMParser(concurrency=4, coords_callback=coords.coords)
-        if verbose:
-            print(&quot;parsing coords&quot;)
-
-        coords_parser.parse(filename)
-
-        m = coords.cartesian(cart=cart)
-
-        if verbose:
-            print(str(coords.cpt))
-    else:
-        coords = None
-    #
-    # Read nodes
-    #
-    if n:
-        nodes = Nodes()
-        nodes.clean()
-        nodes_parser = OSMParser(concurrency=4, nodes_callback=nodes.nodes)
-
-        if verbose:
-            print(&quot;parsing nodes&quot;)
-
-        nodes_parser.parse(filename)
-
-        if verbose:
-            print(str(nodes.cpt))
-    else:
-        nodes = None
-
-    #
-    # Read ways
-    #
-    if w:
-        ways = Ways()
-        ways.clean()
-        if typ==&#39;outdoor&#39;:
-            ways_parser = OSMParser(concurrency=4, ways_callback=ways.building)
-        if typ==&#39;indoor&#39;:
-            ways_parser = OSMParser(concurrency=4, ways_callback=ways.ways)
-        if verbose:
-            print(&quot;parsing ways&quot;)
-        ways_parser.parse(filename)
-
-        if verbose:
-            print(str(ways.cpt))
-
-        # convert lat,lon in cartesian
-        ways.eval(coords)
-    else:
-        ways = None
-
-    #
-    # Read relations
-    #
-    if r:
-        relations = Relations()
-        relations.clean()
-        relations_parser = OSMParser(concurrency=4,relations_callback=relations.relations)
-
-        if verbose:
-            print(&quot;parsing relations&quot;)
-        relations_parser.parse(filename)
-
-        if verbose:
-            print(str(relations.cpt))
-    else:
-        relations = None
-
-    return coords,nodes,ways,relations,m</div>
-
+    #return coords,nodes,ways,dpoly,m
+    return coords, nodes, ways, m, (lat,lon)</div>
 
 <div class="viewcode-block" id="extract"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.extract.html#pylayers.gis.osmparser.extract">[docs]</a>def extract(alat,alon,fileosm,fileout):
     &quot;&quot;&quot; extraction of an osm sub region using osmconvert
@@ -1214,7 +1201,7 @@ import pdb
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Oct 17, 2018.
+      Last updated on Jan 24, 2019.
 
     </p>
   </div>

@@ -224,11 +224,14 @@
 <h1>dectile<a class="headerlink" href="#dectile" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pylayers.gis.ezone.dectile">
-<code class="descclassname">pylayers.gis.ezone.</code><code class="descname">dectile</code><span class="sig-paren">(</span><em>prefix='N48W002'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/ezone.html#dectile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.ezone.dectile" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pylayers.gis.ezone.</code><code class="descname">dectile</code><span class="sig-paren">(</span><em>prefix='N48W002'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/gisutil.html#dectile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.ezone.dectile" title="Permalink to this definition">¶</a></dt>
 <dd><p>decode tile name</p>
-<p>_filehgt : string</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import ezone
-&gt;&gt;&gt; ezone.dectile(&#39;N48W002&#39;)
+<p>prefix : string</p>
+<p>extent : tuple</p>
+<blockquote>
+<div>(lonmin,lonmax,latmin,latmax)</div></blockquote>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.gis.gisutil import *
+&gt;&gt;&gt; dectile(&#39;N48W002&#39;)
 (-2.0, -1.0, 48,49)
 </pre></div>
 </div>
@@ -248,7 +251,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Oct 17, 2018.
+      Last updated on Jan 24, 2019.
 
     </p>
   </div>
