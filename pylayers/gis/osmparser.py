@@ -813,7 +813,6 @@ def getosm(**kwargs):
     nodes.clean()
     nodes.readmap(osmmap)
 
-    pdb.set_trace()
     coords = Coords()
     coords.clean()
     coords.from_nodes(nodes)
