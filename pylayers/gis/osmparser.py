@@ -747,7 +747,7 @@ def getosm(**kwargs):
     #    lat = latlon[0]
     #    lon = latlon[1]
 
-        # rad_to_deg = (180/np.pi)
+        rad_to_deg = (180/np.pi)
         # if latlon == 0:
         #     place = geo.osm(address)
         #     try:
