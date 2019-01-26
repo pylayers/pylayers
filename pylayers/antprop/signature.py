@@ -18,7 +18,6 @@ import h5py
 import copy
 import time
 import pickle
-import logging
 import networkx as nx
 import shapely.geometry as shg
 import matplotlib.pyplot as plt
@@ -37,7 +36,6 @@ import shapely.ops as sho
 from tqdm import tqdm
 #from numba import autojit
 
-logger = logging.getLogger(__name__)
 
 def plot_lines(ax, ob, color = []):
     """ plot lines with colors

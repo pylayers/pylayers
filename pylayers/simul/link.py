@@ -24,9 +24,6 @@ import numpy as np
 import matplotlib.pylab as plt
 import pylayers.signal.waveform as wvf
 import pylayers.util.geomutil as geu
-import logging
-
-logger = logging.getLogger(__name__)
 
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
@@ -47,8 +44,6 @@ import tqdm
 import copy
 import h5py
 import pdb
-
-logger = logging.getLogger(__name__)
 
 class Link(PyLayers):
     """ Link class
@@ -284,7 +279,7 @@ class DLink(Link):
 
 
         Link.__init__(self)
-
+        logger.name = __name__
         defaults={ 'L': '',
                    'a': np.array(()),
                    'b': np.array(()),
@@ -987,10 +982,12 @@ class DLink(Link):
         update self.dexist dictionnary
 
         """
+        filenameh5 = pyu.getlong(self.filename,'output')
         # get identifier group name in h5py file
-        self.get_grpname()
+        if os.path.exists(filenameh5):
+            self.get_grpname()
         # check if group name exists in the h5py file
-        [self.check_grpname(k,self.dexist[k]['grpname'])   for k in self.save_opt]
+            [self.check_grpname(k,self.dexist[k]['grpname'])   for k in self.save_opt]
 
 
 
@@ -1355,9 +1352,10 @@ class DLink(Link):
 
         """
 
-        lfilename=pyu.getlong(self.filename,pstruc['DIRLNK'])
+        lfilename = pyu.getlong(self.filename,pstruc['DIRLNK'])
+        # file should exist before calling (append mode)
+        f = h5py.File(lfilename,'a')
         try :
-            f=h5py.File(lfilename,'a')
             fa = f[key][...]
             f.close()
         except:
@@ -2647,7 +2645,7 @@ class DLink(Link):
         else:
             data = self.L.angleonlink3(self.a,self.b)
             # as many slabs as segments and subsegments
-            us  = data['s'] 
+            us  = data['s']
             if len(us) >0:
                 sl = v(us)
                 uus = np.where((sl != 'AIR') & (sl != '_AIR'))[0]

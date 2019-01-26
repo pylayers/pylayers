@@ -20,7 +20,6 @@ except:
 import pdb
 import sys
 import os
-import logging
 import copy
 import glob
 import time
@@ -851,11 +850,11 @@ class Layout(pro.PyLayers):
                 deg1 = filter(lambda x: nx.degree(self.Gs, x) == 1, upnt)
 
                 if len(deg0) > 0:
-                    logging.critical( "It exists degree 0 points :  %r", deg0 )
+                    logger.critical( "It exists degree 0 points :  %r", deg0 )
                     f, a = self.pltvnodes(deg0, fig=f, ax=a)
                     bconsistent = False
                 if len(deg1) > 0:
-                    logging.critical( "It exists degree 0 points :  %r", deg1 )
+                    logger.critical( "It exists degree 0 points :  %r", deg1 )
                     f, a = self.pltvnodes(deg1, fig=f, ax=a)
                     bconsistent = False
 
@@ -919,14 +918,14 @@ class Layout(pro.PyLayers):
                                     dseg[s].append(n)
                                 else:
                                     dseg[s]=[n]
-                                logging.critical("segment %d contains point %d", s, n)
+                                logger.critical("segment %d contains point %d", s, n)
                                 bconsistent = False
                     if level > 0:
                         cycle = self.Gs.node[s]['ncycles']
                         if len(cycle) == 0:
-                            logging.critical("segment %d has no cycle", s)
+                            logger.critical("segment %d has no cycle", s)
                         if len(cycle) == 3:
-                            logging.critical(
+                            logger.critical(
                                 "segment %d has cycle %s", s, str(cycle))
 
         #
@@ -938,7 +937,7 @@ class Layout(pro.PyLayers):
         similar = geu.check_point_unicity(P)
 
         if len(similar) != 0:
-            logging.critical("points at index(es) %s in self.Gs.pos are similar", str(similar))
+            logger.critical("points at index(es) %s in self.Gs.pos are similar", str(similar))
             bconsistent = False
 
         return bconsistent, dseg
@@ -1228,7 +1227,7 @@ class Layout(pro.PyLayers):
         try:
             Nsmax = max(self.tsg)
         except:
-            logging.warning("No segments in Layout yet")
+            logger.warning("No segments in Layout yet")
 
         #
         # handling of segment related arrays
@@ -1345,7 +1344,7 @@ class Layout(pro.PyLayers):
         lheight = array([v[1] for v in
                     nx.get_node_attributes(self.Gs, 'z').values()
                     if v[1] < 2000 ])
-        #assert(len(lheight)>0),logging.error("no valid heights for segments")
+        #assert(len(lheight)>0),logger.error("no valid heights for segments")
         if len(lheight)>0:
             self.maxheight = np.max(lheight)
         else:
@@ -4182,7 +4181,7 @@ class Layout(pro.PyLayers):
 
         """
 
-        logging.warning('This function is deprecated use')
+        logger.warning('This function is deprecated use')
 
         u = p1 - p2
         nu = np.sqrt(np.dot(u, u))
@@ -6842,7 +6841,7 @@ class Layout(pro.PyLayers):
                     if n > 0:
                         if len(self.Gs.node[n]['ncycles']) > 2:
                             print(n, self.Gs.node[n]['ncycles'])
-                            logging.warning(
+                            logger.warning(
                                 'A segment cannot relate more than 2 cycles')
 
         for nseg in self.Gs.node:
@@ -9408,6 +9407,7 @@ class Layout(pro.PyLayers):
 
         Notes
         -----
+
         As a diffraction point may involve iso segments the nature
         of the diffraction interaction depends on a height parameter
         This function extacts the couple of slab from this information
@@ -9415,14 +9415,14 @@ class Layout(pro.PyLayers):
         Returns
         -------
 
-        - a list of 2-segments list. the length of this list == length of lz
+        - a list of 2-segments . the length of this list == length of lz
         - a list of slab tuples.  the length of this list == length of lz
 
         [[443, 529], [444, 530]]
         [['WALL', 'WALL'], ['AIR', 'AIR']]
 
         """
-        assert(npt in self.ddiff), logging.error('npt not a diffraction point')
+        assert(npt in self.ddiff), logger.error('npt not a diffraction point')
         lcy = self.ddiff[npt][0]
         ls = []
         llz = len(lz)
@@ -9484,7 +9484,7 @@ class Layout(pro.PyLayers):
         lpnt = [x for x in self.Gs.node if (x < 0 and x not in self.degree[0])]
 
         self.ddiff = {}
-        
+
         if verbose :
             cpt = 1./(len(lpnt)+1)
             pbar = tqdm.tqdm(tqdmkwargs)
@@ -10036,7 +10036,7 @@ class Layout(pro.PyLayers):
         # en  = self.Ns # number of segments
         en = len(np.where(np.array(list(dict(self.Gs.node).keys())) > 0)[0])
         if en != self.Ns:
-            logging.warning("wrong number of segments, consistency problem in layout")
+            logger.warning("wrong number of segments, consistency problem in layout")
         #cen = self.Nss
         # d : dictionnary of layout sub segments
         #
@@ -10047,7 +10047,7 @@ class Layout(pro.PyLayers):
             cen = cen + len(lss)
 
         if cen != self.Nss:
-            logging.warning("wrong number of subsegments, consistency problem in layout")
+            logger.warning("wrong number of subsegments, consistency problem in layout")
 
         sl = self.sl
 #
@@ -10211,7 +10211,7 @@ class Layout(pro.PyLayers):
         # en  = self.Ns # number of segments
         en = len(np.where(np.array(list(dict(self.Gs.node).keys())) > 0)[0])
         if en != self.Ns:
-            logging.warning(
+            logger.warning(
                 "wrong number of segment consistency problem in layout")
         #cen = self.Nss
         # d : dictionnary of layout sub segments
@@ -10223,7 +10223,7 @@ class Layout(pro.PyLayers):
             cen = cen + len(lss)
 
         if cen != self.Nss:
-            logging.warning(
+            logger.warning(
                 "wrong number of subsegment consistency problem in layout")
 
         sl = self.sl
@@ -10346,6 +10346,7 @@ class Layout(pro.PyLayers):
                 name = self.Gs.node[ne]['ss_name'][order]
 
             colname = sl[name]['color']
+            pdb.set_trace()
             colhex = cold[colname]
             color[i, :] = pyu.rgb(colhex)
             color[i + npt_s, :] = pyu.rgb(colhex)

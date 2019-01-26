@@ -8,7 +8,6 @@ from __future__ import print_function
 
 """
 import doctest
-import logging
 import os
 import sys
 import glob
@@ -45,7 +44,6 @@ import shapely.geometry as shg
 import h5py
 import operator
 
-logger = logging.getLogger(__name__)
 
 class Rays(PyLayers, dict):
     """ Class handling a set of rays
@@ -409,8 +407,11 @@ class Rays(PyLayers, dict):
             if a not in notattr:
                 if type(a)==str:
                     a.encode('utf-8')
-                    # print("   ",a)
-                    f.attrs[a] = getattr(self,a)
+                    if a=='_luw':
+                        la = [ x.encode('utf8') for x in getattr(self,a) ] 
+                        f.attrs[a] = la
+                    else:
+                        f.attrs[a] = getattr(self,a)
 
         for k in self.keys():
             f.create_group(str(k))
@@ -422,7 +423,11 @@ class Rays(PyLayers, dict):
                 elif kk == 'nbrays':
                     f[str(k)].create_dataset(kk,shape=(1,),data=np.array([self[k][kk]]))
                 else:
-                    f[str(k)].create_dataset(kk,shape=np.shape(self[k][kk]),data=self[k][kk])
+                    if kk=='diffslabs':
+                        ldiffslabs = [ x.encode('utf8') for x in self[k][kk] ]
+                        f[str(k)].create_dataset(kk,shape=np.shape(self[k][kk]),data=ldiffslabs)
+                    else:
+                        f[str(k)].create_dataset(kk,shape=np.shape(self[k][kk]),data=self[k][kk])
         fh5.close()
         #except:
         #    fh5.close()

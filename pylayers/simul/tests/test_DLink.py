@@ -4,9 +4,9 @@ import pdb
 import warnings
 import logging
 
-logging.basicConfig(filename="testDLink.log",level=logging.DEBUG)
-logging.basicConfig(format='%(asctime)s %(message)s')
-logger = logging.getLogger(__name__)
+#logging.basicConfig(filename="testDLink.log",level=logging.DEBUG)
+#logging.basicConfig(format='%(asctime)s %(message)s')
+#logger = logging.getLogger(__name__)
 
 #warnings.filterwarnings("error")
 # set the frequency range
