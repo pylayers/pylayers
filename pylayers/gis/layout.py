@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#-*- coding:utf-8 -*-
 #
 #
 #   Layout  Module
@@ -277,7 +277,6 @@ class Layout(pro.PyLayers):
 
         #
         # setting display option
-        #
 
         self.display = {}
         self.display['title'] = ''
@@ -3945,7 +3944,6 @@ class Layout(pro.PyLayers):
             p1 = np.outer(p1, np.ones(1))
             p2 = np.outer(p2, np.ones(1))
 
-        pdb.set_trace()
         # 3 x N
         u = p1 - p2
         # 1 x N
