@@ -239,18 +239,16 @@
   <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; !date
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>samedi 26 janvier 2019, 11:58:07 (UTC+0100)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>samedi 26 janvier 2019, 14:14:27 (UTC+0100)
 </pre></div>
 </div>
 <div class="section" id="description-of-the-propagation-environment">
 <h1>Description of the propagation environment<a class="headerlink" href="#description-of-the-propagation-environment" title="Permalink to this headline">¶</a></h1>
-<div class="line-block">
-<div class="line">The <code class="docutils literal notranslate"><span class="pre">Layout</span></code> class contains the data structure for describing a
+<p>The <code class="docutils literal notranslate"><span class="pre">Layout</span></code> class contains the data structure for describing a
 propagation environment. It contains different graphs helping the
 implementation of the ray tracing. The class is implemented in the
-module</div>
-<div class="line"><a class="reference external" href="http://pylayers.github.io/pylayers/api/pylayers.gis.layout.Layout.html">layout.py</a></div>
-</div>
+module
+<a class="reference external" href="http://pylayers.github.io/pylayers/api/pylayers.gis.layout.Layout.html">layout.py</a></p>
 <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.gis.layout import *
 &gt;&gt;&gt; from IPython.display import Image
 &gt;&gt;&gt; import os
@@ -282,14 +280,15 @@ yrange : (-50, 50)
 </pre></div>
 </div>
 <p>The different argument of the <strong>init</strong> function are listed below</p>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L=Layout(string=&#39;&#39;,
-                 _filematini=&#39;matDB.ini&#39;,
-                 _fileslabini=&#39;slabDB.ini&#39;,
-                 _filefur=&#39;&#39;,
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L=Layout(arg=&#39;&#39;,
+                 mat=&#39;matDB.ini&#39;,
+                 slab=&#39;slabDB.ini&#39;,
+                 fur=&#39;&#39;,
                  bcheck=True,
                  bbuild=True,
                  bverbose=False,
                  bcartesian=True,
+             xlim=(),
                  dist_m=400,
                  typ=&#39;indoor&#39;)
 </pre></div>
@@ -297,19 +296,19 @@ yrange : (-50, 50)
 <ul class="simple">
 <li><strong>string</strong> is either an existing layout filename (.lay,.osm,.res) or
 the coordinates (lat,lon)</li>
-<li>** _filematini** is the a material filename material ans slab are
-now described in .lay file</li>
-<li>** _fileslabini** is the a slab filename</li>
-<li>** _filefur** is the furniture filename</li>
+<li>** mat** is the a material filename material ans slab are now
+described in .lay file</li>
+<li>** slab** is the a slab filename</li>
+<li>** fur** is the furniture filename</li>
 <li>** bcheck** is a boolean which force layout integrity checking</li>
 <li>** bbuild** is a boolean which force rebuilding the layouts graphs</li>
 <li>** bverbose** is a boolean output verbosity</li>
 <li>** bcartesian** is a boolean controling the type of coordinates
 cartesian or (lat,lon)</li>
+<li>** xlim** is a tuple with specifies the layout limits</li>
 <li><strong>dist_m</strong> is a float value which indicates the zone radius in meters
 for openstreet map extraction</li>
-<li><strong>typ</strong> is a string which takes values either floorplan or
-outdoor</li>
+<li><strong>typ</strong> is a string which takes values either indoor or outdoor</li>
 </ul>
 <p>Querying the file name associated with the Layout.</p>
 <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L._filename
@@ -322,8 +321,8 @@ outdoor</li>
 <code class="docutils literal notranslate"><span class="pre">.res</span></code> file.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">ls()</span></code> method lists the layout files which are available in the
 <code class="docutils literal notranslate"><span class="pre">struc</span></code> directory of your current project, which is set up via the
-$BASENAME environment variable which should be defined in order PyLayers
-find the good directories.</p>
+$BASENAME environment variable which should be defined in order to seek
+layout file in the good project directory.</p>
 <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.ls(&#39;lay&#39;)
 </pre></div>
 </div>
@@ -397,10 +396,9 @@ find the good directories.</p>
  &#39;testair1.lay&#39;]
 </pre></div>
 </div>
+<p>A very simple Layout which is used for testing is <code class="docutils literal notranslate"><span class="pre">defstr.lay</span></code></p>
 <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L=Layout(&#39;defstr.lay&#39;)
-</pre></div>
-</div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L
+&gt;&gt;&gt; L
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>----------------
@@ -426,6 +424,8 @@ center : ( 5.00,2.67)
 radius : 7.72
 </pre></div>
 </div>
+<p>The showG method can be used for showing the layout in specifying which
+entities to display.</p>
 <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a=L.showG(&#39;s&#39;,
              nodes=True,
          slab=True,
@@ -433,7 +433,7 @@ radius : 7.72
          figsize=(10,10),labels=True)
 </pre></div>
 </div>
-<img alt="../../_images/Layout_13_0.png" src="../../_images/Layout_13_0.png" />
+<img alt="../../_images/Layout_14_0.png" src="../../_images/Layout_14_0.png" />
 <p>L.ax provides the boundary of the layout with the following tuple format
 : (xmin,xmax,ymin,ymax)</p>
 <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.ax
@@ -477,7 +477,7 @@ angles.</p>
 <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a=L.showG(&#39;s&#39;,aw=False)
 </pre></div>
 </div>
-<img alt="../../_images/Layout_22_0.png" src="../../_images/Layout_22_0.png" />
+<img alt="../../_images/Layout_23_0.png" src="../../_images/Layout_23_0.png" />
 <p>To check which are the used slabs :</p>
 <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.sl
 </pre></div>
@@ -485,10 +485,10 @@ angles.</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>List of Slabs
 -----------------------------
 
-PARTITION : |PLASTER
-[0.1]
-       grey80 4
-       epr :(8+0j)    sigma : 0.038
+WALL : |BRICK
+[0.07]
+       grey20 3
+       epr :(4.09999990463+0j)    sigma : 0.300000011921
 _AIR : |AIR
 [0.02]
        white 1
@@ -499,6 +499,10 @@ _AIR : |AIR
        epr :(3.79999995232+0j)    sigma : 0.0
        epr :(1+0j)    sigma : 0.0
        epr :(3.79999995232+0j)    sigma : 0.0
+AIR : |AIR
+[0.02]
+       white 1
+       epr :(1+0j)    sigma : 0.0
 CEIL : |REINFORCED_CONCRETE
 [0.1]
        grey20 1
@@ -507,14 +511,10 @@ FLOOR : |REINFORCED_CONCRETE
 [0.1]
        grey40 1
        epr :(8.69999980927+0j)    sigma : 3.0
-AIR : |AIR
-[0.02]
-       white 1
-       epr :(1+0j)    sigma : 0.0
-WALL : |BRICK
-[0.07]
-       grey20 3
-       epr :(4.09999990463+0j)    sigma : 0.300000011921
+PARTITION : |PLASTER
+[0.1]
+       grey80 4
+       epr :(8+0j)    sigma : 0.038
 </pre></div>
 </div>
 <p>Lets load an other layout. This an indoor office where the FP7 WHERE
@@ -526,14 +526,14 @@ project UWB impulse radio measuremnts have been performed.</p>
 <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a=L.showG(&#39;s&#39;,airwalls=False,figsize=(20,10))
 </pre></div>
 </div>
-<img alt="../../_images/Layout_28_0.png" src="../../_images/Layout_28_0.png" />
+<img alt="../../_images/Layout_29_0.png" src="../../_images/Layout_29_0.png" />
 <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L=Layout(&#39;W2PTIN.lay&#39;)
 </pre></div>
 </div>
 <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a = L.showG(&#39;s&#39;)
 </pre></div>
 </div>
-<img alt="../../_images/Layout_30_0.png" src="../../_images/Layout_30_0.png" />
+<img alt="../../_images/Layout_31_0.png" src="../../_images/Layout_31_0.png" />
 </div>
 <div class="section" id="the-useful-numpy-arrays-of-the-layout">
 <h2>The useful numpy arrays of the Layout<a class="headerlink" href="#the-useful-numpy-arrays-of-the-layout" title="Permalink to this headline">¶</a></h2>
@@ -590,12 +590,12 @@ connected to the origin (corresponding to exterior cycle).</p>
 <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a = L.showG(&#39;s&#39;)
 </pre></div>
 </div>
-<img alt="../../_images/Layout_36_0.png" src="../../_images/Layout_36_0.png" />
+<img alt="../../_images/Layout_37_0.png" src="../../_images/Layout_37_0.png" />
 <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; lp1 = nx.draw_networkx_nodes(L.Gi,L.Gi.pos,node_color=&#39;blue&#39;,node_size=1)
 &gt;&gt;&gt; lp2 = nx.draw_networkx_edges(L.Gi,L.Gi.pos,node_color=&#39;blue&#39;,node_size=1)
 </pre></div>
 </div>
-<img alt="../../_images/Layout_37_0.png" src="../../_images/Layout_37_0.png" />
+<img alt="../../_images/Layout_38_0.png" src="../../_images/Layout_38_0.png" />
 </div>
 </div>
 <div class="section" id="tgs-trancodage-from-graph-indexing-to-numpy-array-indexing">
@@ -629,7 +629,7 @@ because none segment has 0 as an index.</p>
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;connect&#39;: [-8, -139],
- &#39;iso&#39;: [245],
+ &#39;iso&#39;: [365],
  &#39;name&#39;: &#39;PARTITION&#39;,
  &#39;ncycles&#39;: [70, 72],
  &#39;norm&#39;: array([ 0.,  1.,  0.]),
