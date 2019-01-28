@@ -359,6 +359,7 @@ class Coverage(PyLayers):
                     self.ptdbm = np.array(self.dap[iap]['PtdBm'])
                     self.bmhz  = np.array(self.dap[iap].s.chan[apchan[0]]['BMHz'])
 
+        self.nf = len(self.fGHz)
         PnW = np.array((10**(self.noisefactordb/10.))*self.kB*self.temperaturek*self.bmhz*1e6)
         # Evaluate Noise Power (in dBm)
         self.pndbm = np.array(10*np.log10(PnW)+30)
@@ -370,82 +371,102 @@ class Coverage(PyLayers):
         self.ptdbm = self.ptdbm.T
         self.pndbm = self.pndbm.T
         # creating all links
-        # all grid to all ap 
+        # all grid to all ap
         #
         if len(self.pndbm.shape ) == 0:
             self.ptdbm = self.ptdbm.reshape(1,1)
             self.pndbm = self.pndbm.reshape(1,1)
 
-        p = product(range(self.ng),lactiveAP)
-        #
-        # pa : access point
-        # pg : grid point
-        #
-        # 1 x na
+        sizebloc=100
+        Nbloc = self.ng//sizebloc
+        r1 = np.arange(0,Nbloc*sizebloc,sizebloc)
+        r1 = np.append(r1,self.ng)
+        lz1 = list(zip(r1[0:-1],r1[1:]))
 
-        for k in p:
-            pg = self.grid[k[0],:]
-            pa = np.array(self.dap[k[1]]['p'])
-            # exemple with 3 AP
-            # 321 0
-            # 321 1
-            # 321 2
-            # 322 0
-            try:
-                self.pa = np.vstack((self.pa,pa))
-            except:
-                self.pa = pa
-            try:
-                self.pg = np.vstack((self.pg,pg))
-            except:
-                self.pg = pg
+        for z1 in lz1:
+            p = product(range(z1[0],z1[1]),lactiveAP)
+            #
+            # pa : access point
+            # pg : grid point
+            #
+            # 1 x na
 
-        self.pa = self.pa.T
-        shpa = self.pa.shape
-        shpg = self.pg.shape
-
-        if shpa[0] != 3:
-            self.pa = np.vstack((self.pa,np.ones(shpa[1])))
-        self.pg = self.pg.T
-        self.pg = np.vstack((self.pg,self.zgrid*np.ones(shpg[0])))
-
-        self.nf = len(self.fGHz)
-
-        # retrieving dimensions along the 3 axis
-        na = len(lactiveAP)
-        self.na = na
-        ng = self.ng
-        nf = self.nf
-
-        for k,iap in enumerate(self.dap):
-            # select only one access point
-            u = na*np.arange(0,ng,1).astype('int')+k
-            if self.dap[iap]['on']:
-                pt = self.pa[:,u]
-                pr = self.pg[:,u]
-                azoffset = self.dap[iap]['phideg']*np.pi/180.
-                self.dap[iap].A.eval(fGHz=self.fGHz, pt=pt, pr=pr, azoffset=azoffset)
-
-                gain = (self.dap[iap].A.G).T
-                #pdb.set_trace()
-                # to handle omnidirectional antenna (nf,1,1)
-                if gain.shape[1]==1:
-                    gain = np.repeat(gain,ng,axis=1)
+            for k in p:
+                pg = self.grid[k[0],:]
+                pa = np.array(self.dap[k[1]]['p'])
+                # exemple with 3 AP
+                # 321 0
+                # 321 1
+                # 321 2
+                # 322 0
                 try:
-                    tgain = np.dstack((tgain,gain[:,:,None]))
+                    self.pa = np.vstack((self.pa,pa))
                 except:
-                    tgain = gain[:,:,None]
+                    self.pa = pa
+                try:
+                    self.pg = np.vstack((self.pg,pg))
+                except:
+                    self.pg = pg
 
-        #Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
-        Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
+            self.pa = self.pa.T
+            shpa = self.pa.shape
+            shpg = self.pg.shape
 
-        self.Lwo = Lwo.reshape(nf,ng,na)
-        self.Edo = Edo.reshape(nf,ng,na)
-        self.Lwp = Lwp.reshape(nf,ng,na)
-        self.Edp = Edp.reshape(nf,ng,na)
+            # extend 3 dimensions
+            if shpa[0] != 3:
+                self.pa = np.vstack((self.pa,np.ones(shpa[1])))
 
-        freespace = loss.PL(self.fGHz,self.pa,self.pg,dB=False)
-        self.freespace = freespace.reshape(nf,ng,na)
+            self.pg = self.pg.T
+            self.pg = np.vstack((self.pg,self.zgrid*np.ones(shpg[0])))
+
+
+            # retrieving dimensions along the 3 axis
+            na = len(lactiveAP)
+            self.na = na
+            ng = self.ng
+            nf = self.nf
+            for k,iap in enumerate(self.dap):
+                # select only one access point
+                u = na*np.arange(0,z1[1]-z1[0],1).astype('int')+k
+                if self.dap[iap]['on']:
+                    pt = self.pa[:,u]
+                    pr = self.pg[:,u]
+                    azoffset = self.dap[iap]['phideg']*np.pi/180.
+                    self.dap[iap].A.eval(fGHz=self.fGHz, pt=pt, pr=pr, azoffset=azoffset)
+
+                    gain = (self.dap[iap].A.G).T
+                    #pdb.set_trace()
+                    # to handle omnidirectional antenna (nf,1,1)
+                    if gain.shape[1]==1:
+                        gain = np.repeat(gain,ng,axis=1)
+                    try:
+                        tgain = np.dstack((tgain,gain[:,:,None]))
+                    except:
+                        tgain = gain[:,:,None]
+
+            #Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
+            Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
+            freespace = loss.PL(self.fGHz,self.pa,self.pg,dB=False)
+            try:
+                self.Lwo = np.hstack((self.Lwo,Lwo))
+                self.Lwp = np.hstack((self.Lwp,Lwp))
+                self.Edo = np.hstack((self.Edo,Edo))
+                self.Edp = np.hstack((self.Edp,Edp))
+                self.freespace = np.hstack((self.freespace,freespace))
+            except:
+                self.Lwo = Lwo
+                self.Lwp = Lwp
+                self.Edo = Edo
+                self.Edp = Edp
+                self.freespace = freespace
+
+
+        self.Lwo = self.Lwo.reshape(nf,ng,na)
+        self.Edo = self.Edo.reshape(nf,ng,na)
+        self.Lwp = self.Lwp.reshape(nf,ng,na)
+        self.Edp = self.Edp.reshape(nf,ng,na)
+
+        self.freespace = self.freespace.reshape(nf,ng,na)
 
         # transmitting power
         # f x g x a
