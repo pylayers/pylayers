@@ -383,50 +383,12 @@ class Coverage(PyLayers):
             self.ptdbm = self.ptdbm.reshape(1,1)
             self.pndbm = self.pndbm.reshape(1,1)
 
-<<<<<<< HEAD
-        # iterator on cartesian product grid x APs
-        p = product(range(self.ng),lactiveAP)
-
-        #
-        # pa : access point
-        # pg : grid point
-        #
-        # 1 x na
-
-        for k in p:
-            pg = self.grid[k[0],:]
-            pa = np.array(self.dap[k[1]]['p'])
-            # exemple with 3 AP
-            # 321 0
-            # 321 1
-            # 321 2
-            # 322 0
-            try:
-                self.pa = np.vstack((self.pa,pa))
-            except:
-                self.pa = pa
-            try:
-                self.pg = np.vstack((self.pg,pg))
-            except:
-                self.pg = pg
-        pdb.set_trace()
-        self.pa = self.pa.T
-        shpa = self.pa.shape
-        shpg = self.pg.shape
-
-        if shpa[0] != 3:
-            self.pa = np.vstack((self.pa,np.ones(shpa[1])))
-        self.pg = self.pg.T
-        self.pg = np.vstack((self.pg,self.zgrid*np.ones(shpg[0])))
-
         self.nf = len(self.fGHz)
-=======
         sizebloc=100
         Nbloc = self.ng//sizebloc
         r1 = np.arange(0,Nbloc*sizebloc,sizebloc)
         r1 = np.append(r1,self.ng)
         lz1 = list(zip(r1[0:-1],r1[1:]))
->>>>>>> blockcoverage
 
         for z1 in lz1:
             p = product(range(z1[0],z1[1]),lactiveAP)
