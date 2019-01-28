@@ -773,8 +773,8 @@ def PL(fGHz,pts,p,n=2.0,dB=True,d0=1):
 
     return(PL)
 
-def Losst(L,fGHz,p1,p2,dB=True):
-    """  calculate Losses between links p1 p2
+def Losst(L,fGHz,p1,p2,dB=True,bceilfloor=False):
+    """  calculate Losses between links p1-p2
 
     Parameters
     ----------
@@ -783,10 +783,11 @@ def Losst(L,fGHz,p1,p2,dB=True):
     fGHz : np.array
            frequency GHz
     p1 : source points
-        (2 x Np1) array or (2,) array
-    p2 : observation point
-        (2 x Np2) array or (2,) array
+        (3 x Np1) array or (3,) array
+    p2 : observation points
+        (3 x Np2) array or (3,) array
     dB : boolean
+    bceilfloor : boolean
 
     Examples
     --------
@@ -839,18 +840,15 @@ def Losst(L,fGHz,p1,p2,dB=True):
     data = L.angleonlink3(p1,p2)
 
     # as many slabs as segments and subsegments
-    us    = data['s'] 
+    us    = data['s']
     slabs = np.array([ L.Gs.node[x]['name'] for x in us ])
-
-
-
 
 
     #slabs = L.sla[us]
     check = np.where(slabs=='')
 
     #
-    # As segment numbering is not necessarily contiguous 
+    # As segment numbering is not necessarily contiguous
     # there exist void string '' in slabs
     cslab = list(np.unique(slabs))
     if '' in cslab:
@@ -901,84 +899,83 @@ def Losst(L,fGHz,p1,p2,dB=True):
         EdWallo[:,involved_links] = EdWallo[:,involved_links] + Edo
         EdWallp[:,involved_links] = EdWallp[:,involved_links] + Edp
 
-
+    if bceilfloor:
     # Managing Ceil / Floor transmission
-
-
-    # check crossing ceil
-    if (p1[2,:]> L.zceil).any() or (p2[2,:]> L.zceil).any():
-
-        # WARNING : this test sohould be done individually
-        if (p1[2]>p2[2]).all():
-            v0 = p1
-            v1 = p2
-        else:
-            v0 = p2
-            v1 = p1
-
-        uu = v0 - v1
-        # 1 x N
-        nu = np.sqrt(np.sum(uu * uu, axis=0))
-        # 3 x N
-        un = uu / nu[np.newaxis, :]
-        dotp = np.einsum('ij,i->j',un,np.array([0,0,1]))
-        alphas = np.arccos(dotp)
-
+    # At that point there is only a single type of ceil and floor
+    # it should be defined ideally as a specific entity
         #
-        # calculate Loss for slab CEIL
+        # TODO fix shape error p2 is not always (3 x N)
         #
-        lkco,lkcp  = L.sl['CEIL'].losst(fGHz,alphas)
-        #
-        # calculate Excess delay for slab CEIL
-        #
-        dco , dcp  = L.sl['CEIL'].excess_grdelay(theta=alphas)
+        if (p1[2,:]> L.zceil).any() or (p2[2,:]> L.zceil).any():
+
+            # WARNING : this test should be done individually
+            if (p1[2]>p2[2]).all():
+                v0 = p1
+                v1 = p2
+            else:
+                v0 = p2
+                v1 = p1
+
+            uu = v0 - v1
+            # 1 x N
+            nu = np.sqrt(np.sum(uu * uu, axis=0))
+            # 3 x N
+            un = uu / nu[np.newaxis, :]
+            dotp = np.einsum('ij,i->j',un,np.array([0,0,1]))
+            alphas = np.arccos(dotp)
+
+            #
+            # calculate Loss for slab CEIL
+            #
+            lkco,lkcp  = L.sl['CEIL'].losst(fGHz,alphas)
+            #
+            # calculate Excess delay for slab CEIL
+            #
+            dco , dcp  = L.sl['CEIL'].excess_grdelay(theta=alphas)
 
 
 
-        LossWallo = LossWallo + lkco
-        LossWallp = LossWallp + lkcp
+            LossWallo = LossWallo + lkco
+            LossWallp = LossWallp + lkcp
 
-        EdWallo = EdWallo + dco
-        EdWallp = EdWallp + dcp
-
-
-    # check crossing floor
-    if (p1[2,:]< L.zfloor).any() or (p2[2,:]< L.zfloor).any():
+            EdWallo = EdWallo + dco
+            EdWallp = EdWallp + dcp
 
 
-        # WARNING : this test sohould be done individually
-        if (p1[2]>p2[2]).all():
-            v0 = p1
-            v1 = p2
-        else:
-            v0 = p2
-            v1 = p1
-
-        uu = v0 - v1
-        # 1 x N
-        nu = np.sqrt(np.sum(uu * uu, axis=0))
-        # 3 x N
-        un = uu / nu[np.newaxis, :]
-        dotp = np.einsum('ij,i->j',un,np.array([0,0,1]))
-        alphas = np.arccos(dotp)
-
-        #
-        # calculate Loss for slab CEIL
-        #
-        lkfo,lkfp  = L.sl['FLOOR'].losst(fGHz,alphas)
-        #
-        # calculate Excess delay for slab CEIL
-        #
-        dfo , dfp  = L.sl['FLOOR'].excess_grdelay(theta=alphas)
+        # check crossing floor
+        if (p1[2,:]< L.zfloor).any() or (p2[2,:]< L.zfloor).any():
 
 
+            # WARNING : this test should be done individually
+            if (p1[2]>p2[2]).all():
+                v0 = p1
+                v1 = p2
+            else:
+                v0 = p2
+                v1 = p1
 
-        LossWallo = LossWallo + lkfo
-        LossWallp = LossWallp + lkfp
+            uu = v0 - v1
+            # 1 x N
+            nu = np.sqrt(np.sum(uu * uu, axis=0))
+            # 3 x N
+            un = uu / nu[np.newaxis, :]
+            dotp = np.einsum('ij,i->j',un,np.array([0,0,1]))
+            alphas = np.arccos(dotp)
 
-        EdWallo = EdWallo + dfo
-        EdWallp = EdWallp + dfp
+            #
+            # calculate Loss for slab CEIL
+            #
+            lkfo,lkfp  = L.sl['FLOOR'].losst(fGHz,alphas)
+            #
+            # calculate Excess delay for slab CEIL
+            #
+            dfo , dfp  = L.sl['FLOOR'].excess_grdelay(theta=alphas)
 
+            LossWallo = LossWallo + lkfo
+            LossWallp = LossWallp + lkfp
+
+            EdWallo = EdWallo + dfo
+            EdWallp = EdWallp + dfp
 
     if not dB:
         LossWallo = 10**(-LossWallo/10)
@@ -989,13 +986,13 @@ def Losst(L,fGHz,p1,p2,dB=True):
 def gaspl(d,fGHz,T,PhPa,wvden):
     """ attenuation due to atmospheric gases
 
-    Parameters 
+    Parameters
     ----------
     d : np.array
-        range (meters) 
-    fGHz : np.array 
+        range (meters)
+    fGHz : np.array
         frequency (GHz)
-    T : float 
+    T : float
         Temprature in degree Celcius
     PhPa : float
         Pressure in hPa
@@ -1005,8 +1002,8 @@ def gaspl(d,fGHz,T,PhPa,wvden):
     Examples
     --------
 
-    >>> import numpy as np 
-    >>> import matplotlib.pyplot as plt 
+    >>> import numpy as np
+    >>> import matplotlib.pyplot as plt
     >>> T = 15
     >>> PhPa = 1013
     >>> wvden = 7.5

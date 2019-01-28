@@ -99,6 +99,7 @@ import pylayers.gis.osmparser as osm
 from pylayers.gis.selectl import SelectL
 import pylayers.util.graphutil as gph
 import pylayers.util.project as pro
+from pylayers.util.project import logger
 
 def pbar(verbose,**kwargs):
     if verbose:
@@ -846,15 +847,16 @@ class Layout(pro.PyLayers):
             #
             if (degmin <= 1):
                 f, a = self.showG('s', aw=1)
-                deg0 = filter(lambda x: nx.degree(self.Gs, x) == 0, upnt)
-                deg1 = filter(lambda x: nx.degree(self.Gs, x) == 1, upnt)
+                deg0 = [ x for x in upnt if nx.degree(self.Gs, x) == 0]
+                deg1 = [ x for x in upnt if nx.degree(self.Gs, x) == 1]
 
                 if len(deg0) > 0:
                     logger.critical( "It exists degree 0 points :  %r", deg0 )
                     f, a = self.pltvnodes(deg0, fig=f, ax=a)
                     bconsistent = False
+
                 if len(deg1) > 0:
-                    logger.critical( "It exists degree 0 points :  %r", deg1 )
+                    logger.critical( "It exists degree 1 points :  %r", deg1 )
                     f, a = self.pltvnodes(deg1, fig=f, ax=a)
                     bconsistent = False
 
@@ -3838,7 +3840,7 @@ class Layout(pro.PyLayers):
         Notes
         -----
 
-        This method returns all the existing Layout point inside a box zone or
+        This method returns all the existing Layout points inside a box zone or
         the boundary of a polygon
 
         """

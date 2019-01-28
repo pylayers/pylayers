@@ -331,6 +331,7 @@ class Coverage(PyLayers):
         # select active AP
         #
         lactiveAP = []
+
         try:
             del self.aap
             del self.ptdbm
@@ -338,9 +339,14 @@ class Coverage(PyLayers):
             pass
 
 
-        self.kB = 1.3806503e-23 # Boltzmann constant
+        self.kB = 1.3806503e-23 
+        # Boltzmann constant
         #
-        # Loop opver access points
+        # Loop over access points
+        #    set parameter of each active ap
+        #        p
+        #        PtdBm
+        #        BMHz
         #
         for iap in self.dap:
             if self.dap[iap]['on']:
@@ -370,13 +376,15 @@ class Coverage(PyLayers):
         self.ptdbm = self.ptdbm.T
         self.pndbm = self.pndbm.T
         # creating all links
-        # all grid to all ap 
+        # all grid to all ap
         #
         if len(self.pndbm.shape ) == 0:
             self.ptdbm = self.ptdbm.reshape(1,1)
             self.pndbm = self.pndbm.reshape(1,1)
 
+        # iterator on cartesian product grid x APs
         p = product(range(self.ng),lactiveAP)
+
         #
         # pa : access point
         # pg : grid point
@@ -399,7 +407,7 @@ class Coverage(PyLayers):
                 self.pg = np.vstack((self.pg,pg))
             except:
                 self.pg = pg
-
+        pdb.set_trace()
         self.pa = self.pa.T
         shpa = self.pa.shape
         shpg = self.pg.shape

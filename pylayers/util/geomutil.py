@@ -623,6 +623,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
         vnodes is a list of point and segments of the polygon.
         If there are isosegments the sequence of iso segments
         is repeated between the termination points.
+
         L.numseg has been adapted in order to return either the first segment (default)
         or the list of all segments
 
