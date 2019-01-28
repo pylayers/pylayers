@@ -277,19 +277,20 @@
 <h1>Losst<a class="headerlink" href="#losst" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pylayers.antprop.loss.Losst">
-<code class="descclassname">pylayers.antprop.loss.</code><code class="descname">Losst</code><span class="sig-paren">(</span><em>L</em>, <em>fGHz</em>, <em>p1</em>, <em>p2</em>, <em>dB=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/loss.html#Losst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.loss.Losst" title="Permalink to this definition">¶</a></dt>
-<dd><p>calculate Losses between links p1 p2</p>
+<code class="descclassname">pylayers.antprop.loss.</code><code class="descname">Losst</code><span class="sig-paren">(</span><em>L</em>, <em>fGHz</em>, <em>p1</em>, <em>p2</em>, <em>dB=True</em>, <em>bceilfloor=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/loss.html#Losst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.loss.Losst" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate Losses between links p1-p2</p>
 <p>L   : Layout object
 fGHz : np.array</p>
 <blockquote>
 <div>frequency GHz</div></blockquote>
 <dl class="docutils">
 <dt>p1 <span class="classifier-delimiter">:</span> <span class="classifier">source points</span></dt>
-<dd>(2 x Np1) array or (2,) array</dd>
-<dt>p2 <span class="classifier-delimiter">:</span> <span class="classifier">observation point</span></dt>
-<dd>(2 x Np2) array or (2,) array</dd>
+<dd>(3 x Np1) array or (3,) array</dd>
+<dt>p2 <span class="classifier-delimiter">:</span> <span class="classifier">observation points</span></dt>
+<dd>(3 x Np2) array or (3,) array</dd>
 </dl>
-<p>dB : boolean</p>
+<p>dB : boolean
+bceilfloor : boolean</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import matplotlib.pyplot as plt
 &gt;&gt;&gt; from pylayers.measures.mesuwb import *
 &gt;&gt;&gt; from pylayers.antprop.loss import *
@@ -336,7 +337,7 @@ pylayers.slab.Interface.losst</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Jan 24, 2019.
+      Last updated on Jan 28, 2019.
 
     </p>
   </div>

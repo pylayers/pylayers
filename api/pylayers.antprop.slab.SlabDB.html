@@ -225,7 +225,7 @@
 <h1>SlabDB<a class="headerlink" href="#slabdb" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pylayers.antprop.slab.SlabDB">
-<em class="property">class </em><code class="descclassname">pylayers.antprop.slab.</code><code class="descname">SlabDB</code><span class="sig-paren">(</span><em>fileslab=''</em>, <em>filemat=''</em>, <em>ds={}</em>, <em>dm={'AIR': {'epr': (1+0j)</em>, <em>'mur': (1+0j)</em>, <em>'roughness': 0.0</em>, <em>'sigma': 0.0}</em>, <em>'METAL': {'epr': (1+0j)</em>, <em>'mur': (1+0j)</em>, <em>'roughness': 0.0</em>, <em>'sigma': 10000000}</em>, <em>'_AIR': {'epr': (1+0j)</em>, <em>'mur': (1+0j)</em>, <em>'roughness': 0.0</em>, <em>'sigma': 0.0}}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#SlabDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pylayers.antprop.slab.</code><code class="descname">SlabDB</code><span class="sig-paren">(</span><em>fileslab=''</em>, <em>filemat=''</em>, <em>ds={}</em>, <em>dm={'AIR': {'roughness': 0.0</em>, <em>'epr': (1+0j)</em>, <em>'sigma': 0.0</em>, <em>'mur': (1+0j)}</em>, <em>'METAL': {'roughness': 0.0</em>, <em>'epr': (1+0j)</em>, <em>'sigma': 10000000</em>, <em>'mur': (1+0j)}</em>, <em>'_AIR': {'roughness': 0.0</em>, <em>'epr': (1+0j)</em>, <em>'sigma': 0.0</em>, <em>'mur': (1+0j)}}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#SlabDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
 <p>Slab data base</p>
 <p>DB : slab dictionnary</p>
@@ -378,7 +378,7 @@ The surface impedance is <span class="math notranslate nohighlight">\(R = 4 \Ome
 
 <dl class="method">
 <dt id="pylayers.antprop.slab.SlabDB.show">
-<code class="descname">show</code><span class="sig-paren">(</span><em>name='WOOD'</em>, <em>fGHz=array([2.4])</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#SlabDB.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB.show" title="Permalink to this definition">¶</a></dt>
+<code class="descname">show</code><span class="sig-paren">(</span><em>name='WOOD'</em>, <em>fGHz=array([ 2.4])</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#SlabDB.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>evaluate and show a given slab</p>
 <p>name : string
 fGHz : np.array</p>
@@ -413,7 +413,7 @@ fGHz : np.array</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Oct 17, 2018.
+      Last updated on Jan 28, 2019.
 
     </p>
   </div>

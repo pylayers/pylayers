@@ -226,7 +226,6 @@ except:
 import pdb
 import sys
 import os
-import logging
 import copy
 import glob
 import time
@@ -306,6 +305,7 @@ import pylayers.gis.osmparser as osm
 from pylayers.gis.selectl import SelectL
 import pylayers.util.graphutil as gph
 import pylayers.util.project as pro
+from pylayers.util.project import logger
 
 <div class="viewcode-block" id="pbar"><a class="viewcode-back" href="../../../api/pylayers.gis.layout.pbar.html#pylayers.gis.layout.pbar">[docs]</a>def pbar(verbose,**kwargs):
     if verbose:
@@ -1053,15 +1053,16 @@ import pylayers.util.project as pro
             #
             if (degmin &lt;= 1):
                 f, a = self.showG(&#39;s&#39;, aw=1)
-                deg0 = filter(lambda x: nx.degree(self.Gs, x) == 0, upnt)
-                deg1 = filter(lambda x: nx.degree(self.Gs, x) == 1, upnt)
+                deg0 = [ x for x in upnt if nx.degree(self.Gs, x) == 0]
+                deg1 = [ x for x in upnt if nx.degree(self.Gs, x) == 1]
 
                 if len(deg0) &gt; 0:
-                    logging.critical( &quot;It exists degree 0 points :  %r&quot;, deg0 )
+                    logger.critical( &quot;It exists degree 0 points :  %r&quot;, deg0 )
                     f, a = self.pltvnodes(deg0, fig=f, ax=a)
                     bconsistent = False
+
                 if len(deg1) &gt; 0:
-                    logging.critical( &quot;It exists degree 0 points :  %r&quot;, deg1 )
+                    logger.critical( &quot;It exists degree 1 points :  %r&quot;, deg1 )
                     f, a = self.pltvnodes(deg1, fig=f, ax=a)
                     bconsistent = False
 
@@ -1125,14 +1126,14 @@ import pylayers.util.project as pro
                                     dseg[s].append(n)
                                 else:
                                     dseg[s]=[n]
-                                logging.critical(&quot;segment %d contains point %d&quot;, s, n)
+                                logger.critical(&quot;segment %d contains point %d&quot;, s, n)
                                 bconsistent = False
                     if level &gt; 0:
                         cycle = self.Gs.node[s][&#39;ncycles&#39;]
                         if len(cycle) == 0:
-                            logging.critical(&quot;segment %d has no cycle&quot;, s)
+                            logger.critical(&quot;segment %d has no cycle&quot;, s)
                         if len(cycle) == 3:
-                            logging.critical(
+                            logger.critical(
                                 &quot;segment %d has cycle %s&quot;, s, str(cycle))
 
         #
@@ -1144,7 +1145,7 @@ import pylayers.util.project as pro
         similar = geu.check_point_unicity(P)
 
         if len(similar) != 0:
-            logging.critical(&quot;points at index(es) %s in self.Gs.pos are similar&quot;, str(similar))
+            logger.critical(&quot;points at index(es) %s in self.Gs.pos are similar&quot;, str(similar))
             bconsistent = False
 
         return bconsistent, dseg</div>
@@ -1434,7 +1435,7 @@ import pylayers.util.project as pro
         try:
             Nsmax = max(self.tsg)
         except:
-            logging.warning(&quot;No segments in Layout yet&quot;)
+            logger.warning(&quot;No segments in Layout yet&quot;)
 
         #
         # handling of segment related arrays
@@ -1551,7 +1552,7 @@ import pylayers.util.project as pro
         lheight = array([v[1] for v in
                     nx.get_node_attributes(self.Gs, &#39;z&#39;).values()
                     if v[1] &lt; 2000 ])
-        #assert(len(lheight)&gt;0),logging.error(&quot;no valid heights for segments&quot;)
+        #assert(len(lheight)&gt;0),logger.error(&quot;no valid heights for segments&quot;)
         if len(lheight)&gt;0:
             self.maxheight = np.max(lheight)
         else:
@@ -4045,7 +4046,7 @@ import pylayers.util.project as pro
         Notes
         -----
 
-        This method returns all the existing Layout point inside a box zone or
+        This method returns all the existing Layout points inside a box zone or
         the boundary of a polygon
 
         &quot;&quot;&quot;
@@ -4150,7 +4151,7 @@ import pylayers.util.project as pro
             p1 = np.outer(p1, np.ones(1))
             p2 = np.outer(p2, np.ones(1))
 
-        pdb.set_trace()
+        # pdb.set_trace()
         # 3 x N
         u = p1 - p2
         # 1 x N
@@ -4388,7 +4389,7 @@ import pylayers.util.project as pro
 
         &quot;&quot;&quot;
 
-        logging.warning(&#39;This function is deprecated use&#39;)
+        logger.warning(&#39;This function is deprecated use&#39;)
 
         u = p1 - p2
         nu = np.sqrt(np.dot(u, u))
@@ -7048,7 +7049,7 @@ import pylayers.util.project as pro
                     if n &gt; 0:
                         if len(self.Gs.node[n][&#39;ncycles&#39;]) &gt; 2:
                             print(n, self.Gs.node[n][&#39;ncycles&#39;])
-                            logging.warning(
+                            logger.warning(
                                 &#39;A segment cannot relate more than 2 cycles&#39;)
 
         for nseg in self.Gs.node:
@@ -9614,6 +9615,7 @@ import pylayers.util.project as pro
 
         Notes
         -----
+
         As a diffraction point may involve iso segments the nature
         of the diffraction interaction depends on a height parameter
         This function extacts the couple of slab from this information
@@ -9621,14 +9623,14 @@ import pylayers.util.project as pro
         Returns
         -------
 
-        - a list of 2-segments list. the length of this list == length of lz
+        - a list of 2-segments . the length of this list == length of lz
         - a list of slab tuples.  the length of this list == length of lz
 
         [[443, 529], [444, 530]]
         [[&#39;WALL&#39;, &#39;WALL&#39;], [&#39;AIR&#39;, &#39;AIR&#39;]]
 
         &quot;&quot;&quot;
-        assert(npt in self.ddiff), logging.error(&#39;npt not a diffraction point&#39;)
+        assert(npt in self.ddiff), logger.error(&#39;npt not a diffraction point&#39;)
         lcy = self.ddiff[npt][0]
         ls = []
         llz = len(lz)
@@ -9690,7 +9692,7 @@ import pylayers.util.project as pro
         lpnt = [x for x in self.Gs.node if (x &lt; 0 and x not in self.degree[0])]
 
         self.ddiff = {}
-        
+
         if verbose :
             cpt = 1./(len(lpnt)+1)
             pbar = tqdm.tqdm(tqdmkwargs)
@@ -10242,7 +10244,7 @@ import pylayers.util.project as pro
         # en  = self.Ns # number of segments
         en = len(np.where(np.array(list(dict(self.Gs.node).keys())) &gt; 0)[0])
         if en != self.Ns:
-            logging.warning(&quot;wrong number of segments, consistency problem in layout&quot;)
+            logger.warning(&quot;wrong number of segments, consistency problem in layout&quot;)
         #cen = self.Nss
         # d : dictionnary of layout sub segments
         #
@@ -10253,7 +10255,7 @@ import pylayers.util.project as pro
             cen = cen + len(lss)
 
         if cen != self.Nss:
-            logging.warning(&quot;wrong number of subsegments, consistency problem in layout&quot;)
+            logger.warning(&quot;wrong number of subsegments, consistency problem in layout&quot;)
 
         sl = self.sl
 #
@@ -10417,7 +10419,7 @@ import pylayers.util.project as pro
         # en  = self.Ns # number of segments
         en = len(np.where(np.array(list(dict(self.Gs.node).keys())) &gt; 0)[0])
         if en != self.Ns:
-            logging.warning(
+            logger.warning(
                 &quot;wrong number of segment consistency problem in layout&quot;)
         #cen = self.Nss
         # d : dictionnary of layout sub segments
@@ -10429,7 +10431,7 @@ import pylayers.util.project as pro
             cen = cen + len(lss)
 
         if cen != self.Nss:
-            logging.warning(
+            logger.warning(
                 &quot;wrong number of subsegment consistency problem in layout&quot;)
 
         sl = self.sl
@@ -11486,7 +11488,7 @@ if __name__ == &quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Jan 26, 2019.
+      Last updated on Jan 28, 2019.
 
     </p>
   </div>

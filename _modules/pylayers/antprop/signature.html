@@ -224,7 +224,6 @@ import h5py
 import copy
 import time
 import pickle
-import logging
 import networkx as nx
 import shapely.geometry as shg
 import matplotlib.pyplot as plt
@@ -243,7 +242,6 @@ import shapely.ops as sho
 from tqdm import tqdm
 #from numba import autojit
 
-logger = logging.getLogger(__name__)
 
 <div class="viewcode-block" id="plot_lines"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.plot_lines.html#pylayers.antprop.signature.plot_lines">[docs]</a>def plot_lines(ax, ob, color = []):
     &quot;&quot;&quot; plot lines with colors
@@ -506,7 +504,6 @@ logger = logging.getLogger(__name__)
     # else:
 
     tahe = np.array(tahe) # Nseg x tahe x xy 
-    pdb.set_trace()
     pta = tahe[:,0,:].T  #2 x Nseg
     phe = tahe[:,1,:].T  # 2 x Nseg 
 
@@ -749,8 +746,6 @@ logger = logging.getLogger(__name__)
             &gt;&gt;&gt; lsi = DL.Si[3]
             &gt;&gt;&gt; DL.Si.sig2inter(DL.L,lsi)
 
-        &quot;&quot;&quot;
-        
         &#39;&#39;&#39;
 
         assert L.isbuilt,  AttributeError(&#39;Layout is not built&#39;)
@@ -775,7 +770,7 @@ logger = logging.getLogger(__name__)
                 if k == 0:
                     cy0 = self.source
                     lcy0 =[cy0]
-                
+
                 if (typ==3) or (typ==2):
                     cy0 = list(set(seg_cy).intersection(set(lcy0)))[0]
                     cy1 = [x for x in seg_cy if x!= cy0 ][0]
@@ -3615,6 +3610,7 @@ logger = logging.getLogger(__name__)
 
 <div class="viewcode-block" id="Signature.show"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.Signature.html#pylayers.antprop.signature.Signature.show">[docs]</a>    def show(self,L,tx,rx,**kwargs):
         &quot;&quot;&quot;
+
         Parameters
         ----------
         L : Layout 
@@ -3629,8 +3625,6 @@ logger = logging.getLogger(__name__)
                      &#39;fig&#39;:[],
                      &#39;ax&#39;:[]
                      }
-        
-        
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]
@@ -3846,7 +3840,7 @@ if __name__ == &quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Jan 26, 2019.
+      Last updated on Jan 28, 2019.
 
     </p>
   </div>
