@@ -298,7 +298,6 @@ def valid(lsig,L,tahe=[]):
     # else:
 
     tahe = np.array(tahe) # Nseg x tahe x xy 
-    pdb.set_trace()
     pta = tahe[:,0,:].T  #2 x Nseg
     phe = tahe[:,1,:].T  # 2 x Nseg 
 
@@ -541,8 +540,6 @@ class Signatures(PyLayers,dict):
             >>> lsi = DL.Si[3]
             >>> DL.Si.sig2inter(DL.L,lsi)
 
-        """
-        
         '''
 
         assert L.isbuilt,  AttributeError('Layout is not built')
@@ -567,7 +564,7 @@ class Signatures(PyLayers,dict):
                 if k == 0:
                     cy0 = self.source
                     lcy0 =[cy0]
-                
+
                 if (typ==3) or (typ==2):
                     cy0 = list(set(seg_cy).intersection(set(lcy0)))[0]
                     cy1 = [x for x in seg_cy if x!= cy0 ][0]
@@ -3407,6 +3404,7 @@ class Signature(PyLayers,object):
 
     def show(self,L,tx,rx,**kwargs):
         """
+
         Parameters
         ----------
         L : Layout 
@@ -3421,8 +3419,6 @@ class Signature(PyLayers,object):
                      'fig':[],
                      'ax':[]
                      }
-        
-        
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]

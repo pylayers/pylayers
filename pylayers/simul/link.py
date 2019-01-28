@@ -1628,8 +1628,8 @@ class DLink(Link):
         else :
             # perform computation ...
             # ... with vectorized ray evaluation
-            logger.debug(" a : (%d,%d,%d)", self.a[0], self.a[1], self.a[2])
-            logger.debug(" b : (%d,%d,%d)", self.b[0], self.b[1], self.b[2])
+            logger.debug(" a : (%f,%f,%f)", self.a[0], self.a[1], self.a[2])
+            logger.debug(" b : (%f,%f,%f)", self.b[0], self.b[1], self.b[2])
 
             if kwargs['ra_vectorized']:
                 logger.info(" Determine r2d vectorized version")

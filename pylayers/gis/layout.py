@@ -10346,7 +10346,6 @@ class Layout(pro.PyLayers):
                 name = self.Gs.node[ne]['ss_name'][order]
 
             colname = sl[name]['color']
-            pdb.set_trace()
             colhex = cold[colname]
             color[i, :] = pyu.rgb(colhex)
             color[i + npt_s, :] = pyu.rgb(colhex)
