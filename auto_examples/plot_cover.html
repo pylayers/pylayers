@@ -216,9 +216,9 @@
 </div>
 <div class="sphx-glr-example-title section" id="outdoor-radio-coverage-with-deygout-method">
 <span id="sphx-glr-auto-examples-plot-cover-py"></span><h1>Outdoor Radio Coverage with Deygout Method<a class="headerlink" href="#outdoor-radio-coverage-with-deygout-method" title="Permalink to this headline">¶</a></h1>
-<p>This is an example of Motley-Keenan coverage</p>
-<p>The default configuration file coverage.ini.
-The antenna assoaciated to each Access Point are handled in the module</p>
+<p>This is an example of path loss prediction with Deygout method
+with srtm data.</p>
+<p>Here a comparison of the coverage for 3 different heights 10,50 and 100 meters.</p>
 <ul class="sphx-glr-horizontal">
 <li><img alt="../_images/sphx_glr_plot_cover_001.png" class="sphx-glr-multi-img first" src="../_images/sphx_glr_plot_cover_001.png" />
 </li>
@@ -230,9 +230,9 @@ The antenna assoaciated to each Access Point are handled in the module</p>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>SRTMDownloader - server= dds.cr.usgs.gov, directory=srtm/version2_1/SRTM3.
 N50E006.hgt.zip
- Computation time : 20.52 seconds
- Computation time : 19.06 seconds
- Computation time : 17.27 seconds
+ Computation time : 19.73 seconds
+ Computation time : 18.48 seconds
+ Computation time : 16.98 seconds
 </pre></div>
 </div>
 <div class="line-block">
@@ -241,7 +241,6 @@ N50E006.hgt.zip
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pylayers.gis.ezone</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="c1">#import smopy</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="c1">#</span>
@@ -260,11 +259,9 @@ N50E006.hgt.zip
 <span class="n">pa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">longw</span><span class="p">,</span><span class="n">latgw</span><span class="p">])</span>
 <span class="k">for</span> <span class="n">Ht</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">100</span><span class="p">]:</span>
     <span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-    <span class="n">L1</span> <span class="o">=</span> <span class="n">ez</span><span class="o">.</span><span class="n">cover</span><span class="p">(</span><span class="n">pc</span><span class="o">=</span><span class="n">pa</span><span class="p">,</span><span class="n">Ht</span><span class="o">=</span><span class="n">Ht</span><span class="p">,</span><span class="n">Hr</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span><span class="n">Nr</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span><span class="n">Rmax</span><span class="o">=</span><span class="mi">8000</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;deygout&#39;</span><span class="p">,</span><span class="n">source</span><span class="o">=</span><span class="s1">&#39;srtm&#39;</span><span class="p">)</span>
+    <span class="n">L1</span> <span class="o">=</span> <span class="n">ez</span><span class="o">.</span><span class="n">cover</span><span class="p">(</span><span class="n">pc</span><span class="o">=</span><span class="n">pa</span><span class="p">,</span> <span class="n">Ht</span><span class="o">=</span><span class="n">Ht</span><span class="p">,</span> <span class="n">Hr</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">Nr</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">Rmax</span><span class="o">=</span><span class="mi">8000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;deygout&#39;</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">&#39;srtm&#39;</span><span class="p">)</span>
     <span class="n">toc</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
     <span class="k">print</span><span class="p">(</span><span class="s2">&quot; Computation time : {:.2f} seconds&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">toc</span><span class="o">-</span><span class="n">tic</span><span class="p">))</span>
-    <span class="c1">#map = smopy.Map((50., 6, 51., 7), z=6)</span>
-    <span class="c1">#ax = map.show_mpl(figsize=(10,10))</span>
     <span class="n">tc</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">tripcolor</span><span class="p">(</span><span class="n">L1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="o">-</span><span class="n">L1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
                               <span class="n">shading</span><span class="o">=</span><span class="s1">&#39;gouraud&#39;</span><span class="p">,</span>
                               <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span>
@@ -274,14 +271,14 @@ N50E006.hgt.zip
                               <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
                               <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
 
-    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Lat {:.2f}, Lon {:.2f} , Height{:.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">latgw</span><span class="p">,</span><span class="n">longw</span><span class="p">,</span><span class="n">Ht</span><span class="p">),</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Lat {:.2f}, Lon {:.2f} , Height{:.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">latgw</span><span class="p">,</span><span class="n">longw</span><span class="p">,</span><span class="n">Ht</span><span class="p">),</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
     <span class="n">cb</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
     <span class="n">cb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s2">&quot;Loss (dB)&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 1 minutes  6.551 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 1 minutes  4.794 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-cover-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../_downloads/plot_cover.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_cover.py</span></code></a></div>
