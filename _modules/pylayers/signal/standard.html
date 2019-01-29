@@ -615,33 +615,19 @@ from pylayers.util.project import *
         &gt;&gt;&gt; AP1.load()
 
         &quot;&quot;&quot;
-        defaults = { &#39;p&#39; : np.array([0,0,1.2]),
-            &#39;name&#39;: &#39;default&#39;,
-            &#39;wstd&#39;: &#39;ieee80211b&#39;,
-            &#39;chan&#39;:[11],
-            &#39;PtdBm&#39;:0,
-            &#39;sensdBm&#39;: -94,
-            &#39;nant&#39;:1,
-            &#39;ant&#39;:&#39;Omni&#39;,
-            &#39;on&#39;:True
-        }
 
-        for k in defaults:
-            if k not in kwargs:
-                kwargs[k]=defaults[k]
+        self[&#39;name&#39;] = kwargs.pop(&#39;name&#39;,&#39;default&#39;)
+        self[&#39;p&#39;] = kwargs.pop(&#39;p&#39;,np.array([0,0,1.2]))
+        self[&#39;PtdBm&#39;] = kwargs.pop(&#39;PtdBm&#39;,0)
+        self[&#39;chan&#39;] = kwargs.pop(&#39;chan&#39;,[11])
+        self[&#39;sensdBm&#39;] = kwargs.pop(&#39;sensdBm&#39;,-94)
+        self[&#39;nant&#39;] = kwargs.pop(&#39;nant&#39;,1)
+        self[&#39;on&#39;] = kwargs.pop(&#39;on&#39;,True)
+        self[&#39;ant&#39;] = kwargs.pop(&#39;ant&#39;,&#39;Omni&#39;)
+        self[&#39;phideg&#39;] = kwargs.pop(&#39;phideg&#39;,0)
+        self[&#39;wstd&#39;] = kwargs.pop(&#39;wstd&#39;,&#39;ieee80211b&#39;)
 
-        self[&#39;name&#39;] = kwargs[&#39;name&#39;]
-        self[&#39;p&#39;] = kwargs[&#39;p&#39;]
-        self[&#39;PtdBm&#39;] = kwargs[&#39;PtdBm&#39;]
-        self[&#39;chan&#39;] = kwargs[&#39;chan&#39;]
-        self[&#39;sensdBm&#39;] = kwargs[&#39;sensdBm&#39;]
-        self[&#39;nant&#39;] = kwargs[&#39;nant&#39;]
-        self[&#39;on&#39;] = kwargs[&#39;on&#39;]
-        self[&#39;ant&#39;] = kwargs[&#39;ant&#39;]
-        self[&#39;phideg&#39;] = kwargs[&#39;phideg&#39;]
-
-        standard = Wstandard(kwargs[&#39;wstd&#39;])
-        self.s = standard
+        self.s = Wstandard(self[&#39;wstd&#39;])
         self.A = ant.Antenna(self[&#39;ant&#39;])
 
     def __repr__(self):
@@ -704,7 +690,7 @@ from pylayers.util.project import *
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Jan 28, 2019.
+      Last updated on Jan 29, 2019.
 
     </p>
   </div>
