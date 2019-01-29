@@ -124,6 +124,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_cover.html">Outdoor Radio Coverage with Deygout Method</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
@@ -237,6 +238,12 @@
             
   <div class="section" id="description-of-antennas">
 <h1>Description of antennas<a class="headerlink" href="#description-of-antennas" title="Permalink to this headline">¶</a></h1>
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>!date
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mardi 29 janvier 2019, 14:28:18 (UTC+0100)
+</pre></div>
+</div>
 <p>PyLayers has a rich set of tools for handling antenna radiation pattern.
 Antennas can be described in different manners and read from different
 specific file formats.</p>
@@ -415,7 +422,7 @@ f2,a2 = A.plotG(fGHz=[3,4,5.6],plan=&#39;phi&#39;,angdeg=90,GmaxdB=5,fig=f,ax=a2
 f2.tight_layout()
 </pre></div>
 </div>
-<img alt="../../_images/Antenna_16_0.png" src="../../_images/Antenna_16_0.png" />
+<img alt="../../_images/Antenna_18_0.png" src="../../_images/Antenna_18_0.png" />
 <div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(20,10))
 a1 = f.add_subplot(121)
 f1,a1 = A.plotG(fGHz=[3,4,5.6],plan=&#39;theta&#39;,angdeg=0,fig=f,ax=a1,show=False,polar=False)
@@ -424,7 +431,7 @@ f2,a2 = A.plotG(fGHz=[3,4,5.6],plan=&#39;phi&#39;,angdeg=90,GmaxdB=5,fig=f1,ax=a
 f2.tight_layout()
 </pre></div>
 </div>
-<img alt="../../_images/Antenna_17_0.png" src="../../_images/Antenna_17_0.png" />
+<img alt="../../_images/Antenna_19_0.png" src="../../_images/Antenna_19_0.png" />
 <div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>A.fGHz[96]
 </pre></div>
 </div>
@@ -434,9 +441,9 @@ f2.tight_layout()
 <div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>A.plotG(fGHz=[5.6],plan=&#39;phi&#39;,angdeg=90,GmaxdB=5)
 </pre></div>
 </div>
-<img alt="../../_images/Antenna_19_0.png" src="../../_images/Antenna_19_0.png" />
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f45f1473518&gt;,
- &lt;matplotlib.projections.polar.PolarAxes at 0x7f45e429da90&gt;)
+<img alt="../../_images/Antenna_21_0.png" src="../../_images/Antenna_21_0.png" />
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fe8f574f128&gt;,
+ &lt;matplotlib.projections.polar.PolarAxes at 0x7fe8f5759358&gt;)
 </pre></div>
 </div>
 <p>This command invoques geomview for a 3D vizualization of the radated
@@ -450,7 +457,7 @@ A.C.show(typ=&#39;s3&#39;)
 plt.tight_layout()
 </pre></div>
 </div>
-<img alt="../../_images/Antenna_23_0.png" src="../../_images/Antenna_23_0.png" />
+<img alt="../../_images/Antenna_25_0.png" src="../../_images/Antenna_25_0.png" />
 </div>
 <div class="section" id="defining-antenna-gain-from-analytic-formulas">
 <h2>Defining Antenna gain from analytic formulas<a class="headerlink" href="#defining-antenna-gain-from-analytic-formulas" title="Permalink to this headline">¶</a></h2>
@@ -462,9 +469,9 @@ antennas are the following</p>
 Ao.plotG()
 </pre></div>
 </div>
-<img alt="../../_images/Antenna_25_0.png" src="../../_images/Antenna_25_0.png" />
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f45df71ffd0&gt;,
- &lt;matplotlib.projections.polar.PolarAxes at 0x7f45df7fd550&gt;)
+<img alt="../../_images/Antenna_27_0.png" src="../../_images/Antenna_27_0.png" />
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fe8f4c81630&gt;,
+ &lt;matplotlib.projections.polar.PolarAxes at 0x7fe8f56757f0&gt;)
 </pre></div>
 </div>
 </div>
@@ -476,8 +483,8 @@ Ag._show3()
 myu.inotshow(&#39;fig_Gauss.png&#39;)
 </pre></div>
 </div>
-<img alt="../../_images/Antenna_27_0.png" src="../../_images/Antenna_27_0.png" />
-<a class="reference internal image-reference" href="../../_images/Antenna_27_1.png"><img alt="../../_images/Antenna_27_1.png" src="../../_images/Antenna_27_1.png" style="width: 500px; height: 500px;" /></a>
+<img alt="../../_images/Antenna_29_0.png" src="../../_images/Antenna_29_0.png" />
+<a class="reference internal image-reference" href="../../_images/Antenna_29_1.png"><img alt="../../_images/Antenna_29_1.png" src="../../_images/Antenna_29_1.png" style="width: 500px; height: 500px;" /></a>
 </div>
 <div class="section" id="wireplate">
 <h3>WirePlate<a class="headerlink" href="#wireplate" title="Permalink to this headline">¶</a></h3>
@@ -488,9 +495,9 @@ myu.inotshow(&#39;fig_Gauss.png&#39;)
 A3.plotG()
 </pre></div>
 </div>
-<img alt="../../_images/Antenna_29_0.png" src="../../_images/Antenna_29_0.png" />
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f45e4046eb8&gt;,
- &lt;matplotlib.projections.polar.PolarAxes at 0x7f45df6ba908&gt;)
+<img alt="../../_images/Antenna_31_0.png" src="../../_images/Antenna_31_0.png" />
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fe8f5262cc0&gt;,
+ &lt;matplotlib.projections.polar.PolarAxes at 0x7fe8f4be29e8&gt;)
 </pre></div>
 </div>
 </div>

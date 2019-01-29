@@ -98,6 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_cover.html">Outdoor Radio Coverage with Deygout Method</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
@@ -1744,10 +1745,9 @@ from numba import jit
     d : distance between Tx and Rx
         (Np1,)
     ht : Tx height
-
     hr : Rx height
         (Np1)
-    GtdB : float (0) 
+    GtdB : float (0)
         Transmitter Antenna Gain (dB)
     GrdB : float(0)
         Receiver Antenna Gain (dB)
@@ -1766,10 +1766,6 @@ from numba import jit
 
     P :
         received power
-
-
-
-
 
     Examples
     --------
@@ -1808,9 +1804,6 @@ from numba import jit
         &gt;&gt;&gt; plt.ylabel(&#39;Loss Pr/Pt (dB)&#39;)
         &gt;&gt;&gt; plt.legend()
         &gt;&gt;&gt; plt.show()
-
-
-
 
     References
     ----------

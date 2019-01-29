@@ -1,0 +1,366 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Outdoor Radio Coverage with Deygout Method &mdash; PyLayers</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Diffraction coefficient" href="plot_diffraction_polar.html" />
+    <link rel="prev" title="UWB Ray tracing simulation in outdoor scenario" href="plot_exLuebbers.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Python
+          
+
+          
+            
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_layout.html">8 Random Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_issue314.html">Exemple of issue 314</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Outdoor Radio Coverage with Deygout Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_diffraction_polar.html">Diffraction coefficient</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_diffraction.html">Diffraction coefficient</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.gis.selectl">3&nbsp;&nbsp;&nbsp;pylayers.gis.selectl Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.gis.srtm">4&nbsp;&nbsp;&nbsp;pylayers.gis.srtm Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.gis.osmparser">5&nbsp;&nbsp;&nbsp;pylayers.gis.osmparser Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.gis.ezone">6&nbsp;&nbsp;&nbsp;pylayers.gis.ezone Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.antprop.antenna">7&nbsp;&nbsp;&nbsp;pylayers.antprop.antenna Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.antprop.aarray">8&nbsp;&nbsp;&nbsp;pylayers.antprop.aarray Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.antprop.spharm">9&nbsp;&nbsp;&nbsp;pylayers.antprop.spharm Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.antprop.antssh">10&nbsp;&nbsp;&nbsp;pylayers.antprop.antssh Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.antprop.antvsh">11&nbsp;&nbsp;&nbsp;pylayers.antprop.antvsh Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.antprop.slab">12&nbsp;&nbsp;&nbsp;pylayers.antprop.slab Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.antprop.signature">13&nbsp;&nbsp;&nbsp;pylayers.antprop.signature Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.antprop.interactions">14&nbsp;&nbsp;&nbsp;pylayers.antprop.interactions Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.antprop.diffraction">15&nbsp;&nbsp;&nbsp;pylayers.antprop.diffraction Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.antprop.diffRT">16&nbsp;&nbsp;&nbsp;pylayers.antprop.diffRT Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.antprop.rays">17&nbsp;&nbsp;&nbsp;pylayers.antprop.rays Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.antprop.loss">18&nbsp;&nbsp;&nbsp;pylayers.antprop.loss Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.antprop.channel">19&nbsp;&nbsp;&nbsp;pylayers.antprop.channel Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#id39">20&nbsp;&nbsp;&nbsp;pylayers.antprop.loss Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.antprop.coverage">21&nbsp;&nbsp;&nbsp;pylayers.antprop.coverage Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.antprop.coeffModel">22&nbsp;&nbsp;&nbsp;pylayers.antprop.coeffModel Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.simul.link">23&nbsp;&nbsp;&nbsp;pylayers.simul.link Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.simul.exploit">24&nbsp;&nbsp;&nbsp;pylayers.simul.exploit Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.simul.exploit_simulnet">25&nbsp;&nbsp;&nbsp;pylayers.simul.exploit_simulnet Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.simul.simulnet">26&nbsp;&nbsp;&nbsp;pylayers.simul.simulnet Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.simul.simultraj">27&nbsp;&nbsp;&nbsp;pylayers.simul.simultraj Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.exploit.simnet">28&nbsp;&nbsp;&nbsp;pylayers.exploit.simnet Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.measures.mesuwb">29&nbsp;&nbsp;&nbsp;pylayers.measures.mesuwb Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.measures.mesmimo">30&nbsp;&nbsp;&nbsp;pylayers.measures.mesmimo Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.measures.cormoran">31&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">&lt;no title&gt;</a> &raquo;</li>
+        
+      <li>Outdoor Radio Coverage with Deygout Method</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/auto_examples/plot_cover.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Click <a class="reference internal" href="#sphx-glr-download-auto-examples-plot-cover-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="outdoor-radio-coverage-with-deygout-method">
+<span id="sphx-glr-auto-examples-plot-cover-py"></span><h1>Outdoor Radio Coverage with Deygout Method<a class="headerlink" href="#outdoor-radio-coverage-with-deygout-method" title="Permalink to this headline">¶</a></h1>
+<p>This is an example of Motley-Keenan coverage</p>
+<p>The default configuration file coverage.ini.
+The antenna assoaciated to each Access Point are handled in the module</p>
+<ul class="sphx-glr-horizontal">
+<li><img alt="../_images/sphx_glr_plot_cover_001.png" class="sphx-glr-multi-img first" src="../_images/sphx_glr_plot_cover_001.png" />
+</li>
+<li><img alt="../_images/sphx_glr_plot_cover_002.png" class="sphx-glr-multi-img first" src="../_images/sphx_glr_plot_cover_002.png" />
+</li>
+<li><img alt="../_images/sphx_glr_plot_cover_003.png" class="sphx-glr-multi-img first" src="../_images/sphx_glr_plot_cover_003.png" />
+</li>
+</ul>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>SRTMDownloader - server= dds.cr.usgs.gov, directory=srtm/version2_1/SRTM3.
+N50E006.hgt.zip
+ Computation time : 20.52 seconds
+ Computation time : 19.06 seconds
+ Computation time : 17.27 seconds
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pylayers.gis.ezone</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="c1">#import smopy</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+
+<span class="n">latgw</span> <span class="o">=</span> <span class="mf">50.525</span>
+<span class="n">longw</span> <span class="o">=</span> <span class="mf">6.5836</span>
+<span class="n">tilename</span> <span class="o">=</span> <span class="n">enctile</span><span class="p">(</span><span class="n">longw</span><span class="p">,</span><span class="n">latgw</span><span class="p">)</span>
+<span class="n">dem</span><span class="o">=</span><span class="n">DEM</span><span class="p">(</span><span class="n">enctile</span><span class="p">(</span><span class="n">longw</span><span class="p">,</span><span class="n">latgw</span><span class="p">))</span>
+<span class="n">dem</span><span class="o">.</span><span class="n">dwlsrtm</span><span class="p">()</span>
+<span class="n">xgw</span><span class="p">,</span><span class="n">ygw</span> <span class="o">=</span> <span class="n">dem</span><span class="o">.</span><span class="n">m</span><span class="p">(</span><span class="n">longw</span><span class="p">,</span><span class="n">latgw</span><span class="p">)</span>
+<span class="n">ez</span> <span class="o">=</span> <span class="n">Ezone</span><span class="p">(</span><span class="n">enctile</span><span class="p">(</span><span class="n">longw</span><span class="p">,</span><span class="n">latgw</span><span class="p">))</span>
+<span class="n">ez</span><span class="o">.</span><span class="n">hgts</span><span class="o">=</span><span class="n">dem</span><span class="o">.</span><span class="n">hgts</span>
+<span class="n">ez</span><span class="o">.</span><span class="n">rebase</span><span class="p">(</span><span class="s1">&#39;srtm&#39;</span><span class="p">)</span>
+<span class="n">pa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">longw</span><span class="p">,</span><span class="n">latgw</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">Ht</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">100</span><span class="p">]:</span>
+    <span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">L1</span> <span class="o">=</span> <span class="n">ez</span><span class="o">.</span><span class="n">cover</span><span class="p">(</span><span class="n">pc</span><span class="o">=</span><span class="n">pa</span><span class="p">,</span><span class="n">Ht</span><span class="o">=</span><span class="n">Ht</span><span class="p">,</span><span class="n">Hr</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span><span class="n">Nr</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span><span class="n">Rmax</span><span class="o">=</span><span class="mi">8000</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;deygout&#39;</span><span class="p">,</span><span class="n">source</span><span class="o">=</span><span class="s1">&#39;srtm&#39;</span><span class="p">)</span>
+    <span class="n">toc</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot; Computation time : {:.2f} seconds&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">toc</span><span class="o">-</span><span class="n">tic</span><span class="p">))</span>
+    <span class="c1">#map = smopy.Map((50., 6, 51., 7), z=6)</span>
+    <span class="c1">#ax = map.show_mpl(figsize=(10,10))</span>
+    <span class="n">tc</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">tripcolor</span><span class="p">(</span><span class="n">L1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="o">-</span><span class="n">L1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
+                              <span class="n">shading</span><span class="o">=</span><span class="s1">&#39;gouraud&#39;</span><span class="p">,</span>
+                              <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span>
+                              <span class="n">vmax</span><span class="o">=-</span><span class="mi">60</span><span class="p">,</span>
+                              <span class="n">vmin</span><span class="o">=-</span><span class="mi">120</span><span class="p">,</span>
+                              <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                              <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
+                              <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Lat {:.2f}, Lon {:.2f} , Height{:.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">latgw</span><span class="p">,</span><span class="n">longw</span><span class="p">,</span><span class="n">Ht</span><span class="p">),</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+    <span class="n">cb</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+    <span class="n">cb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s2">&quot;Loss (dB)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Total running time of the script:</strong> ( 1 minutes  6.551 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-cover-py">
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../_downloads/plot_cover.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_cover.py</span></code></a></div>
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../_downloads/plot_cover.ipynb" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_cover.ipynb</span></code></a></div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="plot_diffraction_polar.html" class="btn btn-neutral float-right" title="Diffraction coefficient" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="plot_exLuebbers.html" class="btn btn-neutral" title="UWB Ray tracing simulation in outdoor scenario" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team.
+      Last updated on Jan 29, 2019.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script> 
+
+</body>
+</html>
