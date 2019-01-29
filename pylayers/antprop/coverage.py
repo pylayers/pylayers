@@ -485,8 +485,10 @@ class Coverage(PyLayers):
 
         # CmW : Received Power coverage in mW
         # TODO : tgain in o and p polarization
-        self.CmWo = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwo*self.freespace*tgain
-        self.CmWp = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwp*self.freespace*tgain
+        #self.CmWo = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwo*self.freespace*tgain
+        #self.CmWp = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwp*self.freespace*tgain
+        self.CmWo = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwo*self.freespace
+        self.CmWp = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwp*self.freespace
 
 
         if snr:
