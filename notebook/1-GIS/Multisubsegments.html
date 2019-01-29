@@ -115,6 +115,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_layout.html">8 Random Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_issue314.html">Exemple of issue 314</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
@@ -233,16 +234,17 @@
   <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>!date
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>jeudi 26 avril 2018, 19:10:56 (UTC+0200)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mardi 29 janvier 2019, 13:53:10 (UTC+0100)
 </pre></div>
 </div>
 <div class="section" id="modifying-the-segment-nature">
 <h1>Modifying the segment nature<a class="headerlink" href="#modifying-the-segment-nature" title="Permalink to this headline">¶</a></h1>
-<p>This illustrates a simple ray tracing simulation. The environement is a
-building with 2 rooms. At the interface betweebn the two rooms there is
-a segment with 3 sub-segment whose material properties are changed in
-the simulation. The notebook illustrates in details the different steps
-of the simulation. First we need to import several specialized modules.</p>
+<p>This section illustrates a simple ray tracing simulation. The
+environement is a building with 2 rooms. At the interface between the
+two rooms there is a segment with 3 sub-segment whose material
+properties are changed in the simulation. This section illustrates in
+details the different steps of the simulation. First we need to import
+several specialized modules.</p>
 <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>from pylayers.simul.link import *
 from pylayers.antprop.rays import *
 from pylayers.antprop.aarray import *
@@ -255,9 +257,6 @@ import matplotlib.pyplot as plt
 %matplotlib inline
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Warning : imposm seems not to be installed
-</pre></div>
-</div>
 <p>Lets start by loading a simple layout with 2 single rooms. The multi
 subsegment appears in the middle with the red vertical lines. Each
 subsegment is materialized by a segment.</p>
@@ -266,23 +265,35 @@ f,a=L.showG(&#39;s&#39;,subseg=True,figsize=(10,10))
 </pre></div>
 </div>
 <img alt="../../_images/Multisubsegments_4_0.png" src="../../_images/Multisubsegments_4_0.png" />
+<p>The attribute <code class="docutils literal notranslate"><span class="pre">lsss</span></code> lists all the segments which are superposed
+called <code class="docutils literal notranslate"><span class="pre">iso</span></code> segment.</p>
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>L.lsss
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[1, 2, 3]
+</pre></div>
+</div>
 <p>The studied configuration is composed of a simple 2 rooms building
-separated by an iso segment</p>
+separated by an iso segment.</p>
 <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>print(L.Gs.node[1])
 print(L.Gs.node[2])
 print(L.Gs.node[3])
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;z&#39;: (0.0, 2.7), &#39;transition&#39;: False, &#39;ncycles&#39;: [], &#39;name&#39;: &#39;WOOD&#39;, &#39;iso&#39;: [3, 2], &#39;connect&#39;: [-8, -7], &#39;offset&#39;: 0, &#39;norm&#39;: array([ 1., -0.,  0.])}
-{&#39;z&#39;: (2.7, 2.8), &#39;transition&#39;: False, &#39;ncycles&#39;: [], &#39;name&#39;: &#39;AIR&#39;, &#39;iso&#39;: [1, 3], &#39;connect&#39;: [-8, -7], &#39;offset&#39;: 0, &#39;norm&#39;: array([ 1., -0.,  0.])}
-{&#39;z&#39;: (2.8, 3), &#39;transition&#39;: False, &#39;ncycles&#39;: [], &#39;name&#39;: &#39;WOOD&#39;, &#39;iso&#39;: [1, 2], &#39;connect&#39;: [-8, -7], &#39;offset&#39;: 0, &#39;norm&#39;: array([ 1., -0.,  0.])}
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;transition&#39;: False, &#39;iso&#39;: [3, 2], &#39;ncycles&#39;: [], &#39;connect&#39;: [-8, -7], &#39;norm&#39;: array([ 1., -0.,  0.]), &#39;z&#39;: (0.0, 2.7), &#39;offset&#39;: 0, &#39;name&#39;: &#39;WOOD&#39;}
+{&#39;transition&#39;: False, &#39;iso&#39;: [1, 3], &#39;ncycles&#39;: [], &#39;connect&#39;: [-8, -7], &#39;norm&#39;: array([ 1., -0.,  0.]), &#39;z&#39;: (2.7, 2.8), &#39;offset&#39;: 0, &#39;name&#39;: &#39;AIR&#39;}
+{&#39;transition&#39;: False, &#39;iso&#39;: [1, 2], &#39;ncycles&#39;: [], &#39;connect&#39;: [-8, -7], &#39;norm&#39;: array([ 1., -0.,  0.]), &#39;z&#39;: (2.8, 3), &#39;offset&#39;: 0, &#39;name&#39;: &#39;WOOD&#39;}
 </pre></div>
 </div>
-<p>The <span class="math notranslate nohighlight">\(\mathcal{G}_s\)</span> graph dictionary has the following structure</p>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>L.Gs.node
+<p>The <span class="math notranslate nohighlight">\(\mathcal{G}_s\)</span> graph dictionary has the following node.
+Negative nodes are points and positive index nodes are segments.</p>
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>for k in [-1,1,2]:
+    print(L.Gs.node[k])
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>NodeView((1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, -12, -2, -10, -9, -8, -7, -6, -5, -4, -3, -1, -11))
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{}
+{&#39;transition&#39;: False, &#39;iso&#39;: [3, 2], &#39;ncycles&#39;: [], &#39;connect&#39;: [-8, -7], &#39;norm&#39;: array([ 1., -0.,  0.]), &#39;z&#39;: (0.0, 2.7), &#39;offset&#39;: 0, &#39;name&#39;: &#39;WOOD&#39;}
+{&#39;transition&#39;: False, &#39;iso&#39;: [1, 3], &#39;ncycles&#39;: [], &#39;connect&#39;: [-8, -7], &#39;norm&#39;: array([ 1., -0.,  0.]), &#39;z&#39;: (2.7, 2.8), &#39;offset&#39;: 0, &#39;name&#39;: &#39;AIR&#39;}
 </pre></div>
 </div>
 <p>We define now, the position of the transmitter and the receiver, the two
@@ -310,7 +321,7 @@ Lk = DLink(L=L,
 Lk.eval(force=True,verbose=False)
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Signatures: 100.00000000000001it [00:00, 1898.18it/s]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Signatures: 100.00000000000001it [00:00, 1634.19it/s]
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Warning Unable to read graph Gr
@@ -322,9 +333,9 @@ Layout Graph loaded
 Aa.plotG()
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_12_0.png" src="../../_images/Multisubsegments_12_0.png" />
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f2395540f28&gt;,
- &lt;matplotlib.projections.polar.PolarAxes at 0x7f2393d1f358&gt;)
+<img alt="../../_images/Multisubsegments_14_0.png" src="../../_images/Multisubsegments_14_0.png" />
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fa361a69dd8&gt;,
+ &lt;matplotlib.projections.polar.PolarAxes at 0x7fa3dd381fd0&gt;)
 </pre></div>
 </div>
 <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>Lk.C.Ctt
@@ -336,14 +347,14 @@ Aa.plotG()
 <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>Lk.eval(force=True,a=tx,b=rx,applywav=True)
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Signatures: 100.00000000000001it [00:00, 1896.79it/s]
-/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py:1105: VisibleDeprecationWarning: converting an array with ndim &gt; 0 to an index will result in an error in the future
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Signatures: 100.00000000000001it [00:00, 1986.58it/s]
+/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py:1087: VisibleDeprecationWarning: converting an array with ndim &gt; 0 to an index will result in an error in the future
   pstop2 = pstart2 + np.where(u2.x[pstart2:dim2] == xnew[-1])[0]
-/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py:1220: VisibleDeprecationWarning: converting an array with ndim &gt; 0 to an index will result in an error in the future
+/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py:1202: VisibleDeprecationWarning: converting an array with ndim &gt; 0 to an index will result in an error in the future
   x_new = self.x[imin:imax]
-/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py:1225: VisibleDeprecationWarning: converting an array with ndim &gt; 0 to an index will result in an error in the future
+/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py:1207: VisibleDeprecationWarning: converting an array with ndim &gt; 0 to an index will result in an error in the future
   y_new = self.y[..., imin:imax]
-/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.py:4430: VisibleDeprecationWarning: using a non-integer number instead of an integer will result in an error in the future
+/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.py:4627: VisibleDeprecationWarning: using a non-integer number instead of an integer will result in an error in the future
   rir  = np.zeros((shy[0],N))
 </pre></div>
 </div>
@@ -372,13 +383,13 @@ local angles (th,ph) degrees :
 f,a=Lk.C.show(cmap=&#39;jet&#39;,fig=f,typ=&#39;l20&#39;,vmin=-120,vmax=-10)
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_16_0.png" src="../../_images/Multisubsegments_16_0.png" />
+<img alt="../../_images/Multisubsegments_18_0.png" src="../../_images/Multisubsegments_18_0.png" />
 <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>fGHz=np.arange(2,6,0.1)
 wav = wvf.Waveform(fcGHz=4,bandGHz=1.5)
 wav.show()
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_17_0.png" src="../../_images/Multisubsegments_17_0.png" />
+<img alt="../../_images/Multisubsegments_19_0.png" src="../../_images/Multisubsegments_19_0.png" />
 <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>Lk = DLink(L=L,a=tx,b=rx,fGHz=fGHz)
 </pre></div>
 </div>
@@ -407,11 +418,11 @@ Layout Graph loaded
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>WARNING : Tchannel.applywavB is going to be replaced by Tchannel.applywav
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py:1092: VisibleDeprecationWarning: converting an array with ndim &gt; 0 to an index will result in an error in the future
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py:1074: VisibleDeprecationWarning: converting an array with ndim &gt; 0 to an index will result in an error in the future
   pstop1 = pstart1 + np.where(u1.x[pstart1:dim1]==xnew[-1])[0]
-/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py:1220: VisibleDeprecationWarning: converting an array with ndim &gt; 0 to an index will result in an error in the future
+/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py:1202: VisibleDeprecationWarning: converting an array with ndim &gt; 0 to an index will result in an error in the future
   x_new = self.x[imin:imax]
-/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py:1225: VisibleDeprecationWarning: converting an array with ndim &gt; 0 to an index will result in an error in the future
+/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py:1207: VisibleDeprecationWarning: converting an array with ndim &gt; 0 to an index will result in an error in the future
   y_new = self.y[..., imin:imax]
 </pre></div>
 </div>
@@ -422,6 +433,7 @@ L.Gs.node[3][&#39;name&#39;]=&#39;AIR&#39;
 #Ab = Antenna(&#39;Omni&#39;,fGHz=fGHz)
 Lk.eval(force=True,verbose=0,fGHz=fGHz)
 Lk.plt_cir()
+plt.xlim(0,50)
 plt.title(&#39;AIR/AIR/AIR&#39;)
 plt.figure()
 L.Gs.node[1][&#39;name&#39;]=&#39;METAL&#39;
@@ -429,6 +441,7 @@ L.Gs.node[2][&#39;name&#39;]=&#39;METAL&#39;
 L.Gs.node[3][&#39;name&#39;]=&#39;METAL&#39;
 Lk.eval(force=True,verbose=0,fGHz=fGHz)
 Lk.plt_cir()
+plt.xlim(0,50)
 plt.title(&#39;METAL/METAL/METAL&#39;)
 plt.figure()
 L.Gs.node[1][&#39;name&#39;]=&#39;WOOD&#39;
@@ -436,22 +449,23 @@ L.Gs.node[2][&#39;name&#39;]=&#39;AIR&#39;
 L.Gs.node[3][&#39;name&#39;]=&#39;WOOD&#39;
 Lk.eval(force=True,verbose=0,fGHz=fGHz)
 Lk.plt_cir()
+plt.xlim(0,50)
 plt.title(&#39;WOOD/AIR/WOOD&#39;)
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Signatures: 100.00000000000001it [00:00, 1001.36it/s]
-Signatures: 100.00000000000001it [00:00, 3493.71it/s]
-/home/uguen/Documents/rch/devel/pylayers/pylayers/simul/link.py:2402: RuntimeWarning: divide by zero encountered in log10
-  ax.scatter(self.H.taud[uER],20*np.log10(np.abs(self.H.y[uER,0,0,0])),c=colors,cmap=&#39;hot&#39;)
-Signatures: 100.00000000000001it [00:00, 1898.93it/s]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Signatures: 100.00000000000001it [00:00, 968.00it/s]
+Signatures: 100.00000000000001it [00:00, 2984.53it/s]
+/home/uguen/Documents/rch/devel/pylayers/pylayers/simul/link.py:2489: RuntimeWarning: divide by zero encountered in log10
+  ERdB = 10*np.log10(ER)
+Signatures: 100.00000000000001it [00:00, 2006.53it/s]
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7f238f53b748&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7fa35b746588&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_24_2.png" src="../../_images/Multisubsegments_24_2.png" />
-<img alt="../../_images/Multisubsegments_24_3.png" src="../../_images/Multisubsegments_24_3.png" />
-<img alt="../../_images/Multisubsegments_24_4.png" src="../../_images/Multisubsegments_24_4.png" />
+<img alt="../../_images/Multisubsegments_26_2.png" src="../../_images/Multisubsegments_26_2.png" />
+<img alt="../../_images/Multisubsegments_26_3.png" src="../../_images/Multisubsegments_26_3.png" />
+<img alt="../../_images/Multisubsegments_26_4.png" src="../../_images/Multisubsegments_26_4.png" />
 <p>We have modified successively the nature of the 3 surfaces in the sub
 segment placed in the separation partition. The first was AIR, the
 second WOOD and the third METAL. As the subsegment is placed on the LOS
@@ -480,7 +494,7 @@ omni directional <code class="docutils literal notranslate"><span class="pre">An
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on May 31, 2018.
+      Last updated on Jan 29, 2019.
 
     </p>
   </div>
