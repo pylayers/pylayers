@@ -126,7 +126,7 @@ class Coverage(PyLayers):
             #
             # create grid
             #
-            self.creategrid(mode=self.mode,boundary=self.boundary,_fileini=self.filespa)
+            self.creategrid(mode=self.mode, boundary=self.boundary, _fileini=self.filespa)
 
             self.dap = {}
             for k in self.apopt:
@@ -339,7 +339,7 @@ class Coverage(PyLayers):
             pass
 
 
-        self.kB = 1.3806503e-23 
+        self.kB = 1.3806503e-23
         # Boltzmann constant
         #
         # Loop over access points
@@ -393,8 +393,8 @@ class Coverage(PyLayers):
         for z1 in lz1:
             p = product(range(z1[0],z1[1]),lactiveAP)
             #
-            # pa : access point
-            # pg : grid point
+            # pa : access point ,3
+            # pg : grid point ,2
             #
             # 1 x na
 
@@ -419,7 +419,7 @@ class Coverage(PyLayers):
             shpa = self.pa.shape
             shpg = self.pg.shape
 
-            # extend 3 dimensions
+            # extend in 3 dimensions if necessary
             if shpa[0] != 3:
                 self.pa = np.vstack((self.pa,np.ones(shpa[1])))
 
@@ -428,10 +428,16 @@ class Coverage(PyLayers):
 
 
             # retrieving dimensions along the 3 axis
+            # a : number of active access points
+            # g : grid block
+            # f : frequency
+
             na = len(lactiveAP)
             self.na = na
             ng = self.ng
             nf = self.nf
+
+            # antenna gain
             for k,iap in enumerate(self.dap):
                 # select only one access point
                 u = na*np.arange(0,z1[1]-z1[0],1).astype('int')+k
@@ -439,10 +445,9 @@ class Coverage(PyLayers):
                     pt = self.pa[:,u]
                     pr = self.pg[:,u]
                     azoffset = self.dap[iap]['phideg']*np.pi/180.
+                    # the eval function of antenna should also specify polar
                     self.dap[iap].A.eval(fGHz=self.fGHz, pt=pt, pr=pr, azoffset=azoffset)
-
                     gain = (self.dap[iap].A.G).T
-                    #pdb.set_trace()
                     # to handle omnidirectional antenna (nf,1,1)
                     if gain.shape[1]==1:
                         gain = np.repeat(gain,ng,axis=1)
@@ -479,6 +484,7 @@ class Coverage(PyLayers):
         # f x g x a
 
         # CmW : Received Power coverage in mW
+        # TODO : tgain in o and p polarization
         self.CmWo = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwo*self.freespace*tgain
         self.CmWp = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwp*self.freespace*tgain
 
@@ -989,9 +995,9 @@ class Coverage(PyLayers):
                     legcb = 'dB'
                 else:
                     legcb = 'Linear scale'
-                if polar=='o':        
+                if polar=='o':
                     V = self.sinro
-                if polar=='p':    
+                if polar=='p':
                     V = self.sinrp
             if typ=='snr':
                 title = title + 'SNR : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+polar

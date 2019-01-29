@@ -3926,6 +3926,7 @@ class Layout(pro.PyLayers):
         --------
 
         antprop.loss.Losst
+        geomutil.intersect3
 
         """
 
@@ -3945,7 +3946,6 @@ class Layout(pro.PyLayers):
             p1 = np.outer(p1, np.ones(1))
             p2 = np.outer(p2, np.ones(1))
 
-        # pdb.set_trace()
         # 3 x N
         u = p1 - p2
         # 1 x N
@@ -4528,6 +4528,8 @@ class Layout(pro.PyLayers):
                    72, 73, 74, 75, 76, 77, 78, 81, 82, 85, 86])
 
         """
+        #assert( (p1.shape==(1,2)) or (p1.shape==(2)))
+        #assert( (p2.shape==(1,2)) or (p2.shape==(2)))
         max_x = max(p1[0], p2[0])
         min_x = min(p1[0], p2[0])
         max_y = max(p1[1], p2[1])

@@ -151,6 +151,7 @@ class Pattern(PyLayers):
 
         # if current antenna is a measured antenna, pass the request frequencies
         # in particular if antenna pattern is type = nfc
+
         if hasattr(self,'_fGHz'):
             self.param.update({'fGHz':self.fGHz})
 

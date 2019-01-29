@@ -3783,13 +3783,13 @@ def intersect3(a, b, pg, u1, u2, l1, l2,binter=False):
     l1   : np.array (,Nscreen)
         length along first dimension in meters
     l2   : np.array (,Nscreen)
-        length along second dimension in meters 
+        length along second dimension in meters
 
     Returns
     -------
 
     bool : True   => intersection (occultation)
-           False 
+           False
 
     Examples
     --------
@@ -3842,21 +3842,21 @@ def intersect3(a, b, pg, u1, u2, l1, l2,binter=False):
     # visi : Nseg,Nscreen
     visi = np.zeros((A.shape[0],A.shape[1]),dtype=bool)
     pinter = np.nan*np.zeros((Nseg,Nscreen,3))
-    # check non singularity 
-    # detA (Nseg,Nscreen) 
+    # check non singularity
+    # detA (Nseg,Nscreen)
     detA = np.linalg.det(A)
-    # matrix A (Nseg,Nscreen,3,3) is valid if not singular 
+    # matrix A (Nseg,Nscreen,3,3) is valid if not singular
     boolvalid = ~ (np.isclose(detA,0))
     c = pg.T[None, :, :] - a.T[:, None, :]
-    # ba (3,Nseg) 
-    # ba.T (Nseg,3) 
+    # ba (3,Nseg)
+    # ba.T (Nseg,3)
     # ba.T[:,None,:] (Nseg,1,3)
     # x (Nseg,Nscreen,3)
     # pinter (Nseg,Nscreen,3)
     if boolvalid.all():
         x  = np.linalg.solve(A, c)
         # calculate intersection points
-        pinter = ba.T[:,None,:]*x+a.T[:,None,:] 
+        pinter = ba.T[:,None,:]*x+a.T[:,None,:]
 
         condseg = ((x[:, :, 0] > 1) + (x[:, :, 0] < 0))
         cond1 = ((x[:, :, 1] > l1[None, :] / 2.) +
@@ -3877,7 +3877,7 @@ def intersect3(a, b, pg, u1, u2, l1, l2,binter=False):
         #Am = A[boolvalid,:,:]
         if len(Am.shape)==3:
             Am=Am[None,...]
-        
+
 
         cm = c[ui[0],ui[1],:]
         # test if loosing one axis
