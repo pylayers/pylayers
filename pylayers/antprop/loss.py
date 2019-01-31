@@ -1538,10 +1538,9 @@ def two_rays_flatearth(fGHz, **kwargs):
     d : distance between Tx and Rx
         (Np1,)
     ht : Tx height
-
     hr : Rx height
         (Np1)
-    GtdB : float (0) 
+    GtdB : float (0)
         Transmitter Antenna Gain (dB)
     GrdB : float(0)
         Receiver Antenna Gain (dB)
@@ -1560,10 +1559,6 @@ def two_rays_flatearth(fGHz, **kwargs):
 
     P :
         received power
-
-
-
-
 
     Examples
     --------
@@ -1602,9 +1597,6 @@ def two_rays_flatearth(fGHz, **kwargs):
         >>> plt.ylabel('Loss Pr/Pt (dB)')
         >>> plt.legend()
         >>> plt.show()
-
-
-
 
     References
     ----------

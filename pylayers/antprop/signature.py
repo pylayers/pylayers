@@ -1353,6 +1353,7 @@ class Signatures(PyLayers,dict):
                 if (cond1 and cond2 and cond3):
                     if (condD and condR and condT):
                         visited.append(interaction)
+                        logger.debug("{}".format(visited))
                         self.cpt+=1
                         #print(visited)
                         # [(44,2,7),(62,7,15),(21,15),(62,15,7),(44,7,2),(16,2)]

@@ -1585,7 +1585,7 @@ class DLink(Link):
             self.nT = kwargs['nT']
             self.nR = kwargs['nR']
             self.bt = kwargs['bt']
-
+ 
             Si.run(cutoff = self.cutoff,
                     diffraction = kwargs['diffraction'],
                     threshold = self.threshold,
