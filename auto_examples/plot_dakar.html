@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Indoor Radio Coverage with Motley Keenan &mdash; PyLayers</title>
+  <title>Outdoor Radio Coverage with Deygout Method &mdash; PyLayers</title>
   
 
   
@@ -31,8 +31,8 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="8 Random Layout" href="plot_layout.html" />
-    <link rel="prev" title="Building graphs of a Layout" href="plot_exLayout2.html" /> 
+    <link rel="next" title="Diffraction coefficient" href="plot_diffraction_polar.html" />
+    <link rel="prev" title="Outdoor Radio Coverage with Deygout Method" href="plot_cover.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -93,7 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_exLayout2.html">Building graphs of a Layout</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_layout.html">8 Random Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_issue314.html">Exemple of issue 314</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
@@ -101,7 +101,7 @@
 <li class="toctree-l1"><a class="reference internal" href="plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_cover.html">Outdoor Radio Coverage with Deygout Method</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plot_dakar.html">Outdoor Radio Coverage with Deygout Method</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Outdoor Radio Coverage with Deygout Method</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
@@ -192,13 +192,13 @@
         
           <li><a href="index.html">&lt;no title&gt;</a> &raquo;</li>
         
-      <li>Indoor Radio Coverage with Motley Keenan</li>
+      <li>Outdoor Radio Coverage with Deygout Method</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/auto_examples/plot_coverage.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/auto_examples/plot_dakar.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -213,68 +213,80 @@
             
   <div class="sphx-glr-download-link-note admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Click <a class="reference internal" href="#sphx-glr-download-auto-examples-plot-coverage-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+<p class="last">Click <a class="reference internal" href="#sphx-glr-download-auto-examples-plot-dakar-py"><span class="std std-ref">here</span></a> to download the full example code</p>
 </div>
-<div class="sphx-glr-example-title section" id="indoor-radio-coverage-with-motley-keenan">
-<span id="sphx-glr-auto-examples-plot-coverage-py"></span><h1>Indoor Radio Coverage with Motley Keenan<a class="headerlink" href="#indoor-radio-coverage-with-motley-keenan" title="Permalink to this headline">¶</a></h1>
-<p>This is an example of Motley-Keenan coverage</p>
-<p>The default configuration file coverage.ini.
-The antenna assoaciated to each Access Point are handled in the module
-pylayers/antprop/antenna.py</p>
-<blockquote>
-<div><p>[grid]
-nx = 80
-ny = 40
-boundary = [20,0,30,20]
-mode = full ; file, zone , full
-file = ‘points.ini’</p>
-<p>[layout]
-filename = TA-Office.lay ; 0 40 0 15
-;filename = W2PTIN.lay
-;filename = Lstruc.lay</p>
-<p>[ap]
-0 = {‘name’:’room1’,’wstd’:’ieee80211b’,’p’:(1,12,1.2),’PtdBm’:0,’chan’:[11],’on’:True,’ant’:’Gauss’,’phideg’:90}
-1 = {‘name’:’room2’,’wstd’:’ieee80211b’,’p’:(10,2,1.2),’PtdBm’:0,’chan’:[11],’on’:True,’ant’:’Omni’,’phideg’:0}
-2 = {‘name’:’room3’,’wstd’:’ieee80211b’,’p’:(20,1,1.2),’PtdBm’:0,’chan’:[11],’on’:True,’ant’:’Gauss’,’phideg’:75}
-3 = {‘name’:’room4’,’wstd’:’ieee80211b’,’p’:(36.5,1.5,1.2),’PtdBm’:0,’chan’:[11],’on’:True,’ant’:’Gauss’,’phideg’:120}
-4 = {‘name’:’room5’,’wstd’:’ieee80211b’,’p’:(25,12,1.2),’PtdBm’:0,’chan’:[11],’on’:True,’ant’:’Gauss’,’phideg’:180}</p>
-<p>[rx]
-temperaturek = 300
-noisefactordb = 0</p>
-<p>[show]
-show = True</p>
-</div></blockquote>
-<img alt="../_images/sphx_glr_plot_coverage_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_coverage_001.png" />
+<div class="sphx-glr-example-title section" id="outdoor-radio-coverage-with-deygout-method">
+<span id="sphx-glr-auto-examples-plot-dakar-py"></span><h1>Outdoor Radio Coverage with Deygout Method<a class="headerlink" href="#outdoor-radio-coverage-with-deygout-method" title="Permalink to this headline">¶</a></h1>
+<p>This is an example of path loss prediction with Deygout method
+with srtm data.</p>
+<p>Here a comparison of the coverage for 3 different heights 30, 50, 70,  meters.</p>
+<p>f = 474.166 MHz  Emetteur RTS</p>
+<ul class="sphx-glr-horizontal">
+<li><img alt="../_images/sphx_glr_plot_dakar_001.png" class="sphx-glr-multi-img first" src="../_images/sphx_glr_plot_dakar_001.png" />
+</li>
+<li><img alt="../_images/sphx_glr_plot_dakar_002.png" class="sphx-glr-multi-img first" src="../_images/sphx_glr_plot_dakar_002.png" />
+</li>
+<li><img alt="../_images/sphx_glr_plot_dakar_003.png" class="sphx-glr-multi-img first" src="../_images/sphx_glr_plot_dakar_003.png" />
+</li>
+</ul>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Warning Unable to read graph Gr
-Warning Unable to read graph Gw
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>SRTMDownloader - server= dds.cr.usgs.gov, directory=srtm/version2_1/SRTM3.
+N14W018.hgt.zip
+ Computation time : 32.52 seconds
+ Computation time : 31.87 seconds
+ Computation time : 31.44 seconds
 </pre></div>
 </div>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pylayers.gis.ezone</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">pdb</span>
-<span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">()</span>
-<span class="n">C</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">_filename</span>
-<span class="n">C</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">39</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
-<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
-<span class="n">finish</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">9</span><span class="p">))</span>
-<span class="c1">#print &#39;Tx position: &#39;,C.tx</span>
-<span class="c1">#print &#39;Coverage in %1.2f seconds&#39; % (finish-start)</span>
+<span class="c1">#</span>
+<span class="c1"># Saint Pern Transmitter</span>
+<span class="c1">#</span>
+
+<span class="n">latgw</span> <span class="o">=</span> <span class="mf">14.679693</span>
+<span class="n">longw</span> <span class="o">=</span> <span class="o">-</span><span class="mf">17.443819</span>
+<span class="n">tilename</span> <span class="o">=</span> <span class="n">enctile</span><span class="p">(</span><span class="n">longw</span><span class="p">,</span><span class="n">latgw</span><span class="p">)</span>
+<span class="n">dem</span><span class="o">=</span><span class="n">DEM</span><span class="p">(</span><span class="n">enctile</span><span class="p">(</span><span class="n">longw</span><span class="p">,</span><span class="n">latgw</span><span class="p">))</span>
+<span class="n">dem</span><span class="o">.</span><span class="n">dwlsrtm</span><span class="p">()</span>
+<span class="n">xgw</span><span class="p">,</span><span class="n">ygw</span> <span class="o">=</span> <span class="n">dem</span><span class="o">.</span><span class="n">m</span><span class="p">(</span><span class="n">longw</span><span class="p">,</span><span class="n">latgw</span><span class="p">)</span>
+<span class="n">ez</span> <span class="o">=</span> <span class="n">Ezone</span><span class="p">(</span><span class="n">enctile</span><span class="p">(</span><span class="n">longw</span><span class="p">,</span><span class="n">latgw</span><span class="p">))</span>
+<span class="n">ez</span><span class="o">.</span><span class="n">hgts</span><span class="o">=</span><span class="n">dem</span><span class="o">.</span><span class="n">hgts</span>
+<span class="n">ez</span><span class="o">.</span><span class="n">rebase</span><span class="p">(</span><span class="s1">&#39;srtm&#39;</span><span class="p">)</span>
+<span class="n">pa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">longw</span><span class="p">,</span><span class="n">latgw</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">Ht</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">70</span><span class="p">]:</span>
+    <span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">L1</span> <span class="o">=</span> <span class="n">ez</span><span class="o">.</span><span class="n">cover</span><span class="p">(</span><span class="n">pc</span><span class="o">=</span><span class="n">pa</span><span class="p">,</span> <span class="n">Ht</span><span class="o">=</span><span class="n">Ht</span><span class="p">,</span> <span class="n">Hr</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">Nr</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">Rmax</span><span class="o">=</span><span class="mi">25000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;deygout&#39;</span><span class="p">,</span>
+            <span class="n">source</span><span class="o">=</span><span class="s1">&#39;srtm&#39;</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mf">0.474166</span><span class="p">)</span>
+    <span class="n">toc</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot; Computation time : {:.2f} seconds&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">toc</span><span class="o">-</span><span class="n">tic</span><span class="p">))</span>
+    <span class="n">tc</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">tripcolor</span><span class="p">(</span><span class="n">L1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="o">-</span><span class="n">L1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
+                              <span class="n">shading</span><span class="o">=</span><span class="s1">&#39;gouraud&#39;</span><span class="p">,</span>
+                              <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span>
+                              <span class="n">vmax</span><span class="o">=-</span><span class="mi">60</span><span class="p">,</span>
+                              <span class="n">vmin</span><span class="o">=-</span><span class="mi">140</span><span class="p">,</span>
+                              <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                              <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
+                              <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Lat {:.2f}, Lon {:.2f} , Height{:.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">latgw</span><span class="p">,</span><span class="n">longw</span><span class="p">,</span><span class="n">Ht</span><span class="p">),</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+    <span class="n">cb</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+    <span class="n">cb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s2">&quot;Loss (dB)&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  6.447 seconds)</p>
-<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-coverage-py">
+<p><strong>Total running time of the script:</strong> ( 1 minutes  46.174 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-dakar-py">
 <div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../_downloads/plot_coverage.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_coverage.py</span></code></a></div>
+<a class="reference download internal" href="../_downloads/plot_dakar.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_dakar.py</span></code></a></div>
 <div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../_downloads/plot_coverage.ipynb" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_coverage.ipynb</span></code></a></div>
+<a class="reference download internal" href="../_downloads/plot_dakar.ipynb" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_dakar.ipynb</span></code></a></div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
 </div>
@@ -287,10 +299,10 @@ Warning Unable to read graph Gw
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="plot_layout.html" class="btn btn-neutral float-right" title="8 Random Layout" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="plot_diffraction_polar.html" class="btn btn-neutral float-right" title="Diffraction coefficient" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="plot_exLayout2.html" class="btn btn-neutral" title="Building graphs of a Layout" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="plot_cover.html" class="btn btn-neutral" title="Outdoor Radio Coverage with Deygout Method" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
