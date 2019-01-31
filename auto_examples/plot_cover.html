@@ -229,10 +229,10 @@ with srtm data.</p>
 </ul>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>SRTMDownloader - server= dds.cr.usgs.gov, directory=srtm/version2_1/SRTM3.
-N50E006.hgt.zip
- Computation time : 19.73 seconds
- Computation time : 18.48 seconds
- Computation time : 16.98 seconds
+N48W002.hgt.zip
+ Computation time : 13.95 seconds
+ Computation time : 12.68 seconds
+ Computation time : 12.05 seconds
 </pre></div>
 </div>
 <div class="line-block">
@@ -244,11 +244,11 @@ N50E006.hgt.zip
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="c1">#</span>
-<span class="c1">#</span>
+<span class="c1"># Saint Pern Transmitter</span>
 <span class="c1">#</span>
 
-<span class="n">latgw</span> <span class="o">=</span> <span class="mf">50.525</span>
-<span class="n">longw</span> <span class="o">=</span> <span class="mf">6.5836</span>
+<span class="n">latgw</span> <span class="o">=</span> <span class="mf">48.28693</span>
+<span class="n">longw</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.95677</span>
 <span class="n">tilename</span> <span class="o">=</span> <span class="n">enctile</span><span class="p">(</span><span class="n">longw</span><span class="p">,</span><span class="n">latgw</span><span class="p">)</span>
 <span class="n">dem</span><span class="o">=</span><span class="n">DEM</span><span class="p">(</span><span class="n">enctile</span><span class="p">(</span><span class="n">longw</span><span class="p">,</span><span class="n">latgw</span><span class="p">))</span>
 <span class="n">dem</span><span class="o">.</span><span class="n">dwlsrtm</span><span class="p">()</span>
@@ -257,9 +257,10 @@ N50E006.hgt.zip
 <span class="n">ez</span><span class="o">.</span><span class="n">hgts</span><span class="o">=</span><span class="n">dem</span><span class="o">.</span><span class="n">hgts</span>
 <span class="n">ez</span><span class="o">.</span><span class="n">rebase</span><span class="p">(</span><span class="s1">&#39;srtm&#39;</span><span class="p">)</span>
 <span class="n">pa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">longw</span><span class="p">,</span><span class="n">latgw</span><span class="p">])</span>
-<span class="k">for</span> <span class="n">Ht</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">100</span><span class="p">]:</span>
+<span class="k">for</span> <span class="n">Ht</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">150</span><span class="p">]:</span>
     <span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-    <span class="n">L1</span> <span class="o">=</span> <span class="n">ez</span><span class="o">.</span><span class="n">cover</span><span class="p">(</span><span class="n">pc</span><span class="o">=</span><span class="n">pa</span><span class="p">,</span> <span class="n">Ht</span><span class="o">=</span><span class="n">Ht</span><span class="p">,</span> <span class="n">Hr</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">Nr</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">Rmax</span><span class="o">=</span><span class="mi">8000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;deygout&#39;</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">&#39;srtm&#39;</span><span class="p">)</span>
+    <span class="n">L1</span> <span class="o">=</span> <span class="n">ez</span><span class="o">.</span><span class="n">cover</span><span class="p">(</span><span class="n">pc</span><span class="o">=</span><span class="n">pa</span><span class="p">,</span> <span class="n">Ht</span><span class="o">=</span><span class="n">Ht</span><span class="p">,</span> <span class="n">Hr</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">Nr</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">Rmax</span><span class="o">=</span><span class="mi">20000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;deygout&#39;</span><span class="p">,</span>
+            <span class="n">source</span><span class="o">=</span><span class="s1">&#39;srtm&#39;</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mf">0.474166</span><span class="p">)</span>
     <span class="n">toc</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
     <span class="k">print</span><span class="p">(</span><span class="s2">&quot; Computation time : {:.2f} seconds&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">toc</span><span class="o">-</span><span class="n">tic</span><span class="p">))</span>
     <span class="n">tc</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">tripcolor</span><span class="p">(</span><span class="n">L1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="o">-</span><span class="n">L1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
@@ -278,7 +279,7 @@ N50E006.hgt.zip
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 1 minutes  4.794 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  46.576 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-cover-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../_downloads/plot_cover.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_cover.py</span></code></a></div>
@@ -309,7 +310,7 @@ N50E006.hgt.zip
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Jan 29, 2019.
+      Last updated on Jan 31, 2019.
 
     </p>
   </div>

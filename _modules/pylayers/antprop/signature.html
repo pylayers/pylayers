@@ -1560,6 +1560,7 @@ from tqdm import tqdm
                 if (cond1 and cond2 and cond3):
                     if (condD and condR and condT):
                         visited.append(interaction)
+                        logger.debug(&quot;{}&quot;.format(visited))
                         self.cpt+=1
                         #print(visited)
                         # [(44,2,7),(62,7,15),(21,15),(62,15,7),(44,7,2),(16,2)]
@@ -3841,7 +3842,7 @@ if __name__ == &quot;__main__&quot;:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Jan 29, 2019.
+      Last updated on Jan 31, 2019.
 
     </p>
   </div>
