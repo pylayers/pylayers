@@ -459,8 +459,9 @@ class Coverage(PyLayers):
             # calculate antenna gain from ap to grid point
             #
             # loop over all AP
-            # 
-            for k,iap in enumerate(self.dap):
+            #
+            k = 0
+            for iap in self.dap:
                 # select only one access point
                 # n
                 u = na*np.arange(0,bg[1]-bg[0],1).astype('int')+k
@@ -473,11 +474,12 @@ class Coverage(PyLayers):
                     gain = (self.dap[iap].A.G).T
                     # to handle omnidirectional antenna (nf,1,1)
                     if gain.shape[1]==1:
-                        gain = np.repeat(gain,sizebloc,axis=1)
-                    try:
-                        tgain = np.dstack((tgain,gain[:,:,None]))
-                    except:
+                        gain = np.repeat(gain,bg[1]-bg[0],axis=1)
+                    if k==0:
                         tgain = gain[:,:,None]
+                    else:
+                        tgain = np.dstack((tgain,gain[:,:,None]))
+                    k = k+1
 
             tgain = tgain.reshape(nf,tgain.shape[1]*tgain.shape[2])
             Lwo,Lwp,Edo,Edp = loss.Losst(self.L, self.fGHz, self.pa, self.pg, dB=False)
@@ -502,7 +504,6 @@ class Coverage(PyLayers):
         self.Edo = self.Edo.reshape(nf,ng,na)
         self.Lwp = self.Lwp.reshape(nf,ng,na)
         self.Edp = self.Edp.reshape(nf,ng,na)
-        pdb.set_trace()
         self.tgain = self.tgain.reshape(nf,ng,na)
 
         self.freespace = self.freespace.reshape(nf,ng,na)
