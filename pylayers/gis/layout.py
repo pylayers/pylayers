@@ -1057,7 +1057,7 @@ class Layout(pro.PyLayers):
 
         mno = max(self.Gs.nodes())
 
-        self.sgsg = sparse.lil_matrix((mno+1,mno+1),dtype='int')
+        #self.sgsg = sparse.lil_matrix((mno+1,mno+1),dtype='int')
 
         # loop over segments
         # a segment is always connected to 2 nodes
@@ -1084,7 +1084,7 @@ class Layout(pro.PyLayers):
             nptb = [lpts[1]]*len(nsb)
             ns = np.hstack((npta,nptb))
 
-            self.sgsg[s,u]=ns
+            #self.sgsg[s,u]=ns
 
 
         # conversion in numpy array
