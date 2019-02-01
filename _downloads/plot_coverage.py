@@ -23,11 +23,11 @@ pylayers/antprop/antenna.py
     ;filename = Lstruc.lay
 
     [ap]
-    0 = {'name':'room1','wstd':'ieee80211b','p':(1,12,1.2),'PtdBm':0,'chan':[11],'on':True,'ant':'Gauss','phideg':90}
-    1 = {'name':'room2','wstd':'ieee80211b','p':(10,2,1.2),'PtdBm':0,'chan':[11],'on':True,'ant':'Omni','phideg':0}
-    2 = {'name':'room3','wstd':'ieee80211b','p':(20,1,1.2),'PtdBm':0,'chan':[11],'on':True,'ant':'Gauss','phideg':75}
-    3 = {'name':'room4','wstd':'ieee80211b','p':(36.5,1.5,1.2),'PtdBm':0,'chan':[11],'on':True,'ant':'Gauss','phideg':120}
-    4 = {'name':'room5','wstd':'ieee80211b','p':(25,12,1.2),'PtdBm':0,'chan':[11],'on':True,'ant':'Gauss','phideg':180}
+    0 = {'name':'Gauss90','wstd':'ieee80211b','p':(1,12,1.2),'PtdBm':0,'chan':[11],'on':True,'ant':'Gauss','phideg':90}
+    1 = {'name':'Omni','wstd':'ieee80211b','p':(10,2,1.2),'PtdBm':0,'chan':[11],'on':True,'ant':'Omni','phideg':0}
+    2 = {'name':'Gauss75','wstd':'ieee80211b','p':(20,1,1.2),'PtdBm':0,'chan':[11],'on':True,'ant':'Gauss','phideg':75}
+    3 = {'name':'Gauss120','wstd':'ieee80211b','p':(36.5,1.5,1.2),'PtdBm':0,'chan':[11],'on':True,'ant':'Gauss','phideg':120}
+    4 = {'name':'Gauss180','wstd':'ieee80211b','p':(25,12,1.2),'PtdBm':0,'chan':[11],'on':True,'ant':'Gauss','phideg':180}
 
     [rx]
     temperaturek = 300

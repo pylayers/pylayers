@@ -95,6 +95,11 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../TOC.html#environment-description">3&nbsp;&nbsp;&nbsp;Environment Description</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Description of the propagation environment</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#getting-the-list-of-all-available-layouts-the-ls-method">Getting the list of all available Layouts : the <code class="docutils literal notranslate"><span class="pre">ls()</span></code> method</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#structure-of-the-lay-file">Structure of the <code class="docutils literal notranslate"><span class="pre">.lay</span></code> file</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#layout-vizualisation">Layout vizualisation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#layout-bounding-box">Layout bounding box</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#layout-graphs-build">Layout graphs build</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#a-more-realistic-example">A more realistic example</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#the-useful-numpy-arrays-of-the-layout">The useful numpy arrays of the Layout</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#tgs-trancodage-from-graph-indexing-to-numpy-array-indexing"><code class="docutils literal notranslate"><span class="pre">tgs</span></code> : trancodage from graph indexing to numpy array indexing</a></li>
 </ul>
@@ -125,6 +130,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_dakar.html">Outdoor Radio Coverage with Deygout Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_cover.html">Outdoor Radio Coverage with Deygout Method</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
@@ -236,10 +243,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; !date
+  <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>!date
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>samedi 26 janvier 2019, 14:14:27 (UTC+0100)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>vendredi 1 fvrier 2019, 08:21:12 (UTC+0100)
 </pre></div>
 </div>
 <div class="section" id="description-of-the-propagation-environment">
@@ -249,17 +256,17 @@ propagation environment. It contains different graphs helping the
 implementation of the ray tracing. The class is implemented in the
 module
 <a class="reference external" href="http://pylayers.github.io/pylayers/api/pylayers.gis.layout.Layout.html">layout.py</a></p>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.gis.layout import *
-&gt;&gt;&gt; from IPython.display import Image
-&gt;&gt;&gt; import os
-&gt;&gt;&gt; %matplotlib inline
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>from pylayers.gis.layout import *
+from IPython.display import Image
+import os
+%matplotlib inline
 </pre></div>
 </div>
 <div class="section" id="getting-the-list-of-all-available-layouts-the-ls-method">
 <h2>Getting the list of all available Layouts : the <code class="docutils literal notranslate"><span class="pre">ls()</span></code> method<a class="headerlink" href="#getting-the-list-of-all-available-layouts-the-ls-method" title="Permalink to this headline">¶</a></h2>
 <p>Creating an empty Layout is as simple as :</p>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L=Layout()
-&gt;&gt;&gt; L
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>L=Layout()
+L
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>----------------
@@ -280,7 +287,7 @@ yrange : (-50, 50)
 </pre></div>
 </div>
 <p>The different argument of the <strong>init</strong> function are listed below</p>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L=Layout(arg=&#39;&#39;,
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>L=Layout(arg=&#39;&#39;,
                  mat=&#39;matDB.ini&#39;,
                  slab=&#39;slabDB.ini&#39;,
                  fur=&#39;&#39;,
@@ -296,22 +303,22 @@ yrange : (-50, 50)
 <ul class="simple">
 <li><strong>string</strong> is either an existing layout filename (.lay,.osm,.res) or
 the coordinates (lat,lon)</li>
-<li>** mat** is the a material filename material ans slab are now
+<li><strong>mat</strong> is the a material filename material ans slab are now
 described in .lay file</li>
-<li>** slab** is the a slab filename</li>
-<li>** fur** is the furniture filename</li>
-<li>** bcheck** is a boolean which force layout integrity checking</li>
-<li>** bbuild** is a boolean which force rebuilding the layouts graphs</li>
-<li>** bverbose** is a boolean output verbosity</li>
-<li>** bcartesian** is a boolean controling the type of coordinates
+<li><strong>slab</strong> is the a slab filename</li>
+<li><strong>fur</strong> is the furniture filename</li>
+<li><strong>bcheck</strong> is a boolean which force layout integrity checking</li>
+<li><strong>bbuild</strong> is a boolean which force rebuilding the layouts graphs</li>
+<li><strong>bverbose</strong> is a boolean output verbosity</li>
+<li><strong>bcartesian</strong> is a boolean controling the type of coordinates
 cartesian or (lat,lon)</li>
-<li>** xlim** is a tuple with specifies the layout limits</li>
+<li><strong>xlim</strong> is a tuple with specifies the layout limits</li>
 <li><strong>dist_m</strong> is a float value which indicates the zone radius in meters
 for openstreet map extraction</li>
 <li><strong>typ</strong> is a string which takes values either indoor or outdoor</li>
 </ul>
 <p>Querying the file name associated with the Layout.</p>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L._filename
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>L._filename
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&#39;newfile.lay&#39;
@@ -323,7 +330,7 @@ for openstreet map extraction</li>
 <code class="docutils literal notranslate"><span class="pre">struc</span></code> directory of your current project, which is set up via the
 $BASENAME environment variable which should be defined in order to seek
 layout file in the good project directory.</p>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.ls(&#39;lay&#39;)
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>L.ls(&#39;lay&#39;)
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;11Dbibli.lay&#39;,
@@ -397,8 +404,8 @@ layout file in the good project directory.</p>
 </pre></div>
 </div>
 <p>A very simple Layout which is used for testing is <code class="docutils literal notranslate"><span class="pre">defstr.lay</span></code></p>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L=Layout(&#39;defstr.lay&#39;)
-&gt;&gt;&gt; L
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>L=Layout(&#39;defstr.lay&#39;)
+L
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>----------------
@@ -424,25 +431,72 @@ center : ( 5.00,2.67)
 radius : 7.72
 </pre></div>
 </div>
-<p>The showG method can be used for showing the layout in specifying which
+</div>
+<div class="section" id="structure-of-the-lay-file">
+<h2>Structure of the <code class="docutils literal notranslate"><span class="pre">.lay</span></code> file<a class="headerlink" href="#structure-of-the-lay-file" title="Permalink to this headline">¶</a></h2>
+<p>The description file of a Layout has the extension <code class="docutils literal notranslate"><span class="pre">.lay</span></code> it is an
+<code class="docutils literal notranslate"><span class="pre">ini</span></code> file which contains the following section.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[info]
+format= {cart | latlon}
+version = 1.3
+type = {indoor | outdoor}
+
+[points]
+-1 = (0.0,0.0)
+...
+
+[segments]
+1 = {&#39;name&#39;: ,&#39;connect&#39;: ,&#39;z&#39;:}
+...
+
+[slabs]
+WALL = {&#39;color: ,&#39;linewidth&#39;: ,&#39;lthick&#39;:[] ,&#39;lmatname&#39;:[]}
+
+[materials]
+WOOD = {&#39;mur&#39;:,&#39;epr&#39;:,&#39;sigma&#39;:,&#39;roughness&#39;:}
+
+[indoor] ;if type==&#39;indoor&#39;
+zceil = 3
+zfloor = 0
+</pre></div>
+</div>
+</div>
+<div class="section" id="layout-vizualisation">
+<h2>Layout vizualisation<a class="headerlink" href="#layout-vizualisation" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">showG</span></code> method is for showing the layout in specifying which graph
 entities to display.</p>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a=L.showG(&#39;s&#39;,
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>f,a=L.showG(&#39;s&#39;,
              nodes=True,
          slab=True,
          subseg=True,
          figsize=(10,10),labels=True)
 </pre></div>
 </div>
-<img alt="../../_images/Layout_14_0.png" src="../../_images/Layout_14_0.png" />
+<img alt="../../_images/Layout_16_0.png" src="../../_images/Layout_16_0.png" />
+</div>
+<div class="section" id="layout-bounding-box">
+<h2>Layout bounding box<a class="headerlink" href="#layout-bounding-box" title="Permalink to this headline">¶</a></h2>
 <p>L.ax provides the boundary of the layout with the following tuple format
 : (xmin,xmax,ymin,ymax)</p>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.ax
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>L.ax
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(-1.5, 11.5, -1.5, 6.5)
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.build()
+</div>
+<div class="section" id="layout-graphs-build">
+<h2>Layout graphs build<a class="headerlink" href="#layout-graphs-build" title="Permalink to this headline">¶</a></h2>
+<p>A Layout has to be associated with a set of graphs which are built from
+the initial description in <code class="docutils literal notranslate"><span class="pre">L.Gs</span></code>. Those graphs are stored in pickle
+files in a gpickle <code class="docutils literal notranslate"><span class="pre">$BASENAME/struc/gpickle</span></code> directory.</p>
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>L.build()
+</pre></div>
+</div>
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>L.Gv.node
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>NodeView((1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 17, 30, 22, -6, 27, -4, -3, -1))
 </pre></div>
 </div>
 <p>A Layout is decomposed into convex cycles which are stored in the Gt
@@ -450,13 +504,7 @@ graph. The diffraction points are stored in the dictionnary <code class="docutil
 The keys of this dictionnary are the diffraction points number and the
 values are a zipped list of output cycles and corresponding wedge
 angles.</p>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.Gv.node
-</pre></div>
-</div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>NodeView((1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 17, 30, 22, -6, 27, -4, -3, -1))
-</pre></div>
-</div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.ddiff
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>L.ddiff
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{-6: ([4, 1], 4.7123889803846897),
@@ -465,31 +513,47 @@ angles.</p>
  -1: ([3, 1], 4.7123889803846897)}
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.Gt.node
+<p>i.e -6: ([4, 1], 4.712) means Diffracting node -6 which diffract toward
+the exterior sector: cycles 4 and 1 with a wedge angle of 270 degrees.</p>
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>L.Gt.node
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>NodeView((0, 1, 2, 3, 4, 5, 6))
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L=Layout(&#39;DLR.lay&#39;)
+</div>
+<div class="section" id="a-more-realistic-example">
+<h2>A more realistic example<a class="headerlink" href="#a-more-realistic-example" title="Permalink to this headline">¶</a></h2>
+<p>Let load the DLR building</p>
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>L=Layout(&#39;DLR.lay&#39;)
+f,a = L.showG(&#39;s&#39;,aw=False)
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a=L.showG(&#39;s&#39;,aw=False)
-</pre></div>
-</div>
-<img alt="../../_images/Layout_23_0.png" src="../../_images/Layout_23_0.png" />
+<img alt="../../_images/Layout_27_0.png" src="../../_images/Layout_27_0.png" />
 <p>To check which are the used slabs :</p>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.sl
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>L.sl
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>List of Slabs
 -----------------------------
 
+PARTITION : |PLASTER
+[0.1]
+       grey80 4
+       epr :(8+0j)    sigma : 0.038
+CEIL : |REINFORCED_CONCRETE
+[0.1]
+       grey20 1
+       epr :(8.69999980927+0j)    sigma : 3.0
+_AIR : |AIR
+[0.02]
+       white 1
+       epr :(1+0j)    sigma : 0.0
 WALL : |BRICK
 [0.07]
        grey20 3
        epr :(4.09999990463+0j)    sigma : 0.300000011921
-_AIR : |AIR
+AIR : |AIR
 [0.02]
        white 1
        epr :(1+0j)    sigma : 0.0
@@ -499,41 +563,29 @@ _AIR : |AIR
        epr :(3.79999995232+0j)    sigma : 0.0
        epr :(1+0j)    sigma : 0.0
        epr :(3.79999995232+0j)    sigma : 0.0
-AIR : |AIR
-[0.02]
-       white 1
-       epr :(1+0j)    sigma : 0.0
-CEIL : |REINFORCED_CONCRETE
-[0.1]
-       grey20 1
-       epr :(8.69999980927+0j)    sigma : 3.0
 FLOOR : |REINFORCED_CONCRETE
 [0.1]
        grey40 1
        epr :(8.69999980927+0j)    sigma : 3.0
-PARTITION : |PLASTER
-[0.1]
-       grey80 4
-       epr :(8+0j)    sigma : 0.038
 </pre></div>
 </div>
 <p>Lets load an other layout. This an indoor office where the FP7 WHERE
 project UWB impulse radio measuremnts have been performed.</p>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L=Layout(&#39;WHERE1.lay&#39;)
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>L=Layout(&#39;WHERE1.lay&#39;)
 </pre></div>
 </div>
 <p>The showG method provides many possible visualization of the layout</p>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a=L.showG(&#39;s&#39;,airwalls=False,figsize=(20,10))
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>f,a=L.showG(&#39;s&#39;,airwalls=False,figsize=(20,10))
 </pre></div>
 </div>
-<img alt="../../_images/Layout_29_0.png" src="../../_images/Layout_29_0.png" />
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L=Layout(&#39;W2PTIN.lay&#39;)
+<img alt="../../_images/Layout_33_0.png" src="../../_images/Layout_33_0.png" />
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>L=Layout(&#39;W2PTIN.lay&#39;)
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a = L.showG(&#39;s&#39;)
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>f,a = L.showG(&#39;s&#39;)
 </pre></div>
 </div>
-<img alt="../../_images/Layout_31_0.png" src="../../_images/Layout_31_0.png" />
+<img alt="../../_images/Layout_35_0.png" src="../../_images/Layout_35_0.png" />
 </div>
 <div class="section" id="the-useful-numpy-arrays-of-the-layout">
 <h2>The useful numpy arrays of the Layout<a class="headerlink" href="#the-useful-numpy-arrays-of-the-layout" title="Permalink to this headline">¶</a></h2>
@@ -558,8 +610,8 @@ numpy array which are mostly used internally.</p>
 <li>L.Gs.pos : in a dictionary form (key is the point negative index)</li>
 <li>L.pt : in a numpy array</li>
 </ul>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; print(np.shape(L.pt))
-&gt;&gt;&gt; print(len([ x for x in L.Gs.pos.keys() if x &lt;0]))
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>print(np.shape(L.pt))
+print(len([ x for x in L.Gs.pos.keys() if x &lt;0]))
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(2, 185)
@@ -577,7 +629,7 @@ handle the conversion.</p>
 number of segments. The first line is the tail index of the segment
 <span class="math notranslate nohighlight">\(k\)</span> and the second line is the head of the segment <span class="math notranslate nohighlight">\(k\)</span>.
 Where <span class="math notranslate nohighlight">\(k\)</span> is the index of a given segment (starting in 0).</p>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.build()
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>L.build()
 </pre></div>
 </div>
 <p>The figure below illustrates a Layout and a superimposition of the graph
@@ -587,49 +639,49 @@ central in the ray determination algorithm which is implemented in
 PyLayers. Notice that the exterior region is the cycle indexed by 0. All
 the rooms which have a common frontier with the exterior cycle are here
 connected to the origin (corresponding to exterior cycle).</p>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; f,a = L.showG(&#39;s&#39;)
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>f,a = L.showG(&#39;s&#39;)
 </pre></div>
 </div>
-<img alt="../../_images/Layout_37_0.png" src="../../_images/Layout_37_0.png" />
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; lp1 = nx.draw_networkx_nodes(L.Gi,L.Gi.pos,node_color=&#39;blue&#39;,node_size=1)
-&gt;&gt;&gt; lp2 = nx.draw_networkx_edges(L.Gi,L.Gi.pos,node_color=&#39;blue&#39;,node_size=1)
+<img alt="../../_images/Layout_41_0.png" src="../../_images/Layout_41_0.png" />
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>lp1 = nx.draw_networkx_nodes(L.Gi,L.Gi.pos,node_color=&#39;blue&#39;,node_size=1)
+lp2 = nx.draw_networkx_edges(L.Gi,L.Gi.pos,node_color=&#39;blue&#39;,node_size=1)
 </pre></div>
 </div>
-<img alt="../../_images/Layout_38_0.png" src="../../_images/Layout_38_0.png" />
+<img alt="../../_images/Layout_42_0.png" src="../../_images/Layout_42_0.png" />
 </div>
 </div>
 <div class="section" id="tgs-trancodage-from-graph-indexing-to-numpy-array-indexing">
 <h2><code class="docutils literal notranslate"><span class="pre">tgs</span></code> : trancodage from graph indexing to numpy array indexing<a class="headerlink" href="#tgs-trancodage-from-graph-indexing-to-numpy-array-indexing" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">tgs</span></code> is an array with length <span class="math notranslate nohighlight">\(N_s\)</span>+1. The index 0 is not used
 because none segment has 0 as an index.</p>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; ns = 5
-&gt;&gt;&gt; utahe = L.tgs[ns]
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>ns = 5
+utahe = L.tgs[ns]
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; tahe =  L.tahe[:,utahe]
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>tahe =  L.tahe[:,utahe]
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; ptail = L.pt[:,tahe[0]]
-&gt;&gt;&gt; phead = L.pt[:,tahe[1]]
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>ptail = L.pt[:,tahe[0]]
+phead = L.pt[:,tahe[1]]
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; print(ptail)
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>print(ptail)
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ 29.785   6.822]
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; print(phead)
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>print(phead)
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ 27.414   6.822]
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.Gs.node[5]
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>L.Gs.node[5]
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;connect&#39;: [-8, -139],
- &#39;iso&#39;: [365],
+ &#39;iso&#39;: [326],
  &#39;name&#39;: &#39;PARTITION&#39;,
  &#39;ncycles&#39;: [70, 72],
  &#39;norm&#39;: array([ 0.,  1.,  0.]),
@@ -638,24 +690,24 @@ because none segment has 0 as an index.</p>
  &#39;z&#39;: (0, 3.0)}
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; print(L.Gs.pos[-8])
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>print(L.Gs.pos[-8])
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(29.785, 6.822)
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; aseg = np.array([4,7,134])
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>aseg = np.array([4,7,134])
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; print(np.shape(aseg))
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>print(np.shape(aseg))
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(3,)
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; pt  = L.tahe[:,L.tgs[aseg]][0,:]
-&gt;&gt;&gt; ph = L.tahe[:,L.tgs[aseg]][1,:]
-&gt;&gt;&gt; pth = np.vstack((pt,ph))
+<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>pt  = L.tahe[:,L.tgs[aseg]][0,:]
+ph = L.tahe[:,L.tgs[aseg]][1,:]
+pth = np.vstack((pt,ph))
 </pre></div>
 </div>
 </div>
@@ -682,7 +734,7 @@ because none segment has 0 as an index.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Jan 29, 2019.
+      Last updated on Feb 01, 2019.
 
     </p>
   </div>

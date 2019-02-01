@@ -98,6 +98,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_dakar.html">Outdoor Radio Coverage with Deygout Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_cover.html">Outdoor Radio Coverage with Deygout Method</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
@@ -251,7 +253,7 @@ na : number of access point</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.coverage.Coverage.cover" title="pylayers.antprop.coverage.Coverage.cover"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cover</span></code></a>([sinr,&nbsp;snr,&nbsp;best])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.coverage.Coverage.cover" title="pylayers.antprop.coverage.Coverage.cover"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cover</span></code></a>(**kwargs)</td>
 <td>run the coverage calculation</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.coverage.Coverage.creategrid" title="pylayers.antprop.coverage.Coverage.creategrid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">creategrid</span></code></a>([mode,&nbsp;boundary,&nbsp;_fileini])</td>
@@ -280,15 +282,18 @@ na : number of access point</p>
 <p class="rubric">Methods Documentation</p>
 <dl class="method">
 <dt id="pylayers.antprop.coverage.Coverage.cover">
-<code class="descname">cover</code><span class="sig-paren">(</span><em>sinr=True</em>, <em>snr=True</em>, <em>best=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/coverage.html#Coverage.cover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.coverage.Coverage.cover" title="Permalink to this definition">¶</a></dt>
+<code class="descname">cover</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/coverage.html#Coverage.cover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.coverage.Coverage.cover" title="Permalink to this definition">¶</a></dt>
 <dd><p>run the coverage calculation</p>
 <p>sinr : boolean
 snr  : boolean
-best : boolean</p>
+best : boolean
+size : integer</p>
+<blockquote>
+<div>size of grid points block</div></blockquote>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.coverage import *
 &gt;&gt;&gt; C = Coverage()
 &gt;&gt;&gt; C.cover()
-&gt;&gt;&gt; f,a=C.show(typ=&#39;sinr&#39;,figsize=(10,8))
+&gt;&gt;&gt; f,a = C.show(typ=&#39;sinr&#39;,figsize=(10,8))
 &gt;&gt;&gt; plt.show()
 </pre></div>
 </div>
@@ -432,7 +437,7 @@ polar : string</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Jan 29, 2019.
+      Last updated on Feb 01, 2019.
 
     </p>
   </div>

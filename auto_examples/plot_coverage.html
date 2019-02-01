@@ -100,8 +100,8 @@
 <li class="toctree-l1"><a class="reference internal" href="plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plot_cover.html">Outdoor Radio Coverage with Deygout Method</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_dakar.html">Outdoor Radio Coverage with Deygout Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_cover.html">Outdoor Radio Coverage with Deygout Method</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
@@ -233,11 +233,11 @@ filename = TA-Office.lay ; 0 40 0 15
 ;filename = W2PTIN.lay
 ;filename = Lstruc.lay</p>
 <p>[ap]
-0 = {‘name’:’room1’,’wstd’:’ieee80211b’,’p’:(1,12,1.2),’PtdBm’:0,’chan’:[11],’on’:True,’ant’:’Gauss’,’phideg’:90}
-1 = {‘name’:’room2’,’wstd’:’ieee80211b’,’p’:(10,2,1.2),’PtdBm’:0,’chan’:[11],’on’:True,’ant’:’Omni’,’phideg’:0}
-2 = {‘name’:’room3’,’wstd’:’ieee80211b’,’p’:(20,1,1.2),’PtdBm’:0,’chan’:[11],’on’:True,’ant’:’Gauss’,’phideg’:75}
-3 = {‘name’:’room4’,’wstd’:’ieee80211b’,’p’:(36.5,1.5,1.2),’PtdBm’:0,’chan’:[11],’on’:True,’ant’:’Gauss’,’phideg’:120}
-4 = {‘name’:’room5’,’wstd’:’ieee80211b’,’p’:(25,12,1.2),’PtdBm’:0,’chan’:[11],’on’:True,’ant’:’Gauss’,’phideg’:180}</p>
+0 = {‘name’:’Gauss90’,’wstd’:’ieee80211b’,’p’:(1,12,1.2),’PtdBm’:0,’chan’:[11],’on’:True,’ant’:’Gauss’,’phideg’:90}
+1 = {‘name’:’Omni’,’wstd’:’ieee80211b’,’p’:(10,2,1.2),’PtdBm’:0,’chan’:[11],’on’:True,’ant’:’Omni’,’phideg’:0}
+2 = {‘name’:’Gauss75’,’wstd’:’ieee80211b’,’p’:(20,1,1.2),’PtdBm’:0,’chan’:[11],’on’:True,’ant’:’Gauss’,’phideg’:75}
+3 = {‘name’:’Gauss120’,’wstd’:’ieee80211b’,’p’:(36.5,1.5,1.2),’PtdBm’:0,’chan’:[11],’on’:True,’ant’:’Gauss’,’phideg’:120}
+4 = {‘name’:’Gauss180’,’wstd’:’ieee80211b’,’p’:(25,12,1.2),’PtdBm’:0,’chan’:[11],’on’:True,’ant’:’Gauss’,’phideg’:180}</p>
 <p>[rx]
 temperaturek = 300
 noisefactordb = 0</p>
@@ -269,7 +269,7 @@ Warning Unable to read graph Gw
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  6.447 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  4.469 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-coverage-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../_downloads/plot_coverage.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_coverage.py</span></code></a></div>
@@ -300,7 +300,7 @@ Warning Unable to read graph Gw
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Jan 31, 2019.
+      Last updated on Feb 01, 2019.
 
     </p>
   </div>

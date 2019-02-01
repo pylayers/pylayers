@@ -31,8 +31,8 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Diffraction coefficient" href="plot_diffraction_polar.html" />
-    <link rel="prev" title="Outdoor Radio Coverage with Deygout Method" href="plot_cover.html" /> 
+    <link rel="next" title="Outdoor Radio Coverage with Deygout Method" href="plot_cover.html" />
+    <link rel="prev" title="UWB Ray tracing simulation in outdoor scenario" href="plot_exLuebbers.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -100,8 +100,8 @@
 <li class="toctree-l1"><a class="reference internal" href="plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plot_cover.html">Outdoor Radio Coverage with Deygout Method</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Outdoor Radio Coverage with Deygout Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_cover.html">Outdoor Radio Coverage with Deygout Method</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_diffraction.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
@@ -220,7 +220,7 @@
 <p>This is an example of path loss prediction with Deygout method
 with srtm data.</p>
 <p>Here a comparison of the coverage for 3 different heights 30, 50, 70,  meters.</p>
-<p>f = 474.166 MHz  Emetteur RTS</p>
+<p>f = 474.166 MHz  Transmitter in Dakar (Senegal)</p>
 <ul class="sphx-glr-horizontal">
 <li><img alt="../_images/sphx_glr_plot_dakar_001.png" class="sphx-glr-multi-img first" src="../_images/sphx_glr_plot_dakar_001.png" />
 </li>
@@ -232,9 +232,9 @@ with srtm data.</p>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>SRTMDownloader - server= dds.cr.usgs.gov, directory=srtm/version2_1/SRTM3.
 N14W018.hgt.zip
- Computation time : 32.52 seconds
- Computation time : 31.87 seconds
- Computation time : 31.44 seconds
+ Computation time : 15.26 seconds
+ Computation time : 15.16 seconds
+ Computation time : 14.39 seconds
 </pre></div>
 </div>
 <div class="line-block">
@@ -246,7 +246,7 @@ N14W018.hgt.zip
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="c1">#</span>
-<span class="c1"># Saint Pern Transmitter</span>
+<span class="c1"># RTS Transmitter</span>
 <span class="c1">#</span>
 
 <span class="n">latgw</span> <span class="o">=</span> <span class="mf">14.679693</span>
@@ -261,7 +261,7 @@ N14W018.hgt.zip
 <span class="n">pa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">longw</span><span class="p">,</span><span class="n">latgw</span><span class="p">])</span>
 <span class="k">for</span> <span class="n">Ht</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">70</span><span class="p">]:</span>
     <span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-    <span class="n">L1</span> <span class="o">=</span> <span class="n">ez</span><span class="o">.</span><span class="n">cover</span><span class="p">(</span><span class="n">pc</span><span class="o">=</span><span class="n">pa</span><span class="p">,</span> <span class="n">Ht</span><span class="o">=</span><span class="n">Ht</span><span class="p">,</span> <span class="n">Hr</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">Nr</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">Rmax</span><span class="o">=</span><span class="mi">25000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;deygout&#39;</span><span class="p">,</span>
+    <span class="n">L1</span> <span class="o">=</span> <span class="n">ez</span><span class="o">.</span><span class="n">cover</span><span class="p">(</span><span class="n">pc</span><span class="o">=</span><span class="n">pa</span><span class="p">,</span> <span class="n">Ht</span><span class="o">=</span><span class="n">Ht</span><span class="p">,</span> <span class="n">Hr</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">Nr</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">Rmax</span><span class="o">=</span><span class="mi">15000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;deygout&#39;</span><span class="p">,</span>
             <span class="n">source</span><span class="o">=</span><span class="s1">&#39;srtm&#39;</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mf">0.474166</span><span class="p">)</span>
     <span class="n">toc</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
     <span class="k">print</span><span class="p">(</span><span class="s2">&quot; Computation time : {:.2f} seconds&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">toc</span><span class="o">-</span><span class="n">tic</span><span class="p">))</span>
@@ -281,7 +281,7 @@ N14W018.hgt.zip
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 1 minutes  46.174 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  51.591 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-dakar-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../_downloads/plot_dakar.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_dakar.py</span></code></a></div>
@@ -299,10 +299,10 @@ N14W018.hgt.zip
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="plot_diffraction_polar.html" class="btn btn-neutral float-right" title="Diffraction coefficient" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="plot_cover.html" class="btn btn-neutral float-right" title="Outdoor Radio Coverage with Deygout Method" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="plot_cover.html" class="btn btn-neutral" title="Outdoor Radio Coverage with Deygout Method" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="plot_exLuebbers.html" class="btn btn-neutral" title="UWB Ray tracing simulation in outdoor scenario" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -312,7 +312,7 @@ N14W018.hgt.zip
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Jan 31, 2019.
+      Last updated on Feb 01, 2019.
 
     </p>
   </div>
