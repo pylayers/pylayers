@@ -1197,7 +1197,6 @@ class Layout(pro.PyLayers):
         #ntahe = np.array([dict(self.Gs[x]).keys() for x in useg])
         ntahe = np.array([ [n for n in nx.neighbors(self.Gs,x) ]  for x in useg ])
         #nhead = [ [n for n in nx.neighbors(self.Gs,x) for x in useg ]
-        pdb.set_trace()
         ntail = ntahe[:,0]
         nhead = ntahe[:,1]
 
@@ -1677,7 +1676,6 @@ class Layout(pro.PyLayers):
         # Reading segments
         #
         # ways of osm
-        pdb.set_trace()
         for k, nseg in enumerate(ways.way):
             tahe = ways.way[nseg].refs
             for l in range(len(tahe) - 1):

@@ -528,12 +528,11 @@ class Ways(object):
         plt.axis('scaled')
         return(fig,ax)
 
-    def readmap(self, osmmap, coords, typ='building'):
+    def readmap1(self, osmmap, coords):
         """ read ways from a map
 
-        osmmap : OSM Map in json from OsmAPI
+        osmmap : OSM Map from josm file
         coords : coords object previously parsed
-        typ  : string
 
         """
         for item in osmmap:
@@ -541,7 +540,6 @@ class Ways(object):
                 way = item['data']
                 osmid = way['id']
                 refs_neg = way['nd']
-                #refs_neg = [ -x for x in refs_neg if x >0]
                 # nodes should have negative index (PyLayers convention)
                 tags  = way['tag']
                 if 'z' in tags:
@@ -552,12 +550,38 @@ class Ways(object):
                        z = (eval(z[0]),eval(z[1]))
                    tags['z'] = z
 
-                if typ !='':
-                    if typ in tags:
-                        self.w[osmid] = [refs_neg, tags]
-                        self.cpt += 1
-                else:
-                    self.w[osmid] = [refs_neg,tags]
+                self.w[osmid] = [refs_neg,tags]
+                self.cpt += 1
+
+        self.toway(coords)
+
+
+    def readmap2(self, osmmap, coords, typ='building'):
+        """ read ways from a map
+
+        osmmap : OSM Map in json from OsmAPI
+        coords : coords object previously parsed
+        typ  : string
+
+        """
+        for item in osmmap:
+            if item['type']=='way':
+                way = item['data']
+                tags  = way['tag']
+                if typ in tags:
+                    osmid = way['id']
+                    refs_neg = way['nd']
+                    refs_neg = [ -x for x in refs_neg if x >0]
+                    # nodes should have negative index (PyLayers convention)
+                    if 'z' in tags:
+                       z = tags['z']
+                       if type(z) == str:
+                           z = eval(z)
+                       if type(z[0])==str:
+                           z = (eval(z[0]),eval(z[1]))
+                       tags['z'] = z
+
+                    self.w[osmid] = [refs_neg, tags]
                     self.cpt += 1
 
         self.toway(coords)
@@ -826,10 +850,10 @@ def getosm(**kwargs):
     lon = coords.latlon[list(coords.latlon.keys())[0]][1]
 
     if typ == 'indoor':
-        ways.readmap(osmmap, coords, typ='')
+        ways.readmap1(osmmap, coords)
     else:
-        ways.readmap(osmmap, coords)
-    
+        ways.readmap2(osmmap, coords)
+
     # list of nodes involved in buildings
     lnodes_id=[]
     for iw in ways.w:
