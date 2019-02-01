@@ -7807,7 +7807,7 @@ class Layout(pro.PyLayers):
         #s2pu = self.s2pu.toarray()
         #p2pc = self.p2pc.toarray()
         #A = self.Gi_A.toarray()
-        
+
         assert('Gi' in self.__dict__)
 
         oGipbar = pbar(verbose,total=100.,leave=False,desc='OutputGi',position=tqdmpos)
@@ -8547,6 +8547,8 @@ class Layout(pro.PyLayers):
             2
         nodelist : list
             []
+        overlay : boolean
+
         diffraction :boolean
             False
 
