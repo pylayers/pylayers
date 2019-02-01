@@ -736,12 +736,11 @@ import pdb
         plt.axis(&#39;scaled&#39;)
         return(fig,ax)</div>
 
-<div class="viewcode-block" id="Ways.readmap"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Ways.html#pylayers.gis.osmparser.Ways.readmap">[docs]</a>    def readmap(self, osmmap, coords, typ=&#39;building&#39;):
+    def readmap1(self, osmmap, coords):
         &quot;&quot;&quot; read ways from a map
 
-        osmmap : OSM Map in json from OsmAPI
+        osmmap : OSM Map from josm file
         coords : coords object previously parsed
-        typ  : string
 
         &quot;&quot;&quot;
         for item in osmmap:
@@ -749,7 +748,6 @@ import pdb
                 way = item[&#39;data&#39;]
                 osmid = way[&#39;id&#39;]
                 refs_neg = way[&#39;nd&#39;]
-                refs_neg = [ -x for x in refs_neg if x &gt;0]
                 # nodes should have negative index (PyLayers convention)
                 tags  = way[&#39;tag&#39;]
                 if &#39;z&#39; in tags:
@@ -760,15 +758,41 @@ import pdb
                        z = (eval(z[0]),eval(z[1]))
                    tags[&#39;z&#39;] = z
 
-                if typ !=&#39;&#39;:
-                    if typ in tags:
-                        self.w[osmid] = [refs_neg, tags]
-                        self.cpt += 1
-                else:
-                    self.w[osmid] = [refs_neg,tags]
+                self.w[osmid] = [refs_neg,tags]
+                self.cpt += 1
+
+        self.toway(coords)
+
+
+    def readmap2(self, osmmap, coords, typ=&#39;building&#39;):
+        &quot;&quot;&quot; read ways from a map
+
+        osmmap : OSM Map in json from OsmAPI
+        coords : coords object previously parsed
+        typ  : string
+
+        &quot;&quot;&quot;
+        for item in osmmap:
+            if item[&#39;type&#39;]==&#39;way&#39;:
+                way = item[&#39;data&#39;]
+                tags  = way[&#39;tag&#39;]
+                if typ in tags:
+                    osmid = way[&#39;id&#39;]
+                    refs_neg = way[&#39;nd&#39;]
+                    refs_neg = [ -x for x in refs_neg if x &gt;0]
+                    # nodes should have negative index (PyLayers convention)
+                    if &#39;z&#39; in tags:
+                       z = tags[&#39;z&#39;]
+                       if type(z) == str:
+                           z = eval(z)
+                       if type(z[0])==str:
+                           z = (eval(z[0]),eval(z[1]))
+                       tags[&#39;z&#39;] = z
+
+                    self.w[osmid] = [refs_neg, tags]
                     self.cpt += 1
 
-        self.toway(coords)</div></div>
+        self.toway(coords)</div>
 
 <div class="viewcode-block" id="Relations"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Relations.html#pylayers.gis.osmparser.Relations">[docs]</a>class Relations(object):
     relation = {}
@@ -1034,10 +1058,10 @@ import pdb
     lon = coords.latlon[list(coords.latlon.keys())[0]][1]
 
     if typ == &#39;indoor&#39;:
-        ways.readmap(osmmap, coords, typ=&#39;&#39;)
+        ways.readmap1(osmmap, coords)
     else:
-        ways.readmap(osmmap, coords)
-    
+        ways.readmap2(osmmap, coords)
+
     # list of nodes involved in buildings
     lnodes_id=[]
     for iw in ways.w:

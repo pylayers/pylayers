@@ -1265,7 +1265,7 @@ from pylayers.util.project import logger
 
         mno = max(self.Gs.nodes())
 
-        self.sgsg = sparse.lil_matrix((mno+1,mno+1),dtype=&#39;int&#39;)
+        #self.sgsg = sparse.lil_matrix((mno+1,mno+1),dtype=&#39;int&#39;)
 
         # loop over segments
         # a segment is always connected to 2 nodes
@@ -1292,7 +1292,7 @@ from pylayers.util.project import logger
             nptb = [lpts[1]]*len(nsb)
             ns = np.hstack((npta,nptb))
 
-            self.sgsg[s,u]=ns
+            #self.sgsg[s,u]=ns
 
 
         # conversion in numpy array
@@ -8015,7 +8015,7 @@ from pylayers.util.project import logger
         #s2pu = self.s2pu.toarray()
         #p2pc = self.p2pc.toarray()
         #A = self.Gi_A.toarray()
-        
+
         assert(&#39;Gi&#39; in self.__dict__)
 
         oGipbar = pbar(verbose,total=100.,leave=False,desc=&#39;OutputGi&#39;,position=tqdmpos)

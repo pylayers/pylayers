@@ -7,7 +7,7 @@ Loading an outdoor layout from its address
 """
 from pylayers.gis.layout import *
 # Load the layout from open street map
-L = Layout('Servon sur Vilaine',dist_m=50)
+L = Layout('Servon sur Vilaine',dist_m=50,typ='outdoor')
 # Show the layout
 L.showG('s')
 plt.show()

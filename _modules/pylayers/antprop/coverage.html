@@ -613,7 +613,7 @@ except:
         self.nf = len(self.fGHz)
         Nbloc = self.ng//sizebloc
 
-        r1 = np.arange(0,Nbloc*sizebloc,sizebloc)
+        r1 = np.arange(0,(Nbloc+1)*sizebloc,sizebloc)
         r1 = np.append(r1,self.ng)
         lblock = list(zip(r1[0:-1],r1[1:]))
 
@@ -667,8 +667,9 @@ except:
             # calculate antenna gain from ap to grid point
             #
             # loop over all AP
-            # 
-            for k,iap in enumerate(self.dap):
+            #
+            k = 0
+            for iap in self.dap:
                 # select only one access point
                 # n
                 u = na*np.arange(0,bg[1]-bg[0],1).astype(&#39;int&#39;)+k
@@ -681,11 +682,12 @@ except:
                     gain = (self.dap[iap].A.G).T
                     # to handle omnidirectional antenna (nf,1,1)
                     if gain.shape[1]==1:
-                        gain = np.repeat(gain,sizebloc,axis=1)
-                    try:
-                        tgain = np.dstack((tgain,gain[:,:,None]))
-                    except:
+                        gain = np.repeat(gain,bg[1]-bg[0],axis=1)
+                    if k==0:
                         tgain = gain[:,:,None]
+                    else:
+                        tgain = np.dstack((tgain,gain[:,:,None]))
+                    k = k+1
 
             tgain = tgain.reshape(nf,tgain.shape[1]*tgain.shape[2])
             Lwo,Lwp,Edo,Edp = loss.Losst(self.L, self.fGHz, self.pa, self.pg, dB=False)
