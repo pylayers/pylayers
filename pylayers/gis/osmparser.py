@@ -849,6 +849,7 @@ def getosm(**kwargs):
     lat = coords.latlon[list(coords.latlon.keys())[0]][0]
     lon = coords.latlon[list(coords.latlon.keys())[0]][1]
 
+    pdb.set_trace()
     if typ == 'indoor':
         ways.readmap1(osmmap, coords)
     else:
