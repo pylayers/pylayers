@@ -405,7 +405,7 @@ class Coverage(PyLayers):
         self.nf = len(self.fGHz)
         Nbloc = self.ng//sizebloc
 
-        r1 = np.arange(0,Nbloc*sizebloc,sizebloc)
+        r1 = np.arange(0,(Nbloc+1)*sizebloc,sizebloc)
         r1 = np.append(r1,self.ng)
         lblock = list(zip(r1[0:-1],r1[1:]))
 
@@ -502,6 +502,7 @@ class Coverage(PyLayers):
         self.Edo = self.Edo.reshape(nf,ng,na)
         self.Lwp = self.Lwp.reshape(nf,ng,na)
         self.Edp = self.Edp.reshape(nf,ng,na)
+        pdb.set_trace()
         self.tgain = self.tgain.reshape(nf,ng,na)
 
         self.freespace = self.freespace.reshape(nf,ng,na)
