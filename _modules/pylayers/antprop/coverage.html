@@ -1123,7 +1123,7 @@ except:
         ----------
 
         typ : string
-            &#39;pr&#39; | &#39;sinr&#39; | &#39;capacity&#39; | &#39;loss&#39; | &#39;best&#39; | &#39;egd&#39;
+            &#39;pr&#39; | &#39;sinr&#39; | &#39;capacity&#39; | &#39;loss&#39; | &#39;best&#39; | &#39;egd&#39; | &#39;ref&#39;
         grid : boolean
         polar : string
             &#39;o&#39; | &#39;p&#39;
@@ -1161,20 +1161,25 @@ except:
         defaults = { &#39;typ&#39;: &#39;pr&#39;,
                      &#39;grid&#39;: False,
                      &#39;polar&#39;:&#39;p&#39;,
+                     &#39;scale&#39;:30,
                      &#39;f&#39; : 0,
                      &#39;a&#39; :-1,
                      &#39;db&#39;:True,
                      &#39;cmap&#39; :cm.jet,
-                     &#39;best&#39;:False
+                     &#39;best&#39;:False,
+                     &#39;title&#39;: &#39;&#39;
                    }
 
-        title = self.dap[list(self.dap.keys())[0]].s.name+ &#39; : &#39;
 
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]
+
+        title = self.dap[list(self.dap.keys())[0]].s.name+ &#39; : &#39; + kwargs[&#39;title&#39;] + &quot; :&quot;
         polar = kwargs[&#39;polar&#39;]
-        best = kwargs[&#39;best&#39;] 
+        best = kwargs[&#39;best&#39;]
+        scale = kwargs[&#39;scale&#39;]
+
         assert polar in [&#39;p&#39;,&#39;o&#39;],&quot;polar wrongly defined in show coverage&quot;
 
         if &#39;fig&#39; in kwargs:
@@ -1197,7 +1202,7 @@ except:
         f = kwargs[&#39;f&#39;]
         a = kwargs[&#39;a&#39;]
         typ = kwargs[&#39;typ&#39;]
-        assert typ in [&#39;best&#39;,&#39;egd&#39;,&#39;sinr&#39;,&#39;snr&#39;,&#39;capacity&#39;,&#39;pr&#39;,&#39;loss&#39;],&quot;typ unknown in show coverage&quot;
+        assert typ in [&#39;best&#39;,&#39;egd&#39;,&#39;sinr&#39;,&#39;snr&#39;,&#39;capacity&#39;,&#39;pr&#39;,&#39;loss&#39;,&#39;ref&#39;],&quot;typ unknown in show coverage&quot;
         best = kwargs[&#39;best&#39;]
 
         dB = kwargs[&#39;db&#39;]
@@ -1214,7 +1219,7 @@ except:
             for ka in range(self.na):
                 if polar==&#39;p&#39;:
                     bestsv =  self.bestsvp[f,:,ka]
-                if polar==&#39;o&#39;: 
+                if polar==&#39;o&#39;:
                     bestsv =  self.bestsvo[f,:,ka]
                 m = np.ma.masked_where(bestsv == 0,bestsv)
                 if self.mode!=&#39;file&#39;:
@@ -1224,7 +1229,7 @@ except:
                             vmin=1,
                             vmax=self.na+1)
                 else:
-                    ax.scatter(self.grid[:,0],self.grid[:,1],c=m,s=20,linewidth=0)
+                    ax.scatter(self.grid[:,0],self.grid[:,1],c=m,s=scale,linewidth=0)
             ax.set_title(title)
         else:
             if typ == &#39;egd&#39;:
@@ -1269,6 +1274,14 @@ except:
                     V = self.CmWo
                 if polar==&#39;p&#39;:
                     V = self.CmWp
+
+            if typ == &quot;ref&quot;:
+                title = kwargs[&#39;title&#39;]
+                V = 10**(self.ref/10)
+                if dB:
+                    legcb = &#39;dB&#39;
+                else:
+                    legcb = &#39;Linear scale&#39;
 
             if typ == &quot;loss&quot;:
                 title = title + &#39;Loss : &#39;+&#39; fc = &#39;+str(self.fGHz[f])+&#39; GHz&#39;+ &#39; polar : &#39;+polar
@@ -1316,7 +1329,7 @@ except:
                 img=ax.scatter(self.grid[:,0],
                                self.grid[:,1],
                                c=U,
-                               s=20,
+                               s=scale,
                                linewidth=0,
                                cmap=kwargs[&#39;cmap&#39;],
                                vmin=vmin,
@@ -1341,9 +1354,9 @@ except:
 
         # display access points
         if a==-1:
-            ax.scatter(self.pa[0,:],self.pa[1,:],s=30,c=&#39;r&#39;,linewidth=0)
+            ax.scatter(self.pa[0,:],self.pa[1,:],s=scale+10,c=&#39;r&#39;,linewidth=0)
         else:
-            ax.scatter(self.pa[0,a],self.pa[1,a],s=30,c=&#39;r&#39;,linewidth=0)
+            ax.scatter(self.pa[0,a],self.pa[1,a],s=scale+10,c=&#39;r&#39;,linewidth=0)
         plt.tight_layout()
         return(fig,ax)</div></div>
 

@@ -241,13 +241,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>!date
+  <div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>! LANG=en date
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>vendredi 1 fvrier 2019, 17:01:10 (UTC+0100)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Fri Feb  1 18:08:11 CET 2019
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>from pylayers.antprop.coverage import *
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>from pylayers.antprop.coverage import *
 import pandas as pd
 %matplotlib inline
 </pre></div>
@@ -261,7 +261,7 @@ the direct path with the METIS ray tracing data.</p>
 project <a class="reference external" href="https://metis2020.com/documents/simulations/index.html">METIS
 Data</a></p>
 <p><code class="docutils literal notranslate"><span class="pre">ldf</span></code> contains a dataframe of data for each access point.</p>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>def readdata(filename):
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>def readdata(filename):
     with open(filename) as fd:
         lis = fd.readlines()
     data = lis[8:-1]
@@ -288,7 +288,7 @@ for k,f in enumerate(lfile):
     ldf.append(df)
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span># For AP1
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span># For AP1
 ldf[0].head()
 </pre></div>
 </div>
@@ -372,7 +372,7 @@ ldf[0].head()
     </tr>
   </tbody>
 </table>
-</div><div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>!cat $BASENAME/ini/coverage/TC1_METIS_coverage.ini
+</div><div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>!cat $BASENAME/ini/coverage/TC1_METIS_coverage.ini
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[grid]
@@ -404,20 +404,20 @@ noisefactordb = 0
 show = True
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>C = Coverage(&#39;coverage/TC1_METIS_coverage.ini&#39;)
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>C = Coverage(&#39;coverage/TC1_METIS_coverage.ini&#39;)
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Warning Unable to read graph Gr
 Warning Unable to read graph Gw
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>print(C.grid.shape)
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>print(C.grid.shape)
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(1176, 2)
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>def plotingAP(iap):
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>def plotingAP(iap):
     idxf = C.dap[iap].s.fcghz.shape[0]//2
     data = C.CmWp[idxf,:,0]
     p = C.dap[iap][&#39;p&#39;][0:2]
@@ -434,7 +434,7 @@ Warning Unable to read graph Gw
     L = 32.4+ 20*np.log10(C.fGHz[idxf])+ 20*np.log10(dnn)
     plt.semilogx(dnn,-L,&#39;g&#39;,label=&#39;Free Space Path Loss&#39;)
     plt.legend()
-    plt.figure()
+    fig = plt.figure()
     err = ldf[iap-1][&#39;pg&#39;].values-10*np.log10(data)
     plt.subplot(121)
     plt.plot(d,err,&#39;.b&#39;)
@@ -446,6 +446,7 @@ Warning Unable to read graph Gw
     plt.figure(figsize=(15,10))
     plt.scatter(x=C.grid[:,0], y=C.grid[:,1], c=err, s=40, cmap=cm.jet, vmin=-30, vmax=30)
     plt.plot(df[&#39;xap&#39;][1175],df[&#39;yap&#39;][1175],&#39;^k&#39;,ms=10)
+    plt.title(&#39;Difference between the 2 methods (RT vs Motley Keenan) (dB)&#39;)
     cbar=plt.colorbar()
     cbar.ax.set_ylabel(&#39;dBm&#39;)
     plt.axis(&#39;equal&#39;)
@@ -455,7 +456,7 @@ Warning Unable to read graph Gw
 </div>
 <div class="section" id="ap1">
 <h2>AP1<a class="headerlink" href="#ap1" title="Permalink to this headline">¶</a></h2>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>C.dap[1][&#39;on&#39;]=True
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>C.dap[1][&#39;on&#39;]=True
 C.dap[2][&#39;on&#39;]=False
 C.dap[3][&#39;on&#39;]=False
 C.dap[4][&#39;on&#39;]=False
@@ -465,12 +466,19 @@ tic = time.time()
 C.cover(snr=False,sinr=False)
 toc=time.time()
 print(&#39;Elapsed time :&#39;,toc-tic)
+C.ref=ldf[0][&#39;pg&#39;].reshape(1,1176,1)
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Elapsed time : 6.316565275192261
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Elapsed time : 6.329138278961182
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>f,a = C.show(figsize=(10,10),typ=&#39;pr&#39;)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/home/uguen/anaconda2/envs/pylayers/lib/python3.5/site-packages/ipykernel_launcher.py:11: FutureWarning: reshape is deprecated and will raise in a subsequent release. Please use .values.reshape(...) instead
+  # This is added back by InteractiveShellApp.init_path()
+</pre></div>
+</div>
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f,a = C.show(figsize=(10,5), typ=&#39;pr&#39; , title=&quot;PyLayers MultiWall&quot;, scale=40, f=2)
+a.axis(&quot;on&quot;)
+f,a = C.show(figsize=(10,5), typ=&#39;ref&#39; , title=&quot;METIS Ray Tracing&quot;, scale=40)
 a.axis(&quot;on&quot;)
 </pre></div>
 </div>
@@ -478,32 +486,40 @@ a.axis(&quot;on&quot;)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_11_1.png" src="../../_images/CoverageMetis_11_1.png" />
-<p>The next figure shows the representation of full coverage w.r.t range in
-a log/log scale.</p>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>plotingAP(1)
+<img alt="../../_images/CoverageMetis_11_2.png" src="../../_images/CoverageMetis_11_2.png" />
+<p>The next figure shows the representation of the full coverage w.r.t
+range in a log/log scale.</p>
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>plotingAP(1)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_13_0.png" src="../../_images/CoverageMetis_13_0.png" />
 <img alt="../../_images/CoverageMetis_13_1.png" src="../../_images/CoverageMetis_13_1.png" />
 <img alt="../../_images/CoverageMetis_13_2.png" src="../../_images/CoverageMetis_13_2.png" />
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7fd54085be10&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7ff1bfdba748&gt;
 </pre></div>
 </div>
 </div>
 <div class="section" id="ap2">
 <h2>AP2<a class="headerlink" href="#ap2" title="Permalink to this headline">¶</a></h2>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>C.dap[1][&#39;on&#39;]=False
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>C.dap[1][&#39;on&#39;]=False
 C.dap[2][&#39;on&#39;]=True
 tic = time.time()
 C.cover()
 toc=time.time()
 print(&#39;Elapsed time :&#39;,toc-tic)
+C.ref=ldf[1][&#39;pg&#39;].reshape(1,1176,1)
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Elapsed time : 6.162029027938843
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Elapsed time : 6.219014883041382
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>f,a = C.show(figsize=(10,10),typ=&#39;pr&#39;)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/home/uguen/anaconda2/envs/pylayers/lib/python3.5/site-packages/ipykernel_launcher.py:7: FutureWarning: reshape is deprecated and will raise in a subsequent release. Please use .values.reshape(...) instead
+  import sys
+</pre></div>
+</div>
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f,a = C.show(figsize=(10,5), typ=&#39;pr&#39; , title=&quot;PyLayers MultiWall&quot;, scale=40, f=2)
+a.axis(&quot;on&quot;)
+f,a = C.show(figsize=(10,5), typ=&#39;ref&#39; , title=&quot;METIS Ray Tracing&quot;, scale=40)
 a.axis(&quot;on&quot;)
 </pre></div>
 </div>
@@ -511,30 +527,38 @@ a.axis(&quot;on&quot;)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_16_1.png" src="../../_images/CoverageMetis_16_1.png" />
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>plotingAP(2)
+<img alt="../../_images/CoverageMetis_16_2.png" src="../../_images/CoverageMetis_16_2.png" />
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>plotingAP(2)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_17_0.png" src="../../_images/CoverageMetis_17_0.png" />
 <img alt="../../_images/CoverageMetis_17_1.png" src="../../_images/CoverageMetis_17_1.png" />
 <img alt="../../_images/CoverageMetis_17_2.png" src="../../_images/CoverageMetis_17_2.png" />
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7fd540f0bc50&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7ff1c0335cc0&gt;
 </pre></div>
 </div>
 </div>
 <div class="section" id="ap3">
 <h2>AP3<a class="headerlink" href="#ap3" title="Permalink to this headline">¶</a></h2>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>C.dap[2][&#39;on&#39;]=False
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>C.dap[2][&#39;on&#39;]=False
 C.dap[3][&#39;on&#39;]=True
 tic = time.time()
 C.cover()
 toc=time.time()
 print(&#39;Elapsed time :&#39;,toc-tic)
+C.ref=ldf[2][&#39;pg&#39;].reshape(1,1176,1)
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Elapsed time : 19.765076875686646
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Elapsed time : 19.30396866798401
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>f,a = C.show(figsize=(10,10),typ=&#39;pr&#39;)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/home/uguen/anaconda2/envs/pylayers/lib/python3.5/site-packages/ipykernel_launcher.py:7: FutureWarning: reshape is deprecated and will raise in a subsequent release. Please use .values.reshape(...) instead
+  import sys
+</pre></div>
+</div>
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f,a = C.show(figsize=(10,5), typ=&#39;pr&#39; , title=&quot;PyLayers MultiWall&quot;, scale=40, f=2)
+a.axis(&quot;on&quot;)
+f,a = C.show(figsize=(10,5), typ=&#39;ref&#39; , title=&quot;METIS Ray Tracing&quot;, scale=40)
 a.axis(&quot;on&quot;)
 </pre></div>
 </div>
@@ -542,30 +566,38 @@ a.axis(&quot;on&quot;)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_20_1.png" src="../../_images/CoverageMetis_20_1.png" />
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>plotingAP(3)
+<img alt="../../_images/CoverageMetis_20_2.png" src="../../_images/CoverageMetis_20_2.png" />
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>plotingAP(3)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_21_0.png" src="../../_images/CoverageMetis_21_0.png" />
 <img alt="../../_images/CoverageMetis_21_1.png" src="../../_images/CoverageMetis_21_1.png" />
 <img alt="../../_images/CoverageMetis_21_2.png" src="../../_images/CoverageMetis_21_2.png" />
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7fd53e90c6d8&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7ff1bdeec748&gt;
 </pre></div>
 </div>
 </div>
 <div class="section" id="ap4">
 <h2>AP4<a class="headerlink" href="#ap4" title="Permalink to this headline">¶</a></h2>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>C.dap[3][&#39;on&#39;]=False
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>C.dap[3][&#39;on&#39;]=False
 C.dap[4][&#39;on&#39;]=True
 tic = time.time()
 C.cover()
 toc=time.time()
 print(&#39;Elapsed time :&#39;,toc-tic)
+C.ref=ldf[3][&#39;pg&#39;].reshape(1,1176,1)
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Elapsed time : 19.301042079925537
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Elapsed time : 19.5051486492157
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>f,a = C.show(figsize=(10,10),typ=&#39;pr&#39;)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/home/uguen/anaconda2/envs/pylayers/lib/python3.5/site-packages/ipykernel_launcher.py:7: FutureWarning: reshape is deprecated and will raise in a subsequent release. Please use .values.reshape(...) instead
+  import sys
+</pre></div>
+</div>
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f,a = C.show(figsize=(10,5), typ=&#39;pr&#39; , title=&quot;PyLayers MultiWall&quot;, scale=40, f=2)
+a.axis(&quot;on&quot;)
+f,a = C.show(figsize=(10,5), typ=&#39;ref&#39; , title=&quot;METIS Ray Tracing&quot;, scale=40)
 a.axis(&quot;on&quot;)
 </pre></div>
 </div>
@@ -573,19 +605,20 @@ a.axis(&quot;on&quot;)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_24_1.png" src="../../_images/CoverageMetis_24_1.png" />
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>plotingAP(4)
+<img alt="../../_images/CoverageMetis_24_2.png" src="../../_images/CoverageMetis_24_2.png" />
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>plotingAP(4)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_25_0.png" src="../../_images/CoverageMetis_25_0.png" />
 <img alt="../../_images/CoverageMetis_25_1.png" src="../../_images/CoverageMetis_25_1.png" />
 <img alt="../../_images/CoverageMetis_25_2.png" src="../../_images/CoverageMetis_25_2.png" />
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7fd53e8e09e8&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7ff1bffd2860&gt;
 </pre></div>
 </div>
 </div>
 <div class="section" id="ap5">
 <h2>AP5<a class="headerlink" href="#ap5" title="Permalink to this headline">¶</a></h2>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>C.dap[1][&#39;on&#39;]=False
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>C.dap[1][&#39;on&#39;]=False
 C.dap[2][&#39;on&#39;]=False
 C.dap[3][&#39;on&#39;]=False
 C.dap[4][&#39;on&#39;]=False
@@ -595,12 +628,19 @@ tic = time.time()
 C.cover(snr=False,sinr=False)
 toc=time.time()
 print(&#39;Elapsed time :&#39;,toc-tic)
+C.ref=ldf[4][&#39;pg&#39;].reshape(1,1176,1)
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Elapsed time : 0.20174574851989746
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Elapsed time : 0.19188904762268066
 </pre></div>
 </div>
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>f,a = C.show(figsize=(10,10),typ=&#39;pr&#39;)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/home/uguen/anaconda2/envs/pylayers/lib/python3.5/site-packages/ipykernel_launcher.py:11: FutureWarning: reshape is deprecated and will raise in a subsequent release. Please use .values.reshape(...) instead
+  # This is added back by InteractiveShellApp.init_path()
+</pre></div>
+</div>
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f,a = C.show(figsize=(10,5), typ=&#39;pr&#39; , title=&quot;PyLayers MultiWall&quot;, scale=40, f=2)
+a.axis(&quot;on&quot;)
+f,a = C.show(figsize=(10,5), typ=&#39;ref&#39; , title=&quot;METIS Ray Tracing&quot;, scale=40)
 a.axis(&quot;on&quot;)
 </pre></div>
 </div>
@@ -608,13 +648,14 @@ a.axis(&quot;on&quot;)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_28_1.png" src="../../_images/CoverageMetis_28_1.png" />
-<div class="code ipython3 highlight-none notranslate"><div class="highlight"><pre><span></span>plotingAP(5)
+<img alt="../../_images/CoverageMetis_28_2.png" src="../../_images/CoverageMetis_28_2.png" />
+<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>plotingAP(5)
 </pre></div>
 </div>
 <img alt="../../_images/CoverageMetis_29_0.png" src="../../_images/CoverageMetis_29_0.png" />
 <img alt="../../_images/CoverageMetis_29_1.png" src="../../_images/CoverageMetis_29_1.png" />
 <img alt="../../_images/CoverageMetis_29_2.png" src="../../_images/CoverageMetis_29_2.png" />
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7fd540d58780&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7ff1c0104c88&gt;
 </pre></div>
 </div>
 </div>
