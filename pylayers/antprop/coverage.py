@@ -915,7 +915,7 @@ class Coverage(PyLayers):
         ----------
 
         typ : string
-            'pr' | 'sinr' | 'capacity' | 'loss' | 'best' | 'egd'
+            'pr' | 'sinr' | 'capacity' | 'loss' | 'best' | 'egd' | 'ref'
         grid : boolean
         polar : string
             'o' | 'p'
@@ -953,20 +953,25 @@ class Coverage(PyLayers):
         defaults = { 'typ': 'pr',
                      'grid': False,
                      'polar':'p',
+                     'scale':30,
                      'f' : 0,
                      'a' :-1,
                      'db':True,
                      'cmap' :cm.jet,
-                     'best':False
+                     'best':False,
+                     'title': ''
                    }
 
-        title = self.dap[list(self.dap.keys())[0]].s.name+ ' : '
 
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]
+
+        title = self.dap[list(self.dap.keys())[0]].s.name+ ' : ' + kwargs['title'] + " :"
         polar = kwargs['polar']
-        best = kwargs['best'] 
+        best = kwargs['best']
+        scale = kwargs['scale']
+
         assert polar in ['p','o'],"polar wrongly defined in show coverage"
 
         if 'fig' in kwargs:
@@ -989,7 +994,7 @@ class Coverage(PyLayers):
         f = kwargs['f']
         a = kwargs['a']
         typ = kwargs['typ']
-        assert typ in ['best','egd','sinr','snr','capacity','pr','loss'],"typ unknown in show coverage"
+        assert typ in ['best','egd','sinr','snr','capacity','pr','loss','ref'],"typ unknown in show coverage"
         best = kwargs['best']
 
         dB = kwargs['db']
@@ -1006,7 +1011,7 @@ class Coverage(PyLayers):
             for ka in range(self.na):
                 if polar=='p':
                     bestsv =  self.bestsvp[f,:,ka]
-                if polar=='o': 
+                if polar=='o':
                     bestsv =  self.bestsvo[f,:,ka]
                 m = np.ma.masked_where(bestsv == 0,bestsv)
                 if self.mode!='file':
@@ -1016,7 +1021,7 @@ class Coverage(PyLayers):
                             vmin=1,
                             vmax=self.na+1)
                 else:
-                    ax.scatter(self.grid[:,0],self.grid[:,1],c=m,s=20,linewidth=0)
+                    ax.scatter(self.grid[:,0],self.grid[:,1],c=m,s=scale,linewidth=0)
             ax.set_title(title)
         else:
             if typ == 'egd':
@@ -1061,6 +1066,14 @@ class Coverage(PyLayers):
                     V = self.CmWo
                 if polar=='p':
                     V = self.CmWp
+
+            if typ == "ref":
+                title = kwargs['title']
+                V = 10**(self.ref/10)
+                if dB:
+                    legcb = 'dB'
+                else:
+                    legcb = 'Linear scale'
 
             if typ == "loss":
                 title = title + 'Loss : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+polar
@@ -1108,7 +1121,7 @@ class Coverage(PyLayers):
                 img=ax.scatter(self.grid[:,0],
                                self.grid[:,1],
                                c=U,
-                               s=20,
+                               s=scale,
                                linewidth=0,
                                cmap=kwargs['cmap'],
                                vmin=vmin,
@@ -1133,9 +1146,9 @@ class Coverage(PyLayers):
 
         # display access points
         if a==-1:
-            ax.scatter(self.pa[0,:],self.pa[1,:],s=30,c='r',linewidth=0)
+            ax.scatter(self.pa[0,:],self.pa[1,:],s=scale+10,c='r',linewidth=0)
         else:
-            ax.scatter(self.pa[0,a],self.pa[1,a],s=30,c='r',linewidth=0)
+            ax.scatter(self.pa[0,a],self.pa[1,a],s=scale+10,c='r',linewidth=0)
         plt.tight_layout()
         return(fig,ax)
 
