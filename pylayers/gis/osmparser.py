@@ -541,7 +541,7 @@ class Ways(object):
                 way = item['data']
                 osmid = way['id']
                 refs_neg = way['nd']
-                refs_neg = [ -x for x in refs_neg if x >0]
+                #refs_neg = [ -x for x in refs_neg if x >0]
                 # nodes should have negative index (PyLayers convention)
                 tags  = way['tag']
                 if 'z' in tags:
