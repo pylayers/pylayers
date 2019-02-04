@@ -304,7 +304,7 @@ for nm,nv in pstruc.items():
 # copy files from /data/ini in project directory
 #
 
-# IF new file taype is added :
+# IF new file type is added :
 # 1 - add the directory path to pstruc['DIRFILETYPE'] = os.path.join('path','to','filetype')
 # 2 - add the directory path to dirlist( just below)
 
@@ -330,6 +330,7 @@ if basename != os.path.join(pylayersdir,'data'):
         ,os.path.join('output','r3d'),'body'
         ,os.path.join('body','c3d')
         ,os.path.join('body','wear')]
+
     for dl in dirlist:
         filelist = os.listdir(os.path.join(pylayersdir,'data', dl))
         for fi in filelist:
@@ -348,3 +349,16 @@ if basename != os.path.join(pylayersdir,'data'):
 os.chdir(currentdir)
 ## set seaborn style
 sns.set_style("white")
+
+LOG_FORMAT = '%(asctime)s ; %(name)s ; %(levelname)s ; %(message)s'
+logging.basicConfig(filename = basename+"/PyLayers.log",
+                    level = logging.DEBUG,
+                    format = LOG_FORMAT,
+                    filemode = 'w')
+logger = logging.getLogger(__name__)
+logger.setLevel(0)
+logger.info('INFO')
+logger.debug('DEBUG')
+logger.error('ERROR')
+logger.critical('CRITICAL')
+logger.warning('WARNING')

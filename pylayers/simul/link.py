@@ -24,9 +24,6 @@ import numpy as np
 import matplotlib.pylab as plt
 import pylayers.signal.waveform as wvf
 import pylayers.util.geomutil as geu
-import logging
-
-logger = logging.getLogger(__name__)
 
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
@@ -47,8 +44,6 @@ import tqdm
 import copy
 import h5py
 import pdb
-
-logger = logging.getLogger(__name__)
 
 class Link(PyLayers):
     """ Link class
@@ -284,7 +279,7 @@ class DLink(Link):
 
 
         Link.__init__(self)
-
+        logger.name = __name__
         defaults={ 'L': '',
                    'a': np.array(()),
                    'b': np.array(()),
@@ -986,10 +981,12 @@ class DLink(Link):
         update self.dexist dictionnary
 
         """
+        filenameh5 = pyu.getlong(self.filename,'output')
         # get identifier group name in h5py file
-        self.get_grpname()
+        if os.path.exists(filenameh5):
+            self.get_grpname()
         # check if group name exists in the h5py file
-        [self.check_grpname(k,self.dexist[k]['grpname'])   for k in self.save_opt]
+            [self.check_grpname(k,self.dexist[k]['grpname'])   for k in self.save_opt]
 
 
 
@@ -1354,9 +1351,10 @@ class DLink(Link):
 
         """
 
-        lfilename=pyu.getlong(self.filename,pstruc['DIRLNK'])
+        lfilename = pyu.getlong(self.filename,pstruc['DIRLNK'])
+        # file should exist before calling (append mode)
+        f = h5py.File(lfilename,'a')
         try :
-            f=h5py.File(lfilename,'a')
             fa = f[key][...]
             f.close()
         except:
@@ -1586,7 +1584,7 @@ class DLink(Link):
             self.nT = kwargs['nT']
             self.nR = kwargs['nR']
             self.bt = kwargs['bt']
-
+ 
             Si.run(cutoff = self.cutoff,
                     diffraction = kwargs['diffraction'],
                     threshold = self.threshold,
@@ -1629,8 +1627,8 @@ class DLink(Link):
         else :
             # perform computation ...
             # ... with vectorized ray evaluation
-            logger.debug(" a : (%d,%d,%d)", self.a[0], self.a[1], self.a[2])
-            logger.debug(" b : (%d,%d,%d)", self.b[0], self.b[1], self.b[2])
+            logger.debug(" a : (%f,%f,%f)", self.a[0], self.a[1], self.a[2])
+            logger.debug(" b : (%f,%f,%f)", self.b[0], self.b[1], self.b[2])
 
             if kwargs['ra_vectorized']:
                 logger.info(" Determine r2d vectorized version")
@@ -1915,6 +1913,10 @@ class DLink(Link):
             color of termination a (A)
         cb  : string
             color of termination b (B)
+        markera : string
+            "^"
+        markerb : string
+            "o"
         alpha : float
             marker transparency (0 < alpha <1)
         axis : boolean
@@ -1932,20 +1934,24 @@ class DLink(Link):
         laddr : list
             list of signature addresses
         cmap : colormap
-        radius : float
-            radius in meters for layout vizualization
-        labels : boolean
-            enabling edge label (useful for signature identification)
         pol : string
             'tt','pp','tp','pt','co','cross',tot'
-        col : string
+        labels : boolean
+            enabling edge label (useful for signature identification)
+        color : string
             'cmap'
-        width : float
+        linewidth : float
         alpha : float
+        radius : float
+            radius in meters for layout vizualization
         dB    : boolean
-            default False
+            default True
         dyn : float
             dynamic in dB (def 70dB)
+        ix
+        vmin 
+        vmax
+        bcolorbar : boolean
 
         Returns
         -------
@@ -2646,7 +2652,7 @@ class DLink(Link):
         else:
             data = self.L.angleonlink3(self.a,self.b)
             # as many slabs as segments and subsegments
-            us  = data['s'] 
+            us  = data['s']
             if len(us) >0:
                 sl = v(us)
                 uus = np.where((sl != 'AIR') & (sl != '_AIR'))[0]

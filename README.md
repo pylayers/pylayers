@@ -15,7 +15,7 @@ PyLayers an Open Source Site Specific Radio Channel Simulator for
 The code is developed at the University of Rennes 1 in the laboratory
 Institute of Electronics and Telecommunication of Rennes. 
 
-WebSite : [http://www.pylayers.org](http://www.pylayers.org)
+WebSite : [http://pylayers.github.io/pylayers/](http://pylayers.github.io/pylayers/)
 Documentation : [Documentation](http://pylayers.github.io/pylayers/notebook/TOC.html)
 
 PyLayers is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -65,7 +65,7 @@ Among early pylayers contributors : Friedman Tchoffo Talom, Louis Marie Aubert, 
 
 ## Acknowledgements
 
-This work has been supported by the Bretagne Region council (Project LOCUS), by the french ANR project AUBADE and CORMORAN and by the European projects FP7 UCELLS, FP7 WHERE1, FP7 WHERE2.
+This work has been supported by the french ANR project AUBADE and CORMORAN and by the European projects FP7 UCELLS, FP7 WHERE1, FP7 WHERE2.
 
 <img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/logoUR1.jpg" width="100">
 <img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/logoIETR.jpg" width="100

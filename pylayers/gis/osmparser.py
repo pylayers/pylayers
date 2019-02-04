@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- moding: utf-8 -*-
 """
 Module OSMParser
 
@@ -389,7 +389,7 @@ class Ways(object):
                 self.w[osmid] = [refs, ntags]
                 self.cpt += 1
 
-    def eval(self,coords):
+    def toway(self,coords):
         """ convert into a Way object
 
         Parameters
@@ -398,7 +398,6 @@ class Ways(object):
         coords : osm coordinates
 
         """
-
         for osmid in self.w:
             refs = self.w[osmid][0]
             tags = self.w[osmid][1]
@@ -529,12 +528,11 @@ class Ways(object):
         plt.axis('scaled')
         return(fig,ax)
 
-    def readmap(self, osmmap, coords, typ='building'):
+    def readmap1(self, osmmap, coords):
         """ read ways from a map
 
-        osmmap : OSM Map in json from OsmAPI
+        osmmap : OSM Map from josm file
         coords : coords object previously parsed
-        typ  : string
 
         """
         for item in osmmap:
@@ -552,15 +550,41 @@ class Ways(object):
                        z = (eval(z[0]),eval(z[1]))
                    tags['z'] = z
 
-                if typ !='':
-                    if typ in tags:
-                        self.w[osmid] = [refs_neg, tags]
-                        self.cpt += 1
-                else:
-                    self.w[osmid] = [refs_neg,tags]
+                self.w[osmid] = [refs_neg,tags]
+                self.cpt += 1
+
+        self.toway(coords)
+
+
+    def readmap2(self, osmmap, coords, typ='building'):
+        """ read ways from a map
+
+        osmmap : OSM Map in json from OsmAPI
+        coords : coords object previously parsed
+        typ  : string
+
+        """
+        for item in osmmap:
+            if item['type']=='way':
+                way = item['data']
+                tags  = way['tag']
+                if typ in tags:
+                    osmid = way['id']
+                    refs_neg = way['nd']
+                    refs_neg = [ -x for x in refs_neg if x >0]
+                    # nodes should have negative index (PyLayers convention)
+                    if 'z' in tags:
+                       z = tags['z']
+                       if type(z) == str:
+                           z = eval(z)
+                       if type(z[0])==str:
+                           z = (eval(z[0]),eval(z[1]))
+                       tags['z'] = z
+
+                    self.w[osmid] = [refs_neg, tags]
                     self.cpt += 1
 
-        self.eval(coords)
+        self.toway(coords)
 
 class Relations(object):
     relation = {}
@@ -715,7 +739,7 @@ def getosm(**kwargs):
     Notes
     -----
 
-    There are 3 ways to read an Open Stree Map structure
+    There are 3 ways to read an Open Street Map structure
 
     1 - From an osm file ex : filename = 'B11.osm'
     2 - From an osm (lat,lon) string or tuple of float
@@ -735,6 +759,7 @@ def getosm(**kwargs):
         address = kwargs.pop('address','Rennes')
         latlon = kwargs.pop('latlon', 0)
         dist_m = kwargs.pop('dist_m', 400)
+        rad_to_deg = (180/np.pi)
 
         if latlon == 0:
             resp = geo.arcgis(address)
@@ -831,18 +856,18 @@ def getosm(**kwargs):
     ways = Ways()
     ways.clean()
 
+    lat = coords.latlon[list(coords.latlon.keys())[0]][0]
+    lon = coords.latlon[list(coords.latlon.keys())[0]][1]
 
     if typ == 'indoor':
-        lat = coords.latlon[list(coords.latlon.keys())[0]][0]
-        lon = coords.latlon[list(coords.latlon.keys())[0]][1]
-        ways.readmap(osmmap, coords, typ='')
+        ways.readmap1(osmmap, coords)
     else:
-        ways.readmap(osmmap, coords)
+        ways.readmap2(osmmap, coords)
 
     # list of nodes involved in buildings
     lnodes_id=[]
     for iw in ways.w:
-        lnodes_id+=ways.w[iw][0]
+        lnodes_id += ways.w[iw][0]
     # list of all nodes of coords
 
     lnodes_id  = np.unique(np.array(lnodes_id))
@@ -851,9 +876,9 @@ def getosm(**kwargs):
 
     # nodes not involved in buildings
 
-    if typ != 'indoor':
-        lexcluded = lnodes_full[mask]
-        coords.filter(lexcluded)
+    #if typ != 'indoor':
+    #    lexcluded = lnodes_full[mask]
+    #    coords.filter(lexcluded)
 
     # dpoly = {}
     # for iw in ways.w:

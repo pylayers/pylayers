@@ -100,7 +100,7 @@ def draw(G,**kwargs):
                 'alphae': 1.0,
                 'nodelist': [],
                 #'background_color':'#cccccc',
-                'background_color':'#7f7f7f',
+                'background_color':'#ffffff',
                 'edgelist': [],
                 'figsize': (8,8)
                  }

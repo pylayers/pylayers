@@ -28,7 +28,7 @@ Important : Say yes to add Anaconda to your path
 ############################
 
 
-1 - Download and Install Anaconda from https://store.continuum.io/cshop/anaconda/
+1 - Download and Install Anaconda from www.anaconda/download 
 2 - Download the Shapely package corresponding to your platform from http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely *
 3 - Download the Basemap package corresponding to your platform fromhttp://www.lfd.uci.edu/~gohlke/pythonlibs/#basemap
 4 - Install Shapely and Basemap using the downloaded file

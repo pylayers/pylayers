@@ -95,10 +95,15 @@ class Coverage(PyLayers):
         self.config = ConfigParser.ConfigParser(allow_no_value=True)
         self.config.read(pyu.getlong(_fileini,pstruc['DIRSIMUL']))
 
+        # section layout
         self.layoutopt = dict(self.config.items('layout'))
+        # section sector
         self.gridopt   = dict(self.config.items('grid'))
+        # section ap (access point)
         self.apopt     = dict(self.config.items('ap'))
+        # section receiver  parameters
         self.rxopt     = dict(self.config.items('rx'))
+        # section receiver  parameters
         self.showopt   = dict(self.config.items('show'))
 
         # get the Layout
@@ -121,7 +126,7 @@ class Coverage(PyLayers):
             #
             # create grid
             #
-            self.creategrid(mode=self.mode,boundary=self.boundary,_fileini=self.filespa)
+            self.creategrid(mode=self.mode, boundary=self.boundary, _fileini=self.filespa)
 
             self.dap = {}
             for k in self.apopt:
@@ -159,6 +164,15 @@ class Coverage(PyLayers):
 
         # show section
         self.bshow = str2bool(self.showopt['show'])
+
+        self.sinr = False
+        self.snr = False
+        self.best = False
+        self.egd = False
+        self.Pr = False
+        self.capacity = False
+        self.pr = False
+        self.loss = False
 
     def __repr__(self):
         st=''
@@ -271,7 +285,7 @@ class Coverage(PyLayers):
             except:
                 pass
 
-    def cover(self,sinr=True,snr=True,best=True):
+    def cover(self, **kwargs):
         """ run the coverage calculation
 
         Parameters
@@ -280,6 +294,8 @@ class Coverage(PyLayers):
         sinr : boolean
         snr  : boolean
         best : boolean
+        size : integer 
+            size of grid points block
 
         Examples
         --------
@@ -290,7 +306,7 @@ class Coverage(PyLayers):
             >>> from pylayers.antprop.coverage import *
             >>> C = Coverage()
             >>> C.cover()
-            >>> f,a=C.show(typ='sinr',figsize=(10,8))
+            >>> f,a = C.show(typ='sinr',figsize=(10,8))
             >>> plt.show()
 
         Notes
@@ -322,41 +338,55 @@ class Coverage(PyLayers):
         pylayers.antprop.loss.PL
 
         """
+
+        sizebloc = kwargs.pop('size',100)
+
         #
         # select active AP
         #
         lactiveAP = []
+
         try:
             del self.aap
             del self.ptdbm
         except:
             pass
 
-    
-        self.kB = 1.3806503e-23 # Boltzmann constant
+
+        # Boltzmann constant
+        kB = 1.3806503e-23
+
         #
-        # Loop opver access points
-        #
+        # Loop over access points
+        #    set parameter of each active ap
+        #        p
+        #        PtdBm
+        #        BMHz
+
         for iap in self.dap:
             if self.dap[iap]['on']:
                 lactiveAP.append(iap)
+                # set frequency for each AP
                 fGHz = self.dap[iap].s.fcghz
-                # The frequency band is set here
                 self.fGHz=np.unique(np.hstack((self.fGHz,fGHz)))
                 apchan = self.dap[iap]['chan']
+                #
+                # stacking  AP position Power Bandwidth
+                #
                 try:
                     self.aap   = np.vstack((self.aap,self.dap[iap]['p']))
                     self.ptdbm = np.vstack((self.ptdbm,self.dap[iap]['PtdBm']))
-                    self.bmhz  = np.vstack((self.bmhz,
-                                 self.dap[iap].s.chan[apchan[0]]['BMHz']))
+                    self.bmhz  = np.vstack((self.bmhz,self.dap[iap].s.chan[apchan[0]]['BMHz']))
                 except:
                     self.aap   = self.dap[iap]['p']
                     self.ptdbm = np.array(self.dap[iap]['PtdBm'])
                     self.bmhz  = np.array(self.dap[iap].s.chan[apchan[0]]['BMHz'])
 
-        PnW = np.array((10**(self.noisefactordb/10.))*self.kB*self.temperaturek*self.bmhz*1e6)
+        self.nf = len(self.fGHz)
+        PnW = np.array((10**(self.noisefactordb/10.))*kB*self.temperaturek*self.bmhz*1e6)
         # Evaluate Noise Power (in dBm)
-        self.pndbm = np.array(10*np.log10(PnW)+30)
+
+        self.pndbm = np.array(10*np.log10(PnW) + 30)
 
         #lchan = map(lambda x: self.dap[x]['chan'],lap)
         #apchan = zip(self.dap.keys(),lchan)
@@ -365,96 +395,135 @@ class Coverage(PyLayers):
         self.ptdbm = self.ptdbm.T
         self.pndbm = self.pndbm.T
         # creating all links
-        # all grid to all ap 
+        # from all grid point to all ap
         #
+
         if len(self.pndbm.shape ) == 0:
             self.ptdbm = self.ptdbm.reshape(1,1)
             self.pndbm = self.pndbm.reshape(1,1)
 
-        p = product(range(self.ng),lactiveAP)
-        #
-        # pa : access point
-        # pg : grid point
-        #
-        # 1 x na
-
-        for k in p:
-            pg = self.grid[k[0],:]
-            pa = np.array(self.dap[k[1]]['p'])
-            # exemple with 3 AP
-            # 321 0
-            # 321 1
-            # 321 2
-            # 322 0
-            try:
-                self.pa = np.vstack((self.pa,pa))
-            except:
-                self.pa = pa
-            try:
-                self.pg = np.vstack((self.pg,pg))
-            except:
-                self.pg = pg
-
-        self.pa = self.pa.T
-        shpa = self.pa.shape
-        shpg = self.pg.shape
-
-        if shpa[0] != 3:
-            self.pa = np.vstack((self.pa,np.ones(shpa[1])))
-        self.pg = self.pg.T
-        self.pg = np.vstack((self.pg,self.zgrid*np.ones(shpg[0])))
-
         self.nf = len(self.fGHz)
+        Nbloc = self.ng//sizebloc
 
-        # retrieving dimensions along the 3 axis
-        na = len(lactiveAP)
-        self.na = na
-        ng = self.ng
-        nf = self.nf
+        r1 = np.arange(0,(Nbloc+1)*sizebloc,sizebloc)
+        r1 = np.append(r1,self.ng)
+        lblock = list(zip(r1[0:-1],r1[1:]))
 
-        for k,iap in enumerate(self.dap):
-            # select only one access point
-            u = na*np.arange(0,ng,1).astype('int')+k
-            if self.dap[iap]['on']:
-                pt = self.pa[:,u]
-                pr = self.pg[:,u]
-                azoffset = self.dap[iap]['phideg']*np.pi/180.
-                self.dap[iap].A.eval(fGHz=self.fGHz, pt=pt, pr=pr, azoffset=azoffset)
+        for bg in lblock:
+            p = product(range(bg[0],bg[1]),lactiveAP)
+            #
+            # pa : access point ,3
+            # pg : grid point ,2
+            #
+            # 1 x na
 
-                gain = (self.dap[iap].A.G).T
-                #pdb.set_trace()
-                # to handle omnidirectional antenna (nf,1,1)
-                if gain.shape[1]==1:
-                    gain = np.repeat(gain,ng,axis=1)
+            for k in p:
+                pg = self.grid[k[0],:]
+                pa = np.array(self.dap[k[1]]['p'])
+                # exemple with 3 AP
+                # 321 0
+                # 321 1
+                # 321 2
+                # 322 0
                 try:
-                    tgain = np.dstack((tgain,gain[:,:,None]))
+                    self.pa = np.vstack((self.pa,pa))
                 except:
-                    tgain = gain[:,:,None]
+                    self.pa = pa
+                try:
+                    self.pg = np.vstack((self.pg,pg))
+                except:
+                    self.pg = pg
 
-        #Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
-        Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
+            self.pa = self.pa.T
+            shpa = self.pa.shape
+            shpg = self.pg.shape
 
-        self.Lwo = Lwo.reshape(nf,ng,na)
-        self.Edo = Edo.reshape(nf,ng,na)
-        self.Lwp = Lwp.reshape(nf,ng,na)
-        self.Edp = Edp.reshape(nf,ng,na)
+            # extend in 3 dimensions if necessary
 
-        freespace = loss.PL(self.fGHz,self.pa,self.pg,dB=False)
-        self.freespace = freespace.reshape(nf,ng,na)
+            if shpa[0] != 3:
+                self.pa = np.vstack((self.pa,np.ones(shpa[1])))
+
+            self.pg = self.pg.T
+            self.pg = np.vstack((self.pg,self.zgrid*np.ones(shpg[0])))
+
+            # retrieving dimensions along the 3 axis
+            # a : number of active access points
+            # g : grid block
+            # f : frequency
+
+            na = len(lactiveAP)
+            self.na = na
+            ng = self.ng
+            nf = self.nf
+
+            # calculate antenna gain from ap to grid point
+            #
+            # loop over all AP
+            #
+            k = 0
+            for iap in self.dap:
+                # select only one access point
+                # n
+                u = na*np.arange(0,bg[1]-bg[0],1).astype('int')+k
+                if self.dap[iap]['on']:
+                    pa = self.pa[:,u]
+                    pg = self.pg[:,u]
+                    azoffset = self.dap[iap]['phideg']*np.pi/180.
+                    # the eval function of antenna should also specify polar
+                    self.dap[iap].A.eval(fGHz=self.fGHz, pt=pa, pr=pg, azoffset=azoffset)
+                    gain = (self.dap[iap].A.G).T
+                    # to handle omnidirectional antenna (nf,1,1)
+                    if gain.shape[1]==1:
+                        gain = np.repeat(gain,bg[1]-bg[0],axis=1)
+                    if k==0:
+                        tgain = gain[:,:,None]
+                    else:
+                        tgain = np.dstack((tgain,gain[:,:,None]))
+                    k = k+1
+
+            tgain = tgain.reshape(nf,tgain.shape[1]*tgain.shape[2])
+            Lwo,Lwp,Edo,Edp = loss.Losst(self.L, self.fGHz, self.pa, self.pg, dB=False)
+            freespace = loss.PL(self.fGHz, self.pa, self.pg, dB=False)
+            try:
+                self.Lwo = np.hstack((self.Lwo,Lwo))
+                self.Lwp = np.hstack((self.Lwp,Lwp))
+                self.Edo = np.hstack((self.Edo,Edo))
+                self.Edp = np.hstack((self.Edp,Edp))
+                self.freespace = np.hstack((self.freespace,freespace))
+                self.tgain = np.hstack((self.tgain,tgain))
+            except:
+                self.Lwo = Lwo
+                self.Lwp = Lwp
+                self.Edo = Edo
+                self.Edp = Edp
+                self.freespace = freespace
+                self.tgain = tgain
+
+
+        self.Lwo = self.Lwo.reshape(nf,ng,na)
+        self.Edo = self.Edo.reshape(nf,ng,na)
+        self.Lwp = self.Lwp.reshape(nf,ng,na)
+        self.Edp = self.Edp.reshape(nf,ng,na)
+        self.tgain = self.tgain.reshape(nf,ng,na)
+
+        self.freespace = self.freespace.reshape(nf,ng,na)
 
         # transmitting power
         # f x g x a
 
         # CmW : Received Power coverage in mW
-        self.CmWo = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwo*self.freespace*tgain
-        self.CmWp = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwp*self.freespace*tgain
+        # TODO : tgain in o and p polarization
+        self.CmWo = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwo*self.freespace*self.tgain
+        self.CmWp = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwp*self.freespace*self.tgain
+        #self.CmWo = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwo*self.freespace
+        #self.CmWp = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwp*self.freespace
 
 
-        if snr:
+        if self.snr:
             self.evsnr()
-        if sinr:
+        if self.sinr:
             self.evsinr()
-        if best:
+        if self.best:
             self.evbestsv()
 
     def evsnr(self):
@@ -465,6 +534,7 @@ class Coverage(PyLayers):
 
         self.snro = self.CmWo/NmW
         self.snrp = self.CmWp/NmW
+        self.snr = True
 
     def evsinr(self):
         """ calculates sinr
@@ -488,6 +558,8 @@ class Coverage(PyLayers):
 
         self.sinro = self.CmWo/(ImWo+NmW)
         self.sinrp = self.CmWp/(ImWp+NmW)
+
+        self.sinr = True
 
     def evbestsv(self):
         """ determine the best server map
@@ -514,6 +586,7 @@ class Coverage(PyLayers):
                 up = np.where(Vp[kf,:,ka]==MaxVp)
                 self.bestsvo[kf,uo,ka]=ka+1
                 self.bestsvp[kf,up,ka]=ka+1
+        self.best = True
 
 
 #    def showEd(self,polar='o',**kwargs):
@@ -842,7 +915,7 @@ class Coverage(PyLayers):
         ----------
 
         typ : string
-            'pr' | 'sinr' | 'capacity' | 'loss' | 'best' | 'egd'
+            'pr' | 'sinr' | 'capacity' | 'loss' | 'best' | 'egd' | 'ref'
         grid : boolean
         polar : string
             'o' | 'p'
@@ -880,19 +953,25 @@ class Coverage(PyLayers):
         defaults = { 'typ': 'pr',
                      'grid': False,
                      'polar':'p',
+                     'scale':30,
                      'f' : 0,
                      'a' :-1,
                      'db':True,
                      'cmap' :cm.jet,
-                     'best':True
+                     'best':False,
+                     'title': ''
                    }
 
-        title = self.dap[list(self.dap.keys())[0]].s.name+ ' : '
 
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]
+
+        title = self.dap[list(self.dap.keys())[0]].s.name+ ' : ' + kwargs['title'] + " :"
         polar = kwargs['polar']
+        best = kwargs['best']
+        scale = kwargs['scale']
+
         assert polar in ['p','o'],"polar wrongly defined in show coverage"
 
         if 'fig' in kwargs:
@@ -915,7 +994,7 @@ class Coverage(PyLayers):
         f = kwargs['f']
         a = kwargs['a']
         typ = kwargs['typ']
-        assert typ in ['best','egd','sinr','snr','capacity','pr','loss'],"typ unknown in show coverage"
+        assert typ in ['best','egd','sinr','snr','capacity','pr','loss','ref'],"typ unknown in show coverage"
         best = kwargs['best']
 
         dB = kwargs['db']
@@ -927,12 +1006,12 @@ class Coverage(PyLayers):
         b = self.grid[0,1]
         t = self.grid[-1,-1]
 
-        if typ=='best':
+        if typ=='best' and self.best:
             title = title + 'Best server'+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+polar
             for ka in range(self.na):
                 if polar=='p':
                     bestsv =  self.bestsvp[f,:,ka]
-                if polar=='o':    
+                if polar=='o':
                     bestsv =  self.bestsvo[f,:,ka]
                 m = np.ma.masked_where(bestsv == 0,bestsv)
                 if self.mode!='file':
@@ -942,25 +1021,25 @@ class Coverage(PyLayers):
                             vmin=1,
                             vmax=self.na+1)
                 else:
-                    ax.scatter(self.grid[:,0],self.grid[:,1],c=m,s=20,linewidth=0)
+                    ax.scatter(self.grid[:,0],self.grid[:,1],c=m,s=scale,linewidth=0)
             ax.set_title(title)
         else:
-            if typ=='egd':
+            if typ == 'egd':
                 title = title + 'excess group delay : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+polar
                 V = self.Ed
                 dB = False
                 legcb =  'Delay (ns)'
-            if typ=='sinr':
+            if typ == 'sinr':
                 title = title + 'SINR : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+polar
                 if dB:
                     legcb = 'dB'
                 else:
                     legcb = 'Linear scale'
-                if polar=='o':        
+                if polar=='o':
                     V = self.sinro
-                if polar=='p':    
+                if polar=='p':
                     V = self.sinrp
-            if typ=='snr':
+            if typ == 'snr':
                 title = title + 'SNR : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+polar
                 if dB:
                     legcb = 'dB'
@@ -970,14 +1049,14 @@ class Coverage(PyLayers):
                     V = self.snro
                 if polar=='p':
                     V = self.snrp
-            if typ=='capacity':
+            if typ == 'capacity':
                 title = title + 'Capacity : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+polar
                 legcb = 'Mbit/s'
                 if polar=='o':
                     V = self.bmhz.T[np.newaxis,:]*np.log(1+self.sinro)/np.log(2)
                 if polar=='p':
                     V = self.bmhz.T[np.newaxis,:]*np.log(1+self.sinrp)/np.log(2)
-            if typ=='pr':
+            if typ == "pr":
                 title = title + 'Pr : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+polar
                 if dB:
                     legcb = 'dBm'
@@ -988,7 +1067,15 @@ class Coverage(PyLayers):
                 if polar=='p':
                     V = self.CmWp
 
-            if typ=='loss':
+            if typ == "ref":
+                title = kwargs['title']
+                V = 10**(self.ref/10)
+                if dB:
+                    legcb = 'dB'
+                else:
+                    legcb = 'Linear scale'
+
+            if typ == "loss":
                 title = title + 'Loss : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+polar
                 if dB:
                     legcb = 'dB'
@@ -1034,7 +1121,7 @@ class Coverage(PyLayers):
                 img=ax.scatter(self.grid[:,0],
                                self.grid[:,1],
                                c=U,
-                               s=20,
+                               s=scale,
                                linewidth=0,
                                cmap=kwargs['cmap'],
                                vmin=vmin,
@@ -1059,9 +1146,9 @@ class Coverage(PyLayers):
 
         # display access points
         if a==-1:
-            ax.scatter(self.pa[0,:],self.pa[1,:],s=30,c='r',linewidth=0)
+            ax.scatter(self.pa[0,:],self.pa[1,:],s=scale+10,c='r',linewidth=0)
         else:
-            ax.scatter(self.pa[0,a],self.pa[1,a],s=30,c='r',linewidth=0)
+            ax.scatter(self.pa[0,a],self.pa[1,a],s=scale+10,c='r',linewidth=0)
         plt.tight_layout()
         return(fig,ax)
 

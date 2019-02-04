@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#-*- coding:utf-8 -*-
 #
 #
 #   Layout Module
@@ -280,7 +280,6 @@ class Layout(PyLayers):
 
         #
         # setting display option
-        #
 
         self.display = {}
         self.display['title'] = ''
@@ -329,8 +328,10 @@ class Layout(PyLayers):
 
         #
         # Layout main argument
-        #   If no .ini extension provided it is added
         #
+        if type(self.arg)==tuple:
+            self.arg = str(self.arg)
+
         if type(self.arg) is bytes:
             self.arg = self.arg.decode('utf-8')
 
@@ -407,7 +408,8 @@ class Layout(PyLayers):
                 self.importres(_fileres=self.arg)
                 self.sl = sb.SlabDB()
             elif '(' in str(arg):  # load from osmapi latlon (string or tuple
-                self.importosm(latlon=self.arg, dist_m=dist_m, cart=True, typ=self.typ)
+                latlon = eval(self.arg)
+                self.importosm(latlon=latlon, dist_m=self.dist_m, cart=True, typ=self.typ)
                 self.loadosm = True
             else:  # load from address geocoding
                 self.importosm(address=self.arg, dist_m=self.dist_m, cart=True, typ=self.typ)
@@ -453,7 +455,7 @@ class Layout(PyLayers):
                 elif self.bgraphs:
                     if os.path.splitext(self._filename)[1]=='.lay':
                         dirname = self._filename.replace('.lay','')
-                    path = os.path.join(pro.basename,
+                    path = os.path.join(basename,
                                         'struc',
                                         'gpickle',
                                         dirname)
@@ -888,15 +890,16 @@ class Layout(PyLayers):
             #
             if (degmin <= 1):
                 f, a = self.showG('s', aw=1)
-                deg0 = filter(lambda x: nx.degree(self.Gs, x) == 0, upnt)
-                deg1 = filter(lambda x: nx.degree(self.Gs, x) == 1, upnt)
+                deg0 = [ x for x in upnt if nx.degree(self.Gs, x) == 0]
+                deg1 = [ x for x in upnt if nx.degree(self.Gs, x) == 1]
 
                 if len(deg0) > 0:
-                    logging.critical( "It exists degree 0 points :  %r", deg0 )
+                    logger.critical( "It exists degree 0 points :  %r", deg0 )
                     f, a = self.pltvnodes(deg0, fig=f, ax=a)
                     bconsistent = False
+
                 if len(deg1) > 0:
-                    logging.critical( "It exists degree 0 points :  %r", deg1 )
+                    logger.critical( "It exists degree 1 points :  %r", deg1 )
                     f, a = self.pltvnodes(deg1, fig=f, ax=a)
                     bconsistent = False
 
@@ -960,14 +963,14 @@ class Layout(PyLayers):
                                     dseg[s].append(n)
                                 else:
                                     dseg[s]=[n]
-                                logging.critical("segment %d contains point %d", s, n)
+                                logger.critical("segment %d contains point %d", s, n)
                                 bconsistent = False
                     if level > 0:
                         cycle = self.Gs.node[s]['ncycles']
                         if len(cycle) == 0:
-                            logging.critical("segment %d has no cycle", s)
+                            logger.critical("segment %d has no cycle", s)
                         if len(cycle) == 3:
-                            logging.critical(
+                            logger.critical(
                                 "segment %d has cycle %s", s, str(cycle))
 
         #
@@ -979,7 +982,7 @@ class Layout(PyLayers):
         similar = geu.check_point_unicity(P)
 
         if len(similar) != 0:
-            logging.critical("points at index(es) %s in self.Gs.pos are similar", str(similar))
+            logger.critical("points at index(es) %s in self.Gs.pos are similar", str(similar))
             bconsistent = False
 
         return bconsistent, dseg
@@ -1094,7 +1097,8 @@ class Layout(PyLayers):
         # self.sgsg[seg1,seg2] => return common point
 
         mno = max(self.Gs.nodes())
-        self.sgsg = sparse.lil_matrix((mno+1,mno+1),dtype='int')
+
+        #self.sgsg = sparse.lil_matrix((mno+1,mno+1),dtype='int')
 
         # loop over segments
         # a segment is always connected to 2 nodes
@@ -1122,7 +1126,7 @@ class Layout(PyLayers):
             nptb = [lpts[1]]*len(nsb)
             ns = np.hstack((npta,nptb))
 
-            self.sgsg[s,u]=ns
+            #self.sgsg[s,u]=ns
 
 
         # conversion in numpy array
@@ -1255,7 +1259,7 @@ class Layout(PyLayers):
         try:
             Nsmax = max(self.tsg)
         except:
-            logging.warning("No segments in Layout yet")
+            logger.warning("No segments in Layout yet")
 
         #
         # handling of segment related arrays
@@ -1372,7 +1376,7 @@ class Layout(PyLayers):
         lheight = array([v[1] for v in
                     nx.get_node_attributes(self.Gs, 'z').values()
                     if v[1] < 2000 ])
-        #assert(len(lheight)>0),logging.error("no valid heights for segments")
+        #assert(len(lheight)>0),logger.error("no valid heights for segments")
         if len(lheight)>0:
             self.maxheight = np.max(lheight)
         else:
@@ -1622,12 +1626,12 @@ class Layout(PyLayers):
 
             dist_m = kwargs.pop('dist_m',200)
 
-
             coords, nodes, ways, m , latlon = osm.getosm(address = address,
                                                           latlon = latlon,
                                                           dist_m = dist_m,
                                                           bcart = cart,
                                                           typ = self.typ)
+
             self.typ = 'outdoor'
             if cart:
                 self.coordinates = 'cart'
@@ -1644,6 +1648,7 @@ class Layout(PyLayers):
                     str(lat).replace('.', '_') + '_lon_' + \
                     str(lon).replace('.', '_') + '.ini'
         else:  # by reading an osm file
+
             # The osm file is supposed to be in $PROJECT/struc/osm directory
             fileosm = pyu.getlong(self._fileosm, os.path.join('struc', 'osm'))
             #coords, nodes, ways, relations, m = osm.osmparse(fileosm, typ=self.typ)
@@ -1661,7 +1666,7 @@ class Layout(PyLayers):
 
             # self.coordinates = 'latlon'
             self._filename = self._fileosm.replace('osm', 'lay')
-        # 2 valid typ : 'indoor' and 'building'
+
         _np = 0  # _ to avoid name conflict with numpy alias
         _ns = 0
         ns = 0
@@ -1674,8 +1679,9 @@ class Layout(PyLayers):
 
         kp = [k for k in coords.xy]
 
-        x = np.array(list(map(lambda x: coords.xy[x][0], kp)))
-        y = np.array(list(map(lambda x: coords.xy[x][1], kp)))
+        x = np.array([ coords.xy[x][0] for x in  kp ])
+        y = np.array([ coords.xy[x][1] for x in  kp ])
+
         ux = np.argsort(x)
         x_prev = -100
         y_prev = -100
@@ -4283,7 +4289,7 @@ class Layout(PyLayers):
         Notes
         -----
 
-        This method returns all the existing Layout point inside a box zone or
+        This method returns all the existing Layout points inside a box zone or
         the boundary of a polygon
 
         """
@@ -4356,7 +4362,7 @@ class Layout(PyLayers):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('DLR.lay')
+        >>> L = Layout('DLR2.lay')
         >>> p1 = np.array([0,0,1])
         >>> p2 = np.array([10,3,2])
         >>> data = L.angleonlink3(p1,p2)
@@ -4369,6 +4375,7 @@ class Layout(PyLayers):
         --------
 
         antprop.loss.Losst
+        geomutil.intersect3
 
         """
 
@@ -4504,7 +4511,6 @@ class Layout(PyLayers):
 
         sh1 = np.shape(p1)
         sh2 = np.shape(p2)
-
         assert sh1[0] == 2
         assert sh2[0] == 2
 
@@ -4626,7 +4632,7 @@ class Layout(PyLayers):
 
         """
 
-        logging.warning('This function is deprecated use')
+        logger.warning('This function is deprecated use')
 
         u = p1 - p2
         nu = np.sqrt(np.dot(u, u))
@@ -4974,6 +4980,8 @@ class Layout(PyLayers):
                    72, 73, 74, 75, 76, 77, 78, 81, 82, 85, 86])
 
         """
+        #assert( (p1.shape==(1,2)) or (p1.shape==(2)))
+        #assert( (p2.shape==(1,2)) or (p2.shape==(2)))
         max_x = max(p1[0], p2[0])
         min_x = min(p1[0], p2[0])
         max_y = max(p1[1], p2[1])
@@ -5498,17 +5506,17 @@ class Layout(PyLayers):
         Parameters
         ----------
         seed : float
-        alpha : float 
-            transparency 
-        sig : list of signatures (isequence of Gi nodes format) 
-        cycles : list 
-            [cystart,cyend] 
+        alpha : float
+            transparency
+        sig : list of signatures (isequence of Gi nodes format)
+        cycles : list
+            [cystart,cyend]
         ninter : int
             interaction index
         inter : tuple
-            interaction tuple 
+            interaction tuple
 
-        See Also 
+        See Also
         --------
 
         Signatures.siginter
@@ -5523,9 +5531,10 @@ class Layout(PyLayers):
                     'fontsize':18,
                     'labels':False,
                     'inter':[]}
-        for k in defaults: 
+
+        for k in defaults:
             if k not in kwargs:
-                kwargs[k]=defaults[k] 
+                kwargs[k]=defaults[k]
 
         edges = self.Gi.edges()
         cy = kwargs['cycles']
@@ -5553,13 +5562,13 @@ class Layout(PyLayers):
             edinter = kwargs['inter']
             outlist = self.Gi[edinter[0]][edinter[1]]['output']
             outprob = outlist.values()
-            edgelist = [(edinter[1],x) for x in outlist] 
+            edgelist = [(edinter[1],x) for x in outlist]
             dprob = dict(zip(edgelist,[str(x) for x in outprob]))
         elif kwargs['ninter']!=[]:
-            edinter = edges[kwargs['ninter']]
+            edinter = [ e for e in edges][kwargs['ninter']]
             outlist = self.Gi[edinter[0]][edinter[1]]['output']
             outprob = outlist.values()
-            edgelist = [(edinter[1],x) for x in outlist] 
+            edgelist = [(edinter[1],x) for x in outlist]
             dprob = dict(zip(edgelist,[str(x) for x in outprob]))
         else:
             pass
@@ -7331,7 +7340,7 @@ class Layout(PyLayers):
                     if n > 0:
                         if len(self.Gs.node[n]['ncycles']) > 2:
                             print(n, self.Gs.node[n]['ncycles'])
-                            logging.warning(
+                            logger.warning(
                                 'A segment cannot relate more than 2 cycles')
 
         for nseg in self.Gs.node:
@@ -9026,6 +9035,8 @@ class Layout(PyLayers):
             2
         nodelist : list
             []
+        overlay : boolean
+
         diffraction :boolean
             False
 
@@ -9890,6 +9901,7 @@ class Layout(PyLayers):
 
         Notes
         -----
+
         As a diffraction point may involve iso segments the nature
         of the diffraction interaction depends on a height parameter
         This function extacts the couple of slab from this information
@@ -9897,14 +9909,14 @@ class Layout(PyLayers):
         Returns
         -------
 
-        - a list of 2-segments list. the length of this list == length of lz
+        - a list of 2-segments . the length of this list == length of lz
         - a list of slab tuples.  the length of this list == length of lz
 
         [[443, 529], [444, 530]]
         [['WALL', 'WALL'], ['AIR', 'AIR']]
 
         """
-        assert(npt in self.ddiff), logging.error('npt not a diffraction point')
+        assert(npt in self.ddiff), logger.error('npt not a diffraction point')
         lcy = self.ddiff[npt][0]
         ls = []
         llz = len(lz)
@@ -9966,7 +9978,7 @@ class Layout(PyLayers):
         lpnt = [x for x in self.Gs.node if (x < 0 and x not in self.degree[0])]
 
         self.ddiff = {}
-        
+
         if verbose :
             cpt = 1./(len(lpnt)+1)
             pbar = tqdm.tqdm(tqdmkwargs)
@@ -10518,7 +10530,7 @@ class Layout(PyLayers):
         # en  = self.Ns # number of segments
         en = len(np.where(np.array(list(dict(self.Gs.node).keys())) > 0)[0])
         if en != self.Ns:
-            logging.warning("wrong number of segments, consistency problem in layout")
+            logger.warning("wrong number of segments, consistency problem in layout")
         #cen = self.Nss
         # d : dictionnary of layout sub segments
         #
@@ -10529,7 +10541,7 @@ class Layout(PyLayers):
             cen = cen + len(lss)
 
         if cen != self.Nss:
-            logging.warning("wrong number of subsegments, consistency problem in layout")
+            logger.warning("wrong number of subsegments, consistency problem in layout")
 
         sl = self.sl
 #
@@ -10693,7 +10705,7 @@ class Layout(PyLayers):
         # en  = self.Ns # number of segments
         en = len(np.where(np.array(list(dict(self.Gs.node).keys())) > 0)[0])
         if en != self.Ns:
-            logging.warning(
+            logger.warning(
                 "wrong number of segment consistency problem in layout")
         #cen = self.Nss
         # d : dictionnary of layout sub segments
@@ -10705,7 +10717,7 @@ class Layout(PyLayers):
             cen = cen + len(lss)
 
         if cen != self.Nss:
-            logging.warning(
+            logger.warning(
                 "wrong number of subsegment consistency problem in layout")
 
         sl = self.sl

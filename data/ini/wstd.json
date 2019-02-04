@@ -156,7 +156,7 @@
     },
     "ieee80211g": {
         "channels": {
-            "ism24": {
+	  "ism24":{
             "bmhz": 20,
             "fstart": 2.412,
             "fstep": "5",
@@ -165,7 +165,7 @@
             "pmaxmw": 50,
             "smhz": 5,
             "zone": "Europe"
-            }
+	  }
         },
         "crate": [
             0.5,
@@ -193,6 +193,26 @@
         "channels": {
             "ism24": {
                 "bmhz": 2.8,
+                "fstart": 3.0,
+                "fstep": 5,
+                "fstop": 3.2,
+                "pmaxmw": 2,
+                "smhz": 5,
+                "gmhz": 2,
+                "zone": "Europe"
+            }
+        },
+        "modulation": "['dss o-qpsk']",
+        "crate": [
+            0.02,
+            0.04,
+            0.25
+        ]
+    },
+    "ieee802154b": {
+        "channels": {
+            "ism24": {
+                "bmhz": 2.8,
                 "fstart": 2.405,
                 "fstep": 5,
                 "fstop": 2.480,
@@ -208,5 +228,25 @@
             0.04,
             0.25
         ]
+    },
+    "generic": {
+        "channels": {
+            "60G": {
+                "bmhz": 20,
+                "fstart": 59,
+                "fstep": "500",
+                "fstop": 63,
+                "gmhz": 2,
+                "pmaxmw": 100,
+                "smhz": 500,
+                "zone": "Europe"
+            }
+        },
+        "crate": [
+            0.5,
+            0.666,
+            0.75
+        ],
+        "modulation": "['dsss']"
     }
 }

@@ -211,7 +211,7 @@ class Wstandard(PyLayers,dict):
         return(st)
 
 
-    def load(self,stdname,_fileini='wstd.json'):
+    def load(self, stdname, _fileini='wstd.json'):
         """ load a standard from file
 
         Parameters
@@ -226,7 +226,7 @@ class Wstandard(PyLayers,dict):
 
         """
 
-        filename=pyu.getlong(_fileini,pstruc['DIRSIMUL'])
+        filename = pyu.getlong(_fileini,pstruc['DIRSIMUL'])
         fp = open(filename)
         stds = json.load(fp)
         fp.close()
@@ -409,33 +409,19 @@ class AP(dict):
         >>> AP1.load()
 
         """
-        defaults = { 'p' : np.array([0,0,1.2]),
-            'name': 'default',
-            'wstd': 'ieee80211b',
-            'chan':[11],
-            'PtdBm':0,
-            'sensdBm': -94,
-            'nant':1,
-            'ant':'Omni',
-            'on':True
-        }
 
-        for k in defaults:
-            if k not in kwargs:
-                kwargs[k]=defaults[k]
+        self['name'] = kwargs.pop('name','default')
+        self['p'] = kwargs.pop('p',np.array([0,0,1.2]))
+        self['PtdBm'] = kwargs.pop('PtdBm',0)
+        self['chan'] = kwargs.pop('chan',[11])
+        self['sensdBm'] = kwargs.pop('sensdBm',-94)
+        self['nant'] = kwargs.pop('nant',1)
+        self['on'] = kwargs.pop('on',True)
+        self['ant'] = kwargs.pop('ant','Omni')
+        self['phideg'] = kwargs.pop('phideg',0)
+        self['wstd'] = kwargs.pop('wstd','ieee80211b')
 
-        self['name'] = kwargs['name']
-        self['p'] = kwargs['p']
-        self['PtdBm'] = kwargs['PtdBm']
-        self['chan'] = kwargs['chan']
-        self['sensdBm'] = kwargs['sensdBm']
-        self['nant'] = kwargs['nant']
-        self['on'] = kwargs['on']
-        self['ant'] = kwargs['ant']
-        self['phideg'] = kwargs['phideg']
-
-        standard = Wstandard(kwargs['wstd'])
-        self.s = standard
+        self.s = Wstandard(self['wstd'])
         self.A = ant.Antenna(self['ant'])
 
     def __repr__(self):

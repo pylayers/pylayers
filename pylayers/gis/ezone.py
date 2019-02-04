@@ -856,6 +856,11 @@ class Ezone(PyLayers):
         K : float
             K factor
 
+        Returns
+        -------
+
+        triang, L
+
         """
         defaults = {'pc': (-1.627449, 48.124648),
                     'Nphi': 360,
@@ -925,7 +930,7 @@ class Ezone(PyLayers):
 
         L = loss.cover(x, y, height, Ht, Hr, fGHz, K, method='deygout')
         self.triang = triang
-        self.coverage  = L 
+        self.coverage  = L
         return triang, L
 
 #        # adding effect of earth equivalent curvature
