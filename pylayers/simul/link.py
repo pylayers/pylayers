@@ -1914,6 +1914,10 @@ class DLink(Link):
             color of termination a (A)
         cb  : string
             color of termination b (B)
+        markera : string
+            "^"
+        markerb : string
+            "o"
         alpha : float
             marker transparency (0 < alpha <1)
         axis : boolean
@@ -1931,20 +1935,24 @@ class DLink(Link):
         laddr : list
             list of signature addresses
         cmap : colormap
-        radius : float
-            radius in meters for layout vizualization
-        labels : boolean
-            enabling edge label (useful for signature identification)
         pol : string
             'tt','pp','tp','pt','co','cross',tot'
-        col : string
+        labels : boolean
+            enabling edge label (useful for signature identification)
+        color : string
             'cmap'
-        width : float
+        linewidth : float
         alpha : float
+        radius : float
+            radius in meters for layout vizualization
         dB    : boolean
-            default False
+            default True
         dyn : float
             dynamic in dB (def 70dB)
+        ix
+        vmin 
+        vmax
+        bcolorbar : boolean
 
         Returns
         -------
