@@ -352,9 +352,6 @@ class DLink(Link):
         else:
             self._Lname = self._L._filename
 
-
-
-        pdb.set_trace()
         if self._Lname != '':
 
             self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5'

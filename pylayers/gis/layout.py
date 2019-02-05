@@ -373,9 +373,11 @@ class Layout(PyLayers):
             if loadlay:
                 filename = pyu.getlong(self._filename, pstruc['DIRLAY'])
                 if os.path.exists(filename):  # which exists
+                    # check the .lay hash
                     fd = open(filename,'rb')
                     self._hash = hashlib.md5(fd.read()).hexdigest()
                     fd.close()
+                    # check existence of gpickle graphs
                     if os.path.exists(os.path.join(path,'Gs.gpickle')):
                         if os.path.exists(os.path.join(path,'.hash')):
                             fd = open(os.path.join(path,'.hash'),'r')
@@ -383,6 +385,7 @@ class Layout(PyLayers):
                             fd.close()
                             hashGs = lines[0].replace('\n','')
                             self.segboundary = eval(lines[1])
+                            self.typ = lines[2]
                             if hashGs==self._hash:
                                 logger.info('load from Gs graph')
                                 self.hasboundary = True
@@ -2504,9 +2507,12 @@ class Layout(PyLayers):
         logger.info('save the hash')
         dirname = self._filename.replace('.lay','')
         path = os.path.join(basename, 'struc', 'gpickle', dirname)
+        if not os.path.exists(path):
+            os.mkdir(path)
         fd = open(os.path.join(path,'.hash'),'w')
         fd.write(self._hash)
         fd.write('\n'+str(self.segboundary))
+        fd.write('\n'+self.typ)
         fd.close()
         logger.info('dump a pickle of Gs')
         self.lbltg = ['s']
