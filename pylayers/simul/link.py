@@ -354,6 +354,7 @@ class DLink(Link):
 
 
 
+        pdb.set_trace()
         if self._Lname != '':
 
             self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5'
@@ -377,7 +378,6 @@ class DLink(Link):
             #
 
             cindoor = [p for p in self.L.Gt.nodes() if self.L.Gt.node[p]['indoor']]
-
             if self._L.typ == 'outdoor':
                 ginodes = self.L.Gi.node.keys()
                 # lT : list of transmission interactions
