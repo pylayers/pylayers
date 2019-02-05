@@ -350,15 +350,3 @@ os.chdir(currentdir)
 ## set seaborn style
 sns.set_style("white")
 
-LOG_FORMAT = '%(asctime)s ; %(name)s ; %(levelname)s ; %(message)s'
-logging.basicConfig(filename = basename+"/PyLayers.log",
-                    level = logging.DEBUG,
-                    format = LOG_FORMAT,
-                    filemode = 'w')
-logger = logging.getLogger(__name__)
-logger.setLevel(0)
-logger.info('INFO')
-logger.debug('DEBUG')
-logger.error('ERROR')
-logger.critical('CRITICAL')
-logger.warning('WARNING')

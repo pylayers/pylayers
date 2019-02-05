@@ -41,7 +41,6 @@ DL.Aa = Antenna(typ='Omni')
 DL.Ab = Antenna(typ='Omni')
 DL.a[2]=1.5
 DL.b[2]=1.5
-pdb.set_trace()
 #DL.b=np.array([766,1115,1.8])
 tic = time.time()
 #DL.eval(verbose=True,force=True,bt=False,cutoff=4,threshold=0.1,ra_vectorized=False)
@@ -66,11 +65,13 @@ print(toc-tic)
 # Point outside
 #DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=True,ra_ceil_H=0)
 #DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=True)
-# Angular Spread 
+# Angular Spread
+
 doa = DL.H.doa
 dod = DL.H.dod
 tau = DL.H.taud
 E   = DL.H.energy()[:,0,0]
+
 APSthd=np.sum(dod[:,0]*E)/np.sum(E)
 APSphd=np.sum(dod[:,1]*E)/np.sum(E)
 APStha=np.sum(doa[:,0]*E)/np.sum(E)
