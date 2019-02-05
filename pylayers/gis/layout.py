@@ -186,10 +186,10 @@ class Layout(pro.PyLayers):
 
     _shseg : keys / segment index
              values / shapely LineString
-    dca    : keys / Gt node 
-             values / list of air wall 
+    dca    : keys / Gt node
+             values / list of air wall
     degree : keys / point degree
-             values / array of index 
+             values / array of index
     display : dictionnary for controling various visualization
     dsseg :
 
