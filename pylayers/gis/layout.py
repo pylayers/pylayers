@@ -1496,6 +1496,7 @@ class Layout(PyLayers):
         -----
 
         COST231 data Munich_buildongs.res
+
         """
         fileres = pyu.getlong(_fileres, os.path.join('struc', 'res'))
         D  = np.fromfile(fileres,dtype='int',sep=' ')
@@ -1503,7 +1504,7 @@ class Layout(PyLayers):
         # number of integer
         N1 = len(D)
         # number of lines
-        N2 = N1/8
+        N2 = N1//8
         D = D.reshape(N2,8)
         # list of coordinates
         lcoords = []
@@ -1513,13 +1514,13 @@ class Layout(PyLayers):
         zring = []
         #
         bdg_old = 1
+        self.zfloor=-1000
+        self.zceil = 4000
         for e in range(N2):
             # p1 point coordinate
             p1 = ([D[e,0],D[e,1]])
             # p2 point coordinate
             p2 = ([D[e,2],D[e,3]])
-            # (ground height,building height)
-            #z  = (D[e,7]-500,D[e,4])
             # (ground height,building height+ground_height)
             z  = (D[e,7],D[e,4]+D[e,7])
             # building number
@@ -1542,14 +1543,15 @@ class Layout(PyLayers):
                 lcoords.append(p2)
 
         npt = 1
-
-        for r1,z1 in zip(lring,zring):
+        self.dpoly = {}
+        for kpol,(r1,z1) in enumerate(zip(lring,zring)):
             x,y = r1.xy
+            lseg = []
 
             for k2 in range(len(x)):
                 new_pt = (x[k2],y[k2])
-                kpos = self.Gs.pos.keys()
-                vpos = self.Gs.pos.values()
+                kpos = list(self.Gs.pos.keys())
+                vpos = list(self.Gs.pos.values())
                 if new_pt not in vpos:
                     #
                     # add node point nde <0 and position
@@ -1564,10 +1566,15 @@ class Layout(PyLayers):
                     current_node_index = kpos[u[0]]
 
                 if k2>0: # at least already one point
-                    ns = self.add_segment(current_node_index, previous_node_index, name='WALL', z=z1)
+                    ns = self.add_segment(current_node_index,
+                                          previous_node_index,
+                                          name='WALL',
+                                          z=z1)
+                    lseg.append(ns)
                 else:
-                    starting_node_index  =   current_node_index
+                    starting_node_index = current_node_index
                 previous_node_index = current_node_index
+            self.dpoly[kpol+1] = {'connect':lseg, 'z':z1, 'name':''}
             # last segment
             #ns = self.add_segment(previous_node_index, starting_node_index, name='WALL', z=z1)
 
@@ -1950,7 +1957,7 @@ class Layout(PyLayers):
         """ save Layout structure in a .lay file
 
         """
-        current_version = 1.3
+        current_version = 1.4
         if os.path.splitext(self._filename)[1]=='.ini':
             self._filename = self._filename.replace('.ini','.lay')
         #
@@ -2015,13 +2022,13 @@ class Layout(PyLayers):
                 cond4 = (self.Gs.node[n]['z'][0] == self.zfloor)
                 cond5 = (cond2 and cond3)
                 cond6 = (cond2 and cond4)
-                cond7 = (cond2 and cond3 and cond4) 
+                cond7 = (cond2 and cond3 and cond4)
                 #
-                # _AIR are not stored  (cond1) 
-                # AIR segment reaching zceil are not stored  (cond4) 
-                # AIR segment reaching zfloor are not stored (cond5) 
+                # _AIR are not stored  (cond1)
+                # AIR segment reaching zceil are not stored  (cond4)
+                # AIR segment reaching zfloor are not stored (cond5)
                 #
-                if (cond1 and (not cond5) and (not cond6)) or cond7: 
+                if (cond1 and (not cond5) and (not cond6)) or cond7:
                     d = copy.deepcopy(self.Gs.node[n])
                     # v1.1 d['connect'] = nx.neighbors(self.Gs, n)
                     d['connect'] = list(self.Gs[n].keys())
@@ -2062,6 +2069,14 @@ class Layout(PyLayers):
 
 
                     config.set("segments", str(n), d)
+        #
+        # [polygon]
+        #   1 = { 'connect':[1,2,3,4], 'z':(100,115),name:''}
+        #
+        if hasattr(self,'dpoly'):
+            config.add_section("polygons")
+            for k in self.dpoly:
+                config.set("polygons", str(k), self.dpoly[k])
 
         #
         # [ slabs ]
@@ -2523,7 +2538,7 @@ class Layout(PyLayers):
 
         The filename is in self._filename
 
-        Format version 1.3
+        Format version 1.4
         ------------------
 
         [info]
@@ -2542,6 +2557,9 @@ class Layout(PyLayers):
 
         [materials]
         BRICK = {'mur':complex,'epsr':complex,'sigma':float,'roughness':}
+
+        [polygons]
+        1 = {'connect':[1,2,3,4],'name':NAME,'z':(zmin,zmax)}
 
         [indoor]
         zceil =
@@ -2572,6 +2590,13 @@ class Layout(PyLayers):
 
         self.Np = len(di['points'])
         self.Ns = len(di['segments'])
+        #
+        # Ng : number of polygons
+        # polygons introduced in 1.4 format
+        #
+        if config.has_section('polygons'):
+            self.Ng = len(di['polygons'])
+
         self.Gs = nx.Graph(name='Gs')
         self.Gs.pos = {}
         self.labels = {}
@@ -2781,6 +2806,10 @@ class Layout(PyLayers):
         # add _AIR wall around the layout
         #
         self.boundary()
+
+        if config.has_section('polygons'):
+            logger.info("reading polygons")
+            self.dpoly = di['polygons']
 
         # compliant with config file without  material/slab information
         #

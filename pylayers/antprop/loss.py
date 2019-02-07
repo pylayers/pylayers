@@ -107,7 +107,7 @@ def FMetisShad2(fGHz,r,D,sign=1):
         indirect distance between Tx and Rx (screen effect)
     sign : np.array(Nseg,Nscreen)
         == 1  : Shadowing NLOS situation
-        ==-1  : No shadowing LOS situation   
+        ==-1  : No shadowing LOS situation
 
 
     Returns
