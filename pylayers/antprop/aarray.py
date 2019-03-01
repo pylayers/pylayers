@@ -314,6 +314,7 @@ class AntArray(Array, ant.Antenna):
 
     def steervec(self,ang,nbit=3):
         """
+
         Parameters
         ----------
         ang : Mx2  (steering directions) 
@@ -484,7 +485,7 @@ def k2xyz(ik, sh):
     ix = ik/(Ny*Nz)
     iy = (ik-ix*Ny*Nz)/(Nz)
     iz = ik-ix*Ny*Nz-iy*Nz
-   
+
     return(ix, iy, iz)
 
 def xyztok(iz,iy,ix,Nx=10,Ny=11):

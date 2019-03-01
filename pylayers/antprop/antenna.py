@@ -1564,7 +1564,7 @@ class Pattern(PyLayers):
             Ft = np.sqrt(3)*np.einsum('ki,ki->i',vec,th)[...,None]
             Fp = np.sqrt(3)*np.einsum('ki,ki->i',vec,ph)[...,None]
 
-        return Ft,Fp 
+        return Ft,Fp
 
     def __pArray(self,**kwargs):
         """ Array factor
