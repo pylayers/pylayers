@@ -221,7 +221,7 @@ class Layout(pro.PyLayers):
         check : boolean
         build : boolean
         verbose : boolean
-        cartesian : boolean
+        bcartesian : boolean
         xlim : '(xmin,xmax,ymin,ymax) | () default'
         dist_m : int
         typ : string
@@ -364,17 +364,17 @@ class Layout(pro.PyLayers):
                     newfile = True
                     print("new file - creating a void Layout", self._filename)
             elif loadosm:  # load .osm file
-                self.importosm(fileosm=self.arg, cart=True, typ=self.typ)
+                self.importosm(fileosm=self.arg, cart=self.bcartesian, typ=self.typ)
                 self.loadosm = True
             elif loadres:
                 self.importres(_fileres=self.arg)
                 self.sl = sb.SlabDB()
             elif '(' in str(arg):  # load from osmapi latlon (string or tuple
                 latlon = eval(self.arg)
-                self.importosm(latlon=latlon, dist_m=self.dist_m, cart=True, typ=self.typ)
+                self.importosm(latlon=latlon, dist_m=self.dist_m, cart=self.bcartesian, typ=self.typ)
                 self.loadosm = True
             else:  # load from address geocoding
-                self.importosm(address=self.arg, dist_m=self.dist_m, cart=True, typ=self.typ)
+                self.importosm(address=self.arg, dist_m=self.dist_m, cart=self.bcartesian , typ=self.typ)
                 self.loadosm = True
 
             # add boundary if it not exist
@@ -619,6 +619,24 @@ class Layout(pro.PyLayers):
         Ls.g2npy()
         return Ls
 
+    def switch(self):
+        """ switch coordinates
+
+        """
+        if hasattr(self,'m'):
+            if self.coordinates=='cart':
+                for k in self.Gs.pos.keys():
+                    self.Gs.pos[k] = self.m( self.Gs.pos[k][0], self.Gs.pos[k][1], inverse=True)
+                self.coordinates ='latlon'
+            elif self.coordinates=='latlon':
+                for k in self.Gs.pos.keys():
+                    self.Gs.pos[k] = self.m( self.Gs.pos[k][0], self.Gs.pos[k][1])
+                self.coordinates ='cart'
+
+            nodes = self.Gs.nodes()
+            upnt = [n for n in nodes if n < 0]
+            self.pt[0, :] = np.array([self.Gs.pos[k][0] for k in upnt])
+            self.pt[1, :] = np.array([self.Gs.pos[k][1] for k in upnt])
 
     def _help(self):
         st = ''
@@ -1432,8 +1450,7 @@ class Layout(pro.PyLayers):
             Dy = kwargs['pref'][0][1] - y_ref
             pos = np.array(self.Gs.pos.values())
             for k, keys in enumerate(self.Gs.pos.keys()):
-                self.Gs.pos[keys] = self.m(
-                    pos[k, 0] - Dx, pos[k, 1] - Dy, inverse=True)
+                self.Gs.pos[keys] = self.m( pos[k, 0] - Dx, pos[k, 1] - Dy, inverse=True)
 
             self.coordinates = 'latlon'
 
@@ -1681,7 +1698,6 @@ class Layout(pro.PyLayers):
                     nhe = dup[nhe]
 
                 d = ways.way[nseg].tags
-                print(d)
 
                 #
                 # Convert string to integer if possible
@@ -10358,7 +10374,7 @@ class Layout(pro.PyLayers):
 
         sc = tvtk.UnsignedCharArray()
         sc.from_array(color)
-        
+ 
         # manage floor
 
         # if Gt doesn't exists
