@@ -1191,33 +1191,24 @@ class Layout(pro.PyLayers):
         self.radius  = dptc.max()
         self.pg = np.hstack((self.pg, 0.))
 
-        # ntail = map(lambda x: nx.neighbors(self.Gs, x)[0], useg)
-        # nhead = map(lambda x: nx.neighbors(self.Gs, x)[1], useg)
-        # v1.1 ntahe = np.array([nx.neighbors(self.Gs, x) for x in useg])
-        #ntahe = np.array([dict(self.Gs[x]).keys() for x in useg])
-        ntahe = np.array([ [n for n in nx.neighbors(self.Gs,x) ]  for x in useg ])
-        #nhead = [ [n for n in nx.neighbors(self.Gs,x) for x in useg ]
-        ntail = ntahe[:,0]
-        nhead = ntahe[:,1]
+        if self.Ns>0:
+            ntahe = np.array([ [n for n in nx.neighbors(self.Gs,x) ]  for x in useg ])
+            ntail = ntahe[:,0]
+            nhead = ntahe[:,1]
 
-        # create sparse matrix from a Gs segment node to its 2 extremal points (tahe) index
-        mlgsn = max(self.Gs.nodes())+1
-        self.s2pu = sparse.lil_matrix((mlgsn,2),dtype='int')
-        self.s2pu[useg,:] = ntahe
-        # convert to compressed row sparse matrix
-        # to be more efficient on row slicing
-        self.s2pu = self.s2pu.tocsr()
+            # create sparse matrix from a Gs segment node to its 2 extremal points (tahe) index
+            mlgsn = max(self.Gs.nodes())+1
+            self.s2pu = sparse.lil_matrix((mlgsn,2),dtype='int')
+            self.s2pu[useg,:] = ntahe
+            # convert to compressed row sparse matrix
+            # to be more efficient on row slicing
+            self.s2pu = self.s2pu.tocsr()
 
 
-        # tic = time.time()
-        # self.tahe[0, :] = np.array(
-        #      map(lambda x: np.nonzero(np.array(upnt) == x)[0][0], ntail))
-        # self.tahe[1, :] = np.array(
-        #    map(lambda x: np.nonzero(np.array(upnt) == x)[0][0], nhead))
-
-        aupnt = np.array(upnt)
-        self.tahe[0, :] = np.array([np.where(aupnt==x)[0][0] for x in ntail ])
-        self.tahe[1, :] = np.array([np.where(aupnt==x)[0][0] for x in nhead ])
+        if self.Ns>0:
+            aupnt = np.array(upnt)
+            self.tahe[0, :] = np.array([np.where(aupnt==x)[0][0] for x in ntail ])
+            self.tahe[1, :] = np.array([np.where(aupnt==x)[0][0] for x in nhead ])
 
         if verbose:
             print('tahe in numpy array : Done')
@@ -1314,46 +1305,47 @@ class Layout(pro.PyLayers):
         # append sub segment normal to normal
 
         # create sparse matrix from a Gs segment node to its 2 extremal points (tahe) coordinates
-        self.s2pc = sparse.lil_matrix((mlgsn,4))
+        if self.Ns >0:
+            self.s2pc = sparse.lil_matrix((mlgsn,4))
 
-        ptail = self.pt[:,self.tahe[0,:]]
-        phead = self.pt[:,self.tahe[1,:]]
-        A = np.vstack((ptail,phead)).T
-        self.s2pc[self.tsg,:]=A
+            ptail = self.pt[:,self.tahe[0,:]]
+            phead = self.pt[:,self.tahe[1,:]]
+            A = np.vstack((ptail,phead)).T
+            self.s2pc[self.tsg,:]=A
 
 
-        # convert to compressed row sparse matrix 
-        # to be more efficient on row slicing
-        self.s2pc = self.s2pc.tocsr()
-        # for k in self.tsg:
-        #     assert(np.array(self.s2pc[k,:].todense())==self.seg2pts(k).T).all(),pdb.set_trace()
-        #
-        # This is wrong and asume a continuous indexation of points
-        # TODO FIX : This problem cleanly
-        # 
-        # self.p2pc is only used in Gspos in outputGi_func only caled in case of 
-        # multiprocessing 
-        #
-        # The temporary fix is to comment the 5 next lines
-        #
-        # mino = -min(self.Gs.nodes())+1
-        # self.p2pc = sparse.lil_matrix((mino,2))
-        # self.p2pc[-self.upnt,:]=self.pt.T
-        # self.p2pc = self.p2pc.tocsr()
-        # normal_ss = self.normal[:,self.tgs[self.lsss]]
-        # self.normal = np.hstack((self.normal,normal_ss))
-        # if problem here check file format 'z' should be a string
-        lheight = array([v[1] for v in
-                    nx.get_node_attributes(self.Gs, 'z').values()
-                    if v[1] < 2000 ])
-        #assert(len(lheight)>0),logger.error("no valid heights for segments")
-        if len(lheight)>0:
-            self.maxheight = np.max(lheight)
-        else:
-            self.maxheight = 3
-        # self.maxheight=3.
-        # calculate extremum of segments
-        self.extrseg()
+            # convert to compressed row sparse matrix 
+            # to be more efficient on row slicing
+            self.s2pc = self.s2pc.tocsr()
+            # for k in self.tsg:
+            #     assert(np.array(self.s2pc[k,:].todense())==self.seg2pts(k).T).all(),pdb.set_trace()
+            #
+            # This is wrong and asume a continuous indexation of points
+            # TODO FIX : This problem cleanly
+            # 
+            # self.p2pc is only used in Gspos in outputGi_func only caled in case of 
+            # multiprocessing 
+            #
+            # The temporary fix is to comment the 5 next lines
+            #
+            # mino = -min(self.Gs.nodes())+1
+            # self.p2pc = sparse.lil_matrix((mino,2))
+            # self.p2pc[-self.upnt,:]=self.pt.T
+            # self.p2pc = self.p2pc.tocsr()
+            # normal_ss = self.normal[:,self.tgs[self.lsss]]
+            # self.normal = np.hstack((self.normal,normal_ss))
+            # if problem here check file format 'z' should be a string
+            lheight = array([v[1] for v in
+                        nx.get_node_attributes(self.Gs, 'z').values()
+                        if v[1] < 2000 ])
+            #assert(len(lheight)>0),logger.error("no valid heights for segments")
+            if len(lheight)>0:
+                self.maxheight = np.max(lheight)
+            else:
+                self.maxheight = 3
+            # self.maxheight=3.
+            # calculate extremum of segments
+            self.extrseg()
 
     def importshp(self, **kwargs):
         """ import layout from shape file
@@ -1627,7 +1619,6 @@ class Layout(pro.PyLayers):
             else:
                 self.coordinates = 'latlon'
 
-
             # self.coordinates = 'latlon'
             self._filename = self._fileosm.replace('osm', 'lay')
 
@@ -1690,6 +1681,7 @@ class Layout(pro.PyLayers):
                     nhe = dup[nhe]
 
                 d = ways.way[nseg].tags
+                print(d)
 
                 #
                 # Convert string to integer if possible
@@ -1702,8 +1694,8 @@ class Layout(pro.PyLayers):
                         pass
 
 
-                # getting segment information
-                if 'name' in d:
+                # getting segment slab information
+                if 'slab' in d:
                         slab = d['name']
                 else:  # the default slab name is WALL
                         slab = "WALL"
@@ -1788,7 +1780,6 @@ class Layout(pro.PyLayers):
         # 3) create slabs database
         # 4) add materials database to slab database
         # 5) load slabs database
-
         mat = sb.MatDB()
         mat.load(self._filematini)
         self.sl = sb.SlabDB()

@@ -1724,7 +1724,7 @@ class Pattern(PyLayers):
     def radF(self):
         """ evaluate radiation fonction w.r.t polarization
 
-        self.pol : 't' : theta , 'p' : phi n, 'c' : circular 
+        self.pol : 't' : theta , 'p' : phi n, 'c' : circular
 
         """
         assert self.pol in ['t','p','c']

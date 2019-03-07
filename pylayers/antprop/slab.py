@@ -1307,8 +1307,9 @@ class Slab(Interface,dict):
 
         """
         self['lmat'] = []
-
         for matname in self['lmatname']:
+            if type(matname)==int:
+                pdb.set_trace()
             if 'ITU_' in matname:
                 mi = Mat(matname)
             else:

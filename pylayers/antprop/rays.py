@@ -2838,7 +2838,7 @@ class Rays(PyLayers, dict):
         #
         # core calculation of all interactions is done here
         #
-        
+
         self.I.eval(fGHz)
 
         # if np.isnan(self.I.I).any():
@@ -2872,7 +2872,7 @@ class Rays(PyLayers, dict):
         # loop on interaction blocks
         if ib==[]:
             ib=self.keys()
-        
+
         # loop over group of interactions
         for l in ib:
             # ir : ray index
@@ -3025,7 +3025,7 @@ class Rays(PyLayers, dict):
         #c12 = Ct[:,:,0,1]
         #c21 = Ct[:,:,1,0]
         #c22 = Ct[:,:,1,1]
-        
+
         c11 = Ct[:,:,1,1]
         c12 = Ct[:,:,1,2]
         c21 = Ct[:,:,2,1]
