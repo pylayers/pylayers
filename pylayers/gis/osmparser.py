@@ -945,7 +945,7 @@ def getosm(**kwargs):
 
     #return coords,nodes,ways,dpoly,m
     return coords, nodes, ways, m, (lat,lon)
-
+#
 def extract(alat,alon,fileosm,fileout):
     """ extraction of an osm sub region using osmconvert
 

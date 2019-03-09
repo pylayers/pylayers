@@ -333,9 +333,10 @@ class Layout(pro.PyLayers):
         # Layout Point of Interest DataFrame
         #
         # A Layout is equipped with a DataFrame of Points of Interest
+        # 
+        # dfpoi   type =['tree','human','tx','rx','support']
         #
-        # dfpoi
-        self.dfoi = pd.DataFRame(columns=['name','type','lon','lat','alt','x',',y','z'],data=np.array([[]]))
+        self.dfpoi = pd.DataFrame(columns=['name','type','lon','lat','alt','x',',y','z','radius'])
         if type(self.arg) is bytes:
             self.arg = self.arg.decode('utf-8')
 
