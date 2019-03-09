@@ -33,6 +33,7 @@ import triangle
 import matplotlib.pyplot as plt
 import matplotlib.colors as clr
 import networkx as nx
+import pandas as pd
 from itertools import combinations, product
 import ast
 from networkx.readwrite import write_gpickle, read_gpickle
@@ -328,7 +329,13 @@ class Layout(pro.PyLayers):
         #
         if type(self.arg)==tuple:
             self.arg = str(self.arg)
-
+        #
+        # Layout Point of Interest DataFrame
+        #
+        # A Layout is equipped with a DataFrame of Points of Interest
+        #
+        # dfpoi
+        self.dfoi = pd.DataFRame(columns=['name','type','lon','lat','alt','x',',y','z'],data=np.array([[]]))
         if type(self.arg) is bytes:
             self.arg = self.arg.decode('utf-8')
 
