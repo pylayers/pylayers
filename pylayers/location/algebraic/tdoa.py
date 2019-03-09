@@ -214,7 +214,7 @@ class TDoALocation(object):
         c       = 3e08                      # Speed of light
         RDoA    = c*TDoA
         RDoAStd = c*TDoAStd
-        
+
         for i in arange(Niter):
 
             # Construct the matrix A (see theory)
@@ -222,7 +222,7 @@ class TDoALocation(object):
                 RN1)/np.sqrt(sum((np.outer(P,np.ones(RNnum))-
                 RN1)**2,axis=0))).T-((np.outer(P,np.ones(RNnum))-
                 RN2)/np.sqrt(sum((outer(P,ones(RNnum))- RN2)**2,axis=0))).T
-            
+
             # Construct the Covariance Matrix
             C  = np.diag((RDoAStd[:,0])**2)
 

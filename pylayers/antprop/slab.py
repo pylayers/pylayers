@@ -696,7 +696,7 @@ class Mat(PyLayers,dict):
                 self[k] = dm[k]
 
 
-        #MATERIAL ;  a  ; b ;   c  ;  d  ;  fmin ; fmax 
+        # MATERIAL ;  a  ; b ;   c  ;  d  ;  fmin ; fmax
         # ITU-R P2040 Table 3
         ITU_P2040_T3 = {
         'ITU_CONCRETE' : np.array([  5.31  ,  0 , 0.0326 , 0.8095, 1, 100]),
@@ -704,6 +704,7 @@ class Mat(PyLayers,dict):
         'ITU_PLASTERBOARD' : np.array([ 2.94 , 0 , 0.0116 , 0.7076 , 1 , 100]),
         'ITU_WOOD' : np.array([ 1.99 , 0 , 0.0047 , 1.0718 , 0.001 , 100]),
         'ITU_GLASS' : np.array([ 6.27 , 0 , 0.0043 , 1.1925 , 0.1 , 100]),
+        'ITU_METAL' : np.array([ 1  , 0 , 1e7 , 0 , 0.1 , 100]),
         'ITU_CEILINGBOARD' : np.array([ 1.50 , 0 , 0.0005 , 1.1634 , 1 , 100]),
         'ITU_CHIPBOARD' : np.array([ 2.58 , 0 , 0.0217 , 0.7800 , 1 , 100]),
         'ITU_FLOORBOARD' : np.array([ 3.66 , 0 , 0.0044 , 1.3515 , 50 , 100]),
@@ -1279,9 +1280,9 @@ class Slab(Interface,dict):
         print("nbmat : ", len(self['lmatname']))
         chaine = "[ "
         for name in self['lmatname']:
-            self.mat[name].info()
+            Mat(name).info()
             if self['evaluated']:
-                epsrc = self.mat[name].eval(self.fGHz[0])
+                epsrc = Mat(name).eval(self.fGHz[0])
                 print("epsrc : ", epsrc)
             chaine = chaine + name + ' '
             chaine = chaine + ']'
@@ -1306,9 +1307,13 @@ class Slab(Interface,dict):
 
         """
         self['lmat'] = []
-
         for matname in self['lmatname']:
-            mi = matDB[matname] 
+            if type(matname)==int:
+                pdb.set_trace()
+            if 'ITU_' in matname:
+                mi = Mat(matname)
+            else:
+                mi = matDB[matname]
             self['lmat'].append(mi)
 
 

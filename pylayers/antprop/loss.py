@@ -126,6 +126,7 @@ def FMetisShad2(fGHz,r,D,sign=1):
 
     LossMetisShadowing
 
+    The arctan is approximating the enveloppe of the Fresnel integral.
 
     """
     lamda = 0.3/fGHz[None,None,:]
@@ -138,11 +139,11 @@ def FMetisShad(fGHz,r,D,sign=1):
     Parameters
     ----------
 
-    fGHz : float 
+    fGHz : float
         frequency GHz
     r : float
         distance between Tx and Rx
-    D : float 
+    D : float
         indirect distance between Tx and Rx (screen effect)
     sign : int
         == 1  : Shadowing NLOS situation
@@ -772,6 +773,56 @@ def PL(fGHz,pts,p,n=2.0,dB=True,d0=1):
         PL=10**(-PL/10)
 
     return(PL)
+
+def Lconcrete(fGHz):
+    """ 3GPP above 6GHz concrete loss
+
+    From Table 7.4.3.1 of 3GPP TR38.900
+    Study on channel model for frequency spectrum above 6 GHz
+
+    """
+
+    return(5+4*fGHz)
+
+def Lglass(fGHz):
+    """ 3GPP above 6GHz glass loss
+
+    From Table 7.4.3.1 of 3GPP TR38.900
+    Study on channel model for frequency spectrum above 6 GHz
+
+    """
+    return(2 + 0.2* fGHz)
+
+def LIRRglass(fGHz):
+    """ 3GPP above 6GHz IRR (Infra Red Reflecting) glass loss
+
+    From Table 7.4.3.1 of 3GPP TR38.900
+    Study on channel model for frequency spectrum above 6 GHz
+
+    """
+    return(23 + 0.3* fGHz)
+
+def Lwood(fGHz):
+    """ 3GPP above 6GHz wood loss
+
+    From Table 7.4.3.1 of 3GPP TR38.900
+    Study on channel model for frequency spectrum above 6 GHz
+
+    """
+    return(4.85 + 0.12* fGHz)
+
+
+
+
+def LossPenetration(fGHz, alpha = 0.3, typ='low'):
+    if typ=='low':
+        PLTW = 5 - 10*np.log10(alpha*10**(-Lglass(fGHz)/10)+(1-alpha)*10**(-Lconcrete(fGHz)))
+
+    if typ=='high':
+        PLTW = 5 - 10*np.log10((1-alpha)*10**(-LIRRglass(fGHz)/10)+alpha*10**(-Lconcrete(fGHz)))
+
+    return(PLTW)
+
 
 def Losst(L,fGHz,p1,p2,dB=True,bceilfloor=False):
     """  calculate Losses between links p1-p2
@@ -1659,7 +1710,7 @@ def two_rays_flatearth(fGHz, **kwargs):
         dloss=kwargs['d']
         ht=kwargs['ht']
         hr=kwargs['hr']
-    
+
     Gt = 10**((1.*Gt)/10.)
     Gr = 10**((1.*Gr)/10.)
 
@@ -1690,6 +1741,7 @@ def two_rays_flatearth(fGHz, **kwargs):
         return 10*np.log10(P)
     else:
         return P
+
 
 def lossref_compute(P,h0,h1,k=4/3.) :
     """

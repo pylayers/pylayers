@@ -562,30 +562,58 @@ class Ways(object):
         osmmap : OSM Map in json from OsmAPI
         coords : coords object previously parsed
         typ  : string
+            type of ways to capture
 
         """
+        ltree =[]
         for item in osmmap:
+            # parse trees
+            if item['type']=='node':
+                node = item['data']
+                tags = node['tag']
+                if 'natural' in tags:
+                    if tags['natural']=='tree':
+                        ltree.append((node['lon'],node['lat']))
+
             if item['type']=='way':
                 way = item['data']
-                tags  = way['tag']
+                tags = way['tag']
                 if typ in tags:
                     osmid = way['id']
                     refs_neg = way['nd']
                     refs_neg = [ -x for x in refs_neg if x >0]
+                    ntags = {}
                     # nodes should have negative index (PyLayers convention)
+                    if 'height' in tags:
+                        ntags['height'] = tags['height']
+                    elif 'building:height' in tags:
+                        ntags['height']  = tags['building:height']
+
+                    # min_height : from ground to roof top
+                    if 'building:min_height' in tags:
+                        ntags['min_height'] = tags['building:min_height']
+                    elif 'min_height' in tags:
+                        ntags['min_height'] = tags['min_height']
+
+                    # material : from ground to roof top
+                    if 'building:material' in tags:
+                        ntags['material'] = tags['building:material']
+                    elif 'material' in tags:
+                        ntags['material'] = tags['material']
                     if 'z' in tags:
                        z = tags['z']
                        if type(z) == str:
                            z = eval(z)
                        if type(z[0])==str:
                            z = (eval(z[0]),eval(z[1]))
-                       tags['z'] = z
+                       ntags['z'] = z
 
-                    self.w[osmid] = [refs_neg, tags]
+                    #print('osmparser readmap2',ntags)
+                    self.w[osmid] = [refs_neg, ntags]
                     self.cpt += 1
 
         self.toway(coords)
-
+        return(ltree)
 class Relations(object):
     relation = {}
     cpt = 0
@@ -755,6 +783,7 @@ def getosm(**kwargs):
     level_height = kwargs.pop('level_height', 3.45)
     typical_height = kwargs.pop('typical_height', 10)
 
+    # from coordinates
     if filename == '':
         address = kwargs.pop('address','Rennes')
         latlon = kwargs.pop('latlon', 0)
@@ -788,6 +817,7 @@ def getosm(**kwargs):
         alpha = (dist_m/r_earth)*rad_to_deg
     #
     # get map from OsmApi (Database query)
+    # same extension in longitude and latitude
     #
         Osm = OsmApi()
         osmmap = Osm.Map(lon-alpha, lat-alpha, lon+alpha, lat+alpha)
@@ -862,8 +892,7 @@ def getosm(**kwargs):
     if typ == 'indoor':
         ways.readmap1(osmmap, coords)
     else:
-        ways.readmap2(osmmap, coords)
-
+        ltree = ways.readmap2(osmmap, coords)
     # list of nodes involved in buildings
     lnodes_id=[]
     for iw in ways.w:
@@ -926,7 +955,7 @@ def getosm(**kwargs):
 
     #return coords,nodes,ways,dpoly,m
     return coords, nodes, ways, m, (lat,lon)
-
+#
 def extract(alat,alon,fileosm,fileout):
     """ extraction of an osm sub region using osmconvert
 
