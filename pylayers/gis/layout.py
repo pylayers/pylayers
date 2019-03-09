@@ -1383,7 +1383,7 @@ class Layout(PyLayers):
             A = np.vstack((ptail,phead)).T
             self.s2pc[self.tsg,:]=A
 
-            # convert to compressed row sparse matrix 
+            # convert to compressed row sparse matrix
             # to be more efficient on row slicing
             self.s2pc = self.s2pc.tocsr()
             # for k in self.tsg:

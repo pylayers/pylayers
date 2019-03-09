@@ -633,8 +633,8 @@ class FloorPlan(nx.DiGraph):
     Methods
     -------
 
-    build : recursive construction of floor plan 
-    show : show the floor plan 
+    build : recursive construction of floor plan
+    show : show the floor plan
 
     """
 
@@ -893,68 +893,70 @@ def getosm(**kwargs):
         ways.readmap1(osmmap, coords)
     else:
         ltree = ways.readmap2(osmmap, coords)
+
     # list of nodes involved in buildings
     lnodes_id=[]
     for iw in ways.w:
         lnodes_id += ways.w[iw][0]
-    # list of all nodes of coords
 
+    # list of all nodes of coords
     lnodes_id  = np.unique(np.array(lnodes_id))
     lnodes_full = np.unique(np.array(list(coords.latlon.keys())))
     mask = np.in1d(lnodes_full, lnodes_id, invert=True)
 
     # nodes not involved in buildings
 
-    #if typ != 'indoor':
-    #    lexcluded = lnodes_full[mask]
-    #    coords.filter(lexcluded)
+    if typ != 'indoor':
+        lexcluded = lnodes_full[mask]
+        coords.filter(lexcluded)
 
-    # dpoly = {}
-    # for iw in ways.w:
-    #     # ways.way[iw].tags = {}
-    #     # # material
-    #     # if 'material' in ways.w[iw][1]:
-    #     #     ways.way[iw].tags['name']=ways.w[iw][1]['material']
-    #     # elif 'building:material' in ways.w[iw][1]:
-    #     #     ways.way[iw].tags['name']=ways.w[iw][1]['building:material']
-    #     # else:
-    #     #     ways.way[iw].tags['name']='WALL'
+    dpoly = {}
+    for iw in ways.w:
+        ways.way[iw].tags = {}
+        #
+        # slab and materials extraction
+        #
+        if 'material' in ways.w[iw][1]:
+             ways.way[iw].tags['slab']=ways.w[iw][1]['material']
+        elif 'building:material' in ways.w[iw][1]:
+             ways.way[iw].tags['slab']=ways.w[iw][1]['building:material']
+        else:
+             ways.way[iw].tags['slab']='WALL'
 
-    #     # # min_height
-    #     # if 'building:min_height' in ways.w[iw][1]:
-    #     #     min_height = eval(ways.w[iw][1]['building:min_height'])
-    #     # else:
-    #     #     min_height = 0
-    #     # # height
-    #     # if 'height' in ways.w[iw][1]:
-    #     #     ways.way[iw].tags['z'] = (min_height, eval(ways.w[iw][1]['height']))
-    #     # elif 'building:height' in ways.w[iw][1]:
-    #     #     ways.way[iw].tags['z'] = (min_height, eval(ways.w[iw][1]['building:height']))
-    #     # elif 'building:levels' in ways.w[iw][1]:
-    #     #     nb_levels = eval(ways.w[iw][1]['building:levels'])
-    #     #     if type(nb_levels)!=int:
-    #     #         try:
-    #     #             nb_levels = max(nb_levels)
-    #     #         except:
-    #     #             nb_levels=2
-    #     #     ways.way[iw].tags['z']=(min_height,nb_levels*level_height)
-    #     # elif 'levels' in ways.w[iw][1]:
-    #     #     nb_levels = eval(ways.w[iw][1]['levels'])
-    #     #     if type(nb_levels)!=int:
-    #     #         try:
-    #     #             nb_levels=max(nb_levels)
-    #     #         except:
-    #     #             nb_levels=2
-    #     #     ways.way[iw].tags['z'] = (min_height,nb_levels*level_height)
-    #     # else:
-    #     #     ways.way[iw].tags['z'] = (0,typical_height)
+        # min_height
+        if 'building:min_height' in ways.w[iw][1]:
+            min_height = eval(ways.w[iw][1]['building:min_height'])
+        else:
+            min_height = 0
+        # height
+        if 'height' in ways.w[iw][1]:
+            ways.way[iw].tags['z'] = (min_height, eval(ways.w[iw][1]['height']))
+        elif 'building:height' in ways.w[iw][1]:
+            ways.way[iw].tags['z'] = (min_height, eval(ways.w[iw][1]['building:height']))
+        elif 'building:levels' in ways.w[iw][1]:
+            nb_levels = eval(ways.w[iw][1]['building:levels'])
+            if type(nb_levels)!=int:
+                try:
+                    nb_levels = max(nb_levels)
+                except:
+                    nb_levels=2
+                ways.way[iw].tags['z'] = (min_height, nb_levels*level_height)
+            elif 'levels' in ways.w[iw][1]:
+                nb_levels = eval(ways.w[iw][1]['levels'])
+                if type(nb_levels)!=int:
+                    try:
+                        nb_levels=max(nb_levels)
+                    except:
+                        nb_levels=2
+                    ways.way[iw].tags['z'] = (min_height, nb_levels*level_height)
+            else:
+                ways.way[iw].tags['z'] = (0,typical_height)
 
-    #     ptpoly = [coords.xy[x] for x in ways.w[iw][0]]
-    #     dpoly[iw] = geu.Polygon(ptpoly,vnodes=ways.w[iw][0])
-    #     dpoly[iw].coorddeter()
+        ptpoly = [coords.xy[x] for x in ways.w[iw][0]]
+        dpoly[iw] = geu.Polygon(ptpoly, vnodes=ways.w[iw][0])
+        dpoly[iw].coorddeter()
 
-    #return coords,nodes,ways,dpoly,m
-    return coords, nodes, ways, m, (lat,lon)
+    return coords, nodes, ways, m, (lat,lon), dpoly
 #
 def extract(alat,alon,fileosm,fileout):
     """ extraction of an osm sub region using osmconvert
