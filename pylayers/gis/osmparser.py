@@ -883,9 +883,7 @@ def getosm(**kwargs):
     coords.clean()
     coords.from_nodes(nodes)
 
-    pdb.set_trace()
     m = coords.cartesian(cart=bcart)
-
     ways = Ways()
     ways.clean()
 
@@ -896,7 +894,7 @@ def getosm(**kwargs):
         ways.readmap1(osmmap, coords)
     else:
         ltree = ways.readmap2(osmmap, coords)
-
+ 
     # list of nodes involved in buildings
     lnodes_id=[]
     for iw in ways.w:
@@ -958,7 +956,8 @@ def getosm(**kwargs):
         ptpoly = [coords.xy[x] for x in ways.w[iw][0]]
         dpoly[iw] = geu.Polygon(ptpoly, vnodes=ways.w[iw][0])
         dpoly[iw].coorddeter()
-
+    
+    pdb.set_trace()
     return coords, nodes, ways, m, (lat,lon), dpoly
 #
 def extract(alat,alon,fileosm,fileout):
