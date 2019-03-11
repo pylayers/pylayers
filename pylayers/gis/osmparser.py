@@ -872,6 +872,7 @@ def getosm(**kwargs):
     coords.clean()
     coords.from_nodes(nodes)
     m = coords.cartesian(cart=bcart)
+    pdb.set_trace()
 
     ways = Ways()
     ways.clean()
