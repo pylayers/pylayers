@@ -797,9 +797,9 @@ def getosm(**kwargs):
                 lon = resp.geojson['features'][0]['properties']['lng']
             except:
                 print(place)
-    #else:
-    #    lat = latlon[0]
-    #    lon = latlon[1]
+        else:
+            lat = latlon[0]
+            lon = latlon[1]
 
         rad_to_deg = (180/np.pi)
         # if latlon == 0:

@@ -1124,7 +1124,7 @@ class Layout(PyLayers):
         # sparse matrix segment-segment
         # usage
         # self.sgsg[seg1,seg2] => return common point
-
+        
         mno = max(self.Gs.nodes())
 
         #self.sgsg = sparse.lil_matrix((mno+1,mno+1),dtype='int')
@@ -1663,7 +1663,7 @@ class Layout(PyLayers):
 
             dist_m = kwargs.pop('dist_m',200)
 
-            coords, nodes, ways, m , latlon = osm.getosm(address = address,
+            coords, nodes, ways, m , latlon , dpoly = osm.getosm(address = address,
                                                           latlon = latlon,
                                                           dist_m = dist_m,
                                                           bcart = cart,
@@ -1692,7 +1692,7 @@ class Layout(PyLayers):
             # typ outdoor parse ways.buildings
             # typ indoor parse ways.ways
             # coords, nodes, ways, relations, m = osm.osmparse(fileosm)
-            coords, nodes, ways, m , (lat,lon) = osm.getosm(cart = cart,
+            coords, nodes, ways, m , (lat,lon) , dpoly = osm.getosm(cart = cart,
                                                        filename = fileosm,
                                                        typ = self.typ)
             if cart:
@@ -1748,6 +1748,7 @@ class Layout(PyLayers):
         # Reading segments
         #
         # ways of osm
+        #
         for k, nseg in enumerate(ways.way):
             tahe = ways.way[nseg].refs
             for l in range(len(tahe) - 1):
@@ -1776,7 +1777,7 @@ class Layout(PyLayers):
 
                 # getting segment slab information
                 if 'slab' in d:
-                        slab = d['name']
+                        slab = d['slab']
                 else:  # the default slab name is WALL
                         slab = "WALL"
 
