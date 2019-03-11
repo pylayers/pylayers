@@ -614,6 +614,7 @@ class Ways(object):
 
         self.toway(coords)
         return(ltree)
+
 class Relations(object):
     relation = {}
     cpt = 0
@@ -881,6 +882,8 @@ def getosm(**kwargs):
     coords = Coords()
     coords.clean()
     coords.from_nodes(nodes)
+
+    pdb.set_trace()
     m = coords.cartesian(cart=bcart)
 
     ways = Ways()
