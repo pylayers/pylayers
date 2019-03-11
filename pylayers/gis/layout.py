@@ -1655,7 +1655,7 @@ class Layout(pro.PyLayers):
         # Reorganize points coordinates for detecting
         # duplicate nodes
         # duplicate nodes are saved in dict dup
-
+        pdb.set_trace()
         kp = [k for k in coords.xy]
 
         x = np.array([ coords.xy[x][0] for x in  kp ])
