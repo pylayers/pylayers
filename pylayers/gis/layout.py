@@ -1738,6 +1738,7 @@ class Layout(PyLayers):
                 u_prev = u
                 k_prev = kp[u]
 
+        pdb.set_trace()
         for npt in coords.xy:
             # if node is not duplicated add node
             if npt not in dup:
