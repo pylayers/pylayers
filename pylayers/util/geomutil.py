@@ -6174,6 +6174,21 @@ def reflection_matrix(U):
 
     return M
 
+def conv(x,y,m,ma):
+    """
+    Parameters
+    ----------
+
+    x : x coordinate
+    y : y coordinate
+    m : Basemap projection converter
+    ma : smopy Map
+
+    """
+    lgw,Lgw = m(x,y,inverse=True)
+    xx,yy = ma.to_pixels(Lgw,lgw)
+    return xx, yy
+
 def ellipse2D(pa, pb, l, N , unit='meter'):
     """ points on an ellipse
 

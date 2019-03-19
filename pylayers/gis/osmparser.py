@@ -894,19 +894,20 @@ def getosm(**kwargs):
         ways.readmap1(osmmap, coords)
     else:
         ltree = ways.readmap2(osmmap, coords)
- 
+
     # list of nodes involved in buildings
     lnodes_id=[]
     for iw in ways.w:
         lnodes_id += ways.w[iw][0]
 
-    # list of all nodes of coords
+    # list of all nodes involved in buildings
     lnodes_id  = np.unique(np.array(lnodes_id))
+    # list of all nodes
     lnodes_full = np.unique(np.array(list(coords.latlon.keys())))
+    # intersection True if nodes not involved in building
     mask = np.in1d(lnodes_full, lnodes_id, invert=True)
 
     # nodes not involved in buildings
-
     if typ != 'indoor':
         lexcluded = lnodes_full[mask]
         coords.filter(lexcluded)
@@ -956,8 +957,7 @@ def getosm(**kwargs):
         ptpoly = [coords.xy[x] for x in ways.w[iw][0]]
         dpoly[iw] = geu.Polygon(ptpoly, vnodes=ways.w[iw][0])
         dpoly[iw].coorddeter()
-    
-    pdb.set_trace()
+
     return coords, nodes, ways, m, (lat,lon), dpoly
 #
 def extract(alat,alon,fileosm,fileout):

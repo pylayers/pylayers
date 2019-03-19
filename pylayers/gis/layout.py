@@ -24,6 +24,7 @@ import os
 import copy
 import glob
 import time
+import pickle
 import tqdm
 import numpy as np
 import numpy.random as rd
@@ -32,6 +33,7 @@ import scipy.sparse as sparse
 import doctest
 import triangle
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 import matplotlib.colors as clr
 import networkx as nx
 import pandas as pd
@@ -43,6 +45,7 @@ import shapely.geometry as sh
 import shapefile as shp
 from shapely.ops import cascaded_union
 from descartes.patch import PolygonPatch
+from matplotlib.collections import PolyCollection
 from numpy import array
 import PIL.Image as Image
 import hashlib
@@ -681,16 +684,25 @@ class Layout(PyLayers):
             if self.coordinates=='cart':
                 for k in self.Gs.pos.keys():
                     self.Gs.pos[k] = self.m( self.Gs.pos[k][0], self.Gs.pos[k][1], inverse=True)
+                if hasattr(self,'dpoly'):
+                    for k in self.dpoly:
+                        #self.dpoly[k].ndarray() = np.vstack(self.m(self.dpoly[k].ndarray()[0,:],self.dpoly[k].ndarray()[1,:],inverse=True))
+                        self.dpoly[k]._xy = np.vstack(self.m(self.dpoly[k]._xy[0,:],self.dpoly[k]._xy[1,:],inverse=True))
                 self.coordinates ='latlon'
             elif self.coordinates=='latlon':
                 for k in self.Gs.pos.keys():
                     self.Gs.pos[k] = self.m( self.Gs.pos[k][0], self.Gs.pos[k][1])
+                if hasattr(self,'dpoly'):
+                    for k in self.dpoly:
+                        #self.dpoly[k].ndarray() = np.vstack(self.m(self.dpoly[k].ndarray()[0,:],self.dpoly[k].ndarray()[1,:],inverse=True))
+                        self.dpoly[k]._xy = np.vstack(self.m(self.dpoly[k]._xy[0,:],self.dpoly[k]._xy[1,:]))
                 self.coordinates ='cart'
 
             nodes = self.Gs.nodes()
             upnt = [n for n in nodes if n < 0]
             self.pt[0, :] = np.array([self.Gs.pos[k][0] for k in upnt])
             self.pt[1, :] = np.array([self.Gs.pos[k][1] for k in upnt])
+
 
     def _help(self):
         st = ''
@@ -1124,7 +1136,7 @@ class Layout(PyLayers):
         # sparse matrix segment-segment
         # usage
         # self.sgsg[seg1,seg2] => return common point
-        pdb.set_trace()
+
         mno = max(self.Gs.nodes())
 
         #self.sgsg = sparse.lil_matrix((mno+1,mno+1),dtype='int')
@@ -1703,6 +1715,7 @@ class Layout(PyLayers):
             # self.coordinates = 'latlon'
             self._filename = self._fileosm.replace('osm', 'lay')
 
+        self.dpoly = dpoly
         _np = 0  # _ to avoid name conflict with numpy alias
         _ns = 0
         ns = 0
@@ -1738,7 +1751,6 @@ class Layout(PyLayers):
                 u_prev = u
                 k_prev = kp[u]
 
-        pdb.set_trace()
         for npt in coords.xy:
             # if node is not duplicated add node
             if npt not in dup:
@@ -1995,6 +2007,8 @@ class Layout(PyLayers):
         config.add_section("info")
         config.add_section("points")
         config.add_section("segments")
+        if hasattr(self,'dpoly'):
+            config.add_section("polygons")
         config.add_section("files")
         config.add_section("slabs")
         config.add_section("materials")
@@ -2101,7 +2115,6 @@ class Layout(PyLayers):
         #   1 = { 'connect':[1,2,3,4], 'z':(100,115),name:''}
         #
         if hasattr(self,'dpoly'):
-            config.add_section("polygons")
             for k in self.dpoly:
                 config.set("polygons", str(k), self.dpoly[k])
 
@@ -2480,6 +2493,11 @@ class Layout(PyLayers):
 
         self.boundary(bg2npy = False)
 
+        # load poygons
+        if config.has_section('polygons'):
+            logger.info("reading polygons")
+            self.dpoly = eva(di['polygons'])
+
         # compliant with config file without  material/slab information
         #
         # {latlon]
@@ -2833,7 +2851,6 @@ class Layout(PyLayers):
         # add _AIR wall around the layout
         #
         self.boundary()
-
         if config.has_section('polygons'):
             logger.info("reading polygons")
             self.dpoly = di['polygons']
@@ -3757,7 +3774,7 @@ class Layout(PyLayers):
             ----------
 
             pt : a point (2,)
-            seg : a list of segments to test. 
+            seg : a list of segments to test.
                  if [] => all Gs segments are tested
 
             segdtol : distance tolerance point to segment
@@ -6127,9 +6144,13 @@ class Layout(PyLayers):
             if hasattr(self,'sl'):
                 write_gpickle(getattr(self, 'sl'),
                           os.path.join(path, 'sl.gpickle'))
+            if hasattr(self,'dpoly'):
+                with open(os.path.join(path, 'dpoly.pickle'),'wb') as fd:
+                    pickle.dump(getattr(self,'dpoly'),fd)
 
         # save dictionnary which maps string interaction to
         # [interaction node, interaction type]
+
         if 't' in self.lbltg:
             if hasattr(self,'ddiff'):
                 write_gpickle(getattr(self, 'ddiff'),
@@ -6212,6 +6233,14 @@ class Layout(PyLayers):
                 setattr(self, 'lnss', lnss)
             else :
                 self.lnss=[]
+
+            filedpoly = os.path.join(path, 'dpoly.pickle')
+            if os.path.isfile(filedpoly):
+                fd = open(filedpoly,'rb')
+                dpoly = pickle.load(fd)
+                setattr(self, 'dpoly', dpoly)
+            else :
+                self.dpoly = {}
 
         filedca = os.path.join(path, 'dca.gpickle')
         if os.path.isfile(filedca):
@@ -8906,7 +8935,7 @@ class Layout(PyLayers):
         #
 
         vnodes = self.Gt.node[ncy]['polyg'].vnodes
-        vpoints = [ x for x in vnodes if  x < 0 ] 
+        vpoints = [ x for x in vnodes if  x < 0 ]
         lD = []
         for x in vpoints:
             if x in self.ddiff:
@@ -9025,6 +9054,60 @@ class Layout(PyLayers):
         #         fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg,edges=False,nodes=True,node_size=50,node_color='c')
         #     if k==4:
         #         fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg,nodes=False,node_size=50,node_color='b')
+
+    def show_poly(self,**kwargs):
+       """ show polygons
+       Parameters
+       ----------
+       bmap : boolean (display smpoy map)
+
+       Returns
+       -------
+
+       fig,ax
+       """
+       import smopy
+       bmap = kwargs.pop('bmap',True)
+       figsize = kwargs.pop('figsize',(15,15))
+       lm = self.extent[0]
+       lM = self.extent[1]
+       Lm = self.extent[2]
+       LM = self.extent[3]
+       zoom = 10
+       self.map = smopy.Map((Lm,lm,LM,lM), z=zoom)
+       bcond = bmap and hasattr(self,'map')
+       fig = kwargs.pop('fig',plt.gcf())
+       ax = self.map.show_mpl(figsize=figsize)
+
+       #ax = kwargs.pop('ax',plt.gca())
+
+       BLUE='#6699cc'
+       verts = []
+       lbdg_height = []
+       pdb.set_trace()
+       if hasattr(self.dpoly,'_xy'):
+           for kpoly in self.dpoly:
+               verts.append(self.dpoly[kpoly]._xy.T)
+       else:
+           for kpoly in self.dpoly:
+               connect = self.dpoly[kpoly]['connect']
+               z = self.dpoly[kpoly]['z']
+               building_height = z[1]-z[0]
+               lbdg_height.append(building_height)
+               lpol = []
+               for seg in connect:
+                   ta = self.Gs.node[seg]['connect'][0]
+                   lpol.append((self.Gs.pos[ta][0],self.Gs.pos[ta][1]))
+               verts.append(lpol)
+       hmax = np.max(lbdg_height)
+       hmin = np.min(lbdg_height)
+       arg =  255*(np.array(lbdg_height)-hmin)/(hmax-hmin)
+       facecolors = cm.jet(arg.astype(int))
+       coll = PolyCollection(verts, edgecolors='k', facecolors=facecolors)
+       ax.add_collection(coll)
+       ax.autoscale_view()
+       ax.axis('equal')
+       return fig,ax,arg,facecolors
 
     def showG(self, graph='s', **kwargs):
         """ show the different graphs
