@@ -676,8 +676,53 @@ class Layout(PyLayers):
         Ls.g2npy()
         return Ls
 
+    def mapconv(xorlon,yorlat,inverse=False):
+        """ map converter spherical to cartesian (default)
+
+        Parameters
+        ----------
+
+        lonorx : np.array of float
+            lon or x
+        latory : np.array of float
+            lat or y
+
+        inverse : boolean
+           True  (cartesian -> spherical)
+           False (spherical -> cartesian)
+
+        Examples
+        --------
+
+        lon = np.array([])
+        lat = np.array([])
+        p = L.mapconv(lon,lat)
+
+        Info
+        ----
+
+        Lambert 93 (France) : Proj(init='epsg:2154')
+
+        """
+        # spherical projection
+        psph = Proj(init='epsg:4326')
+        # use Basemap (Deprecated)
+        if hasattr(self,'m'):
+            p = self.m(lonorx,latory,inverse=inverse)
+        # use pyproj
+        if hasattr(self,'cartproj'):
+            if inverse:
+                p = projection(self.cartproj,psph,lonorx,latory)
+            else:
+                p = projection(psph,self.cartproj,lonorx,latory)
+
     def switch(self):
         """ switch coordinates
+
+        Info
+        ----
+
+        Use either basemap objet or pyproj object
 
         """
         if hasattr(self,'m'):
@@ -2344,10 +2389,10 @@ class Layout(PyLayers):
                 or_coord_format = 'latlon'
                 coords = osm.Coords()
                 coords.clean()
-                coords.latlon = {i: np.array(
-                    eval(di['points'][i])) for i in di['points']}
-                coords.boundary = np.hstack((np.min(np.array(coords.latlon.values()), axis=0),
-                                             np.max(np.array(coords.latlon.values()), axis=0)))
+                coords.latlon = {eval(i): np.array( eval(di['points'][i])) for i in di['points']}
+                coords.boundary = np.hstack((np.min(np.vstack(coords.latlon.values()), axis=0),
+                                             np.max(np.vstack(coords.latlon.values()), axis=0)))
+                assert(len(coords.boundary)==4)
                 coords.cartesian(cart=True)
             else:
                 or_coord_format = 'cart'

@@ -174,13 +174,14 @@ class Coords(object):
 
             self.cpt += 1
 
-        self.boundary=np.array([self.minlon,self.minlat,self.maxlon,self.maxlat])
+        self.boundary = np.array([self.minlon,self.minlat,self.maxlon,self.maxlat])
 
     def cartesian(self, cart=False, delta=0, projection='cass'):
         """ convert Latitude/Longitude in cartesian
 
         Parameters
         ----------
+
         cart : Boolean
             conversion to cartesian
         delta : offset
@@ -211,6 +212,7 @@ class Coords(object):
 
         """
         bd = self.boundary
+        print(bd)
         lon_0 = (bd[0]+bd[2])/2.
         lat_0 = (bd[1]+bd[3])/2.
 
