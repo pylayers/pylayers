@@ -734,7 +734,8 @@ class Layout(PyLayers):
         if hasattr(self,'m'):
             if self.coordinates=='cart':
                 for k in self.Gs.pos.keys():
-                    self.Gs.pos[k] = self.m( self.Gs.pos[k][0], self.Gs.pos[k][1], inverse=True)
+                    p = self.m( self.Gs.pos[k][0], self.Gs.pos[k][1], inverse=True)
+                    self.Gs.pos[k] = p
                 if hasattr(self,'dpoly'):
                     for k in self.dpoly:
                         #self.dpoly[k].ndarray() = np.vstack(self.m(self.dpoly[k].ndarray()[0,:],self.dpoly[k].ndarray()[1,:],inverse=True))
@@ -742,7 +743,8 @@ class Layout(PyLayers):
                 self.coordinates ='latlon'
             elif self.coordinates=='latlon':
                 for k in self.Gs.pos.keys():
-                    self.Gs.pos[k] = self.m( self.Gs.pos[k][0], self.Gs.pos[k][1])
+                    p = self.m( self.Gs.pos[k][0], self.Gs.pos[k][1])
+                    self.Gs.pos[k] = p
                 if hasattr(self,'dpoly'):
                     for k in self.dpoly:
                         #self.dpoly[k].ndarray() = np.vstack(self.m(self.dpoly[k].ndarray()[0,:],self.dpoly[k].ndarray()[1,:],inverse=True))
@@ -2296,15 +2298,24 @@ class Layout(PyLayers):
         [materials]
         BRICK = {'mur':complex,'epsr':complex,'sigma':float,'roughness':}
 
+        [polygons]
+        1 = {'connect':[1,2,3,4],'name':NAME,'z':(zmin,zmax)}
+
         [indoor]
         zceil =
         zfloor =
 
         [latlon]
+        llcrnrlon = 
+        llcrnrlat = 
+        urcrnrlon =
+        urcrnrlat = 
+        projection = 
+
 
 
         """
-        logger.info('load lay file')
+        logger.info('load lay file in load fast')
         # di : dictionnary which reflects the content of ini file
         di = {}
         config = ConfigParser.RawConfigParser()
@@ -2325,6 +2336,14 @@ class Layout(PyLayers):
 
         self.Np = len(di['points'])
         self.Ns = len(di['segments'])
+
+        #
+        # Ng : number of polygons
+        # polygons introduced in 1.4 format
+        #
+        if config.has_section('polygons'):
+            self.Ng = len(di['polygons'])
+
         self.Gs = nx.Graph(name='Gs')
         self.Gs.pos = {}
         self.labels = {}
@@ -2428,7 +2447,10 @@ class Layout(PyLayers):
         logger.info('load_fast : reading points')
         lnodeindex = [ eval(x) for x in di['points']]
         self.Gs.add_nodes_from(lnodeindex)  # add point node
-        self.Gs.pos = { eval(i) : eval(di['points'][i]) for i in di['points']}
+        if self.coordinates=='latlon':
+            self.Gs.pos = { eval(i) : eval(di['points'][i]) for i in di['points']}
+        else:
+            self.Gs.pos = { i : coords.xy[i] for i in coords.xy}
 
         #    #
         #    # limitation of point precision is important for avoiding
@@ -2665,6 +2687,11 @@ class Layout(PyLayers):
         zfloor =
 
         [latlon]
+        llcrnrlon = 
+        llcrnrlat = 
+        urcrnrlon =
+        urcrnrlat = 
+        projection = 
 
 
         """
@@ -2768,8 +2795,7 @@ class Layout(PyLayers):
                 or_coord_format = 'latlon'
                 coords = osm.Coords()
                 coords.clean()
-                coords.latlon = {i: np.array(
-                    eval(di['points'][i])) for i in di['points']}
+                coords.latlon = {i: np.array( eval(di['points'][i])) for i in di['points']}
                 coords.boundary = np.hstack((np.min(np.array(coords.latlon.values()), axis=0),
                                              np.max(np.array(coords.latlon.values()), axis=0)))
                 coords.cartesian(cart=True)
@@ -2810,8 +2836,7 @@ class Layout(PyLayers):
             #
 
             self.Gs.add_node(nodeindex)  # add point node
-            self.Gs.pos[nodeindex] = (
-                round(1000 * x) / 1000., round(1000 * y) / 1000.)
+            self.Gs.pos[nodeindex] = ( round(1000 * x) / 1000., round(1000 * y) / 1000.)
             self.labels[nodeindex] = nn
 
         #
