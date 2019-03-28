@@ -785,6 +785,7 @@ def getosm(**kwargs):
     typ = kwargs.pop('typ','indoor')
     level_height = kwargs.pop('level_height', 3.45)
     typical_height = kwargs.pop('typical_height', 10)
+    bexcluded = kwargs.pop('bexcluded', False)
 
     # from coordinates
     if filename == '':
@@ -910,7 +911,7 @@ def getosm(**kwargs):
     mask = np.in1d(lnodes_full, lnodes_id, invert=True)
 
     # nodes not involved in buildings
-    if typ != 'indoor':
+    if typ != 'indoor' and bexcluded:
         lexcluded = lnodes_full[mask]
         coords.filter(lexcluded)
 

@@ -245,6 +245,7 @@ class Layout(PyLayers):
         self.xlim = kwargs.pop('xlim',())
         self.dist_m = kwargs.pop('dist_m',400)
         self.typ = kwargs.pop('typ','outdoor')
+        self.bexcluded = kwargs.pop('bexcluded',False)
 
         self.labels = {}
 
@@ -423,10 +424,15 @@ class Layout(PyLayers):
                 self.sl = sb.SlabDB()
             elif '(' in str(arg):  # load from osmapi latlon (string or tuple
                 latlon = eval(self.arg)
-                self.importosm(latlon=latlon, dist_m=self.dist_m, cart=self.bcartesian, typ=self.typ)
+                self.importosm(latlon=latlon, dist_m=self.dist_m,
+                        cart=self.bcartesian, typ=self.typ)
                 self.loadosm = True
             else:  # load from address geocoding
-                self.importosm(address=self.arg, dist_m=self.dist_m, cart=self.bcartesian , typ=self.typ)
+                self.importosm(address=self.arg,
+                        dist_m=self.dist_m,
+                        cart=self.bcartesian,
+                        typ=self.typ)
+
                 self.loadosm = True
 
             # add boundary if it not exist
@@ -1710,6 +1716,7 @@ class Layout(PyLayers):
         self.zfloor = 1e10
 
         if self._fileosm == '':  # by using osmapi address or latlon
+            logger.info('load from osmapi')
 
             self.typ = kwargs.pop('typ','indoor')
             address = kwargs.pop('address','Rennes')
@@ -1743,6 +1750,7 @@ class Layout(PyLayers):
                     str(lon).replace('.', '_') + '.ini'
         else:  # by reading an osm file
 
+            logger.info('load from osm file')
             # The osm file is supposed to be in $PROJECT/struc/osm directory
             fileosm = pyu.getlong(self._fileosm, os.path.join('struc', 'osm'))
             #coords, nodes, ways, relations, m = osm.osmparse(fileosm, typ=self.typ)
@@ -1751,7 +1759,8 @@ class Layout(PyLayers):
             # coords, nodes, ways, relations, m = osm.osmparse(fileosm)
             coords, nodes, ways, m , (lat,lon) , dpoly = osm.getosm(cart = cart,
                                                        filename = fileosm,
-                                                       typ = self.typ)
+                                                       typ = self.typ,
+                                                       bexcluded = self.bexcluded)
             if cart:
                 self.coordinates = 'cart'
             else:
