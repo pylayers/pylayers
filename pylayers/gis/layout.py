@@ -2578,7 +2578,7 @@ class Layout(PyLayers):
         # load poygons
         if config.has_section('polygons'):
             logger.info("reading polygons")
-            self.dpoly = di['polygons']
+            self.dpoly = { k : eval(di['polygons'][k]) for k in di['polygons']}
             #
             # TODO convert keys into int
 
@@ -6326,6 +6326,7 @@ class Layout(PyLayers):
                 fd = open(filedpoly,'rb')
                 dpoly = pickle.load(fd)
                 setattr(self, 'dpoly', dpoly)
+                self.dpoly = {k:eval(self.dpoly[k]) for k in self.dpoly}
             else :
                 self.dpoly = {}
 
@@ -9181,7 +9182,6 @@ class Layout(PyLayers):
        BLUE='#6699cc'
        verts = []
        lbdg_height = []
-       pdb.set_trace()
        if hasattr(self.dpoly,'_xy'):
            for kpoly in self.dpoly:
                verts.append(self.dpoly[kpoly]._xy.T)
@@ -9189,7 +9189,7 @@ class Layout(PyLayers):
            for kpoly in self.dpoly:
                connect = self.dpoly[kpoly]['connect']
                z = self.dpoly[kpoly]['z']
-               building_height = z[1]-z[0]
+               building_height = z[1] - z[0]
                lbdg_height.append(building_height)
                lpol = []
                for seg in connect:
