@@ -275,7 +275,7 @@ class Layout(PyLayers):
         self._shseg = {}
 
         self.hasboundary = False
-        self.coordinates = 'cart'
+        self.format = 'cart'
         self.version = '1.3'
 
         assert(self.typ in ['indoor','outdoor','floorplan'])
@@ -528,7 +528,7 @@ class Layout(PyLayers):
             filename = pyu.getlong(
                 self.display['overlay_file'], os.path.join('struc', 'images'))
             st = st + "Image('" + filename + "')\n"
-        st = st + "Coordinates : " + self.coordinates + "\n"
+        st = st + "Coordinates : " + self.format + "\n"
         if hasattr(self,'extent'):
             st = st + "----------------\n"
             st = st+ str(self.extent)+'\n'
@@ -732,7 +732,7 @@ class Layout(PyLayers):
 
         """
         if hasattr(self,'m'):
-            if self.coordinates=='cart':
+            if self.format == 'cart':
                 for k in self.Gs.pos.keys():
                     p = self.m( self.Gs.pos[k][0], self.Gs.pos[k][1], inverse=True)
                     self.Gs.pos[k] = p
@@ -740,8 +740,8 @@ class Layout(PyLayers):
                     for k in self.dpoly:
                         #self.dpoly[k].ndarray() = np.vstack(self.m(self.dpoly[k].ndarray()[0,:],self.dpoly[k].ndarray()[1,:],inverse=True))
                         self.dpoly[k]._xy = np.vstack(self.m(self.dpoly[k]._xy[0,:],self.dpoly[k]._xy[1,:],inverse=True))
-                self.coordinates ='latlon'
-            elif self.coordinates=='latlon':
+                self.format = 'latlon'
+            elif self.format == 'latlon':
                 for k in self.Gs.pos.keys():
                     p = self.m( self.Gs.pos[k][0], self.Gs.pos[k][1])
                     self.Gs.pos[k] = p
@@ -749,7 +749,7 @@ class Layout(PyLayers):
                     for k in self.dpoly:
                         #self.dpoly[k].ndarray() = np.vstack(self.m(self.dpoly[k].ndarray()[0,:],self.dpoly[k].ndarray()[1,:],inverse=True))
                         self.dpoly[k]._xy = np.vstack(self.m(self.dpoly[k]._xy[0,:],self.dpoly[k]._xy[1,:]))
-                self.coordinates ='cart'
+                self.format ='cart'
 
             nodes = self.Gs.nodes()
             upnt = [n for n in nodes if n < 0]
@@ -1570,7 +1570,7 @@ class Layout(PyLayers):
             for k, keys in enumerate(self.Gs.pos.keys()):
                 self.Gs.pos[keys] = self.m( pos[k, 0] - Dx, pos[k, 1] - Dy, inverse=True)
 
-            self.coordinates = 'latlon'
+            self.format = 'latlon'
 
     def importres(self,_fileres,**kwargs):
         """ import res format
@@ -1737,9 +1737,9 @@ class Layout(PyLayers):
 
             self.typ = 'outdoor'
             if cart:
-                self.coordinates = 'cart'
+                self.format = 'cart'
             else:
-                self.coordinates = 'latlon'
+                self.format = 'latlon'
 
             if latlon == '0':
                 self._filename = kwargs['address'].replace(' ', '_') + '.lay'
@@ -1764,11 +1764,10 @@ class Layout(PyLayers):
                                                        typ = self.typ,
                                                        bexcluded = self.bexcluded)
             if cart:
-                self.coordinates = 'cart'
+                self.format = 'cart'
             else:
-                self.coordinates = 'latlon'
+                self.format = 'latlon'
 
-            # self.coordinates = 'latlon'
             self._filename = self._fileosm.replace('osm', 'lay')
 
         self.dpoly = dpoly
@@ -1915,10 +1914,13 @@ class Layout(PyLayers):
         self.pur = self.m(self.extent[1],self.extent[3])
         self.extent_c = (self.pll[0],self.pur[0],self.pll[1],self.pur[1])
 
-        if (cart and (self.coordinates!='cart')):
+        #
+        # TODO use conversion function
+        #
+        if (cart and (self.format != 'cart')):
              x, y = self.m(lon, lat)
              self.Gs.pos = {k: (x[i], y[i]) for i, k in enumerate(self.Gs.pos)}
-             self.coordinates = 'cart'
+             self.format  = 'cart'
 
         # del coords
         # del nodes
@@ -1997,9 +1999,9 @@ class Layout(PyLayers):
         for n in self.Gs.pos:
             if n < 0:
                 if n not in self.lboundary:
-                    if self.coordinates == 'latlon':
+                    if self.format == 'latlon':
                         lon, lat = self.Gs.pos[n]
-                    if self.coordinates == 'cart':
+                    if self.format == 'cart':
                         x, y = self.Gs.pos[n]
                         lon, lat = self.m(x, y, inverse=True)
                     fd.write("<node id='" + str(n) + "' action='modify' visible='true' lat='" +
@@ -2052,24 +2054,29 @@ class Layout(PyLayers):
         """ save Layout structure in a .lay file
 
         """
+
         current_version = 1.4
+
         if os.path.splitext(self._filename)[1]=='.ini':
             self._filename = self._filename.replace('.ini','.lay')
         #
         # version 1.3 : suppression of index in slab and materials
         #
+
         config = ConfigParser.RawConfigParser()
         config.optionxform = str
         config.add_section("info")
         config.add_section("points")
         config.add_section("segments")
+
         if hasattr(self,'dpoly'):
             config.add_section("polygons")
+
         config.add_section("files")
         config.add_section("slabs")
         config.add_section("materials")
 
-        if self.coordinates == 'latlon':
+        if self.format == 'latlon':
             config.set("info", "format", "latlon")
         else:
             config.set("info", "format", "cart")
@@ -2107,8 +2114,7 @@ class Layout(PyLayers):
         for n in self.Gs.pos:
             if n < 0:
                 if n not in self.lboundary:
-                    config.set("points", str(
-                        n), (self.Gs.pos[n][0], self.Gs.pos[n][1]))
+                    config.set("points", str(n), (self.Gs.pos[n][0], self.Gs.pos[n][1]))
 
         # iterate on segments
         for n in self.Gs.pos:
@@ -2447,7 +2453,7 @@ class Layout(PyLayers):
         logger.info('load_fast : reading points')
         lnodeindex = [ eval(x) for x in di['points']]
         self.Gs.add_nodes_from(lnodeindex)  # add point node
-        if self.coordinates=='latlon':
+        if self.format=='cart':
             self.Gs.pos = { eval(i) : eval(di['points'][i]) for i in di['points']}
         else:
             self.Gs.pos = { i : coords.xy[i] for i in coords.xy}
@@ -2572,7 +2578,9 @@ class Layout(PyLayers):
         # load poygons
         if config.has_section('polygons'):
             logger.info("reading polygons")
-            self.dpoly = eva(di['polygons'])
+            self.dpoly = di['polygons']
+            #
+            # TODO convert keys into int
 
         # compliant with config file without  material/slab information
         #
@@ -6326,9 +6334,17 @@ class Layout(PyLayers):
             dca = read_gpickle(filedca)
             setattr(self, 'dca',dca)
 
+        #
+        # TODO Replace self.m by pyproj
+        #
         filem = os.path.join(path, 'm.gpickle')
         if os.path.isfile(filem):
             setattr(self, 'm', read_gpickle(filem))
+            self.extent = (self.m.lonmin,self.m.lonmax,self.m.latmin,self.m.latmax)
+            self.pll = self.m(self.extent[0],self.extent[2])
+            self.pur = self.m(self.extent[1],self.extent[3])
+            self.extent_c = (self.pll[0],self.pur[0],self.pll[1],self.pur[1])
+
 
     def polysh2geu(self, poly):
         """ transform sh.Polygon into geu.Polygon
@@ -9136,8 +9152,10 @@ class Layout(PyLayers):
 
     def show_poly(self,**kwargs):
        """ show polygons
+
        Parameters
        ----------
+
        bmap : boolean (display smpoy map)
 
        Returns
