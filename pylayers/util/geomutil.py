@@ -1,5 +1,6 @@
 # -*- coding:Utf-8 -*-
 """
+
 .. currentmodule:: pylayers.util.geomutil
 
 
@@ -13,6 +14,7 @@ import networkx as nx
 import doctest
 import os
 import matplotlib.pyplot as plt
+from matplotlib.collections import PolyCollection
 import numpy as np
 from scipy.linalg import toeplitz
 import pylayers.util.project as pro
@@ -22,7 +24,7 @@ import numpy.ma as ma
 
 # from antenna import *
 import shapely.geometry as shg
-from descartes.patch import PolygonPatch
+#from descartes.patch import PolygonPatch
 from itertools import combinations, permutations, product
 
 
@@ -223,9 +225,11 @@ class Plot_shapely(pro.PyLayers):
 
     def plot_polygon(self):
         """polygons"""
-        patch = PolygonPatch(self.obj, facecolor=self.coul,
-                             edgecolor='#000000', alpha=self.alph)
-        self.ax.add_patch(patch)
+        #patch = PolygonPatch(self.obj, facecolor=self.coul,
+        #                      edgecolor='#000000', alpha=self.alph)
+        coll = PolyCollection(self.obj, edgecolors="#000000", facecolor=self.coul, alpha = self.alph)
+        self.ax.add_collection(coll)
+        #self.ax.add_patch(patch)
 
     def plot_multi(self):
         """multipoints, multilignes,multipolygones + GeometryCollection"""
@@ -1445,9 +1449,12 @@ class Polygon(pro.PyLayers, shg.Polygon):
                 else:
                     ax.plot(pt.x, pt.y, 'o', color=GRAY)
 
-            patch = PolygonPatch(self, facecolor='#6699cc',
-                                 edgecolor='#000000', alpha=0.5, zorder=2)
-            ax.add_patch(patch)
+            coll = PolyCollection(self, edgecolors="#000000",
+            facecolor="6699cc")
+            #patch = PolygonPatch(self, facecolor='#6699cc',
+            #                     edgecolor='#000000', alpha=0.5, zorder=2)
+            #ax.add_patch(patch)
+            ax.add_collection(coll)
         # pdb.set_trace()
         #
         #  1) Calculate node-node visibility
@@ -1670,9 +1677,11 @@ class Polygon(pro.PyLayers, shg.Polygon):
                 ax.plot(pt.x, pt.y, 'o', color=GRAY)
             k = k + 1
 
-        patch = PolygonPatch(self, facecolor='#6699cc',
-                             edgecolor='#6699cc', alpha=0.5, zorder=2)
-        ax.add_patch(patch)
+        coll = PolyCollection(self, edgecolors="#000000",facecolor="6699cc")
+        #patch = PolygonPatch(self, facecolor='#6699cc',
+        #                     edgecolor='#6699cc', alpha=0.5, zorder=2)
+        #ax.add_patch(patch)
+        ax.add_collection(coll)
         nodes = np.array(Gv.nodes())
 
         uneg = list(nodes[np.nonzero(nodes < 0)[0]])
@@ -4601,8 +4610,12 @@ def plotPolygon(poly, color="#abcdef", alpha=0.8):
         ax = gax[0]
     else:
         ax = fig.add_subplot(111)
-    patch = PolygonPatch(poly, facecolor=color, alpha=alpha)
-    ax.add_patch(patch)
+
+    coll = PolyCollection(self,
+            edgecolors="#000000",facecolor=color,alpha=alpha)
+    #patch = PolygonPatch(poly, facecolor=color, alpha=alpha)
+    #ax.add_patch(patch)
+    ax.add_collection(coll)
     plt.show()
 
 
