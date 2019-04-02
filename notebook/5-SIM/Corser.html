@@ -17,37 +17,40 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="TC1 METIS Scenario" href="../2-AP/MetisRayTracing60GHzforTC1.html" />
     <link rel="prev" title="Handling Body Description and Mobility" href="../4-MOB/Body.html" /> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -90,14 +93,14 @@
             
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">User Manual</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#basic-usage">2&nbsp;&nbsp;&nbsp;Basic Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#environment-description">3&nbsp;&nbsp;&nbsp;Environment Description</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#materials-and-slabs">4&nbsp;&nbsp;&nbsp;Materials and Slabs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#description-of-antennas">5&nbsp;&nbsp;&nbsp;Description of Antennas</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#coverage-simulation">6&nbsp;&nbsp;&nbsp;Coverage Simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#ray-tracing-simulation">7&nbsp;&nbsp;&nbsp;Ray Tracing Simulation</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../TOC.html#handling-agent-mobility">8&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html"><span class="sectnum">1</span> Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#basic-usage"><span class="sectnum">2</span> Basic Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#environment-description"><span class="sectnum">3</span> Environment Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#materials-and-slabs"><span class="sectnum">4</span> Materials and Slabs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#description-of-antennas"><span class="sectnum">5</span> Description of Antennas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#coverage-simulation"><span class="sectnum">6</span> Coverage Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#ray-tracing-simulation"><span class="sectnum">7</span> Ray Tracing Simulation</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../TOC.html#handling-agent-mobility"><span class="sectnum">8</span> Handling Agent Mobility</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="SimulNetConfig.html">Network Simulation Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../4-MOB/Mobility.html">Trajectory and Network simulation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../4-MOB/Body.html">Handling Body Description and Mobility</a></li>
@@ -113,10 +116,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#using-pylayers-ray-tracing-with-corser-data">Using Pylayers Ray-tracing with CorSer data</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#other-simulation-examples">9&nbsp;&nbsp;&nbsp;Other Simulation Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#localization-algorithms">10&nbsp;&nbsp;&nbsp;Localization Algorithms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#measurements-tools">11&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#pylayers-tools">12&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#other-simulation-examples"><span class="sectnum">9</span> Other Simulation Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#localization-algorithms"><span class="sectnum">10</span> Localization Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#measurements-tools"><span class="sectnum">11</span> Measurements Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#pylayers-tools"><span class="sectnum">12</span> PyLayers Tools</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
@@ -129,49 +132,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_dakar.html">Outdoor Radio Coverage with Deygout Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_cover.html">Outdoor Radio Coverage with Deygout Method</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.selectl">3&nbsp;&nbsp;&nbsp;pylayers.gis.selectl Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.srtm">4&nbsp;&nbsp;&nbsp;pylayers.gis.srtm Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.osmparser">5&nbsp;&nbsp;&nbsp;pylayers.gis.osmparser Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.ezone">6&nbsp;&nbsp;&nbsp;pylayers.gis.ezone Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.antenna">7&nbsp;&nbsp;&nbsp;pylayers.antprop.antenna Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.aarray">8&nbsp;&nbsp;&nbsp;pylayers.antprop.aarray Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.spharm">9&nbsp;&nbsp;&nbsp;pylayers.antprop.spharm Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.antssh">10&nbsp;&nbsp;&nbsp;pylayers.antprop.antssh Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.antvsh">11&nbsp;&nbsp;&nbsp;pylayers.antprop.antvsh Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.slab">12&nbsp;&nbsp;&nbsp;pylayers.antprop.slab Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.signature">13&nbsp;&nbsp;&nbsp;pylayers.antprop.signature Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.interactions">14&nbsp;&nbsp;&nbsp;pylayers.antprop.interactions Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.diffraction">15&nbsp;&nbsp;&nbsp;pylayers.antprop.diffraction Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.diffRT">16&nbsp;&nbsp;&nbsp;pylayers.antprop.diffRT Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.rays">17&nbsp;&nbsp;&nbsp;pylayers.antprop.rays Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.loss">18&nbsp;&nbsp;&nbsp;pylayers.antprop.loss Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.channel">19&nbsp;&nbsp;&nbsp;pylayers.antprop.channel Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id39">20&nbsp;&nbsp;&nbsp;pylayers.antprop.loss Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.coverage">21&nbsp;&nbsp;&nbsp;pylayers.antprop.coverage Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.coeffModel">22&nbsp;&nbsp;&nbsp;pylayers.antprop.coeffModel Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.simul.link">23&nbsp;&nbsp;&nbsp;pylayers.simul.link Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.simul.exploit">24&nbsp;&nbsp;&nbsp;pylayers.simul.exploit Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.simul.exploit_simulnet">25&nbsp;&nbsp;&nbsp;pylayers.simul.exploit_simulnet Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.simul.simulnet">26&nbsp;&nbsp;&nbsp;pylayers.simul.simulnet Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.simul.simultraj">27&nbsp;&nbsp;&nbsp;pylayers.simul.simultraj Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.exploit.simnet">28&nbsp;&nbsp;&nbsp;pylayers.exploit.simnet Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.measures.mesuwb">29&nbsp;&nbsp;&nbsp;pylayers.measures.mesuwb Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.measures.mesmimo">30&nbsp;&nbsp;&nbsp;pylayers.measures.mesmimo Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.measures.cormoran">31&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -219,7 +183,7 @@
         
           <li><a href="../index.html">User Manual</a> &raquo;</li>
         
-          <li><a href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
+          <li><a href="../TOC.html"><span class="sectnum">1</span> Overview</a> &raquo;</li>
         
       <li>Table Of Content</li>
     
@@ -243,40 +207,45 @@
   <div class="section" id="table-of-content">
 <h1>Table Of Content<a class="headerlink" href="#table-of-content" title="Permalink to this headline">¶</a></h1>
 <ol class="arabic simple">
-<li><a class="reference external" href="#CORMORAN">CORMORAN Measurement Campaign</a><ol class="arabic">
-<li><a class="reference external" href="#Motivation">Motivation for creating a specific tool</a></li>
-<li><a class="reference external" href="#pre">Prerequisite installations</a></li>
+<li><p><a class="reference external" href="#CORMORAN">CORMORAN Measurement Campaign</a></p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="#Motivation">Motivation for creating a specific tool</a></p></li>
+<li><p><a class="reference external" href="#pre">Prerequisite installations</a></p></li>
 </ol>
 </li>
-<li><a class="reference external" href="#CorSer">The CorSer Class</a><ol class="arabic">
-<li><a class="reference external" href="#Load">Load Serie</a></li>
-<li><a class="reference external" href="#getinfo">Get information on the Series</a></li>
-<li><a class="reference external" href="#Available%20Data">Available Data Variable</a><ol class="arabic">
-<li><a class="reference external" href="#Radio%20df">Radio DataFrames</a></li>
-<li><a class="reference external" href="#Non%20Radio%20df">Non Radio DataFrames</a></li>
-<li><a class="reference external" href="#device">Involved Devices</a></li>
+<li><p><a class="reference external" href="#CorSer">The CorSer Class</a></p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="#Load">Load Serie</a></p></li>
+<li><p><a class="reference external" href="#getinfo">Get information on the Series</a></p></li>
+<li><p><a class="reference external" href="#Available%20Data">Available Data Variable</a></p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="#Radio%20df">Radio DataFrames</a></p></li>
+<li><p><a class="reference external" href="#Non%20Radio%20df">Non Radio DataFrames</a></p></li>
+<li><p><a class="reference external" href="#device">Involved Devices</a></p></li>
 </ol>
 </li>
-<li><a class="reference external" href="#access%20data">Acessing the Data</a><ol class="arabic">
-<li><a class="reference external" href="#getdevp">Get Device Position</a></li>
-<li><a class="reference external" href="#getlink">Get Link Value</a></li>
-<li><a class="reference external" href="#getlinkd">Get Link Distance</a></li>
+<li><p><a class="reference external" href="#access%20data">Acessing the Data</a></p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="#getdevp">Get Device Position</a></p></li>
+<li><p><a class="reference external" href="#getlink">Get Link Value</a></p></li>
+<li><p><a class="reference external" href="#getlinkd">Get Link Distance</a></p></li>
 </ol>
 </li>
-<li><a class="reference external" href="#vizu">Visualizing the data</a><ol class="arabic">
-<li><a class="reference external" href="#pandas">Native Pandas Vizualization</a></li>
-<li><a class="reference external" href="#plot">Plot Method</a></li>
-<li><a class="reference external" href="#plotvisi">Plot Visibility Method</a></li>
-<li><a class="reference external" href="#plotmob">Plot Mobility Method</a></li>
-<li><a class="reference external" href="#3Dplot">3D plot</a></li>
-<li><a class="reference external" href="#3Dploti">3D plot interactively</a></li>
-<li><a class="reference external" href="#visii">3D Interrative Visibility</a></li>
+<li><p><a class="reference external" href="#vizu">Visualizing the data</a></p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="#pandas">Native Pandas Vizualization</a></p></li>
+<li><p><a class="reference external" href="#plot">Plot Method</a></p></li>
+<li><p><a class="reference external" href="#plotvisi">Plot Visibility Method</a></p></li>
+<li><p><a class="reference external" href="#plotmob">Plot Mobility Method</a></p></li>
+<li><p><a class="reference external" href="#3Dplot">3D plot</a></p></li>
+<li><p><a class="reference external" href="#3Dploti">3D plot interactively</a></p></li>
+<li><p><a class="reference external" href="#visii">3D Interrative Visibility</a></p></li>
 </ol>
 </li>
 </ol>
 </li>
 </ol>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>%matplotlib inline
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>%matplotlib inline
 import  pylayers.util.mayautil as myu
 </pre></div>
 </div>
@@ -285,13 +254,13 @@ import  pylayers.util.mayautil as myu
 <p>The CORMORAN measurement campaign is the first known campaign in the
 WBAN context gathering :</p>
 <ul class="simple">
-<li>3 differents radio technologies (HiKoB, CEA plateform and Beespoon
-phone)</li>
-<li>Up to 24 radio devices equiped on a single body</li>
-<li>A precise capture of the radio device and body movement using a Vicon
-motion capture (MOCAP) system.</li>
-<li>A perfect knowledge of the capture environement</li>
-<li>58 Series with capture or group navigation scenarios</li>
+<li><p>3 differents radio technologies (HiKoB, CEA plateform and Beespoon
+phone)</p></li>
+<li><p>Up to 24 radio devices equiped on a single body</p></li>
+<li><p>A precise capture of the radio device and body movement using a Vicon
+motion capture (MOCAP) system.</p></li>
+<li><p>A perfect knowledge of the capture environement</p></li>
+<li><p>58 Series with capture or group navigation scenarios</p></li>
 </ul>
 <p>One of the main characteristics of this measurement campaign is the use
 of a precise motion capture system which allows to get a ground truth
@@ -327,14 +296,14 @@ and simplify dissemination.</p>
 <h1>Prerequisite Installations<a class="headerlink" href="#prerequisite-installations" title="Permalink to this headline">¶</a></h1>
 <p>Before starting using this tool, some requirements have to be satisfied.</p>
 <ol class="arabic simple">
-<li>The open source platform PyLayers ( <a class="reference external" href="http://www.pylayers.org">http://www.pylayers.org</a> ) has to
+<li><p>The open source platform PyLayers ( <a class="reference external" href="http://www.pylayers.org">http://www.pylayers.org</a> ) has to
 be installed following the installation notes here:
-<a class="reference external" href="https://github.com/pylayers/pylayers/blob/master/INSTALL.txt">https://github.com/pylayers/pylayers/blob/master/INSTALL.txt</a></li>
-<li>The CORMORAN measurements have to be downloaded from the gitlab
-repository</li>
-<li>An environement variable $CORMORAN has to be set at the root of your
+<a class="reference external" href="https://github.com/pylayers/pylayers/blob/master/INSTALL.txt">https://github.com/pylayers/pylayers/blob/master/INSTALL.txt</a></p></li>
+<li><p>The CORMORAN measurements have to be downloaded from the gitlab
+repository</p></li>
+<li><p>An environement variable $CORMORAN has to be set at the root of your
 CORMORAN measurements directory (help about setup of environement
-variables can be found in pylayers’ INSTALL.txt</li>
+variables can be found in pylayers’ INSTALL.txt</p></li>
 </ol>
 <p>Once those 3 steps are satisfied, the CORMORAN exploitation measure tool
 is ready to be used.</p>
@@ -344,7 +313,7 @@ is ready to be used.</p>
 CorSer (which stands for Cormoran Series). Once PyLayers has been
 installed, it is possible to directly access to the class by importing
 it.</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>   from pylayers.measures.cormoran import *
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   from pylayers.measures.cormoran import *
 
 Get information on the Series
 </pre></div>
@@ -354,11 +323,11 @@ Get information on the Series
 available measurements series using <em>cor_log()</em>. Then for each
 <strong>serie</strong> of a given <strong>day</strong> it is possible to get:</p>
 <ul class="simple">
-<li>The involved subject(s)</li>
-<li>The radio technology</li>
-<li>A short description of the serie</li>
+<li><p>The involved subject(s)</p></li>
+<li><p>The radio technology</p></li>
+<li><p>A short description of the serie</p></li>
 </ul>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>cor_log()
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cor_log()
 </pre></div>
 </div>
    <div>
@@ -868,7 +837,7 @@ available measurements series using <em>cor_log()</em>. Then for each
 Load Serie<hr class="docutils" />
 <p>As an example, serie 6 from day 11 can be loaded using the following
 command:</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>S=CorSer(serie=6,day=11,layout=True)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>S=CorSer(serie=6,day=11,layout=True)
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>load infrastructure node position: **** Processor coding : Intel-PC
@@ -905,11 +874,10 @@ the new syntax is .resample(...).ffill()
 </div>
 <p>Once loaded information about the serie (date, type, …) can be
 obtained just by calling the object itself:</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>S
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>S
 </pre></div>
 </div>
-<pre class="literal-block">
-   filename : Sc20_S6_R2_HKBS
+<pre class="literal-block">   filename : Sc20_S6_R2_HKBS
    filewear : /home/uguen/data/CORMORAN/cormoran-measures/POST-TREATED/11-06-2014/BodyandWear/Nicolas_11-06-2014_HKBS.ini
    filebody : /home/uguen/data/CORMORAN/cormoran-measures/POST-TREATED/11-06-2014/BodyandWear/Nicolas.ini
    filemocap : /home/uguen/data/CORMORAN/cormoran-measures/RAW/11-06-2014/MOCAP/serie_006.c3d
@@ -943,28 +911,28 @@ obtained just by calling the object itself:</p>
 
 
 
-Available data
-</pre>
+Available data</pre>
 <hr class="docutils" />
 <blockquote>
-<div>Radio DataFrames</div></blockquote>
+<div><p>Radio DataFrames</p>
+</div></blockquote>
 <hr class="docutils" />
 <p>Data frames are <em>Pandas</em> objects which can be interpreted as tables.</p>
 <ul class="simple">
-<li>Each line correspond a given timestamp</li>
-<li>Each column correspond to a given link between 2 radio devices</li>
+<li><p>Each line correspond a given timestamp</p></li>
+<li><p>Each column correspond to a given link between 2 radio devices</p></li>
 </ul>
 <p>Depending on available RAT involved in the serie, different data frames
 are available:</p>
 <ul class="simple">
-<li>HiKoB (HKB) data : <em>S.hkb</em></li>
-<li>BeSpoon data : <em>S.bespo</em></li>
-<li>TCR data : <em>S.tcr</em></li>
+<li><p>HiKoB (HKB) data : <em>S.hkb</em></p></li>
+<li><p>BeSpoon data : <em>S.bespo</em></p></li>
+<li><p>TCR data : <em>S.tcr</em></p></li>
 </ul>
 <p>In the example serie chosen, only HiKoB and Bespoon are available.</p>
 <p>Here is an example of the RSS values obtained by the HKB sensors for the
 120 available links and the 5 first available timestamp :</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>S.hkb.head(5)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>S.hkb.head(5)
 </pre></div>
 </div>
    <div>
@@ -1140,14 +1108,14 @@ Non Radio DataFrames<hr class="docutils" />
 <p>Extra data frames are also available to acces to non radio information.
 In particular, it exists :</p>
 <ul class="simple">
-<li><em>S.devdf</em>: the device dataframe, which gives mechanical information:
+<li><p><em>S.devdf</em>: the device dataframe, which gives mechanical information:
 position (x,y,z), velocity (v,vx,vy,vz) and acceleration (a,ax,ay,az)
-of the devices at any time stamps</li>
-<li><em>S.distdf</em>: the distance data frame, which gives ground truth
-distances between the different radio links.</li>
+of the devices at any time stamps</p></li>
+<li><p><em>S.distdf</em>: the distance data frame, which gives ground truth
+distances between the different radio links.</p></li>
 </ul>
 <p>Here is the 5 last data of the device data frame…</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>S.devdf.tail(5)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>S.devdf.tail(5)
 </pre></div>
 </div>
 <div>
@@ -1267,7 +1235,7 @@ distances between the different radio links.</li>
   </tbody>
 </table>
 </div><p>… and the 5 last data of the distance data frame:</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>S.distdf.tail(5)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>S.distdf.tail(5)
 </pre></div>
 </div>
    <div>
@@ -1443,13 +1411,13 @@ Involved devices (*S.dev*)<hr class="docutils" />
 <p>The <em>S.dev</em> command allows to obtain the complete list of devices
 involved in the serie and:</p>
 <ul class="simple">
-<li>the Name of the device used in the radio dataframe</li>
-<li>the Real device Id used during the measurement campaign</li>
-<li>The corresponding device Id used on the Body wear description</li>
-<li>At wich Subject the device is related.</li>
+<li><p>the Name of the device used in the radio dataframe</p></li>
+<li><p>the Real device Id used during the measurement campaign</p></li>
+<li><p>The corresponding device Id used on the Body wear description</p></li>
+<li><p>At wich Subject the device is related.</p></li>
 </ul>
 <p>Infrastrucure access point obviously don’t have related Subject.</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>S.dev
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>S.dev
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   Name in Dataframe     | Real Id | Body Id  | Subject
@@ -1486,19 +1454,20 @@ Accessing the data
 useful methods are provided in order to extract values from radio and
 non radio dataframes.</p>
 <blockquote>
-<div>### Get device position (<em>S.getdevp</em>)</div></blockquote>
+<div><p>### Get device position (<em>S.getdevp</em>)</p>
+</div></blockquote>
 <p>The value of the device position at a specific time or range or time can
 be obtained by specifying:</p>
 <ul class="simple">
-<li>The device (Name in dataframe OR real id OR body id)</li>
-<li>The radio <em>techno</em> (Precising the techno is optional except when an
-ambiguity occurs, therefore error is raised)</li>
-<li>a given time in second or a [start time,stop time]. If no time is
-given, the position for all time stamps are provided</li>
+<li><p>The device (Name in dataframe OR real id OR body id)</p></li>
+<li><p>The radio <em>techno</em> (Precising the techno is optional except when an
+ambiguity occurs, therefore error is raised)</p></li>
+<li><p>a given time in second or a [start time,stop time]. If no time is
+given, the position for all time stamps are provided</p></li>
 </ul>
 <p>Hence, It is possible to get the positions of the HKB radio node 11 (Hip
 Right), between 5.0 seconds and 5.2 seconds with:</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>Positions = S.getdevp(11,t=[5,5.2])
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Positions = S.getdevp(11,t=[5,5.2])
 Positions
 </pre></div>
 </div>
@@ -1656,11 +1625,10 @@ Positions
 </table>
 </div><p><strong>NOTE : You may also obtain a classical numpy array instead of this
 Pandas object by using the “*values*” method :</strong></p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>Positions.values
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Positions.values
 </pre></div>
 </div>
-<pre class="literal-block">
-   array([[-0.13956557,  0.22490462,  1.01679608],
+<pre class="literal-block">   array([[-0.13956557,  0.22490462,  1.01679608],
           [-0.13955284,  0.22484492,  1.01682581],
           [-0.13954524,  0.22482529,  1.01681787],
           [-0.1395645 ,  0.2247298 ,  1.01684918],
@@ -1684,23 +1652,22 @@ Pandas object by using the “*values*” method :</strong></p>
 
 
 
-Get link value (<em>S.getlink</em>)
-</pre>
+Get link value (<em>S.getlink</em>)</pre>
 <hr class="docutils" />
 <p>The value of a link <em>a</em> and <em>b</em> at a specific time or range or time can
 be obtained by specifying:</p>
 <ul class="simple">
-<li>The device <span class="math notranslate nohighlight">\(a\)</span> (Name in dataframe OR real id OR body id)</li>
-<li>The device <span class="math notranslate nohighlight">\(b\)</span> (Name in dataframe OR real id OR body id)</li>
-<li>The radio <em>technoa</em> and <em>technob</em> (Precising the techno is optional
-except when an ambiguity occurs, therefore error is raised)</li>
-<li>a given time in second or a [start time,stop time]. If no time is
-given, the position for all time stamps are provided</li>
+<li><p>The device <span class="math notranslate nohighlight">\(a\)</span> (Name in dataframe OR real id OR body id)</p></li>
+<li><p>The device <span class="math notranslate nohighlight">\(b\)</span> (Name in dataframe OR real id OR body id)</p></li>
+<li><p>The radio <em>technoa</em> and <em>technob</em> (Precising the techno is optional
+except when an ambiguity occurs, therefore error is raised)</p></li>
+<li><p>a given time in second or a [start time,stop time]. If no time is
+given, the position for all time stamps are provided</p></li>
 </ul>
 <p>Hence, It is possible to get the HKB values between radio node 11 (Hip
 Right) and node 16 (Ankle Right) , between 5 seconds and 5.2 seconds
 with:</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>   Values = S.getlink(11,16,t=[5,5.2])
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   Values = S.getlink(11,16,t=[5,5.2])
 
 Get link distance (*S.getlinkd*)
 </pre></div>
@@ -1709,31 +1676,32 @@ Get link distance (*S.getlinkd*)
 <p>The ground truth distance separating a device <em>a</em> and device <em>b</em> at a
 specific time or range or time can be obtained by specifying:</p>
 <ul class="simple">
-<li>The device <span class="math notranslate nohighlight">\(a\)</span> (Name in dataframe OR real id OR body id)</li>
-<li>The device <span class="math notranslate nohighlight">\(b\)</span> (Name in dataframe OR real id OR body id)</li>
-<li>The radio <em>technoa</em> and <em>technob</em> (Precising the techno is optional
-except when an ambiguity occurs, therefore error is raised)</li>
-<li>a given time in second or a [start time,stop time]. If no time is
-given, the position for all time stamps are provided</li>
+<li><p>The device <span class="math notranslate nohighlight">\(a\)</span> (Name in dataframe OR real id OR body id)</p></li>
+<li><p>The device <span class="math notranslate nohighlight">\(b\)</span> (Name in dataframe OR real id OR body id)</p></li>
+<li><p>The radio <em>technoa</em> and <em>technob</em> (Precising the techno is optional
+except when an ambiguity occurs, therefore error is raised)</p></li>
+<li><p>a given time in second or a [start time,stop time]. If no time is
+given, the position for all time stamps are provided</p></li>
 </ul>
 <p>Hence, It is possible to get the HKB values between radio node 11 (Hip
 Right) and node 16 (Ankle Right) , between 5 seconds and 5.2 seconds
 with:</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>   Distances = S.getlinkd(11,16,t=[5,5.2])
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   Distances = S.getlinkd(11,16,t=[5,5.2])
 
 Visualizing the Data
 </pre></div>
 </div>
 <hr class="docutils" />
 <blockquote>
-<div>Native Pandas Vizualization</div></blockquote>
+<div><p>Native Pandas Vizualization</p>
+</div></blockquote>
 <hr class="docutils" />
 <p>Because radio data in CorSer are stored into Pandas objects, convenient
 vizualization method are directly available. Most of them can be found
 here : <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/visualization.html">http://pandas.pydata.org/pandas-docs/stable/visualization.html</a></p>
 <p>As an example, it is possible to plot the previous obtained values and
 distance with :</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span># Ploting
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Ploting
 ax=Values.plot() #plot values
 l=Distances.plot(secondary_y=True,ax=ax) # plot distances on the right side
 
@@ -1752,17 +1720,18 @@ ax.set_title(&#39;RSS and distance as a function of time&#39;)
 <p>In addition, CorSer also provides specific plotting methods which
 includes extra features.</p>
 <blockquote>
-<div>Plot method (S.plot)</div></blockquote>
+<div><p>Plot method (S.plot)</p>
+</div></blockquote>
 <hr class="docutils" />
 <p>The plot function allows to display the radio values of a link. The main
 parameters are always the same:</p>
 <ul class="simple">
-<li>The device <span class="math notranslate nohighlight">\(a\)</span> (Name in dataframe OR real id OR body id)</li>
-<li>The device <span class="math notranslate nohighlight">\(b\)</span> (Name in dataframe OR real id OR body id)</li>
-<li>The radio <em>techno</em> (Precising the techno is optional except when an
-ambiguity occurs, therefore error is raised)</li>
-<li>A given time in second or a [start time,stop time]. If no time is
-given, the position for all time stamps are provided</li>
+<li><p>The device <span class="math notranslate nohighlight">\(a\)</span> (Name in dataframe OR real id OR body id)</p></li>
+<li><p>The device <span class="math notranslate nohighlight">\(b\)</span> (Name in dataframe OR real id OR body id)</p></li>
+<li><p>The radio <em>techno</em> (Precising the techno is optional except when an
+ambiguity occurs, therefore error is raised)</p></li>
+<li><p>A given time in second or a [start time,stop time]. If no time is
+given, the position for all time stamps are provided</p></li>
 </ul>
 <p>More option are availble, please refer to the docstring (<em>S.plot?</em>) for
 more information</p>
@@ -1771,7 +1740,7 @@ more information</p>
 <p>Continuying with the same example, it is possible to plot the HKB values
 between radio node 11 (Hip Right) and node 16 (Ankle Right) , between 5
 seconds and 5.2 seconds with:</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>S.plot(11,16,t=[5,5.2])
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>S.plot(11,16,t=[5,5.2])
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f04e8b56f90&gt;,
@@ -1783,7 +1752,7 @@ seconds and 5.2 seconds with:</p>
 <h4>Plot distance<a class="headerlink" href="#plot-distance" title="Permalink to this headline">¶</a></h4>
 <p>As well, it is possible to plot the distance using the <em>distance</em>
 parameter</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>S.plot(11,16,t=[5,5.2],distance = True)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>S.plot(11,16,t=[5,5.2],distance = True)
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f04e8931350&gt;,
@@ -1793,7 +1762,7 @@ parameter</p>
 <img alt="../../_images/Corser_31_1.png" src="../../_images/Corser_31_1.png" />
 <p>It is also possible to get the same result than with the Pandas
 procedure with the following code :</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>#plot value
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#plot value
 f,ax = S.plot(11,16,t=[5,5.2],color =&#39;b&#39;,title=False)
 
 # create right axis
@@ -1820,7 +1789,7 @@ interpretation.</p>
 the plot visibility (<em>S.pltvisi</em>) method is used. The <strong>hatched</strong> area
 denoted <strong>NLOS</strong> wheras <strong>clear</strong> area denotes <strong>LOS</strong>.</p>
 <p>Parameters are the same than those the <em>plot</em> method:</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f,ax = S.plot(1,16)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>f,ax = S.plot(1,16)
 S.pltvisi(1,16,fig=f,ax=ax)
 </pre></div>
 </div>
@@ -1839,7 +1808,7 @@ S.pltvisi(1,16,fig=f,ax=ax)
 static or not by using the plot mobility method (<em>S.pltmob</em>). The
 succession of Static and Mobile sequences are denoted <span class="math notranslate nohighlight">\(S_x\)</span> and
 <span class="math notranslate nohighlight">\(M_x\)</span> resplectively, where <span class="math notranslate nohighlight">\(x\)</span> is an index of the sequence.</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f,ax = S.plot(1,16)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>f,ax = S.plot(1,16)
 S.pltmob(fig=f,ax=ax)
 </pre></div>
 </div>
@@ -1850,7 +1819,7 @@ S.pltmob(fig=f,ax=ax)
 <img alt="../../_images/Corser_37_1.png" src="../../_images/Corser_37_1.png" />
 <p>The 2 upmentionned methods can also be used simultaneously as shown in
 the following example :</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span># plot data in green)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># plot data in green)
 f,ax=S.plthkb(1,13,figsize=(10,5))
 # plot optical occultation (hatched lines)
 S.pltvisi(1,13,fig=f,ax=ax)
@@ -1866,16 +1835,16 @@ S.pltmob(showvel=False,ylim=([-100,-40]),fig=f,ax=ax)
 <p>With the help of the Mayavi Library, the CorSer class allows to display
 in 3D :</p>
 <ul class="simple">
-<li>The building where measurements have taken place</li>
-<li>The positions of Vicon Cameras</li>
-<li>The Multi-cylindric representation of the the subjects involved in
-the selected serie</li>
-<li>The position/ antenna pattern of the devices on the body(ies) and in
-the infrastructure.</li>
+<li><p>The building where measurements have taken place</p></li>
+<li><p>The positions of Vicon Cameras</p></li>
+<li><p>The Multi-cylindric representation of the the subjects involved in
+the selected serie</p></li>
+<li><p>The position/ antenna pattern of the devices on the body(ies) and in
+the infrastructure.</p></li>
 </ul>
 <p>By default, the use of the *S._show3* method display the complete
 scene with body(ies) and associated devices at 4 different timestamp</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>S._show3()
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>S._show3()
 
 #the following line is only used to display in the notebook a screenshot of the mayavi window
 myu.inotshow(&#39;fig1&#39;)
@@ -1894,7 +1863,7 @@ myu.inotshow(&#39;fig1&#39;)
 <em>bodytime</em> can be used</p>
 <p>Example: to show the body position at <span class="math notranslate nohighlight">\(t=0s\)</span>, <span class="math notranslate nohighlight">\(t=30s\)</span> and
 <span class="math notranslate nohighlight">\(t=90s\)</span>.</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>S._show3(bodytime=[0.,30.,90.])
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>S._show3(bodytime=[0.,30.,90.])
 #the following line is only used to display in the notebook a screenshot of the mayavi window
 myu.inotshow(&#39;fig2&#39;)
 </pre></div>
@@ -1903,7 +1872,7 @@ myu.inotshow(&#39;fig2&#39;)
 </div>
 <div class="section" id="display-trajectory-trajectory-parameter">
 <h3>display trajectory (<em>trajectory</em> parameter)<a class="headerlink" href="#display-trajectory-trajectory-parameter" title="Permalink to this headline">¶</a></h3>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>S._show3(trajectory = True,bodytime=[0.,30.,90.])
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>S._show3(trajectory = True,bodytime=[0.,30.,90.])
 
 #the following line is only used to display in the notebook a screenshot of the mayavi window
 myu.inotshow(&#39;fig3&#39;)
@@ -1914,7 +1883,7 @@ myu.inotshow(&#39;fig3&#39;)
 window incluying a slider acting like a jog shuttle, to choose the
 timestamp to vizualize.</p>
 <p>Note : This function is note available in the notebook</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>S._show3i(t=35) #t=35 is an initialization value
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>S._show3i(t=35) #t=35 is an initialization value
 
 #the following line is only used to display in the notebook a screenshot of the mayavi window
 myu.inotshow(&#39;fig4&#39;)
@@ -1927,7 +1896,7 @@ myu.inotshow(&#39;fig4&#39;)
 time the vizualization is called. The following code displays the
 tisibility matrix and associated 3D scene at the inital time
 <span class="math notranslate nohighlight">\(t=35s\)</span></p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>S.imshowvisibility_i(t=35)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>S.imshowvisibility_i(t=35)
 
 #the following line is only used to display in the notebook a screenshot of the mayavi window
 myu.inotshow(&#39;fig5&#39;)
@@ -1945,10 +1914,10 @@ processing shadowing from  Nicolas
 </div>
 <div class="section" id="using-pylayers-ray-tracing-with-corser-data">
 <h1>Using Pylayers Ray-tracing with CorSer data<a class="headerlink" href="#using-pylayers-ray-tracing-with-corser-data" title="Permalink to this headline">¶</a></h1>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>import pylayers.simul.simultraj as st
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import pylayers.simul.simultraj as st
 </pre></div>
 </div>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>ST = st.Simul(S)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ST = st.Simul(S)
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Warning Unable to read graph Gr
@@ -1969,7 +1938,7 @@ Layout Graph loaded
         <a href="../2-AP/MetisRayTracing60GHzforTC1.html" class="btn btn-neutral float-right" title="TC1 METIS Scenario" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../4-MOB/Body.html" class="btn btn-neutral" title="Handling Body Description and Mobility" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../4-MOB/Body.html" class="btn btn-neutral float-left" title="Handling Body Description and Mobility" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -1978,8 +1947,10 @@ Layout Graph loaded
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Jan 29, 2019.
+        &copy; Copyright 2017, PyLayers developer team
+      <span class="lastupdated">
+        Last updated on Apr 02, 2019.
+      </span>
 
     </p>
   </div>
@@ -1996,38 +1967,16 @@ Layout Graph loaded
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-  
-
   <script type="text/javascript">
       jQuery(function () {
-          
-          SphinxRtdTheme.Navigation.enableSticky();
-          
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

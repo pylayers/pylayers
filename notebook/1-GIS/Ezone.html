@@ -17,37 +17,40 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Outdoor Coverage Knife-Edge Model" href="Coverage.html" />
     <link rel="prev" title="Modifying the segment nature" href="Multisubsegments.html" /> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -90,9 +93,9 @@
             
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">User Manual</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#basic-usage">2&nbsp;&nbsp;&nbsp;Basic Usage</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../TOC.html#environment-description">3&nbsp;&nbsp;&nbsp;Environment Description</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html"><span class="sectnum">1</span> Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#basic-usage"><span class="sectnum">2</span> Basic Usage</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../TOC.html#environment-description"><span class="sectnum">3</span> Environment Description</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="Layout.html">Description of the propagation environment</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Multisubsegments.html">Modifying the segment nature</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Geographical Information and the Earth Zone class : <code class="docutils literal notranslate"><span class="pre">Ezone</span></code></a><ul>
@@ -103,15 +106,15 @@
 <li class="toctree-l3"><a class="reference internal" href="Coverage.html">Outdoor Coverage Knife-Edge Model</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#materials-and-slabs">4&nbsp;&nbsp;&nbsp;Materials and Slabs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#description-of-antennas">5&nbsp;&nbsp;&nbsp;Description of Antennas</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#coverage-simulation">6&nbsp;&nbsp;&nbsp;Coverage Simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#ray-tracing-simulation">7&nbsp;&nbsp;&nbsp;Ray Tracing Simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#handling-agent-mobility">8&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#other-simulation-examples">9&nbsp;&nbsp;&nbsp;Other Simulation Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#localization-algorithms">10&nbsp;&nbsp;&nbsp;Localization Algorithms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#measurements-tools">11&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#pylayers-tools">12&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#materials-and-slabs"><span class="sectnum">4</span> Materials and Slabs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#description-of-antennas"><span class="sectnum">5</span> Description of Antennas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#coverage-simulation"><span class="sectnum">6</span> Coverage Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#ray-tracing-simulation"><span class="sectnum">7</span> Ray Tracing Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#handling-agent-mobility"><span class="sectnum">8</span> Handling Agent Mobility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#other-simulation-examples"><span class="sectnum">9</span> Other Simulation Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#localization-algorithms"><span class="sectnum">10</span> Localization Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#measurements-tools"><span class="sectnum">11</span> Measurements Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#pylayers-tools"><span class="sectnum">12</span> PyLayers Tools</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
@@ -124,49 +127,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_dakar.html">Outdoor Radio Coverage with Deygout Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_cover.html">Outdoor Radio Coverage with Deygout Method</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.selectl">3&nbsp;&nbsp;&nbsp;pylayers.gis.selectl Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.srtm">4&nbsp;&nbsp;&nbsp;pylayers.gis.srtm Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.osmparser">5&nbsp;&nbsp;&nbsp;pylayers.gis.osmparser Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.ezone">6&nbsp;&nbsp;&nbsp;pylayers.gis.ezone Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.antenna">7&nbsp;&nbsp;&nbsp;pylayers.antprop.antenna Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.aarray">8&nbsp;&nbsp;&nbsp;pylayers.antprop.aarray Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.spharm">9&nbsp;&nbsp;&nbsp;pylayers.antprop.spharm Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.antssh">10&nbsp;&nbsp;&nbsp;pylayers.antprop.antssh Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.antvsh">11&nbsp;&nbsp;&nbsp;pylayers.antprop.antvsh Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.slab">12&nbsp;&nbsp;&nbsp;pylayers.antprop.slab Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.signature">13&nbsp;&nbsp;&nbsp;pylayers.antprop.signature Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.interactions">14&nbsp;&nbsp;&nbsp;pylayers.antprop.interactions Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.diffraction">15&nbsp;&nbsp;&nbsp;pylayers.antprop.diffraction Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.diffRT">16&nbsp;&nbsp;&nbsp;pylayers.antprop.diffRT Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.rays">17&nbsp;&nbsp;&nbsp;pylayers.antprop.rays Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.loss">18&nbsp;&nbsp;&nbsp;pylayers.antprop.loss Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.channel">19&nbsp;&nbsp;&nbsp;pylayers.antprop.channel Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id39">20&nbsp;&nbsp;&nbsp;pylayers.antprop.loss Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.coverage">21&nbsp;&nbsp;&nbsp;pylayers.antprop.coverage Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.coeffModel">22&nbsp;&nbsp;&nbsp;pylayers.antprop.coeffModel Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.simul.link">23&nbsp;&nbsp;&nbsp;pylayers.simul.link Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.simul.exploit">24&nbsp;&nbsp;&nbsp;pylayers.simul.exploit Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.simul.exploit_simulnet">25&nbsp;&nbsp;&nbsp;pylayers.simul.exploit_simulnet Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.simul.simulnet">26&nbsp;&nbsp;&nbsp;pylayers.simul.simulnet Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.simul.simultraj">27&nbsp;&nbsp;&nbsp;pylayers.simul.simultraj Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.exploit.simnet">28&nbsp;&nbsp;&nbsp;pylayers.exploit.simnet Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.measures.mesuwb">29&nbsp;&nbsp;&nbsp;pylayers.measures.mesuwb Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.measures.mesmimo">30&nbsp;&nbsp;&nbsp;pylayers.measures.mesmimo Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.measures.cormoran">31&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -214,7 +178,7 @@
         
           <li><a href="../index.html">User Manual</a> &raquo;</li>
         
-          <li><a href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
+          <li><a href="../TOC.html"><span class="sectnum">1</span> Overview</a> &raquo;</li>
         
       <li>Geographical Information and the Earth Zone class : <code class="docutils literal notranslate"><span class="pre">Ezone</span></code></li>
     
@@ -235,20 +199,20 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>!date
+  <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>!date
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mardi 29 janvier 2019, 13:52:50 (UTC+0100)
 </pre></div>
 </div>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>import pylayers.gis.ezone as ez
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import pylayers.gis.ezone as ez
 from pylayers.gis.gisutil import ent,ext2qt
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 </pre></div>
 </div>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>%matplotlib inline
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>%matplotlib inline
 </pre></div>
 </div>
 <div class="section" id="geographical-information-and-the-earth-zone-class-ezone">
@@ -262,7 +226,7 @@ stored in <code class="docutils literal notranslate"><span class="pre">hdf5</spa
 <p>By default files are placed in directory <code class="docutils literal notranslate"><span class="pre">gis/h5</span></code> of the current
 project tree.</p>
 <p>The command h5ls allows to see the hierarchical structure of the file</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>!h5ls $BASENAME/gis/h5/N48W002.h5
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>!h5ls $BASENAME/gis/h5/N48W002.h5
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>bldg                     Group
@@ -275,16 +239,16 @@ naming convention as with SRTM files. For example let consider the earth
 zone from -2 to -1 in west longitude and from 48 to 49 in North latitude
 this corresponds to the <code class="docutils literal notranslate"><span class="pre">N48W002</span></code> tile, so the ezone <code class="docutils literal notranslate"><span class="pre">z</span></code> is invoked
 as :</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>z = ez.Ezone(&#39;N48W002&#39;)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>z = ez.Ezone(&#39;N48W002&#39;)
 </pre></div>
 </div>
 <p>In this initial phase no data is loaded yet, to load all the data
 gathered for this <code class="docutils literal notranslate"><span class="pre">Ezone</span></code> in an existing HDF5 file let invoque the
 <code class="docutils literal notranslate"><span class="pre">loadh5</span></code> method.</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>z.loadh5()
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>z.loadh5()
 </pre></div>
 </div>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>z
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>z
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>N48W002
@@ -305,13 +269,13 @@ DEM srtm (hgts) :(1201, 1201)
 filtration of the <code class="docutils literal notranslate"><span class="pre">open</span> <span class="pre">street</span> <span class="pre">map</span></code> database selecting only the ways
 with <code class="docutils literal notranslate"><span class="pre">building</span></code> attribute. Lets have a look to the data with the
 <code class="docutils literal notranslate"><span class="pre">show</span></code> method.</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f,a,axd,md = z.show(source=&#39;srtm&#39;,bldg=False,height=True,clim=[150,350],cmap=plt.cm.hot,alpha=1)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>f,a,axd,md = z.show(source=&#39;srtm&#39;,bldg=False,height=True,clim=[150,350],cmap=plt.cm.hot,alpha=1)
 </pre></div>
 </div>
 <img alt="../../_images/Ezone_11_0.png" src="../../_images/Ezone_11_0.png" />
 <p>The <code class="docutils literal notranslate"><span class="pre">Ezone</span></code> object has a member extent which gives
 [lonmin,lonmax,latmin,latmax]</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>z.extent
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>z.extent
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>array([-2, -1, 48, 49])
@@ -319,20 +283,20 @@ with <code class="docutils literal notranslate"><span class="pre">building</span
 </div>
 <p>The shape of hgta data is larger (3601,3601) than the srtm data
 (1201,1201)</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>z.hgta.shape
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>z.hgta.shape
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(3601, 3601)
 </pre></div>
 </div>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>z.hgts.shape
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>z.hgts.shape
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(1201, 1201)
 </pre></div>
 </div>
 <p>The aster DEM can also be shown.</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f,a,axd,md =z.show(source=&#39;aster&#39;,bldg=False,clim=[0,320])
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>f,a,axd,md =z.show(source=&#39;aster&#39;,bldg=False,clim=[0,320])
 </pre></div>
 </div>
 <img alt="../../_images/Ezone_18_0.png" src="../../_images/Ezone_18_0.png" />
@@ -346,7 +310,7 @@ Rennes in Brittany (France).</p>
 given rectangular region with <code class="docutils literal notranslate"><span class="pre">(lonmin,lonmax,latmin,latmax)</span></code>.</p>
 <p>This region can be converted into Cartesian coordinates with the
 <code class="docutils literal notranslate"><span class="pre">conv</span></code> method.</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>extent1 = (-1.8,-1.6,48.05,48.15)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>extent1 = (-1.8,-1.6,48.05,48.15)
 extent1_cart  = ez.conv(extent1,z.m)
 print(&quot;latlon extent :&quot;,extent1)
 print(&quot;Cartesian extent (meters):&quot;,extent1_cart)
@@ -358,7 +322,7 @@ Cartesian extent (meters): [ 14902.21631867  29782.95775577   5482.5311488   165
 </div>
 <p>Once the selected extent has been chosen, it is possible to pass it to
 the <code class="docutils literal notranslate"><span class="pre">show</span></code> method for zooming in the map.</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f,a,axd,md = z.show(title=&#39;Rennes City Center (ASTER data)&#39;,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>f,a,axd,md = z.show(title=&#39;Rennes City Center (ASTER data)&#39;,
 ...              extent=extent1,
 ...              bldg=True,
 ...              height=True,
@@ -383,11 +347,11 @@ f,a,axd,md = z.show(title=&#39;Rennes City Center (SRTM data)&#39;,
 <p>The maps diplayed above are labeled in longitude (horizontal axis) and
 latitude (vertical axis) but it is also possible to label it in
 cartesian coordinates as below</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>z.rebase()
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>z.rebase()
 z.tocart()
 </pre></div>
 </div>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f,a,axd,mp = z.show(title=&#39;Rennes City Center&#39;,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>f,a,axd,mp = z.show(title=&#39;Rennes City Center&#39;,
 ...              extent=extent1_cart,coord=&#39;cartesian&#39;,
 ...              bldg=True,height=True,
 ...              clim=[0,100])
@@ -399,7 +363,7 @@ z.tocart()
 <img alt="../../_images/Ezone_25_1.png" src="../../_images/Ezone_25_1.png" />
 <p>Let zoom to the University of Rennes 1 campus in the North-East region
 of the city.</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>extent2 = (-1.645,-1.62,48.111,48.125)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>extent2 = (-1.645,-1.62,48.111,48.125)
 extent2_cart = ez.conv(extent2,z.m)
 print(extent2)
 print(extent2_cart)
@@ -409,7 +373,7 @@ print(extent2_cart)
 [ 26436.36082369  28294.87716098  12232.14024031  13785.67272678]
 </pre></div>
 </div>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f,a,axd,mp = z.show(title=&#39;Beaulieu Campus&#39;,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>f,a,axd,mp = z.show(title=&#39;Beaulieu Campus&#39;,
               extent=extent2_cart,
               coord=&#39;cartesian&#39;,
               height=False,
@@ -418,7 +382,7 @@ print(extent2_cart)
 </pre></div>
 </div>
 <img alt="../../_images/Ezone_28_0.png" src="../../_images/Ezone_28_0.png" />
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f,a,axd,mp = z.show(title=&#39;Beaulieu Campus&#39;,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>f,a,axd,mp = z.show(title=&#39;Beaulieu Campus&#39;,
               extent=extent2_cart,
               coord=&#39;cartesian&#39;,
               bldg=True,
@@ -438,7 +402,7 @@ height profile between 2 points on the earth surface. The <code class="docutils 
 method does a profile extraction and geometrical calculation for further
 propagation loss determination using the Deygout method. Points have to
 be expressed in (lon,lat) coordinates in WGS84 system.</p>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>data = z.profile(pa=(-1.645,48.111),
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>data = z.profile(pa=(-1.645,48.111),
                                  pb=(-1.62,48.325),
                                  fGHz=0.3,
                                  source=&#39;srtm&#39;)
@@ -453,7 +417,7 @@ dict_keys([&#39;ellFresnel&#39;, &#39;nu&#39;, &#39;L&#39;, &#39;LFS&#39;, &#39;
   fac = np.sqrt(2*d[-1]/(lmbda*d*d[::-1]))
 </pre></div>
 </div>
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(15,5))
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(15,5))
 d = data[&#39;d&#39;]
 dh = data[&#39;dh&#39;]
 h = data[&#39;height&#39;]
@@ -468,7 +432,7 @@ plt.xlabel(&#39;distance (meters)&#39;)
 </pre></div>
 </div>
 <img alt="../../_images/Ezone_32_1.png" src="../../_images/Ezone_32_1.png" />
-<div class="code highlight-none notranslate"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(15,5))
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(15,5))
 a = plt.plot(d,nu)
 a = plt.axis([0,25000,-2,2])
 plt.title(r&#39;Fresnel parameter $\nu$&#39;)
@@ -493,7 +457,7 @@ plt.xlabel(&#39;Distance (meters)&#39;)
         <a href="Coverage.html" class="btn btn-neutral float-right" title="Outdoor Coverage Knife-Edge Model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="Multisubsegments.html" class="btn btn-neutral" title="Modifying the segment nature" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="Multisubsegments.html" class="btn btn-neutral float-left" title="Modifying the segment nature" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -502,8 +466,10 @@ plt.xlabel(&#39;Distance (meters)&#39;)
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Jan 29, 2019.
+        &copy; Copyright 2017, PyLayers developer team
+      <span class="lastupdated">
+        Last updated on Apr 02, 2019.
+      </span>
 
     </p>
   </div>
@@ -520,38 +486,16 @@ plt.xlabel(&#39;Distance (meters)&#39;)
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-  
-
   <script type="text/javascript">
       jQuery(function () {
-          
-          SphinxRtdTheme.Navigation.enableSticky();
-          
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

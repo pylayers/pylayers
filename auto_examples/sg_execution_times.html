@@ -1,0 +1,238 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Computation times &mdash; PyLayers</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Python
+          
+
+          
+            
+            <img src="../_static/pylayers.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_layout.html">8 Random Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_issue314.html">Exemple of issue 314</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_dakar.html">Outdoor Radio Coverage with Deygout Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_cover.html">Outdoor Radio Coverage with Deygout Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_diffraction_polar.html">Diffraction coefficient</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_diffraction.html">Diffraction coefficient</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Computation times</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/auto_examples/sg_execution_times.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="computation-times">
+<span id="sphx-glr-auto-examples-sg-execution-times"></span><h1>Computation times<a class="headerlink" href="#computation-times" title="Permalink to this headline">¶</a></h1>
+<p><strong>00:00.951</strong> total execution time for <strong>auto_examples</strong> files:</p>
+<ul class="simple">
+<li><p><strong>00:00.574</strong>: <span class="xref std std-ref">sphx_glr_auto_examples_plot_slab1.py</span> (<code class="docutils literal notranslate"><span class="pre">plot_slab1.py</span></code>)</p></li>
+<li><p><strong>00:00.378</strong>: <span class="xref std std-ref">sphx_glr_auto_examples_plot_slab.py</span> (<code class="docutils literal notranslate"><span class="pre">plot_slab.py</span></code>)</p></li>
+<li><p><strong>00:00.000</strong>: <a class="reference internal" href="plot_antenna.html#sphx-glr-auto-examples-plot-antenna-py"><span class="std std-ref">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_antenna.py</span></code>)</p></li>
+<li><p><strong>00:00.000</strong>: <a class="reference internal" href="plot_cover.html#sphx-glr-auto-examples-plot-cover-py"><span class="std std-ref">Outdoor Radio Coverage with Deygout Method</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_cover.py</span></code>)</p></li>
+<li><p><strong>00:00.000</strong>: <a class="reference internal" href="plot_coverage.html#sphx-glr-auto-examples-plot-coverage-py"><span class="std std-ref">Indoor Radio Coverage with Motley Keenan</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_coverage.py</span></code>)</p></li>
+<li><p><strong>00:00.000</strong>: <a class="reference internal" href="plot_dakar.html#sphx-glr-auto-examples-plot-dakar-py"><span class="std std-ref">Outdoor Radio Coverage with Deygout Method</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_dakar.py</span></code>)</p></li>
+<li><p><strong>00:00.000</strong>: <a class="reference internal" href="plot_diffraction.html#sphx-glr-auto-examples-plot-diffraction-py"><span class="std std-ref">Diffraction coefficient</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_diffraction.py</span></code>)</p></li>
+<li><p><strong>00:00.000</strong>: <a class="reference internal" href="plot_diffraction_polar.html#sphx-glr-auto-examples-plot-diffraction-polar-py"><span class="std std-ref">Diffraction coefficient</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_diffraction_polar.py</span></code>)</p></li>
+<li><p><strong>00:00.000</strong>: <a class="reference internal" href="plot_exAbsGas.html#sphx-glr-auto-examples-plot-exabsgas-py"><span class="std std-ref">Attenuation due to atmospheric gases</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_exAbsGas.py</span></code>)</p></li>
+<li><p><strong>00:00.000</strong>: <a class="reference internal" href="plot_exDLink.html#sphx-glr-auto-examples-plot-exdlink-py"><span class="std std-ref">Evaluation of a radio link DLink</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_exDLink.py</span></code>)</p></li>
+<li><p><strong>00:00.000</strong>: <a class="reference internal" href="plot_exLayout1.html#sphx-glr-auto-examples-plot-exlayout1-py"><span class="std std-ref">Loading an outdoor layout from its address</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_exLayout1.py</span></code>)</p></li>
+<li><p><strong>00:00.000</strong>: <a class="reference internal" href="plot_exLayout2.html#sphx-glr-auto-examples-plot-exlayout2-py"><span class="std std-ref">Building graphs of a Layout</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_exLayout2.py</span></code>)</p></li>
+<li><p><strong>00:00.000</strong>: <a class="reference internal" href="plot_exLuebbers.html#sphx-glr-auto-examples-plot-exluebbers-py"><span class="std std-ref">UWB Ray tracing simulation  in outdoor scenario</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_exLuebbers.py</span></code>)</p></li>
+<li><p><strong>00:00.000</strong>: <a class="reference internal" href="plot_issue314.html#sphx-glr-auto-examples-plot-issue314-py"><span class="std std-ref">Exemple of issue 314</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_issue314.py</span></code>)</p></li>
+<li><p><strong>00:00.000</strong>: <a class="reference internal" href="plot_layout.html#sphx-glr-auto-examples-plot-layout-py"><span class="std std-ref">8 Random Layout</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_layout.py</span></code>)</p></li>
+<li><p><strong>00:00.000</strong>: <a class="reference internal" href="plot_w1.html#sphx-glr-auto-examples-plot-w1-py"><span class="std std-ref">Indoor Radio Coverage FP7 WHERE1 M1 setup</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_w1.py</span></code>)</p></li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team
+      <span class="lastupdated">
+        Last updated on Apr 02, 2019.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

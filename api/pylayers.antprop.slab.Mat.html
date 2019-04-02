@@ -17,37 +17,38 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
   <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="MatDB" href="pylayers.antprop.slab.MatDB.html" />
-    <link rel="prev" title="Interface" href="pylayers.antprop.slab.Interface.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -88,7 +89,7 @@
               
             
             
-              <ul class="current">
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../notebook/index.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
@@ -100,63 +101,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_dakar.html">Outdoor Radio Coverage with Deygout Method</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_cover.html">Outdoor Radio Coverage with Deygout Method</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.selectl">3&nbsp;&nbsp;&nbsp;pylayers.gis.selectl Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.srtm">4&nbsp;&nbsp;&nbsp;pylayers.gis.srtm Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.osmparser">5&nbsp;&nbsp;&nbsp;pylayers.gis.osmparser Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.gis.ezone">6&nbsp;&nbsp;&nbsp;pylayers.gis.ezone Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.antenna">7&nbsp;&nbsp;&nbsp;pylayers.antprop.antenna Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.aarray">8&nbsp;&nbsp;&nbsp;pylayers.antprop.aarray Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.spharm">9&nbsp;&nbsp;&nbsp;pylayers.antprop.spharm Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.antssh">10&nbsp;&nbsp;&nbsp;pylayers.antprop.antssh Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.antvsh">11&nbsp;&nbsp;&nbsp;pylayers.antprop.antvsh Module</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="references.html#module-pylayers.antprop.slab">12&nbsp;&nbsp;&nbsp;pylayers.antprop.slab Module</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="references.html#id24">12.1&nbsp;&nbsp;&nbsp;Functions</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="references.html#id25">12.2&nbsp;&nbsp;&nbsp;Classes</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.slab.Interface.html">Interface</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Mat</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.slab.MatDB.html">MatDB</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.slab.MatInterface.html">MatInterface</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.slab.Slab.html">Slab</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.slab.SlabDB.html">SlabDB</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="references.html#id26">12.3&nbsp;&nbsp;&nbsp;Class Inheritance Diagram</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.signature">13&nbsp;&nbsp;&nbsp;pylayers.antprop.signature Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.interactions">14&nbsp;&nbsp;&nbsp;pylayers.antprop.interactions Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.diffraction">15&nbsp;&nbsp;&nbsp;pylayers.antprop.diffraction Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.diffRT">16&nbsp;&nbsp;&nbsp;pylayers.antprop.diffRT Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.rays">17&nbsp;&nbsp;&nbsp;pylayers.antprop.rays Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.loss">18&nbsp;&nbsp;&nbsp;pylayers.antprop.loss Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.channel">19&nbsp;&nbsp;&nbsp;pylayers.antprop.channel Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id39">20&nbsp;&nbsp;&nbsp;pylayers.antprop.loss Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.coverage">21&nbsp;&nbsp;&nbsp;pylayers.antprop.coverage Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.antprop.coeffModel">22&nbsp;&nbsp;&nbsp;pylayers.antprop.coeffModel Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.simul.link">23&nbsp;&nbsp;&nbsp;pylayers.simul.link Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.simul.exploit">24&nbsp;&nbsp;&nbsp;pylayers.simul.exploit Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.simul.exploit_simulnet">25&nbsp;&nbsp;&nbsp;pylayers.simul.exploit_simulnet Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.simul.simulnet">26&nbsp;&nbsp;&nbsp;pylayers.simul.simulnet Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.simul.simultraj">27&nbsp;&nbsp;&nbsp;pylayers.simul.simultraj Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.exploit.simnet">28&nbsp;&nbsp;&nbsp;pylayers.exploit.simnet Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.mesuwb">29&nbsp;&nbsp;&nbsp;pylayers.measures.mesuwb Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.mesmimo">30&nbsp;&nbsp;&nbsp;pylayers.measures.mesmimo Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.cormoran">31&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -202,8 +150,6 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-          <li><a href="references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a> &raquo;</li>
-        
       <li>Mat</li>
     
     
@@ -243,20 +189,20 @@ conductivity (S/m) 0
 roughness : float
 (meter) 0</p>
 <p class="rubric">Methods Summary</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-center">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Mat.R" title="pylayers.antprop.slab.Mat.R"><code class="xref py py-obj docutils literal notranslate"><span class="pre">R</span></code></a>(fGHz,&nbsp;theta)</td>
-<td>Calculate Reflection coefficient on the air|mat interface</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylayers.antprop.slab.Mat.R" title="pylayers.antprop.slab.Mat.R"><code class="xref py py-obj docutils literal notranslate"><span class="pre">R</span></code></a>(fGHz, theta)</p></td>
+<td><p>Calculate Reflection coefficient on the air|mat interface</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.slab.Mat.eval" title="pylayers.antprop.slab.Mat.eval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval</span></code></a>(fGHz)</td>
-<td>evaluate Mat at given frequencies</td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylayers.antprop.slab.Mat.eval" title="pylayers.antprop.slab.Mat.eval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval</span></code></a>(fGHz)</p></td>
+<td><p>evaluate Mat at given frequencies</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.slab.Mat.info" title="pylayers.antprop.slab.Mat.info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">info</span></code></a>()</td>
-<td>display material properties</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylayers.antprop.slab.Mat.info" title="pylayers.antprop.slab.Mat.info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">info</span></code></a>()</p></td>
+<td><p>display material properties</p></td>
 </tr>
 </tbody>
 </table>
@@ -274,9 +220,9 @@ theta : incidence angle referenced from interface normal</p>
 <dt id="pylayers.antprop.slab.Mat.eval">
 <code class="descname">eval</code><span class="sig-paren">(</span><em>fGHz</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Mat.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Mat.eval" title="Permalink to this definition">¶</a></dt>
 <dd><p>evaluate Mat at given frequencies</p>
-<dl class="docutils">
-<dt>fGHz <span class="classifier-delimiter">:</span> <span class="classifier">np.array()</span></dt>
-<dd>frequency (GHz)</dd>
+<dl class="simple">
+<dt>fGHz<span class="classifier">np.array()</span></dt><dd><p>frequency (GHz)</p>
+</dd>
 </dl>
 <p>w = 2*np.pi*f*1e-9
 eps0 = 8.854e-12</p>
@@ -304,22 +250,15 @@ sigma/(w*eps0) = 17.98 * sigma/fGHz</p>
           </div>
           <footer>
   
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="pylayers.antprop.slab.MatDB.html" class="btn btn-neutral float-right" title="MatDB" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="pylayers.antprop.slab.Interface.html" class="btn btn-neutral" title="Interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Jan 29, 2019.
+        &copy; Copyright 2017, PyLayers developer team
+      <span class="lastupdated">
+        Last updated on Apr 02, 2019.
+      </span>
 
     </p>
   </div>
@@ -336,38 +275,16 @@ sigma/(w*eps0) = 17.98 * sigma/fGHz</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-  
-
   <script type="text/javascript">
       jQuery(function () {
-          
-          SphinxRtdTheme.Navigation.enableSticky();
-          
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -1,0 +1,366 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Ray Tracing &mdash; PyLayers</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Python
+          
+
+          
+            
+            <img src="../../_static/pylayers.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_layout.html">8 Random Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_issue314.html">Exemple of issue 314</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_dakar.html">Outdoor Radio Coverage with Deygout Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_cover.html">Outdoor Radio Coverage with Deygout Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Ray Tracing</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/notebook/2-AP/RayTracingMetis.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from pylayers.antprop.coverage import *
+from pylayers.simul.link import *
+import pandas as pd
+%matplotlib inline
+</pre></div>
+</div>
+<div class="section" id="ray-tracing">
+<h1>Ray Tracing<a class="headerlink" href="#ray-tracing" title="Permalink to this headline">¶</a></h1>
+<p>Ray tracing is a method to approach the propagation of a radio wave in a
+given environment by using discrete rays. This can be done by
+calculating the effect of rays interactions (such as
+reflection,transmission,diffraction), with the surrounding objects as
+they propagate in the environment.</p>
+<p>A ray tracing tool requires the knowledge of the environment as well as
+knowledge on the material parameters of the objects. The approach
+supports different transmitter and receiver locations for instance,
+macro, microcellular, or D2D and it is spatially consistent.</p>
+<p>Although ray tracing can be accurate way of simulating radio wave
+propagation, it suffers from mainly two difficulties: the knowledge of
+the environment is required which is often challenging, and the
+computational load is high.</p>
+<p>In the following figure we present a ray tracing graph for TC1 METIS
+between AP5 (A=Tx) and a UE (B=Rx) located at (0.5, 8.5, 0.75). The two
+equipments use a Gauss antenna type working at the frequency band of
+(59-61) GHz.</p>
+<p>We select the propagation environment and specify the antennas at both
+ends.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>L=Layout(&#39;TC1_METIS_2D2.lay&#39;)
+fGHz=np.linspace(59,61,10)
+Aa = Antenna(&#39;Gauss&#39;,fGHz=fGHz)
+Ab = Antenna(&#39;Gauss&#39;,fGHz=fGHz)
+Ab.eval()
+Aa.eval()
+pAP = np.array([12.5,6.25,2.85])
+pUE = np.array([0.5,8.5,0.75])
+</pre></div>
+</div>
+<p>The link is then created and evaluated</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Lk = DLink(L=L, a=pAP, b=pUE, Aa=Aa, Ab=Ab, fGHz=fGHz, cutoff=2)
+Lk.show(aw=1)
+plt.axis(&#39;on&#39;)
+Lk.eval(force=True,verbose=False,cutoff=2,applywav=False)
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Signatures:   0%|          | 0/100 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Warning Unable to read graph Gr
+Warning Unable to read graph Gw
+Layout Graph loaded
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/signature.py:1563: RuntimeWarning: invalid value encountered in true_divide
+  v0n  = v0/np.linalg.norm(v0)
+/home/uguen/Documents/rch/devel/pylayers/pylayers/util/geomutil.py:3411: RuntimeWarning: invalid value encountered in greater
+  bhs = bvalid &amp; (np.dot(w,vcone)&gt;0)
+/home/uguen/anaconda2/envs/pylayers/lib/python3.5/site-packages/numpy/linalg/linalg.py:1776: RuntimeWarning: invalid value encountered in det
+  r = _umath_linalg.det(a, signature=signature)
+Signatures: 100%|| 100.0/100 [00:16&lt;00:00, 14.17it/s]
+</pre></div>
+</div>
+<img alt="../../_images/RayTracingMetis_4_3.png" src="../../_images/RayTracingMetis_4_3.png" />
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>f,a=Lk.show(rays=1)
+</pre></div>
+</div>
+<img alt="../../_images/RayTracingMetis_5_0.png" src="../../_images/RayTracingMetis_5_0.png" />
+<p>The first graph on the figure shows clearly the position of the two
+nodes and the obtained rays are displayed in the second graph. The link
+evaluation information in PyLayers displayed a distance of 12.4m between
+A and B and a delay of 41 ns. The nodes are separated by air and wood.
+From the second graph, it can be seen direct rays as well as multi-path
+propagation rays between A and B. Multi-path rays hit different walls
+which are in wood before the destination. Multi-paths rays suffer from
+different propagation phenomena such as reflection and diffraction.</p>
+</div>
+<div class="section" id="signature">
+<h1>Signature<a class="headerlink" href="#signature" title="Permalink to this headline">¶</a></h1>
+<p>In propagation, signature means the sequence of points and segments
+(which are the objects of the layout) that are involved in a given
+optical ray between Tx and Rx. The next figure describes the signature
+between A and B.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>fig = plt.figure(figsize=(20,20))
+Lk.Si.show(L=Lk.L)
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f9f16e00390&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f9f16e075c0&gt;)
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7f9f16e00438&gt;
+</pre></div>
+</div>
+<img alt="../../_images/RayTracingMetis_7_2.png" src="../../_images/RayTracingMetis_7_2.png" />
+<p>The concept of ray signature and the derivation of signature from the
+layout are described in (Uguen B. et al., 2012). The graph of signature
+contains three types of interactions which are diffraction, reflection
+and transmission. To calculate the signature, first the nodes which are
+visible from Tx and Rx need to be retrieved. This operation is executed
+rapidly if the positions of Tx and Rx are maintained available during
+the simulated trajectory. The second step consists of exploiting those
+nodes in order to determine the first order signature. Details of the
+algorithm that computes the signature can be found in (Uguen B. et al.,
+2012).</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Lk.C
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Ctilde : Ray Propagation Channel Tensor (2x2xrxf)
+---------
+between antennas local frames
+Nray : 75
+Nfreq : 10
+fmin(GHz) : 59.0
+fmax(GHz): 61.0
+---1st ray 1st freq ---
+global angles (th,ph) degrees :
+[  99.   139.4]
+[  81.  -353.7]
+local angles (th,ph) degrees :
+[  99.   139.4]
+[ 81.    6.3]
+    | (0.00038170379341+0.000206571488591j)   (2.30556048164e-06+8.84132059829e-07j) |
+    | (1.76856905067e-06+6.09482910887e-07j)   (0.000285005952+0.000143255552601j) |
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(10,10))
+f,a=Lk.C.show(cmap=&#39;jet&#39;,fig=f,typ=&#39;l20&#39;,vmin=-120,vmax=-10)
+</pre></div>
+</div>
+<img alt="../../_images/RayTracingMetis_10_0.png" src="../../_images/RayTracingMetis_10_0.png" />
+</div>
+<div class="section" id="transmission-channel">
+<h1>Transmission Channel<a class="headerlink" href="#transmission-channel" title="Permalink to this headline">¶</a></h1>
+<p>The transmission channel is obtained through combination of the
+propagation channel and the antenna transfer functions from both
+transmitter and receiver. The transmission channel is obtained from the
+entire set of ray transfer functions. The simulated transmission channel
+is shown in the next figure.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(20,10))
+f,a =Lk.H.show(fig=f,cmap=&#39;jet&#39;)
+#plt.xlabel(&#39;Frequency (GHz)&#39;)
+</pre></div>
+</div>
+<img alt="../../_images/RayTracingMetis_12_0.png" src="../../_images/RayTracingMetis_12_0.png" />
+<p>This figure describes the magnitude (amplitude) in dB (left) and the
+phase in degree (right) of the transmission channel within the frequency
+range of 59-61GHz. This transmission channel has been simulated by first
+construction the propagation channel between A and B which are the two
+ends of the link specified in the layout. Both antennas are omni
+directional working at the above specified frequency range.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyLayers developer team
+      <span class="lastupdated">
+        Last updated on Apr 02, 2019.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -17,37 +17,40 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Sorting and Cutting" href="CIR.html" />
     <link rel="prev" title="Ray Signatures" href="Signatures.html" /> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -90,13 +93,13 @@
             
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">User Manual</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#basic-usage">2&nbsp;&nbsp;&nbsp;Basic Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#environment-description">3&nbsp;&nbsp;&nbsp;Environment Description</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#materials-and-slabs">4&nbsp;&nbsp;&nbsp;Materials and Slabs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#description-of-antennas">5&nbsp;&nbsp;&nbsp;Description of Antennas</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#coverage-simulation">6&nbsp;&nbsp;&nbsp;Coverage Simulation</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../TOC.html#ray-tracing-simulation">7&nbsp;&nbsp;&nbsp;Ray Tracing Simulation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html"><span class="sectnum">1</span> Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#basic-usage"><span class="sectnum">2</span> Basic Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#environment-description"><span class="sectnum">3</span> Environment Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#materials-and-slabs"><span class="sectnum">4</span> Materials and Slabs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#description-of-antennas"><span class="sectnum">5</span> Description of Antennas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#coverage-simulation"><span class="sectnum">6</span> Coverage Simulation</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../TOC.html#ray-tracing-simulation"><span class="sectnum">7</span> Ray Tracing Simulation</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="Signatures.html">Ray Signatures</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">The transmission channel</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#the-friis-factor">The Friis factor</a></li>
@@ -107,11 +110,11 @@
 <li class="toctree-l3"><a class="reference internal" href="CIR.html#ray-visuzalization">Ray visuzalization</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#handling-agent-mobility">8&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#other-simulation-examples">9&nbsp;&nbsp;&nbsp;Other Simulation Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#localization-algorithms">10&nbsp;&nbsp;&nbsp;Localization Algorithms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#measurements-tools">11&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../TOC.html#pylayers-tools">12&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#handling-agent-mobility"><span class="sectnum">8</span> Handling Agent Mobility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#other-simulation-examples"><span class="sectnum">9</span> Other Simulation Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#localization-algorithms"><span class="sectnum">10</span> Localization Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#measurements-tools"><span class="sectnum">11</span> Measurements Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TOC.html#pylayers-tools"><span class="sectnum">12</span> PyLayers Tools</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
@@ -124,49 +127,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_exLuebbers.html">UWB Ray tracing simulation  in outdoor scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_dakar.html">Outdoor Radio Coverage with Deygout Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_cover.html">Outdoor Radio Coverage with Deygout Method</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction_polar.html">Diffraction coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_diffraction.html">Diffraction coefficient</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html">1&nbsp;&nbsp;&nbsp;pylayers.util.project Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.layout">2&nbsp;&nbsp;&nbsp;pylayers.gis.layout Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.selectl">3&nbsp;&nbsp;&nbsp;pylayers.gis.selectl Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.srtm">4&nbsp;&nbsp;&nbsp;pylayers.gis.srtm Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.osmparser">5&nbsp;&nbsp;&nbsp;pylayers.gis.osmparser Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.gis.ezone">6&nbsp;&nbsp;&nbsp;pylayers.gis.ezone Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.antenna">7&nbsp;&nbsp;&nbsp;pylayers.antprop.antenna Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.aarray">8&nbsp;&nbsp;&nbsp;pylayers.antprop.aarray Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.spharm">9&nbsp;&nbsp;&nbsp;pylayers.antprop.spharm Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.antssh">10&nbsp;&nbsp;&nbsp;pylayers.antprop.antssh Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.antvsh">11&nbsp;&nbsp;&nbsp;pylayers.antprop.antvsh Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.slab">12&nbsp;&nbsp;&nbsp;pylayers.antprop.slab Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.signature">13&nbsp;&nbsp;&nbsp;pylayers.antprop.signature Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.interactions">14&nbsp;&nbsp;&nbsp;pylayers.antprop.interactions Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.diffraction">15&nbsp;&nbsp;&nbsp;pylayers.antprop.diffraction Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.diffRT">16&nbsp;&nbsp;&nbsp;pylayers.antprop.diffRT Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.rays">17&nbsp;&nbsp;&nbsp;pylayers.antprop.rays Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.loss">18&nbsp;&nbsp;&nbsp;pylayers.antprop.loss Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.channel">19&nbsp;&nbsp;&nbsp;pylayers.antprop.channel Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id39">20&nbsp;&nbsp;&nbsp;pylayers.antprop.loss Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.coverage">21&nbsp;&nbsp;&nbsp;pylayers.antprop.coverage Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.antprop.coeffModel">22&nbsp;&nbsp;&nbsp;pylayers.antprop.coeffModel Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.simul.link">23&nbsp;&nbsp;&nbsp;pylayers.simul.link Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.simul.exploit">24&nbsp;&nbsp;&nbsp;pylayers.simul.exploit Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.simul.exploit_simulnet">25&nbsp;&nbsp;&nbsp;pylayers.simul.exploit_simulnet Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.simul.simulnet">26&nbsp;&nbsp;&nbsp;pylayers.simul.simulnet Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.simul.simultraj">27&nbsp;&nbsp;&nbsp;pylayers.simul.simultraj Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.exploit.simnet">28&nbsp;&nbsp;&nbsp;pylayers.exploit.simnet Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.measures.mesuwb">29&nbsp;&nbsp;&nbsp;pylayers.measures.mesuwb Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.measures.mesmimo">30&nbsp;&nbsp;&nbsp;pylayers.measures.mesmimo Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.measures.cormoran">31&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.measures.vna.E5072A">32&nbsp;&nbsp;&nbsp;pylayers.measures.vna.E5072A Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.measures.parker.smparker">33&nbsp;&nbsp;&nbsp;pylayers.measures.parker.smparker Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.bsignal">34&nbsp;&nbsp;&nbsp;pylayers.signal.bsignal Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.standard">35&nbsp;&nbsp;&nbsp;pylayers.signal.standard Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.device">36&nbsp;&nbsp;&nbsp;pylayers.signal.device Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.DF">37&nbsp;&nbsp;&nbsp;pylayers.signal.DF Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.signal.waveform">38&nbsp;&nbsp;&nbsp;pylayers.signal.waveform Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.agent">39&nbsp;&nbsp;&nbsp;pylayers.mobility.agent Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#module-pylayers.mobility.ban.body">40&nbsp;&nbsp;&nbsp;pylayers.mobility.ban.body Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/references.html#id138">41&nbsp;&nbsp;&nbsp;pylayers.measures.cormoran Module</a></li>
 </ul>
 
             
@@ -214,7 +178,7 @@
         
           <li><a href="../index.html">User Manual</a> &raquo;</li>
         
-          <li><a href="../TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a> &raquo;</li>
+          <li><a href="../TOC.html"><span class="sectnum">1</span> Overview</a> &raquo;</li>
         
       <li>The transmission channel</li>
     
@@ -237,34 +201,34 @@
             
   <div class="section" id="the-transmission-channel">
 <h1>The transmission channel<a class="headerlink" href="#the-transmission-channel" title="Permalink to this headline">¶</a></h1>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>%matplotlib inline
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
 </pre></div>
 </div>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>from pylayers.antprop.rays import *
-import scipy.fftpack as fft
-from pylayers.gis.layout import *
-from pylayers.antprop.signature import *
-from pylayers.simul.link import *
-from pylayers.antprop.channel import *
-import pylayers.signal.waveform as wvf
-from pylayers.simul.simulem import *
-import matplotlib.pyplot as plt
-import time
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">scipy.fftpack</span> <span class="kn">as</span> <span class="nn">fft</span>
+<span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.signature</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.simul.link</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.channel</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">pylayers.signal.waveform</span> <span class="kn">as</span> <span class="nn">wvf</span>
+<span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">time</span>
 </pre></div>
 </div>
 <p>We start by constructing a propagation channel with the dedicated class
 <code class="docutils literal notranslate"><span class="pre">DLink</span></code>. We specify a Layout as well as the two extremities of the
 link. Antennas are also specified. The frequency range is determined by
 the frequency range of antennas.</p>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>L = Layout(&#39;defstr.ini&#39;)
-L.Gs.node[1][&#39;ss_name&#39;]=[&#39;WOOD&#39;,&#39;AIR&#39;,&#39;METAL&#39;]
-L.build()
-tx=array([759,1114,1.0])
-rx=array([761,1114,1.5])
-fGHz = np.linspace(2,6,401)
-Aa = Antenna(&#39;Omni&#39;,fGHz=fGHz)
-Ab = Antenna(&#39;Omni&#39;,fGHz=fGHz)
-Lk = DLink(L=L,a=tx,b=rx,Aa=Aa,Ab=Ab)
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;defstr.ini&#39;</span><span class="p">)</span>
+<span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;ss_name&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;WOOD&#39;</span><span class="p">,</span><span class="s1">&#39;AIR&#39;</span><span class="p">,</span><span class="s1">&#39;METAL&#39;</span><span class="p">]</span>
+<span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="n">tx</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">759</span><span class="p">,</span><span class="mi">1114</span><span class="p">,</span><span class="mf">1.0</span><span class="p">])</span>
+<span class="n">rx</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">761</span><span class="p">,</span><span class="mi">1114</span><span class="p">,</span><span class="mf">1.5</span><span class="p">])</span>
+<span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">401</span><span class="p">)</span>
+<span class="n">Aa</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s1">&#39;Omni&#39;</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span><span class="p">)</span>
+<span class="n">Ab</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s1">&#39;Omni&#39;</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span><span class="p">)</span>
+<span class="n">Lk</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">tx</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">rx</span><span class="p">,</span><span class="n">Aa</span><span class="o">=</span><span class="n">Aa</span><span class="p">,</span><span class="n">Ab</span><span class="o">=</span><span class="n">Ab</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>building Layout ...
@@ -274,16 +238,16 @@ check len(ncycles) == 2 passed
 <p>The full evaluation and hdf5 storage of the channel is done with the
 <code class="docutils literal notranslate"><span class="pre">eval</span></code> function. The <code class="docutils literal notranslate"><span class="pre">force</span></code> option is for forcing a full
 reevaluation.</p>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>ak,tauk=Lk.eval(force=True)
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ak</span><span class="p">,</span><span class="n">tauk</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(15,15))
-f,a=Lk.C.show(cmap=&#39;jet&#39;,typ=&#39;l20&#39;,fig=f,vmin=-100,vmax=-20,fontsize=22)
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
+<span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;l20&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span><span class="n">vmax</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../../_images/Channel_7_0.png" src="../../_images/Channel_7_0.png" />
 <p>The transmission channel is stored in <code class="docutils literal notranslate"><span class="pre">H</span></code></p>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>Lk.H
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span>
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Tchannel : Ray transfer function (Nray x Nr x Nt x Nf)
@@ -299,22 +263,22 @@ Friis factor -j c/(4 pi f) has been applied
 </div>
 <p>Once the channel has been calculated, we define an Impulse Radio
 Waveform.</p>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>fGHz=np.arange(2,12,.1)
-wav = wvf.Waveform(fcGHz=5,bandGHz=3)
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="n">fcGHz</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">bandGHz</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>wav.show()
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="../../_images/Channel_12_0.png" src="../../_images/Channel_12_0.png" />
 <p>is an object which contains all the information about the propagation
 channel.</p>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>f,a=Lk.show()
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="../../_images/Channel_14_0.png" src="../../_images/Channel_14_0.png" />
 <p>The <code class="docutils literal notranslate"><span class="pre">Ctilde</span></code> channel can be sorted with respect to delay</p>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>Lk.H
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span>
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Tchannel : Ray transfer function (Nray x Nr x Nt x Nf)
@@ -328,14 +292,14 @@ Friis factor -j c/(4 pi f) has been applied
  windowed : No
 </pre></div>
 </div>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>len(Lk.fGHz)
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>402
 </pre></div>
 </div>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(20,10))
-f,a =Lk.H.show(fig=f,cmap=&#39;jet&#39;)
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../../_images/Channel_18_0.png" src="../../_images/Channel_18_0.png" />
@@ -347,7 +311,7 @@ f,a =Lk.H.show(fig=f,cmap=&#39;jet&#39;)
 <p>This factor is fundamental and has to be applied only once. By default
 the link is evaluated with the Friis factor : <code class="docutils literal notranslate"><span class="pre">isFriis=True</span></code>. This
 can be checked at the end of the <strong>repr</strong> of <code class="docutils literal notranslate"><span class="pre">H</span></code>.</p>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>Lk.H
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span>
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Tchannel : Ray transfer function (Nray x Nr x Nt x Nf)
@@ -361,14 +325,14 @@ Friis factor -j c/(4 pi f) has been applied
  windowed : No
 </pre></div>
 </div>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>Emean=Lk.H.energy(mode=&#39;mean&#39;)
-Eint=Lk.H.energy(mode=&#39;integ&#39;)
-Ecenter=Lk.H.energy(mode=&#39;center&#39;)
-Efirst=Lk.H.energy(mode=&#39;first&#39;)
-Elast=Lk.H.energy(mode=&#39;last&#39;)
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Emean</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="n">Eint</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;integ&#39;</span><span class="p">)</span>
+<span class="n">Ecenter</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+<span class="n">Efirst</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">)</span>
+<span class="n">Elast</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;last&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>print Efirst[0],Elast[0]
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">Efirst</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">Elast</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[[  3.35253916e-05]] [[  3.72504352e-06]]
@@ -380,78 +344,78 @@ straight lines coresponds to the Free space path loss formula for 3
 frequencies (f = 2GHz,f=6GHz,f=10GHz). For those 3 frequencies the first
 path is perfectly on the curve, which is a validation the observed
 level.</p>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>Lk.H.y.shape
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(206, 1, 1, 401)
 </pre></div>
 </div>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>f1 = 2
-f2 = 10
-f3 = 6
-fig = plt.figure(figsize=(10,5))
-a = plt.semilogx(Lk.H.taud,10*np.log10(Efirst[:,0,0]),&#39;.r&#39;,label=&#39;f=2GHz&#39;)
-a = plt.semilogx(Lk.H.taud,10*np.log10(Emean[:,0,0]),&#39;.b&#39;,label=&#39;mean&#39;)
-a = plt.semilogx(Lk.H.taud,10*np.log10(Elast[:,0,0]),&#39;.g&#39;,label=&#39;f=10GHz&#39;)
-a = plt.semilogx(Lk.H.taud,10*np.log10(Eint[:,0,0]),&#39;.k&#39;,label=&#39;integral&#39;)
-a = plt.semilogx(Lk.H.taud,10*np.log10(Ecenter[:,0,0]),&#39;.c&#39;,label=&#39;6GHz&#39;)
-plt.xlabel(r&#39;$\tau$ (ns)&#39;)
-plt.ylabel(&#39;Path Loss (dB)&#39;)
-LOS1 = -32.4-20*np.log10(Lk.H.taud*0.3)-20*np.log10(f1)
-LOS2 = -32.4-20*np.log10(Lk.H.taud*0.3)-20*np.log10(f2)
-LOS3 = -32.4-20*np.log10(Lk.H.taud*0.3)-20*np.log10(f3)
-plt.semilogx(Lk.H.taud,LOS1,&#39;r&#39;)
-plt.semilogx(Lk.H.taud,LOS2,&#39;g&#39;)
-plt.semilogx(Lk.H.taud,LOS3,&#39;c&#39;)
-plt.semilogx(tauk,20*np.log10(np.sum(np.sum(ak,axis=2),axis=1)),&#39;+&#39;)
-plt.ylim([-120,0])
-plt.legend()
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">f1</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">f2</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">f3</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Efirst</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]),</span><span class="s1">&#39;.r&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;f=2GHz&#39;</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Emean</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]),</span><span class="s1">&#39;.b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Elast</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]),</span><span class="s1">&#39;.g&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;f=10GHz&#39;</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Eint</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]),</span><span class="s1">&#39;.k&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;integral&#39;</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Ecenter</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]),</span><span class="s1">&#39;.c&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;6GHz&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\tau$ (ns)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Path Loss (dB)&#39;</span><span class="p">)</span>
+<span class="n">LOS1</span> <span class="o">=</span> <span class="o">-</span><span class="mf">32.4</span><span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span><span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">f1</span><span class="p">)</span>
+<span class="n">LOS2</span> <span class="o">=</span> <span class="o">-</span><span class="mf">32.4</span><span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span><span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">f2</span><span class="p">)</span>
+<span class="n">LOS3</span> <span class="o">=</span> <span class="o">-</span><span class="mf">32.4</span><span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span><span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">f3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="n">LOS1</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="n">LOS2</span><span class="p">,</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="n">LOS3</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">tauk</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ak</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)),</span><span class="s1">&#39;+&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f5539cb78d0&gt;
 </pre></div>
 </div>
 <img alt="../../_images/Channel_25_1.png" src="../../_images/Channel_25_1.png" />
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>a = plt.semilogx(Lk.H.taud,10*np.log10(Emean[:,0,0]),&#39;.b&#39;,label=&#39;mean&#39;)
-plt.semilogx(tauk,20*np.log10(np.sum(np.sum(ak,axis=2),axis=1)),&#39;+&#39;)
-plt.ylim([-120,0])
-plt.legend()
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Emean</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]),</span><span class="s1">&#39;.b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">tauk</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ak</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)),</span><span class="s1">&#39;+&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f553b979090&gt;
 </pre></div>
 </div>
 <img alt="../../_images/Channel_26_1.png" src="../../_images/Channel_26_1.png" />
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>CIR=TUchannel(tauk,np.zeros(len(tauk)))
-CIR.aggcir(ak,tauk)
-CIR.stem()
-plt.title(&#39;Infinite bandwidth CIR&#39;)
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">CIR</span><span class="o">=</span><span class="n">TUchannel</span><span class="p">(</span><span class="n">tauk</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tauk</span><span class="p">)))</span>
+<span class="n">CIR</span><span class="o">.</span><span class="n">aggcir</span><span class="p">(</span><span class="n">ak</span><span class="p">,</span><span class="n">tauk</span><span class="p">)</span>
+<span class="n">CIR</span><span class="o">.</span><span class="n">stem</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Infinite bandwidth CIR&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7f553bb7c650&gt;
 </pre></div>
 </div>
 <img alt="../../_images/Channel_27_1.png" src="../../_images/Channel_27_1.png" />
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>MeanDelay = CIR.tau_moy()
-DelaySpread = CIR.tau_rms()
-print MeanDelay,DelaySpread
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MeanDelay</span> <span class="o">=</span> <span class="n">CIR</span><span class="o">.</span><span class="n">tau_moy</span><span class="p">()</span>
+<span class="n">DelaySpread</span> <span class="o">=</span> <span class="n">CIR</span><span class="o">.</span><span class="n">tau_rms</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">MeanDelay</span><span class="p">,</span><span class="n">DelaySpread</span>
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>36.619045782 13.4093554011
 </pre></div>
 </div>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(20,10))
-f=Lk.H.show(cmap=&#39;jet&#39;,fig=f)
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">f</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../../_images/Channel_29_0.png" src="../../_images/Channel_29_0.png" />
 <p>The cut method applies an energy thresholding on the transmission
 channel.</p>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>Lk.H.cut()
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">cut</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(20,10))
-f=Lk.H.show(cmap=&#39;jet&#39;,fig=f)
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">f</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../../_images/Channel_32_0.png" src="../../_images/Channel_32_0.png" />
@@ -466,72 +430,72 @@ number of time samples <span class="math notranslate nohighlight">\(N_m\)</span>
 <p>This method returns a Multi Dimensional Array <span class="math notranslate nohighlight">\(htap(f,s,m,tap)\)</span></p>
 <p>htap has 4 axes.</p>
 <ul class="simple">
-<li>axis 0 is frequency,</li>
-<li>axis 1 is spatial realization</li>
-<li>axis 2 is discrete time</li>
-<li>axis 3 is tap index</li>
+<li><p>axis 0 is frequency,</p></li>
+<li><p>axis 1 is spatial realization</p></li>
+<li><p>axis 2 is discrete time</p></li>
+<li><p>axis 3 is tap index</p></li>
 </ul>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>Va = 10
-Vb = 10
-fcGHz = 4.5
-Nm = 50
-Ns = 10
-WMHz = 20
-Ntap = 10
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Va</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">Vb</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">fcGHz</span> <span class="o">=</span> <span class="mf">4.5</span>
+<span class="n">Nm</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">Ns</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">WMHz</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">Ntap</span> <span class="o">=</span> <span class="mi">10</span>
 </pre></div>
 </div>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span># htap,b,c,d = Lk.H.tap(WMHz=WMHz,Ns=Ns,Nm=Nm,Va=Va,Vb=Vb,Ntap=Ntap)
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># htap,b,c,d = Lk.H.tap(WMHz=WMHz,Ns=Ns,Nm=Nm,Va=Va,Vb=Vb,Ntap=Ntap)</span>
 </pre></div>
 </div>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>#np.shape(htap)
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#np.shape(htap)</span>
 </pre></div>
 </div>
 <p>The second parameter is the time integration of htap</p>
 <ul class="simple">
-<li>axis 0 i frequency</li>
-<li>axis 2 is spatial (realization)</li>
-<li>axis 2 is tap</li>
+<li><p>axis 0 i frequency</p></li>
+<li><p>axis 2 is spatial (realization)</p></li>
+<li><p>axis 2 is tap</p></li>
 </ul>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span># b.shape
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># b.shape</span>
 </pre></div>
 </div>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span># np.shape(c)
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># np.shape(c)</span>
 </pre></div>
 </div>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span># d.shape
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># d.shape</span>
 </pre></div>
 </div>
 <p>The figure below illustrates the joint frequency and spatial fluctuation
 for the first channel tap. :exit</p>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>#img = plt.imshow(abs(b[:,:,0]),interpolation=&#39;nearest&#39;,extent=(0,1000,fGHz[-1],fGHz[0]))
-#plt.axis(&#39;tight&#39;)
-#plt.colorbar()
-#plt.xlabel(&#39;spatial realizations&#39;)
-#plt.ylabel(&#39;Frequency GHz&#39;)
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#img = plt.imshow(abs(b[:,:,0]),interpolation=&#39;nearest&#39;,extent=(0,1000,fGHz[-1],fGHz[0]))</span>
+<span class="c1">#plt.axis(&#39;tight&#39;)</span>
+<span class="c1">#plt.colorbar()</span>
+<span class="c1">#plt.xlabel(&#39;spatial realizations&#39;)</span>
+<span class="c1">#plt.ylabel(&#39;Frequency GHz&#39;)</span>
 </pre></div>
 </div>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>#f = plt.figure(figsize=(10,4))
-#h = plt.hist(np.real(b[0,:,0])*1e5,40,normed=True)
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#f = plt.figure(figsize=(10,4))</span>
+<span class="c1">#h = plt.hist(np.real(b[0,:,0])*1e5,40,normed=True)</span>
 </pre></div>
 </div>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>#mmax = 0.3*WMHz*1e6/(2*fcGHz*(Va+Vb))
-#tmaxms = 1000*mmax/(WMHz*1e6)
-#plt.imshow(abs(c[:,:,1]),interpolation=&#39;nearest&#39;,extent=(0,tmaxms,fGHz[-1],fGHz[0]))
-#plt.axis(&#39;tight&#39;)
-#plt.colorbar()
-#plt.xlabel(&#39;Discrete Time (ms)&#39;)
-#plt.ylabel(&#39;frequency (GHz)&#39;)
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#mmax = 0.3*WMHz*1e6/(2*fcGHz*(Va+Vb))</span>
+<span class="c1">#tmaxms = 1000*mmax/(WMHz*1e6)</span>
+<span class="c1">#plt.imshow(abs(c[:,:,1]),interpolation=&#39;nearest&#39;,extent=(0,tmaxms,fGHz[-1],fGHz[0]))</span>
+<span class="c1">#plt.axis(&#39;tight&#39;)</span>
+<span class="c1">#plt.colorbar()</span>
+<span class="c1">#plt.xlabel(&#39;Discrete Time (ms)&#39;)</span>
+<span class="c1">#plt.ylabel(&#39;frequency (GHz)&#39;)</span>
 </pre></div>
 </div>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>#plt.plot(abs(c[0,:,0]))
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#plt.plot(abs(c[0,:,0]))</span>
 </pre></div>
 </div>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>#h = c[:,:,2]
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#h = c[:,:,2]</span>
 </pre></div>
 </div>
-<div class="code python highlight-none notranslate"><div class="highlight"><pre><span></span>#from pylayers.util.mayautil import *
-#m=VolumeSlicer(data=abs(htap[:,0,:,:]))
-#m.configure_traits()
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#from pylayers.util.mayautil import *</span>
+<span class="c1">#m=VolumeSlicer(data=abs(htap[:,0,:,:]))</span>
+<span class="c1">#m.configure_traits()</span>
 </pre></div>
 </div>
 </div>
@@ -548,7 +512,7 @@ for the first channel tap. :exit</p>
         <a href="CIR.html" class="btn btn-neutral float-right" title="Sorting and Cutting" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="Signatures.html" class="btn btn-neutral" title="Ray Signatures" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="Signatures.html" class="btn btn-neutral float-left" title="Ray Signatures" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -557,8 +521,10 @@ for the first channel tap. :exit</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, PyLayers developer team.
-      Last updated on Jan 29, 2019.
+        &copy; Copyright 2017, PyLayers developer team
+      <span class="lastupdated">
+        Last updated on Apr 02, 2019.
+      </span>
 
     </p>
   </div>
@@ -575,38 +541,16 @@ for the first channel tap. :exit</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-  
-
   <script type="text/javascript">
       jQuery(function () {
-          
-          SphinxRtdTheme.Navigation.enableSticky();
-          
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
