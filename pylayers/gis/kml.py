@@ -1,6 +1,5 @@
 import numpy as np
 import numpy.ma as ma
-from netCDF4 import Dataset, date2index, num2date
 import matplotlib.pyplot as plt
 from simplekml import (Kml, OverlayXY, ScreenXY, Units, RotationXY,
                        AltitudeMode, Camera)
@@ -121,50 +120,3 @@ def gearth_fig(extent,extent_c):
     ax.set_ylim(extent[2], extent[3])
 
     return fig, ax
-
-
-
-#nc = Dataset('./mdt_cnes_cls2009_global_v1.1.nc')
-#
-#u = nc.variables['Grid_0002'][:]
-#v = nc.variables['Grid_0003'][:]
-#
-#lat = nc.variables['NbLatitudes'][:]
-#lon = nc.variables['NbLongitudes'][:]
-#lat, lon = np.meshgrid(lat, lon)
-#
-#mdt = nc.variables['Grid_0001'][:]
-#mdt = ma.masked_equal(mdt, 9999.0)
-#
-#from palettable import colorbrewer
-#
-#pixels = 1024 * 10
-#cmap = colorbrewer.get_map('RdYlGn', 'diverging', 11, reverse=True).mpl_colormap
-#
-#fig, ax = gearth_fig(llcrnrlon=lon.min(),
-#                     llcrnrlat=lat.min(),
-#                     urcrnrlon=lon.max(),
-#                     urcrnrlat=lat.max(),
-#                     pixels=pixels)
-#cs = ax.pcolormesh(lon, lat, mdt, cmap=cmap)
-#ax.set_axis_off()
-#fig.savefig('overlay1.png', transparent=False, format='png')
-#fig = plt.figure(figsize=(1.0, 4.0), facecolor=None, frameon=False)
-#ax = fig.add_axes([0.0, 0.05, 0.2, 0.9])
-#cb = fig.colorbar(cs, cax=ax)
-#cb.set_label('Mean Dynamic Topography [m]', rotation=-90, color='k', labelpad=20)
-#fig.savefig('legend.png', transparent=False, format='png')  # Change transparent to True if your colorbar is not on space :)
-#fig, ax = gearth_fig(llcrnrlon=lon.min(),
-#                     llcrnrlat=lat.min(),
-#                     urcrnrlon=lon.max(),
-#                     urcrnrlat=lat.max(),
-#                     pixels=pixels)
-#Q = ax.quiver(lon[::10, ::10], lat[::10, ::10], u[::10, ::10], v[::10, ::10], scale=30)
-#ax.quiverkey(Q, 0.86, 0.45, 1, '1 m s$^{-1}$', labelpos='W')
-#ax.set_axis_off()
-#fig.savefig('overlay2.png', transparent=True, format='png')
-#make_kml(llcrnrlon=lon.min(), llcrnrlat=lat.min(),
-#         urcrnrlon=lon.max(), urcrnrlat=lat.max(),
-#         figs=['overlay1.png', 'overlay2.png'], colorbar='legend.png',
-#         kmzfile='mdt_uv.kmz', name='Mean Dynamic Topography and velocity')
-#

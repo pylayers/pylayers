@@ -44,7 +44,7 @@ from mpl_toolkits.basemap import Basemap
 import shapely.geometry as sh
 import shapefile as shp
 from shapely.ops import cascaded_union
-from descartes.patch import PolygonPatch
+#from descartes.patch import PolygonPatch
 from matplotlib.collections import PolyCollection
 from numpy import array
 import PIL.Image as Image
@@ -737,18 +737,20 @@ class Layout(PyLayers):
                     p = self.m( self.Gs.pos[k][0], self.Gs.pos[k][1], inverse=True)
                     self.Gs.pos[k] = p
                 if hasattr(self,'dpoly'):
-                    for k in self.dpoly:
+                    if hasattr(self.dpoly,'_xy'):
+                        for k in self.dpoly:
                         #self.dpoly[k].ndarray() = np.vstack(self.m(self.dpoly[k].ndarray()[0,:],self.dpoly[k].ndarray()[1,:],inverse=True))
-                        self.dpoly[k]._xy = np.vstack(self.m(self.dpoly[k]._xy[0,:],self.dpoly[k]._xy[1,:],inverse=True))
+                            self.dpoly[k]._xy = np.vstack(self.m(self.dpoly[k]._xy[0,:],self.dpoly[k]._xy[1,:],inverse=True))
                 self.format = 'latlon'
             elif self.format == 'latlon':
                 for k in self.Gs.pos.keys():
                     p = self.m( self.Gs.pos[k][0], self.Gs.pos[k][1])
                     self.Gs.pos[k] = p
                 if hasattr(self,'dpoly'):
-                    for k in self.dpoly:
+                    if hasattr(self.dpoly,'_xy'):
+                        for k in self.dpoly:
                         #self.dpoly[k].ndarray() = np.vstack(self.m(self.dpoly[k].ndarray()[0,:],self.dpoly[k].ndarray()[1,:],inverse=True))
-                        self.dpoly[k]._xy = np.vstack(self.m(self.dpoly[k]._xy[0,:],self.dpoly[k]._xy[1,:]))
+                            self.dpoly[k]._xy = np.vstack(self.m(self.dpoly[k]._xy[0,:],self.dpoly[k]._xy[1,:]))
                 self.format ='cart'
 
             nodes = self.Gs.nodes()
@@ -6326,7 +6328,8 @@ class Layout(PyLayers):
                 fd = open(filedpoly,'rb')
                 dpoly = pickle.load(fd)
                 setattr(self, 'dpoly', dpoly)
-                self.dpoly = {k:eval(self.dpoly[k]) for k in self.dpoly}
+                #self.dpoly = {k:eval(self.dpoly[k]) for k in self.dpoly}
+                self.dpoly = {k:self.dpoly[k] for k in self.dpoly}
             else :
                 self.dpoly = {}
 
@@ -6506,9 +6509,9 @@ class Layout(PyLayers):
         if ax == []:
             ax = plt.gca()
         try:
-            mpl = [PolygonPatch(x, alpha=alpha, color=color) for x in poly]
+            mpl = [ PolygonPatch(x, alpha=alpha, color=color) for x in poly]
         except:
-            mpl = [PolygonPatch(x, alpha=alpha, color=color) for x in [poly]]
+            mpl = [ PolygonPatch(x, alpha=alpha, color=color) for x in [poly]]
         [ax.add_patch(x) for x in mpl]
         plt.axis(self.ax)
         plt.draw()
@@ -7258,7 +7261,7 @@ class Layout(PyLayers):
 
             indoor = [self.Gt.node[p]['polyg']
                       for p in self.Gt.nodes() if p != 0 and self.Gt.node[p]['indoor']]
-            outdoor = [self.Gt.node[p]['polyg'] 
+            outdoor = [self.Gt.node[p]['polyg']
                       for p in self.Gt.nodes()  if p != 0 and not self.Gt.node[p]['indoor']]
 
             self.pltpoly(indoor, color='r', ax=ax, fig=fig)
@@ -9162,8 +9165,10 @@ class Layout(PyLayers):
        Returns
        -------
 
-       fig,ax
+       fig,ax,args,
+
        """
+
        import smopy
        bmap = kwargs.pop('bmap',True)
        figsize = kwargs.pop('figsize',(15,15))
@@ -9171,10 +9176,9 @@ class Layout(PyLayers):
        lM = self.extent[1]
        Lm = self.extent[2]
        LM = self.extent[3]
-       zoom = 10
+       zoom = 15
        self.map = smopy.Map((Lm,lm,LM,lM), z=zoom)
        bcond = bmap and hasattr(self,'map')
-       fig = kwargs.pop('fig',plt.gcf())
        ax = self.map.show_mpl(figsize=figsize)
 
        #ax = kwargs.pop('ax',plt.gca())
@@ -9192,18 +9196,33 @@ class Layout(PyLayers):
                building_height = z[1] - z[0]
                lbdg_height.append(building_height)
                lpol = []
+               lprev = 0
+               #
+               # Take care of the order of the sequence of points
+               #
                for seg in connect:
                    ta = self.Gs.node[seg]['connect'][0]
-                   lpol.append((self.Gs.pos[ta][0],self.Gs.pos[ta][1]))
-               verts.append(lpol)
+                   he = self.Gs.node[seg]['connect'][1]
+                   if ((he==lprev) or (lprev==0)):
+                       lpol.append((self.Gs.pos[ta][0],self.Gs.pos[ta][1]))
+                       lprev = ta
+                   else:
+                       lpol.append((self.Gs.pos[he][0],self.Gs.pos[he][1]))
+                       lprev = he
+               llL =  [ self.m(x[0],x[1],inverse=True) for x in lpol ]
+               lpol2 = [ self.map.to_pixels(lL[1],lL[0]) for lL in llL]
+
+               verts.append(lpol2)
        hmax = np.max(lbdg_height)
        hmin = np.min(lbdg_height)
        arg =  255*(np.array(lbdg_height)-hmin)/(hmax-hmin)
        facecolors = cm.jet(arg.astype(int))
        coll = PolyCollection(verts, edgecolors='k', facecolors=facecolors)
        ax.add_collection(coll)
-       ax.autoscale_view()
-       ax.axis('equal')
+       plt.axis('on')
+       #ax.autoscale_view()
+       #ax.axis('equal')
+       fig = plt.gcf()
        return fig,ax,arg,facecolors
 
     def showG(self, graph='s', **kwargs):
