@@ -36,14 +36,8 @@ try:
     from pylayers.antprop.antvsh import vsh
 except:
     pass
-if sys.version_info.major == 2:
-    import PIL.Image as Image
-    try:
-        import mayavi.mlab as mlab
-    except:
-        pass
-else:
-    import image
+
+import PIL.Image as Image
 
 
 class Pattern(PyLayers):
@@ -2446,10 +2440,7 @@ class Antenna(Pattern):
 
         _filename = 'IMG_'+self.PhotoFile.split('-')[1]+'.JPG'
         filename = pyu.getlong(_filename,directory)
-        if sys.version_info.major==2:
-            I = Image.open(filename)
-        else:
-            I = image.open(filename)
+        I = Image.open(filename)
 
         I.show()
 

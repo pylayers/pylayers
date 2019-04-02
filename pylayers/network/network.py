@@ -55,7 +55,7 @@ import pickle as pk
 import pkgutil
 from copy import deepcopy
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
+#from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 #import Tkinter as tk
 import sys
 if sys.version_info.major==2:

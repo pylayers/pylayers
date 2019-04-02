@@ -340,14 +340,14 @@ class Layout(PyLayers):
         # Layout Point of Interest DataFrame
         #
         # A Layout is equipped with a DataFrame of Points of Interest
-        # 
+        #
         # dfpoi   type =['tree','human','tx','rx','support']
         #
         self.dfpoi = pd.DataFrame(columns=['name','type','lon','lat','alt','x',',y','z','radius'])
         if type(self.arg) is bytes:
             self.arg = self.arg.decode('utf-8')
 
-        logger.info('analyze input string')
+        logger.info('analyze input string '+ self.arg)
         arg, ext = os.path.splitext(self.arg)
 
         if arg != '':

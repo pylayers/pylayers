@@ -579,7 +579,7 @@ def get_osm_elev_profile(node0,node1,nb_samples=10):
     else:
         print('issue getting elevation info')
         return np.array([])
-    dres=json.loads(r.text)['results']
+    dres = json.loads(r.text)['results']
 
     # res = np.array([[x['latitude'],x['longitude'],x['elevation']] for x in delev])
     elev = np.array([x['elevation'] for x in dres])

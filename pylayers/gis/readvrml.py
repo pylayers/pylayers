@@ -17,7 +17,6 @@ import matplotlib.pyplot as plt
 from pylayers.util import geomutil as geo
 from pylayers.util import pyutil as pyu
 from pylayers.util.project import *
-from descartes.patch import PolygonPatch
 import shapely.geometry as shg
 import shapely.ops as sho
 import networkx as nx
