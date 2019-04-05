@@ -166,8 +166,7 @@ class Coverage(PyLayers):
         self.sinr = False
         self.snr = False
         self.best = False
-        self.egdo = False
-        self.egdp = False
+        self.egd = False
         self.Pr = False
         self.capacity = False
         self.pr = False
@@ -497,8 +496,9 @@ class Coverage(PyLayers):
             if (self.pg.shape[0]!=3):
                 self.pg = self.pg.T
 
-            logger.info('[+] calling Losst')
+            pdb.set_trace()
             Lwo,Lwp,Edo,Edp = loss.Losst(self.L, self.fGHz, self.pa, self.pg, dB=False)
+            logger.info('Lwo[0][0] %.2f' % Lwo[0,0])
             freespace = loss.PL(self.fGHz, self.pa, self.pg, dB=False)
             try:
                 self.Lwo = np.hstack((self.Lwo,Lwo))
