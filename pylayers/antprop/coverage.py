@@ -294,7 +294,7 @@ class Coverage(PyLayers):
         sinr : boolean
         snr  : boolean
         best : boolean
-        size : integer 
+        size : integer
             size of grid points block
 
         Examples
@@ -394,6 +394,8 @@ class Coverage(PyLayers):
 
         self.ptdbm = self.ptdbm.T
         self.pndbm = self.pndbm.T
+
+        #
         # creating all links
         # from all grid point to all ap
         #
@@ -482,6 +484,14 @@ class Coverage(PyLayers):
                     k = k+1
 
             tgain = tgain.reshape(nf,tgain.shape[1]*tgain.shape[2])
+            #
+            # sef.pa and self.pg should be 3xN
+            #
+            if (self.pa.shape[0]!=3):
+                self.pa = self.pa.T
+            if (self.pg.shape[0]!=3):
+                self.pg = self.pg.T
+
             Lwo,Lwp,Edo,Edp = loss.Losst(self.L, self.fGHz, self.pa, self.pg, dB=False)
             freespace = loss.PL(self.fGHz, self.pa, self.pg, dB=False)
             try:

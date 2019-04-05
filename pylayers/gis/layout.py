@@ -4509,7 +4509,7 @@ class Layout(PyLayers):
         return((pt,ke))
 
     def angleonlink3(self, p1=np.array([0, 0, 1]), p2=np.array([10, 3, 1])):
-        """ return (seglist,angle) between p1 and p2
+        """ returns (seglist,angle) in retangular area defined by p1 and p2
 
         Parameters
         ----------
@@ -4550,8 +4550,8 @@ class Layout(PyLayers):
         sh1 = np.shape(p1)
         sh2 = np.shape(p2)
 
-        assert sh1[0] == 3
-        assert sh2[0] == 3
+        assert sh1[0] == 3, pdb.set_trace()
+        assert sh2[0] == 3, pdb.set_trace()
 
         if (len(sh1) < 2) & (len(sh2) > 1):
             p1 = np.outer(p1, np.ones(sh2[1]))
