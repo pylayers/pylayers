@@ -1,6 +1,5 @@
 import numpy as np
 import numpy.ma as ma
-from netCDF4 import Dataset, date2index, num2date
 import matplotlib.pyplot as plt
 from simplekml import (Kml, OverlayXY, ScreenXY, Units, RotationXY,
                        AltitudeMode, Camera)

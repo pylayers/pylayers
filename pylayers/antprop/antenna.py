@@ -36,14 +36,8 @@ try:
     from pylayers.antprop.antvsh import vsh
 except:
     pass
-if sys.version_info.major == 2:
-    import PIL.Image as Image
-    try:
-        import mayavi.mlab as mlab
-    except:
-        pass
-else:
-    import image
+
+import PIL.Image as Image
 
 
 class Pattern(PyLayers):

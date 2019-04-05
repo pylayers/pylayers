@@ -1677,7 +1677,7 @@ bernard
 
 
     def _distancematrix(self):
-        """Compute the ditance matrix between the nodes
+        """Compute the distance matrix between the nodes
 
             self.dist : (nb frame x nb_node x nb_node)
             self.dist_nodesmap : list of used nodes (useful to make the association ;) )
@@ -1859,9 +1859,6 @@ bernard
         fig
         ax
         figsize : tuple
-
-        Examples
-        --------
 
 
         """
@@ -2207,6 +2204,7 @@ bernard
             >>> C=Corser(6)
             >>> lk = 'HKB:15-HKB:7'
             >>> C.lk2nd(lk)
+
         """
         u = lk.replace('HKB:','').split('-')
         v = [ self.idHKB[int(x)] for x in u ]

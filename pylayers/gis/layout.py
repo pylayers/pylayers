@@ -46,8 +46,8 @@ from numpy import array
 import PIL.Image as Image
 import hashlib
 import pylayers.gis.kml as gkml
-from pathos.multiprocessing import ProcessingPool as Pool
-from pathos.multiprocessing import cpu_count
+#from pathos.multiprocessing import ProcessingPool as Pool
+#from pathos.multiprocessing import cpu_count
 from functools import partial
 
 if sys.version_info.major==2:
