@@ -4095,8 +4095,8 @@ class Layout(pro.PyLayers):
         # 2 x N
         un = u / nu[np.newaxis, :]
 
-        #seglist = self.seginframe2(p1, p2)
-        seglist = self.seginframe(p1, p2)
+        seglist = self.seginframe2(p1, p2)
+        #seglist = self.seginframe(p1, p2)
         upos = np.nonzero(seglist >= 0)[0]
         uneg = np.nonzero(seglist < 0)[0]
 
@@ -4109,7 +4109,6 @@ class Layout(pro.PyLayers):
             llink = np.array([len(seglist)])
 
         # llink : list of link length
-
         npta = self.tahe[0, seglist[upos]]
         nphe = self.tahe[1, seglist[upos]]
 
@@ -4503,7 +4502,7 @@ class Layout(pro.PyLayers):
         # -1 acts as a deliminiter (not as a segment number)
 
         # seglist = reduce(lambda x, y: np.hstack((x, array([-1]), y)), seglist)
-        x = np.array([])
+        x = np.array([]).astype(int)
         for y in seglist:
             x = np.hstack((x, np.array([-1]), y))
 
@@ -4543,6 +4542,7 @@ class Layout(pro.PyLayers):
         """
         #assert( (p1.shape==(1,2)) or (p1.shape==(2)))
         #assert( (p2.shape==(1,2)) or (p2.shape==(2)))
+        pdb.set_trace()
         max_x = max(p1[0], p2[0])
         min_x = min(p1[0], p2[0])
         max_y = max(p1[1], p2[1])
