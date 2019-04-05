@@ -94,9 +94,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html">8 Random Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_issue314.html">Exemple of issue 314</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
@@ -518,9 +518,11 @@ import pdb
 
         if isinstance(self._L,str):
             self._Lname = self._L
-            self._L = Layout(self._Lname, bgraphs=True, bcheck=False)
+            self._L = Layout(self._Lname,bgraphs=True,bcheck=False)
         else:
             self._Lname = self._L._filename
+
+
 
         if self._Lname != &#39;&#39;:
 
@@ -545,10 +547,11 @@ import pdb
             #
 
             cindoor = [p for p in self.L.Gt.nodes() if self.L.Gt.node[p][&#39;indoor&#39;]]
-            if self._L.typ == &#39;outdoor&#39;:
-                ginodes = self.L.Gi.node.keys()
+
+            if self._L.typ ==&#39;outdoor&#39;:
+                u = self.L.Gi.node.keys()
                 # lT : list of transmission interactions
-                lT  =  [k for k in ginodes if (len(k)==3)]
+                lT  =  [k for k in u if (len(k)==3)]
                 # lTi : transmission connected at least to an indoor cycle
                 lTi = [ k for k in lT if ((k[1]  in cindoor) or (k[2] in cindoor))]
                 # lTiw : those which are walls (not those above buildings)
@@ -566,7 +569,7 @@ import pdb
                     for l in output.keys():
                         if l in lTiw:
                             tbd.append(l)
-                    for d in tbd:
+                    for d in tbd : 
                         del output[d]
 
                     self.L.Gi[e[0]][e[1]][&#39;output&#39;]=output
@@ -1072,6 +1075,7 @@ import pdb
             nodes = [n for n in nodes if n!=0 ]
 
         # draw the link extremities randomly
+
         np.random.seed(self.seed)
         ia = np.random.randint(0,len(nodes))
         ib = np.random.randint(0,len(nodes))
@@ -2845,7 +2849,7 @@ if (__name__ == &quot;__main__&quot;):
     <p>
         &copy; Copyright 2017, PyLayers developer team
       <span class="lastupdated">
-        Last updated on Apr 02, 2019.
+        Last updated on Apr 05, 2019.
       </span>
 
     </p>

@@ -94,9 +94,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html">8 Random Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_issue314.html">Exemple of issue 314</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
@@ -301,16 +301,12 @@ from tqdm import tqdm
     gr = g.subgraph(edlist)
     for k in gr.edges():
         #print(k)
-        #di = gr[k[0]][k[1]]
-        #ke = di[&#39;output&#39;].keys()
-        ke  = gr[k[0]][k[1]][&#39;output&#39;]
-        #ke = di[&#39;output&#39;].keys()
-        #va = di[&#39;output&#39;].values()
-        #keva = zip(ke,va)
-        #keva_valid = [ x for x in keva if len(x[0])&gt;1]
-        ke_valid = [ x for x in ke if len(x)&gt;1 ]
-        #gr[k[0]][k[1]][&#39;output&#39;] = dict(keva_valid)
-        gr[k[0]][k[1]][&#39;output&#39;] = ke_valid
+        di = gr[k[0]][k[1]]
+        ke = di[&#39;output&#39;].keys()
+        va = di[&#39;output&#39;].values()
+        keva = zip(ke,va)
+        keva_valid = [ x for x in keva if len(x[0])&gt;1]
+        gr[k[0]][k[1]][&#39;output&#39;] = dict(keva_valid)
 
     dpos = {k:g.pos[k] for k in edlist}
     gr.pos=dpos
@@ -1257,7 +1253,7 @@ from tqdm import tqdm
         else:
             return False</div>
 
-    #@profile
+
 <div class="viewcode-block" id="Signatures.run"><a class="viewcode-back" href="../../../api/pylayers.antprop.signature.Signatures.html#pylayers.antprop.signature.Signatures.run">[docs]</a>    def run(self,**kwargs):
         &quot;&quot;&quot; evaluate signatures between cycle of tx and cycle of rx
 
@@ -1426,16 +1422,18 @@ from tqdm import tqdm
             #
             # TODO : It concerns self[1] : only one interaction (i.e several single reflection or diffraction)
             #
-            if (s in lit) or (s[-1] == self.target):
+            if (s in lit) or (s[-1]==self.target):
+                #anstr = np.array(map(lambda x: x[0],visited))
                 anstr = np.array([ x[0] for x in visited ])
-                typ = np.array([len(x) for x in visited ])
+                #typ  = np.array(map(lambda x: len(x),visited))
+                typ =np.array([len(x) for x in visited ])
 
                 assert(len(typ)==1)
                 try:
-                    self[len(typ)] = np.vstack((self[len(typ)], anstr, typ))
+                    self[len(typ)] = np.vstack((self[len(typ)],anstr,typ))
                     self.ratio[len(typ)] = np.append(self.ratio[len(typ)],1.)
                 except:
-                    self[len(typ)] = np.vstack((anstr, typ))
+                    self[len(typ)] = np.vstack((anstr,typ))
                     self.ratio[len(typ)] = np.array([1.])
                 # update signature counter
                 cptsig +=1
@@ -1485,11 +1483,9 @@ from tqdm import tqdm
                 # cond3 : test the cutoff condition not get to the limit
                 # continue if True
                 cond3 = not(len(visited) &gt; (self.cutoff + sum(lawp)))
-
                 uD = [ k for k in range(len(visited)) if len(visited[k])==1 ]
                 uR = [ k for k in range(len(visited)) if len(visited[k])==2 ]
                 uT = [ k for k in range(len(visited)) if len(visited[k])==3 ]
-
                 if cond1:
                     condD = True
                     condR = True
@@ -1545,6 +1541,9 @@ from tqdm import tqdm
                         # update number of useful segments
                         # if there is airwall in visited
                         nstr = interaction[0]
+                        #
+                        #
+                        #
                         # Testing the type of interaction at rank -2
                         # R is a list which contains a rotation matrix
                         # and a translation vector for doing the mirroring
@@ -1594,12 +1593,11 @@ from tqdm import tqdm
                         # dtarget :  distance between th and target
                         #
                         pt_th = np.sum(th,axis=0)/2.
-                        d_target = np.linalg.norm(pt_target - pt_th)
+                        d_target = np.linalg.norm(pt_target-pt_th)
 
                         #
                         # mirroring th until the previous point
                         #
-
                         th_mirror = copy.copy(th)
 
                         while np.any(r[0] != np.eye(2)):
@@ -1710,16 +1708,16 @@ from tqdm import tqdm
                                 #angle_cone = np.arccos(vrdotvl)
                                 # prepare lines and seg argument for intersection checking
                                 if angle_cone!=0:
-                                    linel = (vl[0], vl[1]-vl[0])
-                                    liner = (vr[0], vr[1]-vr[0])
+                                    linel = (vl[0],vl[1]-vl[0])
+                                    liner = (vr[0],vr[1]-vr[0])
                                     # from origin mirrored segment to be tested
-                                    seg   = (th_mirror[0], th_mirror[1])
+                                    seg   = (th_mirror[0],th_mirror[1])
 
                                     # apex calculation
-                                    a0u = np.dot(pta0, vr_n)
-                                    a0v = np.dot(pta0, vl_n)
-                                    b0u = np.dot(phe0, vr_n)
-                                    b0v = np.dot(phe0, vl_n)
+                                    a0u = np.dot(pta0,vr_n)
+                                    a0v = np.dot(pta0,vl_n)
+                                    b0u = np.dot(phe0,vr_n)
+                                    b0v = np.dot(phe0,vl_n)
                                     #import warnings
                                     #warnings.filterwarnings(&quot;error&quot;)
                                     try:
@@ -1871,7 +1869,7 @@ from tqdm import tqdm
                         #     pdb.set_trace()
                         #print d_excess,dist_excess_max
                         #if (ratio2 &gt; self.threshold) and (d_excess&lt;dist_excess_max):
-                        if (ratio2 &gt; self.threshold) and (d_excess &lt; dist_excess_max):
+                        if (ratio2 &gt; self.threshold) and (d_excess&lt;dist_excess_max):
                         #if (ratio &gt; self.threshold):
                             #
                             # Update sequence of mirrored points
@@ -1941,15 +1939,12 @@ from tqdm import tqdm
                                         ax.collections.remove(Ef)
                                     except:
                                         pass
-                            #
-                            # output is no longer a dict but a list
-                            #
-                            outint = Gi[visited[-2]][interaction][&#39;output&#39;]
-                            #outint = Gi[visited[-2]][interaction][&#39;output&#39;].keys()
+
+                            outint = Gi[visited[-2]][interaction][&#39;output&#39;].keys()
                             #
                             # proint not used 
                             #
-                            # proint = Gi[visited[-2]][interaction][&#39;output&#39;].values()
+                            proint = Gi[visited[-2]][interaction][&#39;output&#39;].values()
                             nexti  = [it for it in outint ]
                             stack.append(iter(nexti))
                         # 1590 ratio &lt;= threshold
@@ -1962,17 +1957,17 @@ from tqdm import tqdm
                     # 1389 condR and condT and condD
                     else:
                         pass
-                # 1388 cond1 and cond2 and cond3
+                # 1388 cond1 and cond2 and cond3  
                 else:
-                    # if at least 2 interactions
-                    # and antepenultiem is a reflexion
+                    # if at least 2 interactions 
+                    # and antepenultiem is a reflexion  
                     if len(visited)&gt;1:
                         if ((len(visited[-2])==2) or len(visited[-2])==1):
                             R.pop()
                     last = visited.pop()
                     #
-                    # Poping
-                    #      tahe
+                    # Poping 
+                    #      tahe 
                     #      lawp
                     #      stack
                     #if (tahe[-1][0]==tahe[-1][1]).all():
@@ -3811,7 +3806,7 @@ if __name__ == &quot;__main__&quot;:
     <p>
         &copy; Copyright 2017, PyLayers developer team
       <span class="lastupdated">
-        Last updated on Apr 02, 2019.
+        Last updated on Apr 05, 2019.
       </span>
 
     </p>

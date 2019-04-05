@@ -94,9 +94,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html">8 Random Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_issue314.html">Exemple of issue 314</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
@@ -576,7 +576,8 @@ except:
         Nbloc = self.ng//sizebloc
 
         r1 = np.arange(0,(Nbloc+1)*sizebloc,sizebloc)
-        r1 = np.append(r1,self.ng)
+        if self.ng != r1[-1]:
+            r1 = np.append(r1,self.ng)
         lblock = list(zip(r1[0:-1],r1[1:]))
 
         for bg in lblock:
@@ -1164,7 +1165,7 @@ except:
         f = kwargs[&#39;f&#39;]
         a = kwargs[&#39;a&#39;]
         typ = kwargs[&#39;typ&#39;]
-        assert typ in [&#39;best&#39;,&#39;egd&#39;,&#39;sinr&#39;,&#39;snr&#39;,&#39;capacity&#39;,&#39;pr&#39;,&#39;loss&#39;,&#39;ref&#39;],&quot;typ unknown in show coverage&quot;
+        assert typ in [&#39;best&#39;,&#39;egdo&#39;,&#39;egdp&#39;,&#39;sinr&#39;,&#39;snr&#39;,&#39;capacity&#39;,&#39;pr&#39;,&#39;loss&#39;,&#39;ref&#39;],&quot;typ unknown in show coverage&quot;
         best = kwargs[&#39;best&#39;]
 
         dB = kwargs[&#39;db&#39;]
@@ -1194,9 +1195,14 @@ except:
                     ax.scatter(self.grid[:,0],self.grid[:,1],c=m,s=scale,linewidth=0)
             ax.set_title(title)
         else:
-            if typ == &#39;egd&#39;:
-                title = title + &#39;excess group delay : &#39;+&#39; fc = &#39;+str(self.fGHz[f])+&#39; GHz&#39;+ &#39; polar : &#39;+polar
-                V = self.Ed
+            if typ == &#39;egdo&#39;:
+                title = title + &#39;excess group delay (ortho): &#39;+&#39; fc = &#39;+str(self.fGHz[f])+&#39; GHz&#39;+ &#39; polar : &#39;+polar
+                V = self.Edo
+                dB = False
+                legcb =  &#39;Delay (ns)&#39;
+            if typ == &#39;egdp&#39;:
+                title = title + &#39;excess group delay (para): &#39;+&#39; fc = &#39;+str(self.fGHz[f])+&#39; GHz&#39;+ &#39; polar : &#39;+polar
+                V = self.Edp
                 dB = False
                 legcb =  &#39;Delay (ns)&#39;
             if typ == &#39;sinr&#39;:
@@ -1408,7 +1414,7 @@ if (__name__ == &quot;__main__&quot;):
     <p>
         &copy; Copyright 2017, PyLayers developer team
       <span class="lastupdated">
-        Last updated on Apr 02, 2019.
+        Last updated on Apr 05, 2019.
       </span>
 
     </p>

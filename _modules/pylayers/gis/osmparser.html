@@ -94,9 +94,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html">8 Random Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_issue314.html">Exemple of issue 314</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
@@ -344,14 +344,13 @@ import pdb
 
             self.cpt += 1
 
-        self.boundary = np.array([self.minlon,self.minlat,self.maxlon,self.maxlat])</div>
+        self.boundary=np.array([self.minlon,self.minlat,self.maxlon,self.maxlat])</div>
 
 <div class="viewcode-block" id="Coords.cartesian"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Coords.html#pylayers.gis.osmparser.Coords.cartesian">[docs]</a>    def cartesian(self, cart=False, delta=0, projection=&#39;cass&#39;):
         &quot;&quot;&quot; convert Latitude/Longitude in cartesian
 
         Parameters
         ----------
-
         cart : Boolean
             conversion to cartesian
         delta : offset
@@ -382,7 +381,6 @@ import pdb
 
         &quot;&quot;&quot;
         bd = self.boundary
-        print(bd)
         lon_0 = (bd[0]+bd[2])/2.
         lat_0 = (bd[1]+bd[3])/2.
 
@@ -786,7 +784,6 @@ import pdb
 
         self.toway(coords)
         return(ltree)</div>
-
 <div class="viewcode-block" id="Relations"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.Relations.html#pylayers.gis.osmparser.Relations">[docs]</a>class Relations(object):
     relation = {}
     cpt = 0
@@ -806,8 +803,8 @@ import pdb
     Methods
     -------
 
-    build : recursive construction of floor plan
-    show : show the floor plan
+    build : recursive construction of floor plan 
+    show : show the floor plan 
 
     &quot;&quot;&quot;
 
@@ -955,40 +952,29 @@ import pdb
     typ = kwargs.pop(&#39;typ&#39;,&#39;indoor&#39;)
     level_height = kwargs.pop(&#39;level_height&#39;, 3.45)
     typical_height = kwargs.pop(&#39;typical_height&#39;, 10)
-    bexcluded = kwargs.pop(&#39;bexcluded&#39;, False)
 
     # from coordinates
     if filename == &#39;&#39;:
         address = kwargs.pop(&#39;address&#39;,&#39;Rennes&#39;)
         latlon = kwargs.pop(&#39;latlon&#39;, 0)
         dist_m = kwargs.pop(&#39;dist_m&#39;, 400)
+
         rad_to_deg = (180/np.pi)
 
         if latlon == 0:
-            resp = geo.arcgis(address)
+            place = geo.osm(address)
             try:
-                lat = resp.geojson[&#39;features&#39;][0][&#39;properties&#39;][&#39;lat&#39;]
-                lon = resp.geojson[&#39;features&#39;][0][&#39;properties&#39;][&#39;lng&#39;]
+                lat, lon = place.latlng
             except:
                 print(place)
         else:
             lat = latlon[0]
             lon = latlon[1]
 
-        rad_to_deg = (180/np.pi)
-        # if latlon == 0:
-        #     place = geo.osm(address)
-        #     try:
-        #         lat, lon = place.latlng
-        #     except:
-        #         print(place)
-        # else:
-        #     lat = latlon[0]
-        #     lon = latlon[1]
-
         r_earth = 6370e3
 
         alpha = (dist_m/r_earth)*rad_to_deg
+
     #
     # get map from OsmApi (Database query)
     # same extension in longitude and latitude
@@ -1055,8 +1041,8 @@ import pdb
     coords = Coords()
     coords.clean()
     coords.from_nodes(nodes)
-
     m = coords.cartesian(cart=bcart)
+
     ways = Ways()
     ways.clean()
 
@@ -1067,71 +1053,68 @@ import pdb
         ways.readmap1(osmmap, coords)
     else:
         ltree = ways.readmap2(osmmap, coords)
-
     # list of nodes involved in buildings
     lnodes_id=[]
     for iw in ways.w:
         lnodes_id += ways.w[iw][0]
+    # list of all nodes of coords
 
-    # list of all nodes involved in buildings
     lnodes_id  = np.unique(np.array(lnodes_id))
-    # list of all nodes
     lnodes_full = np.unique(np.array(list(coords.latlon.keys())))
-    # intersection True if nodes not involved in building
     mask = np.in1d(lnodes_full, lnodes_id, invert=True)
 
     # nodes not involved in buildings
-    if typ != &#39;indoor&#39; and bexcluded:
-        lexcluded = lnodes_full[mask]
-        coords.filter(lexcluded)
 
-    dpoly = {}
-    for iw in ways.w:
-        ways.way[iw].tags = {}
-        #
-        # slab and materials extraction
-        #
-        if &#39;material&#39; in ways.w[iw][1]:
-             ways.way[iw].tags[&#39;slab&#39;]=ways.w[iw][1][&#39;material&#39;]
-        elif &#39;building:material&#39; in ways.w[iw][1]:
-             ways.way[iw].tags[&#39;slab&#39;]=ways.w[iw][1][&#39;building:material&#39;]
-        else:
-             ways.way[iw].tags[&#39;slab&#39;]=&#39;WALL&#39;
+    #if typ != &#39;indoor&#39;:
+    #    lexcluded = lnodes_full[mask]
+    #    coords.filter(lexcluded)
 
-        # min_height
-        if &#39;building:min_height&#39; in ways.w[iw][1]:
-            min_height = eval(ways.w[iw][1][&#39;building:min_height&#39;])
-        else:
-            min_height = 0
-        # height
-        if &#39;height&#39; in ways.w[iw][1]:
-            ways.way[iw].tags[&#39;z&#39;] = (min_height, eval(ways.w[iw][1][&#39;height&#39;]))
-        elif &#39;building:height&#39; in ways.w[iw][1]:
-            ways.way[iw].tags[&#39;z&#39;] = (min_height, eval(ways.w[iw][1][&#39;building:height&#39;]))
-        elif &#39;building:levels&#39; in ways.w[iw][1]:
-            nb_levels = eval(ways.w[iw][1][&#39;building:levels&#39;])
-            if type(nb_levels)!=int:
-                try:
-                    nb_levels = max(nb_levels)
-                except:
-                    nb_levels=2
-                ways.way[iw].tags[&#39;z&#39;] = (min_height, nb_levels*level_height)
-            elif &#39;levels&#39; in ways.w[iw][1]:
-                nb_levels = eval(ways.w[iw][1][&#39;levels&#39;])
-                if type(nb_levels)!=int:
-                    try:
-                        nb_levels=max(nb_levels)
-                    except:
-                        nb_levels=2
-                    ways.way[iw].tags[&#39;z&#39;] = (min_height, nb_levels*level_height)
-            else:
-                ways.way[iw].tags[&#39;z&#39;] = (0,typical_height)
+    # dpoly = {}
+    # for iw in ways.w:
+    #     # ways.way[iw].tags = {}
+    #     # # material
+    #     # if &#39;material&#39; in ways.w[iw][1]:
+    #     #     ways.way[iw].tags[&#39;name&#39;]=ways.w[iw][1][&#39;material&#39;]
+    #     # elif &#39;building:material&#39; in ways.w[iw][1]:
+    #     #     ways.way[iw].tags[&#39;name&#39;]=ways.w[iw][1][&#39;building:material&#39;]
+    #     # else:
+    #     #     ways.way[iw].tags[&#39;name&#39;]=&#39;WALL&#39;
 
-        ptpoly = [coords.xy[x] for x in ways.w[iw][0]]
-        dpoly[iw] = geu.Polygon(ptpoly, vnodes=ways.w[iw][0])
-        dpoly[iw].coorddeter()
+    #     # # min_height
+    #     # if &#39;building:min_height&#39; in ways.w[iw][1]:
+    #     #     min_height = eval(ways.w[iw][1][&#39;building:min_height&#39;])
+    #     # else:
+    #     #     min_height = 0
+    #     # # height
+    #     # if &#39;height&#39; in ways.w[iw][1]:
+    #     #     ways.way[iw].tags[&#39;z&#39;] = (min_height, eval(ways.w[iw][1][&#39;height&#39;]))
+    #     # elif &#39;building:height&#39; in ways.w[iw][1]:
+    #     #     ways.way[iw].tags[&#39;z&#39;] = (min_height, eval(ways.w[iw][1][&#39;building:height&#39;]))
+    #     # elif &#39;building:levels&#39; in ways.w[iw][1]:
+    #     #     nb_levels = eval(ways.w[iw][1][&#39;building:levels&#39;])
+    #     #     if type(nb_levels)!=int:
+    #     #         try:
+    #     #             nb_levels = max(nb_levels)
+    #     #         except:
+    #     #             nb_levels=2
+    #     #     ways.way[iw].tags[&#39;z&#39;]=(min_height,nb_levels*level_height)
+    #     # elif &#39;levels&#39; in ways.w[iw][1]:
+    #     #     nb_levels = eval(ways.w[iw][1][&#39;levels&#39;])
+    #     #     if type(nb_levels)!=int:
+    #     #         try:
+    #     #             nb_levels=max(nb_levels)
+    #     #         except:
+    #     #             nb_levels=2
+    #     #     ways.way[iw].tags[&#39;z&#39;] = (min_height,nb_levels*level_height)
+    #     # else:
+    #     #     ways.way[iw].tags[&#39;z&#39;] = (0,typical_height)
 
-    return coords, nodes, ways, m, (lat,lon), dpoly</div>
+    #     ptpoly = [coords.xy[x] for x in ways.w[iw][0]]
+    #     dpoly[iw] = geu.Polygon(ptpoly,vnodes=ways.w[iw][0])
+    #     dpoly[iw].coorddeter()
+
+    #return coords,nodes,ways,dpoly,m
+    return coords, nodes, ways, m, (lat,lon)</div>
 #
 <div class="viewcode-block" id="extract"><a class="viewcode-back" href="../../../api/pylayers.gis.osmparser.extract.html#pylayers.gis.osmparser.extract">[docs]</a>def extract(alat,alon,fileosm,fileout):
     &quot;&quot;&quot; extraction of an osm sub region using osmconvert
@@ -1236,7 +1219,7 @@ import pdb
     <p>
         &copy; Copyright 2017, PyLayers developer team
       <span class="lastupdated">
-        Last updated on Apr 02, 2019.
+        Last updated on Apr 05, 2019.
       </span>
 
     </p>

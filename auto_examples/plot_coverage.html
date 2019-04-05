@@ -39,8 +39,8 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="8 Random Layout" href="plot_layout.html" />
-    <link rel="prev" title="Building graphs of a Layout" href="plot_exLayout2.html" /> 
+    <link rel="next" title="&lt;no title&gt;" href="plot_slab1.html" />
+    <link rel="prev" title="Exemple of issue 314" href="plot_issue314.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -96,9 +96,9 @@
 <li class="toctree-l1"><a class="reference internal" href="plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_exLayout2.html">Building graphs of a Layout</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Indoor Radio Coverage with Motley Keenan</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_layout.html">8 Random Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_issue314.html">Exemple of issue 314</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Indoor Radio Coverage with Motley Keenan</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_exDLink.html">Evaluation of a radio link DLink</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_w1.html">Indoor Radio Coverage FP7 WHERE1 M1 setup</a></li>
@@ -206,10 +206,16 @@ noisefactordb = 0</p>
 <p>[show]
 show = True</p>
 </div></blockquote>
-<img alt="../_images/sphx_glr_plot_coverage_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_coverage_001.png" />
+<ul class="sphx-glr-horizontal">
+<li><img alt="../_images/sphx_glr_plot_coverage_001.png" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_coverage_001.png" />
+</li>
+<li><img alt="../_images/sphx_glr_plot_coverage_002.png" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_coverage_002.png" />
+</li>
+</ul>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Warning Unable to read graph Gr
 Warning Unable to read graph Gw
+Coverage in 5.08 seconds
 </pre></div>
 </div>
 <div class="line-block">
@@ -225,13 +231,14 @@ Warning Unable to read graph Gw
 <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 <span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
 <span class="n">finish</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">9</span><span class="p">))</span>
+<span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">9</span><span class="p">),</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;pr&#39;</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">120</span><span class="p">,</span><span class="n">vmax</span><span class="o">=-</span><span class="mi">40</span><span class="p">)</span>
+<span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">9</span><span class="p">),</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;egdo&#39;</span><span class="p">)</span>
 <span class="c1">#print &#39;Tx position: &#39;,C.tx</span>
-<span class="c1">#print &#39;Coverage in %1.2f seconds&#39; % (finish-start)</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;Coverage in </span><span class="si">%1.2f</span><span class="s1"> seconds&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">finish</span><span class="o">-</span><span class="n">start</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  4.469 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  9.237 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-coverage-py">
 <div class="sphx-glr-download docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/ba62a971cd2eef7a7ed5c0bcb9f236e1/plot_coverage.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_coverage.py</span></code></a></p>
@@ -251,10 +258,10 @@ Warning Unable to read graph Gw
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="plot_layout.html" class="btn btn-neutral float-right" title="8 Random Layout" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="plot_slab1.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="plot_exLayout2.html" class="btn btn-neutral float-left" title="Building graphs of a Layout" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="plot_issue314.html" class="btn btn-neutral float-left" title="Exemple of issue 314" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -265,7 +272,7 @@ Warning Unable to read graph Gw
     <p>
         &copy; Copyright 2017, PyLayers developer team
       <span class="lastupdated">
-        Last updated on Apr 02, 2019.
+        Last updated on Apr 05, 2019.
       </span>
 
     </p>
