@@ -995,7 +995,7 @@ class Coverage(PyLayers):
         f = kwargs['f']
         a = kwargs['a']
         typ = kwargs['typ']
-        assert typ in ['best','egd','sinr','snr','capacity','pr','loss','ref'],"typ unknown in show coverage"
+        assert typ in ['best','egdo','egdp','sinr','snr','capacity','pr','loss','ref'],"typ unknown in show coverage"
         best = kwargs['best']
 
         dB = kwargs['db']
@@ -1025,9 +1025,14 @@ class Coverage(PyLayers):
                     ax.scatter(self.grid[:,0],self.grid[:,1],c=m,s=scale,linewidth=0)
             ax.set_title(title)
         else:
-            if typ == 'egd':
-                title = title + 'excess group delay : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+polar
-                V = self.Ed
+            if typ == 'egdo':
+                title = title + 'excess group delay (ortho): '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+polar
+                V = self.Edo
+                dB = False
+                legcb =  'Delay (ns)'
+            if typ == 'egdp':
+                title = title + 'excess group delay (para): '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+polar
+                V = self.Edp
                 dB = False
                 legcb =  'Delay (ns)'
             if typ == 'sinr':
