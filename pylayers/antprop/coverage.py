@@ -484,6 +484,7 @@ class Coverage(PyLayers):
 
             tgain = tgain.reshape(nf,tgain.shape[1]*tgain.shape[2])
             Lwo,Lwp,Edo,Edp = loss.Losst(self.L, self.fGHz, self.pa, self.pg, dB=False)
+            logger.info('Lwo[0][0] %.2f' % Lwo[0,0])
             freespace = loss.PL(self.fGHz, self.pa, self.pg, dB=False)
             try:
                 self.Lwo = np.hstack((self.Lwo,Lwo))
