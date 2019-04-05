@@ -406,7 +406,8 @@ class Coverage(PyLayers):
         Nbloc = self.ng//sizebloc
 
         r1 = np.arange(0,(Nbloc+1)*sizebloc,sizebloc)
-        r1 = np.append(r1,self.ng)
+        if self.ng != r1[-1]:
+            r1 = np.append(r1,self.ng)
         lblock = list(zip(r1[0:-1],r1[1:]))
 
         for bg in lblock:

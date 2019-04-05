@@ -887,8 +887,7 @@ def Losst(L,fGHz,p1,p2,dB=True,bceilfloor=False):
         Nlink = 1
 
     # determine incidence angles on segment crossing p1-p2 segment
-    data = L.angleonlink(p1[0:2,:],p2[0:2,:])
-    #data = L.angleonlink3(p1,p2)
+    data = L.angleonlink3(p1,p2)
 
     # as many slabs as segments and subsegments
     us = data['s']
