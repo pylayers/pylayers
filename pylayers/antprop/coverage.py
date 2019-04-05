@@ -166,7 +166,8 @@ class Coverage(PyLayers):
         self.sinr = False
         self.snr = False
         self.best = False
-        self.egd = False
+        self.egdo = False
+        self.egdp = False
         self.Pr = False
         self.capacity = False
         self.pr = False
@@ -1041,7 +1042,10 @@ class Coverage(PyLayers):
         else:
             if typ == 'egd':
                 title = title + 'excess group delay : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+polar
-                V = self.Ed
+                if polar =='o':
+                    V = self.Edo
+                if polar =='p':
+                    V = self.Edp
                 dB = False
                 legcb =  'Delay (ns)'
             if typ == 'sinr':
