@@ -48,7 +48,7 @@ class Model(object):
         st = ''
         st = st + 'frequency (f in GHz) : %.2f' % self.f
         st = st + 'path loss exponent (n) : %.2f' % self.n
-        st  'PL0 : %.2f' % self.PL0
+        st = st + 'PL0 : %.2f' % self.PL0
 
     def PL0_c(self, Gt=0, Gr=0):
         """
