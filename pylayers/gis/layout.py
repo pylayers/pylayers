@@ -4553,9 +4553,11 @@ class Layout(PyLayers):
         assert sh1[0] == 3, pdb.set_trace()
         assert sh2[0] == 3, pdb.set_trace()
 
+        #  p1 (1 axe) and p2 (2 or 3 axes) 
         if (len(sh1) < 2) & (len(sh2) > 1):
             p1 = np.outer(p1, np.ones(sh2[1]))
 
+        #  p2 (1 axe) and p1 (2 or 3 axes) 
         if (len(sh2) < 2) & (len(sh1) > 1):
             p2 = np.outer(p2, np.ones(sh1[1]))
 
@@ -4573,28 +4575,28 @@ class Layout(PyLayers):
         #
         # warning : seglist contains the segment number in tahe not in Gs
         #
-
-        seglist  = np.unique(self.seginframe2(p1[0:2], p2[0:2])).astype(int)
+        seglist  =  self.seginframe2(p1[0:2], p2[0:2])
+        useglist = np.unique(seglist)
         #seglist  = np.unique(self.seginframe(p1[0:2], p2[0:2]))
 
-        upos = np.nonzero(seglist >= 0)[0]
-        uneg = np.nonzero(seglist < 0)[0]
+        upos = np.nonzero(useglist >= 0)[0]
+        uneg = np.nonzero(useglist < 0)[0]
 
 
         # nNLOS = len(uneg) + 1
         # # retrieve the number of segments per link
         # if nNLOS > 1:
-        #     llink = np.hstack(
+        #      llink = np.hstack(
         #         (uneg[0], np.hstack((uneg[1:], array([len(seglist)]))) - uneg - 1))
         # else:
         #     llink = np.array([len(seglist)])
         # [(link id,number of seg),...]
         # nl = zip(np.arange(nlink),llink)n
 
-        seglist = seglist[upos]
+        useglist = useglist[upos]
 
-        npta = self.tahe[0, seglist]
-        nphe = self.tahe[1, seglist]
+        npta = self.tahe[0, useglist]
+        nphe = self.tahe[1, useglist]
 
         Pta = self.pt[:, npta]
         Phe = self.pt[:, nphe]
@@ -4602,9 +4604,9 @@ class Layout(PyLayers):
         Nscreen = len(npta)
         # get segment height bounds
         zmin = np.array([self.Gs.node[x]['z'][0]
-                         for x in self.tsg[seglist]])
+                         for x in self.tsg[useglist]])
         zmax = np.array([self.Gs.node[x]['z'][1]
-                         for x in self.tsg[seglist]])
+                         for x in self.tsg[useglist]])
         # centroid of the screen
         Pg = np.vstack(((Phe + Pta) / 2., (zmax + zmin) / 2.))
         Ptahe = Phe - Pta
@@ -4613,6 +4615,7 @@ class Layout(PyLayers):
         U1 = np.vstack((Ptahe / L1, np.zeros(Nscreen)))
         L2 = zmax - zmin
         U2 = np.array([0, 0, 1])[:, None]  # 3 x 1  U2 is along z
+
         #
         # p1 : 3 x Ng
         # p2 : 3 x Ng
@@ -5031,7 +5034,7 @@ class Layout(PyLayers):
         #self.min_sy = np.array([ np.minnimum(pt[1, x[0]], pt[1, x[1]]) for x in th ])
 
     def seginframe2(self, p1, p2):
-        """ returns the seg list of a given zone defined by two points
+        """ returns the seglist of a given zone defined by two points
         (vectorised version)
 
             Parameters
@@ -5047,6 +5050,7 @@ class Layout(PyLayers):
 
             seglist
                 list of segment number inside a planar region defined by p1 an p2
+                separated by -1 
 
 
             Examples
@@ -5110,7 +5114,7 @@ class Layout(PyLayers):
         # -1 acts as a deliminiter (not as a segment number)
 
         # seglist = reduce(lambda x, y: np.hstack((x, array([-1]), y)), seglist)
-        x = np.array([])
+        x = np.array([]).astype(int)
         for y in seglist:
             x = np.hstack((x, np.array([-1]), y))
 

@@ -6,7 +6,6 @@
 
 """
 from pylayers.util.project import *
-#from pylayers.measures.mesuwb import *
 from pylayers.simul.radionode import *
 import pylayers.util.pyutil as pyu
 from pylayers.util.utilnet import str2bool
@@ -91,7 +90,6 @@ class Coverage(PyLayers):
 
         """
 
-
         self.config = ConfigParser.ConfigParser(allow_no_value=True)
         self.config.read(pyu.getlong(_fileini,pstruc['DIRSIMUL']))
 
@@ -173,6 +171,7 @@ class Coverage(PyLayers):
         self.capacity = False
         self.pr = False
         self.loss = False
+        logger.info('[+] Coverage _init__ completed')
 
     def __repr__(self):
         st=''
@@ -359,12 +358,13 @@ class Coverage(PyLayers):
         #
         # Loop over access points
         #    set parameter of each active ap
-        #        p
-        #        PtdBm
-        #        BMHz
-
+        #        aap  :   (,Nactive AP)
+        #        ptdbm :  (,Nactive AP)
+        #        bmhz  :  (,Nactive AP)
+        logger.info('[+] start loop over access points')
         for iap in self.dap:
             if self.dap[iap]['on']:
+                logger.info('[+] AP %g ' % iap)
                 lactiveAP.append(iap)
                 # set frequency for each AP
                 fGHz = self.dap[iap].s.fcghz
@@ -382,10 +382,11 @@ class Coverage(PyLayers):
                     self.ptdbm = np.array(self.dap[iap]['PtdBm'])
                     self.bmhz  = np.array(self.dap[iap].s.chan[apchan[0]]['BMHz'])
 
+        # nf : number of frequency points
         self.nf = len(self.fGHz)
-        PnW = np.array((10**(self.noisefactordb/10.))*kB*self.temperaturek*self.bmhz*1e6)
-        # Evaluate Noise Power (in dBm)
 
+        # Evaluate Noise Power (in dBm)
+        PnW = np.array((10**(self.noisefactordb/10.))*kB*self.temperaturek*self.bmhz*1e6)
         self.pndbm = np.array(10*np.log10(PnW) + 30)
 
         #lchan = map(lambda x: self.dap[x]['chan'],lap)
@@ -408,8 +409,11 @@ class Coverage(PyLayers):
         Nbloc = self.ng//sizebloc
 
         r1 = np.arange(0,(Nbloc+1)*sizebloc,sizebloc)
-        r1 = np.append(r1,self.ng)
+        if self.ng!=r1[-1]:
+            r1 = np.append(r1,self.ng)
         lblock = list(zip(r1[0:-1],r1[1:]))
+
+        logger.info('[+] start looping over blocks ')
 
         for bg in lblock:
             p = product(range(bg[0],bg[1]),lactiveAP)
@@ -492,6 +496,7 @@ class Coverage(PyLayers):
             if (self.pg.shape[0]!=3):
                 self.pg = self.pg.T
 
+            logger.info('[+] calling Losst')
             Lwo,Lwp,Edo,Edp = loss.Losst(self.L, self.fGHz, self.pa, self.pg, dB=False)
             freespace = loss.PL(self.fGHz, self.pa, self.pg, dB=False)
             try:
