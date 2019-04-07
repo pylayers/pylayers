@@ -379,11 +379,11 @@ class Layout(pro.PyLayers):
 
         if os.path.splitext(self._filename)[1] == '.lay':
             dirname = self._filename.replace('.lay','')
-            path = os.path.join(basename, 'struc', 'gpickle', dirname)
+            path = os.path.join(pro.basename, 'struc', 'gpickle', dirname)
 
         if not newfile:
             if loadlay:
-                filename = pyu.getlong(self._filename, pstruc['DIRLAY'])
+                filename = pyu.getlong(self._filename, pro.pstruc['DIRLAY'])
                 if os.path.exists(filename):  # which exists
                     # check the .lay hash
                     fd = open(filename,'rb')
@@ -1347,7 +1347,7 @@ class Layout(pro.PyLayers):
 
         if self.Ns > 0:
             aupnt = np.array(upnt)
-	    logger.info('g2npy : build tail head tahe')
+            logger.info('g2npy : build tail head tahe')
             self.tahe[0, :] = np.array([np.where(aupnt==x)[0][0] for x in ntail ])
             self.tahe[1, :] = np.array([np.where(aupnt==x)[0][0] for x in nhead ])
 
@@ -2271,7 +2271,7 @@ class Layout(pro.PyLayers):
         else:
             fileout = self._filename
 
-        filelay = pyu.getlong(fileout, pstruc['DIRLAY'])
+        filelay = pyu.getlong(fileout, pro.pstruc['DIRLAY'])
         print(filelay)
         fd = open(filelay, "w")
         config.write(fd)
@@ -2328,7 +2328,7 @@ class Layout(pro.PyLayers):
         di = {}
         config = ConfigParser.RawConfigParser()
         config.optionxform = str
-        filelay = pyu.getlong(self._filename, pstruc['DIRLAY'])
+        filelay = pyu.getlong(self._filename, pro.pstruc['DIRLAY'])
         config.read(filelay)
 
 
@@ -2652,7 +2652,7 @@ class Layout(pro.PyLayers):
 
         logger.info('save the hash')
         dirname = self._filename.replace('.lay','')
-        path = os.path.join(basename, 'struc', 'gpickle', dirname)
+        path = os.path.join(pro.basename, 'struc', 'gpickle', dirname)
         if not os.path.exists(path):
             os.mkdir(path)
         fd = open(os.path.join(path,'.hash'),'w')
@@ -2710,7 +2710,7 @@ class Layout(pro.PyLayers):
         di = {}
         config = ConfigParser.RawConfigParser()
         config.optionxform = str
-        filelay = pyu.getlong(self._filename, pstruc['DIRLAY'])
+        filelay = pyu.getlong(self._filename, pro.pstruc['DIRLAY'])
         config.read(filelay)
 
 
@@ -3048,7 +3048,7 @@ class Layout(pro.PyLayers):
 
 
         """
-        filefur = pyu.getlong(_filefur, pstruc['DIRFUR'])
+        filefur = pyu.getlong(_filefur, pro.pstruc['DIRFUR'])
         config = ConfigParser.ConfigParser()
         config.read(filefur)
         furname = config.sections()
@@ -3076,7 +3076,7 @@ class Layout(pro.PyLayers):
         """
 
         newfile = False
-        filename = pyu.getlong(_filename, pstruc['DIRLAY'])
+        filename = pyu.getlong(_filename, pro.pstruc['DIRLAY'])
         if os.path.exists(filename):  # which exists
             self.loadini(arg)
         else:  # which do not exist
@@ -3738,7 +3738,7 @@ class Layout(pro.PyLayers):
 
         """
 
-        filefur = pyu.getlong(_filefur, pstruc['DIRFUR'])
+        filefur = pyu.getlong(_filefur, pro.pstruc['DIRFUR'])
         config = ConfigParser.ConfigParser()
         config.read(filefur)
         furname = config.sections()
@@ -5977,7 +5977,7 @@ class Layout(pro.PyLayers):
             else:
                 if self.display['overlay_file'] != '':
                     image = Image.open(os.path.join(
-                        basename, pstruc['DIRIMAGE'], self.display['overlay_file']))
+                        pro.basename, pro.pstruc['DIRIMAGE'], self.display['overlay_file']))
                     imok = True
             if imok:
                 if 'v' in self.display['overlay_flip']:
@@ -6184,7 +6184,7 @@ class Layout(pro.PyLayers):
 
         # add hash to node 0 of Gs
 
-        filelay = pyu.getlong(self._filename, pstruc['DIRLAY'])
+        filelay = pyu.getlong(self._filename, pro.pstruc['DIRLAY'])
         fd = open(filelay,'rb')
         _hash = hashlib.md5(fd.read()).hexdigest()
         fd.close()
@@ -6216,7 +6216,7 @@ class Layout(pro.PyLayers):
             dirname = self._filename.replace('.ini','')
         if os.path.splitext(self._filename)[1]=='.lay':
             dirname = self._filename.replace('.lay','')
-        path = os.path.join(basename, 'struc', 'gpickle', dirname)
+        path = os.path.join(pro.basename, 'struc', 'gpickle', dirname)
 
         if not os.path.isdir(path):
             os.mkdir(path)
@@ -6279,7 +6279,7 @@ class Layout(pro.PyLayers):
             dirname = self._filename.replace('.ini','')
         if os.path.splitext(self._filename)[1]=='.lay':
             dirname = self._filename.replace('.lay','')
-        path = os.path.join(basename, 'struc', 'gpickle', dirname)
+        path = os.path.join(pro.basename, 'struc', 'gpickle', dirname)
         for g in graphs:
             try:
                 # if g in ['v','i']:
@@ -9734,7 +9734,7 @@ class Layout(pro.PyLayers):
             imok = False
             if self.display['overlay_file'] != '':
                 image = Image.open(os.path.join(
-                    basename, pstruc['DIRIMAGE'], self.display['overlay_file']))
+                    basename, pro.pstruc['DIRIMAGE'], self.display['overlay_file']))
                 imok = True
             if imok:
                 if 'v' in self.display['overlay_flip']:
@@ -10510,7 +10510,7 @@ class Layout(pro.PyLayers):
         """
 
         filename = name + '.list'
-        filestruc = pyu.getlong(filename, pstruc['DIRGEOM'])
+        filestruc = pyu.getlong(filename, pro.pstruc['DIRGEOM'])
         fos = open(filestruc, "w")
         fos.write("LIST{\n")
         for e in edlist:
@@ -10720,7 +10720,7 @@ class Layout(pro.PyLayers):
             nsseg = 0
 
         filename = 'fa' + str(s) + '.off'
-        filestruc = pyu.getlong(filename, pstruc['DIRGEOM'])
+        filestruc = pyu.getlong(filename, pro.pstruc['DIRGEOM'])
         fos = open(filestruc, "w")
         fos.write("OFF\n")
         fos.write("%d %d \n\n" % (1 + (nsseg + 1) * 4, nsseg + 1))
@@ -10882,7 +10882,7 @@ class Layout(pro.PyLayers):
         _filename, ext = os.path.splitext(self._filename)
         _filegeom = _filename + '.off'
         self.filegeom = _filegeom
-        filegeom = pyu.getlong(_filegeom, pstruc['DIRGEOM'])
+        filegeom = pyu.getlong(_filegeom, pro.pstruc['DIRGEOM'])
         fos = open(filegeom, "w")
         fos.write("OFF\n")
         fos.write("%d %d \n\n" % (npt + 1, en + cen))
@@ -11081,7 +11081,7 @@ class Layout(pro.PyLayers):
 #         _filename,ext = os.path.splitext(self._filename)
 #         _filegeom = _filename+'.off'
 #         self.filegeom=_filegeom
-#         filegeom = pyu.getlong(_filegeom, pstruc['DIRGEOM'])
+#         filegeom = pyu.getlong(_filegeom, pro.pstruc['DIRGEOM'])
 #         fos = open(filegeom, "w")
 #         fos.write("OFF\n")
 #         fos.write("%d %d \n\n" % (npt + 1, en + cen))
@@ -11276,7 +11276,7 @@ class Layout(pro.PyLayers):
 
         pg = self.geomfile(centered=centered)
 
-        filename = pyu.getlong(self.filegeom, pstruc['DIRGEOM'])
+        filename = pyu.getlong(self.filegeom, pro.pstruc['DIRGEOM'])
         if (bdis):
             #chaine = "geomview -nopanel -b 1 1 1 " + filename + " 2>/dev/null &"
             chaine = "geomview  -b 1 1 1 " + filename + " 2>/dev/null &"
