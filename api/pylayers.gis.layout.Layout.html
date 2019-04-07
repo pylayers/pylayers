@@ -96,6 +96,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_layout.html">8 Random Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_issue314.html">Exemple of issue 314</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_slab1.html">Material Attenuation for ITU_CONCRETE ITU_GLASS from 0.1 to 100GHz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
@@ -274,19 +275,19 @@ zmin</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#pylayers.gis.layout.Layout.add_pons" title="pylayers.gis.layout.Layout.add_pons"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_pons</span></code></a>(ns[, alpha])</p></td>
 <td><p>add point on segment</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylayers.gis.layout.Layout.add_segment" title="pylayers.gis.layout.Layout.add_segment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_segment</span></code></a>(n1, n2[, num, maxnum, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylayers.gis.layout.Layout.add_segment" title="pylayers.gis.layout.Layout.add_segment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_segment</span></code></a>(n1, n2, **kwargs)</p></td>
 <td><p>add segment between node n1 and node n2</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pylayers.gis.layout.Layout.angleonlink" title="pylayers.gis.layout.Layout.angleonlink"><code class="xref py py-obj docutils literal notranslate"><span class="pre">angleonlink</span></code></a>([p1, p2])</p></td>
 <td><p>angleonlink(self,p1,p2) return (seglist,angle) between p1 and p2</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pylayers.gis.layout.Layout.angleonlink3" title="pylayers.gis.layout.Layout.angleonlink3"><code class="xref py py-obj docutils literal notranslate"><span class="pre">angleonlink3</span></code></a>([p1, p2])</p></td>
-<td><p>return (seglist,angle) between p1 and p2</p></td>
+<td><p>returns (seglist,angle) in retangular area defined by p1 and p2</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pylayers.gis.layout.Layout.angleonlinkold" title="pylayers.gis.layout.Layout.angleonlinkold"><code class="xref py py-obj docutils literal notranslate"><span class="pre">angleonlinkold</span></code></a>([p1, p2])</p></td>
 <td><p>angleonlink(self,p1,p2) returns seglist between p1 and p2</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylayers.gis.layout.Layout.boundary" title="pylayers.gis.layout.Layout.boundary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">boundary</span></code></a>([percx, percy, xlim, force, minD])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylayers.gis.layout.Layout.boundary" title="pylayers.gis.layout.Layout.boundary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">boundary</span></code></a>(**kwargs)</p></td>
 <td><p>add a blank boundary around layout</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pylayers.gis.layout.Layout.build" title="pylayers.gis.layout.Layout.build"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build</span></code></a>([graph, verbose, difftol, multi])</p></td>
@@ -347,7 +348,7 @@ zmin</p>
 <td><p>read of given graphs</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pylayers.gis.layout.Layout.dumpw" title="pylayers.gis.layout.Layout.dumpw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dumpw</span></code></a>()</p></td>
-<td><p>write a dump of given Graph</p></td>
+<td><p>pickle dump of specified Graphs</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pylayers.gis.layout.Layout.ed2nd" title="pylayers.gis.layout.Layout.ed2nd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ed2nd</span></code></a>(edlist)</p></td>
 <td><p>convert edgelist to nodelist</p></td>
@@ -440,7 +441,7 @@ zmin</p>
 <td><p>layeronlink(self,p1,p2) return seglist between p1 and p2</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pylayers.gis.layout.Layout.load" title="pylayers.gis.layout.Layout.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>()</p></td>
-<td><p>load a layout  from a .lay file</p></td>
+<td><p>load a layout from a .lay file</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pylayers.gis.layout.Layout.load_modif" title="pylayers.gis.layout.Layout.load_modif"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_modif</span></code></a>(_filename[, build, cartesian, dist_m])</p></td>
 <td><p>load a Layout in different formats</p></td>
@@ -482,7 +483,7 @@ zmin</p>
 <td><p>filter output of Gi edges</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pylayers.gis.layout.Layout.plot" title="pylayers.gis.layout.Layout.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>(**kwargs)</p></td>
-<td><p>plot the layout with shapely polygons</p></td>
+<td><p>plot the layout with shapely MultiLineString</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pylayers.gis.layout.Layout.plot_segments" title="pylayers.gis.layout.Layout.plot_segments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_segments</span></code></a>(lns, **kwargs)</p></td>
 <td><p><p>”</p>
@@ -537,7 +538,7 @@ zmin</p>
 <td><p>scale overlay image</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pylayers.gis.layout.Layout.seg2pts" title="pylayers.gis.layout.Layout.seg2pts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">seg2pts</span></code></a>(aseg)</p></td>
-<td><p>convert segments array from Gs numerotation  to corresponding termination points array in pt</p></td>
+<td><p>convert segments array from Gs numerotation</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pylayers.gis.layout.Layout.seg2ro" title="pylayers.gis.layout.Layout.seg2ro"><code class="xref py py-obj docutils literal notranslate"><span class="pre">seg2ro</span></code></a>(seg)</p></td>
 <td><p>return room number of a point</p></td>
@@ -549,7 +550,7 @@ zmin</p>
 <td><p>return the seg list of a given zone defined by two points</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pylayers.gis.layout.Layout.seginframe2" title="pylayers.gis.layout.Layout.seginframe2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">seginframe2</span></code></a>(p1, p2)</p></td>
-<td><p>returns the seg list of a given zone defined by two points (vectorised version)</p></td>
+<td><p>returns the seglist of a given zone defined by two points (vectorised version)</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pylayers.gis.layout.Layout.seginline" title="pylayers.gis.layout.Layout.seginline"><code class="xref py py-obj docutils literal notranslate"><span class="pre">seginline</span></code></a>(p1, p2)</p></td>
 <td><p>returns the intersection between a given line and all segments</p></td>
@@ -710,12 +711,12 @@ create 2 segments with same properties</p>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.add_segment">
-<code class="descname">add_segment</code><span class="sig-paren">(</span><em>n1</em>, <em>n2</em>, <em>num=-1</em>, <em>maxnum=-1</em>, <em>transition=False</em>, <em>name='PARTITION'</em>, <em>z=(0.0</em>, <em>40000000)</em>, <em>offset=0</em>, <em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_segment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_segment" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_segment</code><span class="sig-paren">(</span><em>n1</em>, <em>n2</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_segment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_segment" title="Permalink to this definition">¶</a></dt>
 <dd><p>add segment between node n1 and node n2</p>
 <p>n1  : integer &lt; 0
 n2  : integer &lt; 0
 num : segment index (-1 default not given)
-maxnum : maximum number (-1 default not given) 
+maxnum : maximum number (-1 default not given)
 name : string</p>
 <blockquote>
 <div><p>layer name ‘PARTITION’</p>
@@ -724,6 +725,8 @@ name : string</p>
 <dt>z<span class="classifier">tuple of 2 floats</span></dt><dd><p>default = (0,40000000)</p>
 </dd>
 <dt>offset<span class="classifier">float</span></dt><dd><p>[-1,1] default (0)</p>
+</dd>
+<dt>bootdoor<span class="classifier">boolean</span></dt><dd><p>if outdoor add an _AIR wall above the segment</p>
 </dd>
 </dl>
 <p>num : segment number (&gt;0)</p>
@@ -766,7 +769,7 @@ data[‘a’] : angle (in radians) between segment and LOS axis</p>
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.angleonlink3">
 <code class="descname">angleonlink3</code><span class="sig-paren">(</span><em>p1=array([0</em>, <em>0</em>, <em>1])</em>, <em>p2=array([10</em>, <em>3</em>, <em>1])</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.angleonlink3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.angleonlink3" title="Permalink to this definition">¶</a></dt>
-<dd><p>return (seglist,angle) between p1 and p2</p>
+<dd><p>returns (seglist,angle) in retangular area defined by p1 and p2</p>
 <p>p1 : np.array (3 x N) or (3,)
 p2 : np.array (3 x N) or (3,)</p>
 <dl class="simple">
@@ -818,7 +821,7 @@ geomutil.intersect3</p>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.boundary">
-<code class="descname">boundary</code><span class="sig-paren">(</span><em>percx=0.15</em>, <em>percy=0.15</em>, <em>xlim=()</em>, <em>force=False</em>, <em>minD=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.boundary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.boundary" title="Permalink to this definition">¶</a></dt>
+<code class="descname">boundary</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.boundary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.boundary" title="Permalink to this definition">¶</a></dt>
 <dd><p>add a blank boundary around layout</p>
 <dl class="simple">
 <dt>percx<span class="classifier">float</span></dt><dd><p>percentage of Dx for x offset calculation (default 0.15)</p>
@@ -826,11 +829,17 @@ geomutil.intersect3</p>
 <dt>percy<span class="classifier">float</span></dt><dd><p>percentage of Dy for y offset calculation (default 0.15)</p>
 </dd>
 </dl>
-<p>minD : miimum distance for boundary
+<p>xlim : tuple
+minD : minimum distance for boundary
 force : boolean</p>
 <blockquote>
-<div><p>force modification of boundaries</p>
+<div><p>force modification of boundaries even if one boundary already
+exists</p>
 </div></blockquote>
+<dl class="simple">
+<dt>minD<span class="classifier">int</span></dt><dd><p>minimal distance over x and y</p>
+</dd>
+</dl>
 <p>self.lboundary is the list of the nodes of the added boundary
 self.axn is the zone without the boundary extension
 self.ax  is updated</p>
@@ -839,6 +848,7 @@ self.ax  is updated</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">boundary</span><span class="p">()</span>
 </pre></div>
 </div>
+<p>This function calls g2npy</p>
 </dd></dl>
 
 <dl class="method">
@@ -1096,12 +1106,13 @@ specified by the $BASENAME environment variable</p>
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.dumpw">
 <code class="descname">dumpw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.dumpw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.dumpw" title="Permalink to this definition">¶</a></dt>
-<dd><p>write a dump of given Graph</p>
+<dd><p>pickle dump of specified Graphs</p>
+<p>graphs which are in lbltg are saved in pickle format</p>
 <p>‘t’ : Gt
-‘r’ : Gr
 ‘s’ : Gs
 ‘v’ : Gv
-‘i’ : Gi</p>
+‘i’ : Gi
+‘r’ : Gr</p>
 </dd></dl>
 
 <dl class="method">
@@ -1215,19 +1226,19 @@ nodelist : input nodelist</p>
 <code class="descname">g2npy</code><span class="sig-paren">(</span><em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.g2npy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.g2npy" title="Permalink to this definition">¶</a></dt>
 <dd><p>conversion from graphs to numpy arrays</p>
 <p>verbose : boolean</p>
-<p>This function updates the following arrays:</p>
+<p>This function updates the following arrays in self:</p>
 <ul class="simple">
-<li><p>self.pt   (2xNp)</p></li>
-<li><p>self.pg   center of gravity</p></li>
-<li><p>self.tahe (2xNs)</p></li>
-<li><p>self.tgs  : graph to segment</p></li>
-<li><p>self.tsg  : segment to graph</p></li>
-<li><p>self.dca  : dictionnary of cycle with an airwall</p></li>
-<li><p>self.s2pu : sparse_lil_matrix</p></li>
-<li><p>self.s2pc : sparse_lil_matrix</p></li>
-<li><p>self.lsss : list of iso segments</p></li>
-<li><p>self.maxheight :</p></li>
-<li><p>self.normal :</p></li>
+<li><p>pt   (2xNp)</p></li>
+<li><p>pg   center of gravity</p></li>
+<li><p>tahe (2xNs)</p></li>
+<li><p>tgs  : graph to segment</p></li>
+<li><p>tsg  : segment to graph</p></li>
+<li><p>dca  : dictionnary of cycle with an airwall (_AIR)</p></li>
+<li><p>s2pu : sparse_lil_matrix</p></li>
+<li><p>s2pc : sparse_lil_matrix</p></li>
+<li><p>lsss : list of iso segments</p></li>
+<li><p>maxheight :</p></li>
+<li><p>normal :</p></li>
 </ul>
 <p>assert self.pt[self.iupnt[-1]] == self.pt[:,self.iupnt[-1]]</p>
 <p>extrseg</p>
@@ -1400,13 +1411,14 @@ pylayers they have a positive index.</p>
 <code class="descname">importres</code><span class="sig-paren">(</span><em>_fileres</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.importres"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.importres" title="Permalink to this definition">¶</a></dt>
 <dd><p>import res format</p>
 <p>col1 : x1 coordinates
-col2 : y1 coordinates 
+col2 : y1 coordinates
 col3 : x2 coordinates
 col4 : y2 coordinates
 col5 : building height
 col6 : building number
-col7 : building class 
+col7 : building class
 col8 : ground height</p>
+<p>COST231 data Munich_buildings.res</p>
 </dd></dl>
 
 <dl class="method">
@@ -1502,7 +1514,7 @@ p2 : (1 x 2 )</p>
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.load">
 <code class="descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.load" title="Permalink to this definition">¶</a></dt>
-<dd><p>load a layout  from a .lay file</p>
+<dd><p>load a layout from a .lay file</p>
 <p>The filename is in self._filename</p>
 <p>[info]
 format = {cart | latlon}
@@ -1516,10 +1528,17 @@ type = {indoor | outdoor}</p>
 WALL = {‘lthick’:[,],’lmat’:[,],’color:’‘,’linewidth’:float}</p>
 <p>[materials]
 BRICK = {‘mur’:complex,’epsr’:complex,’sigma’:float,’roughness’:}</p>
+<p>[polygons]
+1 = {‘connect’:[1,2,3,4],’name’:NAME,’z’:(zmin,zmax)}</p>
 <p>[indoor]
 zceil =
 zfloor =</p>
-<p>[latlon]</p>
+<p>[latlon]
+llcrnrlon = 
+llcrnrlat = 
+urcrnrlon =
+urcrnrlat = 
+projection =</p>
 </dd></dl>
 
 <dl class="method">
@@ -1706,12 +1725,13 @@ pylayers.util.cone.Cone.belong_seg</p>
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.plot">
 <code class="descname">plot</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.plot" title="Permalink to this definition">¶</a></dt>
-<dd><p>plot the layout with shapely polygons</p>
+<dd><p>plot the layout with shapely MultiLineString</p>
 <p>show : boolean
 fig :figure
 ax  :
 labels : list
 nodes : boolean</p>
+<p>fig, ax</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;Munich.lay&#39;</span><span class="p">,</span><span class="n">bbuild</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
@@ -1899,8 +1919,8 @@ ay : float</p>
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.seg2pts">
 <code class="descname">seg2pts</code><span class="sig-paren">(</span><em>aseg</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.seg2pts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.seg2pts" title="Permalink to this definition">¶</a></dt>
-<dd><p>convert segments array from Gs numerotation 
-to corresponding termination points array in pt</p>
+<dd><p>convert segments array from Gs numerotation</p>
+<p>to corresponding termination points array in pt</p>
 <dl class="simple">
 <dt>aseg<span class="classifier">np.array (,Ns) or int for single value:w</span></dt><dd><p>array of segment number (&gt;0)</p>
 </dd>
@@ -1916,7 +1936,7 @@ to corresponding termination points array in pt</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pt</span> <span class="o">=</span>  <span class="n">L</span><span class="o">.</span><span class="n">seg2pts</span><span class="p">(</span><span class="n">aseg</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>OBSOLETE : Use self.s2pc instead</p>
+<p>surprisingly self.s2pc is slower than this function</p>
 </dd></dl>
 
 <dl class="method">
@@ -1970,7 +1990,7 @@ lshP : list of shapely points of intersections.</p>
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.seginframe2">
 <code class="descname">seginframe2</code><span class="sig-paren">(</span><em>p1</em>, <em>p2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.seginframe2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.seginframe2" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns the seg list of a given zone defined by two points
+<dd><p>returns the seglist of a given zone defined by two points
 (vectorised version)</p>
 <blockquote>
 <div><dl class="simple">
@@ -1980,7 +2000,8 @@ lshP : list of shapely points of intersections.</p>
 </dd>
 </dl>
 <dl class="simple">
-<dt>seglist</dt><dd><p>list of segment number inside a planar region defined by p1 an p2</p>
+<dt>seglist</dt><dd><p>list of segment number inside a planar region defined by p1 an p2
+separated by -1</p>
 </dd>
 </dl>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="k">import</span> <span class="o">*</span>
@@ -2268,6 +2289,7 @@ alpha : float</p>
 </dd>
 </dl>
 <p>font_size</p>
+<p>show_segment</p>
 </dd></dl>
 
 <dl class="method">
@@ -2290,6 +2312,8 @@ dlabels : Boolean</p>
 <dt>alpha<span class="classifier">float</span></dt><dd><p>transparancy</p>
 </dd>
 </dl>
+<p>show_segment
+showGs</p>
 </dd></dl>
 
 <dl class="method">
@@ -2325,6 +2349,7 @@ dlabels</p>
 <dt>font_size<span class="classifier">int</span></dt><dd><p>Default 15</p>
 </dd>
 </dl>
+<p>show_nodes</p>
 </dd></dl>
 
 <dl class="method">
@@ -2485,7 +2510,7 @@ nroom2</p>
     <p>
         &copy; Copyright 2017, PyLayers developer team
       <span class="lastupdated">
-        Last updated on Apr 05, 2019.
+        Last updated on Apr 07, 2019.
       </span>
 
     </p>

@@ -96,6 +96,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_layout.html">8 Random Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_issue314.html">Exemple of issue 314</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_slab1.html">Material Attenuation for ITU_CONCRETE ITU_GLASS from 0.1 to 100GHz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_coverage.html">Indoor Radio Coverage with Motley Keenan</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exAbsGas.html">Attenuation due to atmospheric gases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/plot_exDLink.html">Evaluation of a radio link DLink</a></li>
@@ -176,7 +177,6 @@
 
 &quot;&quot;&quot;
 from pylayers.util.project import *
-#from pylayers.measures.mesuwb import *
 from pylayers.simul.radionode import *
 import pylayers.util.pyutil as pyu
 from pylayers.util.utilnet import str2bool
@@ -261,7 +261,6 @@ except:
 
         &quot;&quot;&quot;
 
-
         self.config = ConfigParser.ConfigParser(allow_no_value=True)
         self.config.read(pyu.getlong(_fileini,pstruc[&#39;DIRSIMUL&#39;]))
 
@@ -343,6 +342,7 @@ except:
         self.capacity = False
         self.pr = False
         self.loss = False
+        logger.info(&#39;[+] Coverage _init__ completed&#39;)
 
     def __repr__(self):
         st=&#39;&#39;
@@ -464,7 +464,7 @@ except:
         sinr : boolean
         snr  : boolean
         best : boolean
-        size : integer 
+        size : integer
             size of grid points block
 
         Examples
@@ -529,12 +529,13 @@ except:
         #
         # Loop over access points
         #    set parameter of each active ap
-        #        p
-        #        PtdBm
-        #        BMHz
-
+        #        aap  :   (,Nactive AP)
+        #        ptdbm :  (,Nactive AP)
+        #        bmhz  :  (,Nactive AP)
+        logger.info(&#39;[+] start loop over access points&#39;)
         for iap in self.dap:
             if self.dap[iap][&#39;on&#39;]:
+                logger.info(&#39;[+] AP %g &#39; % iap)
                 lactiveAP.append(iap)
                 # set frequency for each AP
                 fGHz = self.dap[iap].s.fcghz
@@ -552,10 +553,11 @@ except:
                     self.ptdbm = np.array(self.dap[iap][&#39;PtdBm&#39;])
                     self.bmhz  = np.array(self.dap[iap].s.chan[apchan[0]][&#39;BMHz&#39;])
 
+        # nf : number of frequency points
         self.nf = len(self.fGHz)
-        PnW = np.array((10**(self.noisefactordb/10.))*kB*self.temperaturek*self.bmhz*1e6)
-        # Evaluate Noise Power (in dBm)
 
+        # Evaluate Noise Power (in dBm)
+        PnW = np.array((10**(self.noisefactordb/10.))*kB*self.temperaturek*self.bmhz*1e6)
         self.pndbm = np.array(10*np.log10(PnW) + 30)
 
         #lchan = map(lambda x: self.dap[x][&#39;chan&#39;],lap)
@@ -564,6 +566,8 @@ except:
 
         self.ptdbm = self.ptdbm.T
         self.pndbm = self.pndbm.T
+
+        #
         # creating all links
         # from all grid point to all ap
         #
@@ -576,9 +580,11 @@ except:
         Nbloc = self.ng//sizebloc
 
         r1 = np.arange(0,(Nbloc+1)*sizebloc,sizebloc)
-        if self.ng != r1[-1]:
+        if self.ng!=r1[-1]:
             r1 = np.append(r1,self.ng)
         lblock = list(zip(r1[0:-1],r1[1:]))
+
+        logger.info(&#39;[+] start looping over blocks &#39;)
 
         for bg in lblock:
             p = product(range(bg[0],bg[1]),lactiveAP)
@@ -653,7 +659,16 @@ except:
                     k = k+1
 
             tgain = tgain.reshape(nf,tgain.shape[1]*tgain.shape[2])
+            #
+            # sef.pa and self.pg should be 3xN
+            #
+            if (self.pa.shape[0]!=3):
+                self.pa = self.pa.T
+            if (self.pg.shape[0]!=3):
+                self.pg = self.pg.T
+
             Lwo,Lwp,Edo,Edp = loss.Losst(self.L, self.fGHz, self.pa, self.pg, dB=False)
+            logger.info(&#39;Lwo[0][0] %.2f&#39; % Lwo[0,0])
             freespace = loss.PL(self.fGHz, self.pa, self.pg, dB=False)
             try:
                 self.Lwo = np.hstack((self.Lwo,Lwo))
@@ -1165,7 +1180,7 @@ except:
         f = kwargs[&#39;f&#39;]
         a = kwargs[&#39;a&#39;]
         typ = kwargs[&#39;typ&#39;]
-        assert typ in [&#39;best&#39;,&#39;egdo&#39;,&#39;egdp&#39;,&#39;sinr&#39;,&#39;snr&#39;,&#39;capacity&#39;,&#39;pr&#39;,&#39;loss&#39;,&#39;ref&#39;],&quot;typ unknown in show coverage&quot;
+        assert typ in [&#39;best&#39;,&#39;egd&#39;,&#39;sinr&#39;,&#39;snr&#39;,&#39;capacity&#39;,&#39;pr&#39;,&#39;loss&#39;,&#39;ref&#39;],&quot;typ unknown in show coverage&quot;
         best = kwargs[&#39;best&#39;]
 
         dB = kwargs[&#39;db&#39;]
@@ -1195,14 +1210,12 @@ except:
                     ax.scatter(self.grid[:,0],self.grid[:,1],c=m,s=scale,linewidth=0)
             ax.set_title(title)
         else:
-            if typ == &#39;egdo&#39;:
-                title = title + &#39;excess group delay (ortho): &#39;+&#39; fc = &#39;+str(self.fGHz[f])+&#39; GHz&#39;+ &#39; polar : &#39;+polar
-                V = self.Edo
-                dB = False
-                legcb =  &#39;Delay (ns)&#39;
-            if typ == &#39;egdp&#39;:
-                title = title + &#39;excess group delay (para): &#39;+&#39; fc = &#39;+str(self.fGHz[f])+&#39; GHz&#39;+ &#39; polar : &#39;+polar
-                V = self.Edp
+            if typ == &#39;egd&#39;:
+                title = title + &#39;excess group delay : &#39;+&#39; fc = &#39;+str(self.fGHz[f])+&#39; GHz&#39;+ &#39; polar : &#39;+polar
+                if polar ==&#39;o&#39;:
+                    V = self.Edo
+                if polar ==&#39;p&#39;:
+                    V = self.Edp
                 dB = False
                 legcb =  &#39;Delay (ns)&#39;
             if typ == &#39;sinr&#39;:
@@ -1414,7 +1427,7 @@ if (__name__ == &quot;__main__&quot;):
     <p>
         &copy; Copyright 2017, PyLayers developer team
       <span class="lastupdated">
-        Last updated on Apr 05, 2019.
+        Last updated on Apr 07, 2019.
       </span>
 
     </p>
