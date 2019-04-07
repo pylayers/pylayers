@@ -4632,13 +4632,13 @@ class Layout(pro.PyLayers):
         data = np.zeros(Nseg, dtype=[('i', 'i8'), ('s', 'i8'), ('a', np.float32)])
 
         data['i'] = ubo[0]
-        data['s'] = self.tsg[seglist[ubo[1]]]
+        data['s'] = self.tsg[useglist[ubo[1]]]
 
         #
         # Calculate angle of incidence refered from segment normal
         #
 
-        norm = self.normal[:, seglist[ubo[1]]]
+        norm = self.normal[:, useglist[ubo[1]]]
         # vector along the link
         uu = un[:, ubo[0]]
         unn = abs(np.sum(uu * norm, axis=0))
