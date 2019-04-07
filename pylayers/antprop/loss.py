@@ -1031,6 +1031,7 @@ def Losst(L,fGHz,p1,p2,dB=True,bceilfloor=False):
         LossWallo = 10**(-LossWallo/10)
         LossWallp = 10**(-LossWallp/10)
 
+    print(LossWallo)
     return(LossWallo,LossWallp,EdWallo,EdWallp)
 
 def gaspl(d,fGHz,T,PhPa,wvden):
