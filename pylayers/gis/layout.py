@@ -44,7 +44,6 @@ from mpl_toolkits.basemap import Basemap
 import shapely.geometry as sh
 import shapefile as shp
 from shapely.ops import cascaded_union
-#from descartes.patch import PolygonPatch
 from matplotlib.collections import PolyCollection
 from numpy import array
 import PIL.Image as Image
@@ -103,7 +102,8 @@ import pylayers.gis.furniture as fur
 import pylayers.gis.osmparser as osm
 from pylayers.gis.selectl import SelectL
 import pylayers.util.graphutil as gph
-from pylayers.util.project import *
+import pylayers.util.project as pro
+from pylayers.util.project import logger
 
 def pbar(verbose,**kwargs):
     if verbose:
@@ -111,7 +111,7 @@ def pbar(verbose,**kwargs):
         return pbar
 
 
-class Layout(PyLayers):
+class Layout(pro.PyLayers):
     """ Handling Layout
 
     Attributes
@@ -256,11 +256,11 @@ class Layout(PyLayers):
 
         #
         # Initializing graphs
-        #  s : structure
-        #  t : topology
-        #  i : interaction
-        #  r : rooms
-        #  m : mobility
+        #  Gs : structure
+        #  Gt : topology
+        #  Gi : interaction
+        #  Gr : rooms
+        #  Gm : mobility
 
         self.Gs = nx.Graph(name='Gs')
         self.Gr = nx.Graph(name='Gr')
@@ -424,8 +424,10 @@ class Layout(PyLayers):
                 self.sl = sb.SlabDB()
             elif '(' in str(arg):  # load from osmapi latlon (string or tuple
                 latlon = eval(self.arg)
-                self.importosm(latlon=latlon, dist_m=self.dist_m,
-                        cart=self.bcartesian, typ=self.typ)
+                self.importosm(latlon=latlon,
+                               dist_m=self.dist_m,
+                               cart=self.bcartesian,
+                               typ=self.typ)
                 self.loadosm = True
             else:  # load from address geocoding
                 self.importosm(address=self.arg,
@@ -475,7 +477,7 @@ class Layout(PyLayers):
                 elif self.bgraphs:
                     if os.path.splitext(self._filename)[1]=='.lay':
                         dirname = self._filename.replace('.lay','')
-                    path = os.path.join(basename,
+                    path = os.path.join(pro.basename,
                                         'struc',
                                         'gpickle',
                                         dirname)
@@ -847,13 +849,13 @@ class Layout(PyLayers):
         """
 
         if typ == 'lay':
-            pathname = os.path.join(pstruc['DIRLAY'], '*.' + typ)
+            pathname = os.path.join(pro.pstruc['DIRLAY'], '*.' + typ)
         if typ == 'osm':
-            pathname = os.path.join(pstruc['DIROSM'], '*.' + typ)
+            pathname = os.path.join(pro.pstruc['DIROSM'], '*.' + typ)
         if typ == 'wrl':
-            pathname = os.path.join(pstruc['DIRWRL'], '*.' + typ)
+            pathname = os.path.join(pro.pstruc['DIRWRL'], '*.' + typ)
 
-        lfile_l = glob.glob(os.path.join(basename, pathname))
+        lfile_l = glob.glob(os.path.join(pro.basename, pathname))
         lfile_s = []
         for fi in lfile_l:
             fis = pyu.getshort(fi)
@@ -1192,7 +1194,7 @@ class Layout(PyLayers):
         # usage
         # self.sgsg[seg1,seg2] => return common point
 
-        mno = max(self.Gs.nodes())
+        mno = max(nodes)
 
         #self.sgsg = sparse.lil_matrix((mno+1,mno+1),dtype='int')
 
@@ -1343,9 +1345,9 @@ class Layout(PyLayers):
             self.s2pu = self.s2pu.tocsr()
 
 
-        if self.Ns>0:
+        if self.Ns > 0:
             aupnt = np.array(upnt)
-            logger.info('g2npy : build tail head tahe')
+	    logger.info('g2npy : build tail head tahe')
             self.tahe[0, :] = np.array([np.where(aupnt==x)[0][0] for x in ntail ])
             self.tahe[1, :] = np.array([np.where(aupnt==x)[0][0] for x in nhead ])
 
@@ -1498,9 +1500,7 @@ class Layout(PyLayers):
         latlon = kwargs.pop('latlon',True)
         bd = kwargs.pop('bd', [24, 60, 25, 61])
 
-        for k in defaults:
-            if k not in kwargs:
-                kwargs[k] = defaults[k]
+
 
         fileshp = pyu.getlong(kwargs['_fileshp'], os.path.join('struc', 'shp'))
         polys = shp.Reader(fileshp)
@@ -1589,7 +1589,7 @@ class Layout(PyLayers):
         Notes
         -----
 
-        COST231 data Munich_buildongs.res
+        COST231 data Munich_buildings.res
 
         """
         fileres = pyu.getlong(_fileres, os.path.join('struc', 'res'))
