@@ -888,8 +888,9 @@ def Losst(L,fGHz,p1,p2,dB=True,bceilfloor=False):
 
     # determine incidence angles on segment crossing p1-p2 segment
     #data = L.angleonlink(p1,p2)
+    logger.debug('losst before angleonlink3')
     data = L.angleonlink3(p1,p2)
-
+ 
     # as many slabs as segments and subsegments
     us = data['s']
     slabs = np.array([ L.Gs.node[x]['name'] for x in us ])

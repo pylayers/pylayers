@@ -496,7 +496,6 @@ class Coverage(PyLayers):
             if (self.pg.shape[0]!=3):
                 self.pg = self.pg.T
 
-            pdb.set_trace()
             Lwo,Lwp,Edo,Edp = loss.Losst(self.L, self.fGHz, self.pa, self.pg, dB=False)
             logger.info('Lwo[0][0] %.2f' % Lwo[0,0])
             freespace = loss.PL(self.fGHz, self.pa, self.pg, dB=False)
