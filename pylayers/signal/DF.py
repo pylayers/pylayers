@@ -183,11 +183,11 @@ class DF(PyLayers):
         Notes
         -----
 
-        if $$H(z)=\\frac{1+b_1z^1+...+b_Nz^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$
+        if $$H(z)=1+b_1z^1+...+b_Nz^{-N}$$
 
         it returns
 
-        $$H_m(z)=\\frac{b_N+b_{N-1}z^1+...+z^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$
+        $$H_m(z)=b_N+b_{N-1}z^1+...+z^{-N}$$
 
         """
 
