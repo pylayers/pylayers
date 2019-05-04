@@ -354,7 +354,15 @@ class Bsignal(PyLayers):
             for k in range(nl):
                 ax.stem(self.x, self.y[k].squeeze(), **kwargs)
         else:
-            ax.stem(self.x, self.y,**kwargs)
+            if np.iscomplex(self.y[0][0]):
+                ax1 = fig.add_subplot(211)
+                ax1.stem(self.x, np.real(self.y[0,:]),**kwargs)
+                ax2 = fig.add_subplot(212)
+                ax2.stem(self.x, np.imag(self.y[0,:]),**kwargs)
+                ax = [ax1,ax2]
+            else:
+                ax.stem(self.x, self.y,**kwargs)
+
         return(fig,ax)
 
     def step(self, color='b'):

@@ -12,20 +12,15 @@ import os
 import sys
 import glob
 try:
-#    from tvtk.api import tvtk
-#    from mayavi.sources.vtk_data_source import VTKDataSource
     from mayavi import mlab
 except:
     print('Layout:Mayavi is not installed')
 import pdb
-import os
 import copy
 if sys.version_info.major==2:
     import ConfigParser
 else:
     import configparser
-import glob
-import doctest
 import networkx as nx
 import numpy as np
 import scipy as sp
@@ -243,7 +238,7 @@ class Rays(PyLayers, dict):
         s = s + '\npTx : '+ str(self.pTx) + '\npRx : ' + str(self.pRx)+'\n'
 
         if not self.is3D:
-            ray_cpt = 0  
+            ray_cpt = 0
             for k in lgi:
                 #sk = np.shape(self[k]['sig'])[2]
                 s = s + str(k) + ':\n'
@@ -252,11 +247,11 @@ class Rays(PyLayers, dict):
                 sha1 = sig.shape[1]
                 #pdb.set_trace()
                 for l in np.arange(sha1):
-                    s = s + '  '+str(ray_cpt)+':'
+                    s = s + '  ' + str(ray_cpt) + ':'
                     ray_cpt +=1
                     for n in np.arange(sha0):
-                        s = s + '      '+str(sig[n,l])
-                    s = s+'\n'
+                        s = s + '      ' + str(sig[n,l])
+                    s = s + '\n'
                 #pdb.set_trace()
                 #s = s + str(sk) + 'rays with' + str(k) + ' interactions'
 
@@ -633,10 +628,10 @@ class Rays(PyLayers, dict):
         if not isinstance(nT,list):
             nT=[nT]
 
-        op = {'and':operator.and_,
-              'or':operator.or_,
-              '&':operator.and_,
-              '|':operator.or_,
+        op = {'and' : operator.and_,
+              'or': operator.or_,
+              '&': operator.and_,
+              '|': operator.or_,
               }
 
 
@@ -890,7 +885,6 @@ class Rays(PyLayers, dict):
         r.locbas(L)
         r.fillinter(L)
         return(r)
-
 
 
     def show(self,**kwargs):
@@ -3153,7 +3147,7 @@ class Rays(PyLayers, dict):
         Parameters
         ----------
         ir : integer
-        
+
         Returns
         -------
         (ni,ux) : tuple address (group of interactions, index)
@@ -3166,16 +3160,16 @@ class Rays(PyLayers, dict):
 
     def a2ir(self,t):
         """  address ray 2 index ray
-        
+
         Parameters
         ----------
         t = (ni,ux) : tuple address (group of interactions, index)
-            ray address  
-        
+            ray address
+
         Returns
         -------
         ir : integer
-            ray index  
+            ray index
 
         """
         assert t[0] in self.keys(), "wrong number of interactions"
@@ -3299,7 +3293,7 @@ class Rays(PyLayers, dict):
         return(self[self._ray2nbi[ir]]['sig'][0,1:-1,raypos[0]])
 
     def vis(self,ir,L):
-        typ = ['Tx'] + self.typ(ir) + ['Rx'] 
+        typ = ['Tx'] + self.typ(ir) + ['Rx']
         slab_nb = self.slab_nb(ir)
         slab_nb = np.insert(slab_nb,0,0)
         slab_nb = np.insert(slab_nb,len(slab_nb),0)
@@ -3336,9 +3330,9 @@ class Rays(PyLayers, dict):
 
         """
         #
-        # In this function we can see that the ceil and floor 
-        # are hard coded as reflection. This is going to evolve 
-        # for implementation of multi floor 
+        # In this function we can see that the ceil and floor
+        # are hard coded as reflection. This is going to evolve
+        # for implementation of multi floor
         #
         if fromR:
             di = {0:'L',1:'D',2:'R',3:'T',4:'R',5:'R'}
@@ -3351,9 +3345,9 @@ class Rays(PyLayers, dict):
             return(self.I.typ[a])
 
     def dump(self,ir,L,ifGHz=0,filename='dumpray.ray'):
-        """ dump the full information of a ray in a file 
+        """ dump the full information of a ray in a file
         """
-        nbi = self._ray2nbi[ir]  
+        nbi = self._ray2nbi[ir]
         ur = np.where(self[nbi]['rayidx']==ir)[0][0]
         fd=open(filename,'w')
         fd.write('ray #'+str(ir)+'\n')
@@ -3685,7 +3679,7 @@ class Rays(PyLayers, dict):
         newfig : boolean (default: False)
             if true create a new mayavi figure
             else : use the current
-        ER: Ray energy 
+        ER: Ray energy
 
         """
 
