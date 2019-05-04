@@ -10,7 +10,6 @@ from __future__ import print_function
 import doctest
 import os
 import sys
-import glob
 try:
     from mayavi import mlab
 except:
@@ -93,7 +92,7 @@ class Rays(PyLayers, dict):
 
     The Rays object is obtained from a signature.
     It is a container for a set of rays between a source
-    and a target point defining a radio link.
+    and a destination point defining a radio link.
 
     Once a Rays object has been obtained in 2D, it is transformed
     in 3D via the **to3D** method. This method takes two parameters :
@@ -102,14 +101,16 @@ class Rays(PyLayers, dict):
 
     Once the 3d rays have been calculated,
     the local basis are evaluated along those rays. This is
-    done through the **locbas** method
+    done through the **locbas** method.
 
     Once the local basis have been calculated the different
     interactions along rays can be informed via the **fillinter**
     method.
 
-    Once the interactions are informed the field along rays can
+    Once the interactions are informed, the field along rays can
     be evaluated via the **eval** method
+
+    to3D -> fillinter -> eval
 
     """
     def __init__(self, pTx, pRx):
@@ -198,10 +199,6 @@ class Rays(PyLayers, dict):
     #             self[ni]=r[ni]
 
 
-
-
-
-
     def __repr__(self):
         s = ''
         ni = 0
@@ -231,6 +228,7 @@ class Rays(PyLayers, dict):
 
         s = s + '\n'
         s = s + 'N2Drays : '+ str(nray2D) + '\n'
+
         if hasattr(self,'nb_origin_sig'):
             s = s + 'from '+ str(self.nb_origin_sig) + ' signatures\n'
             s = s + '#Rays/#Sig: '+ str(nray2D/(1.*self.nb_origin_sig) )
@@ -242,16 +240,17 @@ class Rays(PyLayers, dict):
             for k in lgi:
                 #sk = np.shape(self[k]['sig'])[2]
                 s = s + str(k) + ':\n'
-                sig = self[k]['sig'][0,:]
-                sha0 = sig.shape[0]
-                sha1 = sig.shape[1]
-                #pdb.set_trace()
-                for l in np.arange(sha1):
-                    s = s + '  ' + str(ray_cpt) + ':'
-                    ray_cpt +=1
-                    for n in np.arange(sha0):
-                        s = s + '      ' + str(sig[n,l])
-                    s = s + '\n'
+                if len(self[k]['sig'])>0:
+                    sig = self[k]['sig'][0,:]
+                    sha0 = sig.shape[0]
+                    sha1 = sig.shape[1]
+                    #pdb.set_trace()
+                    for l in np.arange(sha1):
+                        s = s + '  ' + str(ray_cpt) + ':'
+                        ray_cpt +=1
+                        for n in np.arange(sha0):
+                            s = s + '      ' + str(sig[n,l])
+                        s = s + '\n'
                 #pdb.set_trace()
                 #s = s + str(sk) + 'rays with' + str(k) + ' interactions'
 
