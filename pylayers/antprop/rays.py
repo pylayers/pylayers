@@ -238,27 +238,19 @@ class Rays(PyLayers, dict):
         if not self.is3D:
             ray_cpt = 0
             for k in lgi:
-                #sk = np.shape(self[k]['sig'])[2]
                 s = s + str(k) + ':\n'
                 if len(self[k]['sig'])>0:
                     sig = self[k]['sig'][0,:]
                     sha0 = sig.shape[0]
                     sha1 = sig.shape[1]
-                    #pdb.set_trace()
                     for l in np.arange(sha1):
                         s = s + '  ' + str(ray_cpt) + ':'
                         ray_cpt +=1
                         for n in np.arange(sha0):
                             s = s + '      ' + str(sig[n,l])
                         s = s + '\n'
-                #pdb.set_trace()
-                #s = s + str(sk) + 'rays with' + str(k) + ' interactions'
-
 
         return(s)
-
-
-
 
     def saveh5(self,idx=0):
         """ save rays in hdf5 format
@@ -275,10 +267,8 @@ class Rays(PyLayers, dict):
 
         """
 
-        filename = self.filename+'_'+str(idx)
+        filename = self.filename+'_' + str(idx)
         filenameh5=pyu.getlong(filename+'.h5',pstruc['DIRR3D'])
-
-
 
         # try/except to avoid loosing the h5 file if
         # read/write error
@@ -308,17 +298,17 @@ class Rays(PyLayers, dict):
         print(filenameh5)
 
 
-    def loadh5(self,filename=[],idx=0):
+    def loadh5(self,filename=[], idx=0):
         """ load rays hdf5 format
 
         Parameters
         ----------
 
-        idx : int 
+        idx : int
 
         """
         if filename == []:
-            filenameh5 = self.filename+'_'+str(idx)+'.h5'
+            filenameh5 = self.filename + '_' + str(idx) + '.h5'
         else :
             filenameh5 = filename
 
@@ -1101,9 +1091,13 @@ class Rays(PyLayers, dict):
 
         d is a dictionnary whose keys are heights along the vertical from where
         are emanating the reflected rays. Values of d are the parameterization
-        (0< () <1) along the ray where are situated the different reflection
+        (0< () <1) along the corresponding to the different reflection
         points.
 
+        See Also
+        --------
+
+        to3D
 
         """
 
@@ -1157,10 +1151,6 @@ class Rays(PyLayers, dict):
             d[ht] = np.array([])
         elif H==-1:
             d[ht] = np.array([])
-            # print "zp",zp
-            # print "kp",kp
-            # print "thrp",thrp
-            # print "alphap",d[zp]
 
         return d
 
@@ -1174,13 +1164,13 @@ class Rays(PyLayers, dict):
 
         H : float
             ceil height (default 3m)
-            if H= 0 only floor reflection is calculated (outdoor case)
-            if H=-1 floor and ceil reflection are inhibited (2D test case)
+            if H = 0 only floor reflection is calculated (outdoor case)
+            if H = -1 floor and ceil reflection are deactivated (2D test case)
         N : int
             number of mirror reflexions
         rmoutceilR : bool
             Remove ceil reflexions in cycles (Gt nodes)
-            with indoor=False attribute
+            with indoor == False attribute
 
         Returns
         -------
@@ -1195,29 +1185,32 @@ class Rays(PyLayers, dict):
         """
 
         if H==-1:
-            rmoutceilR=False
+            rmoutceilR = False
 
         tx = self.pTx
         rx = self.pRx
 
         #
-        # Phase 1 : calculate Tx images height and parameterization in the
-        # vertical plane
+        # Phase 1 : calculate Tx images height
+        #           parameterization in the vertical plane
         #
 
         d = self.mirror(H=H, N=N, za=tx[2], zb=rx[2])
 
         #
-        # Elimination of invalid diffraction point 
-        # If the diffaction point is a separation between 2 air wall 
+        # Elimination of invalid diffraction point
+        # If the diffaction point is a separation between 2 air wall
         # it should be removed.
+        #
 
 
         #
-        # Phase 2 : calculate 2D parameterization in the horizontal plane
+        # Phase 2 :
+        #    calculate 2D parameterization in the horizontal plane
         #
 
         # for all group of interactions
+
         for i in self:
 
             pts = self[i]['pt'][0:2, :, :]
@@ -1234,9 +1227,8 @@ class Rays(PyLayers, dict):
                 t = self.pTx[0:2].reshape((2, 1, 1))
                 r = self.pRx[0:2].reshape((2, 1, 1))
                 pts1 = np.hstack((t,r))
+
             # append t and r to interaction points in 2D
-
-
             si1 = pts1[:, 1:, :] - pts1[:, :-1, :]
             # array of all ray segments distances
             si = np.sqrt(np.sum(si1 * si1, axis=0))
@@ -1257,11 +1249,13 @@ class Rays(PyLayers, dict):
         #
         #  Phase 3 : Initialize 3D rays dictionnary
         #
+
         r3d = Rays(tx, rx)
         r3d.los = self.los
         r3d.is3D = True
         r3d.nray2D = len(self)
         r3d.nb_origin_sig = self.nb_origin_sig
+
         #
         # Phase 4 : Fill 3D rays information
         #
@@ -1330,7 +1324,7 @@ class Rays(PyLayers, dict):
 
                     da1es = np.diff(a1es,axis=0)
                     pda1es = np.where(da1es<1e-10)
-                    a1es[pda1es]=a1es[pda1es]-1e-3
+                    a1es[pda1es] = a1es[pda1es]-1e-3
 
 
                     # prepare an extended sequence of points ( ndim x  (Nint+k+2) x Nrayk )
@@ -1343,10 +1337,10 @@ class Rays(PyLayers, dict):
                     #      5 (ceil interaction )
                     #  depending on the vertical pattern l.
                     #
-                    #  l <0 corresponds to last reflexion on floor
-                    #  l >0 corresponds to last reflexion on ceil
+                    #  l < 0 corresponds to last reflexion on floor
+                    #  l > 0 corresponds to last reflexion on ceil
                     #
-                    # u =0 (floor) or 1 (ceil)
+                    # u == 0 (floor) or 1 (ceil)
                     # if l < 0:
                     #     u = np.mod(range(Nint), 2)
                     # else:
@@ -1358,7 +1352,6 @@ class Rays(PyLayers, dict):
 
                     elif l > 0 and Nint%2 ==1: # l>0 Nint odd
                         u = 1 - np.mod(range(Nint), 2)
-
 
                     elif l < 0 and Nint%2 ==0: # l<0 Nint even
                         u = 1 - np.mod(range(Nint), 2)
@@ -1415,7 +1408,7 @@ class Rays(PyLayers, dict):
                     #
                     # Cette sequence d'instruction fixe le bug #133
                     #
-                    # Antrieurement il y avait une hypothese de succession
+                    # Anterieurement il y avait une hypothese de succession
                     # immediate d'un point 2D renseigne.
                     #
                     try:
