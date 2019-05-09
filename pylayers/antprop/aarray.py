@@ -308,16 +308,16 @@ class AntArray(Array, ant.Antenna):
             for t in self.typant:
                 self.la.append(ant.Antenna(typ=t))
 
-        super(AntArray, self).__init__(p=p,w=self.w)
+        super(AntArray, self).__init__(p=p, w=self.w)
         typ = 'Array'
-        ant.Antenna.__init__(self,typ=typ,**kwargs)
+        ant.Antenna.__init__(self, typ=typ, **kwargs)
 
-    def steervec(self,ang,nbit=3):
+    def steervec(self, ang, nbit=3):
         """
 
         Parameters
         ----------
-        ang : Mx2  (steering directions) 
+        ang : Mx2  (steering directions)
             [[theta0,phi0],[theta1,phi1],....,[theta(M-1),phi(M-1)]]
         nbit : phase quantization number of bits
 
@@ -347,12 +347,13 @@ class AntArray(Array, ant.Antenna):
         N = np.prod(self.N)
         ik = np.arange(N)
         ix, iy, iz = k2xyz(ik, self.N)
-        st = st + self.typ + ' of : '+self.typant+'\n'
+        st = st + self.typ + self.tarr + ' of : '+self.typant+'\n'
         st = st + 'N              : '+str(self.N)+'\n'
         st = st + 'dm             : '+str(self.dm)+'\n\n'
         st = st + "Ant Id         : x  ,    y   ,  z\n"
-        #for n in range(N):
-        #    st = st + str(n) +  ' : ' + str(self.p[0, ix[n]]) + ' , ' + str(self.p[1, iy[n]])+' , '+str(self.p[2, iz[n]])+'\n'
+        pdb.set_trace()
+        for n in range(N):
+            st = st + str(n) +  ' : ' + str(self.p[0, ix[n]]) + ' , ' + str(self.p[1, iy[n]])+' , '+str(self.p[2, iz[n]])+'\n'
         #st = st + "\nweight : Coupling matrix @ f = "+str(self.fGHz[0]) + ' fGHz'+'\n'
         #for n in range(N):
         #    st = st + str(self.w[n]) + ' : ' + str(self.Sc[n,:, 0])+'\n'
@@ -482,9 +483,9 @@ def k2xyz(ik, sh):
     Nz = sh[2]
 
 
-    ix = ik/(Ny*Nz)
-    iy = (ik-ix*Ny*Nz)/(Nz)
-    iz = ik-ix*Ny*Nz-iy*Nz
+    ix = (ik/(Ny*Nz)).astype('int')
+    iy = ((ik-ix*Ny*Nz)/Nz).astype('int')
+    iz = (ik-ix*Ny*Nz-iy*Nz).astype('int')
 
     return(ix, iy, iz)
 

@@ -1154,6 +1154,73 @@ class Rays(PyLayers, dict):
 
         return d
 
+    def mirror_new(self, N=1, zlevels=[0, 3] , za = None, zb= None):
+        """ mirror a ray termination
+
+        Parameters
+        ----------
+
+        N : int
+            number of mirror reflexions
+
+        zlevels : np.array  (,Nlevels)
+            list of levels height
+
+        za : float
+            height of the point where the parametrization starts ( e.g. pTx[2])
+
+        zb : float
+            height of the point where the parametrization ends ( e.g. pRx[2])
+
+
+        Returns
+        -------
+
+        d : dict
+            k : zm  v: alpham
+            k : zp  v: alphap
+
+        Examples
+        --------
+
+        >>> ptx = np.array([1,1,1.5])
+        >>> prx = np.array([2,2,1.2])
+        >>> r = Rays(ptx,prx)
+        >>> d = r.mirror_new(zlevels=[0,])
+        >>> d[-1.5]
+        array([ 0.55555556])
+
+        Notes
+        -----
+
+        d is a dictionnary whose keys are heights along the vertical from where
+        are emanating the reflected rays. Values of d are the parameterization
+        (0< () <1) along the corresponding to the different reflection
+        points.
+
+        See Also
+        --------
+
+        to3D
+
+        """
+
+
+
+        km = np.arange(-N+1, N+1, 1)
+        kp = np.arange(-N, N+1, 1)
+        #
+        # heights at both ends
+        #
+        if za == None:
+            za=self.pTx[2]
+        if zb == None:
+            zb=self.pRx[2]
+
+
+        #for 
+        return d
+
     def to3D(self, L, H=3, N=1, rmoutceilR=True):
         """ transform 2D ray to 3D ray
 
@@ -1191,8 +1258,8 @@ class Rays(PyLayers, dict):
         rx = self.pRx
 
         #
-        # Phase 1 : calculate Tx images height
-        #           parameterization in the vertical plane
+        # Phase 1 : calculate parameterizario of the Tx images height
+        #           in the vertical plane
         #
 
         d = self.mirror(H=H, N=N, za=tx[2], zb=rx[2])

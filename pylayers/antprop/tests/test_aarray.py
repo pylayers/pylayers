@@ -4,7 +4,7 @@ print('--------------')
 print('antprop/test_aarray.py')
 print('--------------')
 #
-# This is a uniform array (10 x 10) 
+# This is a uniform array (10 x 10)
 #
 A = AntArray(tarr='UA',N=[10,10,1],dm=[0.5,0.5,0],fGHz=0.3)
 A.eval()
