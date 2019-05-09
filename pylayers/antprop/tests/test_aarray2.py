@@ -14,9 +14,9 @@ lamda = 0.3/6
 UA1 = AntArray(tarr='UA',N=[10,1,1],dm=[0.04,0.0,0],fGHz=fGHz)
 UA2 = AntArray(tarr='UA',N=[1,1,10],dm=[0,0.0,0.04],fGHz=fGHz)
 A1.eval()
-f1,a1 = A1.plotG()
+f1,a1 = UA1.plotG()
 f1.savefig('ArrayDiag.png')
-f2,a2 = A1.show()
+f2,a2 = UA1.show()
 f2.savefig('ArrayConfig.png')
 
 Nrays = 100
