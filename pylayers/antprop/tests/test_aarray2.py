@@ -4,12 +4,15 @@ print('--------------')
 print('antprop/test_aarray2.py')
 print('--------------')
 #
-# This is a uniform array (10 x 10)
+# This is an array obtained by juxtaposition of 2 uniform array
+#   - the first along the z axis
+#   - the second along the x axis
+#  Antenna spacing is 4cm 0.04m
 #
 fGHz = 6
 lamda = 0.3/6
-A1 = AntArray(tarr='UA',N=[10,1,1],dm=[0.04,0.0,0],fGHz=fGHz)
-A2 = AntArray(tarr='UA',N=[1,1,10],dm=[0,0.0,0.04],fGHz=fGHz)
+UA1 = AntArray(tarr='UA',N=[10,1,1],dm=[0.04,0.0,0],fGHz=fGHz)
+UA2 = AntArray(tarr='UA',N=[1,1,10],dm=[0,0.0,0.04],fGHz=fGHz)
 A1.eval()
 f1,a1 = A1.plotG()
 f1.savefig('ArrayDiag.png')
