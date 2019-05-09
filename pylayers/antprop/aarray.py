@@ -54,23 +54,28 @@ class Array(ant.Pattern):
             self.Np = p.shape[1]
         shp = np.shape(p)
 
-        # If no excitation choose 1 beam of uniform weights
+        # If no w then choose a beam of uniform weights
         # Nb x Np x Nf
         if w == []:
             w = np.ones((shp[1:]))[..., None]
         self.w = w
 
         self.typ = 'Array'
-        #self.param = {'param': {}}
+
         self.param = {}
 
         ant.Pattern.__init__(self)
 
     def __repr__(self):
-        st = ''
-        #st = st + 'points :' + str(self.p) + '\n'
-        #st = st + 'weights :' + str(self.w) + '\n'
+        st = self.typ
+        st = st + 'points :' + str(self.p) + '\n'
+        st = st + 'weights :' + str(self.w) + '\n'
         return(st)
+
+    def __add__(self,other):
+        self.p = np.concatenate(self.p,other.p,axis=-1)
+        self.w = np.concatenate(self.w,other.w,axis=0)
+        self.Np = p.shape[1]
 
     def show(self):
         """ show array configuration in 3D
@@ -83,8 +88,8 @@ class Array(ant.Pattern):
         ax.set_zlabel('Z axis')
         return(fig,ax)
 
-class ULArray(Array):
-    """ Uniform Linear Array
+class UArray(Array):
+    """ Uniform Array
 
     An uniform array is centered on the origin.
     It has Nx, Ny, Nz antennas placed respectively along the x,y,z axis.
@@ -109,35 +114,20 @@ class ULArray(Array):
         w  : np.array
             array weights
         T  : np.array
-            basis of the ULA (by default the othonormal basis I3)
+            basis of the UA (by default the othonormal basis I3)
         mode : string
             'step' | 'point'
         p :
 
         """
-        defaults = { 'N'    : [8, 1, 1],
-                     'dm'   : [0.075, 0, 0],
-                     'w'    : [],
-                     'T'    : np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]]),
-                     'mode' : 'step',
-                     'p'    : []
-                   }
-        for k in defaults:
-            if k not in kwargs:
-                kwargs[k] = defaults[k]
 
-        self.N  = kwargs.pop('N')
-        self.dm = np.array(kwargs.pop('dm'))
-        self.T = kwargs.pop('T')
-        self.mode = kwargs.pop('mode')
+        self.N  = kwargs.pop('N',[8, 1, 1])
+        self.dm = np.array(kwargs.pop('dm'),[0.075,0,0])
+        self.T = kwargs.pop('T',np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]]))
+        self.w = kwargs.pop('w',[])
+        p = self.set_position()
 
-        # self.Na = np.prod(self.N)
-        p = kwargs.pop('p')
-
-        if self.mode == 'step':
-            p = self.set_position()
-
-        Array.__init__(self,p,**kwargs)
+        Array.__init__(self, p, **kwargs)
 
     def set_position(self):
         if self.mode == 'step':
@@ -191,9 +181,9 @@ class AntArray(Array, ant.Antenna):
         ----------
 
         mode : string
-            'array' | 'grid'
+            'array' | 'cloud'
             'array' is for antenna array
-            'grid' for cloud of points (scanner).
+            'cloud' for cloud of points (scanner).
 
         typant : string
             either a selected string among the implemented predefined patterns.
@@ -209,9 +199,9 @@ class AntArray(Array, ant.Antenna):
         dm : array of float
             Inter element distance (meters)
 
-        min : array of float
+        min : array of floats
 
-        max : array of float
+        max : array of floats
 
         S : coupling matrix
 
@@ -227,51 +217,39 @@ class AntArray(Array, ant.Antenna):
             >>> A.plotG()
 
         """
-        defaults = {'tarr': 'UA',
-                    'N': [8, 1, 1],
-                    'dm': [0.075, 0, 0],
-                    'min': [0, 0, 0, 0],
-                    'max': [0, 0, 0, 0],
-                    'S': [],
-                    'typant': 'Omni',
-                    'mode': 'array',
-                    'array': [],
-                    'p': [],
-                    'w': [],
-                    'fGHz': np.array([60])
-                    }
+        self.mode = kwargs.pop('mode','array') # array | cloud
+        self.tarr = kwargs.pop('tarr','UA')
 
-        for k in defaults:
-            if k not in kwargs:
-                kwargs[k] = defaults[k]
+        if self.tarr =='UA':
+            N = np.array(kwargs.pop('N',[8,1,1]))
+            dm = np.array(kwargs.pop('dm',[0.075,0,0]))
 
-        self.tarr = kwargs.pop('tarr')
-        self.N = np.array(kwargs.pop('N'))
-        self.max = np.array(kwargs.pop('max'))
-        self.min = np.array(kwargs.pop('min'))
+        self.max = np.array(kwargs.pop('max'),[0,0,0,0])
+        self.min = np.array(kwargs.pop('min'),[0,0,0,0])
+        self.S = np.array(kwargs.pop('S',[]))
+        self.array = kwargs.pop('array',[])
+        self.w = np.array(kwargs.pop('w',[]))
+
         self.Na = np.prod(self.N)  # number of antennas
-        self.dm = np.array(kwargs.pop('dm'))
-        self.array = kwargs.pop('array')
-        self.w = kwargs.pop('w')
 
         if self.array == []:
-            self.typant = kwargs.pop('typant')
+            self.typant = kwargs.pop('typant','Omni')
         else:
             self.typant = self.array.typant
 
-        # There are two modes : 'array' and 'grid'
-        # If the grid mode is chosen, the spacing dm is determined
+        # There are two modes : 'uniform' and 'cloud'
+        # If the 'cloud' mode is chosen, the spacing dm is determined
         # from max and min. In that mode max and min are prioritary w.r.t to the
         # specified dm. This is a mode which is used when using the
         # scanner for emulating a received array from a specified range of
         # disance on a given axis. The max and min are for fixing those limits.
 
-        if kwargs['mode'] == 'grid':
+        if kwargs['mode'] == 'cloud':
             for  k in range(len(self.N)):
                 if self.N[k] == 1:
-                    self.dm[k] = self.max[k]
+                    dm[k] = self.max[k]
                 else:
-                    self.dm[k] = (self.max[k]-self.min[k])/(self.N[k]-1.0)
+                    dm[k] = (self.max[k]-self.min[k])/(self.N[k]-1.0)
 
         if type(self.typant) == list:
             self.sameAnt = False
@@ -280,14 +258,10 @@ class AntArray(Array, ant.Antenna):
             self.sameAnt = True
 
         # Uniform Array
-        # p is obtained from ULArray
-        #
+        # p is obtained from UArray
+
         if self.tarr == 'UA':
-            if kwargs['p'] == []:
-                UA = ULArray(N = self.N, dm = self.dm , w = self.w)
-                p = UA.p
-            else:
-                p = kwargs['p']
+            UArray.__init__(self,N = N, dm = dm , w = self.w)
 
         if self.array != []:
             lsh = tuple(list(self.array.p.shape)+[p.shape[1]])
@@ -295,6 +269,7 @@ class AntArray(Array, ant.Antenna):
             b = np.kron(np.ones(self.array.p.shape[1]), p) # 3 x M
             p = a + b  # 3 x NM
             p = p.reshape(lsh)
+            super(AntArray, self).__init__(p=p, w=self.w)
 
         #
         # Add the antennas of the array, either 1 (same for all points), or Na
@@ -308,7 +283,6 @@ class AntArray(Array, ant.Antenna):
             for t in self.typant:
                 self.la.append(ant.Antenna(typ=t))
 
-        super(AntArray, self).__init__(p=p, w=self.w)
         typ = 'Array'
         ant.Antenna.__init__(self, typ=typ, **kwargs)
 
@@ -351,7 +325,6 @@ class AntArray(Array, ant.Antenna):
         st = st + 'N              : '+str(self.N)+'\n'
         st = st + 'dm             : '+str(self.dm)+'\n\n'
         st = st + "Ant Id         : x  ,    y   ,  z\n"
-        pdb.set_trace()
         for n in range(N):
             st = st + str(n) +  ' : ' + str(self.p[0, ix[n]]) + ' , ' + str(self.p[1, iy[n]])+' , '+str(self.p[2, iz[n]])+'\n'
         #st = st + "\nweight : Coupling matrix @ f = "+str(self.fGHz[0]) + ' fGHz'+'\n'
