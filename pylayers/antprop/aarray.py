@@ -122,7 +122,7 @@ class UArray(Array):
         """
 
         self.N  = kwargs.pop('N',[8, 1, 1])
-        self.dm = np.array(kwargs.pop('dm'),[0.075,0,0])
+        self.dm = np.array(kwargs.pop('dm',[0.075,0,0]))
         self.T = kwargs.pop('T',np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]]))
         self.w = kwargs.pop('w',[])
         p = self.set_position()
@@ -164,11 +164,11 @@ class UCArray(Array):
 class AntArray(Array, ant.Antenna):
     """ Class AntArray
 
-
-    This class inherits from Array and Antenna classes
+    This class inherits from Array and Antenna
 
     An AntArray is the combination of an
         + an Array and an Antenna
+        or
         + an Array and an AntArray
 
 
@@ -217,6 +217,7 @@ class AntArray(Array, ant.Antenna):
             >>> A.plotG()
 
         """
+
         self.mode = kwargs.pop('mode','array') # array | cloud
         self.tarr = kwargs.pop('tarr','UA')
 
@@ -224,13 +225,14 @@ class AntArray(Array, ant.Antenna):
             N = np.array(kwargs.pop('N',[8,1,1]))
             dm = np.array(kwargs.pop('dm',[0.075,0,0]))
 
-        self.max = np.array(kwargs.pop('max'),[0,0,0,0])
-        self.min = np.array(kwargs.pop('min'),[0,0,0,0])
+        self.max = np.array(kwargs.pop('max',[0,0,0,0]))
+        self.min = np.array(kwargs.pop('min',[0,0,0,0]))
+
         self.S = np.array(kwargs.pop('S',[]))
         self.array = kwargs.pop('array',[])
         self.w = np.array(kwargs.pop('w',[]))
 
-        self.Na = np.prod(self.N)  # number of antennas
+        #self.Na = np.prod(self.N)  # number of antennas
 
         if self.array == []:
             self.typant = kwargs.pop('typant','Omni')
@@ -244,7 +246,7 @@ class AntArray(Array, ant.Antenna):
         # scanner for emulating a received array from a specified range of
         # disance on a given axis. The max and min are for fixing those limits.
 
-        if kwargs['mode'] == 'cloud':
+        if self.mode == 'cloud':
             for  k in range(len(self.N)):
                 if self.N[k] == 1:
                     dm[k] = self.max[k]
