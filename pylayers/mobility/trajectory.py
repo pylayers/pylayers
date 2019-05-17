@@ -461,10 +461,10 @@ class Trajectory(PyLayers,pd.DataFrame):
         if len(self.values) != 0:
             self.tmin = self.t.min()
             self.tmax = self.t.max()
-            try:
-                self.ts = (self.index[-1]*1e-9)-(self.index[-2]*1e-9)
-            except:
-                self.ts = np.nan
+            #try:
+            self.ts = (self.t[-1]*1e-9)-(self.t[-2]*1e-9)
+            #except:
+            #    self.ts = np.nan
 
             self.ttime = self.tmax-self.tmin
             self.dtot = self['s'].values[-1]

@@ -1561,7 +1561,7 @@ class Pattern(PyLayers):
         return Ft,Fp
 
     def __pArray(self,**kwargs):
-        """ Array factor
+        """ Array pattern 
 
         Parameters
         ----------
@@ -1622,9 +1622,9 @@ class Pattern(PyLayers):
             #pdb.set_trace()
 
         #
-        # Get the weights 
+        # Get the weights
         #
-        #   w :  b x a x f 
+        #   w :  b x a x f
         lshw = np.array(self.w.shape)
         if len(lshw)>2:
             Np2 = np.prod(lshw[0:-1])
@@ -1666,7 +1666,7 @@ class Pattern(PyLayers):
         # Nf : frequency
         # Nd : direction
         # Np : points or array antenna element position
-        # Nb : number of beams  
+        # Nb : number of beams
         #
         # w  : Np x Nf
         # Sc : Np x Np x Nf

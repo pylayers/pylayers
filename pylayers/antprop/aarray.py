@@ -73,9 +73,10 @@ class Array(ant.Pattern):
         return(st)
 
     def __add__(self,other):
-        self.p = np.concatenate(self.p,other.p,axis=-1)
-        self.w = np.concatenate(self.w,other.w,axis=0)
-        self.Np = p.shape[1]
+        self.p = np.concatenate((self.p,other.p),axis=-1)
+        self.w = np.concatenate((self.w,other.w),axis=0)
+        self.Np = self.p.shape[1]
+        return self
 
     def show(self):
         """ show array configuration in 3D
@@ -125,33 +126,36 @@ class UArray(Array):
         self.dm = np.array(kwargs.pop('dm',[0.075,0,0]))
         self.T = kwargs.pop('T',np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]]))
         self.w = kwargs.pop('w',[])
-        p = self.set_position()
+        self.mode = kwargs.pop('mode','step')
+        if self.mode=='step':
+            p = self.set_position()
+        elif self.mode =='point':
+            p = kwargs.pop('p')
 
         Array.__init__(self, p, **kwargs)
 
     def set_position(self):
-        if self.mode == 'step':
-            N0 = self.N[0]
-            N1 = self.N[1]
-            N2 = self.N[2]
+        N0 = self.N[0]
+        N1 = self.N[1]
+        N2 = self.N[2]
 
-            p0 = self.dm[0]*np.linspace(-(N0-1)/2., (N0-1)/2., N0)[:, None, None] # N0 x N1 x N2
-            p1 = self.dm[1]*np.linspace(-(N1-1)/2., (N1-1)/2., N1)[None,:, None] # ""
-            p2 = self.dm[2]*np.linspace(-(N2-1)/2., (N2-1)/2., N2)[None, None,:] # ""
+        p0 = self.dm[0]*np.linspace(-(N0-1)/2., (N0-1)/2., N0)[:, None, None] # N0 x N1 x N2
+        p1 = self.dm[1]*np.linspace(-(N1-1)/2., (N1-1)/2., N1)[None,:, None] # ""
+        p2 = self.dm[2]*np.linspace(-(N2-1)/2., (N2-1)/2., N2)[None, None,:] # ""
 
-            p = np.zeros((3, N0, N1, N2))
-            # p = np.zeros((3,Nx*Ny*Nz))
+        p = np.zeros((3, N0, N1, N2))
+        # p = np.zeros((3,Nx*Ny*Nz))
 
-            v = p0[None, ...] * self.T[:, 0][:, None, None, None] \
-              + p1[None, ...] * self.T[:, 1][:, None, None, None] \
-              + p2[None, ...] * self.T[:, 2][:, None, None, None]
+        v = p0[None, ...] * self.T[:, 0][:, None, None, None] \
+          + p1[None, ...] * self.T[:, 1][:, None, None, None] \
+          + p2[None, ...] * self.T[:, 2][:, None, None, None]
 
-            p[0,:,:,:] = v[0, ...]
-            p[1,:,:,:] = v[1, ...]
-            p[2,:,:,:] = v[2, ...]
+        p[0,:,:,:] = v[0, ...]
+        p[1,:,:,:] = v[1, ...]
+        p[2,:,:,:] = v[2, ...]
 
-            q = p.reshape((3, N0*N1*N2))
-            return(q)
+        q = p.reshape((3, N0*N1*N2))
+        return(q)
 
 class UCArray(Array):
     """ Uniform Circular Array
@@ -161,7 +165,7 @@ class UCArray(Array):
 
     pass
 
-class AntArray(Array, ant.Antenna):
+class AntArray(Array,ant.Antenna):
     """ Class AntArray
 
     This class inherits from Array and Antenna
@@ -174,7 +178,7 @@ class AntArray(Array, ant.Antenna):
 
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self,ar, **kwargs):
         """
 
         Parameters
@@ -213,87 +217,92 @@ class AntArray(Array, ant.Antenna):
         ... plot::
             :include-source:
 
-            >>> A = AntArray()
+            >>> uar = UArray()
+            >>> A = AntArray(uar)
             >>> A.plotG()
 
         """
+        # AntArray is an Array
+        self = ar
+        # AntArray has an antenna or a list of antennas
+        self.la = kwargs.pop('la',['Omni'])
+        #self.mode = kwargs.pop('mode','array') # array | cloud
+        #self.tarr = kwargs.pop('tarr','UA')
 
-        self.mode = kwargs.pop('mode','array') # array | cloud
-        self.tarr = kwargs.pop('tarr','UA')
+        #if self.tarr =='UA':
+        #    N = np.array(kwargs.pop('N',[8,1,1]))
+        #    dm = np.array(kwargs.pop('dm',[0.075,0,0]))
 
-        if self.tarr =='UA':
-            N = np.array(kwargs.pop('N',[8,1,1]))
-            dm = np.array(kwargs.pop('dm',[0.075,0,0]))
+        #self.max = np.array(kwargs.pop('max',[0,0,0,0]))
+        #self.min = np.array(kwargs.pop('min',[0,0,0,0]))
 
-        self.max = np.array(kwargs.pop('max',[0,0,0,0]))
-        self.min = np.array(kwargs.pop('min',[0,0,0,0]))
+        #self.S = np.array(kwargs.pop('S',[]))
+        #self.array = kwargs.pop('array',[])
+        #w = np.array(kwargs.pop('w',[]))
 
-        self.S = np.array(kwargs.pop('S',[]))
-        self.array = kwargs.pop('array',[])
-        self.w = np.array(kwargs.pop('w',[]))
+        ##self.Na = np.prod(self.N)  # number of antennas
 
-        #self.Na = np.prod(self.N)  # number of antennas
+        #if self.array == []:
+        #    self.typant = kwargs.pop('typant','Omni')
+        #else:
+        #    self.typant = self.array.typant
 
-        if self.array == []:
-            self.typant = kwargs.pop('typant','Omni')
-        else:
-            self.typant = self.array.typant
+        ## There are two modes : 'uniform' and 'cloud'
+        ## If the 'cloud' mode is chosen, the spacing dm is determined
+        ## from max and min. In that mode max and min are prioritary w.r.t to the
+        ## specified dm. This is a mode which is used when using the
+        ## scanner for emulating a received array from a specified range of
+        ## disance on a given axis. The max and min are for fixing those limits.
 
-        # There are two modes : 'uniform' and 'cloud'
-        # If the 'cloud' mode is chosen, the spacing dm is determined
-        # from max and min. In that mode max and min are prioritary w.r.t to the
-        # specified dm. This is a mode which is used when using the
-        # scanner for emulating a received array from a specified range of
-        # disance on a given axis. The max and min are for fixing those limits.
-
-        if self.mode == 'cloud':
-            for  k in range(len(self.N)):
-                if self.N[k] == 1:
-                    dm[k] = self.max[k]
-                else:
-                    dm[k] = (self.max[k]-self.min[k])/(self.N[k]-1.0)
-
-        if type(self.typant) == list:
-            self.sameAnt = False
-            assert len(self.typant) == self.Na, "Wrong number of antennas"
-        else:
+        #if self.mode == 'cloud':
+        #    for  k in range(len(self.N)):
+        #        if self.N[k] == 1:
+        #            dm[k] = self.max[k]
+        #        else:
+        #            dm[k] = (self.max[k]-self.min[k])/(self.N[k]-1.0)
+        llant = len(self.lant)
+        if llant == 1:
             self.sameAnt = True
-
-        # Uniform Array
-        # p is obtained from UArray
-
-        if self.tarr == 'UA':
-            UArray.__init__(self,N = N, dm = dm , w = self.w)
-
-        if self.array != []:
-            lsh = tuple(list(self.array.p.shape)+[p.shape[1]])
-            a = np.kron(self.array.p, np.ones(p.shape[1])) # 3 x N
-            b = np.kron(np.ones(self.array.p.shape[1]), p) # 3 x M
-            p = a + b  # 3 x NM
-            p = p.reshape(lsh)
-            super(AntArray, self).__init__(p=p, w=self.w)
-
-        #
-        # Add the antennas of the array, either 1 (same for all points), or Na
-        # (array size)
-        #
-        # init Antenna parent
-        self.la = []
-        if self.sameAnt:
-            self.la.append(ant.Antenna(typ=self.typant))
         else:
-            for t in self.typant:
-                self.la.append(ant.Antenna(typ=t))
+            assert llant == self.Na, "Wrong number of antennas"
+            self.sameAnt = False
+
+        ## Uniform Array
+        ## p is obtained from UArray
+
+        #if self.tarr == 'UA':
+
+        #    super(AntArray,self).__init__(self,N = N, dm = dm , w = w)
+
+        #if self.array != []:
+        #    lsh = tuple(list(self.array.p.shape)+[p.shape[1]])
+        #    a = np.kron(self.array.p, np.ones(p.shape[1])) # 3 x N
+        #    b = np.kron(np.ones(self.array.p.shape[1]), p) # 3 x M
+        #    p = a + b  # 3 x NM
+        #    p = p.reshape(lsh)
+        #    super(AntArray, self).__init__(p=p, w = w)
+
+        ##
+        ## Add the antennas of the array, either 1 (same for all points), or Na
+        ## (array size)
+        ##
+        ## init Antenna parent
+        #self.la = []
+        #if self.sameAnt:
+        #    self.la.append(ant.Antenna(typ=self.typant))
+        #else:
+        #    for t in self.typant:
+        #        self.la.append(ant.Antenna(typ=t))
 
         typ = 'Array'
         ant.Antenna.__init__(self, typ=typ, **kwargs)
 
     def steervec(self, ang, nbit=3):
-        """
+        """ calculates steering vector from array
 
         Parameters
         ----------
-        ang : Mx2  (steering directions)
+        ang : Mx2  (M steering directions)
             [[theta0,phi0],[theta1,phi1],....,[theta(M-1),phi(M-1)]]
         nbit : phase quantization number of bits
 
@@ -304,8 +313,9 @@ class AntArray(Array, ant.Antenna):
             steering matrix
 
         """
+
         M = geu.SphericalBasis(ang)
-        # extracting direction 3xM
+        # extracting directions 3xM
         u = M[:,2,:]
         lam = 0.3/self.fGHz
         k = 2*np.pi/lam
@@ -944,4 +954,5 @@ if __name__ == '__main__':
 #
 # el(dot(conj(U.T),dot(W,S))+dot(conj(S.T),dot(W,U)))
 #    H  =
-# real(dot(conj(R.T),dot(W,S))+2*dot(conj(U.T),dot(W,U))+dot(conj(S.T),dot(W,R)))# Comparaison petit rseau et grand rseau.
+# real(dot(conj(R.T),dot(W,S))+2*dot(conj(U.T),dot(W,U))+dot(conj(S.T),dot(W,R)))#
+# Comparaison petit rseau et grand rseau.'

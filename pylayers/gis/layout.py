@@ -6693,7 +6693,7 @@ class Layout(pro.PyLayers):
         return lMP
 
     def _triangle(self, holes=[], vnodes=[] ,bplot = False):
-        """ Delaunay partitioning on shapely polygons
+        """ Delaunay triangulation on shapely polygons
 
         Parameters
         ----------
@@ -6720,7 +6720,7 @@ class Layout(pro.PyLayers):
         """
 
         # this means Delaunay is applied on exterior
-        # and inside polygon will be discarded
+        # and internal polygons will be discarded
         segbounds = []
         ptbounds = []
 
@@ -6766,9 +6766,9 @@ class Layout(pro.PyLayers):
         T = triangle.triangulate(C, 'pa')
 
         if bplot:
-            import triangle.plot as plot
-            ax=plt.gca()
-            plot.plot(ax,**T)
+            import triangle.plot as plottri
+            ax = plt.gca()
+            plottri(ax,**T)
             ax = plt.gca()
             ax.get_xaxis().set_visible(True)
             ax.get_yaxis().set_visible(True)
@@ -6809,7 +6809,11 @@ class Layout(pro.PyLayers):
         pbartmp = pbar(verbose,total=100., desc ='Triangulation',leave=True,position=tqdmpos+1)
 
         logger.info('buildGt : Triangulation')
+        #
+        #
+        #
         T, map_vertices = self._triangle()
+        pdb.set_trace()
 
         if verbose:
             pbartmp.update(100.)
@@ -6892,7 +6896,6 @@ class Layout(pro.PyLayers):
 
 
         pbartmp = pbar(verbose,total=100., desc ='Update Graph',leave=True,position=tqdmpos+1)
-        
         logger.info('buildGt : temporary graph')
 
         tri = T['triangles']
@@ -6906,7 +6909,7 @@ class Layout(pro.PyLayers):
         # edges link triangle centroids to their respective segments
 
         # Ex represent list of points in Gs corresponging to segments
-        #[pt_head pt_tail]
+        # [pt_head pt_tail]
 
         E0 = map_vertices[tri[:, 1:]]
         E1 = map_vertices[tri[:, :2]]
@@ -6925,6 +6928,7 @@ class Layout(pro.PyLayers):
         G.add_edges_from(zip(n1, MT))
         G.add_edges_from(zip(n2, MT))
 
+        pdb.set_trace()
         # 4. search in the temporary graph
         ###
         # nodes of degree 2  :
@@ -7010,6 +7014,10 @@ class Layout(pro.PyLayers):
             #
             # n0,n1 : cycle number
             #
+            #debug = False
+            #if a == 88:
+            #    debug = True
+
             n0, n1 = iuE[a]
             found = False
             while not found:
@@ -7018,13 +7026,22 @@ class Layout(pro.PyLayers):
                     found = True
                 else:
                     n0 = nn0
+                #if debug==True:
+                #    print("1 :",n0,nn0)
+
             found = False
             while not found:
                 nn1 = mapoldcy[n1]
-                if n1 == nn1:
+                #if (n1 == nn1)
+                if ((n1 == nn1) & (n1 != n0)):
                     found = True
                 else:
                     n1 = nn1
+                #if debug==True:
+                #    print("2 :",n1,nn1)
+
+            #if a == 88:
+            #    pdb.set_trace()
 
             p0 = self.Gt.node[n0]['polyg']
             p1 = self.Gt.node[n1]['polyg']
@@ -7044,7 +7061,10 @@ class Layout(pro.PyLayers):
                 # remove connection to n0 to avoid a cycle being
                 # connected to itself
                 # v1.1 self.Gt[n1].pop(n0)
-                dict(self.Gt[n1]).pop(n0)
+                try:
+                    dict(self.Gt[n1]).pop(n0)
+                except:
+                    pdb.set_trace()
                 # add information from adjacent cycle n1
                 dne.update(dict(self.Gt[n1]))
                 # list of items of the merged dictionnary
