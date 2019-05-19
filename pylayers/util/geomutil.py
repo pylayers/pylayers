@@ -624,12 +624,11 @@ class Polygon(pro.PyLayers, shg.Polygon):
 
         pylayers.layout.Layout.ispoint
 
-        vnodes is a list of point and segments of the polygon.
+        vnodes is a list of points and segments of the polygon.
         If there are isosegments the sequence of iso segments
         is repeated between the termination points.
 
-        L.numseg has been adapted in order to return either the first segment (default)
-        or the list of all segments
+        L.numseg has been adapted in order to return either the first segment (default) or the list of all segments
 
         """
         # get coordinates of the exterior of the polygon
@@ -639,10 +638,10 @@ class Polygon(pro.PyLayers, shg.Polygon):
         #        0 means not in the layout
         #
         # TODO : Sometimes polygon points are not exactly corresponding to nodes of Layout (Why ? )
-        #        This is the reason of the applied tolerance of 5cm
+        #        This is the reason of the applied tolerance of 1cm
         #
 
-        npts = [ ispoint(tpts, np.array(xx), tol=0.05) for xx in zip(x[0:-1], y[0:-1]) ]
+        npts = [ ispoint(tpts, np.array(xx), tol=0.01) for xx in zip(x[0:-1], y[0:-1]) ]
 
         assert (0 not in npts), pdb.set_trace()
         #if 0 in npts:

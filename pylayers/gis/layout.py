@@ -402,6 +402,11 @@ class Layout(pro.PyLayers):
                                 logger.info('load from Gs graph')
                                 self.hasboundary = True
                                 self.dumpr('s')
+                                self.lboundary = []
+                                for ns in self.segboundary:
+                                    for nh in nx.neighbors(self.Gs,ns):
+                                        if nh not in self.lboundary:
+                                            self.lboundary.append(nh)
                             else:
                                 logger.info('load from .lay file')
                                 self.load_fast()
@@ -6138,12 +6143,13 @@ class Layout(pro.PyLayers):
         Warning : by default the layout is saved (dumpw) after each build
 
         """
-        # list of built graphs
         if not self.hasboundary:
             self.boundary()
 
         # to save graoh Gs
-        self.lbltg.extend('s')
+        # list of built graphs
+        if 's' not in self.lbltg:
+            self.lbltg.extend('s')
 
         Buildpbar = pbar(verbose,total=5,desc='Build Layout',position=0)
 
@@ -6571,7 +6577,7 @@ class Layout(pro.PyLayers):
         Parameters
         ----------
 
-            poly_surround : sh.Polygon 
+            poly_surround : sh.Polygon
                 A single polygon to be partitionned
             poly_holes : list of sh.Polygon
                 A list of polygon contained inside poly_surround. they are considered as holes
@@ -6742,6 +6748,7 @@ class Layout(pro.PyLayers):
                 seg = np.array([nx.neighbors(self.Gs, x) for x in vnodes
                         if x > 0
                         and x not in segbounds])
+
         # get vertices/points of layout
         ivertices = np.array([(x, self.Gs.pos[x][0], self.Gs.pos[x][1]) for x in vnodes
                               if x < 0
@@ -6787,9 +6794,9 @@ class Layout(pro.PyLayers):
         verbose : boolean
         tqdmpos : progressbar
 
-        todo :
+        TODO :
         - add an option to only take outside polygon
-            => pass to self._triangle a hole coreesponding to centroid of
+            => pass to self._triangle a hole corresponding to centroid of
             polygon except those of boundary ( see buildGtold )
 
         """
@@ -6801,25 +6808,33 @@ class Layout(pro.PyLayers):
         #       segment which is tagged as _AIR
         ###
 
-        # if verbose :
-        #     Gtpbar = tqdm.tqdm(total=100., desc='BuildGt',position=0)
-        #     pbar_awloop =  tqdm.tqdm(total=100., desc ='airwalls loop',leave=False,position=1)
-
-        Gtpbar = pbar(verbose,total=100., desc ='BuildGt',position=tqdmpos)
-        pbartmp = pbar(verbose,total=100., desc ='Triangulation',leave=True,position=tqdmpos+1)
+        Gtpbar = pbar(verbose, total=100., desc ='BuildGt',position=tqdmpos)
+        pbartmp = pbar(verbose, total=100., desc ='Triangulation',leave=True,position=tqdmpos+1)
 
         logger.info('buildGt : Triangulation')
         #
         #
         #
+        # T  dict  ['segment_markers', 'segments', 'holes', 'vertices', 'vertex_markers', 'triangles']
         T, map_vertices = self._triangle()
-        pdb.set_trace()
 
         if verbose:
             pbartmp.update(100.)
             Gtpbar.update(100./12.)
 
+        # coordinates of triangle points
+        # ptri np.array Ntri x  3 x 2
+
         ptri = T['vertices'][T['triangles']]
+
+        # check that any point of triangulation belong to Gs
+        #
+        # for k in range(ptri.shape[0]):
+        #     for l in range(3):
+        #         point_tri = ptri[k,l,:]
+        #         if self.ispoint(point_tri,tol=0.01)==0:
+        #             print(point_tri)
+        # pdb.set_trace()
 
         # List of Triangle Polygons
         pbartmp = pbar(verbose,total=100.,
@@ -6827,8 +6842,9 @@ class Layout(pro.PyLayers):
                         leave=True,
                         position=tqdmpos+1)
 
-        logger.info('buildGt : create list of Polygons')
-        lTP = [geu.Polygon(x) for x in ptri]
+        logger.info('buildGt : create list of Triangle Polygons')
+        lTP = [ geu.Polygon(x) for x in ptri ]
+
         if verbose:
             pbartmp.update(100.)
             Gtpbar.update(100./12.)
@@ -6843,7 +6859,7 @@ class Layout(pro.PyLayers):
         # get_points(p) : get points from polygon
         # this is for limiting the search region for large Layout
         #
-        logger.info('buildGt : setvnodes_new on each polygon')
+        logger.info('buildGt : apply setvnodes_new on each polygon')
         [ polygon.setvnodes_new(self.get_points(polygon), self) for polygon in lTP ]
 
         if verbose:
@@ -6860,15 +6876,19 @@ class Layout(pro.PyLayers):
                         leave=True,
                         position=tqdmpos+1)
 
+        # segments of the polygon which do not belong to Gs are airwalls (code 0)
+        #
         logger.info('buildGt : get list of airwalls')
         luaw = [(p, np.where(p.vnodes == 0)[0]) for p in lTP]
+
         if verbose:
             pbartmp.update(100.)
             Gtpbar.update(100./12.)
 
         #
-        # For a triangle polygon the number of vnodes
-        # creates new _AIR segments
+        # For a triangle polygon
+        # creates new _AIR segments for segments not belonging to Gs
+        # vnodes == 0
         #
 
         cpt = 1./(len(luaw)+1)
@@ -6876,7 +6896,7 @@ class Layout(pro.PyLayers):
 
         pbartmp = pbar(verbose,total=100., desc ='Add airwalls',leave=True,position=tqdmpos+1)
 
-        logger.info('buildGt : add new airwalls segments')
+        logger.info('buildGt : add %d new airwalls segments ',len(luaw))
         for p, uaw in luaw:
             # for each vnodes == 0, add an _AIR
             if verbose :
@@ -6885,9 +6905,9 @@ class Layout(pro.PyLayers):
                 modpt = len(p.vnodes)
                 _airseg.append(self.add_segment(p.vnodes[np.mod(aw - 1, modpt)],
                                                 p.vnodes[np.mod(aw + 1, modpt)],
-                                                name='_AIR',
-                                                z=(0, 40000000),
-                                                verbose=False))
+                                                name = '_AIR',
+                                                z = (0, 40000000),
+                                                verbose = False))
             # update polygon segments with new added airwalls
             p.setvnodes_new(self.get_points(p),self)
 
@@ -6896,16 +6916,18 @@ class Layout(pro.PyLayers):
 
 
         pbartmp = pbar(verbose,total=100., desc ='Update Graph',leave=True,position=tqdmpos+1)
-        logger.info('buildGt : temporary graph')
+        logger.info('buildGt : create temporary graph')
 
+        # tri : np.array (Ntri x 3 )
         tri = T['triangles']
         nbtri = len(T['triangles'])
         # temporary name/node_index of triangles
         MT = -np.arange(1, nbtri + 1)
 
         # 3. Create a temporary graph
+        #
         # where : positive nodes (>0) are triangles segments
-        # negative nodes (<0) are triangles centroids
+        #         negative nodes (<0) are triangles centroids
         # edges link triangle centroids to their respective segments
 
         # Ex represent list of points in Gs corresponging to segments
@@ -6928,7 +6950,6 @@ class Layout(pro.PyLayers):
         G.add_edges_from(zip(n1, MT))
         G.add_edges_from(zip(n2, MT))
 
-        pdb.set_trace()
         # 4. search in the temporary graph
         ###
         # nodes of degree 2  :
@@ -6948,16 +6969,16 @@ class Layout(pro.PyLayers):
         # centroids)
         # v1.1 neigh = [nx.neighbors(G, un) for un in rn]
         #neigh = [ dict(G[un]).keys() for un in rn ]
+
         neigh = [[n for n in nx.neighbors(G,un)] for un in rn ]
 
         # store into networkx compliant format
+        # rlrn = range len rn
+        rlrn = range(len(rn))
+        uE = [(neigh[un][0], neigh[un][1], {'segment': [ rn[un]] + self.Gs.node[rn[un]]['iso']}) for un in rlrn]
+        iuE = {rn[un]: [-neigh[un][0], -neigh[un][1]] for un in rlrn }
 
-        uE = [(neigh[un][0], neigh[un][1], {'segment': [
-               rn[un]] + self.Gs.node[rn[un]]['iso']}) for un in range(len(rn))]
-        iuE = {rn[un]: [-neigh[un][0], -neigh[un][1]]
-               for un in range(len(rn))}
-
-        # delete temporary graph
+        # delete temporary graph G
         del G
 
         logger.info('buildGt : creates graph Gt')
@@ -6966,9 +6987,13 @@ class Layout(pro.PyLayers):
         self.Gt.add_edges_from(uE)
         self.Gt = nx.relabel_nodes(self.Gt, lambda x: -x)
 
+
+        # add nodes ro Gt 
         # add polyg  to nodes
         # add indoor to nodes
         # add isopen to nodes
+        #
+        # WARNING indoor: True is weird
 
         nno = [(n, {'polyg': lTP[n - 1], 'indoor':True, 'isopen':True})
                for n in self.Gt.nodes()]
@@ -6978,6 +7003,9 @@ class Layout(pro.PyLayers):
 
         self.Gt.pos.update({n: np.array(
             self.Gt.node[n]['polyg'].centroid.xy).squeeze() for n in self.Gt.nodes()})
+
+        #fig = plt.figure(figsize=(50,50))
+        #self.showG('st',fig=fig)
 
         # self.Gtpos = {-MT[i]:pMT[i] for i in xrange(len(MT))}
         # plt.figure()
@@ -6990,11 +7018,13 @@ class Layout(pro.PyLayers):
         _airseg = _airseg[_airseg != np.array(None)].astype('int')
         _airseg = np.unique(_airseg)
 
+        logger.info('buildGt : start Mikado like simplification ')
         #
         # Mikado like progression for simplification of a set of convex polygons
         #
         #    Loop over AIR segments
         #
+
         mapoldcy = {c: c for c in self.Gt.nodes()}
 
         # self.showG('st',aw=1)
@@ -7002,8 +7032,6 @@ class Layout(pro.PyLayers):
         if verbose:
             pbartmp.update(100.)
             Gtpbar.update(100./12.)
-
-
 
         Nairseg = len(_airseg)
         cpt = 1./(Nairseg+1)
@@ -7015,10 +7043,9 @@ class Layout(pro.PyLayers):
             # n0,n1 : cycle number
             #
             #debug = False
-            #if a == 88:
-            #    debug = True
 
             n0, n1 = iuE[a]
+            logger.debug(" segment %d : %d %d ",a,n0,n1)
             found = False
             while not found:
                 nn0 = mapoldcy[n0]
@@ -7026,76 +7053,73 @@ class Layout(pro.PyLayers):
                     found = True
                 else:
                     n0 = nn0
-                #if debug==True:
-                #    print("1 :",n0,nn0)
 
             found = False
             while not found:
                 nn1 = mapoldcy[n1]
-                #if (n1 == nn1)
-                if ((n1 == nn1) & (n1 != n0)):
+                if n1 == nn1:
                     found = True
                 else:
                     n1 = nn1
-                #if debug==True:
-                #    print("2 :",n1,nn1)
 
-            #if a == 88:
-            #    pdb.set_trace()
+            # if the 2 cycles are distincts
+            if (n0 != n1):
+                p0 = self.Gt.node[n0]['polyg']
+                p1 = self.Gt.node[n1]['polyg']
 
-            p0 = self.Gt.node[n0]['polyg']
-            p1 = self.Gt.node[n1]['polyg']
+                # Merge polygon
+                P = p0 + p1
+                # If the new Polygon is convex update Gt
+                #
+                if geu.isconvex(P):
+                    logger.debug(" merge %d : %d %d ",a,n0,n1)
+                    # updates vnodes of the new merged polygon
+                    P.setvnodes_new(self.get_points(P),self)
+                    # update edge
+                    n0s = n0
+                    n1s = n1
+                    # get segments information from cycle n0
+                    dne = dict(self.Gt[n0])
+                    # remove connection to n0 to avoid a cycle being
+                    # connected to itself
+                    # v1.1 self.Gt[n1].pop(n0)
+                    try:
+                        dict(self.Gt[n1]).pop(n0)
+                    except:
+                        pdb.set_trace()
+                    # add information from adjacent cycle n1
+                    dne.update(dict(self.Gt[n1]))
+                    # list of items of the merged dictionnary
+                    ine = dne.items()
+                    # update n0 with the new merged polygon
+                    self.Gt.add_node(n0, polyg=P)
+                    # connect new cycle n0 to neighbors
+                    # for x in ine:
+                    #     if x[0]!=n0:
+                    #         ncy  = x[0]
+                    #         dseg = x[1]
+                    #         # a link between cycles already exists
+                    #         if self.Gt.has_edge(n0,ncy):
+                    #             dseg_prev = self.Gt.edge[n0][ncy]
+                    #             dseg['segment']=list(set(dseg['segment']+dseg_prev['segment']))
+                    #         printn0,ncy,dseg['segment']
+                    #         self.Gt.add_edge(n0,ncy,segment=dseg['segment'])
 
-            # Merge polygon
-            P = p0 + p1
-            # If the new Polygon is convex update Gt
-            #
-            if geu.isconvex(P):
-                # updates vnodes of the new merged polygon
-                P.setvnodes_new(self.get_points(P),self)
-                # update edge
-                n0s = n0
-                n1s = n1
-                # get segments information from cycle n0
-                dne = dict(self.Gt[n0])
-                # remove connection to n0 to avoid a cycle being
-                # connected to itself
-                # v1.1 self.Gt[n1].pop(n0)
-                try:
-                    dict(self.Gt[n1]).pop(n0)
-                except:
-                    pdb.set_trace()
-                # add information from adjacent cycle n1
-                dne.update(dict(self.Gt[n1]))
-                # list of items of the merged dictionnary
-                ine = dne.items()
-                # update n0 with the new merged polygon
-                self.Gt.add_node(n0, polyg=P)
-                # connect new cycle n0 to neighbors
-                # for x in ine:
-                #     if x[0]!=n0:
-                #         ncy  = x[0]
-                #         dseg = x[1]
-                #         # a link between cycles already exists
-                #         if self.Gt.has_edge(n0,ncy):
-                #             dseg_prev = self.Gt.edge[n0][ncy]
-                #             dseg['segment']=list(set(dseg['segment']+dseg_prev['segment']))
-                #         printn0,ncy,dseg['segment']
-                #         self.Gt.add_edge(n0,ncy,segment=dseg['segment'])
-
-                self.Gt.add_edges_from([(n0, x[0], x[1])
-                                        for x in ine if x[0] != n0])
-                # remove old cycle n1 n
-                self.Gt.remove_node(n1)
-                # update pos of the cycle with merged polygon centroid
-                self.Gt.pos[n0] = np.array((P.centroid.xy)).squeeze()
-                self.Gt.pos.pop(n1)
-                # delete _air segment a
-                # do not apply g2npy
-                self.del_segment(a, verbose=False, g2npy=False)
-                mapoldcy[n1] = n0
-                # fig,a=self.showG('st',aw=1)
-                # plt.show()
+                    self.Gt.add_edges_from([(n0, x[0], x[1])
+                                            for x in ine if x[0] != n0])
+                    # remove old cycle n1 n
+                    self.Gt.remove_node(n1)
+                    # update pos of the cycle with merged polygon centroid
+                    self.Gt.pos[n0] = np.array((P.centroid.xy)).squeeze()
+                    self.Gt.pos.pop(n1)
+                    # delete _air segment a
+                    # do not apply g2npy
+                    self.del_segment(a, verbose=False, g2npy=False)
+                    mapoldcy[n1] = n0
+                    # fig,a=self.showG('st',aw=1)
+                    # plt.show()
+            else:
+                    self.del_segment(a, verbose=False, g2npy=False)
         ######
         # fix renumbering Gt nodes
 
@@ -10552,6 +10576,7 @@ class Layout(pro.PyLayers):
 
         ta  : int <0
         he  : int <0
+
         first : Boolean
             if True returns only one among the several iso segments
             else returns a np.array of iso segments
@@ -10562,9 +10587,12 @@ class Layout(pro.PyLayers):
         nseg : > 0
         if 0 not a segment
 
+        See Also
+        --------
+
+        buildGt
+
         """
-        # v1.1 nta = np.array(nx.neighbors(self.Gs, ta))
-        # v1.1 nhe = np.array(nx.neighbors(self.Gs, he))
         nta = np.array(list(dict(self.Gs[ta]).keys()))
         nhe = np.array(list(dict(self.Gs[he]).keys()))
         nseg = np.intersect1d(nta, nhe)
