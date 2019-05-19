@@ -6143,6 +6143,11 @@ class Layout(pro.PyLayers):
         Warning : by default the layout is saved (dumpw) after each build
 
         """
+        # check that the graph and numpy table are aligned
+        # if not call g2npy
+        if self.pt.shape[1] != self.Np:
+            self.g2npy()
+
         if not self.hasboundary:
             self.boundary()
 
