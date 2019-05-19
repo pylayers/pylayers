@@ -1609,11 +1609,6 @@ class Rays(PyLayers, dict):
                     #
 
                     for npt in lns:
-                        # diffraction cornet in espoo.lay
-                        #if npt==-225:
-                        #    import ipdb
-                        #    ipdb.set_trace()
-
                         u  = np.where(anstr==npt)
                         if len(u)>0:
                            # height of the diffraction point
@@ -1630,7 +1625,7 @@ class Rays(PyLayers, dict):
                             # delete rays where diffraction point is connected to
                             # 2 AIR segments
                             #
-
+                            pdb.set_trace()
                             [ray_to_delete.append(u[1][i]) for i in range(len(zp))
                             if ((ltu_slab[i][0]=='AIR') & (ltu_slab[i][1]=='AIR'))]
                             # #zinterval = L.Gs.node[s]['z']

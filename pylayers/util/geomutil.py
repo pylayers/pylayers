@@ -607,7 +607,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
         self.vnodes = np.array(vnodes)
 
 
-    def setvnodes_new(self,tpts,L):
+    def setvnodes_new(self,tpts,L,tol=0.001):
         """ update vnodes members from Layout
 
         Parameters
@@ -618,6 +618,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
                     np.array
            tpts[1] : points index
         L : pylayers.layout.Layout
+        tol : tolerance
 
         See Also
         --------
@@ -641,7 +642,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
         #        This is the reason of the applied tolerance of 1cm
         #
 
-        npts = [ ispoint(tpts, np.array(xx), tol=0.01) for xx in zip(x[0:-1], y[0:-1]) ]
+        npts = [ ispoint(tpts, np.array(xx), tol=tol) for xx in zip(x[0:-1], y[0:-1]) ]
 
         assert (0 not in npts), pdb.set_trace()
         #if 0 in npts:
