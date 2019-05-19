@@ -10247,15 +10247,17 @@ class Layout(pro.PyLayers):
             for x in lseg_valid:
                 zsup = lz >self.Gs.node[x]['z'][0]
                 zinf = lz <=self.Gs.node[x]['z'][1]
-                z    = zsup & zinf 
+                z    = zsup & zinf
                 uz = np.where(z)[0]
-                # fill dz_seg at the correct height with a lseg_valid 
-                # and simulnaneously 
+                # fill dz_seg at the correct height with a lseg_valid
+                # and simulnaneously
                 # fill dz_sl at the correct height with correspondong slab
                 [(dz_seg[i].append(x),dz_sl[i].append(self.Gs.node[x]['name']))
                                                                     for i in uz]
 
-        return dz_seg.values(),dz_sl.values()
+        lseg  = list(dz_seg.values())
+        lslab = list(dz_sl.values())
+        return lseg, lslab
 
     def _find_diffractions(self, difftol=0.01,verbose = False,tqdmkwargs={}):
         """ find diffractions points of the Layout
