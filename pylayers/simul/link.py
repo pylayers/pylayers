@@ -1851,10 +1851,10 @@ class DLink(Link):
                 self.afprt.y = np.squeeze(S)
         if self.H.y.shape[3]!=1:
             self.afprt.x = self.H.x
-            self.afprt.fcGHz = self.afprt.x[len(self.afprt.x)/2]
+            self.afprt.fcGHz = self.afprt.x[len(self.afprt.x)//2]
         else:
             self.afprt.x = fGHz
-            self.afprt.fcGHz = fGHz[len(fGHz)/2]
+            self.afprt.fcGHz = fGHz[len(fGHz)//2]
 
         self.dpdp = np.sum(self.dpadp,axis=0)
         self.dpap = np.sum(self.dpadp,axis=1)
@@ -2586,7 +2586,7 @@ class DLink(Link):
         else:
             ax = kwargs['ax']
 
-        ax.hist(self.H.taud,bins=len(self.H.taud)/2)
+        ax.hist(self.H.taud,bins=len(self.H.taud)//2)
         ax.set_xlim([0,max(self.H.taud)])
         return fig,ax
 
@@ -2611,7 +2611,7 @@ class DLink(Link):
         else:
             ax = kwargs['ax']
 
-        ax.hist(self.H.doa[:,0],bins=len(self.H.doa[:,0])/2)
+        ax.hist(self.H.doa[:,0],bins=len(self.H.doa[:,0])//2)
         ax.set_xlim([-np.pi,np.pi])
         return fig,ax
 
