@@ -404,7 +404,6 @@ class DLink(Link):
             #self.L.dumpw()
             #self.L.build()
 
-            pdb.set_trace()
             self.init_positions()
 
 

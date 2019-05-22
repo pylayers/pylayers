@@ -1108,7 +1108,6 @@ class Rays(PyLayers, dict):
         #
         # heights of transmitter and receiver
         #
-        pdb.set_trace()
         if za == []:
             za=self.pTx[2]
         if zb == []:
