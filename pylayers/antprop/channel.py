@@ -696,7 +696,7 @@ class ADPchannel(bs.TUsignal):
         dB   = kwargs.pop('dB',True)
         fig  = kwargs.pop('fig',[])
         ax   = kwargs.pop('ax',[])
-        fonts = kwargs.pop('fontsize',18)
+        fonts = kwargs.pop('fonts',18)
         label = kwargs.pop('label','')
         blos = kwargs.pop('blos',True)
         orientation = kwargs.pop('orientation',-1)
@@ -725,6 +725,7 @@ class ADPchannel(bs.TUsignal):
             padp = np.abs(self.y)[:,imin:imax].T
         if dB:
             padp  = 20*np.log10(padp)
+            pdb.set_trace()
             im = ax.imshow(padp,extent=extent,aspect='auto',**kwargs)
             #plt.axis('equal')
 
