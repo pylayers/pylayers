@@ -4186,10 +4186,10 @@ def MATP(sl,el,phi,tilt,pol):
     pol : string 'H' (Horizontal) or 'V' (Vertical)
 
     """
-    assert np.isclose(np.dot(sl,sl),1)
-    assert np.isclose(np.dot(el,el),1)
-    assert np.isclose(np.dot(sl,el),0,atol=1e-1)
-    
+    assert np.isclose(np.dot(sl,sl),1), pdb.set_trace()
+    assert np.isclose(np.dot(el,el),1), pdb.set_trace()
+    assert np.isclose(np.dot(sl,el),0,atol=1e-1),pdb.set_trace()
+
     #
     # local frame completion (vl,pl,ql) direct frame 
     #

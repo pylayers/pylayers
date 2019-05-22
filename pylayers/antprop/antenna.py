@@ -590,29 +590,29 @@ class Pattern(PyLayers):
         return Ft,Fp
 
     def __phplanesectoralhorn(self,**kwargs):
-        """ H plane sectoral horn 
+        """ H plane sectoral horn
 
         Parameters
         ----------
 
-        rho1 : float 
+        rho1 : float
             sector radius (meter)
         a1 : float
             aperture dimension along x (greatest value in meters)
-        b1 : float 
-            aperture dimension along y (greatest value in meters) 
+        b1 : float
+            aperture dimension along y (greatest value in meters)
 
         Notes
         -----
 
-        Maximum gain in theta =0 
-        Polarized along y axis (Jx=0,Jz=0)  
+        Maximum gain in theta =0
+        Polarized along y axis (Jx=0,Jz=0)
 
         """
 
         defaults = {'param': {'rho1':0.198,
                               'a1':0.088,  # aperture dimension along x
-                              'b1':0.0126, # aperture dimension along y 
+                              'b1':0.0126, # aperture dimension along y
                               'fcGHz':28,
                               'GcmaxdB':19,
                               'Nx':20,
@@ -665,7 +665,7 @@ class Pattern(PyLayers):
         ctsp = np.cos(Theta)*np.sin(Phi)
         cp = np.cos(Phi)
         ctcp = np.cos(Theta)*np.cos(Phi)
-        sp = np.sin(Phi) 
+        sp = np.sin(Phi)
         stcp = np.sin(Theta)*np.cos(Phi)
         stsp = np.sin(Theta)*np.sin(Phi)
         # N & L
@@ -1760,10 +1760,10 @@ class Pattern(PyLayers):
             linear sqare root of gain
                   or np.array(Nr,Nf)
         + self.efficiency : np.array (,Nf) dtype:float
-            efficiency 
+            efficiency
         + self.hpster : np.array (,Nf) dtype:float
-            half power solid angle :  1 ~ 4pi steradian 
-        + self.ehpbw : np.array (,Nf) dtyp:float 
+            half power solid angle :  1 ~ 4pi steradian
+        + self.ehpbw : np.array (,Nf) dtyp:float
             equivalent half power beamwidth (radians)
 
 
@@ -1776,13 +1776,16 @@ class Pattern(PyLayers):
 
 
         if self.grid:
+            # step in theta
             dt = self.theta[1]-self.theta[0]
+            # step in phi
             dp = self.phi[1]-self.phi[0]
             Nt = len(self.theta)
             Np = len(self.phi)
+            # integation of the gain over the whole sphere (if gain == directivity => efficieny =1)
             Gs = self.G * np.sin(self.theta)[:, None, None] * np.ones(Np)[None, :, None]
             self.efficiency = np.sum(np.sum(Gs,axis=0),axis=0)*dt*dp/(4*np.pi)
-
+            # square root of gai
             self.sqG = np.sqrt(self.G)
             self.GdB = 10*np.log10(self.G)
             # GdBmax (,Nf)
@@ -1796,12 +1799,13 @@ class Pattern(PyLayers):
             self.umax = np.array(np.where(self.GdB==GdBmax))[:,0]
             self.theta_max = self.theta[self.umax[0]]
             self.phi_max = self.phi[self.umax[1]]
+            # spherical basis associated to maximum direction
             M = geu.SphericalBasis(np.array([[self.theta_max,self.phi_max]]))
             self.sl = M[:,2].squeeze()
             uth = M[:,0]
             uph = M[:,1]
 
-            el = self.Ft[tuple(self.umax)]*uth + self.Fp[tuple(self.umax)]*uph
+            el = np.abs(self.Ft[tuple(self.umax)]*uth + self.Fp[tuple(self.umax)]*uph)
             eln = el/np.linalg.norm(el)
             self.el = eln.squeeze()
             self.hl = np.cross(self.sl,self.el)
