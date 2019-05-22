@@ -1761,63 +1761,46 @@ class DLink(Link):
         self.adprt.cut(imax=imax)
 
     def afp(self,**kwargs):
-        """ Evaluate angular frequency profile 
+        """ Evaluate angular frequency profile
 
         Parameters
         ----------
 
-        fGHz  : np.array 
-            frequency range 
-        az : azimuth angle (radian)  
-        tilt : tilt angle (-pi/2<tilt<pi/2) 
+        fGHz  : np.array
+            frequency range
+        az : azimuth angle (radian)
+        tilt : tilt angle (-pi/2<tilt<pi/2)
         polar : string
         win : string 'rect' | 'hamming'
-        _filemeas : string 
-        _filecal : string 
-        ang_offset : 
-        BW : float 
+        _filemeas : string
+        _filecal : string
+        ang_offset :
+        BW : float
             bandwidth
-        ext : string 
+        ext : string
             'txt' | 'mat'
-        dirmeas : string 
-            directory of the data in the project path 
+        dirmeas : string
+            directory of the data in the project path
 
         Notes
         -----
 
         If a measurement file is given the angular range is obtained from the measurement
-        otherwise the variable az is used. 
+        otherwise the variable az is used.
 
         """
-        defaults = {'fGHz':32.6,
-                     'az': 0,
-                     'tilt':0,
-                     'polar':'V',
-                     'win':'rect',
-                     '_filemeas':'',
-                     '_filecal':'',
-                     'ang_offset' : 0.37,
-                     'BW': 1.6,
-                     'ext':'txt',
-                     'dirmeas':'meas',
-                     'refinement':False
-                    }
-        for k in defaults:
-            if k not in kwargs:
-                kwargs[k] = defaults[k] 
-
-        fGHz = kwargs.pop('fGHz')
-        az   = kwargs.pop('az')
-        tilt = kwargs.pop('tilt')
-        polar = kwargs.pop('polar')
-        win = kwargs.pop('win')               # argument for loadmes
-        _filemeas = kwargs.pop('_filemeas')   # argument for loadmes
-        _filecal = kwargs.pop('_filecal')     # argument for loadmes
-        dirmeas = kwargs.pop('dirmeas')      # argument for loadmes
-        ang_offset = kwargs.pop('ang_offset') # argument for loadmes
-        BW = kwargs.pop('BW')                 # argument for loadmes
-        ext = kwargs.pop('ext')               # argument for loadmes
-        refinement = kwargs.pop('refinement')  # argument for loadmes
+        fGHz = kwargs.pop('fGHz',32.6)
+        az   = kwargs.pop('az',0)
+        tilt = kwargs.pop('tilt',0)
+        polar = kwargs.pop('polar','V')
+        win = kwargs.pop('win','rect')               # argument for loadmes
+        _filemeas = kwargs.pop('_filemeas','')   # argument for loadmes
+        _filecal = kwargs.pop('_filecal','')     # argument for loadmes
+        dirmeas = kwargs.pop('dirmeas','meas')      # argument for loadmes
+        ang_offset = kwargs.pop('ang_offset',0.37) # argument for loadmes
+        BW = kwargs.pop('BW',1.6)                 # argument for loadmes
+        ext = kwargs.pop('ext','txt')               # argument for loadmes
+        refinement = kwargs.pop('refinement',False)  # argument for loadmes
 
         # read measurement if available
         if _filemeas!='':
