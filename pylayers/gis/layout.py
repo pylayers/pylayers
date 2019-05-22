@@ -410,6 +410,7 @@ class Layout(pro.PyLayers):
                             else:
                                 logger.info('load from .lay file')
                                 self.load_fast()
+                            self.get_boundary()
                         else:
                             logger.info('load from .lay file')
                             self.load_fast()

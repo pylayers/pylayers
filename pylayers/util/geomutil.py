@@ -87,7 +87,7 @@ def ispoint(tpts, pt, tol=0.05):
             return(ke[nup[mi]][0])
 
 
-def isconvex(poly, tol=1e-2):
+def isconvex(poly, tol=1e-5):
     """ Determine if a polygon is convex
 
     Parameters

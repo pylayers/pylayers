@@ -1037,15 +1037,15 @@ class Rays(PyLayers, dict):
                                 linewidth=kwargs['linewidth'])
                         ax.axis('off')
 
-        if kwargs['bcolorbar']:
-            # axes : left , bottom , width , height
-            sm = plt.cm.ScalarMappable(cmap = kwargs['cmap'], norm = plt.Normalize(vmin=kwargs['vmin'],vmax=kwargs['vmax']))
-            sm._A = []  # necessary set_array
-            cax = fig.add_axes([0.18,0.35, 0.35, 0.025])
-            #cb = plt.colorbar(sm,cax=cax,orientation='horizontal')
-            cb = plt.colorbar(sm,cax=cax,orientation='horizontal')
-            cb.ax.tick_params(labelsize=24)
-            cb.set_label('Level (dB)', fontsize=24)
+        #if kwargs['bcolorbar']:
+        #    # axes : left , bottom , width , height
+        #    sm = plt.cm.ScalarMappable(cmap = kwargs['cmap'], norm = plt.Normalize(vmin=kwargs['vmin'],vmax=kwargs['vmax']))
+        #    sm._A = []  # necessary set_array
+        #    cax = fig.add_axes([0.18,0.35, 0.35, 0.025])
+        #    #cb = plt.colorbar(sm,cax=cax,orientation='horizontal')
+        #    cb = plt.colorbar(sm,cax=cax,orientation='horizontal')
+        #    cb.ax.tick_params(labelsize=24)
+        #    cb.set_label('Level (dB)', fontsize=24)
 
         return(fig,ax)
 
@@ -1108,6 +1108,7 @@ class Rays(PyLayers, dict):
         #
         # heights of transmitter and receiver
         #
+        pdb.set_trace()
         if za == []:
             za=self.pTx[2]
         if zb == []:
@@ -1599,7 +1600,7 @@ class Rays(PyLayers, dict):
                             ray_to_delete.extend(u[1][unot_in_interval])
 
                     # lns : list of diffraction points in the current signature
-                    #       with involving multi segments (iso)
+                    #       involving multi segments (iso)
                     # scalability : avoid a loop over all the points in lnss
                     #
                     lns = [ x for x in lnss if x in anstr.ravel()]

@@ -19,6 +19,7 @@ except:
     print('Layout:Mayavi is not installed')
 
 import doctest
+import random
 import time
 import numpy as np
 import matplotlib.pylab as plt
@@ -403,6 +404,7 @@ class DLink(Link):
             #self.L.dumpw()
             #self.L.build()
 
+            pdb.set_trace()
             self.init_positions()
 
 
@@ -880,7 +882,7 @@ class DLink(Link):
         Parameters
         ----------
 
-        force : boolean 
+        force : boolean
 
         """
         ###########
@@ -892,21 +894,21 @@ class DLink(Link):
         ###########
         nodes = self.L.Gt.nodes()
         #
-        # pick the point outside building if Layout.indoor not activated 
-        #
+        # pick the point outside building if Layout.indoor not activated
+
         if self.L.typ=='outdoor':
             nodes = [n for n in nodes if n!=0 and not self.L.Gt.node[n]['indoor']]
         elif self.L.typ=='indoor':
-            nodes = [n for n in nodes if n!=0 and self.L.Gt.node[n]['indoor']] 
+            nodes = [n for n in nodes if n!=0 and self.L.Gt.node[n]['indoor']]
         else:
             nodes = [n for n in nodes if n!=0 ]
 
         # draw the link extremities randomly
-        np.random.seed(self.seed)
-        ia = np.random.randint(0,len(nodes))
-        ib = np.random.randint(0,len(nodes))
+        random.seed(self.seed)
+        ia = random.choice(nodes)
+        ib = random.choice(nodes)
         if len(self.a)==0 or force:
-            self.ca = nodes[ia]
+            self.ca = ia
         else:
             if len(self.a) ==2:
                 a=np.r_[self.a,1.0]
@@ -916,7 +918,7 @@ class DLink(Link):
             self.a = a
 
         if len(self.b)==0 or force:
-            self.cb = nodes[ib]
+            self.cb = ib
         else:
             if len(self.b) ==2:
                 b=np.r_[self.b,1.0]
@@ -2120,7 +2122,8 @@ class DLink(Link):
                                color = color,
                                linewidth = 10*RayEnergy,
                                alpha = alpha,
-                               fig = fig, ax = ax,
+                               fig = fig,
+                               ax = ax,
                                layout = False,
                                points = False,
                                bcolorbar = kwargs['bcolorbar'],
