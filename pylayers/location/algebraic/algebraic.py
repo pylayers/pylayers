@@ -240,11 +240,11 @@ class algloc(object):
         pl0 = self.ldp['PL0']
         s = (np.log(10) / 10) * rss_std / rss_np
         m = (np.log(10) / 10) * (pl0 - rss_db) / rss_np + np.log(d0)
-        if string.lower(Rest) == 'mode':
+        if Rest.lower() == 'mode':
             rg = np.exp(m - s**2)
-        elif string.lower(Rest) == 'median':
+        elif Rest.lower() == 'median':
             rg = np.exp(m)
-        elif string.lower(Rest) == 'mean':
+        elif Rest.lower() == 'mean':
             rg = np.exp(m + 0.5*s**2)
         else:
             raise ValueError(Rest + ": no such ranging estimator")
@@ -284,12 +284,12 @@ class algloc(object):
         s = (np.log(10) / 10) * rss_std / rss_np
         m = (np.log(10) / 10) * (pl0 - rss_db) / rss_np + np.log(d0)
 
-        if string.lower(Rest) == 'mode':
+        if Rest.lower() == 'mode':
             rg_std = np.sqrt((np.exp(2*m - 2*s**2))*(1 - np.exp(-s**2)))
-        elif string.lower(Rest) == 'median':
+        elif Rest.lower() == 'median':
             rg_std = np.sqrt(
                 (np.exp(2*m + s**2)) * (np.exp(s**2) - 1))
-        elif string.lower(Rest) == 'mean':
+        elif Rest.lower() == 'mean':
             rg_std = np.sqrt((np.exp(2*m + 3*s**2))*(np.exp(s**2) - 1))
         else:
             raise ValueError(Rest + ": no such ranging estimator")
@@ -1081,7 +1081,7 @@ class algloc(object):
                 for i in range(sh1[1]):
                     f1 = P - rn_toa[:, i:i + 1]
                     FIM += np.dot(f1 , f1.T) / ((rg_std[i] ** 2) *np.dot(f1.T , f1))
-                    FIM += np.dot(f1 , f1.T) / ((rg_ramerstd[i] ** 2) *np.dot(f1.T , f1))
+                    #FIM += np.dot(f1 , f1.T) / ((rg_std[i] ** 2) *np.dot(f1.T , f1))
 
             elif toa == 0 and tdoa == 0:
                 rn_rss = self.nodes['RN_RSS']
@@ -1230,12 +1230,12 @@ def scenario():
         >>> ldp['TDOA'] = TDOA
         >>> ldp['TDOA_std'] = TDOA_std
 
-        >>> print 'Nodes'
-        >>> print nodes
-        >>> print 'LDPs'
-        >>> print ldp
-        >>> print 'BN0:initial guess for ML estimator'
-        >>> print BN0
+        >>> print('Nodes')
+        >>> print(nodes)
+        >>> print('LDPs')
+        >>> print(ldp)
+        >>> print('BN0:initial guess for ML estimator')
+        >>> print(BN0)
         """
     nrn = 4
     dim = 3  # 2 for 2D, 3 for 3D
