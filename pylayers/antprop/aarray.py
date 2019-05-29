@@ -80,6 +80,7 @@ class Array(ant.Pattern):
 
     def show(self):
         """ show array configuration in 3D
+
         """
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')

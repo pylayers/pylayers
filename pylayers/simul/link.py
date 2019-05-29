@@ -1930,7 +1930,7 @@ class DLink(Link):
         dyn : float
             dynamic in dB (def 70dB)
         ix
-        vmin 
+        vmin
         vmax
         bcolorbar : boolean
 
@@ -2186,16 +2186,17 @@ class DLink(Link):
         plt.axis('auto')
         return fig,ax
 
-    def _show3(self,rays=True, lay= True, ant= True, newfig= False, **kwargs):
+    def _show3(self, **kwargs):
         """ display the simulation scene using Mayavi
 
         Parameters
         ----------
 
-        rays: boolean
-        lay : boolean
-        ant : boolean
-        newfig : boolean (default : False)
+        brays: boolean
+        blay : boolean
+        bant : boolean
+        bnewfig : boolean (default : False)
+
         kwargs of Rays.show3()
 
 
@@ -2211,21 +2212,27 @@ class DLink(Link):
 
 
             >>> from pylayers.simul.link import *
-            >>> L=DLink()
+            >>> L = DLink()
             >>> L.eval()
 
         """
+        brays = kwargs.pop('brays',True)
+        blay = kwargs.pop('blay',True)
+        bant = kwargs.pop('bant',True)
+        bnewfig = kwargs.pop('bnewfig',False)
 
         if not newfig:
             self._maya_fig=mlab.gcf()
         else:
             self._maya_fig=mlab.figure(bgcolor=(1,1,1),fgcolor=(0,0,0))
 
+        # scaling the antenna pattern
         if 'scale' in kwargs:
             scale = kwargs.pop('scale')
         else:
             scale = 0.5
 
+        # to display the antenna in the center
         if 'centered' in kwargs:
             centered = kwargs['centered']
         else :
@@ -2237,47 +2244,48 @@ class DLink(Link):
 
 
         if centered:
-            ptx = self.a-pg
-            prx = self.b-pg
+            pa = self.a - pg
+            pb = self.b - pg
         else :
-            ptx = self.a
-            prx = self.b
+            pa = self.a
+            pb = self.b
 
         self._maya_fig.scene.disable_render = True
 
 
         if ant :
-            Atx = self.Aa
-            Arx = self.Ab
-            Ttx = self.Ta
-            Trx = self.Tb
+            Aa = self.Aa
+            Ab = self.Ab
+            Ta = self.Ta
+            Tb = self.Tb
 
             # evaluate antenna if required
-            if not Atx.evaluated:
-                Atx.eval()
+            #if not Aa.evaluated:
+            Aa.eval()
 
-            Atx._show3(T=Ttx.reshape(3,3),
-                        po=ptx,
+            Aa._show3(T=Ta.reshape(3,3),
+                        po = pa,
+                        title = False,
+                        bcolorbar = False,
+                        bnewfig = False,
+                        bcircle = False,
+                        name = Aa._filename,
+                        scale = scale,
+                        binteract = False)
+
+            #if not Ab.evaluated:
+            Ab.eval()
+
+            Ab._show3(T=Tb.reshape(3,3),
+                        po = pb,
                         title=False,
                         bcolorbar=False,
                         bnewfig=False,
                         bcircle = False,
-                        name = Atx._filename,
+                        name = Ab._filename,
                         scale= scale,
                         binteract=False)
-
-            if not Arx.evaluated:
-                Arx.eval()
-
-            Arx._show3(T=Trx.reshape(3,3),
-                        po=prx,
-                        title=False,
-                        bcolorbar=False,
-                        bnewfig=False,
-                        bcircle = False,
-                        name = Arx._filename,
-                        scale= scale,
-                        binteract=False)
+        # display the layout
         if lay:
             if self.L.typ == 'outdoor':
                 show_ceil = False
@@ -2300,7 +2308,7 @@ class DLink(Link):
         # mlab.text3d(self.b[0],self.b[1],self.b[2],'b',
         #             scale=1,
         #             color=(1,0,0))
-        if rays :
+        if brays :
             # check rays with energy
             # if hasattr(self,'H') and not kwargs.has_key('rlist'):
             #     urays = np.where(self.H.y!=0)[0]
@@ -2309,20 +2317,20 @@ class DLink(Link):
             #     ipdb.set_trace()
 
             if hasattr(self,'R'):
-                if self.H.y.ndim>2:
+                if self.H.y.ndim > 2:
                     ER = np.squeeze(self.H.energy())
                     kwargs['ER']=ER
+                # display rays without layout
                 self.R._show3(L=[],**kwargs)
 
         fp = (self.a+self.b)/2.
-
         dab = np.sqrt(np.sum((self.a-self.b)**2))
         mlab.view(focalpoint=fp)#,distance=15*dab-55)
         self._maya_fig.scene.disable_render = False
         mlab.orientation_axes()
         mlab.show()
+
         return self._maya_fig
-        #return(self._maya_fig)
 
 
     def _update_show3(self,ant='a',delrays=False):
