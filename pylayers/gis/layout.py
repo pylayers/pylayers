@@ -1941,8 +1941,8 @@ class Layout(pro.PyLayers):
 
         if self.typ == 'indoor':
             config.add_section("indoor")
-            config.set("indoor", "zceil", self.zceil)
-            config.set("indoor", "zfloor", self.zfloor)
+            config.set("indoor", "ceil", self.zceil)
+            config.set("indoor", "floor", self.zfloor)
 
         if self.typ == 'outdoor':
             config.add_section("outdoor")
@@ -2210,13 +2210,13 @@ class Layout(pro.PyLayers):
         #   zfloor
         #
         if self.typ == 'indoor':
-            self.zceil = eval(di['indoor']['zceil'])
-            self.zfloor = eval(di['indoor']['zfloor'])
+            self.zceil = eval(di['indoor']['ceil'])
+            self.zfloor = eval(di['indoor']['floor'])
 
         # old format
         if self.typ == 'floorplan':
-            self.zceil = eval(di['floorplan']['zceil'])
-            self.zfloor = eval(di['floorplan']['zfloor'])
+            self.zceil = eval(di['floorplan']['ceil'])
+            self.zfloor = eval(di['floorplan']['floor'])
 
         # from format 1.3 floorplan is call indoor
         if self.typ=='floorplan':
@@ -2227,16 +2227,16 @@ class Layout(pro.PyLayers):
         #
         if self.typ == 'outdoor':
             if 'outdoor' in di:
-                if 'zceil' in di['outdoor']:
-                    self.zceil = eval(di['outdoor']['zceil'])
+                if 'ceil' in di['outdoor']:
+                    self.zceil = eval(di['outdoor']['ceil'])
                 else:
                     self.zceil  =  3000    # upper limit for AIR walls
             else:
                 self.zceil  =  3000    # upper limit for AIR walls
 
             if 'outdoor' in di:
-                if 'zfloor' in di['outdoor']:
-                    self.zfloor = eval(di['outdoor']['zfloor'])
+                if 'floor' in di['outdoor']:
+                    self.zfloor = eval(di['outdoor']['floor'])
                 else:
                     self.zfloor = 0
             else:
