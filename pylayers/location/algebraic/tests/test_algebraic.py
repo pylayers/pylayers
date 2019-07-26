@@ -35,90 +35,90 @@ S = algloc(nodes,ldp)
 
 #S.show(1,1,1)
 
-print 'BN'
-print nodes['BN']
-print '--------------------------------'
+print('BN')
+print(nodes['BN'])
+print('--------------------------------')
 
 # Test TOA
-print 'Test TOA'
-print '--------------------------------'
-print 'LS solution'
-print S.ls_locate(0,1,0,'mode')
-print 'WLS solution'
-print S.wls_locate(0,1,0,'mode')
-print 'ML solution'
-print S.ml_locate(BN0,0,1,0)
-print 'CRB'
-print S.crb(nodes['BN'],0,1,0)
+print('Test TOA')
+print('--------------------------------')
+print('LS solution')
+print(S.ls_locate(0,1,0,'mode'))
+print('WLS solution')
+print(S.wls_locate(0,1,0,'mode'))
+print('ML solution')
+print(S.ml_locate(BN0,0,1,0))
+print('CRB')
+print(S.crb(nodes['BN'],0,1,0))
 
 # Test RSS
-print 'Test RSS'
-print '--------------------------------'
-print 'LS solution'
-print S.ls_locate(1,0,0,'mode')
-print 'WLS solution'
-print S.wls_locate(1,0,0,'mode')
-print 'ML solution'
-print S.ml_locate(BN0,1,0,0)
-print 'CRB'
-print S.crb(nodes['BN'],1,0,0)
+print('Test RSS')
+print('--------------------------------')
+print('LS solution')
+print(S.ls_locate(1,0,0,'mode'))
+print('WLS solution')
+print(S.wls_locate(1,0,0,'mode'))
+print('ML solution')
+print(S.ml_locate(BN0,1,0,0))
+print('CRB')
+print(S.crb(nodes['BN'],1,0,0))
 
 # Test TDOA
-print 'Test TDOA'
-print '--------------------------------'
-print 'LS solution'
-print S.ls_locate(0,0,1,'mode')
-print 'WLS solution'
-print S.wls_locate(0,0,1,'mode')
-print 'ML solution'
-print S.ml_locate(BN0,0,0,1)
-print 'CRB'
-print S.crb(nodes['BN'],0,0,1)
+print('Test TDOA')
+print('--------------------------------')
+print('LS solution')
+print(S.ls_locate(0,0,1,'mode'))
+print('WLS solution')
+print(S.wls_locate(0,0,1,'mode'))
+print('ML solution')
+print(S.ml_locate(BN0,0,0,1))
+print('CRB')
+print(S.crb(nodes['BN'],0,0,1))
 
 # Test RSS/TOA
-print 'Test RSS/TOA'
-print '--------------------------------'
-print 'LS solution'
-print S.ls_locate(1,1,0,'mode')
-print 'WLS solution'
-print S.wls_locate(1,1,0,'mode')
-print 'ML solution'
-print S.ml_locate(BN0,1,1,0)
-print 'CRB'
-print S.crb(nodes['BN'],1,1,0)
+print('Test RSS/TOA')
+print('--------------------------------')
+print('LS solution')
+print(S.ls_locate(1,1,0,'mode'))
+print('WLS solution')
+print(S.wls_locate(1,1,0,'mode'))
+print('ML solution')
+print(S.ml_locate(BN0,1,1,0))
+print('CRB')
+print(S.crb(nodes['BN'],1,1,0))
 
 # Test RSS/TDOA
-print 'Test RSS/TDOA'
-print '--------------------------------'
-print 'LS solution'
-print S.ls_locate(1,0,1,'mode')
-print 'WLS solution'
-print S.wls_locate(1,0,1,'mode')
-print 'ML solution'
-print S.ml_locate(BN0,1,0,1)
-print 'CRB'
-print S.crb(nodes['BN'],1,0,1)
+print('Test RSS/TDOA')
+print('--------------------------------')
+print('LS solution')
+print(S.ls_locate(1,0,1,'mode'))
+print('WLS solution')
+print(S.wls_locate(1,0,1,'mode'))
+print('ML solution')
+print(S.ml_locate(BN0,1,0,1))
+print('CRB')
+print(S.crb(nodes['BN'],1,0,1))
 
 # Test TOA/TDOA
-print 'Test TOA/TDOA'
-print '--------------------------------'
-print 'LS solution'
-print S.ls_locate(0,1,1,'mode')
-print 'WLS solution'
-print S.wls_locate(0,1,1,'mode')
-print 'ML solution'
-print S.ml_locate(BN0,0,1,1)
-print 'CRB'
-print S.crb(nodes['BN'],0,1,1)
+print('Test TOA/TDOA')
+print('--------------------------------')
+print('LS solution')
+print(S.ls_locate(0,1,1,'mode'))
+print('WLS solution')
+print(S.wls_locate(0,1,1,'mode'))
+print('ML solution')
+print(S.ml_locate(BN0,0,1,1))
+print('CRB')
+print(S.crb(nodes['BN'],0,1,1))
 
 # Test RSS/TOA/TDOA
-print 'Test RSS/TOA/TDOA'
-print '--------------------------------'
-print 'LS solution'
-print S.ls_locate(1,1,1,'mode')
-print 'WLS solution'
-print S.wls_locate(1,1,1,'mode')
-print 'ML solution'
-print S.ml_locate(BN0,1,1,1)
-print 'CRB'
-print S.crb(nodes['BN'],1,1,1)
+print('Test RSS/TOA/TDOA')
+print('--------------------------------')
+print('LS solution')
+print(S.ls_locate(1,1,1,'mode'))
+print('WLS solution')
+print(S.wls_locate(1,1,1,'mode'))
+print('ML solution')
+print(S.ml_locate(BN0,1,1,1))
+print('CRB')
+print(S.crb(nodes['BN'],1,1,1))
