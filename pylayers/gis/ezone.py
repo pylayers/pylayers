@@ -751,7 +751,7 @@ class Ezone(PyLayers):
             antenna b height
         fGHz : float
             frequency
-        K   : float 
+        K   : float
             K facteur (default 4/3)
         method :
         source :
@@ -918,8 +918,12 @@ class Ezone(PyLayers):
         lon, lat = self.m(x, y, inverse=True)
 
         rx = np.floor((lon - self.extent[0]) / self.lonstep).astype(int)
-        ry = np.floor((self.extent[3]-lat) / self.latstep).astype(int)
+        if rx.max() >self.hgts.shape[1]:
+            rx = np.floor(( self.extent[1]-lon) / self.lonstep).astype(int)
 
+        ry = np.floor((self.extent[3]-lat) / self.latstep).astype(int)
+        if ry.max() >self.hgts.shape[0]:
+            ry = np.floor((lat - self.extent[2]) / self.latstep).astype(int)
         # height
         #cov = self.hgts[ry, rx]
         if kwargs['source'] == 'srtm':
