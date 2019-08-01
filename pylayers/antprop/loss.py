@@ -109,7 +109,7 @@ def FMetisShad2(fGHz,r,D,sign=1):
         indirect distance between Tx and Rx (screen effect)
     sign : np.array(Nseg,Nscreen)
         == 1  : Shadowing NLOS situation
-        ==-1  : No shadowing LOS situation   
+        ==-1  : No shadowing LOS situation
 
 
     Returns
@@ -149,7 +149,7 @@ def FMetisShad(fGHz,r,D,sign=1):
         indirect distance between Tx and Rx (screen effect)
     sign : int
         == 1  : Shadowing NLOS situation
-        ==-1  : No shadowing LOS situation   
+        ==-1  : No shadowing LOS situation
 
 
     Notes
@@ -170,31 +170,31 @@ def FMetisShad(fGHz,r,D,sign=1):
     return(F)
 
 def LossMetisShadowing(fGHz,tx,rx,pg,uw,uh,w,h):
-    """ Calculate the Loss from 
+    """ Calculate the Loss from
 
     Parameters
     ----------
     fGHz : float
-        
-    tx  : np.array (,3) of floats  
-        transmiter coordinates 
-    rx  : np.array (,3) of floats  
-        receiver coordinates 
-    pg  : np.array (,3) of floats 
-        center of gravity of the screen 
-    uw  : np.array (,3) of floats 
+
+    tx  : np.array (,3) of floats
+        transmiter coordinates
+    rx  : np.array (,3) of floats
+        receiver coordinates
+    pg  : np.array (,3) of floats
+        center of gravity of the screen
+    uw  : np.array (,3) of floats
         unitary vector along width dimension
-    uh  : np.array (,3) of floats 
+    uh  : np.array (,3) of floats
         unitary vector along height dimension
-    w   : float 
+    w   : float
         width in meters
-    h   : float 
-        height in meters 
+    h   : float
+        height in meters
 
     Returns
     -------
 
-    Lsh : float 
+    Lsh : float
         Loss in dB to add to the FS path Loss
 
 
@@ -272,7 +272,7 @@ def LossMetisShadowing(fGHz,tx,rx,pg,uw,uh,w,h):
         else:
             signw1 = 1
             signw2 = 1
-        
+
         if condh:
             if D1h>D2h:
                 signh1=1
@@ -281,12 +281,12 @@ def LossMetisShadowing(fGHz,tx,rx,pg,uw,uh,w,h):
                 signh1=-1
                 signh2=1
         else:
-            
+
             signh1 = 1
             signh2 = 1
 
-    
-            
+
+
     Fw1 = FMetisShad(fGHz,r,D1w,sign=signw1)
     Fh1 = FMetisShad(fGHz,r,D1h,sign=signh1)
     Fw2 = FMetisShad(fGHz,r,D2w,sign=signw2)
@@ -298,27 +298,27 @@ def LossMetisShadowing(fGHz,tx,rx,pg,uw,uh,w,h):
     return(Lsh)
 
 def LossMetisShadowing2(fGHz,tx,rx,pg,uw,uh,w,h):
-    """ Calculate the Loss from 
+    """ Calculate the Loss from
 
     Parameters
     ----------
 
     fGHz : np.array(,Nf)
-        
-    tx  : np.array (3,Nseg) of floats  
-        transmiter coordinates 
-    rx  : np.array (3,Nseg) of floats  
-        receiver coordinates 
-    pg  : np.array (3,Nscreen) of floats 
-        center of gravity of the screen 
-    uw  : np.array (3,Nscreen) of floats 
+
+    tx  : np.array (3,Nseg) of floats
+        transmiter coordinates
+    rx  : np.array (3,Nseg) of floats
+        receiver coordinates
+    pg  : np.array (3,Nscreen) of floats
+        center of gravity of the screen
+    uw  : np.array (3,Nscreen) of floats
         unitary vector along width dimension
-    uh  : np.array (3,Nscreen) of floats 
+    uh  : np.array (3,Nscreen) of floats
         unitary vector along height dimension
     w   : np.array (,Nscreen)
         width in meters
     h   : np.array (,Nscreen)
-        height in meters 
+        height in meters
 
     Returns
     -------
@@ -339,14 +339,14 @@ def LossMetisShadowing2(fGHz,tx,rx,pg,uw,uh,w,h):
     # Besides, M is defined as M = pg + beta*uw + gamma*uh then  alpha*rx + (1-alpha)tx = pg + beta*uw + gamma*uh
     # [rx-tx , -uw, -uh]*[alpha,beta,gamma].T = pg - tx <==> Ax = b solved by la.solve ; x[0]=alpha, x[1]=beta and
 
-    
+
     """
 
     Nseg = tx.shape[1]
     Nscreen = uw.shape[1]
 
     rxtx = rx - tx # (3,Nseg) LOS distance
-   
+
 
     # A : (Nseg,Nscreen,3,3)
     # b : (Nseg,Nscreen,3)
@@ -363,29 +363,29 @@ def LossMetisShadowing2(fGHz,tx,rx,pg,uw,uh,w,h):
     Ue = U + np.zeros(He.shape)
 
     A = np.concatenate((Ue,-We,-He),axis=3)
-    #A = np.vstack((rxtx,-uw,-uh)).T 
+    #A = np.vstack((rxtx,-uw,-uh)).T
 
     # pg.T Nscreen, 3
     # tx.T Nseg,3
-    b = pg.T[None,:,:]-tx.T[:,None,:] 
+    b = pg.T[None,:,:]-tx.T[:,None,:]
     #b = pg - tx
     x = la.solve(A,b)
-    
-    
+
+
     # condition of shadowing
-    condseg = ((x[:,:,0]>1) + (x[:,:,0]<0)) 
-    condw = ((x[:,:,1]>w[None,:]/2.) + (x[:,:,1]<-w[None,:]/2.)) 
-    condh = ((x[:,:,2]>h[None,:]/2.) + (x[:,:,2]<-h[None,:]/2.)) 
-    
+    condseg = ((x[:,:,0]>1) + (x[:,:,0]<0))
+    condw = ((x[:,:,1]>w[None,:]/2.) + (x[:,:,1]<-w[None,:]/2.))
+    condh = ((x[:,:,2]>h[None,:]/2.) + (x[:,:,2]<-h[None,:]/2.))
+
     visi = (condseg + condw + condh)%2
 
-    
+
     # if visi:
     #     shad = -1
     # else:
     #     shad = 1
-    #shad = - visi    
-    
+    #shad = - visi
+
     r = np.sum(rxtx*rxtx,axis=0)**0.5
 
 
@@ -395,7 +395,7 @@ def LossMetisShadowing2(fGHz,tx,rx,pg,uw,uh,w,h):
     h2 = pg - uh*h[None,:]/2.
 
 
-    
+
     Dtw1 = np.sum((tx[...,None]-w1[:,None,:])*(tx[...,None]-w1[:,None,:]),axis=0)**0.5
     Drw1 = np.sum((rx[...,None]-w1[:,None,:])*(rx[...,None]-w1[:,None,:]),axis=0)**0.5
     Dtw2 = np.sum((tx[...,None]-w2[:,None,:])*(tx[...,None]-w2[:,None,:]),axis=0)**0.5
@@ -413,13 +413,13 @@ def LossMetisShadowing2(fGHz,tx,rx,pg,uw,uh,w,h):
     # Drh1 = np.dot(rx-h1,rx-h1)**0.5
     # Dth2 = np.dot(tx-h2,tx-h2)**0.5
     # Drh2 = np.dot(rx-h2,rx-h2)**0.5
-    
-    
+
+
     D1w = Dtw1+Drw1
     D1h = Dth1+Drh1
     D2w = Dtw2+Drw2
     D2h = Dth2+Drh2
-    
+
     signw1 = np.ones((Nseg,Nscreen))
     signw2 = np.ones((Nseg,Nscreen))
     signh1 = np.ones((Nseg,Nscreen))
@@ -552,13 +552,13 @@ def cost231(pBS,pMS,hroof,phir,wr,fMHz,wb=20,dB=True,city='medium'):
         >>> Nlink = 100
         >>> hBS = 300
         >>> hMS = 1.5
-        >>> # hroof and phir are drawn uniformily at random 
+        >>> # hroof and phir are drawn uniformily at random
         >>> hroof = 40*np.random.rand(Nlink)
         >>> wr = 10*np.ones(Nlink)
         >>> phir = 90*np.random.rand(Nlink)
         >>> pMS = np.vstack((np.linspace(10,2500,Nlink),np.zeros(Nlink),hMS*np.ones(Nlink)))
         >>> pBS = np.vstack((np.zeros(Nlink),np.zeros(Nlink),hBS*np.ones(Nlink)))
-        >>> # frequency range 
+        >>> # frequency range
         >>> fMHz = np.linspace(700,1900,120)
         >>> pl = cost231(pBS,pMS,hroof,phir,wr,fMHz)
         >>> im = plt.imshow(pl,extent=(0,100,0.7,1.9))
@@ -650,15 +650,15 @@ def cost259(pMS,pBS,fMHz):
         pl = 10**(-pl/20.);
     return(pl)
 
-def hata(pMS,pBS,fGHz,hMS,hBS,typ):
+def hata(pMS,pBS,fGHz,typ):
     """ Hata Path loss model
 
     Parameters
     ----------
 
-    pMS : np.array
+    pMS : np.array | (3,N)
         Mobile position (meters)
-    pBS : np.array
+    pBS : np.array | (3,N)
         Base station position (meters)
     fGHz : np.array
     hMS : height mobile station (m)
@@ -672,14 +672,15 @@ def hata(pMS,pBS,fGHz,hMS,hBS,typ):
 
     Examples
     --------
-
-        >>> d = np.linspace(100,5000,120)
+        >>> Npt = 120
+        >>> d = np.linspace(100,5000,Npt)
         >>> hBS = 30
         >>> hMS = 1.5
         >>> fGHz = 0.9
-        >>> pMS = np.array([d,0,hMS])
-        >>> pBS = np.array([d,0,hBS])
-        >>> L = hata(pMS,pBS,fGHz,hMS,hBS,'small')
+        >>> pMS = np.zeros((3,Npt))
+        >>> pMS[2,:] = hMS
+        >>> pBS = np.c_[d,[1]*Npt,[hBS]*Npt].T
+        >>> L = hata(pMS,pBS,fGHz,'small')
 
     Notes
     -----
@@ -702,7 +703,14 @@ def hata(pMS,pBS,fGHz,hMS,hBS,typ):
     Aug. 1980
 
     """
-    dm  = np.sqrt((pBS-pMS)*(pBS-pMS))
+
+    assert pMS.shape[0] == 3
+    assert pBS.shape[0] == 3
+
+    dm  = np.sqrt(np.sum((pBS-pMS)**2,axis=0))
+    hMS = pMS[2]
+    hBS = pBS[2]
+
     if (typ=='small'):
        CH = (1.1*np.log10(fGHz*1000)-0.7)*hMS-(1.56*np.log10(fGHz*1000)-0.8)
     if (typ=='big'):
@@ -710,7 +718,8 @@ def hata(pMS,pBS,fGHz,hMS,hBS,typ):
             CH = 8.29*(np.log10(1.54*hMS)**2)-1.1
         else:# valid until 1.5GHz
             CH = 3.2*(np.log10(11.75*hMS)**2)-4.97
-
+    import ipdb
+    ipdb.set_trace()
     L = 69.55+26.16*np.log10(fGHz*1000)-13.82*np.log10(hBS)+(44.9-6.55*np.log10(hBS))*np.log10(dm/1000.)-CH
 
     return(L)
@@ -1156,7 +1165,7 @@ def gaspl(d,fGHz,T,PhPa,wvden):
     [970.315022,8.9720,1.920,25.50,0.64,4.940,0.67],
     [987.926764,132.1000,0.258,29.85,0.68,4.550,0.90],
     [1780.000000,22,300.0000,0.952,176.20,0.50,30.500]])
-    
+
     dkm = d/1000.
     TK = T + 273.15
     theta = 300./TK #3
@@ -1209,23 +1218,23 @@ def gaspl(d,fGHz,T,PhPa,wvden):
     UH2O = SH2O[:,None]*FH2O
 
     # Nsec  (8)
-    
+
     dD = 5.6e-4*(PhPa+e)*theta**(0.8)
     t1 = 6.14e-5/(dD*(1.+(fGHz/dD)**2))
     t2 = 1.4e-12*PhPa*(theta**(1.5))/(1+1.9e-5*fGHz**(1.5))
-    Nsec = fGHz*PhPa*(theta**2)*(t1+t2)  # 9 
-    
+    Nsec = fGHz*PhPa*(theta**2)*(t1+t2)  # 9
+
     ulow  = np.where(fGHz<118.750343)[0]
-    uhigh = np.where(fGHz>=118.750343)[0] 
+    uhigh = np.where(fGHz>=118.750343)[0]
     UO2low = UO2[:,ulow]
-    UO2high = UO2[:,uhigh] 
+    UO2high = UO2[:,uhigh]
     SO2low  = np.sum(UO2low,axis=0)
     SO2high = np.sum(UO2high[38:,:],axis=0)
     sSO2 = np.hstack((SO2low,SO2high))
     Npp = sSO2 + np.sum(UH2O,axis=0)+Nsec
     Npp = np.sum(UO2,axis=0) + np.sum(UH2O,axis=0)+Nsec
-    gamma = 0.1820*fGHz*Npp 
-    LgasdB = gamma*dkm 
+    gamma = 0.1820*fGHz*Npp
+    LgasdB = gamma*dkm
 
     return(LgasdB)
 
@@ -1237,8 +1246,8 @@ def Loss0(S,rx,ry,f,p):
     ----------
 
     S  : Simulation object
-    rx : extremity of link 
-    ry : extremity of link 
+    rx : extremity of link
+    ry : extremity of link
     fGHz : float
         frequency GHz
     p :
@@ -1436,6 +1445,7 @@ def deygout(d, height, fGHz, L, depth):
     This function is recursive
 
     """
+
     lmbda = 0.3/fGHz
     L0 = np.zeros(len(fGHz))
     depth = depth+1
@@ -2103,7 +2113,7 @@ def cdf(x,colsym="",lab="",lw=4):
         :include-source:
 
         >>> import numpy as np
-        >>> import matplotlib.pyplot as plt 
+        >>> import matplotlib.pyplot as plt
         >>> x = np.random.randn(10000)
         >>> cdf(x)
         >>> plt.show()
