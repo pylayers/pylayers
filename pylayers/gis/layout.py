@@ -40,6 +40,7 @@ from networkx.readwrite import write_gpickle, read_gpickle
 from mpl_toolkits.basemap import Basemap
 import shapely.geometry as sh
 import shapefile as shp
+import shapely.vectorized as shv
 from shapely.ops import cascaded_union
 from descartes.patch import PolygonPatch
 from numpy import array
@@ -3342,7 +3343,7 @@ class Layout(pro.PyLayers):
 
 
 
-    def mask(self):
+    def get_mask(self):
         """  returns the polygonal mask of the building
 
         Returns
@@ -3356,7 +3357,7 @@ class Layout(pro.PyLayers):
         This function assumes graph Gt has been generated
 
         """
-        if hasattr(self,Gt):
+        if hasattr(self,'Gt'):
             # takes the 1st cycle polygon
             p = self.Gt.node[1]['polyg']
             # get the exterior of the polygon
@@ -3368,15 +3369,16 @@ class Layout(pro.PyLayers):
             #
 
             for k in self.Gt.node:
-                if (k != 0) & (k != -1):
+                if (k != 0) & (k != -1) & self.Gt.node[k]['indoor']:
                     p = self.Gt.node[k]['polyg']
                     ps = ps.union(sh.Polygon(p.exterior))
 
             mask = geu.Polygon(ps)
             mask.setvnodes(self)
+            self.mask = mask
             return(mask)
         else:
-            print("Gt not built")
+            raise AttributeError("Gt not built")
 
     def translate(self, vec):
         """ translate layout
@@ -3481,7 +3483,15 @@ class Layout(pro.PyLayers):
         utbd = [x for x in range(len(aseg_conn)) if not x in upos] 
         tbd = aseg_conn[utbd,0]
         for k in tbd:
-            self.del_segment(k)
+            # check not already deleted in loop
+            if k in self.Gs:
+                if not self.have_subseg(k):
+                    self.del_segment(k)
+                else:
+                    for i in self.Gs.node[k]['iso']:
+                        if self.Gs.node[k]['z'] == self.Gs.node[i]['z']:
+                            self.del_segment(k)
+
 
         self.g2npy()
 
@@ -9226,8 +9236,30 @@ class Layout(pro.PyLayers):
             cy = np.unique(cy).tolist()
             return cy
 
+
     def isindoor(self,pt=np.array([0,0])):
-        """ test if a point is indoor 
+        """
+        Parameters
+        ----------
+        pt : np.array 2xNp
+            2d points
+
+        Returns
+        -------
+        b1 : boolean list
+            True if indoor
+
+        """
+        if not hasattr(self,'mask'):
+            self.get_mask()
+
+        return shv.contains(self.mask,pt[0,None],pt[1,None]).squeeze()
+
+
+    def isindoor_old(self,pt=np.array([0,0])):
+        """ 
+        DEPRECATED
+        test if a point is indoor 
 
         Parameters
         ----------
@@ -9240,6 +9272,7 @@ class Layout(pro.PyLayers):
             True if indoor
 
         """
+
         cy = self.pt2cy(pt)
         b1 = self.Gt.node[cy]['indoor']
         return b1

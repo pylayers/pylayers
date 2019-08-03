@@ -18,7 +18,7 @@ L.build('t',convex=True)
 
 
 # p1 = geu.Polygon(L.ax,delta=5)
-# L.ma = L.mask()
+# L.ma = L.get_mask()
 # p2 = p1.difference(L.ma)
 # boundary = geu.Polygon(p2)
 # boundary.vnodes = L.ma.vnodes
