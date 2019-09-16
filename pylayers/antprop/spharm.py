@@ -21,7 +21,7 @@ import scipy as sp
 import scipy.special as special
 from scipy import io
 import matplotlib.pylab as plt
-from scipy.misc import factorial
+from scipy.special import factorial
 import pylayers.util.pyutil as pyu
 from pylayers.util.project import *
 from pylayers.util.plotutil import *
