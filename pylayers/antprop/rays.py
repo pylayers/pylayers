@@ -1108,9 +1108,9 @@ class Rays(PyLayers, dict):
         #
         # heights of transmitter and receiver
         #
-        if za == []:
+        if type(za)==list:
             za=self.pTx[2]
-        if zb == []:
+        if type(zb)==list:
             zb=self.pRx[2]
         ht = za
         hr = zb
