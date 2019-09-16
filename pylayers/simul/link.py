@@ -2221,7 +2221,7 @@ class DLink(Link):
         bant = kwargs.pop('bant',True)
         bnewfig = kwargs.pop('bnewfig',False)
 
-        if not newfig:
+        if not bnewfig:
             self._maya_fig=mlab.gcf()
         else:
             self._maya_fig=mlab.figure(bgcolor=(1,1,1),fgcolor=(0,0,0))
