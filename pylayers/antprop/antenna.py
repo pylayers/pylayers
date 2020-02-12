@@ -3398,10 +3398,10 @@ class Antenna(Pattern):
             display title
         bcolorbar : boolean
             display colorbar
-        binteract : boolean 
+        binteract : boolean
             enable interactive mode
-        bcircle : boolean 
-            draw a circle 
+        bcircle : boolean
+            draw a circle
         newfig: boolean
 
 
@@ -3432,13 +3432,14 @@ class Antenna(Pattern):
 
         if 'opacity' in kwargs:
             opacity = kwargs['opacity']
-        else: 
+        else:
             opacity = 1
 
         self._mayamesh = mlab.mesh(x, y, z,
                                    scalars= scalar,
                                    resolution = 1,
-                                   opacity = opacity,reset_zoom=False)
+                                   opacity = opacity,
+                                   reset_zoom=False)
 
         if name == []:
             f.children[-1].name = 'Antenna ' + self._filename

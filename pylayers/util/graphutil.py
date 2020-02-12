@@ -186,8 +186,7 @@ def draw(G,**kwargs):
     if kwargs['edges']:
         if kwargs['edge_color'] == '':
             kwargs['edge_color']='k'
-        
-        #pdb.set_trace()
+
         nx.draw_networkx_edges(G, G.pos,
                                edgelist = edgelist,
                                edge_color = kwargs['edge_color'],

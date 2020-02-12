@@ -90,9 +90,11 @@ class MIMO(object):
         self.Aat = kwargs.pop('Aat')
         self.Aar = kwargs.pop('Aar')
         if self.Aar == []:
-            self.Aar = AntArray(N=[8,1,1])
+            #self.Aar = AntArray(N=[8,1,1])
+            self.Aar = UArray(N=[8,1,1])
         if self.Aat == []:
-            self.Aat = AntArray(N=[4,1,1])
+            #self.Aat = AntArray(N=[4,1,1])
+            self.Aat = UArray(N=[4,1,1])
 
 
         self.Nf  = Nf

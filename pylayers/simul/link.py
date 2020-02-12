@@ -2253,7 +2253,7 @@ class DLink(Link):
         self._maya_fig.scene.disable_render = True
 
 
-        if ant :
+        if bant :
             Aa = self.Aa
             Ab = self.Ab
             Ta = self.Ta
@@ -2286,7 +2286,7 @@ class DLink(Link):
                         scale= scale,
                         binteract=False)
         # display the layout
-        if lay:
+        if blay:
             if self.L.typ == 'outdoor':
                 show_ceil = False
                 opacity = 1.

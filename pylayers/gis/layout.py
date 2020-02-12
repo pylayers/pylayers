@@ -2484,98 +2484,99 @@ class Layout(pro.PyLayers):
         self.name['AIR'] = []
         self.name['_AIR'] = []
         #
-        # get the maximum index
+        # get the segment maximum index
         #
-        maxnum = max([eval(x) for x in di['segments'].keys()])
-        logger.info('load_fast : reading segments')
+        if len(di['segments'])>0:
+            maxnum = max([eval(x) for x in di['segments'].keys()])
+            logger.info('load_fast : reading segments')
 
-        lsegnum = np.sort([ eval(x) for x in di['segments'].keys() ])
-        maxnum = lsegnum[-1]
+            lsegnum = np.sort([ eval(x) for x in di['segments'].keys() ])
+            maxnum = lsegnum[-1]
 
-        for k in lsegnum:
-            d = eval(di['segments'][str(k)])
-            nta = d['connect'][0]
-            nhe = d['connect'][1]
-            name = d['name']
-
-            z = d['z']
-
-            if not 'transition' in d:
-                transition = False
-            else:
-                transition = d['transition']
-
-            if not 'offset' in d:
-                offset = 0
-            else:
-                offset = d['offset']
-
-            # add new segment
-            #
-            # The segment number is the same as in the .lay file
-            #
-            # Very useful feature
-            #
-
-            if self.typ=='indoor':
-                boutdoor = False
-            else:
-                boutdoor = True
-
-            num = self.add_segment(nta, nhe,
-                                   num = k,
-                                   name = name,
-                                   transition = transition,
-                                   offset = offset,
-                                   z = z,
-                                   maxnum = maxnum,
-                                   boutdoor = boutdoor)
-
-        # only for indoor
-        # exploit iso for segment completion (AIR type)
-        #  Complement single segment which do not reach zceil or zfloor with
-        #  an iso segment with AIR property
-        #
-        #if (self.typ == 'indoor') or (self.typ == 'outdoor'):
-
-        if (self.typ == 'indoor'):
-            segdone = []
-            logger.info('segments completion')
-            for key in di['segments']:
-                iseg = eval(key)
-                d = eval(di['segments'][key])
+            for k in lsegnum:
+                d = eval(di['segments'][str(k)])
                 nta = d['connect'][0]
                 nhe = d['connect'][1]
-                # if not already done
-                if iseg not in segdone:
-                    # get all the iso from the segment key
-                    iso = copy.copy(self.Gs.node[iseg]['iso'])
-                    # append key to iso
-                    iso.append(iseg)
-                    # stack all the intervals in increasing order
-                    ziso = []
-                    for ns in iso:
-                        ziso.append(self.Gs.node[ns]['z'])
+                name = d['name']
 
-                    # get the complementary intervals
-                    if self.typ == 'outdoor':
-                        zmin = 1e6
-                        zmax = -1e6
-                        for iz in ziso:
-                            zmin = np.minimum(zmin,min(iz))
-                            zmax = np.maximum(zmax,max(iz))
-                        ziso = [(zmin,zmax)]
+                z = d['z']
 
-                    # pyutil compint (get complementary interval)
-                    zair = pyu.compint(ziso,self.zfloor,self.zceil)
+                if not 'transition' in d:
+                    transition = False
+                else:
+                    transition = d['transition']
 
-                    # add AIR wall in the intervals
-                    for za in zair:
-                        num = self.add_segment(nta, nhe,
-                                name='AIR',
-                                offset=0,
-                                z=(za[0], za[1]))
-                    segdone = segdone + iso
+                if not 'offset' in d:
+                    offset = 0
+                else:
+                    offset = d['offset']
+
+                # add new segment
+                #
+                # The segment number is the same as in the .lay file
+                #
+                # Very useful feature
+                #
+
+                if self.typ=='indoor':
+                    boutdoor = False
+                else:
+                    boutdoor = True
+
+                num = self.add_segment(nta, nhe,
+                                       num = k,
+                                       name = name,
+                                       transition = transition,
+                                       offset = offset,
+                                       z = z,
+                                       maxnum = maxnum,
+                                       boutdoor = boutdoor)
+
+            # only for indoor
+            # exploit iso for segment completion (AIR type)
+            #  Complement single segment which do not reach zceil or zfloor with
+            #  an iso segment with AIR property
+            #
+            #if (self.typ == 'indoor') or (self.typ == 'outdoor'):
+
+            if (self.typ == 'indoor'):
+                segdone = []
+                logger.info('segments completion')
+                for key in di['segments']:
+                    iseg = eval(key)
+                    d = eval(di['segments'][key])
+                    nta = d['connect'][0]
+                    nhe = d['connect'][1]
+                    # if not already done
+                    if iseg not in segdone:
+                        # get all the iso from the segment key
+                        iso = copy.copy(self.Gs.node[iseg]['iso'])
+                        # append key to iso
+                        iso.append(iseg)
+                        # stack all the intervals in increasing order
+                        ziso = []
+                        for ns in iso:
+                            ziso.append(self.Gs.node[ns]['z'])
+
+                        # get the complementary intervals
+                        if self.typ == 'outdoor':
+                            zmin = 1e6
+                            zmax = -1e6
+                            for iz in ziso:
+                                zmin = np.minimum(zmin,min(iz))
+                                zmax = np.maximum(zmax,max(iz))
+                            ziso = [(zmin,zmax)]
+
+                        # pyutil compint (get complementary interval)
+                        zair = pyu.compint(ziso,self.zfloor,self.zceil)
+
+                        # add AIR wall in the intervals
+                        for za in zair:
+                            num = self.add_segment(nta, nhe,
+                                    name='AIR',
+                                    offset=0,
+                                    z=(za[0], za[1]))
+                        segdone = segdone + iso
 
         #
         # add _AIR wall around the layout
@@ -2703,11 +2704,11 @@ class Layout(pro.PyLayers):
         zfloor =
 
         [latlon]
-        llcrnrlon = 
-        llcrnrlat = 
+        llcrnrlon =
+        llcrnrlat =
         urcrnrlon =
-        urcrnrlat = 
-        projection = 
+        urcrnrlat =
+        projection =
 
 
         """
@@ -2754,10 +2755,10 @@ class Layout(pro.PyLayers):
         if 'type' in di['info']:
             self.typ = di['info']['type']
 
+        # floorplan is no longer a valid typ
         self.name = {}
-        if ((self.typ!='indoor') &
-            (self.typ!='outdoor') &
-            (self.typ!='floorplan')):
+        if ((self.typ!='indoor') 
+                &   (self.typ!='outdoor') ):
             print("invalid file type in ",self._filename)
             return(None)
 
@@ -2770,15 +2771,6 @@ class Layout(pro.PyLayers):
             self.zceil = eval(di['indoor']['zceil'])
             self.zfloor = eval(di['indoor']['zfloor'])
 
-        # old format
-        if self.typ == 'floorplan':
-            self.zceil = eval(di['floorplan']['zceil'])
-            self.zfloor = eval(di['floorplan']['zfloor'])
-
-        # from format 1.3 floorplan is call indoor
-        if self.typ=='floorplan':
-            self.typ = 'indoor'
-        #
         # [outdoor]
         #   TODO add a DEM file
         #
@@ -3848,7 +3840,8 @@ class Layout(pro.PyLayers):
              if e in self.Gs.node[i]['iso']]
             del self.Gs.pos[e]  # delete edge position
             self.Gs.remove_node(e)
-            self.labels.pop(e)
+            if e in self.labels:
+                self.labels.pop(e)
             self.Ns = self.Ns - 1
             # update slab name <-> edge number dictionnary
             self.name[name].remove(e)
@@ -9498,13 +9491,14 @@ class Layout(pro.PyLayers):
             edgelistbkup = kwargs['edgelist']
             widthbkup = kwargs['width']
             nodecolbkup = kwargs['edge_color']
+            # sllist  slab list
             try:
                 sllist = [kwargs['sllist'].pop()]
             except:
                 sllist = list(dict(self.name).keys())
 
             #
-            # Draw segment slab per slab with proper linewidth and color
+            # Draw segments slab per slab with proper linewidth and color
             #
 
             for lmat in sllist:
@@ -9537,6 +9531,7 @@ class Layout(pro.PyLayers):
                 else:
                     kwargs['nodes'] = False
 
+                # plotting graph G
                 kwargs['fig'], kwargs['ax'] = gru.draw(G, **kwargs)
 
             kwargs['nodelist'] = nodelistbkup
@@ -11498,10 +11493,10 @@ class Layout(pro.PyLayers):
 
             #ax.scatter(vv[:, 0], vv[:, 1])
 
-        pdb.set_trace()
         if bsegs:
             ML = sh.MultiLineString(list(self._shseg.values()))
             pt = np.array([l.xy for l in ML])
+            pdb.set_trace()
             line, = plt.plot(pt[0,0],pt[0,1],color='k')
             line.set_data(pt)
 

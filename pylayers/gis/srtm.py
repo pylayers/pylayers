@@ -118,7 +118,7 @@ class SRTMDownloader:
                     ftp.cwd(os.path.join(self.directory,continent))
                     files = ftp.nlst()
                     for filename in files:
-                        s.path.join(self.directory,continent)
+                        os.path.join(self.directory,continent)
                         self.filelist[self.parseFilename(filename)] = (
                                 continent, filename)
             finally:
