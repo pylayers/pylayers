@@ -38,7 +38,7 @@ class someClass(object):
 
 	def go_mp(self):
 		pool = Pool()             
-		print pool.map(self.fgo_func, range(10))
+		print(pool.map(self.fgo_func, range(10)))
 
         def build(self):
     	        self.go_mp()

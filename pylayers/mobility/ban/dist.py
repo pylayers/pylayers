@@ -67,8 +67,8 @@ f = u0 + 2*(alpha*u1+beta*u2+alpha*beta*u3)+alpha*alpha*u4+ beta*beta*u5
 
 Z = np.array([[u4,u3],[u3,u5]])
 y = np.array([-u1,-u2])
-print Z
-print y
+print(Z)
+print(y)
 #print det(Z)
 
 
@@ -76,7 +76,7 @@ print y
 
 
 d2,d3 = dist(A,B,C,D,0.5,0.5)
-print d2,d3
+print(str(d2) + str(d3))
 
 # <codecell>
 
@@ -87,9 +87,9 @@ x = la.solve(Z,y)
 yr = np.dot(Z,x)
 
 
-print yr
-print "alpha : ",x[0]
-print "beta : ",x[1]
+print(yr)
+print("alpha : " + str(x[0]))
+print("beta : " + str(x[1]))
 
 al = x[0]
 be = x[1]
@@ -111,8 +111,8 @@ MI = A + 2*(B-A)
 NO = C - 2*(D-C)
 NI = C + 2*(D-C)
 
-print "alpha : ",al
-print "beta : ",be
+print("alpha : " + str(al))
+print("beta : " + str(be))
 
 # <codecell>
 

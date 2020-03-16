@@ -53,7 +53,7 @@ rawfiles = filter(lambda x: 'RAW' in x ,files)
 
 HKB ={'AP1':1,'AP2':2,'AP3':3,'AP4':4,'HeadRight':5,'TorsoTopRight':6,'TorsoTopLeft':7,'BackCenter':8,'ElbowRight':9,'ElbowLeft':10,'HipRight':11,'WristRight':12,'WristLeft':13,'KneeLeft':14,'AnckleRight':16,'AnckleLeft':15}
 for k in HKB:
-    print k,HKB[k]
+    print(str(k)+str(HKB[k]))
 JiHadHKB = {'TorsoTopRight':10,'TorsoTopLeft':9,'BackCenter':11,'ShoulderLeft':12}
 NicolasHKB = {'TorsoTopRight':6,'TorsoTopLeft':5,'BackCenter':7,'ShoulderLeft':8}
 EricKKB = {'TorsoTopRight':15,'TorsoTopLeft':13,'BackCenter':16,'ShoulderLeft':14}
@@ -262,7 +262,7 @@ def toarray(S):
     A = A.reshape(Nt,16,16)
     return(A)
 
-print "get serie 2"
+print("get serie 2")
 
 tstart = matstart(data2,1).astype('int')
 tstart[6,8] = 3678
@@ -272,7 +272,7 @@ s,data3 = extracts(data2,tstart)
 S2 = pd.DataFrame(s)
 
 
-print "get serie 3"
+print("get serie 3")
 
 tstart3 = matstart(data3,1).astype('int')
 tstart3[6,8] = 3647
@@ -282,7 +282,7 @@ s,data4 = extracts(data3,tstart3)
 
 S3 = pd.DataFrame(s)
 
-print "get serie 4 --"
+print("get serie 4 --")
 
 tstart4 = matstart(data4,1).astype('int')
 tstart4[9,10] = 93
@@ -293,7 +293,7 @@ s,data5 = extracts(data4,tstart4)
 S4 = pd.DataFrame(s)
 
 
-print "get serie 5 --"
+print("get serie 5 --")
 
 tstart5 = matstart(data5,1).astype('int')
 tstart5[9,10] = 48
@@ -303,7 +303,7 @@ s,data6 = extracts(data5,tstart5)
 
 S5 = pd.DataFrame(s)
 
-print "get serie 6 --"
+print("get serie 6 --")
 
 tstart6 = matstart(data6,1).astype('int')
 tstart6[9,10] = 48
@@ -315,7 +315,7 @@ s,data7 = extracts(data6,tstart6)
 S6 = pd.DataFrame(s)
 
 
-print "get serie 7 --"
+print("get serie 7 --")
 
 tstart7 = matstart(data7,1).astype('int')
 tstart7[9,10] = 37
@@ -326,20 +326,20 @@ s,data8 = extracts(data7,tstart7)
 
 S7 = pd.DataFrame(s)
 ##########
-print "get serie 8"
+print("get serie 8")
 
 tstart8 = matstart(data8,1).astype('int')
 s,data9 = extracts(data8,tstart8)
 
 S8 = pd.DataFrame(s)
 
-print "get serie 9"
+print("get serie 9")
 
 tstart9 = matstart(data9,1).astype('int')
 s,data10 = extracts(data9,tstart9)
 S9 = pd.DataFrame(s)
 
-print "get serie 10"
+print("get serie 10")
 
 tstart10 = matstart(data10,1).astype('int')
 #plt.plot(s[11,7].index)
@@ -350,7 +350,7 @@ s,data11 = extracts(data10,tstart10)
 S10 = pd.DataFrame(s)
 
 
-print "get serie 11"
+print("get serie 11")
 
 tstart11 = matstart(data11,1).astype('int')
 tstart11[1,6] = 4332
@@ -361,21 +361,21 @@ s,data12 = extracts(data11,tstart11)
 S11 = pd.DataFrame(s)
 
 
-print "get serie 12"
+print("get serie 12")
 
 tstart12 = matstart(data12,1).astype('int')
 tstart12[1,6] = 4110
 s,data13 = extracts(data12,tstart12)
 S12 = pd.DataFrame(s)
 
-print "get serie 13"
+print("get serie 13")
 
 tstart13 = matstart(data13,1).astype('int')
 s,data14 = extracts(data13,tstart13)
 S13 = pd.DataFrame(s)
 
 
-print "get serie 14"
+print("get serie 14")
 
 tstart14 = matstart(data14,1).astype('int')
 tstart14[7,5]=3030
@@ -385,7 +385,7 @@ s,data15 = extracts(data14,tstart14)
 S14 = pd.DataFrame(s)
 
 
-print "get serie 15"
+print("get serie 15")
 
 tstart15 = matstart(data15,1).astype('int')
 tstart15[7,5]=4036
@@ -395,25 +395,25 @@ tstart15[9,6]=4151
 s,data16 = extracts(data15,tstart15)
 S15 = pd.DataFrame(s)
 
-print "get serie 16"
+print("get serie 16")
 
 tstart16 = matstart(data16,1).astype('int')
 s,data17 = extracts(data16,tstart16)
 S16 = pd.DataFrame(s)
 
-print "get serie 17"
+print("get serie 17")
 
 tstart17 = matstart(data17,1).astype('int')
 s,data18 = extracts(data17,tstart17)
 S17 = pd.DataFrame(s)
 
-print "get serie 18"
+print("get serie 18")
 
 tstart18 = matstart(data18,1).astype('int')
 s,data19 = extracts(data18,tstart18)
 S18 = pd.DataFrame(s)
 
-print "get serie 19"
+print("get serie 19")
 
 tstart19 = matstart(data19,1).astype('int')
 tstart19[0,5]=5112
@@ -441,7 +441,7 @@ def findmin(ss,value,med):
         ss[uss[k][0],uss[k][1]]= np.where(ss[uss[k][0],uss[k][1]]==mss)[0]
     return ss
 
-print "get serie 20"
+print("get serie 20")
 
 tstart20 = matstart(data20,1).astype('int')
 tstart20[0,5] = 3972
@@ -464,7 +464,7 @@ tstart20[15,5] = 3964
 s,data21 = extracts(data20,tstart20)
 S20 = pd.DataFrame(s)
 
-print "get serie 21"
+print("get serie 21")
 tstart21 = matstart(data21,1).astype('int')
 tstart21[6,8]=7808
 tstart21[6,11]=4820
@@ -474,7 +474,7 @@ tstart21[14,4]=4751
 s,data22=extracts(data21,tstart21)
 S21 = pd.DataFrame(s)
 
-print "get serie 22"
+print("get serie 22")
 
 tstart22 = matstart(data22,1).astype('int')
 s,data23=extracts(data22,tstart22)
@@ -491,14 +491,14 @@ data23[9][13]['seq'][1322088]=1
 data23[10][6]['seq'][1315303]=1
 data23[13][9]['seq'][1324935]=1
 
-print "get serie 23"
+print("get serie 23")
 
 tstart23 = matstart(data23,1).astype('int')
 s,data24 = extracts(data23,tstart23)
 S23 = pd.DataFrame(s)
 
 
-print "get serie 24"
+print("get serie 24")
 
 s,dummy = extracts(data24,last=True)
 S24 = pd.DataFrame(s)
@@ -551,7 +551,7 @@ tS = [S2,S3,S8,S9,S10,S11,S12,S13,S14,S15,S16,S17,S18,S19,S20,S21,S22,S23,S24]
 #
 #
 #for sc in tA.keys():
-#    print sc,tA[sc].shape[1]*25.832e-3/60.
+#    print(sc,tA[sc].shape[1]*25.832e-3/60.
 #
 #
 dHKBc={}

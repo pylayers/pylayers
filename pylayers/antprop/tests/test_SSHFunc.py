@@ -42,7 +42,7 @@ Y2pinv = np.linalg.pinv(Y2)
 cg2 = np.dot(Gt.ravel(),Y2pinv)
 xg2 = np.array(zip(np.real(cg2),np.imag(cg2))).ravel()
 xg = np.array(zip(np.real(cg),np.imag(cg))).ravel()
-print "Start optimization"
+print("Start optimization")
 ropt = minimize(fun,xg2,method='CG')
 xopt = fmin(fun,xg2)
 xopt = ropt.x

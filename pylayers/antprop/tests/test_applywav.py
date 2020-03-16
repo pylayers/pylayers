@@ -2,9 +2,9 @@ import numpy as np
 from pylayers.simul.link import *
 import matplotlib.pyplot as plt
 import time
-print "======================="
-print " start test_applywav.py "
-print "======================="
+print("=======================")
+print(" start test_applywav.py ")
+print("=======================")
 
 fGHz=np.arange(2,11,0.1)
 DL=DLink(L='defstr.ini',fGHz=fGHz)

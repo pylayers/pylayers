@@ -2703,7 +2703,7 @@ class Body(PyLayers):
             """ display 
             """
             for k in self.dev:
-                print (k,self.dev[k]['uc3d']) 
+                print(str(k) + str(self.dev[k]['uc3d'])) 
 
 
 def translate(cycle, new_origin):

@@ -36,12 +36,12 @@ def accel_plot(trajectory, t_step=0.01):
     a = Numeric.arange(0, t_total, t_step)
     j = Numeric.arange(0, t_total, t_step)
     traj = list(trajectory)
-    print "  time   distance   veloc    accel    jerk"
+    print("  time   distance   veloc    accel    jerk")
     for ii in range(0, len(t)):
         if t[ii] > traj[1][0]:
             del traj[0]
             # tt is relative to the trajectory segments t_0
-            print "popping trajectory"
+            print("popping trajectory")
         t_0, d_0, v_0, a_0, j_0 = traj[0]
         tt = t[ii] - t_0
         d[ii] = d_0 + v_0*tt + a_0*tt**2/2 + j_0*tt**3/6

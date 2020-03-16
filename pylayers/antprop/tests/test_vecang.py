@@ -49,7 +49,7 @@ tri = {'A':['BAD','DAB'],
        'C':['DCB','BCD'],
        'D':['CDA','ADC']}   
 
-print( ' D          C')
+print(' D          C')
 print('  x--------x')
 print('  |        |')
 print('  |        |')
@@ -59,28 +59,28 @@ print(' A          B')
 
 for d in diff.keys():
     for it,t in enumerate(tri[d]):
-        print '\ndiff point :',d,' tri:',t
+        print('\ndiff point :' + str(d) + ' tri:' + str(t))
         x=eval(t[0])
         y=eval(t[1])
         z=eval(t[2])
         #is left(a,b,c) (Test point c is at left of the vector a-->b)
         uleft = geu.isleft(x[:,None],y[:,None],z[:,None])[0]
         if uleft : 
-            print (t[2],' is  at left of vect ',t[0],t[1])
-            print ('-------------------------------------')
+            print(str(t[2]) + ' is  at left of vect ' + str(t[0]) + str(t[1]))
+            print('-------------------------------------')
             vin = eval(diff[d][it])
-            print (diff[d][it],u'\u2196',geu.vecang(vin,vBDu)*180/np.pi)
-            print (diff[d][it],u'\u2199',geu.vecang(vin,vCAu)*180/np.pi)
-            print (diff[d][it],u'\u2197',geu.vecang(vin,vACu)*180/np.pi)
-            print (diff[d][it],u'\u2198',geu.vecang(vin,vDBu)*180/np.pi)
+            print(str(diff[d][it]) + u'\u2196' + str(geu.vecang(vin,vBDu)*180/np.pi))
+            print(str(diff[d][it]) + u'\u2199' + str(geu.vecang(vin,vCAu)*180/np.pi))
+            print(str(diff[d][it]) + u'\u2197' + str(geu.vecang(vin,vACu)*180/np.pi))
+            print(str(diff[d][it]) + u'\u2198' + str(geu.vecang(vin,vDBu)*180/np.pi))
         else: 
-            print( t[2],' is  at right of vect ',t[0],t[1])
-            print ('-------------------------------------')
+            print(str(t[2]) + ' is  at right of vect ' + str(t[0]) + str(t[1]))
+            print('-------------------------------------')
             vin = eval(diff[d][it])
-            print diff[d][it],u'\u2196',geu.vecang(vBDu,vin)*180/np.pi
-            print diff[d][it],u'\u2199',geu.vecang(vCAu,vin)*180/np.pi
-            print diff[d][it],u'\u2197',geu.vecang(vACu,vin)*180/np.pi
-            print diff[d][it],u'\u2198',geu.vecang(vDBu,vin)*180/np.pi
+            print(str(diff[d][it]) + u'\u2196' + str(geu.vecang(vBDu,vin)*180/np.pi))
+            print(str(diff[d][it]) + u'\u2199' + str(geu.vecang(vCAu,vin)*180/np.pi))
+            print(str(diff[d][it]) + u'\u2197' + str(geu.vecang(vACu,vin)*180/np.pi))
+            print(str(diff[d][it]) + u'\u2198' + str(geu.vecang(vDBu,vin)*180/np.pi))
 
         
 #     if uleft : 

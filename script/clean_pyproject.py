@@ -37,7 +37,7 @@ for d in dirlist:
         for f in files:
             if not os.path.isdir(path+d+f) and ex in f:
                 rindic=True
-                print f
+                print(f)
                 os.remove(path+d+f)
 #                print path+d+f
 

@@ -165,7 +165,7 @@ def read_header(_filename='serie_017.c3d'):
     ParameterGroups = []
     CameraInfo = []
     ResidualError = []
-    print ("FileName = ", FullFileName)
+    print ("FileName = " + FullFileName)
     fid = io.open(FullFileName, 'rb')
     # native format (PC-intel)
     content = fid.read()
@@ -177,7 +177,7 @@ def read_header(_filename='serie_017.c3d'):
     key, content = getNumber(content, 1)
 
     if key != 80:
-        print ('File: ', FullFileName, ' does not comply to the C3D format')
+        print ('File: ' + FullFileName + ' does not comply to the C3D format')
         fid.close()
 
     #fseek(fid,512*(NrecordFirstParameterblock-1)+3,'bof'); % jump to processortype - field
@@ -187,7 +187,7 @@ def read_header(_filename='serie_017.c3d'):
     proctype = proctype - 83                      # proctype: 1(INTEL-PC); 2(DEC-VAX); 3(MIPS-SUN/SGI)
 
     # print "*************************"
-    print ("**** Processor coding :",)
+    print ("**** Processor coding :")
     # print "*************************"
 
 
@@ -398,7 +398,7 @@ def read_c3d(_filename='07_01.c3d',verbose=False):
     EventValue = []
     EventName = []
     if verbose:
-        print ("EventIndicator = ", EventIndicator)
+        print ("EventIndicator = " + EventIndicator)
     if EventIndicator == 12345:
         Nevents, content = getNumber(content, 2)
         #print "Nevents= ", Nevents

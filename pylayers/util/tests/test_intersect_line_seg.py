@@ -7,6 +7,6 @@ seg  = (pta,phe)
 
 x, P   =  intersect_line_seg(line,seg)
 
-print "pta : ",pta
-print "phe : ",phe
-print x,P
+print("pta : " + str(pta))
+print("phe : " + str(phe))
+print(str(x) + str(P))

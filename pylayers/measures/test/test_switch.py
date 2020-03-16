@@ -42,15 +42,15 @@ switch.set_io_mode(0b11111111, 0b11111111, 0b00000000)
 tic = time.time()
 
 for k in range(8):
-    print "	Transmiter : select output number ",k
+    print("	Transmiter : select output number " + str(k))
     switch.write_port(0,k)
     for  l in range(4):
-        print "Receiver : select output number ",l
+        print("Receiver : select output number " + str(l))
         switch.write_port(1,l)
         time.sleep(1) #time waiting of the switch between antennas
 toc = time.time()
 t = toc - tic
-print "Measurement time (s) with switching :",t
+print("Measurement time (s) with switching :" + str(t))
 # tic = time.time()
 
 # for k in range(8):

@@ -132,16 +132,16 @@ class LPRS(object):
 
     def _listen(self,name,timeout):
         listen_txt = ''
-        print "Start listening"
+        print("Start listening")
         while True:
             while self.ser.inWaiting()>0:
                 time.sleep(0.005)
                 listen_txt += self.ser.read(1)
             if listen_txt !='':
-                print listen_txt
+                print(listen_txt)
                 listen_txt = ''
             if (self.exitflag == 1):
-                print "Listening thread exit"
+                print("Listening thread exit")
                 self.exitflag = 0
                 thread.exit()
 
@@ -187,8 +187,8 @@ class LPRS(object):
                 #print resp[-1]
                     try:
                         rssi = int(self.cmd('T8'),16)
-                        print "count ",cpt
-                        print "rssi  ",rssi
+                        print("count " + str(cpt))
+                        print("rssi  " + str(rssi))
                     except:
                         pass
                     cpt = cpt+1
@@ -213,11 +213,11 @@ class LPRS(object):
                 #time.sleep(0.005)
                 resp += self.ser.read(1)
             # wait for ack
-            print resp
+            print(resp)
             if (resp[-1]=='A'):
                 try:
                     rssi = int(self.cmd('T8'),16)
-                    print cpt,rssi
+                    print(str(cpt)+str(rssi))
                 except:
                     pass
                 self.send('B')
@@ -269,12 +269,12 @@ class LPRS(object):
             pass
 
     def _beacon(self,name,timeout=2):
-        print "Start beaconing"
+        print("Start beaconing")
         while True:
             time.sleep(timeout)
             self.send('Beacon')
             if self.exitflag==1:
-                print "Beaconing thread exit"
+                print("Beaconing thread exit")
                 self.exitflag = 0
                 thread.exit()
 
