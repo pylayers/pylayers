@@ -56,12 +56,12 @@ def dist_permut(v1,v2,p,debug=False):
     #dist =  np.sqrt(np.sum(np.abs(v2p[:,0]-p1[:,0])**2)+np.sum(np.abs(v2p[:,1]-v1[:,1])**2)+ha)
     dist =  np.sqrt(np.sum(np.abs(v2p[:,0]-v1[:,0])**2)*np.sum(np.abs(v2p[:,1]-v1[:,1])**2))
     if debug: 
-        #print v2p[:,0]
-        #print v1[:,0]
-        #print "----"
+        #print(v2p[:,0]
+        #print(v1[:,0]
+        #print("----"
         #if ((p==np.array([4,2,0,3,1])).all() | (p==np.array([0,1,2,3,4])).all()):
-        print "current[]",v2p[:,1]
-        print "expected", v1[:,1]
+        print("current[]" + str(v2p[:,1]))
+        print("expected" + str(v1[:,1]))
 
     #dist =  np.prod(np.abs(v2p[:,0]-v1[:,0])**2)*np.prod(np.abs(v2p[:,1]-v1[:,1])**2)
     #dist =  np.sqrt(np.sum(np.abs(v2p[:,1]-v1[:,1])**2))
@@ -98,7 +98,7 @@ def p_opt(v1,v2,bpermut,debug=False):
             popt = p
         if debug:
             #if ((p==np.array([4,2,0,3,1])).all() | (p==np.array([0,1,2,3,4])).all()):
-            print p,d
+            print(str(p) + str(d))
     return popt,d_min
 
 
@@ -153,7 +153,7 @@ def delay_association(tp_s,W=4):
             tp_expected = tp_r[:,k-1,:]+(tp_r[:,k-1,:]-tp_r[:,k-5,:])/4.
             #pprev = tp_r[:,k-1,2].astype(int)
             if k==87:
-                print "oo :",tp_s[pprev,k,1]
+                print("oo :" + str(tp_s[pprev,k,1]))
             #popt,dmin = p_opt(tp_expected,tp_s[pprev,k,:],bpermut,debug)
             popt,dmin = p_opt(tp_expected[pprev,:],tp_s[:,k,:],bpermut,debug)
             #pprev = pprev[popt]
@@ -194,24 +194,24 @@ def delay_association(tp_s,W=4):
         tp_r[:,k,2] = popt
         if k>1:
             tp_r[:,k,3] = tp_expected[:,1]
-        print "~~~~~~~~~~~"
-        print "k : ",k
-        print "gt delay :",tp_gt[:,k,1]
-        print "recovered delay :",tp_r[:,k,1]
+        print("~~~~~~~~~~~")
+        print("k : " + str(k))
+        print("gt delay :" + str(tp_gt[:,k,1]))
+        print("recovered delay :" + str(tp_r[:,k,1]))
         try:
-            print "tp_expected :",tp_expected[:,1] 
+            print("tp_expected :" + str(tp_expected[:,1]))
         except:
             pass
-        print "gt pk :",tp_s[:,k,2]
-        print "pprev :",pprev
-        print "popt :",popt
+        print("gt pk :" + str(tp_s[:,k,2]))
+        print("pprev :" + str(pprev))
+        print("popt :" + str(popt))
         try:
-            print "tp_expected sorted pprev :",tp_expected[pprev,1]
+            print("tp_expected sorted pprev :" + str(tp_expected[pprev,1]))
         except:
-            print "problem",pprev
-        print "s[k] :",tp_s[:,k,1]
+            print("problem" + str(pprev))
+        print("s[k] :" + str(tp_s[:,k,1]))
         pbest_ = np.argsort(pprev)[tp_s[:,k,2].astype(int)] 
-        print "pbest :",pbest_
+        print("pbest :" + str(pbest_))
         #print "popt  :",tp_r[:,k,2]
         #pprev_ = tp_r[:,k,4].astype(int)
         #popt_ = tp_r[:,k,2].astype(int)
@@ -230,10 +230,10 @@ def delay_association(tp_s,W=4):
         #print "delay (pprev[popt])",tp_s[pprev_[popt_],k,1]
         #print "pprev[popt]^-1",np.argsort(pprev_[popt_])
         pprev = pprev[popt]
-        print "pprev (output) :",pprev
+        print("pprev (output) :" + str(pprev))
         if (pprev!=tp_s[:,k,2]).any():
-            print "Erreur en ",k
-        print "=================="
+            print("Erreur en " + str(k))
+        print("==================")
     return(tp_r)
 
 

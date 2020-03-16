@@ -33,8 +33,8 @@ class CRBLocation(object):
         """
             Display scenario information
         """
-        print "Reference Radio Nodes:\n", self.RN
-        print "parameters:\n", self.param
+        print("Reference Radio Nodes:\n" + str(self.RN))
+        print("parameters:\n" + str(self.param))
 
     def FIM_RSS(self, P, RN_RSS, RSSnp, RSSStd):
         """  FIM in P of RSS positioning

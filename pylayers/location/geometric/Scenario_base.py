@@ -171,49 +171,49 @@ class Scenario(object):
         info : display information about current scenario
 
         """
-        print "-------------------------------"
-        print "     SCENARIO INFORMATION"
-        print "-------------------------------"
-        print "scenario type   : ",self.parmsc['scenar_type']
-        print "constraints type  : ",self.parmsc['Constrain_Type']
+        print("-------------------------------")
+        print("     SCENARIO INFORMATION")
+        print("-------------------------------")
+        print("scenario type   : " + str(self.parmsc['scenar_type']))
+        print("constraints type  : " + str(self.parmsc['Constrain_Type']))
 
 
         #### NOEUDS
         if self.parmsc['Constrain_Type']=='TDOA':
-            print "nb of AN couple : ", len(self.dan)
+            print("nb of AN couple : " + str(len(self.dan)))
         else :
-            print "nb AN  : ", len(self.an)
+            print("nb AN  : " + str(len(self.an)))
 
-        print "nb BN  : ", len(self.bn)
-        print 'limit of BNs positions',self.parmsc_dis['room'],'m'
+        print("nb BN  : " + str(len(self.bn)))
+        print('limit of BNs positions' + str(self.parmsc_dis['room']) + str('m'))
 
 
         if self.parmsc['scenar_type']=='simulated':
 
             ##### geometric computaton
-            print 'decimation method : ',self.parmsc['dec_mode']
+            print('decimation method : ' + str(self.parmsc['dec_mode']))
             if self.parmsc['Constrain_Type']=='TOA':
-                print 'validity constraint width :',self.parmsc['vcw'],'m'
+                print('validity constraint width :' + str(self.parmsc['vcw']) + str('m'))
 
-            print "Error type   : ",self.parmsc['err_type']
-            print "std dev : ",self.parmsc['sigma_max'],'ns'
-            print "std dev : ",self.parmsc['sigma_max_RSS'],'ns'
-            print "std dev : ",self.parmsc['sigma_max_TOA'],'ns'
-            print "std dev : ",self.parmsc['sigma_max_TDOA'],'ns'
-            print "std vect : ",self.std_v,'ns'
+            print("Error type   : " + str(self.parmsc['err_type']))
+            print("std dev : " + str(self.parmsc['sigma_max']) + str('ns'))
+            print("std dev : " + str(self.parmsc['sigma_max_RSS']) + str('ns'))
+            print("std dev : " + str(self.parmsc['sigma_max_TOA']) + str('ns'))
+            print("std dev : " + str(self.parmsc['sigma_max_TDOA']) + str('ns'))
+            print("std vect : " + str(self.std_v) + str('ns'))
 
             ########## algebraic
-            print "algebraic compute : ",self.parmsc['algebraic']
+            print("algebraic compute : " + str(self.parmsc['algebraic']))
             if self.parmsc['algebraic']:
                 if self.parmsc['Constrain_Type']=='TDOA':
-                    print 'algebraic TDOA method :',self.parmsc['Algebraic_method']  # if ['Constrain_Type']='TDOA' chose the TDOA method WLS/TLS
+                    print('algebraic TDOA method :' + str(self.parmsc['Algebraic_method']))  # if ['Constrain_Type']='TDOA' chose the TDOA method WLS/TLS
 
             ####### RSS
             if self.parmsc['Constrain_Type']=='RSS':
-                print 'rss mode :',self.parmsc['rss_mode']
-                print 'RSS0 :',self.parmsc['rss0']
-                print 'd0 : ',self.parmsc['d0']
-                print 'np : ',self.parmsc['pn']
+                print('rss mode :' + str(self.parmsc['rss_mode']))
+                print('RSS0 :' + str(self.parmsc['rss0']))
+                print('d0 : ' + str(self.parmsc['d0']))
+                print('np : ' + str(self.parmsc['pn']))
 
 
         #############" MONTE CARLO
@@ -221,18 +221,18 @@ class Scenario(object):
 
         if self.parmsc['scenar_type']=='monte_carlo':
             lcdf=len(self.CDF)
-            print '\n'
+            print('\n')
             for i in range(lcdf):
-                print 'computation nb',i+1
+                print('computation nb' + str(i+1))
                 if self.CDF[i]['mode']=='algebraic':
-                    print 'algebraic'
-                    print '\n'
+                    print('algebraic')
+                    print('\n')
                 else :
-                    print 'err_type :',self.CDF[i]['err_type']
-                    print 'vcw :',self.CDF[i]['vcw'],'m'
-                    print 'decimation :',self.CDF[i]['dec']
-                    print 'sigma max :',self.CDF[i]['sigma_max'],self.std_v,'ns'
-                    print '\n'
+                    print('err_type :'  + str(self.CDF[i]['err_type']))
+                    print('vcw :' + str(self.CDF[i]['vcw']) + str('m'))
+                    print('decimation :' + str(self.CDF[i]['dec']))
+                    print('sigma max :' + str(self.CDF[i]['sigma_max']) + str(self.std_v,'ns'))
+                    print('\n')
 
 
 
@@ -317,7 +317,7 @@ class Scenario(object):
             errli   = []
             Constraint.C_Id = 0         # reset constraint Id for each BN
 
-            print "                    Blind Node N",ibn+1,"/",Nbn
+            print("                    Blind Node N" + str(ibn+1) + "/" + str(Nbn))
             atv=[]
             pbn = self.bn[ibn]
             #print "Blind Node N ",ibn,pbn
@@ -547,7 +547,7 @@ class Scenario(object):
 
                 if self.parmsc['save_pe']:
                     self.p_LS.append(p_LS)
-                if self.parmsc['Constrain_Type'] != 'hybrid'
+                if self.parmsc['Constrain_Type'] != 'hybrid':
                     errLS   = np.sqrt(np.dot(p_LS[:2]-pbn[:2],p_LS[:2]-pbn[:2])) 
 
                 #elif self.parmsc['Algebraic_method'] == 'CRB':
@@ -559,7 +559,7 @@ class Scenario(object):
                 self.errLS  = np.hstack((self.errLS,errLS))    
 
             if errli > errLS:
-                print 'NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNnn\n',errli,'\n',errLS
+                print('NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNnn\n' + str(errli) + '\n' + str(errLS))
 
 
     def algebraic_compute(self,atv):
@@ -703,13 +703,13 @@ class Scenario(object):
         S4=TDoALocation(RN_TDOA)
 
         if self.parmsc['Algebraic_method'] == 'LS':
-            print 'to be implemented'
+            print('to be implemented')
 
         elif self.parmsc['Algebraic_method'] == 'TLS':
-            print 'to be implemented'
+            print('to be implemented')
 
         elif self.parmsc['Algebraic_method'] == 'WLS':
-            print 'to be implemented'
+            print('to be implemented')
 
         elif self.parmsc['Algebraic_method'] == 'TWLS':
             if RN_RSS ==None and RN_TOA==None:
@@ -750,7 +750,7 @@ class Scenario(object):
 
 
         else :
-            print "You have to chose the self.parmsc['Algebraic_method'] between those choices :\n LS,TLS,WLS,TWLS,ML,SDP "
+            print("You have to chose the self.parmsc['Algebraic_method'] between those choices :\n LS,TLS,WLS,TWLS,ML,SDP ")
 
 
         if self.parmsc['CRB'] :
@@ -771,49 +771,49 @@ class Scenario(object):
 
 ###################################### RSS PUR
             if RN_TOA==None and RN_TDOA==None:
-                print 'RSS'
+                print('RSS')
                 self.CRB.append(sqrt(CRBL.CRB_RSS_fim(PP, RN_RSS, RSSnp,RSSStdX)))
 ###################################### TOA PUR
             elif RN_RSS==None and RN_TDOA==None:  # TOA
-                print 'TOA CRB'
+                print('TOA CRB')
 
                 self.CRB.append(sqrt(CRBL.CRB_TOA_fim(PP, RN_TOA,TOAStdX)))
 
 ###################################### TDOA PUR
             elif RN_RSS ==None and RN_TOA==None : # TDOA
-                print 'TDOA'
+                print('TDOA')
                 self.CRB.append(sqrt(CRBL.CRB_TDOA_fim(PP,  RN_TDOA,RN_TDOA_ref,TDOAStdX)))
 
             elif RN_TOA==None and RN_TDOA!= None:
 ###################################### TDOA
                 if RN_RSS==None:
-                    print 'TDOA2'
+                    print('TDOA2')
                     self.CRB.append(sqrt(CRBL.CRB_TDOA_fim(PP, RN_RSS, PL0, RSSStdX)) )
 ###################################### RSS + TDOA
                 else :
-                    print 'RSS+TDOA'
+                    print('RSS+TDOA')
                     self.CRB.append(sqrt(CRBL.CRB_RSS_TDOA_fim(PP, RN_RSS, RN_TDOA,RN_TDOA_ref,RSSnp, RSSStdX, TDOAStdX )))
 
 
             elif RN_TOA!=None and RN_TDOA== None:
 ##################################### TOA
                 if RN_RSS==None:
-                    print 'TOA'
+                    print('TOA')
                     self.CRB.append(sqrt(CRBL.CRB_TOA_fim(PP, RN_TOA,TOAStdX)))
 ##################################### RSS + TOA
                 else :
-                    print 'RSS + TOA'
+                    print('RSS + TOA')
                     self.CRB.append(sqrt(CRBL.CRB_RSS_TOA_fim(PP, RN_RSS,RN_TOA, RSSnp,  RSSStdX, TOAStdX)))
 
             elif RN_TOA!=None and RN_TDOA!= None:
 ##################################### TOA+TDOA
                 if RN_RSS==None :
-                    print 'TOA + TDOA'
+                    print('TOA + TDOA')
                     self.CRB.append(sqrt(CRBL.CRB_TOA_TDOA_fim(PP, RN_TOA, RN_TDOA, RN_TDOA_ref,TOAStdX,TDOAStdX)))
 
 ##################################### RSS+TOA+TDOA
                 else :
-                    print 'RSS + TOA + TDOA'
+                    print('RSS + TOA + TDOA')
                     self.CRB.append(sqrt(CRBL.CRB_RSS_TOA_TDOA_fim(PP, RN_RSS, RN_TOA, RN_TDOA, RN_TDOA_ref, RSSnp, RSSStdX, TOAStdX, TDOAStdX)))
 
 
@@ -992,7 +992,7 @@ class Scenario(object):
 
 
             else :
-                print 'compute() : non-valid err_type'
+                print('compute() : non-valid err_type')
 
             cdfbound = max([self.parmsc['sigma_max_RSS'],self.parmsc['sigma_max_TOA'],self.parmsc['sigma_max_TDOA']])
 

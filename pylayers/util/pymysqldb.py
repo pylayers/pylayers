@@ -32,23 +32,23 @@ class Database:
         dbc=self.connectdb()
         dbc.execute("show tables")
         fields=dbc.fetchall()
-        print "====================================="
-        print "Tables in "+self.dbname
-        print "====================================="
+        print("=====================================")
+        print("Tables in " + self.dbname)
+        print("=====================================")
         for field in fields:
-            print field[0]
-        print "====================================="
+            print(field[0])
+        print("=====================================")
             
     def describetable(self, tablename=""):
         dbc=self.connectdb()
         dbc.execute("describe "+tablename)
         fields=dbc.fetchall()
-        print "====================================="
-        print "Columns in "+tablename
-        print "====================================="
+        print("=====================================")
+        print("Columns in " + tablename)
+        print("=====================================")
         for field in fields:
-            print field[0],"\t\t", field[1],"\t\t", field[2],"\t\t", field[3]
-        print "====================================="
+            print(field[0] + "\t\t" + field[1] + "\t\t" + field[2] + "\t\t" + field[3])
+        print("=====================================")
     
     def droptable(self, tablename):
         #delete DB

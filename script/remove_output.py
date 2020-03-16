@@ -21,4 +21,4 @@ if __name__ == '__main__':
     with io.open(fname, 'r') as f:
         nb = current.read(f, 'json')
     remove_outputs(nb)
-    print current.writes(nb, 'json')
+    print(current.writes(nb, 'json'))

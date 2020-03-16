@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 inst=Gpib.Gpib(0,8) 
 inst.write("*IDN?")
 model = inst.read(100)
-print "Model : ",model
+print("Model : " + str(model))
 inst.write("CF 868.MZ")
 inst.write("SP 50.MZ")
 inst.write("TPL")

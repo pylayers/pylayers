@@ -70,12 +70,12 @@ class RSSLocation(object):
         """
         Display scenario information
         """
-        print "Reference Radio Nodes:\n", self.RN
-        print "References distances:\n", self.d0
-        print "RSSI at d0:\n", self.lamda
-        print "Measured RSS:\n", self.RSS
-        print "Propagation constants:\n", self.RSSnp
-        print "STD of Measured RSS shadowing:\n", self.RSSStd
+        print("Reference Radio Nodes:\n" + str(self.RN))
+        print("References distances:\n" + str(self.d0))
+        print("RSSI at d0:\n" + str(self.lamda))
+        print("Measured RSS:\n" + str(self.RSS))
+        print("Propagation constants:\n" + str(self.RSSnp))
+        print("STD of Measured RSS shadowing:\n" + str(self.RSSStd))
 
     def getPL0(self, lamda, d0):
        """ Compute PL0
@@ -125,7 +125,7 @@ class RSSLocation(object):
             return      np.exp(M+0.5*S**2)
         else:
             return      np.exp(M)
-            print       "No \"%s\" defined estimator" %Rest
+            print("No \"" + str(Rest) + "\" defined estimator")
 
     def getRangeStd(self, RN, PL0, d0, RSS, RSSnp, RSSStd, Rest):
         """
@@ -141,7 +141,7 @@ class RSSLocation(object):
             return      np.sqrt((np.exp(2*M+3*S**2))*(np.exp(S**2)-1))
         else:
             return      np.sqrt((np.exp(2*M+S**2))*(np.exp(S**2)-1))
-            print       "No \"%s\" defined estimator" %Rest
+            print("No \"" + str(Rest) + "\" defined estimator")
 
     def LSRSSLocate(self, RN, PL0, d0, RSS, RSSnp, RSSStd, Rest):
         """

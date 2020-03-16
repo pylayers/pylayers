@@ -1900,7 +1900,7 @@ class DLink(Link):
         if event.button==2:
             self.eval()
             self._show3()
-        print (x,y)
+        print(str(x) + str(y))
 
     def show(self,**kwargs):
         """ show the link

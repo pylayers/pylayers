@@ -3,9 +3,9 @@ from pylayers.simul.link import *
 import numpy as np
 import matplotlib.pyplot as plt 
 import time
-print "======================="
-print " start test_reciprocity.py "
-print "======================="
+print("=======================")
+print(" start test_reciprocity.py ")
+print("=======================")
 
 DL=DLink(L='defstr.ini')
 

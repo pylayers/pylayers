@@ -75,14 +75,14 @@ class NiUsb6501:
             #pdb.set_trace()
             cfg = self.device.get_active_configuration()
             interface_number = cfg[(0,0)].bInterfaceNumber
-            print "interface_number",interface_number
+            print("interface_number" + str(interface_number))
             #reattach = False
-            print " active : ", self.device.is_kernel_driver_active(interface_number)
-            print self.device
+            print(" active : " + str(self.device.is_kernel_driver_active(interface_number)))
+            print(self.device)
             if self.device.is_kernel_driver_active(interface_number):
             #if self.device.is_kernel_driver_active(0):
                 #reattach = True
-                print "kernel driver is active "
+                print("kernel driver is active ")
                 self.device.detach_kernel_driver(interface_number)
                 #self.device.detach_kernel_driver(0)
             
@@ -94,7 +94,7 @@ class NiUsb6501:
 
             #self.device.set_configuration()
             
-            print self.device._ctx
+            print(self.device._ctx)
 
             usb.util.dispose_resources(self.device)
         else:
@@ -229,9 +229,9 @@ class NiUsb6501:
 
     def packet_matches(self, actual, expected, mask):
         if len(actual) != len(expected):
-            print repr(actual)
-            print repr(expected)
-            print repr(mask)
+            print(repr(actual))
+            print(repr(expected))
+            print(repr(mask))
             raise ValueError('Protocol error - invalid response length %d' % len(actual))
 
         for b, e, m in zip(actual, expected, mask):
@@ -284,15 +284,15 @@ if __name__ == "__main__":
     tic = time.time()
 
     for k in range(8):
-        print " Transmiter : select output number ",k
+        print(" Transmiter : select output number " + str(k))
         switch.write_port(0,k)
         for  l in range(4):
-            print "Receiver : select output number ",l
+            print("Receiver : select output number " + str(l))
             switch.write_port(1,l)
             time.sleep(1) #time waiting of the switch between antennas
     toc = time.time()
     t = toc - tic
-    print "Measurement time (s) with switching :",t
+    print("Measurement time (s) with switching :" + str(t))
 
     # for k in range(8):
     #     print " Transmiter : select output number ",k

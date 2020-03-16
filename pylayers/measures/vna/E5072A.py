@@ -86,7 +86,7 @@ class SCPI(PyLayers):
 
         self.Nf   = 201
         self.getIdent()
-        print (self.ident)
+        print(self.ident)
         #assert('E5072A' in self.ident), "E5072A not responding"
         self.freq()
         self.points()

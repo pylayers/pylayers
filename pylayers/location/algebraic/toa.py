@@ -55,9 +55,9 @@ class ToALocation(object):
         """
         Dispaly scenario information
         """
-        print "Reference Radio Nodes:\n", self.RN
-        print "Measured ToA:\n", self.ToA
-        print "STD of Measured ToA:\n", self.ToAStd
+        print("Reference Radio Nodes:\n" + str(self.RN))
+        print("Measured ToA:\n" + str(self.ToA))
+        print("STD of Measured ToA:\n" + str(self.ToAStd))
 
     def LSToALocate(self,RN, ToA):
         """

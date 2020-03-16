@@ -2,7 +2,7 @@ import numpy as np
 import pylayers.util.plotutil as plu
 import matplotlib.pyplot as plt
 import seaborn as sns
-print "util/test_plotutil.py"
+print("util/test_plotutil.py")
 plt.ion()
 sns.set_style("white")
 x = np.arange(0,10,.01)
