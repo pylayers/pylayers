@@ -547,7 +547,7 @@ class Scenario(object):
 
                 if self.parmsc['save_pe']:
                     self.p_LS.append(p_LS)
-                if self.parmsc['Constrain_Type'] != 'hybrid'
+                if self.parmsc['Constrain_Type'] != 'hybrid':
                     errLS   = np.sqrt(np.dot(p_LS[:2]-pbn[:2],p_LS[:2]-pbn[:2])) 
 
                 #elif self.parmsc['Algebraic_method'] == 'CRB':
