@@ -174,12 +174,12 @@ def LossMetisShadowing(fGHz,tx,rx,pg,uw,uh,w,h):
     Parameters
     ----------
     fGHz : float
-        
-    tx  : np.array (,3) of floats  
-        transmiter coordinates 
-    rx  : np.array (,3) of floats  
-        receiver coordinates 
-    pg  : np.array (,3) of floats 
+
+    tx  : np.array (,3) of floats
+        transmiter coordinates
+    rx  : np.array (,3) of floats
+        receiver coordinates
+    pg  : np.array (,3) of floats
         center of gravity of the screen 
     uw  : np.array (,3) of floats 
         unitary vector along width dimension
@@ -1355,6 +1355,7 @@ def route(X, Y, Z, Ha, Hb, fGHz, K, method='deygout'):
         L[ip, :] = LDiff+LOS
     return(L)
 
+
 def cover(X, Y, Z, Ha, Hb, fGHz, K, method='deygout'):
     """ outdoor coverage on a region
 
@@ -1414,6 +1415,66 @@ def cover(X, Y, Z, Ha, Hb, fGHz, K, method='deygout'):
             L[ip, il, :] = LDiff[None, :]+LOS[None,:]
     return(L)
 
+def cover2(X, Y, Z, Ha, Hb, fGHz, K, method='deygout'):
+    """ outdoor coverage on a region
+
+    Parameters
+    ----------
+
+    X : np.array (Nphi,Nr)
+        cartesian coordinate grid
+    Y : np.array (Nphi,Nr)
+        cartesian coordinate grid
+    Z : np.array (Nphi,Nr)
+        height (meters)
+
+    Ha : float
+    Hb : float
+    fGHz : np.array (,Nf)
+        frequency in GHz
+    method : 'deygout' | 'bullington'
+
+    Returns
+    -------
+
+    L : Losses (dB)
+
+
+    """
+    Nphi, Nr = Z.shape
+
+    if (type(fGHz) == float):
+        fGHz = np.array([fGHz])
+
+    Nf = len(fGHz)
+    L = np.zeros((Nphi, Nr, Nf))
+    L0 = np.zeros(Nf)
+    # loop over azimut
+    for il in np.arange(2, Nr-1):
+        dmax = 
+        LOS = 32.4 + 20*np.log10(fGHz) + 20*np.log10(d[-1])
+
+        for ip in range(Nphi):
+        # loop over range
+        # il : 2 ... Nr-2
+        # uk : 0 ....Nr-1
+            uk = np.arange(0, il+1)
+            z = np.empty(len(uk))
+            x = X[ip, uk]
+            y = Y[ip, uk]
+            z[uk] = Z[ip, uk]
+            d = np.sqrt((x-x[0])**2+(y-y[0])**2)
+            # effect of refraction in equivalent earth curvature
+            dh = d*(d[::-1])/(2*K*6375e3)
+            z = z + dh
+            z[0] = z[0] + Ha
+            z[-1] = z[-1] + Hb
+            if method == 'deygout':
+                LDiff = deygout(d, z, fGHz, L0, 0)
+            if method == 'bullington':
+                LDiff, deq, heq = bullington(d, z, fGHz)
+            L[ip, il, :] = LDiff[None, :]+LOS[None,:]
+    return(L)
 
 def deygout(d, height, fGHz, L, depth):
     """ Deygout attenuation
