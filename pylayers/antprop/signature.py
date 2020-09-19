@@ -2179,6 +2179,7 @@ class Signatures(PyLayers,dict):
 
         #
         # Handling LOS ray
+        #  Distance between tx and rx should be sufficient
         #
         dtxrx = np.sum((ptx-prx)*(ptx-prx))
         if dtxrx>1e-15:
@@ -2201,6 +2202,7 @@ class Signatures(PyLayers,dict):
             # get signature block with k interactions
             tsig = self[k]
             shsig = np.shape(tsig)
+
             for l in range(shsig[0]/2):
                 sig = tsig[2*l:2*l+2,:]
                 ns0 = sig[0,0]

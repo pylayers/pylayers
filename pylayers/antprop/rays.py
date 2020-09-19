@@ -131,6 +131,7 @@ class Rays(PyLayers, dict):
         self.nray = 0
         self.nray2D = 0
         self.raypt = 0
+        self.isdirect = False
         self.los = False
         self.is3D = False
         self.isbased = False
@@ -570,8 +571,8 @@ class Rays(PyLayers, dict):
 
     def sort(self):
         """ sort rays
-        
-        TODO : not finished 
+
+        TODO : not finished
 
         """
         u = np.argsort(self.dis)
@@ -671,8 +672,8 @@ class Rays(PyLayers, dict):
         -------
 
         R : Rays object
-            New Rays object containing rays matching 
-            the typ/order conditions 
+            New Rays object containing rays matching
+            the typ/order conditions
 
 
         """
@@ -700,14 +701,9 @@ class Rays(PyLayers, dict):
         r.is3D = self.is3D
 
         for unr,nr in enumerate(lnr):
-            #r.nray2D = 
-            #r.nb_origin_sig = 1
 
             ni = self.ray2nbi(nr)
             ur = np.where(self[ni]['rayidx']==nr)[0][0]
-
-
-
 
             if ni == 0:
                 los = True
@@ -1625,7 +1621,6 @@ class Rays(PyLayers, dict):
                             # delete rays where diffraction point is connected to
                             # 2 AIR segments
                             #
-                            pdb.set_trace()
                             [ray_to_delete.append(u[1][i]) for i in range(len(zp))
                             if ((ltu_slab[i][0]=='AIR') & (ltu_slab[i][1]=='AIR'))]
                             # #zinterval = L.Gs.node[s]['z']

@@ -966,9 +966,9 @@ class ADPchannel(bs.TUsignal):
         uflashing = np.where(pdp_typ>FS)
 
         umin = np.where(pdp_min>-118)
-        pdp_min_thr = pdp_min[umin] 
+        pdp_min_thr = pdp_min[umin]
         umax = np.where(pdp_max>-118)
-        pdp_max_thr = pdp_max[umax] 
+        pdp_max_thr = pdp_max[umax]
         PL = -10*np.log10(np.sum(10**(pdp_min_thr/10.)))
 
         if kwargs['fig']==[]:
@@ -3555,6 +3555,7 @@ class Tchannel(bs.FUsignal):
         fMHz = np.linspace(-WMHz/2.,WMHz/2,Nf)
         E = np.exp(-2*1j*np.pi*fMHz[None,None,None,:]*1e-3*self.taud[:,None,None,None])
         y = np.sum(abb*E,axis=0)
+        #y = np.sum(E,axis=0)
         H = bs.FUsignal(x=fMHz,y=y)
 
         return(H)
@@ -4466,6 +4467,16 @@ class Tchannel(bs.FUsignal):
     #     # update total delay
     #     #self.tau = self.tau+self.taue
 
+    def sumf(self):
+        tau  = self.taud + self.taue
+        fGHz = self.x
+        E    = np.exp(-2*1j*np.pi*fGHz[None,None,None,:]*tau[:,None,None,None])
+        Y    = self.y*E
+        sy   = np.sum(Y,axis=0)
+        U    = bs.FUsignal(x=fGHz,y=np.squeeze(sy))
+        return U
+
+
     def ifft(self):
         """ inverse Fourier Transform
 
@@ -4780,7 +4791,7 @@ class Tchannel(bs.FUsignal):
 
         S = self.resample(f)
         ES = E * S.y
-        V = sum(ES, axis=0)
+        V = np.sum(ES, axis=0)
         U.y = V
 
         return U

@@ -381,6 +381,9 @@ class Layout(pro.PyLayers):
             dirname = self._filename.replace('.lay','')
             path = os.path.join(pro.basename, 'struc', 'gpickle', dirname)
 
+        #
+        # load layout from file
+        #
         if not newfile:
             if loadlay:
                 filename = pyu.getlong(self._filename, pro.pstruc['DIRLAY'])
@@ -445,6 +448,7 @@ class Layout(pro.PyLayers):
 
             # add boundary if it not exist
             if (not self.hasboundary) or (self.xlim != ()):
+                logger.info('call boundary')
                 self.boundary(xlim = self.xlim)
 
             logger.info('call subseg ')
@@ -959,6 +963,7 @@ class Layout(pro.PyLayers):
 
         """
 
+        assert(len(self.Gs.pos)==len(self.Gs.nodes()))
         bconsistent = True
 
         nodes = self.Gs.nodes()
@@ -2537,7 +2542,6 @@ class Layout(pro.PyLayers):
             #  Complement single segment which do not reach zceil or zfloor with
             #  an iso segment with AIR property
             #
-            #if (self.typ == 'indoor') or (self.typ == 'outdoor'):
 
             if (self.typ == 'indoor'):
                 segdone = []
@@ -2580,7 +2584,9 @@ class Layout(pro.PyLayers):
 
         #
         # add _AIR wall around the layout
-        #
+        # This is not the place to add the boundary because
+        # the boundary may depend on the position of tx and rx
+        # boundary is call at the end of layout init 
 
         self.boundary(bg2npy = False)
 
@@ -3343,7 +3349,7 @@ class Layout(pro.PyLayers):
 
         #v1.1 nbnta = self.Gs.neighbors(n1)
         #nbnhe = self.Gs.neighbors(n2)
-                #
+        #
         # add a segment node to Gs
         #
 
@@ -3367,6 +3373,8 @@ class Layout(pro.PyLayers):
                          connect = [n1, n2],
                          iso = [num],
                          ncycles = [])
+            self.Gs.pos[num] = tuple((p1 + p2) / 2.)
+            self.Gs.pos[num+maxnum] = tuple((p1 + p2) / 2.)
         else:
             #
             # BAD IDEA : Not scalable
@@ -3394,6 +3402,7 @@ class Layout(pro.PyLayers):
                          iso = [],
                          ncycles = []
                          )
+            self.Gs.pos[num] = tuple((p1 + p2) / 2.)
 
             #
             # update iso of the 2 segments
@@ -3408,7 +3417,6 @@ class Layout(pro.PyLayers):
         # Segment point position is placed at the middle of segment
         #
 
-        self.Gs.pos[num] = tuple((p1 + p2) / 2.)
 
         #
         # Connectivity between segment node num and points nodes n1 and n2
@@ -3785,16 +3793,16 @@ class Layout(pro.PyLayers):
         if (type(lp) != list):
             lp = [lp]
 
-        print("lp : ", lp)
+        #print("lp : ", lp)
         # get segments involved in points list
         ls = self.nd2seg(lp)
 
-        print("ls : ", ls)
+        #print("ls : ", ls)
         # 1) delete involved segments
         for k in ls:
             assert(k > 0)
             self.del_segment(k)
-            print('del ', k)
+            #print('del ', k)
         # 2) delete involved points
         for n1 in lp:
             assert(n1 < 0)
@@ -7776,7 +7784,7 @@ class Layout(pro.PyLayers):
 
         show : boolean
             default False
-        verbose : boolean 
+        verbose : boolean
         tqdmpos : progressbar
 
         Examples
@@ -7805,7 +7813,7 @@ class Layout(pro.PyLayers):
         self.dGv = {}  # dict of Gv graph
 
         cpt = 1./(len(self.Gt.node) + 1.)
-        
+
         for icycle in self.Gt.node:
             if verbose:
                 Gvpbar.update(100.*cpt)
@@ -7816,7 +7824,7 @@ class Layout(pro.PyLayers):
                 #
                 #  If indoor or outdoor all visibility are calculated
                 #  If outdoor only visibility between iso = 'AIR' and '_AIR' are calculated 
-                # 
+                #
                 #if self.indoor or not self.Gt.node[icycle]['indoor']:
                 polyg = self.Gt.node[icycle]['polyg']
 
@@ -8007,8 +8015,6 @@ class Layout(pro.PyLayers):
         pbartmp = pbar(verbose,total=100., desc ='Create Gi nodes',position=tqdmpos+1)
 
         for n in self.Gv.node:
-            # espoo_journal debug
-            #if n == 530:
             if verbose:
                 pbartmp.update(cpt)
 
@@ -8049,10 +8055,8 @@ class Layout(pro.PyLayers):
                 if (name != 'METAL') & (name != 'ABSORBENT'):
                     self.Gi.add_node((n, cy0, cy1))
                     self.Gi.add_node((n, cy1, cy0))
-                    self.Gi.pos[(n, cy0, cy1)] = tuple(
-                        self.Gs.pos[n] + ln * delta / 2.)
-                    self.Gi.pos[(n, cy1, cy0)] = tuple(
-                        self.Gs.pos[n] - ln * delta / 2.)
+                    self.Gi.pos[(n, cy0, cy1)] = tuple( self.Gs.pos[n] + ln * delta / 2.)
+                    self.Gi.pos[(n, cy1, cy0)] = tuple( self.Gs.pos[n] - ln * delta / 2.)
 
         #
         # 2) Establishing link between interactions
@@ -9500,9 +9504,7 @@ class Layout(pro.PyLayers):
             #
             # Draw segments slab per slab with proper linewidth and color
             #
-
             for lmat in sllist:
-                #print(lmat)
                 lseg = self.name[lmat]
                 if lseg != []:
                     lseg2 = [np.where(np.array(self.Gs.edges()) == i)[0] for i in lseg]
@@ -9531,7 +9533,7 @@ class Layout(pro.PyLayers):
                 else:
                     kwargs['nodes'] = False
 
-                # plotting graph G
+            # plotting graph G
                 kwargs['fig'], kwargs['ax'] = gru.draw(G, **kwargs)
 
             kwargs['nodelist'] = nodelistbkup
@@ -11711,8 +11713,6 @@ class Layout(pro.PyLayers):
 
         """
 
-        # self.boundary()
-
         Tx_x = rd.uniform(self.ax[0], self.ax[1])
         Tx_y = rd.uniform(self.ax[2], self.ax[3])
         Rx_x = rd.uniform(self.ax[0], self.ax[1])
@@ -11724,7 +11724,7 @@ class Layout(pro.PyLayers):
         return(p_Tx, p_Rx)
 
     def get_boundary(self):
-        """ get and update Layout boundary
+        """ get and update Layout ax
 
         """
         xmax = max(p[0] for p in self.Gs.pos.values())
