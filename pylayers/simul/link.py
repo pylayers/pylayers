@@ -519,7 +519,7 @@ class DLink(Link):
         if not self.L.ptin(position):
             # extend layout boundaries 
             self.L.extend_boundary(position)
-            raise NameError ('Warning : point a is not inside the Layout')
+            # raise NameError ('Warning : point a is not inside the Layout')
             # raise NameError ('Warning : point a is not inside the Layout')
         if not self.L.pt2cy(position) == self.ca:
             self.ca = self.L.pt2cy(position)

@@ -567,19 +567,20 @@ class Polygon(pro.PyLayers, shg.Polygon):
 
         pylayers.layout.Layout.ispoint
 
-        vnodes is a list of points and segments of the polygon. 
-        If there are iso-segments the sequence of iso segments 
-        is repeated between the termination points. 
+        vnodes is a list of points and segments of the polygon.
+        If there are iso-segments the sequence of iso segments
+        is repeated between the termination points.
         L.numseg has been adapted in order to return either the first segment (default)
         or the list of all segments
 
         """
-        # get coordinates of the exterior of the polygon 
+        # get coordinates of the exterior of the polygon
         x, y = self.exterior.xy
         # npts = map(lambda x :
         #            L.ispoint(np.array(x),tol=0.01),zip(x[0:-1],y[0:-1]))
         #
-        # npts : list of point which are in the layout (with tolerance 1cm) 0 means not in the layout 
+        # npts : list of point which are in the layout
+        #      (with tolerance 1cm) 0 means not in the layout
         #
         npts = [L.ispoint(np.array(xx), tol=0.01) for xx in zip(x[0:-1], y[0:-1])]
         assert (0 not in npts), pdb.set_trace()
@@ -700,7 +701,6 @@ class Polygon(pro.PyLayers, shg.Polygon):
     def coorddeter(self):
         """ determine polygon coordinates
         """
-
         self.xy = np.array([self.exterior.xy[0], self.exterior.xy[1]])
 
     def isconvex(self, tol=1e-2):

@@ -44,7 +44,7 @@ from mpl_toolkits.basemap import Basemap
 import shapely.geometry as sh
 import shapefile as shp
 from shapely.ops import cascaded_union
-from matplotlib.collections import PolyCollection
+from matplotlib.collections import PolyCollection,LineCollection
 from numpy import array
 import PIL.Image as Image
 import hashlib
@@ -6866,6 +6866,7 @@ class Layout(pro.PyLayers):
         # get_points(p) : get points from polygon
         # this is for limiting the search region for large Layout
         #
+
         logger.info('buildGt : apply setvnodes_new on each polygon')
         [ polygon.setvnodes_new(self.get_points(polygon), self) for polygon in lTP ]
 
@@ -7638,8 +7639,7 @@ class Layout(pro.PyLayers):
 
         nodelist: list
             list of Gt nodes (cycles) for which interactions have to be found
-    
-            
+
 
         Notes
         -----
@@ -10014,7 +10014,7 @@ class Layout(pro.PyLayers):
             return cy
 
     def isindoor(self,pt=np.array([0,0])):
-        """ test if a point is indoor 
+        """ test if a point is indoor
 
         Parameters
         ----------
@@ -10045,6 +10045,8 @@ class Layout(pro.PyLayers):
         Notes
         -----
             If a cycle contains point pt this function returns the cycle number
+            Not scalable
+            TODO : Find a way to accelerate this function
 
         See Also
         --------
@@ -11497,12 +11499,15 @@ class Layout(pro.PyLayers):
 
         if bsegs:
             ML = sh.MultiLineString(list(self._shseg.values()))
-            pt = np.array([l.xy for l in ML])
-            pdb.set_trace()
-            line, = plt.plot(pt[0,0],pt[0,1],color='k')
-            line.set_data(pt)
-
-            #self.pltlines(ML, color='k', fig=fig, ax=ax)
+            lseg = list(self._shseg.keys())
+            lines_wall = [ [(l.xy[0][0],l.xy[1][0]),(l.xy[0][1],l.xy[1][1])] for k,l in
+                    enumerate(ML) if lseg[k] in self.name['WALL']]
+            lines_air = [ [(l.xy[0][0],l.xy[1][0]),(l.xy[0][1],l.xy[1][1])] for k,l in
+                    enumerate(ML) if lseg[k] in self.name['_AIR']]
+            lcwall = LineCollection(lines_wall,colors='k',linewidths=2)
+            lcair = LineCollection(lines_air,colors='k',linewidths=1,linestyle='dotted')
+            ax.add_collection(lcwall)
+            ax.add_collection(lcair)
 
         plt.show()
         return fig, ax
@@ -11732,6 +11737,53 @@ class Layout(pro.PyLayers):
         ymax = max(p[1] for p in self.Gs.pos.values())
         ymin = min(p[1] for p in self.Gs.pos.values())
         self.ax = (xmin,xmax,ymin,ymax)
+
+    def extend_boundary(self,pt,delta=1):
+        """ extend boundary with a point
+
+        Parameters
+        ----------
+
+        pt : np.array (,2)
+        delta : offset distance
+
+        """
+
+
+        # determine which segment to delete
+        # closest boundary segment to pt
+        dmin = 1e15
+        for ns in self.segboundary:
+            ps = self.Gs.pos[ns]
+            v = pt[0:2]-np.array(ps)
+            dps_pt = np.linalg.norm(v)
+            if dps_pt < dmin:
+                dmin=dps_pt
+                nsd = ns
+                vn = v/dps_pt
+
+        #
+        n1,n2 = self.Gs.nodes[nsd]['connect']
+        lcyn1 = self.Gs.nodes[n1]['ncycles']
+        lcyn2 = self.Gs.nodes[n2]['ncycles']
+        cyc = np.intersect1d(np.array(lcyn1),np.array(lcyn2))[0]
+        polygon = self.Gt.nodes[cyc]['polyg']
+        print(nsd,n1,n2,cyc)
+        print(polygon)
+        print(polygon.vnodes)
+        self.del_segment(nsd)
+        self.segboundary.remove(nsd)
+        # Create new layout point near pt
+        npt = self.add_fnod((pt[0]+vn[0]*delta,pt[1]+vn[1]*delta))
+        print(pt)
+        print(npt)
+        print(self.Gs.pos[npt])
+        # Create 2 new segment
+        ns1 = self.add_segment(n1, npt, name='_AIR')
+        ns2 = self.add_segment(n2, npt, name='_AIR')
+        self.segboundary.extend([ns1,ns2])
+        self.lboundary.extend([npt])
+        self.get_boundary()
 
     def boundary(self, **kwargs) :
         """ add a blank boundary around layout
