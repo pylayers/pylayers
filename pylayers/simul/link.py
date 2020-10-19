@@ -405,17 +405,6 @@ class DLink(Link):
 
             self.init_positions()
 
-
-
-            ###########
-            # init freq
-            # TODO Check where it is used redundant with fGHz
-            ###########
-            #self.fmin  = self.fGHz[0]
-            #self.fmax  = self.fGHz[-1]
-            #self.fstep = self.fGHz[1]-self.fGHz[0]
-
-
             self.Si = Signatures(self.L,self.ca,self.cb,cutoff=self.cutoff)
 
             self.R = Rays(self.a,self.b)
@@ -800,10 +789,12 @@ class DLink(Link):
             ray index
 
         """
+        #pdb.set_trace()
         print("Ray : "+str(iray))
         if not self.R.evaluated:
             self.R.eval()
 
+        pdb.set_trace()
         PM = self.R.info(iray,ifGHz=0,matrix=1)
         print("Propagation Channel 2x2 (C):")
         self.C.inforay(iray)

@@ -11768,21 +11768,28 @@ class Layout(pro.PyLayers):
         lcyn2 = self.Gs.nodes[n2]['ncycles']
         cyc = np.intersect1d(np.array(lcyn1),np.array(lcyn2))[0]
         polygon = self.Gt.nodes[cyc]['polyg']
-        print(nsd,n1,n2,cyc)
-        print(polygon)
-        print(polygon.vnodes)
         self.del_segment(nsd)
         self.segboundary.remove(nsd)
         # Create new layout point near pt
         npt = self.add_fnod((pt[0]+vn[0]*delta,pt[1]+vn[1]*delta))
-        print(pt)
-        print(npt)
-        print(self.Gs.pos[npt])
-        # Create 2 new segment
+        self.Gs.nodes[npt]['ncycles']=[cyc]
+        # Create 2 new segment n1->npt and n2->npt
         ns1 = self.add_segment(n1, npt, name='_AIR')
         ns2 = self.add_segment(n2, npt, name='_AIR')
         self.segboundary.extend([ns1,ns2])
         self.lboundary.extend([npt])
+        # Create a triangle polygon 
+        p1 = np.array(self.Gs.pos[n1])
+        p2 = np.array(self.Gs.pos[npt])
+        p3 = np.array(self.Gs.pos[n2])
+        pts = np.vstack((p1,p2,p3,p1)).T
+        tri = geu.Polygon(pts)
+        polysum = polygon+tri
+        polysum.setvnodes(self)
+         #tri.setvnodes(self)
+        #pdb.set_trace()
+        self.Gt.nodes[cyc]['polyg']=polysum
+        self.Gt.pos[cyc]=(polysum.centroid.xy[0][0],polysum.centroid.xy[1][0])
         self.get_boundary()
 
     def boundary(self, **kwargs) :

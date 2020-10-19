@@ -3475,7 +3475,11 @@ class Rays(PyLayers, dict):
         bB: boolean
             display Basis
         matrix :
-            display matrix 
+            display matrix
+
+        Returns
+        -------
+
         """
 
         if self.evaluated:
@@ -3492,7 +3496,7 @@ class Rays(PyLayers, dict):
                 print('{0:5} , {1:4}, {2:10}, {3:7}, {4:7}, {5:10}, {6:10}, {7:4}, {8:4}, {9:4}'\
                         .format('Index',
                                 'type',
-                                'slab', 
+                                'slab',
                                 'nstr' ,
                                 'th(rad)',
                                 'alpha',
@@ -3528,9 +3532,7 @@ class Rays(PyLayers, dict):
                             th = I.data[I.dusl[slab], 0]
                             gamma = I.gamma[midx]
                             alpha = I.alpha[midx]
-                        else : 
-                            # from IPython.core.debugger import Tracer
-                            # Tracer()()
+                        else :
                             th=['-']*max(max(Iidx),1)
                             gamma = ['NC']*max(max(Iidx),1)
                             alpha = ['NC']*max(max(Iidx),1)
@@ -3540,7 +3542,7 @@ class Rays(PyLayers, dict):
                             beta=self.I.D.beta[udiff][0]
                         for ii, Ii in enumerate(Iidx):
                             if Ii == ray[iidx]:
-                                if i=='D': 
+                                if i=='D':
                                     print('{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10}, {6:10}, {7:3.4}, {8:3.4}, {9:3.4}'\
                                     .format(Ii, i, slab, slabnb[iidx], th[ii], alpha[ii], gamma[ii],phi0,phi,beta))
                                 else:
@@ -3563,10 +3565,10 @@ class Rays(PyLayers, dict):
 
                     B0 = self.B0.data[ir,:,:]
                     addr = self.ir2a(ir)
-                    Bo0 = self[addr[0]]['Bo0'][:,:,addr[1]] 
-                    Bi1 = self[addr[0]]['Bi'][:,:,0,addr[1]] 
+                    Bo0 = self[addr[0]]['Bo0'][:,:,addr[1]]
+                    Bi1 = self[addr[0]]['Bi'][:,:,0,addr[1]]
                     U  = np.dot(Bi1.T,Bo0)
-                    assert np.allclose(B0,U) 
+                    assert np.allclose(B0,U)
                     lmat.append(B0)
                     ltran.append(B0)
                     print(B0)
@@ -3580,23 +3582,23 @@ class Rays(PyLayers, dict):
                     if bB:
                         print('rotation matrix#',[ray[iidx]], 'type: B')
                         B = self.B.data[ray[iidx], :, :]
-                        print(B) 
+                        print(B)
                         lmat.append(B)
                         ltran.append(B)
                 # evaluate matrix product
-                PM0=np.eye(3)
-                PM1=np.eye(3)
+                PM0 = np.eye(3)
+                PM1 = np.eye(3)
                 for m in lmat[::-1]:
                     PM0=np.dot(PM0,m)
                 for m in ltran[::-1]:
                     PM1=np.dot(PM1,m)
                 print("matrix product with interactions (dB)")
-                print(20*np.log10(np.abs(PM0[1,1])),'  ',20*np.log10(np.abs(PM0[1,2])))
-                print(20*np.log10(np.abs(PM0[2,1])),'  ',20*np.log10(np.abs(PM0[2,2])))
+                print('{:.2f} {:.2f}'.format(20*np.log10(np.abs(PM0[1,1])),20*np.log10(np.abs(PM0[1,2]))))
+                print('{:.2f} {:.2f}'.format(20*np.log10(np.abs(PM0[2,1])),20*np.log10(np.abs(PM0[2,2]))))
                 print("matrix product without interactions (dB)")
-                print(20*np.log10(np.abs(PM1[1,1])),'  ',20*np.log10(np.abs(PM1[1,2])))
-                print(20*np.log10(np.abs(PM1[2,1])),'  ',20*np.log10(np.abs(PM1[2,2])))
-                return(PM0)
+                print('{:.2f} {:.2f}'.format(20*np.log10(np.abs(PM1[1,1])),20*np.log10(np.abs(PM1[1,2]))))
+                print('{:.2f} {:.2f}'.format(20*np.log10(np.abs(PM1[2,1])),20*np.log10(np.abs(PM1[2,2]))))
+                return(PM0[1:,1:])
 
             else:
                 print('\nto display matrix, use matrix=True on call')

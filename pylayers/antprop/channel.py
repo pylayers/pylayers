@@ -5076,8 +5076,8 @@ class Ctilde(PyLayers):
         return(s)
 
     def inforay(self,iray,ifreq=0):
-        """ provide information about a specific ray 
-        
+        """ provide information about a specific ray
+
         """
         dray   = self.tauk[iray]*0.3
         draydB = 20*np.log10(1./dray)
@@ -5087,7 +5087,7 @@ class Ctilde(PyLayers):
         Cpt = self.Cpt.y[iray,ifreq]
         Cpp = self.Cpp.y[iray,ifreq]
 
-        
+
         Cttc = Ctt*dray
         Ctpc = Ctp*dray
         Cppc = Cpp*dray
@@ -5125,13 +5125,13 @@ class Ctilde(PyLayers):
             CptcdB = -np.inf
         print('Without distance losses (Interactions only)')
         print("-----------------------------------------------")
-        print('co-pol (tt,pp)    dB :',CttcdB,CppcdB)
-        print('cross-pol (tt,pp) dB :',CtpcdB,CptcdB)
-        
+        print('co-pol (tt,pp)    dB : {:.2f} {:.2f}'.format(CttcdB,CppcdB))
+        print('cross-pol (tt,pp) dB : {:.2f} {:.2f}'.format(CtpcdB,CptcdB))
+
         print('With distance losses (Interactions + distance)')
         print("-----------------------------------------------")
-        print('co-pol (tt,pp)    dB :',CttdB,CppdB)
-        print('cross-pol (tp,pt) dB :',CtpdB,CptdB)
+        print('co-pol (tt,pp)    dB : {:.2f} {:.2f}'.format(CttdB,CppdB))
+        print('cross-pol (tp,pt) dB : {:.2f} {:.2f}'.format(CtpdB,CptdB))
 
 
     def saveh5(self,Lfilename,idx,a,b):
