@@ -643,7 +643,7 @@ class Bsignal(PyLayers):
 
         xmin = self.x[ixmin]
         xmax = self.x[ixmax]
-        
+
         if hasattr(self,'a'): 
             ymin = self.a[iamin]
             ymax = self.a[iamax]
@@ -740,6 +740,7 @@ class Bsignal(PyLayers):
         dist = kwargs.pop('dist',False)
         logx = kwargs.pop('logx',False)
         logy = kwargs.pop('logy',False)
+        figsize = kwargs.pop('figsize',(8,8))
         # filtering kwargs argument for plot function
         args = {}
         for k in kwargs:
@@ -771,7 +772,7 @@ class Bsignal(PyLayers):
             Nt = self.y.shape[2]
 
             if iy==-1:
-                fig,ax = plt.subplots(Nr,Nt)
+                fig,ax = plt.subplots(Nr,Nt,figsize=figsize)
                 if ((Nr==1) and (Nt==1)):
                     ax = np.array([[ax]])
 

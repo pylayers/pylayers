@@ -5098,7 +5098,7 @@ class Ctilde(PyLayers):
         else:
             print("between global frames")
             print("--------------------")
-        print('distance losses',draydB)
+        print('distance losses {:.2f}'.format(draydB))
         if (np.abs(Cttc)!=0):
             CttdB = 20*np.log10(np.abs(Ctt))
             CttcdB = 20*np.log10(np.abs(Cttc))

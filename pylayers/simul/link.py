@@ -789,12 +789,10 @@ class DLink(Link):
             ray index
 
         """
-        #pdb.set_trace()
         print("Ray : "+str(iray))
         if not self.R.evaluated:
             self.R.eval()
 
-        pdb.set_trace()
         PM = self.R.info(iray,ifGHz=0,matrix=1)
         print("Propagation Channel 2x2 (C):")
         self.C.inforay(iray)

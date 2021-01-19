@@ -322,9 +322,9 @@ class MIMO(object):
         V   : = Ud (in that case because HdH Hermitian)  (nf x nt x nt)
 
         HdH = U L U^{\dagger}
-        
-        Transfered to Mchannel 
-        DONE 
+
+        Transfered to Mchannel
+        DONE
         """
 
         # H  : nr x nt x nf
@@ -361,11 +361,11 @@ class MIMO(object):
             np.array (Nf,Nt,NPt)
 
             log_2(det(I+(Et/(N0Nt))HH^{H})
-        
-        Transferd to Mchannel 
+
+        Transfered to Mchannel
 
         Done
-        
+
         """
 
         fGHz  = self.Hcal.x

@@ -3568,6 +3568,7 @@ class Rays(PyLayers, dict):
                     Bo0 = self[addr[0]]['Bo0'][:,:,addr[1]]
                     Bi1 = self[addr[0]]['Bi'][:,:,0,addr[1]]
                     U  = np.dot(Bi1.T,Bo0)
+                    pdb.set_trace()
                     assert np.allclose(B0,U)
                     lmat.append(B0)
                     ltran.append(B0)
