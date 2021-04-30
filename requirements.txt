@@ -90,7 +90,7 @@ traitlets==4.3.2
 traits==5.1.1
 traitsui==6.1.0
 triangle==20190115.2
-urllib3==1.25.2
+urllib3==1.25.8
 visdom==0.1.8.8
 vtk==8.1.2
 wcwidth==0.1.7
