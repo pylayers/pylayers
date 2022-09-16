@@ -92,7 +92,7 @@ traitsui==6.1.0
 triangle==20190115.2
 urllib3==1.25.2
 visdom==0.1.8.8
-vtk==8.1.2
+vtk==9.0.1
 wcwidth==0.1.7
 webencodings==0.5.1
 websocket-client==0.56.0
