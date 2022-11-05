@@ -563,7 +563,7 @@ class Signatures(PyLayers,dict):
                 nstr = si[0,k]
                 typ  = si[1,k]
                 # cycles connected to seg or point
-                seg_cy = copy.deepcopy(L.Gs.node[nstr]['ncycles'])
+                seg_cy = copy.deepcopy(L.Gs.nodes[nstr]['ncycles'])
 
                 if k == 0:
                     cy0 = self.source
@@ -578,7 +578,7 @@ class Signatures(PyLayers,dict):
 
                 if typ == 1:
                     inter = (nstr,)
-                    lcy0 = L.Gs.node[nstr]['ncycles']
+                    lcy0 = L.Gs.nodes[nstr]['ncycles']
                 elif typ == 2:
                     inter = (nstr,cy0)
                 elif typ == 3:
@@ -1176,8 +1176,8 @@ class Signatures(PyLayers,dict):
         else:
            lit  = litT + litR
 
-        pt_source = np.array(self.L.Gt.node[self.source]['polyg'].centroid.coords.xy)
-        pt_target = np.array(self.L.Gt.node[self.target]['polyg'].centroid.coords.xy)
+        pt_source = np.array(self.L.Gt.nodes[self.source]['polyg'].centroid.coords.xy)
+        pt_target = np.array(self.L.Gt.nodes[self.target]['polyg'].centroid.coords.xy)
 
         d_source_target = np.linalg.norm(pt_source - pt_target)
 
@@ -1280,8 +1280,8 @@ class Signatures(PyLayers,dict):
             #
             if len(s)==3:
                 nseg = s[0]
-                if ((self.L.Gs.node[nseg]['name']=='_AIR') or
-                   (self.L.Gs.node[nseg]['name']=='AIR')):
+                if ((self.L.Gs.nodes[nseg]['name']=='_AIR') or
+                   (self.L.Gs.nodes[nseg]['name']=='AIR')):
                     lawp = [1]
                 else:
                     lawp = [0]
@@ -1722,7 +1722,7 @@ class Signatures(PyLayers,dict):
                                 # anstr does not contains airwalls
                                 # lawp_tmp = [0]+lawp
                                 # lll = [x[0] for ix,x in enumerate(visited) if lawp_tmp[ix]==1]
-                                # print([self.L.Gs.node[x]['name'] for x in lll])
+                                # print([self.L.Gs.nodes[x]['name'] for x in lll])
 
                                 #anstr = np.array([x[0] for ix,x in enumerate(visited) 
                                 #                                  if ((lawp[ix]!=1) or (x[0] in self.L.name['AIR']) or (x in (lit+lis)))] )
@@ -1988,12 +1988,12 @@ class Signatures(PyLayers,dict):
 
 
         if kwargs['ctx']!=-1:
-            Tpoly = self.L.Gt.node[kwargs['ctx']]['polyg']
+            Tpoly = self.L.Gt.nodes[kwargs['ctx']]['polyg']
             Tpoly.coul='r'
             Tpoly.plot(fig=fig,ax=ax,color='r')
 
         if kwargs['crx']!=-1:
-            Rpoly = self.L.Gt.node[kwargs['crx']]['polyg']
+            Rpoly = self.L.Gt.nodes[kwargs['crx']]['polyg']
             Rpoly.plot(fig=fig,ax=ax,color='g')
 
         # i=-1 all rays
@@ -2047,10 +2047,10 @@ class Signatures(PyLayers,dict):
         ni = nit[uni]
         ust = len(self[ni])/2
 
-        polyS = self.L.Gt.node[self.source]['polyg']
+        polyS = self.L.Gt.nodes[self.source]['polyg']
         cp1 = polyS.centroid.xy
 
-        polyT = self.L.Gt.node[self.target]['polyg']
+        polyT = self.L.Gt.nodes[self.target]['polyg']
         cp2 = polyT.centroid.xy
 
         ptx = np.array([cp1[0][0],cp1[1][0]])
@@ -2174,8 +2174,8 @@ class Signatures(PyLayers,dict):
         cyprx = self.L.pt2cy(prx)
 
         # merged cycle of each point
-        polyctx = self.L.Gt.node[cyptx]['polyg']
-        polycrx = self.L.Gt.node[cyprx]['polyg']
+        polyctx = self.L.Gt.nodes[cyptx]['polyg']
+        polycrx = self.L.Gt.nodes[cyprx]['polyg']
 
         #
         # Handling LOS ray
@@ -2338,8 +2338,8 @@ class Signatures(PyLayers,dict):
         cyprx = self.L.pt2cy(prx)
 
 
-        polyctx = self.L.Gt.node[cyptx]['polyg']
-        polycrx = self.L.Gt.node[cyprx]['polyg']
+        polyctx = self.L.Gt.nodes[cyptx]['polyg']
+        polycrx = self.L.Gt.nodes[cyprx]['polyg']
 
         # The Line of sight situation is detected here
         # dtxtx : square distance between Tx and Rx
@@ -3105,7 +3105,7 @@ class Signature(PyLayers,object):
                 pa = np.array(L.Gs.pos[ta]).reshape(2,1)
                 pb = np.array(L.Gs.pos[he]).reshape(2,1)
                 pc = np.array(L.Gs.pos[k]).reshape(2,1)
-                nor1 = L.Gs.node[k]['norm']
+                nor1 = L.Gs.nodes[k]['norm']
                 norm = np.array([nor1[0], nor1[1]]).reshape(2,1)
             else:
                 pa = np.array(L.Gs.pos[k]).reshape(2,1)
@@ -3203,7 +3203,7 @@ class Signature(PyLayers,object):
             k = self.seq[n]
             if k > 0:  # segment
                 ta, he = L.Gs.neighbors(k)
-                norm1 = np.array(L.Gs.node[k]['norm'])
+                norm1 = np.array(L.Gs.nodes[k]['norm'])
                 norm = np.array([norm1[0], norm1[1]])
                 self.pa[:, n] = np.array(L.Gs.pos[ta])
                 self.pb[:, n] = np.array(L.Gs.pos[he])
@@ -3287,7 +3287,7 @@ class Signature(PyLayers,object):
         for k in self.seq:
             if k > 0:
                 ta, he = L.Gs.neighbors(k)
-                norm1 = L.Gs.node[k]['norm']
+                norm1 = L.Gs.nodes[k]['norm']
                 norm = np.array([norm1[0], norm1[1]]).reshape(2, 1)
                 pa = np.array(L.Gs.pos[ta]).reshape(2, 1)
                 pb = np.array(L.Gs.pos[he]).reshape(2, 1)

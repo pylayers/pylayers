@@ -9059,7 +9059,7 @@ class Layout(pro.PyLayers):
         """
 
         # list of interactions
-        lint = self.Gi.node
+        lint = self.Gi.nodes
 
         # list of tuple interactions (R|T)
         lD = [x for x in lint if len(x)==1]
@@ -10059,7 +10059,7 @@ class Layout(pro.PyLayers):
         ptsh = sh.Point(pt[0], pt[1])
         cycle_exists = False
 
-        for ncy in list(dict(self.Gt.node).keys()):
+        for ncy in list(dict(self.Gt.nodes).keys()):
             if ncy > 0:
                 criter1 = self.Gt.nodes[ncy]['polyg'].touches(ptsh)
                 criter2 = self.Gt.nodes[ncy]['polyg'].contains(ptsh)
