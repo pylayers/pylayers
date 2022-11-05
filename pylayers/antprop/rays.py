@@ -1968,7 +1968,7 @@ class Rays(PyLayers, dict):
         # maximum number for refering to segment
         # not to be confused with a segment number
 
-        nsmax = max(L.Gs.node.keys())
+        nsmax = max(L.Gs.nodes.keys())
 
         mapping = np.zeros(nsmax+1, dtype=int)
 
@@ -2595,7 +2595,7 @@ class Rays(PyLayers, dict):
         #for s in uslv:
         #    dsla[s] = np.where(s == np.array(slv))[0]
 
-        nsmax = max(L.Gs.node.keys())
+        nsmax = max(L.Gs.nodes.keys())
         #sla = np.zeros((nsmax+1), dtype='S20')
 
         # array type str with more than 1 character
