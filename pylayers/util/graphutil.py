@@ -150,8 +150,8 @@ def draw(G,**kwargs):
     if G.name == 'Gs':
         pno = [ x for x in nodelist if  x>0 ]
         # node == air
-        na1 = [x for x in pno if  G.node[x]['name']=='AIR' ]
-        na2 = [x for x in pno if  G.node[x]['name']=='_AIR' ]
+        na1 = [x for x in pno if  G.nodes[x]['name']=='AIR' ]
+        na2 = [x for x in pno if  G.nodes[x]['name']=='_AIR' ]
         na = na1 + na2
         # edge == air
         ea=[]

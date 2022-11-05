@@ -374,15 +374,15 @@ class DLink(Link):
             # In outdoor situation we delete transmission node involving
             # an indoor cycle except AIR
             #
-            cindoor = [p for p in self.L.Gt.nodes() if self.L.Gt.node[p]['indoor']]
+            cindoor = [p for p in self.L.Gt.nodes() if self.L.Gt.nodes[p]['indoor']]
             if self._L.typ == 'outdoor':
-                ginodes = self.L.Gi.node.keys()
+                ginodes = self.L.Gi.nodes.keys()
                 # lT : list of transmission interactions
                 lT  =  [k for k in ginodes if (len(k)==3)]
                 # lTi : transmission connected at least to an indoor cycle
                 lTi = [ k for k in lT if ((k[1]  in cindoor) or (k[2] in cindoor))]
                 # lTiw : those which are walls (not those above buildings)
-                lTiw = [ k for k in lTi if self.L.Gs.node[k[0]]['name']!='AIR' ]
+                lTiw = [ k for k in lTi if self.L.Gs.nodes[k[0]]['name']!='AIR' ]
 
                 self.L.Gi.remove_nodes_from(lTiw)
                 lE = list(self.L.Gi.edges())
@@ -880,9 +880,9 @@ class DLink(Link):
         # pick the point outside building if Layout.indoor not activated
 
         if self.L.typ=='outdoor':
-            nodes = [n for n in nodes if n!=0 and not self.L.Gt.node[n]['indoor']]
+            nodes = [n for n in nodes if n!=0 and not self.L.Gt.nodes[n]['indoor']]
         elif self.L.typ=='indoor':
-            nodes = [n for n in nodes if n!=0 and self.L.Gt.node[n]['indoor']]
+            nodes = [n for n in nodes if n!=0 and self.L.Gt.nodes[n]['indoor']]
         else:
             nodes = [n for n in nodes if n!=0 ]
 
@@ -2359,8 +2359,8 @@ class DLink(Link):
 
         # # update wall opaccity
         # ds  =[i for i in self._maya_fig.children if self.L._filename in i.name][0]
-        # a_in = self.L.Gt.node[self.ca]['indoor']
-        # b_in = self.L.Gt.node[self.cb]['indoor']
+        # a_in = self.L.Gt.nodes[self.ca]['indoor']
+        # b_in = self.L.Gt.nodes[self.cb]['indoor']
 
         # if
         # if a_in or b_in:
@@ -2618,7 +2618,7 @@ class DLink(Link):
 
         """
 
-        v = np.vectorize( lambda t:self.L.Gs.node[t]['name'])
+        v = np.vectorize( lambda t:self.L.Gs.nodes[t]['name'])
         # determine incidence angles on segment crossing p1-p2 segment
         #data = L.angleonlink(p1,p2)
         if np.allclose(self.a,self.b):

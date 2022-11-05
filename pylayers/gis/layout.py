@@ -6324,8 +6324,7 @@ class Layout(pro.PyLayers):
             if os.path.isfile(filesl):
                 sl = read_gpickle(filesl)
                 setattr(self, 'sl', sl)
-            
-            pdb.set_trace()
+
             filediff = os.path.join(path, 'ddiff.gpickle')
             if os.path.isfile(filediff):
                 ddiff = read_gpickle(filediff)
