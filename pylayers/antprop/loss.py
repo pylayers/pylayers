@@ -1451,8 +1451,7 @@ def cover2(X, Y, Z, Ha, Hb, fGHz, K, method='deygout'):
     L0 = np.zeros(Nf)
     # loop over azimut
     for il in np.arange(2, Nr-1):
-        dmax = 
-        LOS = 32.4 + 20*np.log10(fGHz) + 20*np.log10(d[-1])
+        dmax = LOS = 32.4 + 20*np.log10(fGHz) + 20*np.log10(d[-1])
 
         for ip in range(Nphi):
         # loop over range

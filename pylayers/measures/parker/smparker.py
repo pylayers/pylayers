@@ -386,17 +386,17 @@ class Axes(PyLayers):
                        0,0,0,0]
         self._id = _id
         self.name = name
-       
+
         #
         # serial port
         #
-        
+
         self.ser = ser
         if self.ser == 'emulated':
             self.emulated = True
         else:
             self.emulated = False
-    
+
         #
         # list of profiles
         #
@@ -449,7 +449,7 @@ class Axes(PyLayers):
             st =  st + 'ang (deg) : '+str(self.ang)+' \n'
             st =  st + 'vel       : '+str(self.vel)+' rps\n'
             st =  st + 'acc       : '+str(self.acc)+' rps2\n'
-        
+
         for k,p in enumerate(self.lprofile):
             st = st + '--------------------\n'
             st = st + ' Profile '+str(k+1)+ '\n'
@@ -1056,7 +1056,7 @@ class Axes(PyLayers):
         >>> from pylayers.measures.parker import smparker
         >>> S = Scanner()
         >>> S.a[4].step(-0.1,cmd='set')
-       
+
 
         """
         nstep = int(value*self.scale) #convert num per step
@@ -1441,7 +1441,7 @@ class Scanner(PyLayers):
         frame : {'G'|'H'|'A'}
             determine in which frame is expressed pt (default A)
         vel : int
-            velocity 
+            velocity
         """
 
         # convert to home frame
@@ -1504,7 +1504,7 @@ class Scanner(PyLayers):
                pAnt = np.array([1.6,5.2,1.6]),
                vAnt = np.array([1.0,0.0,0.0]),
                comment = 'test',
-               author = 'mamadou',
+               author = '',
                ):
         """ measure MIMO channel over a set of points from AntArray and store in h5
 
@@ -1538,7 +1538,7 @@ class Scanner(PyLayers):
         switch.set_io_mode(0b11111111, 0b11111111, 0b00000000)
 
         # load the file containing the calibration data
-        
+
         Dh5 = Mesh5(_fileh5)
 
         # open - sdata analysis
@@ -1622,7 +1622,7 @@ class Scanner(PyLayers):
         ix,iy,iz,ia = k2xyza(ik,(A.N[0],A.N[1],A.N[2],A.N[3]))
 
         # k iterates on the total number of points
-        
+
         for k in ik:
             # move the scanner to next position k
             self.mv(pt=A.p[:,k],vel=vel)
@@ -1640,9 +1640,9 @@ class Scanner(PyLayers):
                     time.sleep(0.1)
 
                     S21 = vna.getdata(Nmeas=Nmeas)
-                   
+
                     S[:,iR,iT,:] = S21[:,0,0,:]
-                    
+
             # saving the MIMO matrix in append mode
 
             Dh5.open('a')
@@ -1681,10 +1681,10 @@ class Scanner(PyLayers):
             mes[str(ix[k])][str(iy[k])][str(iz[k])][str(ia[k])].attrs['pg']=self.pG  
             mes[str(ix[k])][str(iy[k])][str(iz[k])][str(ia[k])].attrs['pa']=self.pA    
 
-        
+
             Dh5.close()
             # end saving data
-        
+
 
 if __name__=="__main__":
     doctest.testmod()

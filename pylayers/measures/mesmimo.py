@@ -181,11 +181,12 @@ class MIMO(object):
                     #tc = C.H.y[iR*4+iT,:]
                     tc = C.H.y[iR,iT,:]
 
-        #MIMO
+        # MIMO
         # Nr x Nt x Nf
         tc = tc.reshape(self.Nr,self.Nt,self.Nf)
         # C.freq , Nf
         self.C = Tchannel(x=C.freq,y=tc)
+        pdb.set_trace()
         self.Hcal = self.H/self.C
         del self.H
         del self.C
@@ -856,7 +857,7 @@ class MIMO(object):
         dB = kwargs.pop('dB')
         cal = kwargs.pop('cal')
 
-        fig,ax=plt.subplots(8,self.Nt,sharex=True,sharey=True,**kwargs)
+        fig,ax = plt.subplots(8,self.Nt,sharex=True,sharey=True,**kwargs)
 
         if cal:
             H = self.Hcal

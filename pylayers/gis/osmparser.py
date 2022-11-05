@@ -935,7 +935,8 @@ def getosm(**kwargs):
             min_height = 0
         # height
         if 'height' in ways.w[iw][1]:
-            ways.way[iw].tags['z'] = (min_height, eval(ways.w[iw][1]['height']))
+            st_height = ways.w[iw][1]['height'].replace('m','')
+            ways.way[iw].tags['z'] = (min_height, eval(st_height))
         elif 'building:height' in ways.w[iw][1]:
             ways.way[iw].tags['z'] = (min_height, eval(ways.w[iw][1]['building:height']))
         elif 'building:levels' in ways.w[iw][1]:
